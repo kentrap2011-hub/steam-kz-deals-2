@@ -45925,8 +45925,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-30T02:06:47+00:00",
-      "work_authority_commit": "b43d7b87c30223abf849e608ad70792f872f3dcd",
+      "accepted_at_utc": "2026-09-30T06:40:16+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "49c713b921fb78704795d82697435c4ce7939567903a604b4f75c2834fbe1ad6",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -45942,8 +45942,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "558cb389883702c2d4c78c3a5fbf0766b9041907b60816ac215975a0823769fc",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "b087bd645968cbe36a4043a8b058497dd9af58d09fb8978f44467e18e85ebbeb",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -46057,20 +46057,579 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "bdfbe05110ae49d2fe43c6e5a225d23ed39525a09147aa0dc5f049a1695cc2b5",
+          "family_id": "game:201790",
+          "taste_subject_key": "App_201790",
+          "appid": "201790",
+          "taste_fingerprint": "b1967ed22d92358243f0e2204e3401c92abd693fce0f10af06f9523c81e6352d",
+          "candidate_context_sha256": "413b92061c817d259ac42e615f892860c6d72463e3352ffe7d18d9b7d398f864",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "49c713b921fb78704795d82697435c4ce7939567903a604b4f75c2834fbe1ad6",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "b087bd645968cbe36a4043a8b058497dd9af58d09fb8978f44467e18e85ebbeb",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:40:16+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:201790:558cb389883702c2",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "558cb389883702c2d4c78c3a5fbf0766b9041907b60816ac215975a0823769fc",
+            "prior_accepted_at_utc": "2026-09-30T02:06:47+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "moderate",
+            "prior_confidence": "medium",
+            "prior_taste_factors": {
+              "gameplay_mastery": 86,
+              "development_variety": 84,
+              "structure_pacing_direction": 73,
+              "identity_hooks": 69,
+              "breadth_of_match": 83
+            },
+            "prior_positive_evidence": [
+              "Trap placement, direct third-person combat and a broad upgrade pool create strong room for experimentation with different kill-box strategies.",
+              "Co-op is a major strength and lets two players divide lanes, roles and trap plans rather than simply doubling damage.",
+              "Later missions reward learning trap synergies and active combat, giving the core loop a meaningful mastery component."
+            ],
+            "prior_work_id": "bdfbe05110ae49d2fe43c6e5a225d23ed39525a09147aa0dc5f049a1695cc2b5"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "moderate",
+          "confidence": "medium",
+          "positive_evidence": [
+            "Trap placement, direct third-person combat and a broad upgrade pool support many kill-box strategies.",
+            "Co-op lets two players divide lanes, roles and trap plans.",
+            "Later missions reward learning trap synergies and active fighting."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 87,
+            "development_variety": 85,
+            "structure_pacing_direction": 72,
+            "identity_hooks": 72,
+            "breadth_of_match": 84
+          },
+          "score_findings": [
+            {
+              "finding_id": "omd2-hybrid-depth",
+              "text_ru": "Ловушки, оружие и прямой бой позволяют строить разные killbox-схемы, поэтому система даёт много места для экспериментов и освоения взаимодействий.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                  "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                  "match_text_ru": "Тебе нравятся ситуации, где нужно менять тактику под волну и окружение."
+                },
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Глубокое освоение взаимодействующих механик — сильный плюс для тебя."
+                },
+                {
+                  "json_pointer": "/taste_profile/2/pattern",
+                  "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                  "match_text_ru": "Разные инструменты ценны, когда они заметно меняют способ решения задачи."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 87
+                },
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 85
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 84
+                },
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 72
+                }
+              ]
+            },
+            {
+              "finding_id": "omd2-coop-structure",
+              "text_ru": "Кооператив позволяет делить линии, роли и планы ловушек, но многие карты заметно менее гибки в одиночку на высокой сложности.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/9/pattern",
+                  "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+                  "match_text_ru": "Совместные роли и решения заметно усиливают для тебя игровой опыт."
+                },
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Новые способы распределять задачи помогают знакомой формуле развиваться."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 72
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Многие карты лучше раскрываются вдвоём; в одиночку высокие сложности жёстче и ограничивают варианты.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "difficulty_punishment",
+                "text_ru": "На поздних миссиях и Nightmare часть прогресса может смещаться в гринд улучшений и повтор ограничивающих раскладок вместо свободного экспериментирования.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "felt_technical_burden",
+                "text_ru": "Свежие ПК-отзывы описывают повторяющиеся вылеты, особенно в кооперативе и иногда ближе к концу уровня, с потерей текущей попытки.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:201790:558cb389883702c2",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:40:16+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:40:16+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+            "work_id": "bdfbe05110ae49d2fe43c6e5a225d23ed39525a09147aa0dc5f049a1695cc2b5",
+            "family_id": "game:201790",
+            "taste_subject_key": "App_201790",
+            "appid": "201790",
+            "taste_fingerprint": "b1967ed22d92358243f0e2204e3401c92abd693fce0f10af06f9523c81e6352d",
+            "candidate_context_sha256": "413b92061c817d259ac42e615f892860c6d72463e3352ffe7d18d9b7d398f864",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-30T02:06:47+00:00",
+            "work_authority_commit": "b43d7b87c30223abf849e608ad70792f872f3dcd",
+            "dossier_content_sha256": "49c713b921fb78704795d82697435c4ce7939567903a604b4f75c2834fbe1ad6",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "558cb389883702c2d4c78c3a5fbf0766b9041907b60816ac215975a0823769fc",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+              "work_id": "bdfbe05110ae49d2fe43c6e5a225d23ed39525a09147aa0dc5f049a1695cc2b5",
+              "family_id": "game:201790",
+              "taste_subject_key": "App_201790",
+              "appid": "201790",
+              "taste_fingerprint": "b1967ed22d92358243f0e2204e3401c92abd693fce0f10af06f9523c81e6352d",
+              "candidate_context_sha256": "413b92061c817d259ac42e615f892860c6d72463e3352ffe7d18d9b7d398f864",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "49c713b921fb78704795d82697435c4ce7939567903a604b4f75c2834fbe1ad6",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "558cb389883702c2d4c78c3a5fbf0766b9041907b60816ac215975a0823769fc",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-30T02:06:47+00:00",
+              "run_start_anchor_commit": "fbc9fbdbdc300a5eb2243de78527fc7849618e36",
+              "run_start_authority_commit": "b43d7b87c30223abf849e608ad70792f872f3dcd",
+              "run_started_at_utc": "2026-09-30T02:03:31+00:00",
+              "work_authority_commit": "b43d7b87c30223abf849e608ad70792f872f3dcd",
+              "fit_level": "moderate",
+              "confidence": "medium",
+              "positive_evidence": [
+                "Trap placement, direct third-person combat and a broad upgrade pool create strong room for experimentation with different kill-box strategies.",
+                "Co-op is a major strength and lets two players divide lanes, roles and trap plans rather than simply doubling damage.",
+                "Later missions reward learning trap synergies and active combat, giving the core loop a meaningful mastery component."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 86,
+                "development_variety": 84,
+                "structure_pacing_direction": 73,
+                "identity_hooks": 69,
+                "breadth_of_match": 83
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Многие карты заметно удобнее и гибче в кооперативе; в одиночку высокие сложности могут ощущаться жёстче и сильнее ограничивать варианты.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 1
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "difficulty_punishment",
+                    "text_ru": "На поздних миссиях и Nightmare часть прогресса может уходить в гринд улучшений и повторы ограничивающих раскладок вместо свободного освоения систем ловушек.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 2
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "felt_technical_burden",
+                    "text_ru": "Свежие ПК-отзывы описывают повторяющиеся вылеты, особенно в кооперативе и иногда под конец уровня; потеря текущей попытки заметно усиливает техническую фрустрацию.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 3
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "moderate",
+            "confidence": "medium",
+            "positive_evidence": [
+              "Trap placement, direct third-person combat and a broad upgrade pool create strong room for experimentation with different kill-box strategies.",
+              "Co-op is a major strength and lets two players divide lanes, roles and trap plans rather than simply doubling damage.",
+              "Later missions reward learning trap synergies and active combat, giving the core loop a meaningful mastery component."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 86,
+              "development_variety": 84,
+              "structure_pacing_direction": 73,
+              "identity_hooks": 69,
+              "breadth_of_match": 83
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Многие карты заметно удобнее и гибче в кооперативе; в одиночку высокие сложности могут ощущаться жёстче и сильнее ограничивать варианты.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "difficulty_punishment",
+                  "text_ru": "На поздних миссиях и Nightmare часть прогресса может уходить в гринд улучшений и повторы ограничивающих раскладок вместо свободного освоения систем ловушек.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                },
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "felt_technical_burden",
+                  "text_ru": "Свежие ПК-отзывы описывают повторяющиеся вылеты, особенно в кооперативе и иногда под конец уровня; потеря текущей попытки заметно усиливает техническую фрустрацию.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:201790:558cb389883702c2",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "558cb389883702c2d4c78c3a5fbf0766b9041907b60816ac215975a0823769fc",
+        "prior_accepted_at_utc": "2026-09-30T02:06:47+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "moderate",
+        "prior_confidence": "medium",
+        "prior_taste_factors": {
+          "gameplay_mastery": 86,
+          "development_variety": 84,
+          "structure_pacing_direction": 73,
+          "identity_hooks": 69,
+          "breadth_of_match": 83
+        },
+        "prior_positive_evidence": [
+          "Trap placement, direct third-person combat and a broad upgrade pool create strong room for experimentation with different kill-box strategies.",
+          "Co-op is a major strength and lets two players divide lanes, roles and trap plans rather than simply doubling damage.",
+          "Later missions reward learning trap synergies and active combat, giving the core loop a meaningful mastery component."
+        ],
+        "prior_work_id": "bdfbe05110ae49d2fe43c6e5a225d23ed39525a09147aa0dc5f049a1695cc2b5"
+      },
       "fit_level": "moderate",
       "confidence": "medium",
       "positive_evidence": [
-        "Trap placement, direct third-person combat and a broad upgrade pool create strong room for experimentation with different kill-box strategies.",
-        "Co-op is a major strength and lets two players divide lanes, roles and trap plans rather than simply doubling damage.",
-        "Later missions reward learning trap synergies and active combat, giving the core loop a meaningful mastery component."
+        "Trap placement, direct third-person combat and a broad upgrade pool support many kill-box strategies.",
+        "Co-op lets two players divide lanes, roles and trap plans.",
+        "Later missions reward learning trap synergies and active fighting."
       ],
       "taste_factors": {
-        "gameplay_mastery": 86,
-        "development_variety": 84,
-        "structure_pacing_direction": 73,
-        "identity_hooks": 69,
-        "breadth_of_match": 83
+        "gameplay_mastery": 87,
+        "development_variety": 85,
+        "structure_pacing_direction": 72,
+        "identity_hooks": 72,
+        "breadth_of_match": 84
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "omd2-hybrid-depth",
+          "text_ru": "Ловушки, оружие и прямой бой позволяют строить разные killbox-схемы, поэтому система даёт много места для экспериментов и освоения взаимодействий.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Тебе нравятся ситуации, где нужно менять тактику под волну и окружение."
+            },
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Глубокое освоение взаимодействующих механик — сильный плюс для тебя."
+            },
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Разные инструменты ценны, когда они заметно меняют способ решения задачи."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 87
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 85
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 84
+            },
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 72
+            }
+          ]
+        },
+        {
+          "finding_id": "omd2-coop-structure",
+          "text_ru": "Кооператив позволяет делить линии, роли и планы ловушек, но многие карты заметно менее гибки в одиночку на высокой сложности.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/9/pattern",
+              "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+              "match_text_ru": "Совместные роли и решения заметно усиливают для тебя игровой опыт."
+            },
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Новые способы распределять задачи помогают знакомой формуле развиваться."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 72
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -46092,7 +46651,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Многие карты заметно удобнее и гибче в кооперативе; в одиночку высокие сложности могут ощущаться жёстче и сильнее ограничивать варианты.",
+            "text_ru": "Многие карты лучше раскрываются вдвоём; в одиночку высокие сложности жёстче и ограничивают варианты.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -46103,7 +46662,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "difficulty_punishment",
-            "text_ru": "На поздних миссиях и Nightmare часть прогресса может уходить в гринд улучшений и повторы ограничивающих раскладок вместо свободного освоения систем ловушек.",
+            "text_ru": "На поздних миссиях и Nightmare часть прогресса может смещаться в гринд улучшений и повтор ограничивающих раскладок вместо свободного экспериментирования.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -46114,7 +46673,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "felt_technical_burden",
-            "text_ru": "Свежие ПК-отзывы описывают повторяющиеся вылеты, особенно в кооперативе и иногда под конец уровня; потеря текущей попытки заметно усиливает техническую фрустрацию.",
+            "text_ru": "Свежие ПК-отзывы описывают повторяющиеся вылеты, особенно в кооперативе и иногда ближе к концу уровня, с потерей текущей попытки.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -46141,8 +46700,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-30T02:07:06+00:00",
-      "work_authority_commit": "b43d7b87c30223abf849e608ad70792f872f3dcd",
+      "accepted_at_utc": "2026-09-30T06:40:16+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "49fe2b9058f8e15d49ff53e1dfa3819e8772df4913c56ebc3d29ad200e78c240",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -46158,8 +46717,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "463e8924a70678c31b91a6dd41f68c9b97dab02629d07b9568062344bb7bad19",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "8802bda9c1a5e6f3e57034d320687f399842b594231e187bc5051cc938c6b2ce",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -46273,20 +46832,579 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "7d14e2b5a2abde60325579f9379b9b8d13352a94ae7ccde800b7de29d5b8133e",
+          "family_id": "game:201870",
+          "taste_subject_key": "App_201870",
+          "appid": "201870",
+          "taste_fingerprint": "c0201e7705b197996537ba891e3cbc9b379bf72c8c0918b5cfd5903b9c0f0ad0",
+          "candidate_context_sha256": "d66fd48edc6be55cdb52b8f065197ae3036c388ea5f70dc8d451a483d3eb317f",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "49fe2b9058f8e15d49ff53e1dfa3819e8772df4913c56ebc3d29ad200e78c240",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "8802bda9c1a5e6f3e57034d320687f399842b594231e187bc5051cc938c6b2ce",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:40:16+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:201870:463e8924a70678c3",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "463e8924a70678c31b91a6dd41f68c9b97dab02629d07b9568062344bb7bad19",
+            "prior_accepted_at_utc": "2026-09-30T02:07:06+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "moderate",
+            "prior_confidence": "medium",
+            "prior_taste_factors": {
+              "gameplay_mastery": 72,
+              "development_variety": 66,
+              "structure_pacing_direction": 76,
+              "identity_hooks": 91,
+              "breadth_of_match": 76
+            },
+            "prior_positive_evidence": [
+              "Constantinople traversal preserves the enjoyable parkour core, with the hookblade adding speed and reach to movement.",
+              "The closing chapters for Ezio and Altaïr provide a strong character and narrative payoff, one of the game's most consistently praised strengths.",
+              "Bomb crafting and several new traversal/combat tools add some situational variety around the familiar Brotherhood-era foundation."
+            ],
+            "prior_work_id": "7d14e2b5a2abde60325579f9379b9b8d13352a94ae7ccde800b7de29d5b8133e"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "moderate",
+          "confidence": "medium",
+          "positive_evidence": [
+            "Constantinople traversal preserves the parkour core and the hookblade adds speed and reach.",
+            "The closing chapters for Ezio and Altaïr provide a strong character and narrative payoff.",
+            "Bomb crafting and new traversal or combat tools add situational variety around the familiar foundation."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 73,
+            "development_variety": 66,
+            "structure_pacing_direction": 75,
+            "identity_hooks": 92,
+            "breadth_of_match": 77
+          },
+          "score_findings": [
+            {
+              "finding_id": "acr-parkour-tools",
+              "text_ru": "Паркур Brotherhood остаётся основой, а крюк, бомбы и дополнительные инструменты местами ускоряют перемещение и добавляют новые способы решать знакомые ситуации.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/1/pattern",
+                  "profile_value_sha256": "03ee46ab2d98957c01bd73fe09574b97f6da1eef6a0ceb054817add03d66d5e1",
+                  "match_text_ru": "Само перемещение для тебя может быть самостоятельным источником удовольствия."
+                },
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Освоение дополнительных инструментов повышает ценность знакомой механики."
+                },
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Продолжение должно заметно развивать формулу, а не просто повторять её."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 73
+                },
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 66
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 77
+                }
+              ]
+            },
+            {
+              "finding_id": "acr-ezio-altair-finale",
+              "text_ru": "Финальные главы Эцио и Альтаира, отношения персонажей и атмосфера Константинополя дают сильный эмоциональный итог трилогии — это главный авторский крючок Revelations.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/3/pattern",
+                  "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+                  "match_text_ru": "Персонажи и сюжет для тебя важны как источник вовлечённости."
+                },
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Яркая авторская идентичность заметно повышает запоминаемость."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 75
+                },
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 92
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Крюк, бомбы и защита убежищ добавляют новые инструменты, но часть игроков считает их лишними или недостаточно развитыми.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "unchanged_repetition",
+                "text_ru": "Повтор знакомых активностей, тонкий слой побочного контента и близкая к прежним частям структура миссий усиливают усталость от ежегодной формулы.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "felt_technical_burden",
+                "text_ru": "Текущая Steam-версия имеет сильную legacy-фрикцию: Ubisoft Connect, ошибки запуска, вылеты, проблемы контроллера, потерю сохранений и недоступные обычным путём DLC-достижения.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:201870:463e8924a70678c3",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:40:16+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:40:16+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+            "work_id": "7d14e2b5a2abde60325579f9379b9b8d13352a94ae7ccde800b7de29d5b8133e",
+            "family_id": "game:201870",
+            "taste_subject_key": "App_201870",
+            "appid": "201870",
+            "taste_fingerprint": "c0201e7705b197996537ba891e3cbc9b379bf72c8c0918b5cfd5903b9c0f0ad0",
+            "candidate_context_sha256": "d66fd48edc6be55cdb52b8f065197ae3036c388ea5f70dc8d451a483d3eb317f",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-30T02:07:06+00:00",
+            "work_authority_commit": "b43d7b87c30223abf849e608ad70792f872f3dcd",
+            "dossier_content_sha256": "49fe2b9058f8e15d49ff53e1dfa3819e8772df4913c56ebc3d29ad200e78c240",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "463e8924a70678c31b91a6dd41f68c9b97dab02629d07b9568062344bb7bad19",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+              "work_id": "7d14e2b5a2abde60325579f9379b9b8d13352a94ae7ccde800b7de29d5b8133e",
+              "family_id": "game:201870",
+              "taste_subject_key": "App_201870",
+              "appid": "201870",
+              "taste_fingerprint": "c0201e7705b197996537ba891e3cbc9b379bf72c8c0918b5cfd5903b9c0f0ad0",
+              "candidate_context_sha256": "d66fd48edc6be55cdb52b8f065197ae3036c388ea5f70dc8d451a483d3eb317f",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "49fe2b9058f8e15d49ff53e1dfa3819e8772df4913c56ebc3d29ad200e78c240",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "463e8924a70678c31b91a6dd41f68c9b97dab02629d07b9568062344bb7bad19",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-30T02:07:06+00:00",
+              "run_start_anchor_commit": "fbc9fbdbdc300a5eb2243de78527fc7849618e36",
+              "run_start_authority_commit": "b43d7b87c30223abf849e608ad70792f872f3dcd",
+              "run_started_at_utc": "2026-09-30T02:03:31+00:00",
+              "work_authority_commit": "b43d7b87c30223abf849e608ad70792f872f3dcd",
+              "fit_level": "moderate",
+              "confidence": "medium",
+              "positive_evidence": [
+                "Constantinople traversal preserves the enjoyable parkour core, with the hookblade adding speed and reach to movement.",
+                "The closing chapters for Ezio and Altaïr provide a strong character and narrative payoff, one of the game's most consistently praised strengths.",
+                "Bomb crafting and several new traversal/combat tools add some situational variety around the familiar Brotherhood-era foundation."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 72,
+                "development_variety": 66,
+                "structure_pacing_direction": 76,
+                "identity_hooks": 91,
+                "breadth_of_match": 76
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Крюк, создание бомб и защита убежищ добавляют новые инструменты, но часть игроков считает эти системы лишними или недостаточно развитыми.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 1
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "unchanged_repetition",
+                    "text_ru": "Повтор знакомых активностей, тонкий слой побочного контента и близкая к прежним частям структура миссий могут усиливать усталость от уже знакомой формулы серии.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 2
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "felt_technical_burden",
+                    "text_ru": "Текущая Steam-версия имеет сильную техническую фрикцию: Ubisoft Connect, ошибки запуска, вылеты, проблемы контроллера, случаи потери сохранений и недоступные обычным путём DLC-достижения.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 3
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "moderate",
+            "confidence": "medium",
+            "positive_evidence": [
+              "Constantinople traversal preserves the enjoyable parkour core, with the hookblade adding speed and reach to movement.",
+              "The closing chapters for Ezio and Altaïr provide a strong character and narrative payoff, one of the game's most consistently praised strengths.",
+              "Bomb crafting and several new traversal/combat tools add some situational variety around the familiar Brotherhood-era foundation."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 72,
+              "development_variety": 66,
+              "structure_pacing_direction": 76,
+              "identity_hooks": 91,
+              "breadth_of_match": 76
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Крюк, создание бомб и защита убежищ добавляют новые инструменты, но часть игроков считает эти системы лишними или недостаточно развитыми.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "unchanged_repetition",
+                  "text_ru": "Повтор знакомых активностей, тонкий слой побочного контента и близкая к прежним частям структура миссий могут усиливать усталость от уже знакомой формулы серии.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                },
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "felt_technical_burden",
+                  "text_ru": "Текущая Steam-версия имеет сильную техническую фрикцию: Ubisoft Connect, ошибки запуска, вылеты, проблемы контроллера, случаи потери сохранений и недоступные обычным путём DLC-достижения.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:201870:463e8924a70678c3",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "463e8924a70678c31b91a6dd41f68c9b97dab02629d07b9568062344bb7bad19",
+        "prior_accepted_at_utc": "2026-09-30T02:07:06+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "moderate",
+        "prior_confidence": "medium",
+        "prior_taste_factors": {
+          "gameplay_mastery": 72,
+          "development_variety": 66,
+          "structure_pacing_direction": 76,
+          "identity_hooks": 91,
+          "breadth_of_match": 76
+        },
+        "prior_positive_evidence": [
+          "Constantinople traversal preserves the enjoyable parkour core, with the hookblade adding speed and reach to movement.",
+          "The closing chapters for Ezio and Altaïr provide a strong character and narrative payoff, one of the game's most consistently praised strengths.",
+          "Bomb crafting and several new traversal/combat tools add some situational variety around the familiar Brotherhood-era foundation."
+        ],
+        "prior_work_id": "7d14e2b5a2abde60325579f9379b9b8d13352a94ae7ccde800b7de29d5b8133e"
+      },
       "fit_level": "moderate",
       "confidence": "medium",
       "positive_evidence": [
-        "Constantinople traversal preserves the enjoyable parkour core, with the hookblade adding speed and reach to movement.",
-        "The closing chapters for Ezio and Altaïr provide a strong character and narrative payoff, one of the game's most consistently praised strengths.",
-        "Bomb crafting and several new traversal/combat tools add some situational variety around the familiar Brotherhood-era foundation."
+        "Constantinople traversal preserves the parkour core and the hookblade adds speed and reach.",
+        "The closing chapters for Ezio and Altaïr provide a strong character and narrative payoff.",
+        "Bomb crafting and new traversal or combat tools add situational variety around the familiar foundation."
       ],
       "taste_factors": {
-        "gameplay_mastery": 72,
+        "gameplay_mastery": 73,
         "development_variety": 66,
-        "structure_pacing_direction": 76,
-        "identity_hooks": 91,
-        "breadth_of_match": 76
+        "structure_pacing_direction": 75,
+        "identity_hooks": 92,
+        "breadth_of_match": 77
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "acr-parkour-tools",
+          "text_ru": "Паркур Brotherhood остаётся основой, а крюк, бомбы и дополнительные инструменты местами ускоряют перемещение и добавляют новые способы решать знакомые ситуации.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/1/pattern",
+              "profile_value_sha256": "03ee46ab2d98957c01bd73fe09574b97f6da1eef6a0ceb054817add03d66d5e1",
+              "match_text_ru": "Само перемещение для тебя может быть самостоятельным источником удовольствия."
+            },
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Освоение дополнительных инструментов повышает ценность знакомой механики."
+            },
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Продолжение должно заметно развивать формулу, а не просто повторять её."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 73
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 66
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 77
+            }
+          ]
+        },
+        {
+          "finding_id": "acr-ezio-altair-finale",
+          "text_ru": "Финальные главы Эцио и Альтаира, отношения персонажей и атмосфера Константинополя дают сильный эмоциональный итог трилогии — это главный авторский крючок Revelations.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/3/pattern",
+              "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+              "match_text_ru": "Персонажи и сюжет для тебя важны как источник вовлечённости."
+            },
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Яркая авторская идентичность заметно повышает запоминаемость."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 75
+            },
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 92
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -46308,7 +47426,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Крюк, создание бомб и защита убежищ добавляют новые инструменты, но часть игроков считает эти системы лишними или недостаточно развитыми.",
+            "text_ru": "Крюк, бомбы и защита убежищ добавляют новые инструменты, но часть игроков считает их лишними или недостаточно развитыми.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -46319,7 +47437,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "unchanged_repetition",
-            "text_ru": "Повтор знакомых активностей, тонкий слой побочного контента и близкая к прежним частям структура миссий могут усиливать усталость от уже знакомой формулы серии.",
+            "text_ru": "Повтор знакомых активностей, тонкий слой побочного контента и близкая к прежним частям структура миссий усиливают усталость от ежегодной формулы.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -46330,7 +47448,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "felt_technical_burden",
-            "text_ru": "Текущая Steam-версия имеет сильную техническую фрикцию: Ubisoft Connect, ошибки запуска, вылеты, проблемы контроллера, случаи потери сохранений и недоступные обычным путём DLC-достижения.",
+            "text_ru": "Текущая Steam-версия имеет сильную legacy-фрикцию: Ubisoft Connect, ошибки запуска, вылеты, проблемы контроллера, потерю сохранений и недоступные обычным путём DLC-достижения.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -46357,8 +47475,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-30T02:07:06+00:00",
-      "work_authority_commit": "b43d7b87c30223abf849e608ad70792f872f3dcd",
+      "accepted_at_utc": "2026-09-30T06:40:16+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "49f7e98b6364ec1c3fb33d00c302f3f1a34ce9ffc6c90fa6c2085bbec9be5c4e",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -46374,8 +47492,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "bb6f18b4b4892ebf3d24e1135c941be5593e4f9a933d6c4c86e5d839017b1a36",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "4d9204b43e4f68077e2dc5a83999803fb357c2e2abe424cf085d9cf95c1f462c",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -46474,20 +47592,534 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "b5767f14dcc858391e7c853bef83067fa32353908668db9f9668cc7cbc6211ca",
+          "family_id": "game:200710",
+          "taste_subject_key": "App_200710",
+          "appid": "200710",
+          "taste_fingerprint": "c54bba5e0410b7f4295eeb79f19c4ecc7e7116461dc3b75d59ca8625a69e7870",
+          "candidate_context_sha256": "373ca949eb685bcf6b470bc4c492e305d8710126db0476b95428b8e5538c1cc2",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "49f7e98b6364ec1c3fb33d00c302f3f1a34ce9ffc6c90fa6c2085bbec9be5c4e",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "4d9204b43e4f68077e2dc5a83999803fb357c2e2abe424cf085d9cf95c1f462c",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:40:16+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:200710:bb6f18b4b4892ebf",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "bb6f18b4b4892ebf3d24e1135c941be5593e4f9a933d6c4c86e5d839017b1a36",
+            "prior_accepted_at_utc": "2026-09-30T02:07:06+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "moderate",
+            "prior_confidence": "high",
+            "prior_taste_factors": {
+              "gameplay_mastery": 79,
+              "development_variety": 90,
+              "structure_pacing_direction": 70,
+              "identity_hooks": 65,
+              "breadth_of_match": 83
+            },
+            "prior_positive_evidence": [
+              "Fast action-RPG combat, distinct classes and varied skill trees provide strong build experimentation and clear progression.",
+              "Randomized loot and character development create frequent short-term goals with visible gameplay effects.",
+              "Pets, multiplayer and a large modding scene broaden the base loop and can add classes, maps and quality-of-life options."
+            ],
+            "prior_work_id": "b5767f14dcc858391e7c853bef83067fa32353908668db9f9668cc7cbc6211ca"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "moderate",
+          "confidence": "high",
+          "positive_evidence": [
+            "Fast action-RPG combat, distinct classes and varied skill trees support strong build experimentation.",
+            "Randomized loot and character development provide frequent short-term progression goals.",
+            "Pets and a large modding scene broaden the base loop."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 80,
+            "development_variety": 91,
+            "structure_pacing_direction": 70,
+            "identity_hooks": 65,
+            "breadth_of_match": 84
+          },
+          "score_findings": [
+            {
+              "finding_id": "torchlight-builds",
+              "text_ru": "Быстрый бой, разные классы, деревья навыков и случайный лут постоянно дают новые решения по билду и хорошо ощущаемые краткосрочные цели.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Тебе нравится осваивать механически отличающиеся варианты."
+                },
+                {
+                  "json_pointer": "/taste_profile/2/pattern",
+                  "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                  "match_text_ru": "Понятные улучшения с видимым эффектом особенно хорошо работают для тебя."
+                },
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Новые сборки и предметы поддерживают развитие игрового опыта."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 80
+                },
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 91
+                },
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 70
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 84
+                }
+              ]
+            },
+            {
+              "finding_id": "torchlight-mods",
+              "text_ru": "Моды добавляют классы, карты и улучшения качества жизни, заметно расширяя старую базовую игру для тех, кто готов использовать пользовательский контент.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Отдельный устойчивый крючок помогает игре дольше оставаться значимой."
+                },
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Дополнительные механические варианты помогают знакомой формуле не застывать."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 65
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "unchanged_repetition",
+                "text_ru": "На длинной дистанции бои и окружения могут сливаться, а XP и поиск лута — превращаться в гринд при слабой сюжетной мотивации.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "felt_technical_burden",
+                "text_ru": "После миграции онлайн-сервиса в сентябре 2026 года появились новые сторонние требования к аккаунтам и жалобы на подключение; одиночная игра не затронута.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:200710:bb6f18b4b4892ebf",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:40:16+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:40:16+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+            "work_id": "b5767f14dcc858391e7c853bef83067fa32353908668db9f9668cc7cbc6211ca",
+            "family_id": "game:200710",
+            "taste_subject_key": "App_200710",
+            "appid": "200710",
+            "taste_fingerprint": "c54bba5e0410b7f4295eeb79f19c4ecc7e7116461dc3b75d59ca8625a69e7870",
+            "candidate_context_sha256": "373ca949eb685bcf6b470bc4c492e305d8710126db0476b95428b8e5538c1cc2",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-30T02:07:06+00:00",
+            "work_authority_commit": "b43d7b87c30223abf849e608ad70792f872f3dcd",
+            "dossier_content_sha256": "49f7e98b6364ec1c3fb33d00c302f3f1a34ce9ffc6c90fa6c2085bbec9be5c4e",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "bb6f18b4b4892ebf3d24e1135c941be5593e4f9a933d6c4c86e5d839017b1a36",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+              "work_id": "b5767f14dcc858391e7c853bef83067fa32353908668db9f9668cc7cbc6211ca",
+              "family_id": "game:200710",
+              "taste_subject_key": "App_200710",
+              "appid": "200710",
+              "taste_fingerprint": "c54bba5e0410b7f4295eeb79f19c4ecc7e7116461dc3b75d59ca8625a69e7870",
+              "candidate_context_sha256": "373ca949eb685bcf6b470bc4c492e305d8710126db0476b95428b8e5538c1cc2",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "49f7e98b6364ec1c3fb33d00c302f3f1a34ce9ffc6c90fa6c2085bbec9be5c4e",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "bb6f18b4b4892ebf3d24e1135c941be5593e4f9a933d6c4c86e5d839017b1a36",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-30T02:07:06+00:00",
+              "run_start_anchor_commit": "fbc9fbdbdc300a5eb2243de78527fc7849618e36",
+              "run_start_authority_commit": "b43d7b87c30223abf849e608ad70792f872f3dcd",
+              "run_started_at_utc": "2026-09-30T02:03:31+00:00",
+              "work_authority_commit": "b43d7b87c30223abf849e608ad70792f872f3dcd",
+              "fit_level": "moderate",
+              "confidence": "high",
+              "positive_evidence": [
+                "Fast action-RPG combat, distinct classes and varied skill trees provide strong build experimentation and clear progression.",
+                "Randomized loot and character development create frequent short-term goals with visible gameplay effects.",
+                "Pets, multiplayer and a large modding scene broaden the base loop and can add classes, maps and quality-of-life options."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 79,
+                "development_variety": 90,
+                "structure_pacing_direction": 70,
+                "identity_hooks": 65,
+                "breadth_of_match": 83
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "unchanged_repetition",
+                    "text_ru": "На длинных сессиях боевые и окруженческие циклы могут сливаться, а прокачка и поиск лута — превращаться в гринд; для профиля это риск потери ощущения постоянного развития.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 1
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "felt_technical_burden",
+                    "text_ru": "В сентябре 2026 года онлайн-сервис на ПК получил новые сторонние требования к аккаунтам и жалобы на подключение. Одиночная игра не затронута, но совместный режим стал заметно сложнее запускать.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 3
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "moderate",
+            "confidence": "high",
+            "positive_evidence": [
+              "Fast action-RPG combat, distinct classes and varied skill trees provide strong build experimentation and clear progression.",
+              "Randomized loot and character development create frequent short-term goals with visible gameplay effects.",
+              "Pets, multiplayer and a large modding scene broaden the base loop and can add classes, maps and quality-of-life options."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 79,
+              "development_variety": 90,
+              "structure_pacing_direction": 70,
+              "identity_hooks": 65,
+              "breadth_of_match": 83
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "unchanged_repetition",
+                  "text_ru": "На длинных сессиях боевые и окруженческие циклы могут сливаться, а прокачка и поиск лута — превращаться в гринд; для профиля это риск потери ощущения постоянного развития.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "felt_technical_burden",
+                  "text_ru": "В сентябре 2026 года онлайн-сервис на ПК получил новые сторонние требования к аккаунтам и жалобы на подключение. Одиночная игра не затронута, но совместный режим стал заметно сложнее запускать.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:200710:bb6f18b4b4892ebf",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "bb6f18b4b4892ebf3d24e1135c941be5593e4f9a933d6c4c86e5d839017b1a36",
+        "prior_accepted_at_utc": "2026-09-30T02:07:06+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "moderate",
+        "prior_confidence": "high",
+        "prior_taste_factors": {
+          "gameplay_mastery": 79,
+          "development_variety": 90,
+          "structure_pacing_direction": 70,
+          "identity_hooks": 65,
+          "breadth_of_match": 83
+        },
+        "prior_positive_evidence": [
+          "Fast action-RPG combat, distinct classes and varied skill trees provide strong build experimentation and clear progression.",
+          "Randomized loot and character development create frequent short-term goals with visible gameplay effects.",
+          "Pets, multiplayer and a large modding scene broaden the base loop and can add classes, maps and quality-of-life options."
+        ],
+        "prior_work_id": "b5767f14dcc858391e7c853bef83067fa32353908668db9f9668cc7cbc6211ca"
+      },
       "fit_level": "moderate",
       "confidence": "high",
       "positive_evidence": [
-        "Fast action-RPG combat, distinct classes and varied skill trees provide strong build experimentation and clear progression.",
-        "Randomized loot and character development create frequent short-term goals with visible gameplay effects.",
-        "Pets, multiplayer and a large modding scene broaden the base loop and can add classes, maps and quality-of-life options."
+        "Fast action-RPG combat, distinct classes and varied skill trees support strong build experimentation.",
+        "Randomized loot and character development provide frequent short-term progression goals.",
+        "Pets and a large modding scene broaden the base loop."
       ],
       "taste_factors": {
-        "gameplay_mastery": 79,
-        "development_variety": 90,
+        "gameplay_mastery": 80,
+        "development_variety": 91,
         "structure_pacing_direction": 70,
         "identity_hooks": 65,
-        "breadth_of_match": 83
+        "breadth_of_match": 84
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "torchlight-builds",
+          "text_ru": "Быстрый бой, разные классы, деревья навыков и случайный лут постоянно дают новые решения по билду и хорошо ощущаемые краткосрочные цели.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Тебе нравится осваивать механически отличающиеся варианты."
+            },
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Понятные улучшения с видимым эффектом особенно хорошо работают для тебя."
+            },
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Новые сборки и предметы поддерживают развитие игрового опыта."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 80
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 91
+            },
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 70
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 84
+            }
+          ]
+        },
+        {
+          "finding_id": "torchlight-mods",
+          "text_ru": "Моды добавляют классы, карты и улучшения качества жизни, заметно расширяя старую базовую игру для тех, кто готов использовать пользовательский контент.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 2
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Отдельный устойчивый крючок помогает игре дольше оставаться значимой."
+            },
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Дополнительные механические варианты помогают знакомой формуле не застывать."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 65
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -46505,7 +48137,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "unchanged_repetition",
-            "text_ru": "На длинных сессиях боевые и окруженческие циклы могут сливаться, а прокачка и поиск лута — превращаться в гринд; для профиля это риск потери ощущения постоянного развития.",
+            "text_ru": "На длинной дистанции бои и окружения могут сливаться, а XP и поиск лута — превращаться в гринд при слабой сюжетной мотивации.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -46516,7 +48148,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "felt_technical_burden",
-            "text_ru": "В сентябре 2026 года онлайн-сервис на ПК получил новые сторонние требования к аккаунтам и жалобы на подключение. Одиночная игра не затронута, но совместный режим стал заметно сложнее запускать.",
+            "text_ru": "После миграции онлайн-сервиса в сентябре 2026 года появились новые сторонние требования к аккаунтам и жалобы на подключение; одиночная игра не затронута.",
             "evidence_refs": [
               {
                 "kind": "observation",
