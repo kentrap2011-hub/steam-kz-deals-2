@@ -2,9 +2,9 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` assigned: `WORKER_TASK_DEEP_SCORE_EVIDENCE_EXPLAINABILITY_ALIGNMENT_01.md` — align Deep score-bearing evidence with the same grounded reasons shown to the user; no presentation-only template fix.
+- `ЧАТ 1` is free after accepted PR #128 / merge `d6221868a5e78b9852a0720319de036f76e6ec68`. Next authorized task: `WORKER_TASK_DEEP_INVALID_NOT_FIT_CONTRACT_LOOP_FIX_01.md` in a NEW ЧАТ 1.
 - `ЧАТ 2` is free. `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md` is accepted complete via PR #125 / merge `070f30807acceffed36a342e1d442f5dcd1c99c7`.
-- Next queued Deep fix after PR #128: `WORKER_TASK_DEEP_INVALID_NOT_FIT_CONTRACT_LOOP_FIX_01.md` — align `confirmed_personal_negative` confidence rules across schema/prompt/contract/ingest and stop exact contract-invalid semantic executions from looping as fresh normal work.
+- Next authorized Deep fix: `WORKER_TASK_DEEP_INVALID_NOT_FIT_CONTRACT_LOOP_FIX_01.md` — dependency on PR #128 is satisfied; start only in a NEW ЧАТ 1, before further Deep semantic execution.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -20,7 +20,7 @@
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
 
 
-## QUEUED — after ЧАТ 1 / PR #128 — Deep invalid not-fit contract loop fix
+## READY — NEW ЧАТ 1 — Deep invalid not-fit contract loop fix
 
 Task:
 `WORKER_TASK_DEEP_INVALID_NOT_FIT_CONTRACT_LOOP_FIX_01.md`
@@ -29,7 +29,7 @@ Mode:
 `IMPLEMENT / VALIDATE`
 
 Status:
-`waiting_for_pr_128_completion`
+`authorized_ready_for_new_worker`
 
 Pinned defect:
 - Five Dates, Her New Memory - Hentai Simulator and Blazing Sails repeatedly re-enter normal Deep work;
@@ -46,10 +46,11 @@ Required fix:
 - reconcile the three current repeated identities after the generic fix.
 
 Dependency:
-- must start only after PR #128 is complete because both tasks touch Deep prompt/schema/contract/ingest surfaces.
+- satisfied: PR #128 merged as `d6221868a5e78b9852a0720319de036f76e6ec68`;
+- start from fresh `main` and preserve the accepted Deep score-evidence/explainability contract.
 
 
-## ACTIVE — ЧАТ 1 — Deep score evidence / explainability alignment
+## ACCEPTED — ЧАТ 1 — Deep score evidence / explainability alignment
 
 Task:
 `WORKER_TASK_DEEP_SCORE_EVIDENCE_EXPLAINABILITY_ALIGNMENT_01.md`
@@ -58,7 +59,7 @@ Mode:
 `IMPLEMENT / VALIDATE`
 
 Status:
-`authorized_ready_for_worker`
+`migration_prepared_needs_semantic_execution`
 
 User requirement:
 - the reasons allowed to influence Deep personal score must be the same grounded reasons the site can show;
@@ -79,6 +80,16 @@ Pinned regression:
 
 Expected report:
 `reviews/worker_reports/deep-score-evidence-explainability-alignment-01.md`
+
+Director acceptance:
+- PR #128 merged as `d6221868a5e78b9852a0720319de036f76e6ec68`;
+- final branch head `348f24a83ff8a25e907739a502001eade898aec3`;
+- PASS 2 core, execution ownership, backlog dispositions and package purchase value all passed on the final head;
+- canonical structured `DEEP-SCORE-EVIDENCE-V1` links score-bearing findings to exact Dossier/profile evidence and Taste factors;
+- card reasons for linked Deep results project from those accepted findings rather than the old lexical whitelist;
+- finite 43-target historical fit migration is prepared through the existing Progressive Deep worker; KOF XV is included;
+- semantic migration has NOT yet been executed;
+- do not run Deep semantic migration until the already-authorized invalid-not-fit loop fix is completed, because it changes the same Deep contract/ingest boundary and prevents known repeat/rejection behavior.
 
 
 ## ACCEPTED — ЧАТ 1 — KOF XV missing positive reasons diagnostic
