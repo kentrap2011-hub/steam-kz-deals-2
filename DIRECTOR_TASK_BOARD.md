@@ -2,9 +2,9 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` is free after accepted PR #128 / merge `d6221868a5e78b9852a0720319de036f76e6ec68`. Next authorized task: `WORKER_TASK_DEEP_INVALID_NOT_FIT_CONTRACT_LOOP_FIX_01.md` in a NEW ЧАТ 1.
+- `ЧАТ 1` is free after accepted PR #129 / merge `49151c6e688174e965493020624e63f48e20eebc`. Deep invalid not-fit retry loop fix is complete; the three pinned games are now recovery work, not normal first-pass work.
 - `ЧАТ 2` is free. `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md` is accepted complete via PR #125 / merge `070f30807acceffed36a342e1d442f5dcd1c99c7`.
-- Next authorized Deep fix: `WORKER_TASK_DEEP_INVALID_NOT_FIT_CONTRACT_LOOP_FIX_01.md` — dependency on PR #128 is satisfied; start only in a NEW ЧАТ 1, before further Deep semantic execution.
+- Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -20,7 +20,7 @@
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
 
 
-## READY — NEW ЧАТ 1 — Deep invalid not-fit contract loop fix
+## ACCEPTED — ЧАТ 1 — Deep invalid not-fit contract loop fix
 
 Task:
 `WORKER_TASK_DEEP_INVALID_NOT_FIT_CONTRACT_LOOP_FIX_01.md`
@@ -29,26 +29,17 @@ Mode:
 `IMPLEMENT / VALIDATE`
 
 Status:
-`authorized_ready_for_new_worker`
+`recovery_prepared_needs_semantic_execution`
 
-Pinned defect:
-- Five Dates, Her New Memory - Hentai Simulator and Blazing Sails repeatedly re-enter normal Deep work;
-- submitted results used `analyzed_not_fit + confirmed_personal_negative + confidence=medium`;
-- GitHub rejected them with `confirmed personal negative requires high confidence`;
-- rejection status `rejected_invalid_result_no_attempt` leaves them eligible for ordinary reprocessing.
-
-Required fix:
-- encode the high-confidence invariant in schema + worker prompt + contract + ingest;
-- never auto-promote medium to high;
-- proven exact semantic-contract-invalid execution must leave ordinary first-pass through existing terminal/recovery semantics;
-- malformed/stale/unbound transport must not falsely consume an attempt;
-- final worker report must distinguish submission from canonical acceptance;
-- reconcile the three current repeated identities after the generic fix.
-
-Dependency:
-- satisfied: PR #128 merged as `d6221868a5e78b9852a0720319de036f76e6ec68`;
-- start from fresh `main` and preserve the accepted Deep score-evidence/explainability contract.
-
+Director acceptance:
+- PR #129 merged as `49151c6e688174e965493020624e63f48e20eebc`;
+- final head `4edb95fe0fe73421eef4c3ebb24d5f335e837213`;
+- PASS 2 core and backlog validations passed on the final head;
+- schema/prompt/contract/ingest now agree that `confirmed_personal_negative` requires `confidence=high`;
+- deterministic `medium -> high` promotion is forbidden;
+- proven exact-bound semantic-contract failures consume the existing first-pass attempt and move to existing recovery ownership rather than looping as fresh normal work;
+- Five Dates, Her New Memory - Hentai Simulator and Blazing Sails are confirmed in current `main` `progressive_pass2_work.json` with `work_mode=recovery` and bounded recovery authorizations;
+- no semantic recovery was executed by the developer worker and no Scheduled Task was changed.
 
 ## ACCEPTED — ЧАТ 1 — Deep score evidence / explainability alignment
 
