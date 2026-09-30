@@ -306,7 +306,45 @@ def exact_authority_and_path_reuse():
             )
         finally:
             os.chdir(previous_cwd)
-        assert valid_receipts[0]['status'] == 'accepted', valid_receipts[0]
+        if valid_receipts[0]['status'] != 'accepted':
+            identity_fields = list(progressive_pass2.IMMUTABLE_RESULT_FIELDS) + [
+                'dossier_compatibility_binding',
+                'recovery_condition_binding',
+                'migration_provenance',
+                'score_migration_provenance',
+                'score_evidence_contract',
+                'run_start_anchor_commit',
+                'run_start_authority_commit',
+                'run_started_at_utc',
+            ]
+            mismatch = {
+                field: {
+                    'doc': valid_doc.get(field),
+                    'work': (
+                        resolved.get('_run_start_anchor_commit')
+                        if field == 'run_start_anchor_commit'
+                        else resolved.get('_run_start_authority_commit')
+                        if field == 'run_start_authority_commit'
+                        else resolved.get('_run_started_at_utc')
+                        if field == 'run_started_at_utc'
+                        else resolved.get(field)
+                    ),
+                }
+                for field in identity_fields
+                if valid_doc.get(field) != (
+                    resolved.get('_run_start_anchor_commit')
+                    if field == 'run_start_anchor_commit'
+                    else resolved.get('_run_start_authority_commit')
+                    if field == 'run_start_authority_commit'
+                    else resolved.get('_run_started_at_utc')
+                    if field == 'run_started_at_utc'
+                    else resolved.get(field)
+                )
+            }
+            raise AssertionError({
+                'receipt': valid_receipts[0],
+                'identity_mismatch': mismatch,
+            })
         assert valid_state['entries'][item['family_id']]['normal_first_pass_attempted'] is True
         assert progressive_work_authority.commit_is_ancestor(
             confirmation_commit, valid_add, repo
