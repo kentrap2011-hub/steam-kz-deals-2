@@ -1,0 +1,1145 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689",
+  "prepared_required_sha256": "d304f153533d39227d0ad551e7a4195454ccc8f164c4a73c252f171ae5ac3316",
+  "group_plan_sha256": "a1f59224b5acac2ef85750f8a6c6b847352ee6d62c5d448faa1323cdf1f4a65b",
+  "group_count": 81,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 24,
+  "start_index": 69,
+  "end_index_exclusive": 72,
+  "appids": [
+    "2218400",
+    "2221490",
+    "222730"
+  ],
+  "items_sha256": "313a09f67a42f1bb5b88dc04c99d3e22a82fd3c2e2cbf23fb5dab46e65b1b69e",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "b876e7c8001232163f0edb54f1a216a76764020551873acf090ef59edea6b957",
+  "items": [
+    {
+      "key": "App_2218400",
+      "appid": "2218400",
+      "title": "Greedland",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2218400.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2221490",
+      "appid": "2221490",
+      "title": "Tom Clancy’s The Division® 2",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2221490.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_222730",
+      "appid": "222730",
+      "title": "Reus",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_222730.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "1f069943eb814381e4335eb6b784294dc4d8263cb9bf74387aee6f41c74d9aad",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "2218400",
+      "title": "Greedland",
+      "generated_at_utc": "2026-09-30T03:32:35Z",
+      "expires_at_utc": "2026-10-20T03:32:35Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Greedland",
+        "release_year": 2025,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "2218400"
+          },
+          {
+            "kind": "developer",
+            "value": "VaMP He"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 4 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Greedland delivers a straightforward survivor-like/twin-stick loop with large enemy swarms, manual or automatic aiming, numerous weapons, suits and modifier slots that can produce noticeably different power builds.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "Permanent equipment and mod upgrades give frequent unlocks and visible numerical growth, but progression relies heavily on repeated resource and mission grinding rather than continually introducing new systems.",
+          "sentiment": "mixed",
+          "recurrence": "strong",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Repetition is the dominant complaint: similar arenas, repeated enemy patterns and a small set of mission objectives can make long play sessions feel mechanically shallow despite the large arsenal.",
+          "sentiment": "negative",
+          "recurrence": "strong",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-004",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "localization",
+          "statement": "Russian-language players report awkward or unclear Russian translation in item and upgrade descriptions, while recent full-release reviews still mention uneven localization as a presentation issue.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-006"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "strong",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/2218400/Greedland/",
+            "publication_date": "2025-09-15",
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/2218400/negativereviews/?browsefilter=toprated&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "2218400",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/2218400/reviews/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "2218400",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "professional_context",
+            "domain": "xboxtavern.com",
+            "url": "https://www.xboxtavern.com/greedland-review/",
+            "publication_date": "2025-08-08",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": false
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2025-06-29",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2025-09-18",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2026-03-20",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": "2026-08-19",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
+            "publication_date": "2026-09-20",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-003",
+            "publication_date": "2026-09-18",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "2221490",
+      "title": "Tom Clancy’s The Division® 2",
+      "generated_at_utc": "2026-09-30T03:32:35Z",
+      "expires_at_utc": "2026-10-20T03:32:35Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Tom Clancy’s The Division® 2",
+        "release_year": 2019,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "2221490"
+          },
+          {
+            "kind": "developer",
+            "value": "Massive Entertainment"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 4 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Cover shooting, targeted loot, skills and a large gear-set ecosystem support many viable weapon, skill, tank and hybrid builds, with the strongest long-term appeal coming from refining loadouts rather than only finishing the campaign.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "coop",
+          "statement": "The campaign and most PvE content work both solo and cooperatively, while matchmaking remains active enough for major activities; experienced groups can nevertheless trivialize story missions for newcomers.",
+          "sentiment": "positive",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "Endgame offers a very large amount of content and build optimization, but Expertise and proficiency progression remain a substantial grind that can push players to use gear they do not actually enjoy.",
+          "sentiment": "mixed",
+          "recurrence": "strong",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002",
+            "source-005",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-007",
+            "feedback-008",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "The live service still has active stability friction: 2026 players report server errors, crashes and update-specific bugs, including severe lag and disconnections in a September 2026 Escalation-mode issue.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-003",
+            "source-006",
+            "source-007"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-008",
+            "feedback-010"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "strong",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                3
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                3
+              ]
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "news.ubisoft.com",
+            "url": "https://news.ubisoft.com/en-us/article/5gguy1pfxxM7mrCw1vjjQC/the-division-2-available-now-on-xbox-one-pc-and-ps4",
+            "publication_date": "2019-03-15",
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "other_player_feedback",
+            "domain": "stopgame.ru",
+            "url": "https://stopgame.ru/game/tom_clancy_s_the_division_2/reviews",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Tom Clancy’s The Division® 2",
+              "release_year": 2019
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/2221490/reviews?browsefilter=toprated&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "2221490",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "store_user_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/2221490/Tom_Clancys_The_Division_2/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "2221490",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/thedivision/comments/1rlvwp4/how_hard_is_to_get_into_the_division_2_as_a_new/",
+            "publication_date": "2026-03-05",
+            "language": "non_russian",
+            "evidence_role": "current_state",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-006",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/thedivision/comments/1t22xyj/the_expertise_grind_is_killing_this_game/",
+            "publication_date": "2026-05-02",
+            "language": "non_russian",
+            "evidence_role": "current_state",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-007",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/Division2/comments/1wqpct4/please_temporarily_avoid_playing_the_escalation/",
+            "publication_date": "2026-09-26",
+            "language": "non_russian",
+            "evidence_role": "current_state",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2025-06-03",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2024-12-12",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-003",
+            "publication_date": "2025-05-27",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": "2025-06-12",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-004",
+            "publication_date": "2026-09-07",
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-005",
+            "url": "https://www.reddit.com/r/thedivision/comments/1rlvwp4/how_hard_is_to_get_into_the_division_2_as_a_new/",
+            "publication_date": "2026-03-05",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-006",
+            "url": "https://www.reddit.com/r/thedivision/comments/1t22xyj/the_expertise_grind_is_killing_this_game/",
+            "publication_date": "2026-05-02",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-006",
+            "publication_date": "2026-05-02",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-010",
+            "source_id": "source-007",
+            "url": "https://www.reddit.com/r/Division2/comments/1wqpct4/please_temporarily_avoid_playing_the_escalation/",
+            "publication_date": "2026-09-26",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "222730",
+      "title": "Reus",
+      "generated_at_utc": "2026-09-30T03:32:35Z",
+      "expires_at_utc": "2026-10-20T03:32:35Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Reus",
+        "release_year": 2013,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "222730"
+          },
+          {
+            "kind": "developer",
+            "value": "Abbey Games"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 4 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Four elemental giants indirectly shape the planet, while plants, animals and minerals gain bonuses through neighboring synergies; the result plays more like an ecosystem puzzle than direct city control.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Managing resource synergies, village projects and human greed grows considerably more complex than the gentle presentation suggests, and new players can struggle with the tutorial or with understanding which combinations unlock progress.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "Standard runs are time-limited, so the game creates urgency around moving slow giants and developing several villages before they return to sleep; players who want a purely relaxed god game may find that pressure at odds with the visual tone.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-004",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-004",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Unlocks and challenge goals encourage many runs and different ecosystem solutions, but once most sources are known the same broad development loop and limited activity set can become repetitive.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-007"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                3
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                3
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1,
+                3
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                3
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/222730/Reus/",
+            "publication_date": "2013-05-16",
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/222730/reviews/?browsefilter=toprated&l=russian&snr=1_5_9_",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "222730",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "professional_context",
+            "domain": "gamespot.com",
+            "url": "https://www.gamespot.com/reviews/reus-review/1900-6409266/",
+            "publication_date": "2013-06-04",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/222730/positivereviews/?browsefilter=trendsixmonths&l=koreana&p=1",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "222730",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2017-10-27",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2014-12-22",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2023-04-07",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-004",
+            "publication_date": "2026-05-28",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-004",
+            "publication_date": "2026-03-29",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-004",
+            "publication_date": "2026-08-26",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-004",
+            "publication_date": "2026-06-03",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    }
+  ]
+}
