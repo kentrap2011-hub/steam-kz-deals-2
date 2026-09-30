@@ -5743,9 +5743,9 @@
       }
     },
     "game:1046400": {
-      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
-      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
-      "work_id": "0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011",
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "c7af2265e00daf29c872b440fe3d5c4cf687de524c476b9817c10a11cad15cb2",
       "family_id": "game:1046400",
       "taste_subject_key": "App_1046400",
       "appid": "1046400",
@@ -5757,8 +5757,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-28T10:27:23+00:00",
-      "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+      "accepted_at_utc": "2026-09-30T06:26:48+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "204ba2dbfd336eec31b3ad3e4ee691644d89a57f8809330b64f4fbe06fe5df89",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -5774,8 +5774,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "e60c0610f37d8280190c0b41048de32b52dcae65171204f51bf29cb32261d2ed",
-      "work_mode": "legacy_full_reanalysis",
+      "authorization_id": "5da600467c0ee71eb989317b7460d66b11730121ff66109f21eb96cd24f2f751",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -6079,6 +6079,323 @@
             },
             "base_support_compatible": null
           }
+        },
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:26:48+00:00",
+          "state": {
+            "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+            "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+            "work_id": "0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011",
+            "family_id": "game:1046400",
+            "taste_subject_key": "App_1046400",
+            "appid": "1046400",
+            "taste_fingerprint": "a289f6ecb68db127b725355c468131a6bd9d6e136e7f67fb7f29d97a1c4adb9b",
+            "candidate_context_sha256": "e98d55ae8ca838885b14dc4a0f60cbf457bcf80e8ef431f0c2f968fc115b82f2",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-28T10:27:23+00:00",
+            "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+            "dossier_content_sha256": "204ba2dbfd336eec31b3ad3e4ee691644d89a57f8809330b64f4fbe06fe5df89",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "e60c0610f37d8280190c0b41048de32b52dcae65171204f51bf29cb32261d2ed",
+            "work_mode": "legacy_full_reanalysis",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+              "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+              "work_id": "0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011",
+              "family_id": "game:1046400",
+              "taste_subject_key": "App_1046400",
+              "appid": "1046400",
+              "taste_fingerprint": "a289f6ecb68db127b725355c468131a6bd9d6e136e7f67fb7f29d97a1c4adb9b",
+              "candidate_context_sha256": "e98d55ae8ca838885b14dc4a0f60cbf457bcf80e8ef431f0c2f968fc115b82f2",
+              "dossier_content_sha256": "204ba2dbfd336eec31b3ad3e4ee691644d89a57f8809330b64f4fbe06fe5df89",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "371995d5ede46335ccee70649211b30ed6edb3e1fb45762e66454493a50498c6",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-27T17:26:16+00:00",
+              "run_start_anchor_commit": "850fd0ab32ce67271497ae9bfafe80a8ab83fdce",
+              "run_start_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "run_started_at_utc": "2026-09-27T17:10:54+00:00",
+              "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "fit_level": "moderate",
+              "confidence": "medium",
+              "positive_evidence": [
+                "The interconnected tower opens into many routes and secrets, giving exploration concrete discoveries rather than empty traversal.",
+                "Meaningful upgrades and later mobility conveniences materially improve what the player can reach and how the world is navigated, matching the profile's preference for evolving exploration systems."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 68,
+                "development_variety": 70,
+                "structure_pacing_direction": 56,
+                "identity_hooks": 66,
+                "breadth_of_match": 67
+              },
+              "base_support_compatible": null
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "legacy_reanalysis_attempts": [
+              {
+                "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+                "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+                "work_id": "0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011",
+                "family_id": "game:1046400",
+                "taste_subject_key": "App_1046400",
+                "appid": "1046400",
+                "taste_fingerprint": "a289f6ecb68db127b725355c468131a6bd9d6e136e7f67fb7f29d97a1c4adb9b",
+                "candidate_context_sha256": "e98d55ae8ca838885b14dc4a0f60cbf457bcf80e8ef431f0c2f968fc115b82f2",
+                "dossier_content_sha256": "204ba2dbfd336eec31b3ad3e4ee691644d89a57f8809330b64f4fbe06fe5df89",
+                "dossier_compatibility_binding": {
+                  "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                  "evidence_contract_version": 2,
+                  "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                  "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                  "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                  "worker_schema_version": 2,
+                  "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                  "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                  "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                  "dossier_schema_version": 2,
+                  "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                  "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+                },
+                "authorization_id": "e60c0610f37d8280190c0b41048de32b52dcae65171204f51bf29cb32261d2ed",
+                "work_mode": "legacy_full_reanalysis",
+                "recovery_authorization_id": null,
+                "recovery_reason": null,
+                "recovery_condition_binding": null,
+                "migration_provenance": {
+                  "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+                  "migration_target_id": "legacy-full-reanalysis-01:0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011",
+                  "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+                  "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+                  "prior_outcome": "analyzed_fit",
+                  "prior_fit_level": "moderate",
+                  "prior_confidence": "medium",
+                  "prior_taste_factors": {
+                    "gameplay_mastery": 68,
+                    "development_variety": 70,
+                    "structure_pacing_direction": 56,
+                    "identity_hooks": 66,
+                    "breadth_of_match": 67
+                  },
+                  "prior_not_fit_basis": null,
+                  "prior_work_id": "0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011",
+                  "prior_authorization_id": "371995d5ede46335ccee70649211b30ed6edb3e1fb45762e66454493a50498c6",
+                  "prior_accepted_at_utc": "2026-09-27T17:26:16+00:00",
+                  "preserved_positive_evidence": [
+                    "The interconnected tower opens into many routes and secrets, giving exploration concrete discoveries rather than empty traversal.",
+                    "Meaningful upgrades and later mobility conveniences materially improve what the player can reach and how the world is navigated, matching the profile's preference for evolving exploration systems."
+                  ],
+                  "preserved_not_fit_evidence": []
+                },
+                "outcome": "analyzed_fit",
+                "analysis_issue_code": null,
+                "attempt_consumption_source": "accepted_result",
+                "accepted_at_utc": "2026-09-28T10:27:23+00:00",
+                "run_start_anchor_commit": "f4e158c1557a5d95c819a90e42c0778ad1d77ede",
+                "run_start_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+                "run_started_at_utc": "2026-09-28T10:13:37+00:00",
+                "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+                "fit_level": "moderate",
+                "confidence": "medium",
+                "positive_evidence": [
+                  "The interconnected tower opens into many routes and secrets, giving exploration concrete discoveries rather than empty traversal.",
+                  "Meaningful upgrades and later mobility conveniences materially improve what the player can reach and how the world is navigated, matching the profile's preference for evolving exploration systems."
+                ],
+                "taste_factors": {
+                  "gameplay_mastery": 66,
+                  "development_variety": 69,
+                  "structure_pacing_direction": 52,
+                  "identity_hooks": 66,
+                  "breadth_of_match": 65
+                },
+                "base_support_compatible": null,
+                "negative_assessment": {
+                  "status": "completed",
+                  "evaluated_candidate_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    },
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    },
+                    {
+                      "kind": "conflict",
+                      "index": 0
+                    }
+                  ],
+                  "findings": [
+                    {
+                      "disposition": "confirmed_personal_risk",
+                      "risk_code": "unchanged_repetition",
+                      "text_ru": "До получения поздних удобств смерть, редкие точки сохранения и необходимость менять персонажей могут заставлять многократно проходить уже знакомые участки башни; для профиля это заметный риск утомления, хотя поздние улучшения смягчают проблему.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 1
+                        },
+                        {
+                          "kind": "conflict",
+                          "index": 0
+                        }
+                      ]
+                    },
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "Есть старое сообщение о неловкой русской локализации и проблемах с терминологией и размещением текста, но актуальное состояние этих недостатков не подтверждено.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 2
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "migration_result_changed": true,
+                "migration_fit_outcome_changed": false
+              }
+            ],
+            "legacy_reanalysis_status": {
+              "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+              "migration_target_id": "legacy-full-reanalysis-01:0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011",
+              "attempt_outcome": "analyzed_fit",
+              "accepted_at_utc": "2026-09-28T10:27:23+00:00",
+              "completed_revision_promoted": true
+            },
+            "migration_provenance": {
+              "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+              "migration_target_id": "legacy-full-reanalysis-01:0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011",
+              "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+              "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+              "prior_outcome": "analyzed_fit",
+              "prior_fit_level": "moderate",
+              "prior_confidence": "medium",
+              "prior_taste_factors": {
+                "gameplay_mastery": 68,
+                "development_variety": 70,
+                "structure_pacing_direction": 56,
+                "identity_hooks": 66,
+                "breadth_of_match": 67
+              },
+              "prior_not_fit_basis": null,
+              "prior_work_id": "0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011",
+              "prior_authorization_id": "371995d5ede46335ccee70649211b30ed6edb3e1fb45762e66454493a50498c6",
+              "prior_accepted_at_utc": "2026-09-27T17:26:16+00:00",
+              "preserved_positive_evidence": [
+                "The interconnected tower opens into many routes and secrets, giving exploration concrete discoveries rather than empty traversal.",
+                "Meaningful upgrades and later mobility conveniences materially improve what the player can reach and how the world is navigated, matching the profile's preference for evolving exploration systems."
+              ],
+              "preserved_not_fit_evidence": []
+            },
+            "migration_result_changed": true,
+            "migration_fit_outcome_changed": false,
+            "fit_level": "moderate",
+            "confidence": "medium",
+            "positive_evidence": [
+              "The interconnected tower opens into many routes and secrets, giving exploration concrete discoveries rather than empty traversal.",
+              "Meaningful upgrades and later mobility conveniences materially improve what the player can reach and how the world is navigated, matching the profile's preference for evolving exploration systems."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 66,
+              "development_variety": 69,
+              "structure_pacing_direction": 52,
+              "identity_hooks": 66,
+              "breadth_of_match": 65
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                },
+                {
+                  "kind": "conflict",
+                  "index": 0
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "unchanged_repetition",
+                  "text_ru": "До получения поздних удобств смерть, редкие точки сохранения и необходимость менять персонажей могут заставлять многократно проходить уже знакомые участки башни; для профиля это заметный риск утомления, хотя поздние улучшения смягчают проблему.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    },
+                    {
+                      "kind": "conflict",
+                      "index": 0
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Есть старое сообщение о неловкой русской локализации и проблемах с терминологией и размещением текста, но актуальное состояние этих недостатков не подтверждено.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                }
+              ]
+            }
+          }
         }
       ],
       "migration_provenance": {
@@ -6108,19 +6425,399 @@
       },
       "migration_result_changed": true,
       "migration_fit_outcome_changed": false,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "c7af2265e00daf29c872b440fe3d5c4cf687de524c476b9817c10a11cad15cb2",
+          "family_id": "game:1046400",
+          "taste_subject_key": "App_1046400",
+          "appid": "1046400",
+          "taste_fingerprint": "a289f6ecb68db127b725355c468131a6bd9d6e136e7f67fb7f29d97a1c4adb9b",
+          "candidate_context_sha256": "e98d55ae8ca838885b14dc4a0f60cbf457bcf80e8ef431f0c2f968fc115b82f2",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "204ba2dbfd336eec31b3ad3e4ee691644d89a57f8809330b64f4fbe06fe5df89",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "5da600467c0ee71eb989317b7460d66b11730121ff66109f21eb96cd24f2f751",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:26:48+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:1046400:e60c0610f37d8280",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "e60c0610f37d8280190c0b41048de32b52dcae65171204f51bf29cb32261d2ed",
+            "prior_accepted_at_utc": "2026-09-28T10:27:23+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "moderate",
+            "prior_confidence": "medium",
+            "prior_taste_factors": {
+              "gameplay_mastery": 66,
+              "development_variety": 69,
+              "structure_pacing_direction": 52,
+              "identity_hooks": 66,
+              "breadth_of_match": 65
+            },
+            "prior_positive_evidence": [
+              "The interconnected tower opens into many routes and secrets, giving exploration concrete discoveries rather than empty traversal.",
+              "Meaningful upgrades and later mobility conveniences materially improve what the player can reach and how the world is navigated, matching the profile's preference for evolving exploration systems."
+            ],
+            "prior_work_id": "0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "moderate",
+          "confidence": "medium",
+          "positive_evidence": [
+            "The interconnected tower opens into multiple routes, secrets and meaningful upgrades, so exploration produces concrete discoveries.",
+            "Later mobility and switching conveniences materially improve navigation and make the tower's structure more rewarding over time."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 60,
+            "development_variety": 70,
+            "structure_pacing_direction": 55,
+            "identity_hooks": 62,
+            "breadth_of_match": 66
+          },
+          "score_findings": [
+            {
+              "finding_id": "astalon-exploration-growth",
+              "text_ru": "Башня постоянно открывает новые маршруты, секреты и полезные улучшения, поэтому исследование даёт тебе ощущение развития, а не просто хождение по пустым коридорам.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Тебе особенно важно, чтобы опыт заметно развивался по ходу игры."
+                },
+                {
+                  "json_pointer": "/taste_profile/2/pattern",
+                  "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                  "match_text_ru": "Понятный эффект улучшений делает прогрессию для тебя ценнее."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 70
+                },
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 55
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 66
+                }
+              ]
+            },
+            {
+              "finding_id": "astalon-structural-hook",
+              "text_ru": "Связанная структура башни сама становится игровым крючком: новые возможности меняют то, куда можно попасть и как воспринимается уже знакомое пространство.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Яркий собственный крючок повышает шанс, что игра запомнится."
+                },
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Тебе важна эволюция опыта, а не неизменная формула."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 62
+                }
+              ]
+            },
+            {
+              "finding_id": "astalon-early-friction",
+              "text_ru": "До поздних удобств смерть, точки сохранения и смена персонажей могут заставлять много возвращаться по уже знакомым участкам, поэтому механическое удовольствие здесь не безусловное.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "conflict",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/8/pattern",
+                  "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+                  "match_text_ru": "Повторяемость для тебя становится минусом, когда не приносит нового опыта."
+                },
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Мастерство ценно, когда улучшение навыка ощущается содержательно, а не как лишняя рутина."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "qualifies",
+                  "normalized_value": 60
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "conflict",
+                "index": 0
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "unchanged_repetition",
+                "text_ru": "До получения поздних удобств игра может заставлять заметно повторять уже пройденные участки после смерти и ради смены персонажей.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Есть старое единичное замечание о неровном русском переводе, но Dossier не подтверждает, что проблема сохранилась в текущей версии.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Восприятие возвратов меняется по мере прохождения: ранняя часть может раздражать, а поздние возможности заметно улучшают темп исследования.",
+                "evidence_refs": [
+                  {
+                    "kind": "conflict",
+                    "index": 0
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1046400:e60c0610f37d8280",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:26:48+00:00",
+        "completed_revision_promoted": true
+      },
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1046400:e60c0610f37d8280",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "e60c0610f37d8280190c0b41048de32b52dcae65171204f51bf29cb32261d2ed",
+        "prior_accepted_at_utc": "2026-09-28T10:27:23+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "moderate",
+        "prior_confidence": "medium",
+        "prior_taste_factors": {
+          "gameplay_mastery": 66,
+          "development_variety": 69,
+          "structure_pacing_direction": 52,
+          "identity_hooks": 66,
+          "breadth_of_match": 65
+        },
+        "prior_positive_evidence": [
+          "The interconnected tower opens into many routes and secrets, giving exploration concrete discoveries rather than empty traversal.",
+          "Meaningful upgrades and later mobility conveniences materially improve what the player can reach and how the world is navigated, matching the profile's preference for evolving exploration systems."
+        ],
+        "prior_work_id": "0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011"
+      },
       "fit_level": "moderate",
       "confidence": "medium",
       "positive_evidence": [
-        "The interconnected tower opens into many routes and secrets, giving exploration concrete discoveries rather than empty traversal.",
-        "Meaningful upgrades and later mobility conveniences materially improve what the player can reach and how the world is navigated, matching the profile's preference for evolving exploration systems."
+        "The interconnected tower opens into multiple routes, secrets and meaningful upgrades, so exploration produces concrete discoveries.",
+        "Later mobility and switching conveniences materially improve navigation and make the tower's structure more rewarding over time."
       ],
       "taste_factors": {
-        "gameplay_mastery": 66,
-        "development_variety": 69,
-        "structure_pacing_direction": 52,
-        "identity_hooks": 66,
-        "breadth_of_match": 65
+        "gameplay_mastery": 60,
+        "development_variety": 70,
+        "structure_pacing_direction": 55,
+        "identity_hooks": 62,
+        "breadth_of_match": 66
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "astalon-exploration-growth",
+          "text_ru": "Башня постоянно открывает новые маршруты, секреты и полезные улучшения, поэтому исследование даёт тебе ощущение развития, а не просто хождение по пустым коридорам.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Тебе особенно важно, чтобы опыт заметно развивался по ходу игры."
+            },
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Понятный эффект улучшений делает прогрессию для тебя ценнее."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 70
+            },
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 55
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 66
+            }
+          ]
+        },
+        {
+          "finding_id": "astalon-structural-hook",
+          "text_ru": "Связанная структура башни сама становится игровым крючком: новые возможности меняют то, куда можно попасть и как воспринимается уже знакомое пространство.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Яркий собственный крючок повышает шанс, что игра запомнится."
+            },
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Тебе важна эволюция опыта, а не неизменная формула."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 62
+            }
+          ]
+        },
+        {
+          "finding_id": "astalon-early-friction",
+          "text_ru": "До поздних удобств смерть, точки сохранения и смена персонажей могут заставлять много возвращаться по уже знакомым участкам, поэтому механическое удовольствие здесь не безусловное.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            },
+            {
+              "kind": "conflict",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/8/pattern",
+              "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+              "match_text_ru": "Повторяемость для тебя становится минусом, когда не приносит нового опыта."
+            },
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Мастерство ценно, когда улучшение навыка ощущается содержательно, а не как лишняя рутина."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "qualifies",
+              "normalized_value": 60
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -6142,26 +6839,33 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "unchanged_repetition",
-            "text_ru": "До получения поздних удобств смерть, редкие точки сохранения и необходимость менять персонажей могут заставлять многократно проходить уже знакомые участки башни; для профиля это заметный риск утомления, хотя поздние улучшения смягчают проблему.",
+            "text_ru": "До получения поздних удобств игра может заставлять заметно повторять уже пройденные участки после смерти и ради смены персонажей.",
             "evidence_refs": [
               {
                 "kind": "observation",
                 "index": 1
-              },
-              {
-                "kind": "conflict",
-                "index": 0
               }
             ]
           },
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Есть старое сообщение о неловкой русской локализации и проблемах с терминологией и размещением текста, но актуальное состояние этих недостатков не подтверждено.",
+            "text_ru": "Есть старое единичное замечание о неровном русском переводе, но Dossier не подтверждает, что проблема сохранилась в текущей версии.",
             "evidence_refs": [
               {
                 "kind": "observation",
                 "index": 2
+              }
+            ]
+          },
+          {
+            "disposition": "caution",
+            "risk_code": null,
+            "text_ru": "Восприятие возвратов меняется по мере прохождения: ранняя часть может раздражать, а поздние возможности заметно улучшают темп исследования.",
+            "evidence_refs": [
+              {
+                "kind": "conflict",
+                "index": 0
               }
             ]
           }
@@ -6169,9 +6873,9 @@
       }
     },
     "game:102600": {
-      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
-      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
-      "work_id": "6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574",
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "f100915a7c41523808f91e61fe4f9fae614cf067b193bfca92410cba220d5ec9",
       "family_id": "game:102600",
       "taste_subject_key": "App_102600",
       "appid": "102600",
@@ -6183,8 +6887,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-28T10:27:53+00:00",
-      "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+      "accepted_at_utc": "2026-09-30T06:26:48+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "0c2082a9fe10839c934c9abb6f24cb46f6f2b0a198f67a1d4f67a5fd3444a553",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -6200,8 +6904,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "be8658ebefd1b3b79d5bc94b4240f4f3f03d435020838b54094263f7d0dcea45",
-      "work_mode": "legacy_full_reanalysis",
+      "authorization_id": "a0f1e510a1a13ab2843dcef5988c2b1eecbfaf5e5cef0bf769329eae25c71684",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -6486,6 +7190,285 @@
             },
             "base_support_compatible": null
           }
+        },
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:26:48+00:00",
+          "state": {
+            "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+            "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+            "work_id": "6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574",
+            "family_id": "game:102600",
+            "taste_subject_key": "App_102600",
+            "appid": "102600",
+            "taste_fingerprint": "231ad60f2718ad466a51b539253fad6a999b1ebd74ba5aee657d3de268fe07ee",
+            "candidate_context_sha256": "f58ceb29902b2e4fe8c60034550478d092d05b27aa24bdbb77ef88dbab8677eb",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-28T10:27:53+00:00",
+            "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+            "dossier_content_sha256": "0c2082a9fe10839c934c9abb6f24cb46f6f2b0a198f67a1d4f67a5fd3444a553",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "be8658ebefd1b3b79d5bc94b4240f4f3f03d435020838b54094263f7d0dcea45",
+            "work_mode": "legacy_full_reanalysis",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+              "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+              "work_id": "6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574",
+              "family_id": "game:102600",
+              "taste_subject_key": "App_102600",
+              "appid": "102600",
+              "taste_fingerprint": "231ad60f2718ad466a51b539253fad6a999b1ebd74ba5aee657d3de268fe07ee",
+              "candidate_context_sha256": "f58ceb29902b2e4fe8c60034550478d092d05b27aa24bdbb77ef88dbab8677eb",
+              "dossier_content_sha256": "0c2082a9fe10839c934c9abb6f24cb46f6f2b0a198f67a1d4f67a5fd3444a553",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "921380ac9cc0464ddf91a284d11e6c988bd8ca0c3236a0474526ab6e3cefbc28",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-27T17:26:51+00:00",
+              "run_start_anchor_commit": "850fd0ab32ce67271497ae9bfafe80a8ab83fdce",
+              "run_start_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "run_started_at_utc": "2026-09-27T17:10:54+00:00",
+              "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "fit_level": "strong",
+              "confidence": "medium",
+              "positive_evidence": [
+                "The core loop combines direct third-person action with planning trap layouts, kill zones and environmental interactions, closely matching the profile's strong tactical problem-solving and active-gameplay preferences.",
+                "Nightmare difficulty and perfect-clear goals reward learning efficient defenses and improving execution, providing the kind of meaningful mastery challenge that is one of the profile's strongest positive signals."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 89,
+                "development_variety": 74,
+                "structure_pacing_direction": 82,
+                "identity_hooks": 73,
+                "breadth_of_match": 85
+              },
+              "base_support_compatible": null
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "legacy_reanalysis_attempts": [
+              {
+                "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+                "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+                "work_id": "6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574",
+                "family_id": "game:102600",
+                "taste_subject_key": "App_102600",
+                "appid": "102600",
+                "taste_fingerprint": "231ad60f2718ad466a51b539253fad6a999b1ebd74ba5aee657d3de268fe07ee",
+                "candidate_context_sha256": "f58ceb29902b2e4fe8c60034550478d092d05b27aa24bdbb77ef88dbab8677eb",
+                "dossier_content_sha256": "0c2082a9fe10839c934c9abb6f24cb46f6f2b0a198f67a1d4f67a5fd3444a553",
+                "dossier_compatibility_binding": {
+                  "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                  "evidence_contract_version": 2,
+                  "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                  "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                  "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                  "worker_schema_version": 2,
+                  "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                  "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                  "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                  "dossier_schema_version": 2,
+                  "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                  "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+                },
+                "authorization_id": "be8658ebefd1b3b79d5bc94b4240f4f3f03d435020838b54094263f7d0dcea45",
+                "work_mode": "legacy_full_reanalysis",
+                "recovery_authorization_id": null,
+                "recovery_reason": null,
+                "recovery_condition_binding": null,
+                "migration_provenance": {
+                  "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+                  "migration_target_id": "legacy-full-reanalysis-01:6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574",
+                  "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+                  "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+                  "prior_outcome": "analyzed_fit",
+                  "prior_fit_level": "strong",
+                  "prior_confidence": "medium",
+                  "prior_taste_factors": {
+                    "gameplay_mastery": 89,
+                    "development_variety": 74,
+                    "structure_pacing_direction": 82,
+                    "identity_hooks": 73,
+                    "breadth_of_match": 85
+                  },
+                  "prior_not_fit_basis": null,
+                  "prior_work_id": "6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574",
+                  "prior_authorization_id": "921380ac9cc0464ddf91a284d11e6c988bd8ca0c3236a0474526ab6e3cefbc28",
+                  "prior_accepted_at_utc": "2026-09-27T17:26:51+00:00",
+                  "preserved_positive_evidence": [
+                    "The core loop combines direct third-person action with planning trap layouts, kill zones and environmental interactions, closely matching the profile's strong tactical problem-solving and active-gameplay preferences.",
+                    "Nightmare difficulty and perfect-clear goals reward learning efficient defenses and improving execution, providing the kind of meaningful mastery challenge that is one of the profile's strongest positive signals."
+                  ],
+                  "preserved_not_fit_evidence": []
+                },
+                "outcome": "analyzed_fit",
+                "analysis_issue_code": null,
+                "attempt_consumption_source": "accepted_result",
+                "accepted_at_utc": "2026-09-28T10:27:53+00:00",
+                "run_start_anchor_commit": "f4e158c1557a5d95c819a90e42c0778ad1d77ede",
+                "run_start_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+                "run_started_at_utc": "2026-09-28T10:13:37+00:00",
+                "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+                "fit_level": "strong",
+                "confidence": "medium",
+                "positive_evidence": [
+                  "The core loop combines direct third-person action with planning trap layouts, kill zones and environmental interactions, closely matching the profile's strong tactical problem-solving and active-gameplay preferences.",
+                  "Nightmare difficulty and perfect-clear goals reward learning efficient defenses and improving execution, providing the kind of meaningful mastery challenge that is one of the profile's strongest positive signals."
+                ],
+                "taste_factors": {
+                  "gameplay_mastery": 88,
+                  "development_variety": 72,
+                  "structure_pacing_direction": 81,
+                  "identity_hooks": 73,
+                  "breadth_of_match": 84
+                },
+                "base_support_compatible": null,
+                "negative_assessment": {
+                  "status": "completed",
+                  "evaluated_candidate_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    },
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ],
+                  "findings": [
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "Очки улучшений, вложенные в ловушку слишком рано, могут сделать выбор неприятно необратимым, если на поздних картах эта ловушка оказывается слабее ожидаемого.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 1
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "migration_result_changed": true,
+                "migration_fit_outcome_changed": false
+              }
+            ],
+            "legacy_reanalysis_status": {
+              "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+              "migration_target_id": "legacy-full-reanalysis-01:6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574",
+              "attempt_outcome": "analyzed_fit",
+              "accepted_at_utc": "2026-09-28T10:27:53+00:00",
+              "completed_revision_promoted": true
+            },
+            "migration_provenance": {
+              "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+              "migration_target_id": "legacy-full-reanalysis-01:6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574",
+              "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+              "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+              "prior_outcome": "analyzed_fit",
+              "prior_fit_level": "strong",
+              "prior_confidence": "medium",
+              "prior_taste_factors": {
+                "gameplay_mastery": 89,
+                "development_variety": 74,
+                "structure_pacing_direction": 82,
+                "identity_hooks": 73,
+                "breadth_of_match": 85
+              },
+              "prior_not_fit_basis": null,
+              "prior_work_id": "6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574",
+              "prior_authorization_id": "921380ac9cc0464ddf91a284d11e6c988bd8ca0c3236a0474526ab6e3cefbc28",
+              "prior_accepted_at_utc": "2026-09-27T17:26:51+00:00",
+              "preserved_positive_evidence": [
+                "The core loop combines direct third-person action with planning trap layouts, kill zones and environmental interactions, closely matching the profile's strong tactical problem-solving and active-gameplay preferences.",
+                "Nightmare difficulty and perfect-clear goals reward learning efficient defenses and improving execution, providing the kind of meaningful mastery challenge that is one of the profile's strongest positive signals."
+              ],
+              "preserved_not_fit_evidence": []
+            },
+            "migration_result_changed": true,
+            "migration_fit_outcome_changed": false,
+            "fit_level": "strong",
+            "confidence": "medium",
+            "positive_evidence": [
+              "The core loop combines direct third-person action with planning trap layouts, kill zones and environmental interactions, closely matching the profile's strong tactical problem-solving and active-gameplay preferences.",
+              "Nightmare difficulty and perfect-clear goals reward learning efficient defenses and improving execution, providing the kind of meaningful mastery challenge that is one of the profile's strongest positive signals."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 88,
+              "development_variety": 72,
+              "structure_pacing_direction": 81,
+              "identity_hooks": 73,
+              "breadth_of_match": 84
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Очки улучшений, вложенные в ловушку слишком рано, могут сделать выбор неприятно необратимым, если на поздних картах эта ловушка оказывается слабее ожидаемого.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                }
+              ]
+            }
+          }
         }
       ],
       "migration_provenance": {
@@ -6515,19 +7498,374 @@
       },
       "migration_result_changed": true,
       "migration_fit_outcome_changed": false,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "f100915a7c41523808f91e61fe4f9fae614cf067b193bfca92410cba220d5ec9",
+          "family_id": "game:102600",
+          "taste_subject_key": "App_102600",
+          "appid": "102600",
+          "taste_fingerprint": "231ad60f2718ad466a51b539253fad6a999b1ebd74ba5aee657d3de268fe07ee",
+          "candidate_context_sha256": "f58ceb29902b2e4fe8c60034550478d092d05b27aa24bdbb77ef88dbab8677eb",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "0c2082a9fe10839c934c9abb6f24cb46f6f2b0a198f67a1d4f67a5fd3444a553",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "a0f1e510a1a13ab2843dcef5988c2b1eecbfaf5e5cef0bf769329eae25c71684",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:26:48+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:102600:be8658ebefd1b3b7",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "be8658ebefd1b3b79d5bc94b4240f4f3f03d435020838b54094263f7d0dcea45",
+            "prior_accepted_at_utc": "2026-09-28T10:27:53+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "strong",
+            "prior_confidence": "medium",
+            "prior_taste_factors": {
+              "gameplay_mastery": 88,
+              "development_variety": 72,
+              "structure_pacing_direction": 81,
+              "identity_hooks": 73,
+              "breadth_of_match": 84
+            },
+            "prior_positive_evidence": [
+              "The core loop combines direct third-person action with planning trap layouts, kill zones and environmental interactions, closely matching the profile's strong tactical problem-solving and active-gameplay preferences.",
+              "Nightmare difficulty and perfect-clear goals reward learning efficient defenses and improving execution, providing the kind of meaningful mastery challenge that is one of the profile's strongest positive signals."
+            ],
+            "prior_work_id": "6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "strong",
+          "confidence": "high",
+          "positive_evidence": [
+            "The core loop combines direct third-person action with deliberate trap layouts, kill zones and environmental interactions.",
+            "Nightmare difficulty and perfect-clear goals reward learning efficient defenses and improving execution rather than merely increasing enemy health."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 90,
+            "development_variety": 74,
+            "structure_pacing_direction": 82,
+            "identity_hooks": 76,
+            "breadth_of_match": 86
+          },
+          "score_findings": [
+            {
+              "finding_id": "omd-trap-action-systems",
+              "text_ru": "Сочетание личного боя, ловушек, зон убийства и окружения постоянно требует собирать работающую схему под конкретную волну, что хорошо попадает в твою любовь к тактическому решению задач.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                  "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                  "match_text_ru": "Тебе нравится, когда разные угрозы заставляют менять тактику, а не повторять один шаблон."
+                },
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Механическое мастерство — один из самых сильных положительных сигналов профиля."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 90
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 86
+                },
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 76
+                }
+              ]
+            },
+            {
+              "finding_id": "omd-mastery-challenge",
+              "text_ru": "Nightmare и идеальное прохождение усиливают ценность освоения: результат заметно зависит от того, насколько хорошо ты понимаешь защиту и умеешь исполнять план.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Тебе особенно важно чувствовать, что навык реально растёт."
+                },
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Развитие опыта по ходу игры для тебя важнее хорошего старта без продолжения."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 82
+                }
+              ]
+            },
+            {
+              "finding_id": "omd-upgrade-choice",
+              "text_ru": "Разные ловушки и их улучшения дают развитие набора инструментов, хотя ранние вложения иногда могут сделать отдельный выбор слишком дорогим для последующих карт.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                },
+                {
+                  "kind": "observation",
+                  "index": 1
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/2/pattern",
+                  "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                  "match_text_ru": "Прогрессия нравится тебе, когда понятны цель и эффект улучшения."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 74
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Вложения черепов в ловушки могут сделать ранние решения ощутимо дорогими, если выбранная ловушка хуже работает на поздних картах.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Высокая сложность требует заметно более точного планирования и исполнения, но здесь она одновременно раскрывает систему и поэтому не является автоматическим минусом.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:102600:be8658ebefd1b3b7",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:26:48+00:00",
+        "completed_revision_promoted": true
+      },
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:102600:be8658ebefd1b3b7",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "be8658ebefd1b3b79d5bc94b4240f4f3f03d435020838b54094263f7d0dcea45",
+        "prior_accepted_at_utc": "2026-09-28T10:27:53+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "strong",
+        "prior_confidence": "medium",
+        "prior_taste_factors": {
+          "gameplay_mastery": 88,
+          "development_variety": 72,
+          "structure_pacing_direction": 81,
+          "identity_hooks": 73,
+          "breadth_of_match": 84
+        },
+        "prior_positive_evidence": [
+          "The core loop combines direct third-person action with planning trap layouts, kill zones and environmental interactions, closely matching the profile's strong tactical problem-solving and active-gameplay preferences.",
+          "Nightmare difficulty and perfect-clear goals reward learning efficient defenses and improving execution, providing the kind of meaningful mastery challenge that is one of the profile's strongest positive signals."
+        ],
+        "prior_work_id": "6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574"
+      },
       "fit_level": "strong",
-      "confidence": "medium",
+      "confidence": "high",
       "positive_evidence": [
-        "The core loop combines direct third-person action with planning trap layouts, kill zones and environmental interactions, closely matching the profile's strong tactical problem-solving and active-gameplay preferences.",
-        "Nightmare difficulty and perfect-clear goals reward learning efficient defenses and improving execution, providing the kind of meaningful mastery challenge that is one of the profile's strongest positive signals."
+        "The core loop combines direct third-person action with deliberate trap layouts, kill zones and environmental interactions.",
+        "Nightmare difficulty and perfect-clear goals reward learning efficient defenses and improving execution rather than merely increasing enemy health."
       ],
       "taste_factors": {
-        "gameplay_mastery": 88,
-        "development_variety": 72,
-        "structure_pacing_direction": 81,
-        "identity_hooks": 73,
-        "breadth_of_match": 84
+        "gameplay_mastery": 90,
+        "development_variety": 74,
+        "structure_pacing_direction": 82,
+        "identity_hooks": 76,
+        "breadth_of_match": 86
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "omd-trap-action-systems",
+          "text_ru": "Сочетание личного боя, ловушек, зон убийства и окружения постоянно требует собирать работающую схему под конкретную волну, что хорошо попадает в твою любовь к тактическому решению задач.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Тебе нравится, когда разные угрозы заставляют менять тактику, а не повторять один шаблон."
+            },
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Механическое мастерство — один из самых сильных положительных сигналов профиля."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 90
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 86
+            },
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 76
+            }
+          ]
+        },
+        {
+          "finding_id": "omd-mastery-challenge",
+          "text_ru": "Nightmare и идеальное прохождение усиливают ценность освоения: результат заметно зависит от того, насколько хорошо ты понимаешь защиту и умеешь исполнять план.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 2
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Тебе особенно важно чувствовать, что навык реально растёт."
+            },
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Развитие опыта по ходу игры для тебя важнее хорошего старта без продолжения."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 82
+            }
+          ]
+        },
+        {
+          "finding_id": "omd-upgrade-choice",
+          "text_ru": "Разные ловушки и их улучшения дают развитие набора инструментов, хотя ранние вложения иногда могут сделать отдельный выбор слишком дорогим для последующих карт.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            },
+            {
+              "kind": "observation",
+              "index": 1
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Прогрессия нравится тебе, когда понятны цель и эффект улучшения."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 74
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -6545,11 +7883,22 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Очки улучшений, вложенные в ловушку слишком рано, могут сделать выбор неприятно необратимым, если на поздних картах эта ловушка оказывается слабее ожидаемого.",
+            "text_ru": "Вложения черепов в ловушки могут сделать ранние решения ощутимо дорогими, если выбранная ловушка хуже работает на поздних картах.",
             "evidence_refs": [
               {
                 "kind": "observation",
                 "index": 1
+              }
+            ]
+          },
+          {
+            "disposition": "caution",
+            "risk_code": null,
+            "text_ru": "Высокая сложность требует заметно более точного планирования и исполнения, но здесь она одновременно раскрывает систему и поэтому не является автоматическим минусом.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 2
               }
             ]
           }
