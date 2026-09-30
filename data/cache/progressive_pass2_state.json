@@ -34285,8 +34285,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-29T08:40:38+00:00",
-      "work_authority_commit": "7a3eed077b7b67894e5a7e3f0c1c47a6144e54c9",
+      "accepted_at_utc": "2026-09-30T06:36:26+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "78c936482d499a46f9f50d6cb29780c2c35358e90b9577eb9ceca152c4da169b",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -34302,8 +34302,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "e97a7fabd49e9df20308369c7fed89de4dafd6232984f3cc386b2cfdb07e125d",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "fe57dbda7fbebc966e719f5ca93e08890aa9cfed7170d6ad7bd63dd3d7ea722c",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -34417,20 +34417,567 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "85970d2c5a802ef5165e6b8700e7c2c8e6148c9f1586a9f95249f67b367ac06d",
+          "family_id": "game:13600",
+          "taste_subject_key": "App_13600",
+          "appid": "13600",
+          "taste_fingerprint": "2677d1272ccca20b105d47b3b683aa3641f5e0aa42abecc7d04594adb3a7fe51",
+          "candidate_context_sha256": "05aee1cb6995aee574fc3446092763d06896cbec8090d921c1619474c75160fb",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "78c936482d499a46f9f50d6cb29780c2c35358e90b9577eb9ceca152c4da169b",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "fe57dbda7fbebc966e719f5ca93e08890aa9cfed7170d6ad7bd63dd3d7ea722c",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:36:26+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:13600:e97a7fabd49e9df2",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "e97a7fabd49e9df20308369c7fed89de4dafd6232984f3cc386b2cfdb07e125d",
+            "prior_accepted_at_utc": "2026-09-29T08:40:38+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "strong",
+            "prior_confidence": "high",
+            "prior_taste_factors": {
+              "gameplay_mastery": 93,
+              "development_variety": 80,
+              "structure_pacing_direction": 88,
+              "identity_hooks": 90,
+              "breadth_of_match": 91
+            },
+            "prior_positive_evidence": [
+              "Fluid acrobatic traversal is the central mechanic, closely matching the profile's strong preference for movement that is enjoyable and skill-expressive in itself.",
+              "The Dagger of Time lets the player rewind failed jumps and combat mistakes, turning many errors into immediate learning opportunities instead of full restarts.",
+              "The compact continuous-adventure structure, Arabian-fantasy atmosphere and character interplay give the traversal and puzzles a cohesive authored purpose."
+            ],
+            "prior_work_id": "85970d2c5a802ef5165e6b8700e7c2c8e6148c9f1586a9f95249f67b367ac06d"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "strong",
+          "confidence": "high",
+          "positive_evidence": [
+            "Fluid acrobatic traversal is the central mechanic and the Dagger of Time turns mistakes into immediate learning opportunities.",
+            "The compact continuous adventure, Arabian-fantasy atmosphere and character interplay give traversal and puzzles a cohesive purpose."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 94,
+            "development_variety": 80,
+            "structure_pacing_direction": 89,
+            "identity_hooks": 92,
+            "breadth_of_match": 91
+          },
+          "score_findings": [
+            {
+              "finding_id": "sot-traversal-rewind",
+              "text_ru": "Акробатика — центральная механика, а кинжал времени позволяет сразу переигрывать неудачный прыжок или ошибку в бою, поэтому движение одновременно приятно само по себе и хорошо обучает через быстрые повторные попытки.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/1/pattern",
+                  "profile_value_sha256": "03ee46ab2d98957c01bd73fe09574b97f6da1eef6a0ceb054817add03d66d5e1",
+                  "match_text_ru": "Само движение и управление может быть для тебя отдельным источником удовольствия."
+                },
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Тебе нравится ощущать, что точность исполнения реально растёт."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 94
+                },
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 80
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 91
+                }
+              ]
+            },
+            {
+              "finding_id": "sot-cohesive-adventure",
+              "text_ru": "Компактное непрерывное приключение, арабская сказочная атмосфера и отношения персонажей связывают платформинг и загадки в цельное путешествие с сильным собственным лицом.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 4
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/3/pattern",
+                  "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+                  "match_text_ru": "Сюжет и персонажи усиливают для тебя механически хорошую игру."
+                },
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Яркая художественная идентичность заметно повышает запоминаемость."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 89
+                },
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 92
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "unchanged_repetition",
+                "text_ru": "Поздние боевые волны повторяются заметно сильнее платформинга, а обязательные добивания кинжалом растягивают знакомые столкновения.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Камера и захват цели иногда мешают точным прыжкам и боям с несколькими противниками.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "felt_technical_burden",
+                "text_ru": "Современная ПК-версия иногда требует ручных файловых настроек или фанатских исправлений для widescreen, контроллера и стабильной работы.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:13600:e97a7fabd49e9df2",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:36:26+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:36:26+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+            "work_id": "85970d2c5a802ef5165e6b8700e7c2c8e6148c9f1586a9f95249f67b367ac06d",
+            "family_id": "game:13600",
+            "taste_subject_key": "App_13600",
+            "appid": "13600",
+            "taste_fingerprint": "2677d1272ccca20b105d47b3b683aa3641f5e0aa42abecc7d04594adb3a7fe51",
+            "candidate_context_sha256": "05aee1cb6995aee574fc3446092763d06896cbec8090d921c1619474c75160fb",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-29T08:40:38+00:00",
+            "work_authority_commit": "7a3eed077b7b67894e5a7e3f0c1c47a6144e54c9",
+            "dossier_content_sha256": "78c936482d499a46f9f50d6cb29780c2c35358e90b9577eb9ceca152c4da169b",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "e97a7fabd49e9df20308369c7fed89de4dafd6232984f3cc386b2cfdb07e125d",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+              "work_id": "85970d2c5a802ef5165e6b8700e7c2c8e6148c9f1586a9f95249f67b367ac06d",
+              "family_id": "game:13600",
+              "taste_subject_key": "App_13600",
+              "appid": "13600",
+              "taste_fingerprint": "2677d1272ccca20b105d47b3b683aa3641f5e0aa42abecc7d04594adb3a7fe51",
+              "candidate_context_sha256": "05aee1cb6995aee574fc3446092763d06896cbec8090d921c1619474c75160fb",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "78c936482d499a46f9f50d6cb29780c2c35358e90b9577eb9ceca152c4da169b",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "e97a7fabd49e9df20308369c7fed89de4dafd6232984f3cc386b2cfdb07e125d",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-29T08:40:38+00:00",
+              "run_start_anchor_commit": "838bb1121ecd039939c0fba110abff6fe6febef7",
+              "run_start_authority_commit": "7a3eed077b7b67894e5a7e3f0c1c47a6144e54c9",
+              "run_started_at_utc": "2026-09-29T08:34:51+00:00",
+              "work_authority_commit": "7a3eed077b7b67894e5a7e3f0c1c47a6144e54c9",
+              "fit_level": "strong",
+              "confidence": "high",
+              "positive_evidence": [
+                "Fluid acrobatic traversal is the central mechanic, closely matching the profile's strong preference for movement that is enjoyable and skill-expressive in itself.",
+                "The Dagger of Time lets the player rewind failed jumps and combat mistakes, turning many errors into immediate learning opportunities instead of full restarts.",
+                "The compact continuous-adventure structure, Arabian-fantasy atmosphere and character interplay give the traversal and puzzles a cohesive authored purpose."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 93,
+                "development_variety": 80,
+                "structure_pacing_direction": 88,
+                "identity_hooks": 90,
+                "breadth_of_match": 91
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "unchanged_repetition",
+                    "text_ru": "Поздние бои с повторяющимися волнами врагов и обязательными добиваниями кинжалом заметно слабее платформинга и могут превращаться в однообразные затяжные участки.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 1
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Камера и захват цели иногда мешают точным прыжкам и боям с несколькими противниками, нарушая обычно плавное управление.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 2
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "На современном ПК могут понадобиться правки файлов или сторонние исправления для широкого экрана, контроллера и стабильной работы; актуальный сигнал пока единичный.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 3
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "strong",
+            "confidence": "high",
+            "positive_evidence": [
+              "Fluid acrobatic traversal is the central mechanic, closely matching the profile's strong preference for movement that is enjoyable and skill-expressive in itself.",
+              "The Dagger of Time lets the player rewind failed jumps and combat mistakes, turning many errors into immediate learning opportunities instead of full restarts.",
+              "The compact continuous-adventure structure, Arabian-fantasy atmosphere and character interplay give the traversal and puzzles a cohesive authored purpose."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 93,
+              "development_variety": 80,
+              "structure_pacing_direction": 88,
+              "identity_hooks": 90,
+              "breadth_of_match": 91
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "unchanged_repetition",
+                  "text_ru": "Поздние бои с повторяющимися волнами врагов и обязательными добиваниями кинжалом заметно слабее платформинга и могут превращаться в однообразные затяжные участки.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Камера и захват цели иногда мешают точным прыжкам и боям с несколькими противниками, нарушая обычно плавное управление.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "На современном ПК могут понадобиться правки файлов или сторонние исправления для широкого экрана, контроллера и стабильной работы; актуальный сигнал пока единичный.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:13600:e97a7fabd49e9df2",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "e97a7fabd49e9df20308369c7fed89de4dafd6232984f3cc386b2cfdb07e125d",
+        "prior_accepted_at_utc": "2026-09-29T08:40:38+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "strong",
+        "prior_confidence": "high",
+        "prior_taste_factors": {
+          "gameplay_mastery": 93,
+          "development_variety": 80,
+          "structure_pacing_direction": 88,
+          "identity_hooks": 90,
+          "breadth_of_match": 91
+        },
+        "prior_positive_evidence": [
+          "Fluid acrobatic traversal is the central mechanic, closely matching the profile's strong preference for movement that is enjoyable and skill-expressive in itself.",
+          "The Dagger of Time lets the player rewind failed jumps and combat mistakes, turning many errors into immediate learning opportunities instead of full restarts.",
+          "The compact continuous-adventure structure, Arabian-fantasy atmosphere and character interplay give the traversal and puzzles a cohesive authored purpose."
+        ],
+        "prior_work_id": "85970d2c5a802ef5165e6b8700e7c2c8e6148c9f1586a9f95249f67b367ac06d"
+      },
       "fit_level": "strong",
       "confidence": "high",
       "positive_evidence": [
-        "Fluid acrobatic traversal is the central mechanic, closely matching the profile's strong preference for movement that is enjoyable and skill-expressive in itself.",
-        "The Dagger of Time lets the player rewind failed jumps and combat mistakes, turning many errors into immediate learning opportunities instead of full restarts.",
-        "The compact continuous-adventure structure, Arabian-fantasy atmosphere and character interplay give the traversal and puzzles a cohesive authored purpose."
+        "Fluid acrobatic traversal is the central mechanic and the Dagger of Time turns mistakes into immediate learning opportunities.",
+        "The compact continuous adventure, Arabian-fantasy atmosphere and character interplay give traversal and puzzles a cohesive purpose."
       ],
       "taste_factors": {
-        "gameplay_mastery": 93,
+        "gameplay_mastery": 94,
         "development_variety": 80,
-        "structure_pacing_direction": 88,
-        "identity_hooks": 90,
+        "structure_pacing_direction": 89,
+        "identity_hooks": 92,
         "breadth_of_match": 91
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "sot-traversal-rewind",
+          "text_ru": "Акробатика — центральная механика, а кинжал времени позволяет сразу переигрывать неудачный прыжок или ошибку в бою, поэтому движение одновременно приятно само по себе и хорошо обучает через быстрые повторные попытки.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/1/pattern",
+              "profile_value_sha256": "03ee46ab2d98957c01bd73fe09574b97f6da1eef6a0ceb054817add03d66d5e1",
+              "match_text_ru": "Само движение и управление может быть для тебя отдельным источником удовольствия."
+            },
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Тебе нравится ощущать, что точность исполнения реально растёт."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 94
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 80
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 91
+            }
+          ]
+        },
+        {
+          "finding_id": "sot-cohesive-adventure",
+          "text_ru": "Компактное непрерывное приключение, арабская сказочная атмосфера и отношения персонажей связывают платформинг и загадки в цельное путешествие с сильным собственным лицом.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 4
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/3/pattern",
+              "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+              "match_text_ru": "Сюжет и персонажи усиливают для тебя механически хорошую игру."
+            },
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Яркая художественная идентичность заметно повышает запоминаемость."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 89
+            },
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 92
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -34452,7 +34999,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "unchanged_repetition",
-            "text_ru": "Поздние бои с повторяющимися волнами врагов и обязательными добиваниями кинжалом заметно слабее платформинга и могут превращаться в однообразные затяжные участки.",
+            "text_ru": "Поздние боевые волны повторяются заметно сильнее платформинга, а обязательные добивания кинжалом растягивают знакомые столкновения.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -34463,7 +35010,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Камера и захват цели иногда мешают точным прыжкам и боям с несколькими противниками, нарушая обычно плавное управление.",
+            "text_ru": "Камера и захват цели иногда мешают точным прыжкам и боям с несколькими противниками.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -34472,9 +35019,9 @@
             ]
           },
           {
-            "disposition": "caution",
-            "risk_code": null,
-            "text_ru": "На современном ПК могут понадобиться правки файлов или сторонние исправления для широкого экрана, контроллера и стабильной работы; актуальный сигнал пока единичный.",
+            "disposition": "confirmed_personal_risk",
+            "risk_code": "felt_technical_burden",
+            "text_ru": "Современная ПК-версия иногда требует ручных файловых настроек или фанатских исправлений для widescreen, контроллера и стабильной работы.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -35237,8 +35784,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-29T08:41:47+00:00",
-      "work_authority_commit": "7a3eed077b7b67894e5a7e3f0c1c47a6144e54c9",
+      "accepted_at_utc": "2026-09-30T06:36:26+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "75325d587e6fb65c6e89c6713138d2de4aea5f97710bc50089ae4a56ffe46f69",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -35254,8 +35801,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "ce2468e80359febf847e943832d2e28c8bcfa8e2e7395558d8895621156cb2de",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "d16eadbe9be051cb29a080e211955e27008f928db109a1940e72a14b16d66631",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -35354,20 +35901,562 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "b54bd2d2bf528252f039ea7fe3568d3f572e646bca10596d70cad85b927348cf",
+          "family_id": "game:13570",
+          "taste_subject_key": "App_13570",
+          "appid": "13570",
+          "taste_fingerprint": "e818f6afb680454975cb3666951e94c39cd2781738e5db0298a5783ae12d332c",
+          "candidate_context_sha256": "0ce7001656e6ba03f6f295eae072c3b8030bbf9197e5d0d6f58af35ab71bb82d",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "75325d587e6fb65c6e89c6713138d2de4aea5f97710bc50089ae4a56ffe46f69",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "d16eadbe9be051cb29a080e211955e27008f928db109a1940e72a14b16d66631",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:36:26+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:13570:ce2468e80359febf",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "ce2468e80359febf847e943832d2e28c8bcfa8e2e7395558d8895621156cb2de",
+            "prior_accepted_at_utc": "2026-09-29T08:41:47+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "strong",
+            "prior_confidence": "high",
+            "prior_taste_factors": {
+              "gameplay_mastery": 94,
+              "development_variety": 82,
+              "structure_pacing_direction": 84,
+              "identity_hooks": 80,
+              "breadth_of_match": 91
+            },
+            "prior_positive_evidence": [
+              "Light and sound management, nonlethal options and gadgets create a deliberate stealth system with multiple interacting skills rather than a binary detection check.",
+              "Distinct mission identities and alternative routes support experimentation and replay through different approaches to objectives.",
+              "The cooperative mode has separate missions and partner-specific traversal interactions, adding a mechanically distinct shared-play layer instead of merely duplicating the solo campaign."
+            ],
+            "prior_work_id": "b54bd2d2bf528252f039ea7fe3568d3f572e646bca10596d70cad85b927348cf"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "strong",
+          "confidence": "high",
+          "positive_evidence": [
+            "Light, sound, nonlethal options and gadgets form a deliberate multi-skill stealth system.",
+            "Distinct missions and alternative routes encourage experimentation.",
+            "Co-op has separate missions and partner-specific traversal, making shared play mechanically distinct."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 95,
+            "development_variety": 84,
+            "structure_pacing_direction": 85,
+            "identity_hooks": 82,
+            "breadth_of_match": 93
+          },
+          "score_findings": [
+            {
+              "finding_id": "ct-stealth-depth",
+              "text_ru": "Свет, звук, нелетальные приёмы, гаджеты и последствия обнаружения работают как связанная система, где терпение и понимание маршрута дают заметный рост мастерства.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Глубокое освоение механики — один из сильнейших положительных сигналов твоего профиля."
+                },
+                {
+                  "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                  "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                  "match_text_ru": "Тебе нравятся задачи, где разные условия требуют менять подход."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 95
+                },
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 84
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 93
+                }
+              ]
+            },
+            {
+              "finding_id": "ct-mission-routes",
+              "text_ru": "Миссии имеют собственную структуру и альтернативные маршруты, поэтому игра регулярно даёт новый контекст для уже освоенных стелс-инструментов.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Тебе важно, чтобы знакомые механики получали новые ситуации, а не повторялись без изменений."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 85
+                }
+              ]
+            },
+            {
+              "finding_id": "ct-coop-identity",
+              "text_ru": "Отдельные кооперативные миссии и совместные приёмы перемещения делают co-op самостоятельным механическим слоем, а не копией одиночной кампании.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/9/pattern",
+                  "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+                  "match_text_ru": "Совместные роли и уникальные взаимодействия — сильный усилитель для твоего профиля."
+                },
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Собственная характерная механика помогает игре оставлять более сильный след."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 82
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Несмотря на альтернативные маршруты, оптимальное ghost-прохождение иногда уже, чем кажется, а базовый ритм скрыться–отключить–обойти может повторяться.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "felt_technical_burden",
+                "text_ru": "Современная ПК-совместимость неоднородна: есть жалобы на старые управления, вылеты и зависания в Windows 11.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:13570:ce2468e80359febf",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:36:26+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:36:26+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+            "work_id": "b54bd2d2bf528252f039ea7fe3568d3f572e646bca10596d70cad85b927348cf",
+            "family_id": "game:13570",
+            "taste_subject_key": "App_13570",
+            "appid": "13570",
+            "taste_fingerprint": "e818f6afb680454975cb3666951e94c39cd2781738e5db0298a5783ae12d332c",
+            "candidate_context_sha256": "0ce7001656e6ba03f6f295eae072c3b8030bbf9197e5d0d6f58af35ab71bb82d",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-29T08:41:47+00:00",
+            "work_authority_commit": "7a3eed077b7b67894e5a7e3f0c1c47a6144e54c9",
+            "dossier_content_sha256": "75325d587e6fb65c6e89c6713138d2de4aea5f97710bc50089ae4a56ffe46f69",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "ce2468e80359febf847e943832d2e28c8bcfa8e2e7395558d8895621156cb2de",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+              "work_id": "b54bd2d2bf528252f039ea7fe3568d3f572e646bca10596d70cad85b927348cf",
+              "family_id": "game:13570",
+              "taste_subject_key": "App_13570",
+              "appid": "13570",
+              "taste_fingerprint": "e818f6afb680454975cb3666951e94c39cd2781738e5db0298a5783ae12d332c",
+              "candidate_context_sha256": "0ce7001656e6ba03f6f295eae072c3b8030bbf9197e5d0d6f58af35ab71bb82d",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "75325d587e6fb65c6e89c6713138d2de4aea5f97710bc50089ae4a56ffe46f69",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "ce2468e80359febf847e943832d2e28c8bcfa8e2e7395558d8895621156cb2de",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-29T08:41:47+00:00",
+              "run_start_anchor_commit": "838bb1121ecd039939c0fba110abff6fe6febef7",
+              "run_start_authority_commit": "7a3eed077b7b67894e5a7e3f0c1c47a6144e54c9",
+              "run_started_at_utc": "2026-09-29T08:34:51+00:00",
+              "work_authority_commit": "7a3eed077b7b67894e5a7e3f0c1c47a6144e54c9",
+              "fit_level": "strong",
+              "confidence": "high",
+              "positive_evidence": [
+                "Light and sound management, nonlethal options and gadgets create a deliberate stealth system with multiple interacting skills rather than a binary detection check.",
+                "Distinct mission identities and alternative routes support experimentation and replay through different approaches to objectives.",
+                "The cooperative mode has separate missions and partner-specific traversal interactions, adding a mechanically distinct shared-play layer instead of merely duplicating the solo campaign."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 94,
+                "development_variety": 82,
+                "structure_pacing_direction": 84,
+                "identity_hooks": 80,
+                "breadth_of_match": 91
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Несмотря на вариативность уровней, оптимальные маршруты для полностью скрытного прохождения иногда оказываются уже, а цикл «спрятаться — отключить — обойти» может начать повторяться.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 1
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "На современных ПК совместимость неоднородна: часть игроков сталкивается с устаревшим управлением, вылетами или зависаниями Windows 11, хотя у других игра работает нормально.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 2
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "strong",
+            "confidence": "high",
+            "positive_evidence": [
+              "Light and sound management, nonlethal options and gadgets create a deliberate stealth system with multiple interacting skills rather than a binary detection check.",
+              "Distinct mission identities and alternative routes support experimentation and replay through different approaches to objectives.",
+              "The cooperative mode has separate missions and partner-specific traversal interactions, adding a mechanically distinct shared-play layer instead of merely duplicating the solo campaign."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 94,
+              "development_variety": 82,
+              "structure_pacing_direction": 84,
+              "identity_hooks": 80,
+              "breadth_of_match": 91
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Несмотря на вариативность уровней, оптимальные маршруты для полностью скрытного прохождения иногда оказываются уже, а цикл «спрятаться — отключить — обойти» может начать повторяться.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "На современных ПК совместимость неоднородна: часть игроков сталкивается с устаревшим управлением, вылетами или зависаниями Windows 11, хотя у других игра работает нормально.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:13570:ce2468e80359febf",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "ce2468e80359febf847e943832d2e28c8bcfa8e2e7395558d8895621156cb2de",
+        "prior_accepted_at_utc": "2026-09-29T08:41:47+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "strong",
+        "prior_confidence": "high",
+        "prior_taste_factors": {
+          "gameplay_mastery": 94,
+          "development_variety": 82,
+          "structure_pacing_direction": 84,
+          "identity_hooks": 80,
+          "breadth_of_match": 91
+        },
+        "prior_positive_evidence": [
+          "Light and sound management, nonlethal options and gadgets create a deliberate stealth system with multiple interacting skills rather than a binary detection check.",
+          "Distinct mission identities and alternative routes support experimentation and replay through different approaches to objectives.",
+          "The cooperative mode has separate missions and partner-specific traversal interactions, adding a mechanically distinct shared-play layer instead of merely duplicating the solo campaign."
+        ],
+        "prior_work_id": "b54bd2d2bf528252f039ea7fe3568d3f572e646bca10596d70cad85b927348cf"
+      },
       "fit_level": "strong",
       "confidence": "high",
       "positive_evidence": [
-        "Light and sound management, nonlethal options and gadgets create a deliberate stealth system with multiple interacting skills rather than a binary detection check.",
-        "Distinct mission identities and alternative routes support experimentation and replay through different approaches to objectives.",
-        "The cooperative mode has separate missions and partner-specific traversal interactions, adding a mechanically distinct shared-play layer instead of merely duplicating the solo campaign."
+        "Light, sound, nonlethal options and gadgets form a deliberate multi-skill stealth system.",
+        "Distinct missions and alternative routes encourage experimentation.",
+        "Co-op has separate missions and partner-specific traversal, making shared play mechanically distinct."
       ],
       "taste_factors": {
-        "gameplay_mastery": 94,
-        "development_variety": 82,
-        "structure_pacing_direction": 84,
-        "identity_hooks": 80,
-        "breadth_of_match": 91
+        "gameplay_mastery": 95,
+        "development_variety": 84,
+        "structure_pacing_direction": 85,
+        "identity_hooks": 82,
+        "breadth_of_match": 93
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "ct-stealth-depth",
+          "text_ru": "Свет, звук, нелетальные приёмы, гаджеты и последствия обнаружения работают как связанная система, где терпение и понимание маршрута дают заметный рост мастерства.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Глубокое освоение механики — один из сильнейших положительных сигналов твоего профиля."
+            },
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Тебе нравятся задачи, где разные условия требуют менять подход."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 95
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 84
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 93
+            }
+          ]
+        },
+        {
+          "finding_id": "ct-mission-routes",
+          "text_ru": "Миссии имеют собственную структуру и альтернативные маршруты, поэтому игра регулярно даёт новый контекст для уже освоенных стелс-инструментов.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Тебе важно, чтобы знакомые механики получали новые ситуации, а не повторялись без изменений."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 85
+            }
+          ]
+        },
+        {
+          "finding_id": "ct-coop-identity",
+          "text_ru": "Отдельные кооперативные миссии и совместные приёмы перемещения делают co-op самостоятельным механическим слоем, а не копией одиночной кампании.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 3
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/9/pattern",
+              "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+              "match_text_ru": "Совместные роли и уникальные взаимодействия — сильный усилитель для твоего профиля."
+            },
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Собственная характерная механика помогает игре оставлять более сильный след."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 82
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -35385,7 +36474,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Несмотря на вариативность уровней, оптимальные маршруты для полностью скрытного прохождения иногда оказываются уже, а цикл «спрятаться — отключить — обойти» может начать повторяться.",
+            "text_ru": "Несмотря на альтернативные маршруты, оптимальное ghost-прохождение иногда уже, чем кажется, а базовый ритм скрыться–отключить–обойти может повторяться.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -35394,9 +36483,9 @@
             ]
           },
           {
-            "disposition": "caution",
-            "risk_code": null,
-            "text_ru": "На современных ПК совместимость неоднородна: часть игроков сталкивается с устаревшим управлением, вылетами или зависаниями Windows 11, хотя у других игра работает нормально.",
+            "disposition": "confirmed_personal_risk",
+            "risk_code": "felt_technical_burden",
+            "text_ru": "Современная ПК-совместимость неоднородна: есть жалобы на старые управления, вылеты и зависания в Windows 11.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -35423,8 +36512,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-29T08:41:47+00:00",
-      "work_authority_commit": "7a3eed077b7b67894e5a7e3f0c1c47a6144e54c9",
+      "accepted_at_utc": "2026-09-30T06:36:26+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "532409322aa073faf46f77850291d9c365c7ded16a8a7b847abbbccc2141ddb8",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -35440,8 +36529,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "d93bb6844d6acf39bf16fae8fef164ca19037f6cf2284b509b308c0dc5aa1064",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "0ac8d122e08efd797f3d20f901af7c882aaa80cf33e425c5e861fe67cfd026be",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -35539,19 +36628,518 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "f8dc529d7c5862154aba2420aac708b5ca734d7667923e3c7b37f737b41f2382",
+          "family_id": "game:13520",
+          "taste_subject_key": "App_13520",
+          "appid": "13520",
+          "taste_fingerprint": "514feafe857e849276ca13580157f815961660838a6b71ea446059be8b1d53ad",
+          "candidate_context_sha256": "34a57ec54fd63353194ec844ffd17e30038bae20439ab2298ab70a7020e10611",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "532409322aa073faf46f77850291d9c365c7ded16a8a7b847abbbccc2141ddb8",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "0ac8d122e08efd797f3d20f901af7c882aaa80cf33e425c5e861fe67cfd026be",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:36:26+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:13520:d93bb6844d6acf39",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "d93bb6844d6acf39bf16fae8fef164ca19037f6cf2284b509b308c0dc5aa1064",
+            "prior_accepted_at_utc": "2026-09-29T08:41:47+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "moderate",
+            "prior_confidence": "medium",
+            "prior_taste_factors": {
+              "gameplay_mastery": 84,
+              "development_variety": 67,
+              "structure_pacing_direction": 70,
+              "identity_hooks": 68,
+              "breadth_of_match": 76
+            },
+            "prior_positive_evidence": [
+              "Large outdoor encounters support stealth, long-range fire, vehicles, flanking and terrain use, giving combat more tactical choice than corridor-style firefights.",
+              "Scouting and learning encounter layouts reward observation and planning, creating a meaningful mastery layer despite the game's age."
+            ],
+            "prior_work_id": "f8dc529d7c5862154aba2420aac708b5ca734d7667923e3c7b37f737b41f2382"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "moderate",
+          "confidence": "medium",
+          "positive_evidence": [
+            "Large outdoor combat spaces allow stealth, long-range fire, vehicles, flanking and terrain use.",
+            "Scouting and learning encounter layouts provide a tactical mastery layer."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 84,
+            "development_variety": 68,
+            "structure_pacing_direction": 69,
+            "identity_hooks": 66,
+            "breadth_of_match": 78
+          },
+          "score_findings": [
+            {
+              "finding_id": "farcry-open-combat",
+              "text_ru": "Большие открытые бои позволяют выбирать стелс, дальнюю стрельбу, транспорт, обходы и рельеф, поэтому встречи дают больше тактических вариантов, чем обычный коридорный шутер.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                  "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                  "match_text_ru": "Тебе нравится, когда ситуация заставляет менять тактику."
+                },
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Освоение пространства и способов прохождения усиливает для тебя игру."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 84
+                },
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 68
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 78
+                },
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 66
+                }
+              ]
+            },
+            {
+              "finding_id": "farcry-punishing-scouting",
+              "text_ru": "Высокая дальность обнаружения и летальность врагов делают разведку полезной, но одновременно превращают ошибки в жёсткое наказание и замедляют темп.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Сложность для тебя ценна, когда вознаграждает обучение, но не сама по себе."
+                },
+                {
+                  "json_pointer": "/taste_profile/5/pattern",
+                  "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+                  "match_text_ru": "Понятный темп и цель важны для удержания вовлечённости."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "qualifies",
+                  "normalized_value": 69
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "difficulty_punishment",
+                "text_ru": "Дальнее обнаружение и высокая летальность могут заставлять слишком часто переигрывать встречу из-за одной ошибки, даже когда сама разведка интересна.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "felt_technical_burden",
+                "text_ru": "На современных ПК встречаются баги, странности ИИ и конфигурации, где нужны фанатские исправления.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:13520:d93bb6844d6acf39",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:36:26+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:36:26+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+            "work_id": "f8dc529d7c5862154aba2420aac708b5ca734d7667923e3c7b37f737b41f2382",
+            "family_id": "game:13520",
+            "taste_subject_key": "App_13520",
+            "appid": "13520",
+            "taste_fingerprint": "514feafe857e849276ca13580157f815961660838a6b71ea446059be8b1d53ad",
+            "candidate_context_sha256": "34a57ec54fd63353194ec844ffd17e30038bae20439ab2298ab70a7020e10611",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-29T08:41:47+00:00",
+            "work_authority_commit": "7a3eed077b7b67894e5a7e3f0c1c47a6144e54c9",
+            "dossier_content_sha256": "532409322aa073faf46f77850291d9c365c7ded16a8a7b847abbbccc2141ddb8",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "d93bb6844d6acf39bf16fae8fef164ca19037f6cf2284b509b308c0dc5aa1064",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+              "work_id": "f8dc529d7c5862154aba2420aac708b5ca734d7667923e3c7b37f737b41f2382",
+              "family_id": "game:13520",
+              "taste_subject_key": "App_13520",
+              "appid": "13520",
+              "taste_fingerprint": "514feafe857e849276ca13580157f815961660838a6b71ea446059be8b1d53ad",
+              "candidate_context_sha256": "34a57ec54fd63353194ec844ffd17e30038bae20439ab2298ab70a7020e10611",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "532409322aa073faf46f77850291d9c365c7ded16a8a7b847abbbccc2141ddb8",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "d93bb6844d6acf39bf16fae8fef164ca19037f6cf2284b509b308c0dc5aa1064",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-29T08:41:47+00:00",
+              "run_start_anchor_commit": "838bb1121ecd039939c0fba110abff6fe6febef7",
+              "run_start_authority_commit": "7a3eed077b7b67894e5a7e3f0c1c47a6144e54c9",
+              "run_started_at_utc": "2026-09-29T08:34:51+00:00",
+              "work_authority_commit": "7a3eed077b7b67894e5a7e3f0c1c47a6144e54c9",
+              "fit_level": "moderate",
+              "confidence": "medium",
+              "positive_evidence": [
+                "Large outdoor encounters support stealth, long-range fire, vehicles, flanking and terrain use, giving combat more tactical choice than corridor-style firefights.",
+                "Scouting and learning encounter layouts reward observation and planning, creating a meaningful mastery layer despite the game's age."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 84,
+                "development_variety": 67,
+                "structure_pacing_direction": 70,
+                "identity_hooks": 68,
+                "breadth_of_match": 76
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Высокая дальность обнаружения и меткость врагов создают жёсткую кривую обучения; значительная часть сложности снимается разведкой, укрытиями и знанием расстановки, поэтому это не чисто случайное наказание.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 1
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "На современных ПК встречаются баги, странности ИИ и необходимость сторонних исправлений в отдельных конфигурациях; актуальный сигнал пока единичный.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 2
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "moderate",
+            "confidence": "medium",
+            "positive_evidence": [
+              "Large outdoor encounters support stealth, long-range fire, vehicles, flanking and terrain use, giving combat more tactical choice than corridor-style firefights.",
+              "Scouting and learning encounter layouts reward observation and planning, creating a meaningful mastery layer despite the game's age."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 84,
+              "development_variety": 67,
+              "structure_pacing_direction": 70,
+              "identity_hooks": 68,
+              "breadth_of_match": 76
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Высокая дальность обнаружения и меткость врагов создают жёсткую кривую обучения; значительная часть сложности снимается разведкой, укрытиями и знанием расстановки, поэтому это не чисто случайное наказание.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "На современных ПК встречаются баги, странности ИИ и необходимость сторонних исправлений в отдельных конфигурациях; актуальный сигнал пока единичный.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:13520:d93bb6844d6acf39",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "d93bb6844d6acf39bf16fae8fef164ca19037f6cf2284b509b308c0dc5aa1064",
+        "prior_accepted_at_utc": "2026-09-29T08:41:47+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "moderate",
+        "prior_confidence": "medium",
+        "prior_taste_factors": {
+          "gameplay_mastery": 84,
+          "development_variety": 67,
+          "structure_pacing_direction": 70,
+          "identity_hooks": 68,
+          "breadth_of_match": 76
+        },
+        "prior_positive_evidence": [
+          "Large outdoor encounters support stealth, long-range fire, vehicles, flanking and terrain use, giving combat more tactical choice than corridor-style firefights.",
+          "Scouting and learning encounter layouts reward observation and planning, creating a meaningful mastery layer despite the game's age."
+        ],
+        "prior_work_id": "f8dc529d7c5862154aba2420aac708b5ca734d7667923e3c7b37f737b41f2382"
+      },
       "fit_level": "moderate",
       "confidence": "medium",
       "positive_evidence": [
-        "Large outdoor encounters support stealth, long-range fire, vehicles, flanking and terrain use, giving combat more tactical choice than corridor-style firefights.",
-        "Scouting and learning encounter layouts reward observation and planning, creating a meaningful mastery layer despite the game's age."
+        "Large outdoor combat spaces allow stealth, long-range fire, vehicles, flanking and terrain use.",
+        "Scouting and learning encounter layouts provide a tactical mastery layer."
       ],
       "taste_factors": {
         "gameplay_mastery": 84,
-        "development_variety": 67,
-        "structure_pacing_direction": 70,
-        "identity_hooks": 68,
-        "breadth_of_match": 76
+        "development_variety": 68,
+        "structure_pacing_direction": 69,
+        "identity_hooks": 66,
+        "breadth_of_match": 78
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "farcry-open-combat",
+          "text_ru": "Большие открытые бои позволяют выбирать стелс, дальнюю стрельбу, транспорт, обходы и рельеф, поэтому встречи дают больше тактических вариантов, чем обычный коридорный шутер.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Тебе нравится, когда ситуация заставляет менять тактику."
+            },
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Освоение пространства и способов прохождения усиливает для тебя игру."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 84
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 68
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 78
+            },
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 66
+            }
+          ]
+        },
+        {
+          "finding_id": "farcry-punishing-scouting",
+          "text_ru": "Высокая дальность обнаружения и летальность врагов делают разведку полезной, но одновременно превращают ошибки в жёсткое наказание и замедляют темп.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Сложность для тебя ценна, когда вознаграждает обучение, но не сама по себе."
+            },
+            {
+              "json_pointer": "/taste_profile/5/pattern",
+              "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+              "match_text_ru": "Понятный темп и цель важны для удержания вовлечённости."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "qualifies",
+              "normalized_value": 69
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -35567,9 +37155,9 @@
         ],
         "findings": [
           {
-            "disposition": "caution",
-            "risk_code": null,
-            "text_ru": "Высокая дальность обнаружения и меткость врагов создают жёсткую кривую обучения; значительная часть сложности снимается разведкой, укрытиями и знанием расстановки, поэтому это не чисто случайное наказание.",
+            "disposition": "confirmed_personal_risk",
+            "risk_code": "difficulty_punishment",
+            "text_ru": "Дальнее обнаружение и высокая летальность могут заставлять слишком часто переигрывать встречу из-за одной ошибки, даже когда сама разведка интересна.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -35578,9 +37166,9 @@
             ]
           },
           {
-            "disposition": "caution",
-            "risk_code": null,
-            "text_ru": "На современных ПК встречаются баги, странности ИИ и необходимость сторонних исправлений в отдельных конфигурациях; актуальный сигнал пока единичный.",
+            "disposition": "confirmed_personal_risk",
+            "risk_code": "felt_technical_burden",
+            "text_ru": "На современных ПК встречаются баги, странности ИИ и конфигурации, где нужны фанатские исправления.",
             "evidence_refs": [
               {
                 "kind": "observation",
