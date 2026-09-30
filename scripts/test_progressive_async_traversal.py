@@ -75,6 +75,13 @@ def deep_fixture():
         'provenance': {
             'sources': [{'source_id': 'source-001', 'evidence_role': 'identity'}],
         },
+        'observations': [
+            {
+                'sentiment': 'positive',
+                'summary': 'Candidate-specific mastery and variety evidence for async traversal regression.',
+            },
+        ],
+        'conflicts': [],
         'web_evidence_contract_binding': copy.deepcopy(current_binding),
     }
     raw = (
