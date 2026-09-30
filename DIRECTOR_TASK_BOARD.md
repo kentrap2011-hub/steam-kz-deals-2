@@ -4,6 +4,7 @@
 
 - `ЧАТ 1` assigned: `WORKER_TASK_DEEP_SCORE_EVIDENCE_EXPLAINABILITY_ALIGNMENT_01.md` — align Deep score-bearing evidence with the same grounded reasons shown to the user; no presentation-only template fix.
 - `ЧАТ 2` is free. `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md` is accepted complete via PR #125 / merge `070f30807acceffed36a342e1d442f5dcd1c99c7`.
+- Next queued Deep fix after PR #128: `WORKER_TASK_DEEP_INVALID_NOT_FIT_CONTRACT_LOOP_FIX_01.md` — align `confirmed_personal_negative` confidence rules across schema/prompt/contract/ingest and stop exact contract-invalid semantic executions from looping as fresh normal work.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -17,6 +18,35 @@
 - User-authorized current recovery direction: process current translations in ЧАТ 1 while ЧАТ 2 makes translation absence nonblocking and adds translation observability to Statistics. The earlier browser-asset decoupling proposal is not the current task; reassess it only if publication still lags after these authorized changes.
 - Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
+
+
+## QUEUED — after ЧАТ 1 / PR #128 — Deep invalid not-fit contract loop fix
+
+Task:
+`WORKER_TASK_DEEP_INVALID_NOT_FIT_CONTRACT_LOOP_FIX_01.md`
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Status:
+`waiting_for_pr_128_completion`
+
+Pinned defect:
+- Five Dates, Her New Memory - Hentai Simulator and Blazing Sails repeatedly re-enter normal Deep work;
+- submitted results used `analyzed_not_fit + confirmed_personal_negative + confidence=medium`;
+- GitHub rejected them with `confirmed personal negative requires high confidence`;
+- rejection status `rejected_invalid_result_no_attempt` leaves them eligible for ordinary reprocessing.
+
+Required fix:
+- encode the high-confidence invariant in schema + worker prompt + contract + ingest;
+- never auto-promote medium to high;
+- proven exact semantic-contract-invalid execution must leave ordinary first-pass through existing terminal/recovery semantics;
+- malformed/stale/unbound transport must not falsely consume an attempt;
+- final worker report must distinguish submission from canonical acceptance;
+- reconcile the three current repeated identities after the generic fix.
+
+Dependency:
+- must start only after PR #128 is complete because both tasks touch Deep prompt/schema/contract/ingest surfaces.
 
 
 ## ACTIVE — ЧАТ 1 — Deep score evidence / explainability alignment
