@@ -568,6 +568,32 @@
           }
         }
       }
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "analyzed_not_fit"
+          },
+          "not_fit_basis": {
+            "const": "confirmed_personal_negative"
+          }
+        },
+        "required": [
+          "outcome",
+          "not_fit_basis"
+        ]
+      },
+      "then": {
+        "required": [
+          "confidence"
+        ],
+        "properties": {
+          "confidence": {
+            "const": "high"
+          }
+        }
+      }
     }
   ],
   "$defs": {
