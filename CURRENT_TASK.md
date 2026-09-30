@@ -1,14 +1,17 @@
 # CURRENT TASK
 
-## ACTIVE — Deep score evidence / explainability alignment 01
-Статус: `implementing`.
+## COMPLETE — Deep score evidence / explainability alignment 01
+Статус: `migration_prepared_needs_semantic_execution`.
 - task: `WORKER_TASK_DEEP_SCORE_EVIDENCE_EXPLAINABILITY_ALIGNMENT_01.md`;
-- worker branch: `fix/deep-score-evidence-explainability-alignment-01`;
-- architecture preflight complete: Deep remains the semantic owner; GitHub validates structured score-bearing finding/provenance bindings; renderer/browser do not infer semantic validity;
-- current confirmed defect: Deep `taste_factors` can affect personal score without factor-to-evidence linkage, while card reasons are independently filtered by a lexical whitelist;
-- historical Deep-fit results without exact score-evidence linkage will not be silently grandfathered; finite migration through the existing Progressive Deep worker will be prepared if required;
-- KOF XV / AppID 1498570 is the pinned regression;
-- no semantic Deep execution and no Scheduled Task changes are authorized in this chat.
+- implementation PR: `#128`; branch: `fix/deep-score-evidence-explainability-alignment-01`;
+- validated implementation head: `d67d6603a73dc9f627a4f370f1108e9e7d225500`; required PASS 2 / ownership / backlog / package validations passed;
+- new Deep `analyzed_fit` score factors require structured `score_findings` bound to exact Dossier evidence and pinned-profile evidence; card reasons project those same accepted findings;
+- finite existing-Deep-worker migration prepared for 43 current authoritative fit results; 4 current not-fit results do not require positive-score migration;
+- KOF XV / AppID 1498570 is migration sequence 34 and remains the pinned regression;
+- RANK-013/final ranking weights are unchanged; no new semantic worker, queue, retry owner, scheduler or Scheduled Task was created;
+- semantic migration was intentionally not executed from this developer chat;
+- report: `reviews/worker_reports/deep-score-evidence-explainability-alignment-01.md`;
+- next bounded action: after merge, execute the prepared finite migration through the existing Progressive Deep semantic worker.
 
 ## COMPLETE — Visual stale-snapshot rebase race fix 01
 Статус: `complete_ready_for_director_acceptance`.
