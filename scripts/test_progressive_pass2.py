@@ -228,6 +228,10 @@ def result_doc(item, outcome='analyzed_fit', **extra):
         'recovery_condition_binding': copy.deepcopy(item.get('recovery_condition_binding')),
         'outcome': outcome,
     }
+    if item.get('score_evidence_contract') is not None:
+        doc['score_evidence_contract'] = copy.deepcopy(item.get('score_evidence_contract'))
+    if item.get('score_migration_provenance') is not None:
+        doc['score_migration_provenance'] = copy.deepcopy(item.get('score_migration_provenance'))
     if outcome in {'analyzed_fit', 'analyzed_not_fit'}:
         doc['negative_assessment'] = {
             'status': 'completed',
@@ -239,7 +243,7 @@ def result_doc(item, outcome='analyzed_fit', **extra):
 
 
 def terminal_doc(item, reason='worker_failure'):
-    return {
+    doc = {
         'schema_version': 1,
         'contract': 'PROGRESSIVE-PASS2-EXECUTION-RECEIPT-V1',
         **{field: item.get(field) for field in progressive_pass2.IMMUTABLE_RESULT_FIELDS},
@@ -250,6 +254,11 @@ def terminal_doc(item, reason='worker_failure'):
         'execution_finished_at_utc': '2026-09-22T10:01:00Z',
         'terminal_reason': reason,
     }
+    if item.get('score_evidence_contract') is not None:
+        doc['score_evidence_contract'] = copy.deepcopy(item.get('score_evidence_contract'))
+    if item.get('score_migration_provenance') is not None:
+        doc['score_migration_provenance'] = copy.deepcopy(item.get('score_migration_provenance'))
+    return doc
 
 
 def recompute(bindings, p1, p2, dossiers, current_binding, *, proj=None):
