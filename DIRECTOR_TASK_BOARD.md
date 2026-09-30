@@ -3,7 +3,7 @@
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
 - `ЧАТ 1` assigned: `WORKER_TASK_CARD_EXPLANATION_PRODUCER_VALIDATOR_PUBLICATION_PARITY_FIX_01.md` — fix Deep linked explanation validation so fresh visual publication can resume without weakening provenance checks.
-- `ЧАТ 2` is free. `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md` is accepted complete via PR #125 / merge `070f30807acceffed36a342e1d442f5dcd1c99c7`.
+- `ЧАТ 2` assigned: `WORKER_TASK_DEEP_INVALID_NOT_FIT_CURRENT_STATE_REGRESSION_FIX_01.md` — fix the stale PASS 2 regression that pins mutable Deep production state and blocks PR #132.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -18,6 +18,31 @@
 - User-authorized current recovery direction: process current translations in ЧАТ 1 while ЧАТ 2 makes translation absence nonblocking and adds translation observability to Statistics. The earlier browser-asset decoupling proposal is not the current task; reassess it only if publication still lags after these authorized changes.
 - Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
+
+
+## ACTIVE — ЧАТ 2 — Deep invalid-not-fit current-state regression fix
+
+Task:
+`WORKER_TASK_DEEP_INVALID_NOT_FIT_CURRENT_STATE_REGRESSION_FIX_01.md`
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Status:
+`authorized_ready_for_worker`
+
+Purpose:
+- make `scripts/test_deep_invalid_not_fit_contract_loop.py` validate durable historical/attempt invariants instead of requiring mutable current entries to remain forever `analysis_incomplete`;
+- preserve the actual loop-prevention contract;
+- unblock mandatory PASS 2 validation for PR #132.
+
+Hard boundary:
+- do not modify PR #132 implementation;
+- no semantic Deep/Dossier execution;
+- no Scheduled Task changes.
+
+Expected report:
+`reviews/worker_reports/deep-invalid-not-fit-current-state-regression-fix-01.md`
 
 
 ## ACTIVE — ЧАТ 1 — card explanation producer / validator publication parity fix
