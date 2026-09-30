@@ -34501,8 +34501,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-29T08:40:38+00:00",
-      "work_authority_commit": "7a3eed077b7b67894e5a7e3f0c1c47a6144e54c9",
+      "accepted_at_utc": "2026-09-30T06:34:10+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "e15562546cc526bf64ec4b4ce08b707a56f88b4a73ce2019e3439b180c5a91d8",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -34518,8 +34518,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "7f8653db682b07c5b0f670ac8b4e6f3327fafc33038cdac0818a7e52722774fc",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "ce7687018c92480327d12a123274c0ccf906af03dce3d5a63d14f3cca6417f57",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -34618,20 +34618,570 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "c2a7476983262a3d5cfe2f68b8f88f789b87374a3319c4353e154f3cebd53fd7",
+          "family_id": "game:13530",
+          "taste_subject_key": "App_13530",
+          "appid": "13530",
+          "taste_fingerprint": "cffa52bc75ede49a9019b56ee3069c0f9c80522f4e2c1e5edba7e229beb7af3e",
+          "candidate_context_sha256": "613ac339ebfc7dc3b4de82ffce46f32f591fe17d5804104724a9f0be903cbd6e",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "e15562546cc526bf64ec4b4ce08b707a56f88b4a73ce2019e3439b180c5a91d8",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "ce7687018c92480327d12a123274c0ccf906af03dce3d5a63d14f3cca6417f57",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:34:10+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:13530:7f8653db682b07c5",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "7f8653db682b07c5b0f670ac8b4e6f3327fafc33038cdac0818a7e52722774fc",
+            "prior_accepted_at_utc": "2026-09-29T08:40:38+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "strong",
+            "prior_confidence": "high",
+            "prior_taste_factors": {
+              "gameplay_mastery": 90,
+              "development_variety": 78,
+              "structure_pacing_direction": 83,
+              "identity_hooks": 86,
+              "breadth_of_match": 88
+            },
+            "prior_positive_evidence": [
+              "Wall-runs, ledges, poles and dagger-assisted traversal keep acrobatic movement central across ordinary navigation, set pieces and bosses.",
+              "Speed Kill adds an alternate stealth-oriented route around some fights, broadening how encounters can be approached.",
+              "The return to Sands of Time characters and tone gives the campaign a clear narrative payoff and cohesive trilogy-ending identity."
+            ],
+            "prior_work_id": "c2a7476983262a3d5cfe2f68b8f88f789b87374a3319c4353e154f3cebd53fd7"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "strong",
+          "confidence": "high",
+          "positive_evidence": [
+            "Wall-runs, ledges, poles and dagger-assisted traversal keep acrobatic movement central.",
+            "Speed Kill adds a stealth-oriented alternative to some direct fights.",
+            "The return to Sands of Time characters and tone gives the trilogy a strong closing identity."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 91,
+            "development_variety": 80,
+            "structure_pacing_direction": 84,
+            "identity_hooks": 88,
+            "breadth_of_match": 89
+          },
+          "score_findings": [
+            {
+              "finding_id": "ttt-traversal",
+              "text_ru": "Бег по стенам, уступы, шесты и кинжал постоянно делают акробатическое перемещение полноценной механикой, а не промежутком между боями.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/1/pattern",
+                  "profile_value_sha256": "03ee46ab2d98957c01bd73fe09574b97f6da1eef6a0ceb054817add03d66d5e1",
+                  "match_text_ru": "Само перемещение для тебя может быть одним из главных источников удовольствия."
+                },
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Освоение точного движения и исполнения хорошо попадает в твой профиль."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 91
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 89
+                }
+              ]
+            },
+            {
+              "finding_id": "ttt-approach-variety",
+              "text_ru": "Speed Kill и секции Тёмного Принца меняют способы прохождения встреч и ритм движения, добавляя альтернативы обычному прямому бою.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/2/pattern",
+                  "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                  "match_text_ru": "Новые механические возможности ценны для тебя, когда действительно меняют способ игры."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 80
+                }
+              ]
+            },
+            {
+              "finding_id": "ttt-trilogy-close",
+              "text_ru": "Возвращение к персонажам, тону и сюжетным линиям Sands of Time делает кампанию цельным завершением трилогии и даёт сильный эмоциональный крючок.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/3/pattern",
+                  "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+                  "match_text_ru": "Сюжет и персонажи для тебя важны как авторский крючок."
+                },
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Цельная характерная подача повышает запоминаемость."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 84
+                },
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 88
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Speed Kill иногда ощущается скорее проверкой тайминга QTE, чем свободным стелс-решением, особенно в боссах.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Секции Тёмного Принца с постоянно убывающим здоровьем создают темп и напряжение, но мешают спокойному экспериментированию.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:13530:7f8653db682b07c5",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:34:10+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:34:10+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+            "work_id": "c2a7476983262a3d5cfe2f68b8f88f789b87374a3319c4353e154f3cebd53fd7",
+            "family_id": "game:13530",
+            "taste_subject_key": "App_13530",
+            "appid": "13530",
+            "taste_fingerprint": "cffa52bc75ede49a9019b56ee3069c0f9c80522f4e2c1e5edba7e229beb7af3e",
+            "candidate_context_sha256": "613ac339ebfc7dc3b4de82ffce46f32f591fe17d5804104724a9f0be903cbd6e",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-29T08:40:38+00:00",
+            "work_authority_commit": "7a3eed077b7b67894e5a7e3f0c1c47a6144e54c9",
+            "dossier_content_sha256": "e15562546cc526bf64ec4b4ce08b707a56f88b4a73ce2019e3439b180c5a91d8",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "7f8653db682b07c5b0f670ac8b4e6f3327fafc33038cdac0818a7e52722774fc",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+              "work_id": "c2a7476983262a3d5cfe2f68b8f88f789b87374a3319c4353e154f3cebd53fd7",
+              "family_id": "game:13530",
+              "taste_subject_key": "App_13530",
+              "appid": "13530",
+              "taste_fingerprint": "cffa52bc75ede49a9019b56ee3069c0f9c80522f4e2c1e5edba7e229beb7af3e",
+              "candidate_context_sha256": "613ac339ebfc7dc3b4de82ffce46f32f591fe17d5804104724a9f0be903cbd6e",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "e15562546cc526bf64ec4b4ce08b707a56f88b4a73ce2019e3439b180c5a91d8",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "7f8653db682b07c5b0f670ac8b4e6f3327fafc33038cdac0818a7e52722774fc",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-29T08:40:38+00:00",
+              "run_start_anchor_commit": "838bb1121ecd039939c0fba110abff6fe6febef7",
+              "run_start_authority_commit": "7a3eed077b7b67894e5a7e3f0c1c47a6144e54c9",
+              "run_started_at_utc": "2026-09-29T08:34:51+00:00",
+              "work_authority_commit": "7a3eed077b7b67894e5a7e3f0c1c47a6144e54c9",
+              "fit_level": "strong",
+              "confidence": "high",
+              "positive_evidence": [
+                "Wall-runs, ledges, poles and dagger-assisted traversal keep acrobatic movement central across ordinary navigation, set pieces and bosses.",
+                "Speed Kill adds an alternate stealth-oriented route around some fights, broadening how encounters can be approached.",
+                "The return to Sands of Time characters and tone gives the campaign a clear narrative payoff and cohesive trilogy-ending identity."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 90,
+                "development_variety": 78,
+                "structure_pacing_direction": 83,
+                "identity_hooks": 86,
+                "breadth_of_match": 88
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Speed Kill иногда ощущается как проверка таймингов в QTE, а не свободное использование стелса, особенно когда похожие последовательности появляются у боссов.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 1
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Секции Тёмного Принца меняют темп и добавляют цепь как инструмент движения, но постоянно убывающее здоровье подталкивает спешить и оставляет меньше пространства для спокойного эксперимента.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 2
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "strong",
+            "confidence": "high",
+            "positive_evidence": [
+              "Wall-runs, ledges, poles and dagger-assisted traversal keep acrobatic movement central across ordinary navigation, set pieces and bosses.",
+              "Speed Kill adds an alternate stealth-oriented route around some fights, broadening how encounters can be approached.",
+              "The return to Sands of Time characters and tone gives the campaign a clear narrative payoff and cohesive trilogy-ending identity."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 90,
+              "development_variety": 78,
+              "structure_pacing_direction": 83,
+              "identity_hooks": 86,
+              "breadth_of_match": 88
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Speed Kill иногда ощущается как проверка таймингов в QTE, а не свободное использование стелса, особенно когда похожие последовательности появляются у боссов.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Секции Тёмного Принца меняют темп и добавляют цепь как инструмент движения, но постоянно убывающее здоровье подталкивает спешить и оставляет меньше пространства для спокойного эксперимента.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:13530:7f8653db682b07c5",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "7f8653db682b07c5b0f670ac8b4e6f3327fafc33038cdac0818a7e52722774fc",
+        "prior_accepted_at_utc": "2026-09-29T08:40:38+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "strong",
+        "prior_confidence": "high",
+        "prior_taste_factors": {
+          "gameplay_mastery": 90,
+          "development_variety": 78,
+          "structure_pacing_direction": 83,
+          "identity_hooks": 86,
+          "breadth_of_match": 88
+        },
+        "prior_positive_evidence": [
+          "Wall-runs, ledges, poles and dagger-assisted traversal keep acrobatic movement central across ordinary navigation, set pieces and bosses.",
+          "Speed Kill adds an alternate stealth-oriented route around some fights, broadening how encounters can be approached.",
+          "The return to Sands of Time characters and tone gives the campaign a clear narrative payoff and cohesive trilogy-ending identity."
+        ],
+        "prior_work_id": "c2a7476983262a3d5cfe2f68b8f88f789b87374a3319c4353e154f3cebd53fd7"
+      },
       "fit_level": "strong",
       "confidence": "high",
       "positive_evidence": [
-        "Wall-runs, ledges, poles and dagger-assisted traversal keep acrobatic movement central across ordinary navigation, set pieces and bosses.",
-        "Speed Kill adds an alternate stealth-oriented route around some fights, broadening how encounters can be approached.",
-        "The return to Sands of Time characters and tone gives the campaign a clear narrative payoff and cohesive trilogy-ending identity."
+        "Wall-runs, ledges, poles and dagger-assisted traversal keep acrobatic movement central.",
+        "Speed Kill adds a stealth-oriented alternative to some direct fights.",
+        "The return to Sands of Time characters and tone gives the trilogy a strong closing identity."
       ],
       "taste_factors": {
-        "gameplay_mastery": 90,
-        "development_variety": 78,
-        "structure_pacing_direction": 83,
-        "identity_hooks": 86,
-        "breadth_of_match": 88
+        "gameplay_mastery": 91,
+        "development_variety": 80,
+        "structure_pacing_direction": 84,
+        "identity_hooks": 88,
+        "breadth_of_match": 89
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "ttt-traversal",
+          "text_ru": "Бег по стенам, уступы, шесты и кинжал постоянно делают акробатическое перемещение полноценной механикой, а не промежутком между боями.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/1/pattern",
+              "profile_value_sha256": "03ee46ab2d98957c01bd73fe09574b97f6da1eef6a0ceb054817add03d66d5e1",
+              "match_text_ru": "Само перемещение для тебя может быть одним из главных источников удовольствия."
+            },
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Освоение точного движения и исполнения хорошо попадает в твой профиль."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 91
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 89
+            }
+          ]
+        },
+        {
+          "finding_id": "ttt-approach-variety",
+          "text_ru": "Speed Kill и секции Тёмного Принца меняют способы прохождения встреч и ритм движения, добавляя альтернативы обычному прямому бою.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            },
+            {
+              "kind": "observation",
+              "index": 2
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Новые механические возможности ценны для тебя, когда действительно меняют способ игры."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 80
+            }
+          ]
+        },
+        {
+          "finding_id": "ttt-trilogy-close",
+          "text_ru": "Возвращение к персонажам, тону и сюжетным линиям Sands of Time делает кампанию цельным завершением трилогии и даёт сильный эмоциональный крючок.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 3
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/3/pattern",
+              "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+              "match_text_ru": "Сюжет и персонажи для тебя важны как авторский крючок."
+            },
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Цельная характерная подача повышает запоминаемость."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 84
+            },
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 88
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -34649,7 +35199,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Speed Kill иногда ощущается как проверка таймингов в QTE, а не свободное использование стелса, особенно когда похожие последовательности появляются у боссов.",
+            "text_ru": "Speed Kill иногда ощущается скорее проверкой тайминга QTE, чем свободным стелс-решением, особенно в боссах.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -34660,7 +35210,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Секции Тёмного Принца меняют темп и добавляют цепь как инструмент движения, но постоянно убывающее здоровье подталкивает спешить и оставляет меньше пространства для спокойного эксперимента.",
+            "text_ru": "Секции Тёмного Принца с постоянно убывающим здоровьем создают темп и напряжение, но мешают спокойному экспериментированию.",
             "evidence_refs": [
               {
                 "kind": "observation",
