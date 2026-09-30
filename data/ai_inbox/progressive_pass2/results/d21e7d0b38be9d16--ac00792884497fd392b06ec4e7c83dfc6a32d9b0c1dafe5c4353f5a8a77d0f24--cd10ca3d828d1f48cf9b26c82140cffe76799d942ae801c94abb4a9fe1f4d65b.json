@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+  "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+  "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+  "work_id": "ac00792884497fd392b06ec4e7c83dfc6a32d9b0c1dafe5c4353f5a8a77d0f24",
+  "family_id": "game:1206610",
+  "taste_subject_key": "App_1206610",
+  "appid": "1206610",
+  "taste_fingerprint": "37ce186cb43972741ba94c87a88a09d2d3b26d502658a1db139d64d71a5407f7",
+  "candidate_context_sha256": "ef497801885dd0f44f416daa512865e800a1a80b7c83dc2d9e1f666a0c7c330a",
+  "dossier_content_sha256": "a8f86c941bf62bf82ea3ec0920e9e5c69ae7ca7cf013fba75bf309e2a3a7a759",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "cd10ca3d828d1f48cf9b26c82140cffe76799d942ae801c94abb4a9fe1f4d65b",
+  "work_mode": "score_explainability_migration",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_migration_provenance": {
+    "migration_id": "deep-score-evidence-explainability-alignment-01",
+    "migration_target_id": "deep-score-explainability-01:game:1206610:71d5b8ec75463129",
+    "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+    "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+    "prior_authorization_id": "71d5b8ec754631295e57903fc157f994a48873ea65b3561196f87e59eb8274d8",
+    "prior_accepted_at_utc": "2026-09-28T10:31:54+00:00",
+    "prior_outcome": "analyzed_fit",
+    "prior_fit_level": "moderate",
+    "prior_confidence": "medium",
+    "prior_taste_factors": {
+      "gameplay_mastery": 48,
+      "development_variety": 40,
+      "structure_pacing_direction": 66,
+      "identity_hooks": 59,
+      "breadth_of_match": 60
+    },
+    "prior_positive_evidence": [
+      "Short local or online rounds are built around direct interaction with other players, creating the shared, memorable situations that strongly amplify value in the profile.",
+      "Physics-based grabbing, throwing, stealing and improvised object use make individual matches unpredictable enough to support casual group play despite the deliberately simple rules."
+    ],
+    "prior_work_id": "8306b2703cf86581c5a42108782b22f61039d7e1fef020e64b7a55ec8cf9c647"
+  },
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Short local or online rounds create most of their value through direct interaction with friends.",
+    "Physics-based grabbing, throwing, stealing and improvised objects create unpredictable shared situations despite simple rules."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 50,
+    "development_variety": 42,
+    "structure_pacing_direction": 68,
+    "identity_hooks": 65,
+    "breadth_of_match": 62
+  },
+  "score_findings": [
+    {
+      "finding_id": "rubber-social",
+      "text_ru": "Короткие раунды строятся вокруг прямого взаимодействия с друзьями, хаоса и общих смешных ситуаций — именно такой совместный опыт у тебя часто заметно повышает ценность игры.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9/pattern",
+          "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+          "match_text_ru": "Совместные решения и общие воспоминания — сильный усилитель твоего игрового опыта."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 68
+        },
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 65
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 62
+        }
+      ]
+    },
+    {
+      "finding_id": "rubber-simple-physics",
+      "text_ru": "Хватание, броски, кража предметов и физический хаос дают весёлое непосредственное управление, но глубина освоения намеренно ограничена.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Глубокое освоение механики обычно усиливает для тебя игру, поэтому простота ограничивает этот фактор."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 50
+        }
+      ]
+    },
+    {
+      "finding_id": "rubber-novelty",
+      "text_ru": "Без хорошей компании набор целей и ситуаций довольно быстро перестаёт давать новое, поэтому долгосрочное разнообразие остаётся ограниченным.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8/pattern",
+          "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+          "match_text_ru": "Повторяемость без нового опыта для тебя быстро становится минусом."
+        },
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Тебе важно, чтобы игра развивала формулу по ходу прохождения."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "lowers",
+          "normalized_value": 42
+        }
+      ]
+    }
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Правила и механическая глубина намеренно простые; основная ценность зависит от компании.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "После первых сессий быстрые матчи и цели могут начать повторяться, особенно без постоянной компании друзей.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть несколько сообщений о проблемах подключения локальных игроков и назначения контроллеров; их текущая распространённость не подтверждена.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      }
+    ]
+  }
+}
