@@ -37195,8 +37195,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-29T11:28:28+00:00",
-      "work_authority_commit": "21b1d01477d15a9f87c1e0231afbf768f5d42b59",
+      "accepted_at_utc": "2026-09-30T06:36:44+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "5b2deeaa4c537468dcae4bac601a3e2c3b9050912225e0cf25f88d5d9cf795df",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -37212,8 +37212,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "fd5ba92db5eb37f530adb1512c7da88ca7490e23f27ba7092993bc0d5107188b",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "617b69f65792e175f2ea95f1918f37977fbee9cdfeb85c84edeaf9605adee292",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -37312,20 +37312,534 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "5fe767ed8573404f36dfcc71a8fdb3490b9791ab79316a2a6af9b52ac210949d",
+          "family_id": "game:1321440",
+          "taste_subject_key": "App_1321440",
+          "appid": "1321440",
+          "taste_fingerprint": "c60e6973aac94452c77527e3e074ce5a510893d77d756af215fb4c128585d5c6",
+          "candidate_context_sha256": "3c112839bda75a0d8d8f82d11228ff2ac6117f40be794ae78575b9b4da324224",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "5b2deeaa4c537468dcae4bac601a3e2c3b9050912225e0cf25f88d5d9cf795df",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "617b69f65792e175f2ea95f1918f37977fbee9cdfeb85c84edeaf9605adee292",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:36:44+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:1321440:fd5ba92db5eb37f5",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "fd5ba92db5eb37f530adb1512c7da88ca7490e23f27ba7092993bc0d5107188b",
+            "prior_accepted_at_utc": "2026-09-29T11:28:28+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "strong",
+            "prior_confidence": "high",
+            "prior_taste_factors": {
+              "gameplay_mastery": 88,
+              "development_variety": 93,
+              "structure_pacing_direction": 80,
+              "identity_hooks": 78,
+              "breadth_of_match": 91
+            },
+            "prior_positive_evidence": [
+              "Double battles, unusual elemental interactions and monster fusion create a tactically flexible combat system with meaningful experimentation.",
+              "Open-world exploration is tied directly to progression through optional quests, puzzles and traversal abilities that unlock new routes and rewards.",
+              "The combination of collection, fusion and exploration provides multiple evolving goals rather than relying on one static combat loop."
+            ],
+            "prior_work_id": "5fe767ed8573404f36dfcc71a8fdb3490b9791ab79316a2a6af9b52ac210949d"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "strong",
+          "confidence": "high",
+          "positive_evidence": [
+            "Double battles, unusual elemental interactions and fusion create a tactically flexible combat system.",
+            "Exploration is tied directly to progression through quests, puzzles and traversal abilities.",
+            "Collection, fusion and exploration provide multiple evolving goals."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 89,
+            "development_variety": 94,
+            "structure_pacing_direction": 82,
+            "identity_hooks": 80,
+            "breadth_of_match": 92
+          },
+          "score_findings": [
+            {
+              "finding_id": "cassette-combat",
+              "text_ru": "Двойные бои, необычные элементальные взаимодействия и слияния дают много комбинаций и заставляют думать шире простой таблицы уязвимостей.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                  "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                  "match_text_ru": "Тебе нравится менять тактику под свойства конкретной ситуации."
+                },
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Освоение системных взаимодействий — сильный положительный сигнал для тебя."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 89
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 92
+                }
+              ]
+            },
+            {
+              "finding_id": "cassette-exploration-growth",
+              "text_ru": "Побочные задания, загадки и способности перемещения открывают новые маршруты и награды, поэтому исследование напрямую связано с развитием возможностей.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/2/pattern",
+                  "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                  "match_text_ru": "Тебе особенно нравится прогрессия с понятным эффектом улучшения."
+                },
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Новые возможности и маршруты поддерживают важную для тебя эволюцию опыта."
+                },
+                {
+                  "json_pointer": "/taste_profile/1/pattern",
+                  "profile_value_sha256": "03ee46ab2d98957c01bd73fe09574b97f6da1eef6a0ceb054817add03d66d5e1",
+                  "match_text_ru": "Развивающееся перемещение само по себе может быть для тебя приятным игровым слоем."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 94
+                },
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 82
+                },
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 80
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "unchanged_repetition",
+                "text_ru": "Обычные сражения, длинные анимации и отдельный гринд могут со временем замедлять сильную боевую систему.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Официального русского текста нет, а в игре много диалогов и сюжета, поэтому языковой барьер может быть существенным.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1321440:fd5ba92db5eb37f5",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:36:44+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:36:44+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+            "work_id": "5fe767ed8573404f36dfcc71a8fdb3490b9791ab79316a2a6af9b52ac210949d",
+            "family_id": "game:1321440",
+            "taste_subject_key": "App_1321440",
+            "appid": "1321440",
+            "taste_fingerprint": "c60e6973aac94452c77527e3e074ce5a510893d77d756af215fb4c128585d5c6",
+            "candidate_context_sha256": "3c112839bda75a0d8d8f82d11228ff2ac6117f40be794ae78575b9b4da324224",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-29T11:28:28+00:00",
+            "work_authority_commit": "21b1d01477d15a9f87c1e0231afbf768f5d42b59",
+            "dossier_content_sha256": "5b2deeaa4c537468dcae4bac601a3e2c3b9050912225e0cf25f88d5d9cf795df",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "fd5ba92db5eb37f530adb1512c7da88ca7490e23f27ba7092993bc0d5107188b",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+              "work_id": "5fe767ed8573404f36dfcc71a8fdb3490b9791ab79316a2a6af9b52ac210949d",
+              "family_id": "game:1321440",
+              "taste_subject_key": "App_1321440",
+              "appid": "1321440",
+              "taste_fingerprint": "c60e6973aac94452c77527e3e074ce5a510893d77d756af215fb4c128585d5c6",
+              "candidate_context_sha256": "3c112839bda75a0d8d8f82d11228ff2ac6117f40be794ae78575b9b4da324224",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "5b2deeaa4c537468dcae4bac601a3e2c3b9050912225e0cf25f88d5d9cf795df",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "fd5ba92db5eb37f530adb1512c7da88ca7490e23f27ba7092993bc0d5107188b",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-29T11:28:28+00:00",
+              "run_start_anchor_commit": "0a1fd55e46646a4b41203b08ddd83a2cc1dd7cd8",
+              "run_start_authority_commit": "21b1d01477d15a9f87c1e0231afbf768f5d42b59",
+              "run_started_at_utc": "2026-09-29T11:25:32+00:00",
+              "work_authority_commit": "21b1d01477d15a9f87c1e0231afbf768f5d42b59",
+              "fit_level": "strong",
+              "confidence": "high",
+              "positive_evidence": [
+                "Double battles, unusual elemental interactions and monster fusion create a tactically flexible combat system with meaningful experimentation.",
+                "Open-world exploration is tied directly to progression through optional quests, puzzles and traversal abilities that unlock new routes and rewards.",
+                "The combination of collection, fusion and exploration provides multiple evolving goals rather than relying on one static combat loop."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 88,
+                "development_variety": 93,
+                "structure_pacing_direction": 80,
+                "identity_hooks": 78,
+                "breadth_of_match": 91
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "unchanged_repetition",
+                    "text_ru": "Обычные бои могут со временем замедлять темп: повторные столкновения, длинные анимации и отдельные участки гринда делают гибкую боевую систему более однообразной на длинной дистанции.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 2
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "На ПК по-прежнему нет официального русского текста; для игры с большим объёмом диалогов и сюжета это может заметно осложнить прохождение русскоязычному игроку.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 3
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "strong",
+            "confidence": "high",
+            "positive_evidence": [
+              "Double battles, unusual elemental interactions and monster fusion create a tactically flexible combat system with meaningful experimentation.",
+              "Open-world exploration is tied directly to progression through optional quests, puzzles and traversal abilities that unlock new routes and rewards.",
+              "The combination of collection, fusion and exploration provides multiple evolving goals rather than relying on one static combat loop."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 88,
+              "development_variety": 93,
+              "structure_pacing_direction": 80,
+              "identity_hooks": 78,
+              "breadth_of_match": 91
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 2
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "unchanged_repetition",
+                  "text_ru": "Обычные бои могут со временем замедлять темп: повторные столкновения, длинные анимации и отдельные участки гринда делают гибкую боевую систему более однообразной на длинной дистанции.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "На ПК по-прежнему нет официального русского текста; для игры с большим объёмом диалогов и сюжета это может заметно осложнить прохождение русскоязычному игроку.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1321440:fd5ba92db5eb37f5",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "fd5ba92db5eb37f530adb1512c7da88ca7490e23f27ba7092993bc0d5107188b",
+        "prior_accepted_at_utc": "2026-09-29T11:28:28+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "strong",
+        "prior_confidence": "high",
+        "prior_taste_factors": {
+          "gameplay_mastery": 88,
+          "development_variety": 93,
+          "structure_pacing_direction": 80,
+          "identity_hooks": 78,
+          "breadth_of_match": 91
+        },
+        "prior_positive_evidence": [
+          "Double battles, unusual elemental interactions and monster fusion create a tactically flexible combat system with meaningful experimentation.",
+          "Open-world exploration is tied directly to progression through optional quests, puzzles and traversal abilities that unlock new routes and rewards.",
+          "The combination of collection, fusion and exploration provides multiple evolving goals rather than relying on one static combat loop."
+        ],
+        "prior_work_id": "5fe767ed8573404f36dfcc71a8fdb3490b9791ab79316a2a6af9b52ac210949d"
+      },
       "fit_level": "strong",
       "confidence": "high",
       "positive_evidence": [
-        "Double battles, unusual elemental interactions and monster fusion create a tactically flexible combat system with meaningful experimentation.",
-        "Open-world exploration is tied directly to progression through optional quests, puzzles and traversal abilities that unlock new routes and rewards.",
-        "The combination of collection, fusion and exploration provides multiple evolving goals rather than relying on one static combat loop."
+        "Double battles, unusual elemental interactions and fusion create a tactically flexible combat system.",
+        "Exploration is tied directly to progression through quests, puzzles and traversal abilities.",
+        "Collection, fusion and exploration provide multiple evolving goals."
       ],
       "taste_factors": {
-        "gameplay_mastery": 88,
-        "development_variety": 93,
-        "structure_pacing_direction": 80,
-        "identity_hooks": 78,
-        "breadth_of_match": 91
+        "gameplay_mastery": 89,
+        "development_variety": 94,
+        "structure_pacing_direction": 82,
+        "identity_hooks": 80,
+        "breadth_of_match": 92
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "cassette-combat",
+          "text_ru": "Двойные бои, необычные элементальные взаимодействия и слияния дают много комбинаций и заставляют думать шире простой таблицы уязвимостей.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Тебе нравится менять тактику под свойства конкретной ситуации."
+            },
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Освоение системных взаимодействий — сильный положительный сигнал для тебя."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 89
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 92
+            }
+          ]
+        },
+        {
+          "finding_id": "cassette-exploration-growth",
+          "text_ru": "Побочные задания, загадки и способности перемещения открывают новые маршруты и награды, поэтому исследование напрямую связано с развитием возможностей.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Тебе особенно нравится прогрессия с понятным эффектом улучшения."
+            },
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Новые возможности и маршруты поддерживают важную для тебя эволюцию опыта."
+            },
+            {
+              "json_pointer": "/taste_profile/1/pattern",
+              "profile_value_sha256": "03ee46ab2d98957c01bd73fe09574b97f6da1eef6a0ceb054817add03d66d5e1",
+              "match_text_ru": "Развивающееся перемещение само по себе может быть для тебя приятным игровым слоем."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 94
+            },
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 82
+            },
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 80
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -37343,7 +37857,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "unchanged_repetition",
-            "text_ru": "Обычные бои могут со временем замедлять темп: повторные столкновения, длинные анимации и отдельные участки гринда делают гибкую боевую систему более однообразной на длинной дистанции.",
+            "text_ru": "Обычные сражения, длинные анимации и отдельный гринд могут со временем замедлять сильную боевую систему.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -37354,7 +37868,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "На ПК по-прежнему нет официального русского текста; для игры с большим объёмом диалогов и сюжета это может заметно осложнить прохождение русскоязычному игроку.",
+            "text_ru": "Официального русского текста нет, а в игре много диалогов и сюжета, поэтому языковой барьер может быть существенным.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -37381,8 +37895,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-29T11:30:05+00:00",
-      "work_authority_commit": "21b1d01477d15a9f87c1e0231afbf768f5d42b59",
+      "accepted_at_utc": "2026-09-30T06:36:44+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "9a27c31d842dc6e481814b11124e234a0b2a5587013c979e0d546f9fb2b013fb",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -37398,8 +37912,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "6144f9f177f582eee74d858e164face59506987185f5316ce07a4ad693dba1a6",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "9db19cf2bb23675d3d81cce155e350b61daeed18b0447703dd490c5cd4250843",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -37483,20 +37997,527 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "2127bfc09733a36b652937050587d30843772cd9c9b22bbef277fec9b64d5e73",
+          "family_id": "game:1364100",
+          "taste_subject_key": "App_1364100",
+          "appid": "1364100",
+          "taste_fingerprint": "a4f48092845877786c67d60a0d55624dd7d61243be81fe2e7be05e73f8e7e79b",
+          "candidate_context_sha256": "b9ad8ff81969c03a335fdbd91f20b97e1ffb46cf4ddc4d7e998217f5130ed073",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "9a27c31d842dc6e481814b11124e234a0b2a5587013c979e0d546f9fb2b013fb",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "9db19cf2bb23675d3d81cce155e350b61daeed18b0447703dd490c5cd4250843",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:36:44+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:1364100:6144f9f177f582ee",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "6144f9f177f582eee74d858e164face59506987185f5316ce07a4ad693dba1a6",
+            "prior_accepted_at_utc": "2026-09-29T11:30:05+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "strong",
+            "prior_confidence": "high",
+            "prior_taste_factors": {
+              "gameplay_mastery": 79,
+              "development_variety": 76,
+              "structure_pacing_direction": 88,
+              "identity_hooks": 92,
+              "breadth_of_match": 85
+            },
+            "prior_positive_evidence": [
+              "Investigation requires reading evidence and committing answers into case sheets, so deduction is an active system rather than dialogue exhaustion.",
+              "Wrong conclusions can remain in play and alter later outcomes, making decisions consequential instead of cosmetic.",
+              "Dialogue, case answers and relationship choices lead to meaningfully different endings, while the noir setting and political worldbuilding give the short campaign a strong identity."
+            ],
+            "prior_work_id": "2127bfc09733a36b652937050587d30843772cd9c9b22bbef277fec9b64d5e73"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "strong",
+          "confidence": "high",
+          "positive_evidence": [
+            "Investigation requires reading evidence and committing deductions into case sheets.",
+            "Wrong conclusions can persist and materially alter later outcomes.",
+            "Choices, endings and noir political worldbuilding give the short campaign strong consequence and identity."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 80,
+            "development_variety": 78,
+            "structure_pacing_direction": 90,
+            "identity_hooks": 94,
+            "breadth_of_match": 87
+          },
+          "score_findings": [
+            {
+              "finding_id": "lacuna-deduction",
+              "text_ru": "Улики нужно читать и фиксировать выводы в case sheets, а ошибочный вывод может остаться в истории и повлиять на дальнейшие события — расследование здесь действительно является механикой.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Тебе нравится, когда понимание системы и внимательность реально улучшают результат."
+                },
+                {
+                  "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                  "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                  "match_text_ru": "Содержательные решения ценнее для тебя, чем формальный выбор без последствий."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 80
+                },
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 90
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 87
+                }
+              ]
+            },
+            {
+              "finding_id": "lacuna-branches",
+              "text_ru": "Ответы по делам, диалоги и отношения приводят к заметно разным финалам, поэтому короткая кампания всё же даёт содержательные варианты развития.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Тебе важно, чтобы решения открывали новый игровой или сюжетный контекст."
+                },
+                {
+                  "json_pointer": "/taste_profile/2/pattern",
+                  "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                  "match_text_ru": "Понятные последствия выбора усиливают ценность развития."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 78
+                }
+              ]
+            },
+            {
+              "finding_id": "lacuna-noir-identity",
+              "text_ru": "Детективная тема, убедительные персонажи, политический мир и пиксельный нуар дают игре очень узнаваемую атмосферу.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/3/pattern",
+                  "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+                  "match_text_ru": "Персонажи и сюжет для тебя важны как источник вовлечённости."
+                },
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Яркая художественная идентичность сильно повышает шанс, что игра запомнится."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 94
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "unchanged_repetition",
+                "text_ru": "Повторное прохождение ради других исходов требует заново смотреть знакомые сцены и диалоги, а прямой выбор ветки ограничен.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1364100:6144f9f177f582ee",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:36:44+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:36:44+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+            "work_id": "2127bfc09733a36b652937050587d30843772cd9c9b22bbef277fec9b64d5e73",
+            "family_id": "game:1364100",
+            "taste_subject_key": "App_1364100",
+            "appid": "1364100",
+            "taste_fingerprint": "a4f48092845877786c67d60a0d55624dd7d61243be81fe2e7be05e73f8e7e79b",
+            "candidate_context_sha256": "b9ad8ff81969c03a335fdbd91f20b97e1ffb46cf4ddc4d7e998217f5130ed073",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-29T11:30:05+00:00",
+            "work_authority_commit": "21b1d01477d15a9f87c1e0231afbf768f5d42b59",
+            "dossier_content_sha256": "9a27c31d842dc6e481814b11124e234a0b2a5587013c979e0d546f9fb2b013fb",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "6144f9f177f582eee74d858e164face59506987185f5316ce07a4ad693dba1a6",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+              "work_id": "2127bfc09733a36b652937050587d30843772cd9c9b22bbef277fec9b64d5e73",
+              "family_id": "game:1364100",
+              "taste_subject_key": "App_1364100",
+              "appid": "1364100",
+              "taste_fingerprint": "a4f48092845877786c67d60a0d55624dd7d61243be81fe2e7be05e73f8e7e79b",
+              "candidate_context_sha256": "b9ad8ff81969c03a335fdbd91f20b97e1ffb46cf4ddc4d7e998217f5130ed073",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "9a27c31d842dc6e481814b11124e234a0b2a5587013c979e0d546f9fb2b013fb",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "6144f9f177f582eee74d858e164face59506987185f5316ce07a4ad693dba1a6",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-29T11:30:05+00:00",
+              "run_start_anchor_commit": "0a1fd55e46646a4b41203b08ddd83a2cc1dd7cd8",
+              "run_start_authority_commit": "21b1d01477d15a9f87c1e0231afbf768f5d42b59",
+              "run_started_at_utc": "2026-09-29T11:25:32+00:00",
+              "work_authority_commit": "21b1d01477d15a9f87c1e0231afbf768f5d42b59",
+              "fit_level": "strong",
+              "confidence": "high",
+              "positive_evidence": [
+                "Investigation requires reading evidence and committing answers into case sheets, so deduction is an active system rather than dialogue exhaustion.",
+                "Wrong conclusions can remain in play and alter later outcomes, making decisions consequential instead of cosmetic.",
+                "Dialogue, case answers and relationship choices lead to meaningfully different endings, while the noir setting and political worldbuilding give the short campaign a strong identity."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 79,
+                "development_variety": 76,
+                "structure_pacing_direction": 88,
+                "identity_hooks": 92,
+                "breadth_of_match": 85
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "unchanged_repetition",
+                    "text_ru": "Повторные прохождения ради других исходов могут требовать снова проходить уже знакомые сцены и диалоги, а выбор нужной ветки ограничен, поэтому реиграбельность местами превращается в повторение.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 3
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "strong",
+            "confidence": "high",
+            "positive_evidence": [
+              "Investigation requires reading evidence and committing answers into case sheets, so deduction is an active system rather than dialogue exhaustion.",
+              "Wrong conclusions can remain in play and alter later outcomes, making decisions consequential instead of cosmetic.",
+              "Dialogue, case answers and relationship choices lead to meaningfully different endings, while the noir setting and political worldbuilding give the short campaign a strong identity."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 79,
+              "development_variety": 76,
+              "structure_pacing_direction": 88,
+              "identity_hooks": 92,
+              "breadth_of_match": 85
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "unchanged_repetition",
+                  "text_ru": "Повторные прохождения ради других исходов могут требовать снова проходить уже знакомые сцены и диалоги, а выбор нужной ветки ограничен, поэтому реиграбельность местами превращается в повторение.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1364100:6144f9f177f582ee",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "6144f9f177f582eee74d858e164face59506987185f5316ce07a4ad693dba1a6",
+        "prior_accepted_at_utc": "2026-09-29T11:30:05+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "strong",
+        "prior_confidence": "high",
+        "prior_taste_factors": {
+          "gameplay_mastery": 79,
+          "development_variety": 76,
+          "structure_pacing_direction": 88,
+          "identity_hooks": 92,
+          "breadth_of_match": 85
+        },
+        "prior_positive_evidence": [
+          "Investigation requires reading evidence and committing answers into case sheets, so deduction is an active system rather than dialogue exhaustion.",
+          "Wrong conclusions can remain in play and alter later outcomes, making decisions consequential instead of cosmetic.",
+          "Dialogue, case answers and relationship choices lead to meaningfully different endings, while the noir setting and political worldbuilding give the short campaign a strong identity."
+        ],
+        "prior_work_id": "2127bfc09733a36b652937050587d30843772cd9c9b22bbef277fec9b64d5e73"
+      },
       "fit_level": "strong",
       "confidence": "high",
       "positive_evidence": [
-        "Investigation requires reading evidence and committing answers into case sheets, so deduction is an active system rather than dialogue exhaustion.",
-        "Wrong conclusions can remain in play and alter later outcomes, making decisions consequential instead of cosmetic.",
-        "Dialogue, case answers and relationship choices lead to meaningfully different endings, while the noir setting and political worldbuilding give the short campaign a strong identity."
+        "Investigation requires reading evidence and committing deductions into case sheets.",
+        "Wrong conclusions can persist and materially alter later outcomes.",
+        "Choices, endings and noir political worldbuilding give the short campaign strong consequence and identity."
       ],
       "taste_factors": {
-        "gameplay_mastery": 79,
-        "development_variety": 76,
-        "structure_pacing_direction": 88,
-        "identity_hooks": 92,
-        "breadth_of_match": 85
+        "gameplay_mastery": 80,
+        "development_variety": 78,
+        "structure_pacing_direction": 90,
+        "identity_hooks": 94,
+        "breadth_of_match": 87
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "lacuna-deduction",
+          "text_ru": "Улики нужно читать и фиксировать выводы в case sheets, а ошибочный вывод может остаться в истории и повлиять на дальнейшие события — расследование здесь действительно является механикой.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Тебе нравится, когда понимание системы и внимательность реально улучшают результат."
+            },
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Содержательные решения ценнее для тебя, чем формальный выбор без последствий."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 80
+            },
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 90
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 87
+            }
+          ]
+        },
+        {
+          "finding_id": "lacuna-branches",
+          "text_ru": "Ответы по делам, диалоги и отношения приводят к заметно разным финалам, поэтому короткая кампания всё же даёт содержательные варианты развития.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Тебе важно, чтобы решения открывали новый игровой или сюжетный контекст."
+            },
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Понятные последствия выбора усиливают ценность развития."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 78
+            }
+          ]
+        },
+        {
+          "finding_id": "lacuna-noir-identity",
+          "text_ru": "Детективная тема, убедительные персонажи, политический мир и пиксельный нуар дают игре очень узнаваемую атмосферу.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 2
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/3/pattern",
+              "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+              "match_text_ru": "Персонажи и сюжет для тебя важны как источник вовлечённости."
+            },
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Яркая художественная идентичность сильно повышает шанс, что игра запомнится."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 94
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -37510,7 +38531,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "unchanged_repetition",
-            "text_ru": "Повторные прохождения ради других исходов могут требовать снова проходить уже знакомые сцены и диалоги, а выбор нужной ветки ограничен, поэтому реиграбельность местами превращается в повторение.",
+            "text_ru": "Повторное прохождение ради других исходов требует заново смотреть знакомые сцены и диалоги, а прямой выбор ветки ограничен.",
             "evidence_refs": [
               {
                 "kind": "observation",
