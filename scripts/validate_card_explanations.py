@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 import build_daily_visual_payload as readiness_builder
-from card_explanation_policy import GROUNDED_RISK_SOURCES, POSITIVE_BINDING_FIELDS
+from card_explanation_policy import DEEP_SCORE_REQUIRED_BINDING_FIELDS, GROUNDED_RISK_SOURCES
 
 
 CURRENT_VISUAL = Path('data/production/visual/current.json')
@@ -75,7 +75,7 @@ def validate_item(game):
                 if not row.get('evidence_refs') or not row.get('profile_evidence_refs'):
                     errors.append(f'{title}: Deep positive lacks exact candidate/profile evidence refs')
                 binding = row.get('semantic_binding') or {}
-                if any(binding.get(field) in {None, ''} for field in POSITIVE_BINDING_FIELDS):
+                if any(binding.get(field) in {None, ''} for field in DEEP_SCORE_REQUIRED_BINDING_FIELDS):
                     errors.append(f'{title}: Deep positive provenance lacks exact accepted-state binding')
                 if binding.get('semantic_source') != 'progressive_pass2':
                     errors.append(f'{title}: Deep positive provenance has wrong semantic source')
