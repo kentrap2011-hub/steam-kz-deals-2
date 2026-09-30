@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "98f766a847449a9697ba6c4a2370ffad08aee506",
+  "run_start_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+  "run_started_at_utc": "2026-09-30T11:59:25+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+  "work_id": "a349c27f3663446a76886e22218455525bc43a2428278ca450257ad916f6239a",
+  "family_id": "game:1296770",
+  "taste_subject_key": "App_1296770",
+  "appid": "1296770",
+  "taste_fingerprint": "b8fdc904a0b14b7a94c33ef8eb484b43a6a6751c9ead7a50e1e465e7c4ffbb68",
+  "candidate_context_sha256": "65c1745a97ce1806ceede5797c5f05cfdb2f3042d616df3b713db606cedf090f",
+  "dossier_content_sha256": "8a998c504111582b002efe98fe4eee397083124b867bf180e4f2590d52d6db03",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "a8dc0237b8f0a78244c71ef19554d85032503978cf87fd9daea5e06108751323",
+  "work_mode": "recovery",
+  "recovery_authorization_id": "d330d77dcc3803008332a0291baafdf7f842ee878c5e377bf3527f4e77df00f4",
+  "recovery_reason": "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
+  "recovery_condition_binding": {
+    "semantic_input": {
+      "title": "Her New Memory - Hentai Simulator",
+      "short_description": "One day, you find a shivering, barefooted girl in ragged clothes knocking on your door. She has no recollections of her past, and she doesn’t even remember her name. You can help her recover her memories or let her stay at your side forever.",
+      "bundle_members": [],
+      "fit_tags": [],
+      "core_fit_count": 0,
+      "release_date": "8 Feb, 2022",
+      "release_year": null,
+      "semantic_condition": {
+        "ai_condition": "taste_subject_include_controls_purchase_family",
+        "requires_ai_base_support": false,
+        "base_appids": [
+          "1296770"
+        ]
+      }
+    },
+    "defect_fix_binding": {
+      "task_id": "deep-invalid-not-fit-contract-loop-fix-01",
+      "validated_fix_commit": "b21bdfd773162e9856c1b12015b1b497b4999363",
+      "prior_run_start_anchor_commit": "4d1a1c573289358713897559e79b754907ff91c8",
+      "prior_run_start_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
+      "prior_result_commit": "57a31a9789673b6e10464c02938b76c4991a6e40",
+      "prior_ingest_rejection_commit": "5651782bb91a18aaaedc1b26b5973159e3e021d0",
+      "prior_result_authorization_id": "c2586b7e898fbd2588250bf47802969ded4d695783ab841977f5f5e5c9e54e60",
+      "prior_rejection_reason": "confirmed personal negative requires high confidence"
+    }
+  },
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "high",
+  "not_fit_basis": "confirmed_personal_negative",
+  "not_fit_evidence": [
+    "The day-to-day progression loop repeatedly falls into slow clicking and grind between meaningful relationship events.",
+    "Important event and work requirements can be opaque enough that players need external guidance to restore or unlock activities.",
+    "The warm relationship scenes are a real strength, but the recurring grind and unclear progression directly conflict with this profile's need for evolving, legible play."
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "После повторения диалогов ежедневный цикл устойчиво сводится к длинным участкам однообразных кликов и медленного прогресса между значимыми событиями.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "directionlessness",
+        "text_ru": "Условия некоторых событий и занятий непрозрачны: игроки отдельно выясняют, как вернуть активности или открыть совместную работу, что создаёт устойчивый риск непонимания следующего шага.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Темп отношений неоднороден: тёплые сцены соседствуют с очень быстрым развитием и слабо завершёнными побочными эпизодами.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      }
+    ]
+  }
+}
