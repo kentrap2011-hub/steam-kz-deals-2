@@ -1,5 +1,16 @@
 # CURRENT TASK
 
+## ACTIVE — Card explanation producer / validator publication parity fix 01
+Статус: `implementing`.
+- task: `WORKER_TASK_CARD_EXPLANATION_PRODUCER_VALIDATOR_PUBLICATION_PARITY_FIX_01.md`;
+- branch: `fix/card-explanation-producer-validator-publication-parity-01`;
+- fresh-main start anchor: `bf6e2b2288c745f5d2ed67ef73cdbfcec819e1cb`;
+- confirmed root cause: full visual publication is blocked because `scripts/validate_card_explanations.py` applies the legacy literal `теб` rule to authoritative `linked_v1` Deep score-finding reasons;
+- implementation direction: linked Deep positives are validated by accepted structured provenance; legacy/non-Deep explanation validation remains unchanged;
+- no Deep/Dossier semantic execution, ranking change, manual visual build/deploy, scheduler/retry ownership change or Scheduled Task change is authorized;
+- report target: `reviews/worker_reports/card-explanation-producer-validator-publication-parity-fix-01.md`.
+
+
 ## COMPLETE — Deep score evidence / explainability alignment 01
 Статус: `migration_prepared_needs_semantic_execution`.
 - task: `WORKER_TASK_DEEP_SCORE_EVIDENCE_EXPLAINABILITY_ALIGNMENT_01.md`;
