@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 import build_daily_visual_payload as readiness_builder
-from card_explanation_policy import GROUNDED_RISK_SOURCES
+from card_explanation_policy import GROUNDED_RISK_SOURCES, POSITIVE_BINDING_FIELDS
 
 
 CURRENT_VISUAL = Path('data/production/visual/current.json')
@@ -33,10 +33,16 @@ def validate_item(game):
     fit_status = game.get('why_fit_status') or {}
     fit_provenance = game.get('why_fit_provenance') or []
 
+    is_deep = game.get('effective_analysis_source') == 'deep'
+    linked_deep_positive = is_deep and game.get('score_explainability_status') == 'linked_v1'
+
     for reason in reasons:
         if reason.startswith(GENERIC_POSITIVE_PREFIX):
             errors.append(f'{title}: generic positive fallback is visible')
-        if 'теб' not in reason.casefold():
+        # Authoritative linked Deep reasons prove personalization through the
+        # accepted DEEP-SCORE-EVIDENCE-V1 provenance below. Legacy/non-Deep
+        # reasons keep the older explicit-text compatibility guard.
+        if not linked_deep_positive and 'теб' not in reason.casefold():
             errors.append(f'{title}: positive lacks explicit personal-taste link')
         lowered = reason.casefold()
         if any(term in lowered for term in COMMERCIAL_ONLY_TERMS):
@@ -45,36 +51,34 @@ def validate_item(game):
     if reasons:
         if fit_status.get('has_described_fit') is not True:
             errors.append(f'{title}: positive text exists but why_fit_status is not described')
+        if is_deep and fit_status.get('grounding') != 'grounded':
+            errors.append(f'{title}: Deep positive why_fit_status is not grounded')
+        if is_deep and game.get('score_explainability_status') != 'linked_v1':
+            errors.append(f'{title}: Deep positive is not linked to accepted score evidence')
         if len(fit_provenance) < len(reasons):
             errors.append(f'{title}: positive text lacks provenance')
+        if is_deep and len(fit_provenance) != len(reasons):
+            errors.append(f'{title}: Deep positive text/provenance count mismatch')
         for row in fit_provenance[:len(reasons)]:
-            is_deep = game.get('effective_analysis_source') == 'deep'
             if is_deep:
                 if row.get('source') != 'deep_score_finding':
                     errors.append(f'{title}: Deep positive is not sourced from an accepted score finding')
                     continue
-                if not row.get('finding_id') or not row.get('factor_impacts'):
+                impacts = row.get('factor_impacts') or []
+                if not row.get('finding_id') or not impacts:
                     errors.append(f'{title}: Deep positive lacks score-factor provenance')
+                elif not any(
+                    isinstance(impact, dict) and impact.get('effect') == 'supports'
+                    for impact in impacts
+                ):
+                    errors.append(f'{title}: Deep positive lacks supporting score-factor provenance')
                 if not row.get('evidence_refs') or not row.get('profile_evidence_refs'):
                     errors.append(f'{title}: Deep positive lacks exact candidate/profile evidence refs')
                 binding = row.get('semantic_binding') or {}
-                required = (
-                    'semantic_generation_id',
-                    'profile_pin_sha256',
-                    'work_id',
-                    'family_id',
-                    'taste_subject_key',
-                    'appid',
-                    'taste_fingerprint',
-                    'candidate_context_sha256',
-                    'dossier_content_sha256',
-                    'authorization_id',
-                    'accepted_at_utc',
-                )
-                if binding.get('semantic_source') != 'progressive_pass2' or any(
-                    binding.get(field) in {None, ''} for field in required
-                ):
+                if any(binding.get(field) in {None, ''} for field in POSITIVE_BINDING_FIELDS):
                     errors.append(f'{title}: Deep positive provenance lacks exact accepted-state binding')
+                if binding.get('semantic_source') != 'progressive_pass2':
+                    errors.append(f'{title}: Deep positive provenance has wrong semantic source')
                 if str(binding.get('family_id') or '') != str(game.get('id') or ''):
                     errors.append(f'{title}: Deep positive provenance family binding mismatch')
                 if str(binding.get('semantic_generation_id') or '') != str(
