@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+  "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+  "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+  "work_id": "91418534519c5bd8413f5851ecee9e645a492d2f16ce6fda504b3103ddfef1a8",
+  "family_id": "game:1227690",
+  "taste_subject_key": "App_1227690",
+  "appid": "1227690",
+  "taste_fingerprint": "823bbcb7f283ebb1e9b838f6073f56822e4bdd8f51d52313d685d854d38af254",
+  "candidate_context_sha256": "6bbd30cbaaaeece3955dce3d7cb9c6bd5d8cedca97a39e2da5129f993c2f4b0b",
+  "dossier_content_sha256": "f5679ea2320030082602bb867c087e525d775c3cd6d660442ef78d7895742e0a",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "ab89c39839ffc72e536c40f7978132304bd8d642f584f007de13474145ae95c7",
+  "work_mode": "score_explainability_migration",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_migration_provenance": {
+    "migration_id": "deep-score-evidence-explainability-alignment-01",
+    "migration_target_id": "deep-score-explainability-01:game:1227690:f841362b7bb76494",
+    "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+    "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+    "prior_authorization_id": "f841362b7bb764941d9a6d78525503f2ce46e7d2797b81f00006e5d042dc621e",
+    "prior_accepted_at_utc": "2026-09-28T10:29:02+00:00",
+    "prior_outcome": "analyzed_fit",
+    "prior_fit_level": "strong",
+    "prior_confidence": "high",
+    "prior_taste_factors": {
+      "gameplay_mastery": 92,
+      "development_variety": 81,
+      "structure_pacing_direction": 86,
+      "identity_hooks": 82,
+      "breadth_of_match": 89
+    },
+    "prior_positive_evidence": [
+      "Fast parkour, slow motion, weapon stealing and destructible environments make movement and combat expression the central pleasure, directly matching the profile's very strong preference for enjoyable movement and responsive gameplay.",
+      "The controls have a learnable first-hour friction and then improve markedly as movement and challenge modes click, fitting the profile's strong mastery-through-learning signal.",
+      "The compact campaign can end before its combat pattern becomes stale, while optional challenge and replay modes remain available without forcing prolonged repetition."
+    ],
+    "prior_work_id": "a3d7c56a32b38599ded8945bc3eed3efab6ea9bd4bba37690ae3eb4214e3092d"
+  },
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "high",
+  "positive_evidence": [
+    "Fast parkour, slow motion, weapon stealing and destructible environments make movement and combat expression the central pleasure.",
+    "The compact campaign ends before the core action necessarily becomes stale, while optional challenge and replay modes remain available."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 93,
+    "development_variety": 82,
+    "structure_pacing_direction": 87,
+    "identity_hooks": 84,
+    "breadth_of_match": 90
+  },
+  "score_findings": [
+    {
+      "finding_id": "severed-movement-combat",
+      "text_ru": "Паркур, замедление времени, постоянная смена оружия и разрушаемое окружение делают само движение частью боевого мастерства — это один из самых точных матчей с твоим профилем.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1/pattern",
+          "profile_value_sha256": "03ee46ab2d98957c01bd73fe09574b97f6da1eef6a0ceb054817add03d66d5e1",
+          "match_text_ru": "Само управление и перемещение может быть для тебя отдельным источником удовольствия."
+        },
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Ты особенно ценишь механики, в которых ощущается рост собственного навыка."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 93
+        },
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 84
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 90
+        }
+      ]
+    },
+    {
+      "finding_id": "severed-compact-variety",
+      "text_ru": "Кампания достаточно компактна, чтобы не выжать боевую формулу досуха, а дополнительные режимы и пользовательский контент оставляют продолжение тем, кому захочется ещё.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Тебе важно, чтобы игра развивала опыт, а не долго повторяла уже раскрытую формулу."
+        },
+        {
+          "json_pointer": "/taste_profile/8/pattern",
+          "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+          "match_text_ru": "Повторяемость для тебя не запрет, если она не превращается в застой."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 82
+        },
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 87
+        }
+      ]
+    }
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Первый час может ощущаться неловко, пока не освоятся ограничения движения и прыжков, но затем управление заметно раскрывается.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Сюжет здесь очень тонкий и почти не мотивирует сам по себе, хотя для настолько насыщенного экшена это не обязательно критично.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Есть отдельный отзыв, что слабое поведение врагов и повторяемые боевые шаблоны способны сделать даже стильный экшен однообразным.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      }
+    ]
+  }
+}
