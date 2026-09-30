@@ -197,6 +197,13 @@ def dossier_record(appid, title, binding, *, digest=None, expires='2026-10-01T00
                     },
                 ],
             },
+            'observations': [
+                {
+                    'sentiment': 'positive',
+                    'summary': 'Candidate-specific mastery and variety evidence for regression fixtures.',
+                },
+            ],
+            'conflicts': [],
             'web_evidence_contract_binding': copy.deepcopy(binding),
         },
     }
@@ -264,14 +271,48 @@ def recompute(bindings, p1, p2, dossiers, current_binding, *, proj=None):
     return result
 
 
+def score_findings(item, factors=None):
+    factors = copy.deepcopy(factors or FACTOR_VALUES)
+    if item.get('score_evidence_contract') != progressive_pass2.SCORE_EVIDENCE_CONTRACT:
+        return None
+    return [
+        {
+            'finding_id': 'fixture-grounded-fit',
+            'text_ru': (
+                'Конкретная механика из принятого досье даёт тебе пространство для освоения, '
+                'экспериментов и разнообразных игровых решений.'
+            ),
+            'candidate_evidence_refs': [{'kind': 'observation', 'index': 0}],
+            'profile_evidence_refs': [
+                {
+                    'json_pointer': '/fixture/preferences',
+                    'profile_value_sha256': hashlib.sha256(b'fixture-profile-value').hexdigest(),
+                    'match_text_ru': 'Тебе важны освоение механик и разнообразие игровых решений.',
+                },
+            ],
+            'factor_impacts': [
+                {
+                    'factor_id': factor_id,
+                    'effect': 'supports',
+                    'normalized_value': factors[factor_id],
+                }
+                for factor_id in progressive_pass2.SCORE_FACTOR_IDS
+            ],
+        },
+    ]
+
+
 def fit_result(item):
-    return result_doc(
-        item,
-        fit_level='strong',
-        confidence='high',
-        positive_evidence=['candidate-specific dossier-supported gameplay fit'],
-        taste_factors=FACTOR_VALUES,
-    )
+    extra = {
+        'fit_level': 'strong',
+        'confidence': 'high',
+        'positive_evidence': ['candidate-specific dossier-supported gameplay fit'],
+        'taste_factors': copy.deepcopy(FACTOR_VALUES),
+    }
+    findings = score_findings(item, FACTOR_VALUES)
+    if findings is not None:
+        extra['score_findings'] = findings
+    return result_doc(item, **extra)
 
 
 def main():
