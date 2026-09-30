@@ -18,10 +18,10 @@
     "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
     "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
-  "next_pending_sequence": 24,
+  "next_pending_sequence": 25,
   "accepted_group_count": 5,
-  "failed_group_count": 18,
-  "pending_group_count": 58,
+  "failed_group_count": 19,
+  "pending_group_count": 57,
   "normal_first_pass_complete": false,
   "all_groups_accepted": false,
   "full_backlog_complete": false,
@@ -224,6 +224,17 @@
         "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000023--be7e13a0d40cacada3dfb23180d395cf3edf39b81cd004cc3385a4378b0af320.json",
         "artifact_sha256": "fc0cdd1907e29c889953de7ffe7b492c8339defcace8aa826a8071a825d1d743",
         "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000023/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000023--be7e13a0d40cacada3dfb23180d395cf3edf39b81cd004cc3385a4378b0af320.json.invalid-fc0cdd1907e2",
+        "recovery_eligible": true
+      }
+    },
+    {
+      "sequence": 24,
+      "group_sha256": "1f069943eb814381e4335eb6b784294dc4d8263cb9bf74387aee6f41c74d9aad",
+      "failure": {
+        "validator_error": "observation 0 durable claim lacks durable-trait feedback",
+        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000024--1f069943eb814381e4335eb6b784294dc4d8263cb9bf74387aee6f41c74d9aad.json",
+        "artifact_sha256": "fec68989167f7292946e5d4273ce3ec0facb2a4421b8e3f8a93247888c05ab6d",
+        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000024/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000024--1f069943eb814381e4335eb6b784294dc4d8263cb9bf74387aee6f41c74d9aad.json.invalid-fec68989167f",
         "recovery_eligible": true
       }
     }
