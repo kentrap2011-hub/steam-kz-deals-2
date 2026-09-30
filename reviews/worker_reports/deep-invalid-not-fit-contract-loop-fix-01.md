@@ -131,6 +131,16 @@ Important regression outputs from run `36680330138`:
 
 The increase to 55 first-pass attempts includes the three proven pinned semantic executions; they are no longer unattempted ordinary work.
 
+Fresh-main continuation verification after the interrupted worker session:
+
+- fresh main reconciled at `59f8210c595b89418ce1d5be097b35833a3dc8b9`;
+- conflict-safe state reconciliation commit: `ea81af2ff88ea44194288c7bb30088c70af23cbc`;
+- reconciliation took the complete fresh-main Deep state and overlaid only the three already-proven pinned recovery entries; fresh Dossier/Deep production writes were preserved;
+- Validate Progressive PASS 2 core — run `36696765804` / #522 — **success**;
+- Validate backlog dispositions — run `36696765777` / #1500 — **success**;
+- PASS 2 run `36696765804` explicitly passed async traversal, Deep parallel frozen-start, PASS 2 core/integration, balanced negative assessment, legacy full reanalysis, DEEP-SCORE-EVIDENCE-V1, the new invalid-not-fit loop regression, canonical-writer staging, projection accounting and recovery recomputation;
+- execution-ownership validator has no Progressive PASS 2/Deep dependency and its workflow path filter is intentionally not triggered by this PR; no ownership file was changed.
+
 ## Production acceptance
 
 Pre-merge acceptance is satisfied:
@@ -168,6 +178,10 @@ No implementation defect is currently known from validation.
 - recovery-ID verification commit: `3a41184d7293b23f1f9c9fe184f31222ed91b8f4`;
 - validation head: `c53d7907d1b37316411ad7e96acd2264e760dc65`;
 - final pre-report main base: `43a95562cca0431eb25d785e91e1c1068356bb7c`;
+- fresh-main reconciliation base: `59f8210c595b89418ce1d5be097b35833a3dc8b9`;
+- fresh-main state reconciliation: `ea81af2ff88ea44194288c7bb30088c70af23cbc`;
+- fresh PASS 2 core run: `36696765804`;
+- fresh backlog run: `36696765777`;
 - PASS 2 core run: `36680396786`;
 - backlog run: `36680396724`;
 - historical rejected-results reconciliation: `5651782bb91a18aaaedc1b26b5973159e3e021d0`.
