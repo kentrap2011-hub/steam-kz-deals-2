@@ -1,15 +1,16 @@
 # CURRENT TASK
 
-## ACTIVE — Card explanation producer / validator publication parity fix 01
-Статус: `implementing`.
+## BLOCKED — Card explanation producer / validator publication parity fix 01
+Статус: `blocked`.
 - task: `WORKER_TASK_CARD_EXPLANATION_PRODUCER_VALIDATOR_PUBLICATION_PARITY_FIX_01.md`;
-- branch: `fix/card-explanation-producer-validator-publication-parity-01`;
-- fresh-main start anchor: `bf6e2b2288c745f5d2ed67ef73cdbfcec819e1cb`;
-- confirmed root cause: full visual publication is blocked because `scripts/validate_card_explanations.py` applies the legacy literal `теб` rule to authoritative `linked_v1` Deep score-finding reasons;
-- implementation direction: linked Deep positives are validated by accepted structured provenance; legacy/non-Deep explanation validation remains unchanged;
-- no Deep/Dossier semantic execution, ranking change, manual visual build/deploy, scheduler/retry ownership change or Scheduled Task change is authorized;
-- report target: `reviews/worker_reports/card-explanation-producer-validator-publication-parity-fix-01.md`.
-
+- implementation PR: `#132`; branch: `fix/card-explanation-producer-validator-publication-parity-01`;
+- implementation code head: `9b2c094aaa1c868162e2e6e269a92789b4dde131`;
+- linked Deep card reasons no longer depend on the literal substring `теб`; producer and validator now share structured accepted-state binding requirements, while legacy/non-Deep behavior stays unchanged;
+- task-specific Deep score-evidence regression passes on PR run `36735554783`, and backlog run `36735554878` passes;
+- merge/publication acceptance is blocked because the mandatory PASS 2 workflow then fails in the separate existing `test_deep_invalid_not_fit_contract_loop.py` current-state assertion; this task does not modify that Deep state-machine regression;
+- no Deep/Dossier semantic execution, ranking change, manual visual build/deploy, scheduler/retry ownership change or Scheduled Task change was performed;
+- report: `reviews/worker_reports/card-explanation-producer-validator-publication-parity-fix-01.md`;
+- next bounded action: repair/reconcile that separate current-state PASS 2 regression, then revalidate PR #132 before merge.
 
 ## COMPLETE — Deep score evidence / explainability alignment 01
 Статус: `migration_prepared_needs_semantic_execution`.
