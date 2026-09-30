@@ -83,6 +83,7 @@ For each item:
 - Otherwise execute semantic analysis using the frozen profile, semantic input and frozen Dossier evidence. The first item's analysis may already have been computed provisionally before confirmation.
 - Publish at most one create-only artifact: a valid `PROGRESSIVE-PASS2-RESULT-V1`, or only after an authorized semantic attempt actually started but no accepted result can be produced, a `PROGRESSIVE-PASS2-EXECUTION-RECEIPT-V1`.
 - Echo all immutable work/Dossier/recovery/migration fields exactly, including `migration_provenance`, `score_migration_provenance`, and `score_evidence_contract` when present, and additionally include the invocation-wide `run_start_anchor_commit`, GitHub-confirmed `run_start_authority_commit`, and GitHub-confirmed `run_started_at_utc`.
+- Immediately before create-only publication, self-check the final result object against the canonical result contract: outcome/basis/confidence compatibility; every field required for that outcome; balanced `negative_assessment` consistency; exact immutable work/Dossier/recovery/migration/score-evidence bindings; and the exact authorized submission path. If the semantic conclusion cannot satisfy the contract honestly, change the semantic outcome only as supported by the evidence (including truthful `analysis_incomplete` where appropriate); never repair a contract mismatch by inventing evidence or mechanically raising confidence. This worker-side self-check is a safeguard only; GitHub ingest remains authoritative.
 - After submitting A, do not wait for GitHub ingest, attempt advancement, manifest rebuild or sibling removal before starting B.
 - Never revisit an item in the same invocation. If GitHub later rejects and removes an invalid transport, that does not authorize a same-invocation retry.
 
@@ -127,6 +128,8 @@ Every finding must carry non-empty Russian user-facing `text_ru` and at least on
 
 For `analyzed_not_fit` with `not_fit_basis = "confirmed_personal_negative"`, the balanced negative assessment must be `completed` and contain at least one `confirmed_personal_risk` finding. Other completed not-fit bases still require the same balanced assessment, but they do not automatically imply a score-affecting risk.
 
+For that same `analyzed_not_fit + confirmed_personal_negative` combination, `confidence` MUST be `high`. This is an evidence threshold, not a formatting instruction: never mechanically rewrite or promote `medium` to `high`. If the evidence supports only medium confidence, this basis is unavailable. Use another completed not-fit basis only when that different basis is genuinely supported by the frozen evidence; otherwise return truthful `analysis_incomplete` with the appropriate allowed `issue_code`.
+
 Historical accepted Deep results without `negative_assessment` remain historical authoritative fit/not-fit truth. Do not rerun, recreate, recover or invalidate them merely to backfill this field unless GitHub has explicitly emitted that exact identity in the one-off `legacy_full_reanalysis` work mode described below.
 
 
@@ -161,12 +164,16 @@ When and only when a frozen work item has `work_mode = "legacy_full_reanalysis"`
 - Never reinterpret this work mode as `recovery`, never create a recovery authorization, and never consume or alter normal-first-pass/recovery accounting.
 - Never expand the migration scope. Once GitHub stops emitting a target for this migration ID, do not rediscover it from legacy state on your own.
 
+## Final invocation report
+
+The final invocation report must distinguish transport submission from canonical GitHub acceptance. Report create-only artifacts as **submitted**. Call an item **accepted** only when canonical GitHub acceptance is actually known; call it **rejected** only when a GitHub rejection is actually known. If this invocation intentionally continues frozen siblings without waiting for asynchronous ingest, state that canonical acceptance is **pending/unverified** for those submissions. Never infer acceptance merely from successful create-only publication, and never block sibling semantic traversal in order to obtain per-item acceptance receipts.
+
 ## Ownership boundary
 
 GitHub alone owns Deep scope/order, run-start confirmation truth, exact run-start acceptance proof, normal-first-pass accounting, recovery ownership/authorization, validation, canonical persistence, terminal receipts, future eligibility recomputation, completeness and producer projection. The worker never chooses retry eligibility or recovery scope.
 
 The run-start confirmation is an anti-race publication guard for the exact GitHub-selected marker-parent Deep authority, not a repository-wide head-stability lock. Semantic computation before confirmation is speculative only; no semantic artifact may cross the GitHub boundary before the exact confirmation is durable.
 
-Invalid technical transport consumes no semantic attempt. GitHub may persist its rejection receipt and remove the invalid active inbox candidate; only a later invocation's then-current GitHub run-start view can authorize another submission. The worker never turns a freed path into its own retry decision.
+Malformed, stale, wrong-work, wrong-path, or unconfirmed/wrong-run-start technical transport consumes no semantic attempt because it does not prove the exact authorized semantic execution. A parseable result that is exactly bound to a GitHub-confirmed authorized semantic execution but violates a semantic result invariant is different: GitHub may consume that authorized attempt as terminal incomplete work and move it into the existing recovery-owned state. The worker never turns either kind of rejection into its own retry decision.
 
 Do not modify Fast/PASS 1 state, Dossier state/workflows, Deep GitHub state/recovery authorization/accounting, visual projection, or Scheduled Task settings.
