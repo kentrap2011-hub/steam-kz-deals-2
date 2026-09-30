@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` is free after accepted PR #129 / merge `49151c6e688174e965493020624e63f48e20eebc`. Deep invalid not-fit retry loop fix is complete; the three pinned games are now recovery work, not normal first-pass work.
+- `ЧАТ 1` assigned: `WORKER_TASK_STALE_LIVE_STATISTICS_PUBLICATION_DIAGNOSTIC_01.md` — read-only diagnosis of stale live Statistics/page freshness versus newer Dossier/Deep GitHub truth.
 - `ЧАТ 2` is free. `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md` is accepted complete via PR #125 / merge `070f30807acceffed36a342e1d442f5dcd1c99c7`.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
@@ -18,6 +18,33 @@
 - User-authorized current recovery direction: process current translations in ЧАТ 1 while ЧАТ 2 makes translation absence nonblocking and adds translation observability to Statistics. The earlier browser-asset decoupling proposal is not the current task; reassess it only if publication still lags after these authorized changes.
 - Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
+
+
+## ACTIVE — ЧАТ 1 — stale live Statistics publication diagnostic
+
+Task:
+`WORKER_TASK_STALE_LIVE_STATISTICS_PUBLICATION_DIAGNOSTIC_01.md`
+
+Mode:
+`READ-ONLY / RECON`
+
+Status:
+`authorized_ready_for_worker`
+
+User-visible evidence:
+- live Dossier Statistics shows last record `30.09.2026, 10:25`, counts 60 ready / 200 waiting / 6 recovery;
+- live Deep Statistics shows last record `30.09.2026, 06:07`, 41 completed / 37 fit / 4 not-fit / 7 incomplete-recovery / 206 waiting dossier / 8 ready / 221 remaining;
+- top page says discounts updated 24 Sep 03:12;
+- current GitHub truth is materially newer, including Dossier persistence at 09:48:55Z and Deep 48 completed / 42 fit / 6 not-fit.
+
+Diagnostic goal:
+- trace canonical Dossier/Deep -> statistics/visual producer -> canonical visual -> staged web data -> Pages/deploy -> browser cache;
+- prove the first stale boundary;
+- determine exact timestamp semantics;
+- diagnose only, no implementation/redeploy/Scheduled Task changes.
+
+Expected report:
+`reviews/worker_reports/stale-live-statistics-publication-diagnostic-01.md`
 
 
 ## ACCEPTED — ЧАТ 1 — Deep invalid not-fit contract loop fix
