@@ -216,7 +216,7 @@ def run():
     # become a second penalty merely because a score qualifier is visible.
     deep_cautions, _ = card_explanation_policy.deep_cautions(semantic)
     assert deep_cautions
-    assert refine_visual_ranking.personal_taste_risks(semantic) == []
+    assert refine_visual_ranking.personal_taste_risks(semantic) == {}
 
     # All five score-bearing factors are mandatory: no hidden contribution may survive.
     missing = copy.deepcopy(valid)
