@@ -51,15 +51,15 @@
   },
   "scope": {
     "deep_total_current_coverage_target": 266,
-    "deep_first_pass_attempted_count": 79,
-    "deep_authoritative_completed_count": 67,
-    "deep_completed_fit_count": 60,
+    "deep_first_pass_attempted_count": 81,
+    "deep_authoritative_completed_count": 69,
+    "deep_completed_fit_count": 62,
     "deep_completed_not_fit_count": 7,
     "deep_incomplete_or_recovery_count": 12,
     "deep_waiting_for_dossier_count": 182,
-    "deep_ready_or_pending_count": 5,
-    "deep_normal_first_pass_remaining_count": 187,
-    "deep_remaining_until_all_authoritative_count": 199,
+    "deep_ready_or_pending_count": 3,
+    "deep_normal_first_pass_remaining_count": 185,
+    "deep_remaining_until_all_authoritative_count": 197,
     "deep_normal_first_pass_complete": false,
     "deep_all_current_authoritative_complete": false,
     "recovery_owned_count": 12,
@@ -67,9 +67,9 @@
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 3,
     "dossier_waiting_count": 182,
-    "pass2_attempted_count": 79,
-    "pass2_eligible_count": 5,
-    "normal_pass2_eligible_count": 5,
+    "pass2_attempted_count": 81,
+    "pass2_eligible_count": 3,
+    "normal_pass2_eligible_count": 3,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -295,128 +295,6 @@
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--45dc2734a00a725817147af4b6f2fd5c31df817dc6d3b86af513f06b51724c4b--a56b54c98bdd98fe2fa2170ef31169a2ff75b47e6f43c2c014a48208ba5c18d4.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--45dc2734a00a725817147af4b6f2fd5c31df817dc6d3b86af513f06b51724c4b--a56b54c98bdd98fe2fa2170ef31169a2ff75b47e6f43c2c014a48208ba5c18d4.json",
       "sequence": 3
-    },
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:1793250",
-      "taste_subject_key": "App_1793250",
-      "appid": "1793250",
-      "taste_fingerprint": "ebe10b6d5e26f32195c7238e065d252bf2d09a3e2884fe166dea336237c1752b",
-      "candidate_context_sha256": "ca6098c78d02a67e54a2d07cc57b261fb916fb2ce82b9eb9ca01313d1d169426",
-      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
-      "work_id": "ea26dc17e9866afb0b3928f2ab4251cde8abaa95e86f346789b4b6c2c3cfd6d2",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Take Me To The Dungeon!!",
-        "short_description": "Explore the depths of this massive dungeon with your adorable companion Una in this exciting R-18 deck-building adventure!",
-        "bundle_members": [],
-        "fit_tags": [],
-        "core_fit_count": 0,
-        "release_date": "28 Jun, 2023",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1793250"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1793250.json",
-      "dossier_content_sha256": "7c915061151cc7180a3b5929bf4f720f13b310d74180c13e6a4e8878f179deff",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-20T07:36:23Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "95dda72c42189deeffd98d39d0e1234b6f93a6ad1d99cc94d4c0cf6051058101",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ea26dc17e9866afb0b3928f2ab4251cde8abaa95e86f346789b4b6c2c3cfd6d2--95dda72c42189deeffd98d39d0e1234b6f93a6ad1d99cc94d4c0cf6051058101.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ea26dc17e9866afb0b3928f2ab4251cde8abaa95e86f346789b4b6c2c3cfd6d2--95dda72c42189deeffd98d39d0e1234b6f93a6ad1d99cc94d4c0cf6051058101.json",
-      "sequence": 4
-    },
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:2062430",
-      "taste_subject_key": "App_2062430",
-      "appid": "2062430",
-      "taste_fingerprint": "50d838d8dac07f2b2e2b540f3eb2f78c9ca6e0aa93ee1429d145816f7e831fe5",
-      "candidate_context_sha256": "945720d4f1db985f50b3052c5b984138bdf07628ea7698fac4c664108fca5472",
-      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
-      "work_id": "5aea7303db2de6b909dff6bc79cad25db92f6e0126dc4417818da0a2dcb71fa5",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "BALL x PIT",
-        "short_description": "BALL x PIT is a brick-breaking, ball-fusing, base-building survival roguelite. Batter hordes of enemies with ricocheting balls and gather the riches of the pit to expand your homestead, generate resources and recruit unique heroes.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Action"
-        ],
-        "core_fit_count": 0,
-        "release_date": "15 Oct, 2025",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "2062430"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2062430.json",
-      "dossier_content_sha256": "0d42a11de41cb2ad4979dc2b47b768fe1b84f674656cd2225a498881c14e2d2e",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-20T07:31:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "05ba889bd2092954b4cd0c5c4d47e156010e234373245355dc0f123d07ef63c6",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--5aea7303db2de6b909dff6bc79cad25db92f6e0126dc4417818da0a2dcb71fa5--05ba889bd2092954b4cd0c5c4d47e156010e234373245355dc0f123d07ef63c6.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--5aea7303db2de6b909dff6bc79cad25db92f6e0126dc4417818da0a2dcb71fa5--05ba889bd2092954b4cd0c5c4d47e156010e234373245355dc0f123d07ef63c6.json",
-      "sequence": 5
     }
   ]
 }
