@@ -18,10 +18,10 @@
     "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
     "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
-  "next_pending_sequence": 12,
+  "next_pending_sequence": 13,
   "accepted_group_count": 7,
-  "failed_group_count": 4,
-  "pending_group_count": 59,
+  "failed_group_count": 5,
+  "pending_group_count": 58,
   "normal_first_pass_complete": false,
   "all_groups_accepted": false,
   "full_backlog_complete": false,
@@ -70,6 +70,17 @@
         "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/6f796bba9f36cf8090012b26b05bb350a315251f360a0e9c08453de5b6d8717a--g000006--6a95177e32823e72541967b89a95d1d0935d87133de59567507c52a4a0bfac4e.json",
         "artifact_sha256": "34367c9b09e570a1ac14c34c44fa1ba25e620a41f0134d97f558cd509cee40b6",
         "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/6f796bba9f36cf8090012b26b05bb350a315251f360a0e9c08453de5b6d8717a/g000006/6f796bba9f36cf8090012b26b05bb350a315251f360a0e9c08453de5b6d8717a--g000006--6a95177e32823e72541967b89a95d1d0935d87133de59567507c52a4a0bfac4e.json.invalid-34367c9b09e5",
+        "recovery_eligible": true
+      }
+    },
+    {
+      "sequence": 12,
+      "group_sha256": "9df6a59873cb2af4958c0fd38088f8ff1be26c471df720ce5c51cc8884415e4e",
+      "failure": {
+        "validator_error": "dossier contains forbidden author/profile URL at $.provenance.sources[2].url",
+        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/6f796bba9f36cf8090012b26b05bb350a315251f360a0e9c08453de5b6d8717a--g000012--9df6a59873cb2af4958c0fd38088f8ff1be26c471df720ce5c51cc8884415e4e.json",
+        "artifact_sha256": "f8c8e0315e44653a8f1d60227bcbff75867284410dcd792f2b13704f2b3125ab",
+        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/6f796bba9f36cf8090012b26b05bb350a315251f360a0e9c08453de5b6d8717a/g000012/6f796bba9f36cf8090012b26b05bb350a315251f360a0e9c08453de5b6d8717a--g000012--9df6a59873cb2af4958c0fd38088f8ff1be26c471df720ce5c51cc8884415e4e.json.invalid-f8c8e0315e44",
         "recovery_eligible": true
       }
     }
