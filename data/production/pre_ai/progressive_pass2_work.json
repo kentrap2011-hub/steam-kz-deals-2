@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 43,
     "deep_completed_not_fit_count": 4,
     "deep_incomplete_or_recovery_count": 7,
-    "deep_waiting_for_dossier_count": 226,
-    "deep_ready_or_pending_count": 3,
+    "deep_waiting_for_dossier_count": 223,
+    "deep_ready_or_pending_count": 6,
     "deep_normal_first_pass_remaining_count": 229,
     "deep_remaining_until_all_authoritative_count": 236,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 3,
-    "dossier_waiting_count": 226,
+    "dossier_waiting_count": 223,
     "pass2_attempted_count": 54,
-    "pass2_eligible_count": 3,
-    "normal_pass2_eligible_count": 3,
+    "pass2_eligible_count": 6,
+    "normal_pass2_eligible_count": 6,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "legacy_full_reanalysis": {
       "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
@@ -93,6 +93,65 @@
     }
   },
   "items": [
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:2331070",
+      "taste_subject_key": "App_2331070",
+      "appid": "2331070",
+      "taste_fingerprint": "20d804a1af64cd0ca1e69f6c0a2ef700207d7ea69af9b50b3c48621fc91671ed",
+      "candidate_context_sha256": "f8837cdadb55af3ea71e7e945d3aeeeafc8b57e43f5826cf974c1be92b4535aa",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "9c8427429f70065ea4618921c7d06ac6f41a92f866758bb68f81011076e131b8",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Vasilisa and Baba Yaga",
+        "short_description": "An adventure game based on the Russian folktale \"Vasilisa the Beautiful\". A scary story about the journey to the mistress of the forbidden forest for magical powers.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Horror",
+          "Singleplayer"
+        ],
+        "core_fit_count": 1,
+        "release_date": "24 Oct, 2024",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "2331070"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2331070.json",
+      "dossier_content_sha256": "512eddb7c67ad007f4a1f220e9c68739d4eb07632cf4c12a78f426031d56f1d0",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-20T05:59:15Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "35e930709a9260d1fb60dfaec2f9211380cc232953ae4b540d76058a9f530cff",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--9c8427429f70065ea4618921c7d06ac6f41a92f866758bb68f81011076e131b8--35e930709a9260d1fb60dfaec2f9211380cc232953ae4b540d76058a9f530cff.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--9c8427429f70065ea4618921c7d06ac6f41a92f866758bb68f81011076e131b8--35e930709a9260d1fb60dfaec2f9211380cc232953ae4b540d76058a9f530cff.json",
+      "sequence": 1
+    },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
@@ -149,7 +208,7 @@
       "authorization_id": "58e8ea8312bec3291f31f359176ef0d3d3789f7628e1c6bd1be253dde8188c16",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--1379906886119f0bcd8b2d764fa7ce663140ada66a7da03ec1dd08176679773b--58e8ea8312bec3291f31f359176ef0d3d3789f7628e1c6bd1be253dde8188c16.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--1379906886119f0bcd8b2d764fa7ce663140ada66a7da03ec1dd08176679773b--58e8ea8312bec3291f31f359176ef0d3d3789f7628e1c6bd1be253dde8188c16.json",
-      "sequence": 1
+      "sequence": 2
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -204,7 +263,7 @@
       "authorization_id": "c2586b7e898fbd2588250bf47802969ded4d695783ab841977f5f5e5c9e54e60",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--a349c27f3663446a76886e22218455525bc43a2428278ca450257ad916f6239a--c2586b7e898fbd2588250bf47802969ded4d695783ab841977f5f5e5c9e54e60.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--a349c27f3663446a76886e22218455525bc43a2428278ca450257ad916f6239a--c2586b7e898fbd2588250bf47802969ded4d695783ab841977f5f5e5c9e54e60.json",
-      "sequence": 2
+      "sequence": 3
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -259,7 +318,121 @@
       "authorization_id": "f938b2ec18f080adb6fe5d867dc46ddb43e9ce8da11566cc64807d6f95cce443",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ddb33cb3665250557120ce1deaa1af3f23fe213fd96119e7335f5d17a9c01fe9--f938b2ec18f080adb6fe5d867dc46ddb43e9ce8da11566cc64807d6f95cce443.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ddb33cb3665250557120ce1deaa1af3f23fe213fd96119e7335f5d17a9c01fe9--f938b2ec18f080adb6fe5d867dc46ddb43e9ce8da11566cc64807d6f95cce443.json",
-      "sequence": 3
+      "sequence": 4
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:233270",
+      "taste_subject_key": "App_233270",
+      "appid": "233270",
+      "taste_fingerprint": "5e09a182622e06668b8b4526b2349a08926da50a82ed24270a7ebeca26eb2da2",
+      "candidate_context_sha256": "d5f072e46bdfe053db9f5a665cebefa3920ad26ab5f23650c428525fd3625eb2",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "61ec1e06990d88c3b69a675e90c2274e9acb0e982ccd16c55a3b217317d3a2eb",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Far Cry 3 - Blood Dragon",
+        "short_description": "Far Cry® 3: Blood Dragon is THE Kick-Ass Cyber Shooter.Welcome to an 80’s vision of the future. The year is 2007 and you are Sargent Rex Colt, a Mark IV Cyber Commando. Your mission: get the girl, kill the baddies, and save the world.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Open World",
+          "Singleplayer"
+        ],
+        "core_fit_count": 1,
+        "release_date": "1 May, 2013",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "233270"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_233270.json",
+      "dossier_content_sha256": "088dac689e5285df4651c17fc2f9e80bce8e9e765213e754ec42c1b5b677fd85",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-20T05:59:15Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "afc9ee4301021190e9d127f3d5c13536e4699fcdade1eba84877d73bb74e83a4",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--61ec1e06990d88c3b69a675e90c2274e9acb0e982ccd16c55a3b217317d3a2eb--afc9ee4301021190e9d127f3d5c13536e4699fcdade1eba84877d73bb74e83a4.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--61ec1e06990d88c3b69a675e90c2274e9acb0e982ccd16c55a3b217317d3a2eb--afc9ee4301021190e9d127f3d5c13536e4699fcdade1eba84877d73bb74e83a4.json",
+      "sequence": 5
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:232910",
+      "taste_subject_key": "App_232910",
+      "appid": "232910",
+      "taste_fingerprint": "8b3c4ed8e103c5f6ff1d9c63d92af36132ccc9977b1a012c517ca7f56c91fcac",
+      "candidate_context_sha256": "e4d8c0aaec5d2df311cca374f0b3e3e24b2e0a9ee7e7ab3bcfe5b458a175e73c",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "540fc0835ef1be288e4bf7d27e5de6b11ee286b1cb8618b1739aa16972fb1ac3",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "TrackMania² Stadium",
+        "short_description": "TrackMania² Stadium is the return of the popular Stadium environment enjoyed by millions of players with TrackMania Nations Forever. Now part of the ManiaPlanet environment, Stadium allows for improved services around the game, better graphics and a powerful track editor.",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "20 Jun, 2013",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "232910"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_232910.json",
+      "dossier_content_sha256": "7a8a16c7a5f6dce5033b20c01324eab00d23213450d1512fe9ccb7c26768887f",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-20T05:59:15Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "ada53f5ab72f9c10d2250ea2b379fd3c223c312c72db409efd8226b794cc46b9",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--540fc0835ef1be288e4bf7d27e5de6b11ee286b1cb8618b1739aa16972fb1ac3--ada53f5ab72f9c10d2250ea2b379fd3c223c312c72db409efd8226b794cc46b9.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--540fc0835ef1be288e4bf7d27e5de6b11ee286b1cb8618b1739aa16972fb1ac3--ada53f5ab72f9c10d2250ea2b379fd3c223c312c72db409efd8226b794cc46b9.json",
+      "sequence": 6
     }
   ]
 }
