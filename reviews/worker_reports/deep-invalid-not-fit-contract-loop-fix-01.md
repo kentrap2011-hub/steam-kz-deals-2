@@ -155,7 +155,19 @@ Pre-merge acceptance is satisfied:
 
 At the latest pre-report main base `43a95562cca0431eb25d785e91e1c1068356bb7c`, score-explainability migration still had 42 accepted / 1 pending target, so ordinary normal work was temporarily paused by that existing migration. Independent canonical eligibility recomputation already proves all three pinned identities are recovery work rather than normal first-pass work.
 
-Post-merge, this chat must verify the merged `main` work/state before handing semantic execution back to the existing Deep worker.
+Post-merge verification is complete on current `main` descendant `5eb257e5414c2b87f1daad82b15a54ebfadee9bd` (two normal GitHub-owned production commits after merge `49151c6e688174e965493020624e63f48e20eebc`).
+
+- canonical Deep state blob: `4ba768074f8a639e197ef5397472f42f4b92165c`;
+- canonical Deep work blob: `e746de8e592cb466afe16b7dd44797a79f59fd3b`;
+- score-explainability migration is complete: 43/43 accepted, 0 pending;
+- Deep normal-first-pass attempted count is 55, which includes the three reconciled proven executions;
+- each pinned identity is persisted as `analysis_incomplete / terminal_execution_failure`, `recovery_owned=true`, with `attempt_consumption_source=github_derived_semantic_contract_failure`;
+- current GitHub-owned work exposes all three pinned identities only as `work_mode=recovery`, with the exact prepared authorization IDs and recovery reason `corrected_runtime_or_validation_defect_material_to_the_prior_failure`;
+- none of the three pinned work IDs is exposed as `normal_first_pass`;
+- `recovery_pending_count=3`;
+- no semantic recovery was executed by this developer chat.
+
+The implementation is therefore production-accepted for the loop defect. The only remaining action is the already-authorized semantic recovery by the existing Progressive Deep worker.
 
 ## Unresolved
 
@@ -171,6 +183,10 @@ No implementation defect is currently known from validation.
 
 - dependency PR #128 merge: `d6221868a5e78b9852a0720319de036f76e6ec68`;
 - implementation PR: #129;
+- implementation merge: `49151c6e688174e965493020624e63f48e20eebc`;
+- post-merge verified main: `5eb257e5414c2b87f1daad82b15a54ebfadee9bd`;
+- post-merge Deep state blob: `4ba768074f8a639e197ef5397472f42f4b92165c`;
+- post-merge Deep work blob: `e746de8e592cb466afe16b7dd44797a79f59fd3b`;
 - generic validated fix commit: `b21bdfd773162e9856c1b12015b1b497b4999363`;
 - fresh-main reconciliation merge: `ded2de1c711be2b2c51026b6612b5cd837cfb9e7`;
 - pinned state reconciliation: `9131071437f98f64c911f1700bbdea373fa6ce6f`;
