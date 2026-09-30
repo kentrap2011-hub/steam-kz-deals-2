@@ -157,13 +157,27 @@ def assert_persisted_projection_invariants(state_doc, scope, items):
     assert bool(scope.get('deep_all_current_authoritative_complete')) == (authoritative == total)
     migration = scope.get('legacy_full_reanalysis') or {}
     migration_active = bool(scope.get('deep_normal_work_paused_for_legacy_reanalysis'))
+    score_migration = scope.get('score_explainability_migration') or {}
+    score_migration_active = bool(
+        scope.get('deep_normal_work_paused_for_score_explainability_migration')
+    )
     normal_eligible = int(scope.get('normal_pass2_eligible_count', ready) or 0)
     if migration_active:
+        assert score_migration_active is False
         assert normal_eligible == ready
         assert eligible == len(items) == int(migration.get('pending_count') or 0)
         assert all(item.get('work_mode') == progressive_pass2.LEGACY_REANALYSIS_MODE for item in items)
         assert int(migration.get('total_count') or 0) >= eligible
         assert migration.get('complete') is False
+    elif score_migration_active:
+        assert normal_eligible == ready
+        assert eligible == len(items) == int(score_migration.get('pending_count') or 0)
+        assert all(
+            item.get('work_mode') == progressive_pass2.SCORE_EXPLAINABILITY_MODE
+            for item in items
+        )
+        assert int(score_migration.get('total_count') or 0) >= eligible
+        assert score_migration.get('complete') is False
     else:
         assert ready == eligible == len(items)
     assert int(scope.get('recovery_pending_count') or 0) <= ready
