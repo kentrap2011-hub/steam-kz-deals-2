@@ -1,5 +1,15 @@
 # CURRENT TASK
 
+## ACTIVE — Deep score evidence / explainability alignment 01
+Статус: `implementing`.
+- task: `WORKER_TASK_DEEP_SCORE_EVIDENCE_EXPLAINABILITY_ALIGNMENT_01.md`;
+- worker branch: `fix/deep-score-evidence-explainability-alignment-01`;
+- architecture preflight complete: Deep remains the semantic owner; GitHub validates structured score-bearing finding/provenance bindings; renderer/browser do not infer semantic validity;
+- current confirmed defect: Deep `taste_factors` can affect personal score without factor-to-evidence linkage, while card reasons are independently filtered by a lexical whitelist;
+- historical Deep-fit results without exact score-evidence linkage will not be silently grandfathered; finite migration through the existing Progressive Deep worker will be prepared if required;
+- KOF XV / AppID 1498570 is the pinned regression;
+- no semantic Deep execution and no Scheduled Task changes are authorized in this chat.
+
 ## COMPLETE — Visual stale-snapshot rebase race fix 01
 Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_VISUAL_STALE_SNAPSHOT_REBASE_RACE_FIX_01.md`;

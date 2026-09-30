@@ -250,7 +250,10 @@ def resolve_candidate_authority(path, path_field, doc, persisted_work):
             item['_run_start_authority_commit'] = run_commit
             item['_run_started_at_utc'] = run_started
             item['_run_start_authority_verified'] = True
-            if item.get('work_mode') != progressive_pass2.LEGACY_REANALYSIS_MODE:
+            if item.get('work_mode') not in {
+                progressive_pass2.LEGACY_REANALYSIS_MODE,
+                progressive_pass2.SCORE_EXPLAINABILITY_MODE,
+            }:
                 item['_dossier_record'] = _dossier_record_at_commit(run_commit, item)
             return item, None
         except (ValueError, OSError, json.JSONDecodeError) as exc:
@@ -263,9 +266,12 @@ def resolve_candidate_authority(path, path_field, doc, persisted_work):
     current = _current_item_for_path(persisted_work, path, path_field)
     if (
         isinstance(current, dict)
-        and current.get('work_mode') == progressive_pass2.LEGACY_REANALYSIS_MODE
+        and current.get('work_mode') in {
+            progressive_pass2.LEGACY_REANALYSIS_MODE,
+            progressive_pass2.SCORE_EXPLAINABILITY_MODE,
+        }
     ):
-        raise ValueError('legacy Deep reanalysis requires exact GitHub-confirmed run-start authority')
+        raise ValueError('Deep migration requires exact GitHub-confirmed run-start authority')
     if current is None:
         if exact_error:
             raise ValueError(exact_error)

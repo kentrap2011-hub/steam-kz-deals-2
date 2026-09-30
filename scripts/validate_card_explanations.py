@@ -48,10 +48,15 @@ def validate_item(game):
         if len(fit_provenance) < len(reasons):
             errors.append(f'{title}: positive text lacks provenance')
         for row in fit_provenance[:len(reasons)]:
-            if row.get('source') != 'taste_positive_evidence' or not str(row.get('evidence') or '').strip():
-                errors.append(f'{title}: positive provenance is not grounded Taste evidence')
-                continue
-            if game.get('effective_analysis_source') == 'deep':
+            is_deep = game.get('effective_analysis_source') == 'deep'
+            if is_deep:
+                if row.get('source') != 'deep_score_finding':
+                    errors.append(f'{title}: Deep positive is not sourced from an accepted score finding')
+                    continue
+                if not row.get('finding_id') or not row.get('factor_impacts'):
+                    errors.append(f'{title}: Deep positive lacks score-factor provenance')
+                if not row.get('evidence_refs') or not row.get('profile_evidence_refs'):
+                    errors.append(f'{title}: Deep positive lacks exact candidate/profile evidence refs')
                 binding = row.get('semantic_binding') or {}
                 required = (
                     'semantic_generation_id',
@@ -76,8 +81,16 @@ def validate_item(game):
                     game.get('analysis_semantic_generation_id') or ''
                 ):
                     errors.append(f'{title}: Deep positive provenance generation binding mismatch')
+            elif row.get('source') != 'taste_positive_evidence' or not str(row.get('evidence') or '').strip():
+                errors.append(f'{title}: positive provenance is not grounded Taste evidence')
     elif fit_status.get('has_described_fit') is True:
         errors.append(f'{title}: why_fit_status describes a positive but why_fit is empty')
+    if (
+        game.get('effective_analysis_source') == 'deep'
+        and game.get('score_explainability_status') == 'migration_required'
+        and reasons
+    ):
+        errors.append(f'{title}: legacy unlinked Deep result exposes a positive reason before migration')
 
     risks = [str(x).strip() for x in game.get('risks') or [] if str(x).strip()]
     risk_codes = [str(x).strip() for x in game.get('risk_codes') or [] if str(x).strip()]

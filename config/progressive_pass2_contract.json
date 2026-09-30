@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PASS2-V1",
-  "version": 12,
+  "version": 13,
   "status": "production_active",
   "phase": "phase_c_pass2",
   "purpose": "GitHub-owned eventual authoritative Deep analysis for every current eligible Progressive game after an exact-compatible canonically accepted Dossier is ready, with one normal first pass and separately authorized recovery; completed Deep results include a separately grounded balanced negative assessment, and Fast/PASS 1 is never an eligibility prerequisite.",
@@ -123,7 +123,9 @@
       "dossier_compatibility_binding",
       "dossier_expires_at_utc",
       "authorization_id",
-      "migration_provenance"
+      "migration_provenance",
+      "score_evidence_contract",
+      "score_migration_provenance"
     ],
     "dossier_path_is_canonical_read_only_input": true,
     "profile_pin": {
@@ -296,7 +298,10 @@
       ],
       "require_candidate_specific_positive_evidence": true,
       "require_all_normalized_taste_factors": true,
-      "require_balanced_negative_assessment": true
+      "require_balanced_negative_assessment": true,
+      "require_score_findings_for_score_evidence_contract": true,
+      "score_findings_must_cover_all_normalized_taste_factors": true,
+      "generic_or_commercial_praise_forbidden": true
     },
     "analyzed_not_fit": {
       "confidence": [
@@ -593,5 +598,49 @@
     "historical_result_mutation_allowed": false,
     "reconciliation_consumes_semantic_attempt": false,
     "missing_or_inconsistent_equivalence_material": "fail_closed"
+  },
+  "score_explainability": {
+    "decision": "DEEP-SCORE-EVIDENCE-EXPLAINABILITY-ALIGNMENT-01",
+    "score_evidence_contract": "DEEP-SCORE-EVIDENCE-V1",
+    "rule": "Every newly authorized Deep analyzed_fit taste factor must be grounded by accepted structured score_findings; the same findings are the player-facing explanation authority.",
+    "score_formula_change": false,
+    "final_ranking_policy_change": false,
+    "factor_weights_change": false,
+    "semantic_owner": "existing_progressive_deep_worker",
+    "github_owner": "structural_provenance_validation_and_persistence",
+    "browser_owner": "read_only_rendering_of_accepted_findings",
+    "all_five_factor_coverage_required": true,
+    "exact_dossier_refs_required": true,
+    "exact_pinned_profile_refs_required": true,
+    "score_finding_effects": [
+      "supports",
+      "lowers",
+      "qualifies"
+    ],
+    "positive_card_source": "accepted_deep_score_findings_only",
+    "legacy_positive_phrase_recognizer_is_score_authority": false,
+    "migration": {
+      "manifest_path": "data/control/progressive_pass2_score_explainability_migration_manifest.json",
+      "migration_id": "deep-score-evidence-explainability-alignment-01",
+      "work_mode": "score_explainability_migration",
+      "one_off": true,
+      "target_count": 43,
+      "prior_not_fit_not_applicable_count": 4,
+      "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+      "runtime": "existing_progressive_deep_worker",
+      "scheduler_change": false,
+      "new_queue": false,
+      "retry_mechanism": false,
+      "run_start_guard": "existing_v2_marker_and_github_confirmation",
+      "old_revision_rule": "preserve_authoritative_old_revision_until_completed_replacement_is accepted; incomplete attempt does not displace it",
+      "ordinary_deep_behavior": "ordinary Deep work is paused without attempt consumption while finite migration is active, then resumes",
+      "dossier_behavior": "migration reads exact Dossier bytes frozen at migration_authority_commit; concurrent later Dossier writes remain independent",
+      "historical_audit": {
+        "compliant_linked_fit_count": 0,
+        "migration_required_fit_count": 43,
+        "not_fit_no_positive_score_migration_count": 4,
+        "mandatory_regression_appid": "1498570"
+      }
+    }
   }
 }

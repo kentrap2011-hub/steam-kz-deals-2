@@ -42,6 +42,7 @@ SEMANTIC_PRESERVED_FIELDS = (
     'why_fit',
     'why_fit_status',
     'why_fit_provenance',
+    'score_explainability_status',
     'risks',
     'risk_codes',
     'risk_status',
@@ -163,24 +164,44 @@ def apply_card_explanation_policy(game, taste_entry, projection, update_scoring=
     """
     changed = False
 
-    reasons, why_fit_provenance = card_explanation_policy.positive_reasons(
-        taste_entry.get('positive_evidence') or [],
-        source_binding=taste_entry.get('positive_evidence_binding'),
-    )
+    is_deep = taste_entry.get('semantic_source') == 'progressive_pass2'
+    if is_deep:
+        reasons, why_fit_provenance = card_explanation_policy.deep_score_reasons(taste_entry)
+    else:
+        reasons, why_fit_provenance = card_explanation_policy.positive_reasons(
+            taste_entry.get('positive_evidence') or [],
+            source_binding=taste_entry.get('positive_evidence_binding'),
+        )
     changed |= _set_if_changed(game, 'why_fit', reasons)
     changed |= _set_if_changed(
         game,
         'why_fit_status',
         {
             'has_described_fit': bool(reasons),
-            'grounding': 'grounded' if reasons else 'insufficient_evidence',
+            'grounding': (
+                'grounded' if reasons else (
+                    'migration_required'
+                    if is_deep and taste_entry.get('deep_score_explainability_status') == 'migration_required'
+                    else 'insufficient_evidence'
+                )
+            ),
         },
     )
     changed |= _set_if_changed(game, 'why_fit_provenance', why_fit_provenance)
+    changed |= _set_if_changed(
+        game,
+        'score_explainability_status',
+        taste_entry.get('deep_score_explainability_status') if is_deep else None,
+    )
 
     risks = explanation_risk_candidates(taste_entry, projection, game.get('practical') or {})
     visible = card_explanation_policy.visible_risk_payload(risks)
     cautions, caution_provenance = card_explanation_policy.deep_cautions(taste_entry)
+    factor_cautions, factor_caution_provenance = card_explanation_policy.deep_score_qualifiers(taste_entry)
+    for text, provenance in zip(factor_cautions, factor_caution_provenance):
+        if text not in cautions and len(cautions) < 2:
+            cautions.append(text)
+            caution_provenance.append(provenance)
     negative_status = (
         taste_entry.get('deep_negative_assessment_status')
         if taste_entry.get('semantic_source') == 'progressive_pass2'
