@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+  "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+  "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+  "work_id": "22144fa704e24b04a9ba8bb4bf8e3cf67f4e45422db379d710acddc22a53f8b2",
+  "family_id": "game:1372280",
+  "taste_subject_key": "App_1372280",
+  "appid": "1372280",
+  "taste_fingerprint": "e04dbda690aecd3be8831be16af0421b26cdfea5254379a7d0c268969f1750ae",
+  "candidate_context_sha256": "ec40229f3811ade26f11b335a07ee83d3ac986a8e02635d54a227d57cb179416",
+  "dossier_content_sha256": "6218ad979280f2f28b48d38e8972513cc2915be1296cd7f712eeba025962498d",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "91a0f5cfbc35d56420f0e7bdb1c0e8e1d37477fb6971f4303e0ccd2fddc750a9",
+  "work_mode": "score_explainability_migration",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_migration_provenance": {
+    "migration_id": "deep-score-evidence-explainability-alignment-01",
+    "migration_target_id": "deep-score-explainability-01:game:1372280:0d6c7641d2599179",
+    "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+    "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+    "prior_authorization_id": "0d6c7641d2599179e13ab9765b2f7fdcee91072a172849c89b802c42e0639e0d",
+    "prior_accepted_at_utc": "2026-09-29T08:37:03+00:00",
+    "prior_outcome": "analyzed_fit",
+    "prior_fit_level": "strong",
+    "prior_confidence": "high",
+    "prior_taste_factors": {
+      "gameplay_mastery": 95,
+      "development_variety": 76,
+      "structure_pacing_direction": 78,
+      "identity_hooks": 70,
+      "breadth_of_match": 87
+    },
+    "prior_positive_evidence": [
+      "Fast aerial movement and flexible neutral make movement and spacing themselves central skills rather than secondary presentation.",
+      "Shield and parry decisions create an active defensive mind game, while later balance changes reduce oppressive interactions without removing depth.",
+      "Autocombos and simplified inputs lower the entry barrier, but optimized combos, movement and defensive reads preserve a high mastery ceiling."
+    ],
+    "prior_work_id": "22144fa704e24b04a9ba8bb4bf8e3cf67f4e45422db379d710acddc22a53f8b2"
+  },
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "high",
+  "positive_evidence": [
+    "Fast aerial movement, flexible neutral and shield/parry decisions make movement and spacing central skills.",
+    "Approachable inputs lower the entry barrier while optimized combos and defensive reads preserve a high mastery ceiling."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 96,
+    "development_variety": 77,
+    "structure_pacing_direction": 79,
+    "identity_hooks": 72,
+    "breadth_of_match": 88
+  },
+  "score_findings": [
+    {
+      "finding_id": "melty-movement-neutral",
+      "text_ru": "Быстрое воздушное движение, нейтрал и shield/parry-решения превращают позиционирование и чтение соперника в центральную часть мастерства.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1/pattern",
+          "profile_value_sha256": "03ee46ab2d98957c01bd73fe09574b97f6da1eef6a0ceb054817add03d66d5e1",
+          "match_text_ru": "Само управление и перемещение для тебя может быть отдельным источником удовольствия."
+        },
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Ты особенно ценишь системы с высоким потолком освоения."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 96
+        },
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 72
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 88
+        }
+      ]
+    },
+    {
+      "finding_id": "melty-entry-ceiling",
+      "text_ru": "Автокомбо, упрощённые специальные приёмы и обучение дают быстрый вход, но оптимизированные комбо и защитные чтения оставляют долгий путь для роста навыка.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Тебе нравится, когда обучение быстро приводит к реальному росту исполнения."
+        },
+        {
+          "json_pointer": "/taste_profile/2/pattern",
+          "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+          "match_text_ru": "Понятное развитие возможностей и навыка повышает для тебя ценность игры."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 77
+        },
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 79
+        }
+      ]
+    }
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Клавиатурное управление одному русскоязычному игроку показалось неудобным даже после переназначения; геймпад воспринимался лучше.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Онлайн существует, но аудитория ограничена, игра часто требует Discord-поиска соперников и не имеет cross-play.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      }
+    ]
+  }
+}
