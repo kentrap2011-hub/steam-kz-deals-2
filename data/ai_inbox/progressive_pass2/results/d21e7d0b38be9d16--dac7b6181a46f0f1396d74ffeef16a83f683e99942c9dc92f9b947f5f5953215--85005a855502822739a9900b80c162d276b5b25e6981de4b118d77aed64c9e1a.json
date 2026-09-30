@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+  "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+  "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+  "work_id": "dac7b6181a46f0f1396d74ffeef16a83f683e99942c9dc92f9b947f5f5953215",
+  "family_id": "game:15170",
+  "taste_subject_key": "App_15170",
+  "appid": "15170",
+  "taste_fingerprint": "b24bacd24b1641b04b15c488f1c54ae2e809e96d56cff56594cf3dd1ba70958e",
+  "candidate_context_sha256": "30fe1b3875c953ea8fc0a0ed607f891fa46b815c4db107cf490cfb48abddf971",
+  "dossier_content_sha256": "2d629873c3c2ebb0e8427f88305aae300e47019c78c22a1517ef14521edce901",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "85005a855502822739a9900b80c162d276b5b25e6981de4b118d77aed64c9e1a",
+  "work_mode": "score_explainability_migration",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_migration_provenance": {
+    "migration_id": "deep-score-evidence-explainability-alignment-01",
+    "migration_target_id": "deep-score-explainability-01:game:15170:1d1881721494b727",
+    "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+    "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+    "prior_authorization_id": "1d1881721494b7276da99c2ad71aaa2dbd372905a85b81ecdb4e3f27e1be7ec3",
+    "prior_accepted_at_utc": "2026-09-29T16:02:04+00:00",
+    "prior_outcome": "analyzed_fit",
+    "prior_fit_level": "strong",
+    "prior_confidence": "high",
+    "prior_taste_factors": {
+      "gameplay_mastery": 91,
+      "development_variety": 93,
+      "structure_pacing_direction": 82,
+      "identity_hooks": 78,
+      "breadth_of_match": 91
+    },
+    "prior_positive_evidence": [
+      "Turn-based battles, faction differences and hero development create a deep mastery loop with many strategic choices.",
+      "Build freedom and map exploration provide clear progression with tangible effects on armies, skills and tactics.",
+      "Campaign and scenario maps continually combine exploration, resource decisions, army growth and combat instead of relying on one isolated system."
+    ],
+    "prior_work_id": "dac7b6181a46f0f1396d74ffeef16a83f683e99942c9dc92f9b947f5f5953215"
+  },
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "high",
+  "positive_evidence": [
+    "Turn-based battles, faction differences and hero development create a deep strategic mastery loop.",
+    "Build freedom and map exploration provide progression with tangible effects on armies, skills and tactics.",
+    "Campaign maps combine exploration, resources, army growth and combat rather than relying on a single isolated system."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 92,
+    "development_variety": 94,
+    "structure_pacing_direction": 83,
+    "identity_hooks": 80,
+    "breadth_of_match": 92
+  },
+  "score_findings": [
+    {
+      "finding_id": "heroes5-strategy-growth",
+      "text_ru": "Фракции, развитие героев, сбор армии и пошаговые бои дают глубокую систему, где решения по билду реально меняют последующую тактику.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Тебе особенно нравятся системы, которые можно глубоко осваивать."
+        },
+        {
+          "json_pointer": "/taste_profile/2/pattern",
+          "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+          "match_text_ru": "Прогрессия ценнее для тебя, когда улучшения заметно меняют возможности."
+        },
+        {
+          "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+          "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+          "match_text_ru": "Разные ситуации должны требовать разных решений."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 92
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 94
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 92
+        }
+      ]
+    },
+    {
+      "finding_id": "heroes5-map-loop",
+      "text_ru": "Исследование карт, ресурсы, развитие героя и сражения постоянно связаны друг с другом, поэтому кампания регулярно даёт понятный следующий слой развития, а фракционные различия создают собственную идентичность.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Тебе важна эволюция опыта по мере прохождения."
+        },
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Характерные механические различия помогают игре сильнее запоминаться."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 83
+        },
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 80
+        }
+      ]
+    }
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "В отдельных кампаниях скачки сложности, гринд и повторяющиеся шаблоны миссий могут превращать длинные сценарии в рутину.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Русский язык в текущих Steam-установках доступен непоследовательно: есть свежие сообщения и о наличии, и об отсутствии.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "На некоторых современных системах встречаются проблемы сохранений и камеры, решаемые сменой системной локали.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      }
+    ]
+  }
+}
