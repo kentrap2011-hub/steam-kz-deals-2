@@ -295,11 +295,19 @@ def run():
         assert row['evidence_refs']
         assert row['profile_evidence_refs']
         assert any(impact.get('effect') == 'supports' for impact in row['factor_impacts'])
-        for field in card_explanation_policy.POSITIVE_BINDING_FIELDS:
+        for field in card_explanation_policy.DEEP_SCORE_REQUIRED_BINDING_FIELDS:
             assert row['semantic_binding'].get(field) not in {None, ''}
 
     valid_card = linked_deep_card(accepted, no_magic_reasons, no_magic_provenance)
     assert card_validator.validate_item(valid_card) == []
+
+    incomplete_producer_binding = copy.deepcopy(semantic_no_magic_word)
+    incomplete_producer_binding['deep_score_evidence_binding'].pop('profile_pin_sha256', None)
+    hidden_reasons, hidden_provenance = card_explanation_policy.deep_score_reasons(
+        incomplete_producer_binding
+    )
+    assert hidden_reasons == []
+    assert hidden_provenance == []
 
     missing_profile = copy.deepcopy(valid_card)
     missing_profile['why_fit_provenance'][0]['profile_evidence_refs'] = []
@@ -328,7 +336,7 @@ def run():
     assert_card_error(wrong_generation, 'generation binding mismatch')
 
     partial_binding = copy.deepcopy(valid_card)
-    partial_binding['why_fit_provenance'][0]['semantic_binding'].pop('work_authority_commit', None)
+    partial_binding['why_fit_provenance'][0]['semantic_binding'].pop('authorization_id', None)
     assert_card_error(partial_binding, 'lacks exact accepted-state binding')
 
     wrong_source = copy.deepcopy(valid_card)
