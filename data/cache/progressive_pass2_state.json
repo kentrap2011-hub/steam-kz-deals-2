@@ -9158,9 +9158,9 @@
       }
     },
     "game:1054490": {
-      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
-      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
-      "work_id": "6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9",
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "c941aef9ed3fe53ccb9e19fb5f565c3ae55487f7a3e043663058ac4354b0e1fa",
       "family_id": "game:1054490",
       "taste_subject_key": "App_1054490",
       "appid": "1054490",
@@ -9172,8 +9172,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-28T10:30:07+00:00",
-      "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+      "accepted_at_utc": "2026-09-30T06:28:51+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "b47091d4aa33996f574535a301ed21fdd22caf58a44db0c74c6965970c6faff3",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -9189,8 +9189,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "1c0e7684c46b771edf1969b80ac9de851a6c57345b72b00d756f0d8661e132cf",
-      "work_mode": "legacy_full_reanalysis",
+      "authorization_id": "af41f48db0ece4b7e06694e134f7488a24004fbe24b26efe28d22b18579e9ed7",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -9476,6 +9476,282 @@
             },
             "base_support_compatible": null
           }
+        },
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:28:51+00:00",
+          "state": {
+            "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+            "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+            "work_id": "6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9",
+            "family_id": "game:1054490",
+            "taste_subject_key": "App_1054490",
+            "appid": "1054490",
+            "taste_fingerprint": "bd211174279fa4efc63ea52de880ec9ae2400dc84f4bac23182d31add988bf14",
+            "candidate_context_sha256": "46eb0d0b7f74ce52b911ef9b3398ea1b767ad68face8522281117426bd9dd5c1",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-28T10:30:07+00:00",
+            "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+            "dossier_content_sha256": "b47091d4aa33996f574535a301ed21fdd22caf58a44db0c74c6965970c6faff3",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "1c0e7684c46b771edf1969b80ac9de851a6c57345b72b00d756f0d8661e132cf",
+            "work_mode": "legacy_full_reanalysis",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+              "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+              "work_id": "6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9",
+              "family_id": "game:1054490",
+              "taste_subject_key": "App_1054490",
+              "appid": "1054490",
+              "taste_fingerprint": "bd211174279fa4efc63ea52de880ec9ae2400dc84f4bac23182d31add988bf14",
+              "candidate_context_sha256": "46eb0d0b7f74ce52b911ef9b3398ea1b767ad68face8522281117426bd9dd5c1",
+              "dossier_content_sha256": "b47091d4aa33996f574535a301ed21fdd22caf58a44db0c74c6965970c6faff3",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "9e2d5cd805677387f68716269574526be144beae09054c3ed8303cf3efef83df",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-27T17:29:13+00:00",
+              "run_start_anchor_commit": "850fd0ab32ce67271497ae9bfafe80a8ab83fdce",
+              "run_start_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "run_started_at_utc": "2026-09-27T17:10:54+00:00",
+              "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "fit_level": "strong",
+              "confidence": "medium",
+              "positive_evidence": [
+                "The engine-building loop repeatedly asks the player to combine birds, food, eggs, cards, habitats and round goals into an efficient plan, closely matching the profile's strong tactical and systems-thinking signals.",
+                "Hot-seat support creates a durable shared-play use case, which is a strong positive amplifier in the profile even when the underlying game is turn-based and relaxed.",
+                "The digital version automates bookkeeping while retaining the board game's strategic decisions, reducing friction without removing the planning layer."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 82,
+                "development_variety": 73,
+                "structure_pacing_direction": 79,
+                "identity_hooks": 66,
+                "breadth_of_match": 81
+              },
+              "base_support_compatible": null
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "legacy_reanalysis_attempts": [
+              {
+                "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+                "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+                "work_id": "6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9",
+                "family_id": "game:1054490",
+                "taste_subject_key": "App_1054490",
+                "appid": "1054490",
+                "taste_fingerprint": "bd211174279fa4efc63ea52de880ec9ae2400dc84f4bac23182d31add988bf14",
+                "candidate_context_sha256": "46eb0d0b7f74ce52b911ef9b3398ea1b767ad68face8522281117426bd9dd5c1",
+                "dossier_content_sha256": "b47091d4aa33996f574535a301ed21fdd22caf58a44db0c74c6965970c6faff3",
+                "dossier_compatibility_binding": {
+                  "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                  "evidence_contract_version": 2,
+                  "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                  "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                  "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                  "worker_schema_version": 2,
+                  "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                  "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                  "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                  "dossier_schema_version": 2,
+                  "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                  "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+                },
+                "authorization_id": "1c0e7684c46b771edf1969b80ac9de851a6c57345b72b00d756f0d8661e132cf",
+                "work_mode": "legacy_full_reanalysis",
+                "recovery_authorization_id": null,
+                "recovery_reason": null,
+                "recovery_condition_binding": null,
+                "migration_provenance": {
+                  "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+                  "migration_target_id": "legacy-full-reanalysis-01:6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9",
+                  "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+                  "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+                  "prior_outcome": "analyzed_fit",
+                  "prior_fit_level": "strong",
+                  "prior_confidence": "medium",
+                  "prior_taste_factors": {
+                    "gameplay_mastery": 82,
+                    "development_variety": 73,
+                    "structure_pacing_direction": 79,
+                    "identity_hooks": 66,
+                    "breadth_of_match": 81
+                  },
+                  "prior_not_fit_basis": null,
+                  "prior_work_id": "6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9",
+                  "prior_authorization_id": "9e2d5cd805677387f68716269574526be144beae09054c3ed8303cf3efef83df",
+                  "prior_accepted_at_utc": "2026-09-27T17:29:13+00:00",
+                  "preserved_positive_evidence": [
+                    "The engine-building loop repeatedly asks the player to combine birds, food, eggs, cards, habitats and round goals into an efficient plan, closely matching the profile's strong tactical and systems-thinking signals.",
+                    "Hot-seat support creates a durable shared-play use case, which is a strong positive amplifier in the profile even when the underlying game is turn-based and relaxed.",
+                    "The digital version automates bookkeeping while retaining the board game's strategic decisions, reducing friction without removing the planning layer."
+                  ],
+                  "preserved_not_fit_evidence": []
+                },
+                "outcome": "analyzed_fit",
+                "analysis_issue_code": null,
+                "attempt_consumption_source": "accepted_result",
+                "accepted_at_utc": "2026-09-28T10:30:07+00:00",
+                "run_start_anchor_commit": "f4e158c1557a5d95c819a90e42c0778ad1d77ede",
+                "run_start_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+                "run_started_at_utc": "2026-09-28T10:13:37+00:00",
+                "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+                "fit_level": "strong",
+                "confidence": "medium",
+                "positive_evidence": [
+                  "The engine-building loop repeatedly asks the player to combine birds, food, eggs, cards, habitats and round goals into an efficient plan, closely matching the profile's strong tactical and systems-thinking signals.",
+                  "Hot-seat support creates a durable shared-play use case, which is a strong positive amplifier in the profile even when the underlying game is turn-based and relaxed.",
+                  "The digital version automates bookkeeping while retaining the board game's strategic decisions, reducing friction without removing the planning layer."
+                ],
+                "taste_factors": {
+                  "gameplay_mastery": 82,
+                  "development_variety": 72,
+                  "structure_pacing_direction": 78,
+                  "identity_hooks": 66,
+                  "breadth_of_match": 81
+                },
+                "base_support_compatible": null,
+                "negative_assessment": {
+                  "status": "completed",
+                  "evaluated_candidate_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ],
+                  "findings": [
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "Текущий отзыв отмечает неэффективное использование пространства интерфейса и необходимость лишних действий для просмотра карт и поля; это может добавлять небольшую постоянную фрикцию, но не меняет глубину самой настольной системы.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 3
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "migration_result_changed": true,
+                "migration_fit_outcome_changed": false
+              }
+            ],
+            "legacy_reanalysis_status": {
+              "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+              "migration_target_id": "legacy-full-reanalysis-01:6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9",
+              "attempt_outcome": "analyzed_fit",
+              "accepted_at_utc": "2026-09-28T10:30:07+00:00",
+              "completed_revision_promoted": true
+            },
+            "migration_provenance": {
+              "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+              "migration_target_id": "legacy-full-reanalysis-01:6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9",
+              "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+              "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+              "prior_outcome": "analyzed_fit",
+              "prior_fit_level": "strong",
+              "prior_confidence": "medium",
+              "prior_taste_factors": {
+                "gameplay_mastery": 82,
+                "development_variety": 73,
+                "structure_pacing_direction": 79,
+                "identity_hooks": 66,
+                "breadth_of_match": 81
+              },
+              "prior_not_fit_basis": null,
+              "prior_work_id": "6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9",
+              "prior_authorization_id": "9e2d5cd805677387f68716269574526be144beae09054c3ed8303cf3efef83df",
+              "prior_accepted_at_utc": "2026-09-27T17:29:13+00:00",
+              "preserved_positive_evidence": [
+                "The engine-building loop repeatedly asks the player to combine birds, food, eggs, cards, habitats and round goals into an efficient plan, closely matching the profile's strong tactical and systems-thinking signals.",
+                "Hot-seat support creates a durable shared-play use case, which is a strong positive amplifier in the profile even when the underlying game is turn-based and relaxed.",
+                "The digital version automates bookkeeping while retaining the board game's strategic decisions, reducing friction without removing the planning layer."
+              ],
+              "preserved_not_fit_evidence": []
+            },
+            "migration_result_changed": true,
+            "migration_fit_outcome_changed": false,
+            "fit_level": "strong",
+            "confidence": "medium",
+            "positive_evidence": [
+              "The engine-building loop repeatedly asks the player to combine birds, food, eggs, cards, habitats and round goals into an efficient plan, closely matching the profile's strong tactical and systems-thinking signals.",
+              "Hot-seat support creates a durable shared-play use case, which is a strong positive amplifier in the profile even when the underlying game is turn-based and relaxed.",
+              "The digital version automates bookkeeping while retaining the board game's strategic decisions, reducing friction without removing the planning layer."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 82,
+              "development_variety": 72,
+              "structure_pacing_direction": 78,
+              "identity_hooks": 66,
+              "breadth_of_match": 81
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Текущий отзыв отмечает неэффективное использование пространства интерфейса и необходимость лишних действий для просмотра карт и поля; это может добавлять небольшую постоянную фрикцию, но не меняет глубину самой настольной системы.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          }
         }
       ],
       "migration_provenance": {
@@ -9506,20 +9782,323 @@
       },
       "migration_result_changed": true,
       "migration_fit_outcome_changed": false,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "c941aef9ed3fe53ccb9e19fb5f565c3ae55487f7a3e043663058ac4354b0e1fa",
+          "family_id": "game:1054490",
+          "taste_subject_key": "App_1054490",
+          "appid": "1054490",
+          "taste_fingerprint": "bd211174279fa4efc63ea52de880ec9ae2400dc84f4bac23182d31add988bf14",
+          "candidate_context_sha256": "46eb0d0b7f74ce52b911ef9b3398ea1b767ad68face8522281117426bd9dd5c1",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "b47091d4aa33996f574535a301ed21fdd22caf58a44db0c74c6965970c6faff3",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "af41f48db0ece4b7e06694e134f7488a24004fbe24b26efe28d22b18579e9ed7",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:28:51+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:1054490:1c0e7684c46b771e",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "1c0e7684c46b771edf1969b80ac9de851a6c57345b72b00d756f0d8661e132cf",
+            "prior_accepted_at_utc": "2026-09-28T10:30:07+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "strong",
+            "prior_confidence": "medium",
+            "prior_taste_factors": {
+              "gameplay_mastery": 82,
+              "development_variety": 72,
+              "structure_pacing_direction": 78,
+              "identity_hooks": 66,
+              "breadth_of_match": 81
+            },
+            "prior_positive_evidence": [
+              "The engine-building loop repeatedly asks the player to combine birds, food, eggs, cards, habitats and round goals into an efficient plan, closely matching the profile's strong tactical and systems-thinking signals.",
+              "Hot-seat support creates a durable shared-play use case, which is a strong positive amplifier in the profile even when the underlying game is turn-based and relaxed.",
+              "The digital version automates bookkeeping while retaining the board game's strategic decisions, reducing friction without removing the planning layer."
+            ],
+            "prior_work_id": "6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "strong",
+          "confidence": "high",
+          "positive_evidence": [
+            "The engine-building loop repeatedly combines birds, food, eggs, cards, habitats and round goals into an efficient plan.",
+            "Hot-seat support makes the digital version a durable shared-play option while automated bookkeeping preserves the strategy."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 84,
+            "development_variety": 74,
+            "structure_pacing_direction": 80,
+            "identity_hooks": 72,
+            "breadth_of_match": 85
+          },
+          "score_findings": [
+            {
+              "finding_id": "wingspan-engine",
+              "text_ru": "Комбинации птиц, еды, яиц, карт, сред обитания и целей раунда постоянно заставляют собирать эффективный движок, что хорошо совпадает с твоей любовью к системным и тактическим решениям.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                  "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                  "match_text_ru": "Тебе нравится, когда система требует менять решения под текущую ситуацию."
+                },
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Освоение системы и рост собственного понимания для тебя особенно ценны."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 84
+                },
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 74
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 85
+                }
+              ]
+            },
+            {
+              "finding_id": "wingspan-social-digital",
+              "text_ru": "Hot-seat и автоматизация настольной рутины делают совместные партии удобными, не убирая слой планирования; для тебя такой общий игровой опыт — сильный усилитель.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/9/pattern",
+                  "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+                  "match_text_ru": "Совместный игровой опыт особенно ценен для тебя, когда рождает общие решения и воспоминания."
+                },
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Выразительная подача помогает игре лучше запоминаться."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 80
+                },
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 72
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Есть свежая претензия к неэкономному использованию экрана и лишним наведениям/переключениям при просмотре карт и поля.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1054490:1c0e7684c46b771e",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:28:51+00:00",
+        "completed_revision_promoted": true
+      },
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1054490:1c0e7684c46b771e",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "1c0e7684c46b771edf1969b80ac9de851a6c57345b72b00d756f0d8661e132cf",
+        "prior_accepted_at_utc": "2026-09-28T10:30:07+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "strong",
+        "prior_confidence": "medium",
+        "prior_taste_factors": {
+          "gameplay_mastery": 82,
+          "development_variety": 72,
+          "structure_pacing_direction": 78,
+          "identity_hooks": 66,
+          "breadth_of_match": 81
+        },
+        "prior_positive_evidence": [
+          "The engine-building loop repeatedly asks the player to combine birds, food, eggs, cards, habitats and round goals into an efficient plan, closely matching the profile's strong tactical and systems-thinking signals.",
+          "Hot-seat support creates a durable shared-play use case, which is a strong positive amplifier in the profile even when the underlying game is turn-based and relaxed.",
+          "The digital version automates bookkeeping while retaining the board game's strategic decisions, reducing friction without removing the planning layer."
+        ],
+        "prior_work_id": "6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9"
+      },
       "fit_level": "strong",
-      "confidence": "medium",
+      "confidence": "high",
       "positive_evidence": [
-        "The engine-building loop repeatedly asks the player to combine birds, food, eggs, cards, habitats and round goals into an efficient plan, closely matching the profile's strong tactical and systems-thinking signals.",
-        "Hot-seat support creates a durable shared-play use case, which is a strong positive amplifier in the profile even when the underlying game is turn-based and relaxed.",
-        "The digital version automates bookkeeping while retaining the board game's strategic decisions, reducing friction without removing the planning layer."
+        "The engine-building loop repeatedly combines birds, food, eggs, cards, habitats and round goals into an efficient plan.",
+        "Hot-seat support makes the digital version a durable shared-play option while automated bookkeeping preserves the strategy."
       ],
       "taste_factors": {
-        "gameplay_mastery": 82,
-        "development_variety": 72,
-        "structure_pacing_direction": 78,
-        "identity_hooks": 66,
-        "breadth_of_match": 81
+        "gameplay_mastery": 84,
+        "development_variety": 74,
+        "structure_pacing_direction": 80,
+        "identity_hooks": 72,
+        "breadth_of_match": 85
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "wingspan-engine",
+          "text_ru": "Комбинации птиц, еды, яиц, карт, сред обитания и целей раунда постоянно заставляют собирать эффективный движок, что хорошо совпадает с твоей любовью к системным и тактическим решениям.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Тебе нравится, когда система требует менять решения под текущую ситуацию."
+            },
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Освоение системы и рост собственного понимания для тебя особенно ценны."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 84
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 74
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 85
+            }
+          ]
+        },
+        {
+          "finding_id": "wingspan-social-digital",
+          "text_ru": "Hot-seat и автоматизация настольной рутины делают совместные партии удобными, не убирая слой планирования; для тебя такой общий игровой опыт — сильный усилитель.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            },
+            {
+              "kind": "observation",
+              "index": 2
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/9/pattern",
+              "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+              "match_text_ru": "Совместный игровой опыт особенно ценен для тебя, когда рождает общие решения и воспоминания."
+            },
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Выразительная подача помогает игре лучше запоминаться."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 80
+            },
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 72
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -9533,7 +10112,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Текущий отзыв отмечает неэффективное использование пространства интерфейса и необходимость лишних действий для просмотра карт и поля; это может добавлять небольшую постоянную фрикцию, но не меняет глубину самой настольной системы.",
+            "text_ru": "Есть свежая претензия к неэкономному использованию экрана и лишним наведениям/переключениям при просмотре карт и поля.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -9545,9 +10124,9 @@
       }
     },
     "game:1173770": {
-      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
-      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
-      "work_id": "8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9",
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "aeeb0edbd2f3c6d6ee38af45f93b3fbed0f22711035a4d0ada250e8b22e6ec29",
       "family_id": "game:1173770",
       "taste_subject_key": "App_1173770",
       "appid": "1173770",
@@ -9559,8 +10138,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-28T10:31:19+00:00",
-      "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+      "accepted_at_utc": "2026-09-30T06:28:51+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "661db68ee87b44d718fa61466d778f7fabf08b9cdaded728ee915591d115bc1a",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -9576,8 +10155,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b",
-      "work_mode": "legacy_full_reanalysis",
+      "authorization_id": "ad331bacb07f64dfd8edef7779fe3f2a99134d5849604daaa832ea5bdea45570",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -9903,6 +10482,367 @@
             },
             "base_support_compatible": null
           }
+        },
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:28:51+00:00",
+          "state": {
+            "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+            "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+            "work_id": "8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9",
+            "family_id": "game:1173770",
+            "taste_subject_key": "App_1173770",
+            "appid": "1173770",
+            "taste_fingerprint": "338597d36a4b25ee6ae216ea3c993044f1b84fb04ad08810e8943d13f5bdfe85",
+            "candidate_context_sha256": "d21ca96b03df67c7c336e5c9c864ebea5fa013df666f2fc3f9625ae807518bf6",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-28T10:31:19+00:00",
+            "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+            "dossier_content_sha256": "661db68ee87b44d718fa61466d778f7fabf08b9cdaded728ee915591d115bc1a",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b",
+            "work_mode": "legacy_full_reanalysis",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+              "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+              "work_id": "8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9",
+              "family_id": "game:1173770",
+              "taste_subject_key": "App_1173770",
+              "appid": "1173770",
+              "taste_fingerprint": "338597d36a4b25ee6ae216ea3c993044f1b84fb04ad08810e8943d13f5bdfe85",
+              "candidate_context_sha256": "d21ca96b03df67c7c336e5c9c864ebea5fa013df666f2fc3f9625ae807518bf6",
+              "dossier_content_sha256": "661db68ee87b44d718fa61466d778f7fabf08b9cdaded728ee915591d115bc1a",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "0fd015e4ca96cd2ab8acd89f030d2dcb82dee1ebfb669b9731c985865a122549",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-27T17:31:00+00:00",
+              "run_start_anchor_commit": "850fd0ab32ce67271497ae9bfafe80a8ab83fdce",
+              "run_start_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "run_started_at_utc": "2026-09-27T17:10:54+00:00",
+              "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "fit_level": "moderate",
+              "confidence": "medium",
+              "positive_evidence": [
+                "Party composition and class choice provide a clear planning layer even though the underlying combat system is deliberately simple by modern standards.",
+                "Towns, dungeons and world progression still reward curiosity, while the Pixel Remaster's maps, auto-battle and encounter or experience controls substantially reduce old-school grind and navigation friction."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 59,
+                "development_variety": 57,
+                "structure_pacing_direction": 49,
+                "identity_hooks": 62,
+                "breadth_of_match": 58
+              },
+              "base_support_compatible": null
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "legacy_reanalysis_attempts": [
+              {
+                "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+                "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+                "work_id": "8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9",
+                "family_id": "game:1173770",
+                "taste_subject_key": "App_1173770",
+                "appid": "1173770",
+                "taste_fingerprint": "338597d36a4b25ee6ae216ea3c993044f1b84fb04ad08810e8943d13f5bdfe85",
+                "candidate_context_sha256": "d21ca96b03df67c7c336e5c9c864ebea5fa013df666f2fc3f9625ae807518bf6",
+                "dossier_content_sha256": "661db68ee87b44d718fa61466d778f7fabf08b9cdaded728ee915591d115bc1a",
+                "dossier_compatibility_binding": {
+                  "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                  "evidence_contract_version": 2,
+                  "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                  "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                  "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                  "worker_schema_version": 2,
+                  "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                  "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                  "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                  "dossier_schema_version": 2,
+                  "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                  "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+                },
+                "authorization_id": "c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b",
+                "work_mode": "legacy_full_reanalysis",
+                "recovery_authorization_id": null,
+                "recovery_reason": null,
+                "recovery_condition_binding": null,
+                "migration_provenance": {
+                  "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+                  "migration_target_id": "legacy-full-reanalysis-01:8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9",
+                  "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+                  "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+                  "prior_outcome": "analyzed_fit",
+                  "prior_fit_level": "moderate",
+                  "prior_confidence": "medium",
+                  "prior_taste_factors": {
+                    "gameplay_mastery": 59,
+                    "development_variety": 57,
+                    "structure_pacing_direction": 49,
+                    "identity_hooks": 62,
+                    "breadth_of_match": 58
+                  },
+                  "prior_not_fit_basis": null,
+                  "prior_work_id": "8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9",
+                  "prior_authorization_id": "0fd015e4ca96cd2ab8acd89f030d2dcb82dee1ebfb669b9731c985865a122549",
+                  "prior_accepted_at_utc": "2026-09-27T17:31:00+00:00",
+                  "preserved_positive_evidence": [
+                    "Party composition and class choice provide a clear planning layer even though the underlying combat system is deliberately simple by modern standards.",
+                    "Towns, dungeons and world progression still reward curiosity, while the Pixel Remaster's maps, auto-battle and encounter or experience controls substantially reduce old-school grind and navigation friction."
+                  ],
+                  "preserved_not_fit_evidence": []
+                },
+                "outcome": "analyzed_fit",
+                "analysis_issue_code": null,
+                "attempt_consumption_source": "accepted_result",
+                "accepted_at_utc": "2026-09-28T10:31:19+00:00",
+                "run_start_anchor_commit": "f4e158c1557a5d95c819a90e42c0778ad1d77ede",
+                "run_start_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+                "run_started_at_utc": "2026-09-28T10:13:37+00:00",
+                "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+                "fit_level": "moderate",
+                "confidence": "medium",
+                "positive_evidence": [
+                  "Party composition and class choice provide a clear planning layer even though the underlying combat system is deliberately simple by modern standards.",
+                  "Towns, dungeons and world progression still reward curiosity, while the Pixel Remaster's maps, auto-battle and encounter or experience controls substantially reduce old-school grind and navigation friction."
+                ],
+                "taste_factors": {
+                  "gameplay_mastery": 56,
+                  "development_variety": 55,
+                  "structure_pacing_direction": 43,
+                  "identity_hooks": 59,
+                  "breadth_of_match": 55
+                },
+                "base_support_compatible": null,
+                "negative_assessment": {
+                  "status": "completed",
+                  "evaluated_candidate_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 0
+                    },
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    },
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    },
+                    {
+                      "kind": "observation",
+                      "index": 4
+                    }
+                  ],
+                  "findings": [
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "Боевая и ролевая система заметно проще поздних JRPG: выбор классов даёт планирование, но развитие механической глубины по ходу игры ограничено.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 0
+                        }
+                      ]
+                    },
+                    {
+                      "disposition": "confirmed_personal_risk",
+                      "risk_code": "directionlessness",
+                      "text_ru": "Редкие подсказки и легко пропускаемые реплики NPC могут оставлять игрока без ясного понимания следующей цели, что прямо совпадает с одним из сильнейших отрицательных сигналов профиля.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 1
+                        }
+                      ]
+                    },
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "Pixel Remaster не включает часть дополнительных подземелий и другого контента из некоторых поздних версий; это ограничивает объём, но не ухудшает сам основной маршрут.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 3
+                        }
+                      ]
+                    },
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "Сюжет минималистичен, а партия почти полностью задаётся игроком, поэтому персонажная и повествовательная вовлечённость слабее современных JRPG.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 4
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "migration_result_changed": true,
+                "migration_fit_outcome_changed": false
+              }
+            ],
+            "legacy_reanalysis_status": {
+              "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+              "migration_target_id": "legacy-full-reanalysis-01:8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9",
+              "attempt_outcome": "analyzed_fit",
+              "accepted_at_utc": "2026-09-28T10:31:19+00:00",
+              "completed_revision_promoted": true
+            },
+            "migration_provenance": {
+              "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+              "migration_target_id": "legacy-full-reanalysis-01:8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9",
+              "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+              "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+              "prior_outcome": "analyzed_fit",
+              "prior_fit_level": "moderate",
+              "prior_confidence": "medium",
+              "prior_taste_factors": {
+                "gameplay_mastery": 59,
+                "development_variety": 57,
+                "structure_pacing_direction": 49,
+                "identity_hooks": 62,
+                "breadth_of_match": 58
+              },
+              "prior_not_fit_basis": null,
+              "prior_work_id": "8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9",
+              "prior_authorization_id": "0fd015e4ca96cd2ab8acd89f030d2dcb82dee1ebfb669b9731c985865a122549",
+              "prior_accepted_at_utc": "2026-09-27T17:31:00+00:00",
+              "preserved_positive_evidence": [
+                "Party composition and class choice provide a clear planning layer even though the underlying combat system is deliberately simple by modern standards.",
+                "Towns, dungeons and world progression still reward curiosity, while the Pixel Remaster's maps, auto-battle and encounter or experience controls substantially reduce old-school grind and navigation friction."
+              ],
+              "preserved_not_fit_evidence": []
+            },
+            "migration_result_changed": true,
+            "migration_fit_outcome_changed": false,
+            "fit_level": "moderate",
+            "confidence": "medium",
+            "positive_evidence": [
+              "Party composition and class choice provide a clear planning layer even though the underlying combat system is deliberately simple by modern standards.",
+              "Towns, dungeons and world progression still reward curiosity, while the Pixel Remaster's maps, auto-battle and encounter or experience controls substantially reduce old-school grind and navigation friction."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 56,
+              "development_variety": 55,
+              "structure_pacing_direction": 43,
+              "identity_hooks": 59,
+              "breadth_of_match": 55
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                },
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                },
+                {
+                  "kind": "observation",
+                  "index": 4
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Боевая и ролевая система заметно проще поздних JRPG: выбор классов даёт планирование, но развитие механической глубины по ходу игры ограничено.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 0
+                    }
+                  ]
+                },
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "directionlessness",
+                  "text_ru": "Редкие подсказки и легко пропускаемые реплики NPC могут оставлять игрока без ясного понимания следующей цели, что прямо совпадает с одним из сильнейших отрицательных сигналов профиля.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Pixel Remaster не включает часть дополнительных подземелий и другого контента из некоторых поздних версий; это ограничивает объём, но не ухудшает сам основной маршрут.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Сюжет минималистичен, а партия почти полностью задаётся игроком, поэтому персонажная и повествовательная вовлечённость слабее современных JRPG.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 4
+                    }
+                  ]
+                }
+              ]
+            }
+          }
         }
       ],
       "migration_provenance": {
@@ -9932,19 +10872,406 @@
       },
       "migration_result_changed": true,
       "migration_fit_outcome_changed": false,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "aeeb0edbd2f3c6d6ee38af45f93b3fbed0f22711035a4d0ada250e8b22e6ec29",
+          "family_id": "game:1173770",
+          "taste_subject_key": "App_1173770",
+          "appid": "1173770",
+          "taste_fingerprint": "338597d36a4b25ee6ae216ea3c993044f1b84fb04ad08810e8943d13f5bdfe85",
+          "candidate_context_sha256": "d21ca96b03df67c7c336e5c9c864ebea5fa013df666f2fc3f9625ae807518bf6",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "661db68ee87b44d718fa61466d778f7fabf08b9cdaded728ee915591d115bc1a",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "ad331bacb07f64dfd8edef7779fe3f2a99134d5849604daaa832ea5bdea45570",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:28:51+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:1173770:c904a9e4ea355972",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b",
+            "prior_accepted_at_utc": "2026-09-28T10:31:19+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "moderate",
+            "prior_confidence": "medium",
+            "prior_taste_factors": {
+              "gameplay_mastery": 56,
+              "development_variety": 55,
+              "structure_pacing_direction": 43,
+              "identity_hooks": 59,
+              "breadth_of_match": 55
+            },
+            "prior_positive_evidence": [
+              "Party composition and class choice provide a clear planning layer even though the underlying combat system is deliberately simple by modern standards.",
+              "Towns, dungeons and world progression still reward curiosity, while the Pixel Remaster's maps, auto-battle and encounter or experience controls substantially reduce old-school grind and navigation friction."
+            ],
+            "prior_work_id": "8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "moderate",
+          "confidence": "medium",
+          "positive_evidence": [
+            "Party composition and class choice still provide a clear planning layer despite the deliberately simple combat system.",
+            "Pixel Remaster maps, auto-battle and encounter or experience controls substantially reduce old-school grind and navigation friction."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 56,
+            "development_variety": 58,
+            "structure_pacing_direction": 48,
+            "identity_hooks": 60,
+            "breadth_of_match": 58
+          },
+          "score_findings": [
+            {
+              "finding_id": "ff1-party-planning",
+              "text_ru": "Выбор состава и классов даёт понятный слой планирования, хотя сами бои заметно проще более поздних RPG.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Тебе важна возможность осмысленно освоить систему, даже если она не экстремально сложная."
+                },
+                {
+                  "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                  "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                  "match_text_ru": "Тактические различия между вариантами повышают ценность системы для тебя."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 56
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 58
+                }
+              ]
+            },
+            {
+              "finding_id": "ff1-qol",
+              "text_ru": "Карты, автобой и настройки встреч, опыта и денег заметно уменьшают старый гринд и помогают прогрессии двигаться понятнее.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/2/pattern",
+                  "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                  "match_text_ru": "Тебе нравится прогрессия с понятной целью и ощутимым эффектом."
+                },
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Развитие опыта важнее затяжного повторения одной формулы."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 58
+                },
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 48
+                }
+              ]
+            },
+            {
+              "finding_id": "ff1-thin-story",
+              "text_ru": "Минимальный сюжет и почти безликая группа оставляют меньше характерных персонажей и эмоциональных крючков, чем обычно полезно для твоего профиля.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 4
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/3/pattern",
+                  "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+                  "match_text_ru": "Сюжет и персонажи для тебя важны, особенно когда игровая часть не даёт много других крючков."
+                },
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Запоминающаяся идентичность повышает шанс, что игра оставит след."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "qualifies",
+                  "normalized_value": 60
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 0
+              },
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              },
+              {
+                "kind": "observation",
+                "index": 4
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Боевая и ролевая системы по современным меркам довольно просты.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 0
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "directionlessness",
+                "text_ru": "Редкие подсказки и легко пропускаемые реплики NPC могут оставлять непонимание, куда идти дальше.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Pixel Remaster не включает часть бонусных подземелий и дополнительного контента из некоторых более поздних версий.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Сюжет и характеризация группы очень минимальны по сравнению с современными JRPG.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 4
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1173770:c904a9e4ea355972",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:28:51+00:00",
+        "completed_revision_promoted": true
+      },
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1173770:c904a9e4ea355972",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b",
+        "prior_accepted_at_utc": "2026-09-28T10:31:19+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "moderate",
+        "prior_confidence": "medium",
+        "prior_taste_factors": {
+          "gameplay_mastery": 56,
+          "development_variety": 55,
+          "structure_pacing_direction": 43,
+          "identity_hooks": 59,
+          "breadth_of_match": 55
+        },
+        "prior_positive_evidence": [
+          "Party composition and class choice provide a clear planning layer even though the underlying combat system is deliberately simple by modern standards.",
+          "Towns, dungeons and world progression still reward curiosity, while the Pixel Remaster's maps, auto-battle and encounter or experience controls substantially reduce old-school grind and navigation friction."
+        ],
+        "prior_work_id": "8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9"
+      },
       "fit_level": "moderate",
       "confidence": "medium",
       "positive_evidence": [
-        "Party composition and class choice provide a clear planning layer even though the underlying combat system is deliberately simple by modern standards.",
-        "Towns, dungeons and world progression still reward curiosity, while the Pixel Remaster's maps, auto-battle and encounter or experience controls substantially reduce old-school grind and navigation friction."
+        "Party composition and class choice still provide a clear planning layer despite the deliberately simple combat system.",
+        "Pixel Remaster maps, auto-battle and encounter or experience controls substantially reduce old-school grind and navigation friction."
       ],
       "taste_factors": {
         "gameplay_mastery": 56,
-        "development_variety": 55,
-        "structure_pacing_direction": 43,
-        "identity_hooks": 59,
-        "breadth_of_match": 55
+        "development_variety": 58,
+        "structure_pacing_direction": 48,
+        "identity_hooks": 60,
+        "breadth_of_match": 58
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "ff1-party-planning",
+          "text_ru": "Выбор состава и классов даёт понятный слой планирования, хотя сами бои заметно проще более поздних RPG.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Тебе важна возможность осмысленно освоить систему, даже если она не экстремально сложная."
+            },
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Тактические различия между вариантами повышают ценность системы для тебя."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 56
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 58
+            }
+          ]
+        },
+        {
+          "finding_id": "ff1-qol",
+          "text_ru": "Карты, автобой и настройки встреч, опыта и денег заметно уменьшают старый гринд и помогают прогрессии двигаться понятнее.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 2
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Тебе нравится прогрессия с понятной целью и ощутимым эффектом."
+            },
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Развитие опыта важнее затяжного повторения одной формулы."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 58
+            },
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 48
+            }
+          ]
+        },
+        {
+          "finding_id": "ff1-thin-story",
+          "text_ru": "Минимальный сюжет и почти безликая группа оставляют меньше характерных персонажей и эмоциональных крючков, чем обычно полезно для твоего профиля.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 4
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/3/pattern",
+              "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+              "match_text_ru": "Сюжет и персонажи для тебя важны, особенно когда игровая часть не даёт много других крючков."
+            },
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Запоминающаяся идентичность повышает шанс, что игра оставит след."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "identity_hooks",
+              "effect": "qualifies",
+              "normalized_value": 60
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -9970,7 +11297,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Боевая и ролевая система заметно проще поздних JRPG: выбор классов даёт планирование, но развитие механической глубины по ходу игры ограничено.",
+            "text_ru": "Боевая и ролевая системы по современным меркам довольно просты.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -9981,7 +11308,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "directionlessness",
-            "text_ru": "Редкие подсказки и легко пропускаемые реплики NPC могут оставлять игрока без ясного понимания следующей цели, что прямо совпадает с одним из сильнейших отрицательных сигналов профиля.",
+            "text_ru": "Редкие подсказки и легко пропускаемые реплики NPC могут оставлять непонимание, куда идти дальше.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -9992,7 +11319,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Pixel Remaster не включает часть дополнительных подземелий и другого контента из некоторых поздних версий; это ограничивает объём, но не ухудшает сам основной маршрут.",
+            "text_ru": "Pixel Remaster не включает часть бонусных подземелий и дополнительного контента из некоторых более поздних версий.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -10003,7 +11330,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Сюжет минималистичен, а партия почти полностью задаётся игроком, поэтому персонажная и повествовательная вовлечённость слабее современных JRPG.",
+            "text_ru": "Сюжет и характеризация группы очень минимальны по сравнению с современными JRPG.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -10015,9 +11342,9 @@
       }
     },
     "game:1075740": {
-      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
-      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
-      "work_id": "9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac",
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "a1740c2d34bd4a47fd11655729c0904bf7db599397129afcb6bbe2eca0dba949",
       "family_id": "game:1075740",
       "taste_subject_key": "App_1075740",
       "appid": "1075740",
@@ -10029,8 +11356,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-28T10:30:43+00:00",
-      "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+      "accepted_at_utc": "2026-09-30T06:28:51+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "6ba33442a113cc9690b2878d4b59cfcb490f25e7bc8fbb1e63b935968aa65904",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -10046,8 +11373,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44",
-      "work_mode": "legacy_full_reanalysis",
+      "authorization_id": "c97654c035c7fe3fe75257c6460d011f0e0e3b06a16fb9e00c8a5e0ec6365303",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -10362,6 +11689,345 @@
             },
             "base_support_compatible": null
           }
+        },
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:28:51+00:00",
+          "state": {
+            "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+            "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+            "work_id": "9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac",
+            "family_id": "game:1075740",
+            "taste_subject_key": "App_1075740",
+            "appid": "1075740",
+            "taste_fingerprint": "f9487b78772603603f513134f33002bca9ded25d574235806b1029306e22ee05",
+            "candidate_context_sha256": "3e26890bd43f7d7612f2948764df8e4d6a93d8d25c1864df3ba9ce242f3c4d89",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-28T10:30:43+00:00",
+            "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+            "dossier_content_sha256": "6ba33442a113cc9690b2878d4b59cfcb490f25e7bc8fbb1e63b935968aa65904",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44",
+            "work_mode": "legacy_full_reanalysis",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+              "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+              "work_id": "9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac",
+              "family_id": "game:1075740",
+              "taste_subject_key": "App_1075740",
+              "appid": "1075740",
+              "taste_fingerprint": "f9487b78772603603f513134f33002bca9ded25d574235806b1029306e22ee05",
+              "candidate_context_sha256": "3e26890bd43f7d7612f2948764df8e4d6a93d8d25c1864df3ba9ce242f3c4d89",
+              "dossier_content_sha256": "6ba33442a113cc9690b2878d4b59cfcb490f25e7bc8fbb1e63b935968aa65904",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "bfdc8938414ace01f66dc6c3efc6376803d4dc0c7c578531e4864dfd71e70336",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-27T17:29:49+00:00",
+              "run_start_anchor_commit": "850fd0ab32ce67271497ae9bfafe80a8ab83fdce",
+              "run_start_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "run_started_at_utc": "2026-09-27T17:10:54+00:00",
+              "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "fit_level": "moderate",
+              "confidence": "medium",
+              "positive_evidence": [
+                "Combat combines deck construction with party composition, character abilities and battlefield positioning, providing layered tactical decisions beyond a simple card sequence.",
+                "Optional challenge structures can keep pressure meaningful after the basic system is learned, which fits the profile's positive response to mastery-oriented difficulty."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 80,
+                "development_variety": 57,
+                "structure_pacing_direction": 49,
+                "identity_hooks": 59,
+                "breadth_of_match": 65
+              },
+              "base_support_compatible": null
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "legacy_reanalysis_attempts": [
+              {
+                "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+                "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+                "work_id": "9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac",
+                "family_id": "game:1075740",
+                "taste_subject_key": "App_1075740",
+                "appid": "1075740",
+                "taste_fingerprint": "f9487b78772603603f513134f33002bca9ded25d574235806b1029306e22ee05",
+                "candidate_context_sha256": "3e26890bd43f7d7612f2948764df8e4d6a93d8d25c1864df3ba9ce242f3c4d89",
+                "dossier_content_sha256": "6ba33442a113cc9690b2878d4b59cfcb490f25e7bc8fbb1e63b935968aa65904",
+                "dossier_compatibility_binding": {
+                  "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                  "evidence_contract_version": 2,
+                  "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                  "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                  "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                  "worker_schema_version": 2,
+                  "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                  "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                  "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                  "dossier_schema_version": 2,
+                  "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                  "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+                },
+                "authorization_id": "b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44",
+                "work_mode": "legacy_full_reanalysis",
+                "recovery_authorization_id": null,
+                "recovery_reason": null,
+                "recovery_condition_binding": null,
+                "migration_provenance": {
+                  "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+                  "migration_target_id": "legacy-full-reanalysis-01:9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac",
+                  "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+                  "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+                  "prior_outcome": "analyzed_fit",
+                  "prior_fit_level": "moderate",
+                  "prior_confidence": "medium",
+                  "prior_taste_factors": {
+                    "gameplay_mastery": 80,
+                    "development_variety": 57,
+                    "structure_pacing_direction": 49,
+                    "identity_hooks": 59,
+                    "breadth_of_match": 65
+                  },
+                  "prior_not_fit_basis": null,
+                  "prior_work_id": "9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac",
+                  "prior_authorization_id": "bfdc8938414ace01f66dc6c3efc6376803d4dc0c7c578531e4864dfd71e70336",
+                  "prior_accepted_at_utc": "2026-09-27T17:29:49+00:00",
+                  "preserved_positive_evidence": [
+                    "Combat combines deck construction with party composition, character abilities and battlefield positioning, providing layered tactical decisions beyond a simple card sequence.",
+                    "Optional challenge structures can keep pressure meaningful after the basic system is learned, which fits the profile's positive response to mastery-oriented difficulty."
+                  ],
+                  "preserved_not_fit_evidence": []
+                },
+                "outcome": "analyzed_fit",
+                "analysis_issue_code": null,
+                "attempt_consumption_source": "accepted_result",
+                "accepted_at_utc": "2026-09-28T10:30:43+00:00",
+                "run_start_anchor_commit": "f4e158c1557a5d95c819a90e42c0778ad1d77ede",
+                "run_start_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+                "run_started_at_utc": "2026-09-28T10:13:37+00:00",
+                "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+                "fit_level": "moderate",
+                "confidence": "medium",
+                "positive_evidence": [
+                  "Combat combines deck construction with party composition, character abilities and battlefield positioning, providing layered tactical decisions beyond a simple card sequence.",
+                  "Optional challenge structures can keep pressure meaningful after the basic system is learned, which fits the profile's positive response to mastery-oriented difficulty."
+                ],
+                "taste_factors": {
+                  "gameplay_mastery": 79,
+                  "development_variety": 52,
+                  "structure_pacing_direction": 44,
+                  "identity_hooks": 59,
+                  "breadth_of_match": 62
+                },
+                "base_support_compatible": null,
+                "negative_assessment": {
+                  "status": "completed",
+                  "evaluated_candidate_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    },
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    },
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    },
+                    {
+                      "kind": "conflict",
+                      "index": 0
+                    }
+                  ],
+                  "findings": [
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "Бои могут заметно затягиваться из-за высокой живучести участников, поэтому даже тактически содержательные забеги иногда теряют темп.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 1
+                        }
+                      ]
+                    },
+                    {
+                      "disposition": "confirmed_personal_risk",
+                      "risk_code": "unchanged_repetition",
+                      "text_ru": "После освоения основ часть забегов может повторять сходные боевые подходы, стартовые условия и узкие награды, а объём нового содержимого оказывается ограниченным — это прямо конфликтует с потребностью профиля в развитии опыта.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 2
+                        }
+                      ]
+                    },
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "Повторные подтверждения и многошаговые действия интерфейса могут добавлять лишнюю рутину к простым командам, но доказательство единичное и неопределённое.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 3
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "migration_result_changed": true,
+                "migration_fit_outcome_changed": false
+              }
+            ],
+            "legacy_reanalysis_status": {
+              "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+              "migration_target_id": "legacy-full-reanalysis-01:9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac",
+              "attempt_outcome": "analyzed_fit",
+              "accepted_at_utc": "2026-09-28T10:30:43+00:00",
+              "completed_revision_promoted": true
+            },
+            "migration_provenance": {
+              "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+              "migration_target_id": "legacy-full-reanalysis-01:9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac",
+              "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+              "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+              "prior_outcome": "analyzed_fit",
+              "prior_fit_level": "moderate",
+              "prior_confidence": "medium",
+              "prior_taste_factors": {
+                "gameplay_mastery": 80,
+                "development_variety": 57,
+                "structure_pacing_direction": 49,
+                "identity_hooks": 59,
+                "breadth_of_match": 65
+              },
+              "prior_not_fit_basis": null,
+              "prior_work_id": "9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac",
+              "prior_authorization_id": "bfdc8938414ace01f66dc6c3efc6376803d4dc0c7c578531e4864dfd71e70336",
+              "prior_accepted_at_utc": "2026-09-27T17:29:49+00:00",
+              "preserved_positive_evidence": [
+                "Combat combines deck construction with party composition, character abilities and battlefield positioning, providing layered tactical decisions beyond a simple card sequence.",
+                "Optional challenge structures can keep pressure meaningful after the basic system is learned, which fits the profile's positive response to mastery-oriented difficulty."
+              ],
+              "preserved_not_fit_evidence": []
+            },
+            "migration_result_changed": true,
+            "migration_fit_outcome_changed": false,
+            "fit_level": "moderate",
+            "confidence": "medium",
+            "positive_evidence": [
+              "Combat combines deck construction with party composition, character abilities and battlefield positioning, providing layered tactical decisions beyond a simple card sequence.",
+              "Optional challenge structures can keep pressure meaningful after the basic system is learned, which fits the profile's positive response to mastery-oriented difficulty."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 79,
+              "development_variety": 52,
+              "structure_pacing_direction": 44,
+              "identity_hooks": 59,
+              "breadth_of_match": 62
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                },
+                {
+                  "kind": "conflict",
+                  "index": 0
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Бои могут заметно затягиваться из-за высокой живучести участников, поэтому даже тактически содержательные забеги иногда теряют темп.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "unchanged_repetition",
+                  "text_ru": "После освоения основ часть забегов может повторять сходные боевые подходы, стартовые условия и узкие награды, а объём нового содержимого оказывается ограниченным — это прямо конфликтует с потребностью профиля в развитии опыта.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Повторные подтверждения и многошаговые действия интерфейса могут добавлять лишнюю рутину к простым командам, но доказательство единичное и неопределённое.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          }
         }
       ],
       "migration_provenance": {
@@ -10391,19 +12057,396 @@
       },
       "migration_result_changed": true,
       "migration_fit_outcome_changed": false,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "a1740c2d34bd4a47fd11655729c0904bf7db599397129afcb6bbe2eca0dba949",
+          "family_id": "game:1075740",
+          "taste_subject_key": "App_1075740",
+          "appid": "1075740",
+          "taste_fingerprint": "f9487b78772603603f513134f33002bca9ded25d574235806b1029306e22ee05",
+          "candidate_context_sha256": "3e26890bd43f7d7612f2948764df8e4d6a93d8d25c1864df3ba9ce242f3c4d89",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "6ba33442a113cc9690b2878d4b59cfcb490f25e7bc8fbb1e63b935968aa65904",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "c97654c035c7fe3fe75257c6460d011f0e0e3b06a16fb9e00c8a5e0ec6365303",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:28:51+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:1075740:b94fbda6533078aa",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44",
+            "prior_accepted_at_utc": "2026-09-28T10:30:43+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "moderate",
+            "prior_confidence": "medium",
+            "prior_taste_factors": {
+              "gameplay_mastery": 79,
+              "development_variety": 52,
+              "structure_pacing_direction": 44,
+              "identity_hooks": 59,
+              "breadth_of_match": 62
+            },
+            "prior_positive_evidence": [
+              "Combat combines deck construction with party composition, character abilities and battlefield positioning, providing layered tactical decisions beyond a simple card sequence.",
+              "Optional challenge structures can keep pressure meaningful after the basic system is learned, which fits the profile's positive response to mastery-oriented difficulty."
+            ],
+            "prior_work_id": "9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "moderate",
+          "confidence": "medium",
+          "positive_evidence": [
+            "Combat combines deck construction, party composition, abilities and battlefield positioning into layered tactical decisions.",
+            "Optional challenge structures can add pressure after the basic systems are learned."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 80,
+            "development_variety": 50,
+            "structure_pacing_direction": 45,
+            "identity_hooks": 60,
+            "breadth_of_match": 62
+          },
+          "score_findings": [
+            {
+              "finding_id": "banners-tactics",
+              "text_ru": "Колода, состав группы, способности и позиции на поле работают вместе, поэтому бои дают тебе реальный слой тактического освоения, а не только последовательность карт.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                  "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                  "match_text_ru": "Тебе важны ситуации, где приходится менять тактику под противников."
+                },
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Мастерство и понимание системы — один из сильных плюсов профиля."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 80
+                },
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 60
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 62
+                }
+              ]
+            },
+            {
+              "finding_id": "banners-repetition",
+              "text_ru": "После освоения маршрута часть забегов начинает повторять схожие подходы и награды, поэтому развитие и разнообразие заметно слабее самой боевой основы.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/8/pattern",
+                  "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+                  "match_text_ru": "Повтор без нового опыта быстро снижает для тебя интерес."
+                },
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Тебе нужна эволюция игрового опыта по ходу игры."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "development_variety",
+                  "effect": "lowers",
+                  "normalized_value": 50
+                }
+              ]
+            },
+            {
+              "finding_id": "banners-slow-fights",
+              "text_ru": "Долгие бои с большим запасом здоровья у сторон растягивают забеги и ухудшают темп даже при ускоренной анимации.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/5/pattern",
+                  "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+                  "match_text_ru": "Тебе важно регулярно понимать, зачем продолжать и ощущать движение вперёд."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "lowers",
+                  "normalized_value": 45
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              },
+              {
+                "kind": "conflict",
+                "index": 0
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Отдельные бои могут быть чрезмерно долгими и заметно растягивать весь забег.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "unchanged_repetition",
+                "text_ru": "После освоения основной схемы повторяющиеся стартовые условия, похожие решения и ограниченный объём контента могут давать мало нового опыта.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Интерфейс местами требует лишних подтверждений и многошаговых действий для простых команд.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Сложность спорна: для одних она требовательная, для опытных игроков базовая кампания после освоения систем становится сравнительно простой.",
+                "evidence_refs": [
+                  {
+                    "kind": "conflict",
+                    "index": 0
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1075740:b94fbda6533078aa",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:28:51+00:00",
+        "completed_revision_promoted": true
+      },
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1075740:b94fbda6533078aa",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44",
+        "prior_accepted_at_utc": "2026-09-28T10:30:43+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "moderate",
+        "prior_confidence": "medium",
+        "prior_taste_factors": {
+          "gameplay_mastery": 79,
+          "development_variety": 52,
+          "structure_pacing_direction": 44,
+          "identity_hooks": 59,
+          "breadth_of_match": 62
+        },
+        "prior_positive_evidence": [
+          "Combat combines deck construction with party composition, character abilities and battlefield positioning, providing layered tactical decisions beyond a simple card sequence.",
+          "Optional challenge structures can keep pressure meaningful after the basic system is learned, which fits the profile's positive response to mastery-oriented difficulty."
+        ],
+        "prior_work_id": "9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac"
+      },
       "fit_level": "moderate",
       "confidence": "medium",
       "positive_evidence": [
-        "Combat combines deck construction with party composition, character abilities and battlefield positioning, providing layered tactical decisions beyond a simple card sequence.",
-        "Optional challenge structures can keep pressure meaningful after the basic system is learned, which fits the profile's positive response to mastery-oriented difficulty."
+        "Combat combines deck construction, party composition, abilities and battlefield positioning into layered tactical decisions.",
+        "Optional challenge structures can add pressure after the basic systems are learned."
       ],
       "taste_factors": {
-        "gameplay_mastery": 79,
-        "development_variety": 52,
-        "structure_pacing_direction": 44,
-        "identity_hooks": 59,
+        "gameplay_mastery": 80,
+        "development_variety": 50,
+        "structure_pacing_direction": 45,
+        "identity_hooks": 60,
         "breadth_of_match": 62
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "banners-tactics",
+          "text_ru": "Колода, состав группы, способности и позиции на поле работают вместе, поэтому бои дают тебе реальный слой тактического освоения, а не только последовательность карт.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Тебе важны ситуации, где приходится менять тактику под противников."
+            },
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Мастерство и понимание системы — один из сильных плюсов профиля."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 80
+            },
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 60
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 62
+            }
+          ]
+        },
+        {
+          "finding_id": "banners-repetition",
+          "text_ru": "После освоения маршрута часть забегов начинает повторять схожие подходы и награды, поэтому развитие и разнообразие заметно слабее самой боевой основы.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 2
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/8/pattern",
+              "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+              "match_text_ru": "Повтор без нового опыта быстро снижает для тебя интерес."
+            },
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Тебе нужна эволюция игрового опыта по ходу игры."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "development_variety",
+              "effect": "lowers",
+              "normalized_value": 50
+            }
+          ]
+        },
+        {
+          "finding_id": "banners-slow-fights",
+          "text_ru": "Долгие бои с большим запасом здоровья у сторон растягивают забеги и ухудшают темп даже при ускоренной анимации.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/5/pattern",
+              "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+              "match_text_ru": "Тебе важно регулярно понимать, зачем продолжать и ощущать движение вперёд."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "lowers",
+              "normalized_value": 45
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -10429,7 +12472,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Бои могут заметно затягиваться из-за высокой живучести участников, поэтому даже тактически содержательные забеги иногда теряют темп.",
+            "text_ru": "Отдельные бои могут быть чрезмерно долгими и заметно растягивать весь забег.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -10440,7 +12483,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "unchanged_repetition",
-            "text_ru": "После освоения основ часть забегов может повторять сходные боевые подходы, стартовые условия и узкие награды, а объём нового содержимого оказывается ограниченным — это прямо конфликтует с потребностью профиля в развитии опыта.",
+            "text_ru": "После освоения основной схемы повторяющиеся стартовые условия, похожие решения и ограниченный объём контента могут давать мало нового опыта.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -10451,11 +12494,22 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Повторные подтверждения и многошаговые действия интерфейса могут добавлять лишнюю рутину к простым командам, но доказательство единичное и неопределённое.",
+            "text_ru": "Интерфейс местами требует лишних подтверждений и многошаговых действий для простых команд.",
             "evidence_refs": [
               {
                 "kind": "observation",
                 "index": 3
+              }
+            ]
+          },
+          {
+            "disposition": "caution",
+            "risk_code": null,
+            "text_ru": "Сложность спорна: для одних она требовательная, для опытных игроков базовая кампания после освоения систем становится сравнительно простой.",
+            "evidence_refs": [
+              {
+                "kind": "conflict",
+                "index": 0
               }
             ]
           }
