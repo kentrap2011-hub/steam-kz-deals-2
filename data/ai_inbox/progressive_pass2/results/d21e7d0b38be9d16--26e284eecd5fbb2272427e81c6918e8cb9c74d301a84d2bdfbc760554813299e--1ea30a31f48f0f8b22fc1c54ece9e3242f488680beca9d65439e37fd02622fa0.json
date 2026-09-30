@@ -1,0 +1,246 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+  "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+  "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+  "work_id": "26e284eecd5fbb2272427e81c6918e8cb9c74d301a84d2bdfbc760554813299e",
+  "family_id": "game:13500",
+  "taste_subject_key": "App_13500",
+  "appid": "13500",
+  "taste_fingerprint": "ca4ac0694ab4752278eb5997c23ced553b869051d1ca3660fdd2b9a201730358",
+  "candidate_context_sha256": "bbabb448bc8f147058b228c99b11cc8c7ad84118898ce95455f5f72589429bd4",
+  "dossier_content_sha256": "b4420102e34319bbcf517190c3958e631e0541a93256372056c999c016319f1b",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "1ea30a31f48f0f8b22fc1c54ece9e3242f488680beca9d65439e37fd02622fa0",
+  "work_mode": "score_explainability_migration",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_migration_provenance": {
+    "migration_id": "deep-score-evidence-explainability-alignment-01",
+    "migration_target_id": "deep-score-explainability-01:game:13500:90d87ca156127ec4",
+    "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+    "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+    "prior_authorization_id": "90d87ca156127ec47c793e1dae1010ecdecb9f106f4090a52d0bc7ec8d97b8d5",
+    "prior_accepted_at_utc": "2026-09-28T16:53:58+00:00",
+    "prior_outcome": "analyzed_fit",
+    "prior_fit_level": "strong",
+    "prior_confidence": "medium",
+    "prior_taste_factors": {
+      "gameplay_mastery": 92,
+      "development_variety": 80,
+      "structure_pacing_direction": 64,
+      "identity_hooks": 87,
+      "breadth_of_match": 86
+    },
+    "prior_positive_evidence": [
+      "Acrobatic platforming, environmental movement, time powers and the expanded combo system make both traversal and combat expressive, matching the profile's strongest movement and mastery signals.",
+      "Weapon interactions and combat options broaden over the campaign, so progression comes through learning a larger toolkit rather than only raising statistics.",
+      "The darker tone, Dahaka pursuits and aggressive audiovisual identity give the sequel a memorable personality distinct from Sands of Time."
+    ],
+    "prior_work_id": "26e284eecd5fbb2272427e81c6918e8cb9c74d301a84d2bdfbc760554813299e"
+  },
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "high",
+  "positive_evidence": [
+    "Expanded free-form combat and acrobatic platforming create expressive traversal and fighting.",
+    "Weapon interactions, combo options and time powers broaden the usable toolkit across the campaign.",
+    "The darker tone and Dahaka pursuit give the sequel a distinctive audiovisual identity."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 93,
+    "development_variety": 82,
+    "structure_pacing_direction": 66,
+    "identity_hooks": 89,
+    "breadth_of_match": 88
+  },
+  "score_findings": [
+    {
+      "finding_id": "ww-movement-combat",
+      "text_ru": "Акробатика, движения по окружению, оружейные взаимодействия, силы времени и расширенные комбо делают и перемещение, и бой выразительными — это очень сильное совпадение с твоим профилем.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1/pattern",
+          "profile_value_sha256": "03ee46ab2d98957c01bd73fe09574b97f6da1eef6a0ceb054817add03d66d5e1",
+          "match_text_ru": "Само движение и управление может быть для тебя самостоятельным источником удовольствия."
+        },
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Тебе особенно нравится осваивать сложные приёмы и становиться заметно лучше."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 93
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 82
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 88
+        }
+      ]
+    },
+    {
+      "finding_id": "ww-dark-identity",
+      "text_ru": "Тёмный тон, погони Дахаки, тяжёлая музыка и более агрессивный образ Принца дают игре очень узнаваемую личность, даже если не всем нравится отход от атмосферы первой части.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Яркая художественная идентичность сильно повышает для тебя шанс запомнить игру."
+        },
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "Сюжетная и персонажная подача для тебя остаётся важным дополнительным крючком."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 89
+        }
+      ]
+    },
+    {
+      "finding_id": "ww-structure-friction",
+      "text_ru": "Переходы между прошлым и настоящим дают интересную архитектуру уровней, но большое количество возвратов и не всегда ясная следующая цель заметно ухудшают навигационный темп.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/pattern",
+          "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+          "match_text_ru": "Ты любишь исследовать, но не любишь теряться без понимания следующего шага."
+        },
+        {
+          "json_pointer": "/taste_profile/8/pattern",
+          "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+          "match_text_ru": "Повтор знакомых участков становится минусом, если не даёт достаточно нового опыта."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 66
+        }
+      ]
+    }
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "difficulty_punishment",
+        "text_ru": "На высокой сложности запас здоровья врагов, агрессивные группы, чекпоинты и повторы боссов местами превращают испытание в затяжной slog вместо чистого теста навыка.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "directionlessness",
+        "text_ru": "Возвраты по дворцу между двумя эпохами иногда оставляют непонимание следующей цели и усиливают лишний backtracking.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Тёмная подача очень характерная, но часть игроков предпочитает более лёгкую атмосферу и ясный рассказ Sands of Time.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Старая ПК-версия может быть капризной на современных системах; есть свежий успешный Steam Deck опыт после настройки разрешения и V-Sync.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      }
+    ]
+  }
+}
