@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+  "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+  "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+  "work_id": "9b4a664820c2ffc8bb5a129e9b232f682f92f024013b0f0da90cc81417238803",
+  "family_id": "game:1173780",
+  "taste_subject_key": "App_1173780",
+  "appid": "1173780",
+  "taste_fingerprint": "eaec96fcc7b0e8cf8a123a3ff2da11456a712db397a86b97eb34969b0bda2a7a",
+  "candidate_context_sha256": "b87b806f62c0f606980ff46544245cf4408b3c6aa917d1a4bde7d05ae7665a71",
+  "dossier_content_sha256": "9f66425f13807a1bf89243682d83cd6608487a239d40ba4c6a35ee16dac59944",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "0222023b448c3b12020786c830113aec043c770695393ad270a51e3080ee619d",
+  "work_mode": "score_explainability_migration",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_migration_provenance": {
+    "migration_id": "deep-score-evidence-explainability-alignment-01",
+    "migration_target_id": "deep-score-explainability-01:game:1173780:9bf4c0571c7a46b4",
+    "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+    "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+    "prior_authorization_id": "9bf4c0571c7a46b45266cc2db772c3ce3567f92b0c8f0bdc9d6a64b0dfde8ed8",
+    "prior_accepted_at_utc": "2026-09-28T10:32:27+00:00",
+    "prior_outcome": "analyzed_fit",
+    "prior_fit_level": "moderate",
+    "prior_confidence": "medium",
+    "prior_taste_factors": {
+      "gameplay_mastery": 58,
+      "development_variety": 60,
+      "structure_pacing_direction": 49,
+      "identity_hooks": 70,
+      "breadth_of_match": 59
+    },
+    "prior_positive_evidence": [
+      "The darker rebellion story and named party members provide substantially more narrative and character identity than the first game, matching the profile's contextual value on story and memorable characters.",
+      "Usage-based growth allows flexible character development, and Pixel Remaster boosts can reduce the repetition cost of experimenting with that unusual system."
+    ],
+    "prior_work_id": "0ea17f28b7bfa56c8d63131fd1a19dd0fed4bb254b1b2af9bc5e802f19b6aa5b"
+  },
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "The activity-based stat, weapon and spell growth system allows unusually flexible character development.",
+    "The darker rebellion story and named party members provide substantially more narrative identity than the first game.",
+    "Pixel Remaster boosts reduce the repetition cost of experimenting with the unusual progression system."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 58,
+    "development_variety": 62,
+    "structure_pacing_direction": 52,
+    "identity_hooks": 74,
+    "breadth_of_match": 62
+  },
+  "score_findings": [
+    {
+      "finding_id": "ff2-growth-system",
+      "text_ru": "Рост характеристик, оружия и магии через использование даёт необычно свободную прокачку и позволяет собирать персонажей под выбранный стиль, хотя систему нужно сначала понять.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/pattern",
+          "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+          "match_text_ru": "Тебе нравится прогрессия, когда понятны цель и эффект выбранного развития."
+        },
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Освоение необычной системы само по себе может быть для тебя сильным плюсом."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 58
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 62
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 62
+        }
+      ]
+    },
+    {
+      "finding_id": "ff2-story",
+      "text_ru": "Более тёмная история восстания и именованные герои дают игре заметно больше эмоциональной и характерной идентичности, чем у первой части.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "Сюжет и персонажи для тебя важны, особенно когда они дают игре собственный эмоциональный крючок."
+        },
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Яркая идентичность повышает шанс, что игра запомнится."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 74
+        },
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 52
+        }
+      ]
+    }
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Система развития гибкая, но может быть непрозрачной, гриндовой или легко эксплуатируемой в зависимости от подхода.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "directionlessness",
+        "text_ru": "Ловушки-комнаты и пустые ответвления в подземельях могут превращать исследование в повторные бесполезные обходы и случайные бои.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      }
+    ]
+  }
+}
