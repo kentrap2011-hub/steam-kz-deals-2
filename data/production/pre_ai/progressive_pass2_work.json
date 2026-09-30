@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 41,
     "deep_completed_not_fit_count": 4,
     "deep_incomplete_or_recovery_count": 7,
-    "deep_waiting_for_dossier_count": 203,
-    "deep_ready_or_pending_count": 11,
+    "deep_waiting_for_dossier_count": 200,
+    "deep_ready_or_pending_count": 14,
     "deep_normal_first_pass_remaining_count": 214,
     "deep_remaining_until_all_authoritative_count": 221,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 3,
-    "dossier_waiting_count": 203,
+    "dossier_waiting_count": 200,
     "pass2_attempted_count": 52,
-    "pass2_eligible_count": 11,
-    "normal_pass2_eligible_count": 11,
+    "pass2_eligible_count": 14,
+    "normal_pass2_eligible_count": 14,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -174,6 +174,70 @@
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1921980",
+      "taste_subject_key": "App_1921980",
+      "appid": "1921980",
+      "taste_fingerprint": "cc7dbf42c3f3a92525996a8b51cbc93665419639c9ebdaf23eeabf077e1f48b1",
+      "candidate_context_sha256": "b16647534fa1e83393878008e3605b7a4426b2009df6b7993b8b813a34cfaabc",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "8f2a4d0cc8f1660997e8d1d4f160997c2a8555809a27a0ceba0d29863d61a8f1",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Between Horizons – A Sci-Fi Detective Adventure",
+        "short_description": "Between Horizons is a narrative 2.5D sci-fi detective adventure. 33 years into the Zephyr's journey, its mission is suddenly jeopardized. Can you find the culprit before it's too late? Experience an enthralling story set in a semi-open world that branches and ends based on your choices.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Detective",
+          "Sci-fi"
+        ],
+        "core_fit_count": 2,
+        "release_date": "25 Mar, 2024",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1921980"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1921980.json",
+      "dossier_content_sha256": "ec446330a50e8687155a3bb1d2908cc37f81255df4ffe83ddfa9fb3f3b356985",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-20T07:31:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "2ee7a9af8b0783469334490f9e2883decf75ef2985b660e075789bebba920e1f",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--8f2a4d0cc8f1660997e8d1d4f160997c2a8555809a27a0ceba0d29863d61a8f1--2ee7a9af8b0783469334490f9e2883decf75ef2985b660e075789bebba920e1f.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--8f2a4d0cc8f1660997e8d1d4f160997c2a8555809a27a0ceba0d29863d61a8f1--2ee7a9af8b0783469334490f9e2883decf75ef2985b660e075789bebba920e1f.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "family_id": "game:1296770",
       "taste_subject_key": "App_1296770",
       "appid": "1296770",
@@ -229,7 +293,7 @@
       "authorization_id": "40cc4d4a5624aead2aae4b9c8495b3d610b425f27bee2677a3988d51c0ffd71c",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--a349c27f3663446a76886e22218455525bc43a2428278ca450257ad916f6239a--40cc4d4a5624aead2aae4b9c8495b3d610b425f27bee2677a3988d51c0ffd71c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--a349c27f3663446a76886e22218455525bc43a2428278ca450257ad916f6239a--40cc4d4a5624aead2aae4b9c8495b3d610b425f27bee2677a3988d51c0ffd71c.json",
-      "sequence": 2
+      "sequence": 3
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -294,7 +358,7 @@
       "authorization_id": "5cbad135453f56b459601a9f055a1137a5ceb700bf0b431ffb3a4a09e5f11bbe",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--6750999815a75af21a60fb6a911806d043ba0be76ce0dc838e23ce940ab5fbb0--5cbad135453f56b459601a9f055a1137a5ceb700bf0b431ffb3a4a09e5f11bbe.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--6750999815a75af21a60fb6a911806d043ba0be76ce0dc838e23ce940ab5fbb0--5cbad135453f56b459601a9f055a1137a5ceb700bf0b431ffb3a4a09e5f11bbe.json",
-      "sequence": 3
+      "sequence": 4
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -357,7 +421,7 @@
       "authorization_id": "73e372feaa9e84e7dc5782866d62cd4eac942cd2691c2f8e91d6a930eedb7ec1",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--d20509d12ecff540a3912c18dcb176a3cf11b335e4a996cf4b5bd059ab67d329--73e372feaa9e84e7dc5782866d62cd4eac942cd2691c2f8e91d6a930eedb7ec1.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--d20509d12ecff540a3912c18dcb176a3cf11b335e4a996cf4b5bd059ab67d329--73e372feaa9e84e7dc5782866d62cd4eac942cd2691c2f8e91d6a930eedb7ec1.json",
-      "sequence": 4
+      "sequence": 5
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -423,7 +487,7 @@
       "authorization_id": "4d979edb9dd45466ba1609bf2e555ee6511e028619d027f396752bd9460183df",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--dd8f51296c8b1aaafb7c8bc6879dcec82a1b8251b7b2f974c376cd0dfb1800d9--4d979edb9dd45466ba1609bf2e555ee6511e028619d027f396752bd9460183df.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--dd8f51296c8b1aaafb7c8bc6879dcec82a1b8251b7b2f974c376cd0dfb1800d9--4d979edb9dd45466ba1609bf2e555ee6511e028619d027f396752bd9460183df.json",
-      "sequence": 5
+      "sequence": 6
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -487,7 +551,7 @@
       "authorization_id": "5a52e4250af6356a847a1eea74819c2134519a5059907963fd35af42c2e86242",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--8a7c52e870937fd31c409ea901c904111f5d232e047ef02aa29006701be40689--5a52e4250af6356a847a1eea74819c2134519a5059907963fd35af42c2e86242.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--8a7c52e870937fd31c409ea901c904111f5d232e047ef02aa29006701be40689--5a52e4250af6356a847a1eea74819c2134519a5059907963fd35af42c2e86242.json",
-      "sequence": 6
+      "sequence": 7
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -547,7 +611,7 @@
       "authorization_id": "dc0e9819baf24e4d3ae80ccddf6a18fd5986ed39bee5bdf8dbe34f6d4f5140f1",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ddb33cb3665250557120ce1deaa1af3f23fe213fd96119e7335f5d17a9c01fe9--dc0e9819baf24e4d3ae80ccddf6a18fd5986ed39bee5bdf8dbe34f6d4f5140f1.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ddb33cb3665250557120ce1deaa1af3f23fe213fd96119e7335f5d17a9c01fe9--dc0e9819baf24e4d3ae80ccddf6a18fd5986ed39bee5bdf8dbe34f6d4f5140f1.json",
-      "sequence": 7
+      "sequence": 8
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -611,7 +675,136 @@
       "authorization_id": "18bef5c07cb3f0883653aa6e550607d5f5d8c898ed22e6e8f494aca6b13f7d4d",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--61ec1e06990d88c3b69a675e90c2274e9acb0e982ccd16c55a3b217317d3a2eb--18bef5c07cb3f0883653aa6e550607d5f5d8c898ed22e6e8f494aca6b13f7d4d.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--61ec1e06990d88c3b69a675e90c2274e9acb0e982ccd16c55a3b217317d3a2eb--18bef5c07cb3f0883653aa6e550607d5f5d8c898ed22e6e8f494aca6b13f7d4d.json",
-      "sequence": 8
+      "sequence": 9
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1917450",
+      "taste_subject_key": "App_1917450",
+      "appid": "1917450",
+      "taste_fingerprint": "5ed1c96840ef1e9bc286cfc1d0c45e90d3d7528f1da2aaaaf86a6a7efd86c7e5",
+      "candidate_context_sha256": "d7565965b8cb60e46ab5e6311db89f03ea630b53ab98b944aa64c4bb7a1d2e9c",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "e50b7eb36bc16cef86fef4b93e24c541db6173eb5b8a4a6173ea33466755064d",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "fault - StP - LIGHTKRAVTE",
+        "short_description": "fault - StP - LIGHTKRAVTE is the latest entry in the fault series, which has shipped over 500,000 copies worldwide. LIGHTKRAVTE presents its story through the eyes of Khaji Oberg, an ordinary and unremarkable teenaged boy who finds himself reaching for a dream that slips ever further away from him.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Cinematic",
+          "Fantasy",
+          "Story Rich"
+        ],
+        "core_fit_count": 3,
+        "release_date": "27 May, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1917450"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1917450.json",
+      "dossier_content_sha256": "2960cb8e3727c92365244d8860a698a21e9aad8f30d2c03604b772796873f849",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-20T07:31:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "a78c827e56f6f2a73a3fec5da9cf5ccb31288e6f44285e056ef1802c6cd5e674",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--e50b7eb36bc16cef86fef4b93e24c541db6173eb5b8a4a6173ea33466755064d--a78c827e56f6f2a73a3fec5da9cf5ccb31288e6f44285e056ef1802c6cd5e674.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--e50b7eb36bc16cef86fef4b93e24c541db6173eb5b8a4a6173ea33466755064d--a78c827e56f6f2a73a3fec5da9cf5ccb31288e6f44285e056ef1802c6cd5e674.json",
+      "sequence": 10
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1927720",
+      "taste_subject_key": "App_1927720",
+      "appid": "1927720",
+      "taste_fingerprint": "e35895c0dd9e7fa9616ed68dc4e2442ddda7517b9437322591c75a68e7e9c5b5",
+      "candidate_context_sha256": "b594bcf637203e83226a3da426d34919af194d32ea85771cd5e68857975bb417",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "177f6573b9dabc4b976f0857d329e5e66a036e12e358263f3d88c9f27123a1ca",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Monument Valley",
+        "short_description": "Embark on a journey of forgiveness through impossible environments and illusionary puzzles. Experience this meditative and calming puzzle game by manipulating monuments and creating evolving paths to explore new, surreal, and mysterious worlds.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Exploration",
+          "Singleplayer"
+        ],
+        "core_fit_count": 0,
+        "release_date": "12 Jul, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1927720"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1927720.json",
+      "dossier_content_sha256": "35f17224eba21b28c3ed734c05e65f69b5c43aad5ecf759e005d59e45af8e1c5",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-20T07:31:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "a6965b9e4111b0ee81fc82893415efca67360318dc688be50dfee818c3ae8f2b",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--177f6573b9dabc4b976f0857d329e5e66a036e12e358263f3d88c9f27123a1ca--a6965b9e4111b0ee81fc82893415efca67360318dc688be50dfee818c3ae8f2b.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--177f6573b9dabc4b976f0857d329e5e66a036e12e358263f3d88c9f27123a1ca--a6965b9e4111b0ee81fc82893415efca67360318dc688be50dfee818c3ae8f2b.json",
+      "sequence": 11
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -671,7 +864,7 @@
       "authorization_id": "00fc0894e7baf2bfa3ac1cfe209270063e11fbb272a7e9afcc505236eefbcd3e",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--540fc0835ef1be288e4bf7d27e5de6b11ee286b1cb8618b1739aa16972fb1ac3--00fc0894e7baf2bfa3ac1cfe209270063e11fbb272a7e9afcc505236eefbcd3e.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--540fc0835ef1be288e4bf7d27e5de6b11ee286b1cb8618b1739aa16972fb1ac3--00fc0894e7baf2bfa3ac1cfe209270063e11fbb272a7e9afcc505236eefbcd3e.json",
-      "sequence": 9
+      "sequence": 12
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -734,7 +927,7 @@
       "authorization_id": "ca4eb09f2721f44188c81641efe10403cbd99d1083736a20a32ac5b74a27b083",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--4647d9ca82dbfc539ac5a863e7519535ce4919026e4c429d0b05fc703ac38e68--ca4eb09f2721f44188c81641efe10403cbd99d1083736a20a32ac5b74a27b083.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--4647d9ca82dbfc539ac5a863e7519535ce4919026e4c429d0b05fc703ac38e68--ca4eb09f2721f44188c81641efe10403cbd99d1083736a20a32ac5b74a27b083.json",
-      "sequence": 10
+      "sequence": 13
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -794,7 +987,7 @@
       "authorization_id": "95dda72c42189deeffd98d39d0e1234b6f93a6ad1d99cc94d4c0cf6051058101",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ea26dc17e9866afb0b3928f2ab4251cde8abaa95e86f346789b4b6c2c3cfd6d2--95dda72c42189deeffd98d39d0e1234b6f93a6ad1d99cc94d4c0cf6051058101.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ea26dc17e9866afb0b3928f2ab4251cde8abaa95e86f346789b4b6c2c3cfd6d2--95dda72c42189deeffd98d39d0e1234b6f93a6ad1d99cc94d4c0cf6051058101.json",
-      "sequence": 11
+      "sequence": 14
     }
   ]
 }
