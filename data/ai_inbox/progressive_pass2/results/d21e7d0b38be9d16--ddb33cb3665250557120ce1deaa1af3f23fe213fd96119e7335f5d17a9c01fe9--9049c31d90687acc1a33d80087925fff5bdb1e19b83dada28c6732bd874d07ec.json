@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "98f766a847449a9697ba6c4a2370ffad08aee506",
+  "run_start_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+  "run_started_at_utc": "2026-09-30T11:59:25+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+  "work_id": "ddb33cb3665250557120ce1deaa1af3f23fe213fd96119e7335f5d17a9c01fe9",
+  "family_id": "game:1158940",
+  "taste_subject_key": "App_1158940",
+  "appid": "1158940",
+  "taste_fingerprint": "b8a83e5bd64e4bfc511b81bf1e6bb046d4592f26954d595f78eb57a94f490c4e",
+  "candidate_context_sha256": "0ac8cc5ecda123341399c8ebe65e37814e963e783140ef1e6b79e51ccb747832",
+  "dossier_content_sha256": "27942c6a8503e4991d3e468208d11cf92d45d8286459096f1288abb9bff677fc",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "9049c31d90687acc1a33d80087925fff5bdb1e19b83dada28c6732bd874d07ec",
+  "work_mode": "recovery",
+  "recovery_authorization_id": "c2ef1322b725a4551341e7e013f2949ecba572bc636b313a1e64e64c3950cc19",
+  "recovery_reason": "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
+  "recovery_condition_binding": {
+    "semantic_input": {
+      "title": "Blazing Sails",
+      "short_description": "Fight for survival in Blazing Sails, a fast-paced pirate PvP game! Create your own unique pirate and ship. Band together with other players to command your mighty vessel! Explore different game-modes, maps, weapons, ship types and more while eliminating other crews in epic battles on land and sea!",
+      "bundle_members": [],
+      "fit_tags": [],
+      "core_fit_count": 0,
+      "release_date": "13 Nov, 2023",
+      "release_year": null,
+      "semantic_condition": {
+        "ai_condition": "taste_subject_include_controls_purchase_family",
+        "requires_ai_base_support": false,
+        "base_appids": [
+          "1158940"
+        ]
+      }
+    },
+    "defect_fix_binding": {
+      "task_id": "deep-invalid-not-fit-contract-loop-fix-01",
+      "validated_fix_commit": "b21bdfd773162e9856c1b12015b1b497b4999363",
+      "prior_run_start_anchor_commit": "4d1a1c573289358713897559e79b754907ff91c8",
+      "prior_run_start_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
+      "prior_result_commit": "911e1b1e00fdc5dbed1bff3d9e3f0148a18c58ac",
+      "prior_ingest_rejection_commit": "5651782bb91a18aaaedc1b26b5973159e3e021d0",
+      "prior_result_authorization_id": "f938b2ec18f080adb6fe5d867dc46ddb43e9ce8da11566cc64807d6f95cce443",
+      "prior_rejection_reason": "confirmed personal negative requires high confidence"
+    }
+  },
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "high",
+  "not_fit_basis": "confirmed_personal_negative",
+  "not_fit_evidence": [
+    "The strongest mechanics depend on coordinated crews and full PvP matches.",
+    "Low population is a long-running problem and dated 2026 reviews still report difficulty finding enough players without bringing friends.",
+    "Because access to the core loop is unreliable, the game's otherwise appealing coordination and role variety do not form a dependable fit."
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "other_grounded_taste_risk",
+        "text_ru": "Главная ценность игры — полноценные PvP-матчи с координацией экипажа, но низкая популяция остаётся устойчивой проблемой и в датированных отзывах 2026 года; без своей компании основной цикл ненадёжно доступен.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть единичный свежий отчёт о вылетах при создании аккаунта, которые прекратились после нескольких перезапусков.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      }
+    ]
+  }
+}
