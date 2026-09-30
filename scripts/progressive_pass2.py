@@ -84,7 +84,6 @@ IMMUTABLE_RESULT_FIELDS = PASS1_IDENTITY_FIELDS + (
     'work_mode',
     'recovery_authorization_id',
     'recovery_reason',
-    'score_evidence_contract',
 )
 
 
