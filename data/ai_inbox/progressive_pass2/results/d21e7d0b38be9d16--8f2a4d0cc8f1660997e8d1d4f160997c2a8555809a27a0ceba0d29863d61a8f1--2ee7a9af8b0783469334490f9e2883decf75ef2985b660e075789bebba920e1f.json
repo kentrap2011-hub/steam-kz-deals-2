@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "98f766a847449a9697ba6c4a2370ffad08aee506",
+  "run_start_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+  "run_started_at_utc": "2026-09-30T11:59:25+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+  "work_id": "8f2a4d0cc8f1660997e8d1d4f160997c2a8555809a27a0ceba0d29863d61a8f1",
+  "family_id": "game:1921980",
+  "taste_subject_key": "App_1921980",
+  "appid": "1921980",
+  "taste_fingerprint": "cc7dbf42c3f3a92525996a8b51cbc93665419639c9ebdaf23eeabf077e1f48b1",
+  "candidate_context_sha256": "b16647534fa1e83393878008e3605b7a4426b2009df6b7993b8b813a34cfaabc",
+  "dossier_content_sha256": "ec446330a50e8687155a3bb1d2908cc37f81255df4ffe83ddfa9fb3f3b356985",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "2ee7a9af8b0783469334490f9e2883decf75ef2985b660e075789bebba920e1f",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "high",
+  "positive_evidence": [
+    "Cases are solved through collecting evidence, combining clues, questioning characters and committing deductions.",
+    "Failed deductions and choices can persist, making investigation decisions consequential rather than disposable.",
+    "The generation-ship setting, branching mystery and audiovisual presentation give the detective structure a strong authored identity."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 84,
+    "development_variety": 80,
+    "structure_pacing_direction": 86,
+    "identity_hooks": 91,
+    "breadth_of_match": 88
+  },
+  "score_findings": [
+    {
+      "finding_id": "between-detective-system",
+      "text_ru": "Сбор улик, сопоставление фактов, допросы и фиксация выводов делают расследование полноценной игровой системой, где внимательность и логика прямо влияют на результат.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Тебе нравится, когда понимание системы и внимательность заметно улучшают результат."
+        },
+        {
+          "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+          "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+          "match_text_ru": "Содержательные решения и адаптация под факты хорошо совпадают с твоей любовью к тактическим задачам."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 84
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 80
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 88
+        }
+      ]
+    },
+    {
+      "finding_id": "between-consequences",
+      "text_ru": "Ошибочный вывод не всегда откатывается: последствия могут продолжить историю, поэтому решения ощущаются весомыми и поддерживают ясный детективный вектор.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/pattern",
+          "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+          "match_text_ru": "Тебе важны решения с понятными последствиями и развитием ситуации."
+        },
+        {
+          "json_pointer": "/taste_profile/5/pattern",
+          "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+          "match_text_ru": "Ясная цель расследования помогает удерживать интерес без бесцельного блуждания."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 86
+        }
+      ]
+    },
+    {
+      "finding_id": "between-world",
+      "text_ru": "Корабль поколений, пиксельная подача, музыка и ветвящийся научно-фантастический детектив дают игре сильное собственное лицо.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "Сюжет и персонажи для тебя важны как самостоятельный источник вовлечённости."
+        },
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Выразительная авторская идентичность повышает шанс, что игра запомнится."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 91
+        }
+      ]
+    },
+    {
+      "finding_id": "between-backtracking",
+      "text_ru": "Часть расследований страдает от повторяющихся ответов персонажей, возвратов по кораблю и слишком прямолинейных дел, поэтому не вся заявленная детективная глубина раскрывается одинаково хорошо.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8/pattern",
+          "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+          "match_text_ru": "Повтор без нового содержания для тебя быстро становится минусом."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 80
+        }
+      ]
+    }
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Ошибки в выводах могут дорого стоить, потому что игра сознательно не строится вокруг обычного сохранения и мгновенного отката.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Повторяющиеся ответы персонажей и заметный backtracking иногда дают мало нового содержания между содержательными дедукциями.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      }
+    ]
+  }
+}
