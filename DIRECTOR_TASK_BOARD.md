@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` assigned: `WORKER_TASK_KOF_XV_MISSING_POSITIVE_REASONS_DIAGNOSTIC_01.md` — read-only diagnosis of why grounded positive evidence for KOF XV does not reach the visible `Почему может зайти` block.
+- `ЧАТ 1` is free. `WORKER_TASK_KOF_XV_MISSING_POSITIVE_REASONS_DIAGNOSTIC_01.md` is accepted complete: root cause is overly narrow positive-explanation template coverage in `scripts/card_explanation_policy.py`, not missing semantic evidence or ranking.
 - `ЧАТ 2` is free. `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md` is accepted complete via PR #125 / merge `070f30807acceffed36a342e1d442f5dcd1c99c7`.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -19,7 +19,7 @@
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
 
 
-## ACTIVE — ЧАТ 1 — KOF XV missing positive reasons diagnostic
+## ACCEPTED — ЧАТ 1 — KOF XV missing positive reasons diagnostic
 
 Task:
 `WORKER_TASK_KOF_XV_MISSING_POSITIVE_REASONS_DIAGNOSTIC_01.md`
@@ -28,7 +28,16 @@ Mode:
 `READ-ONLY / RECON`
 
 Status:
-`authorized_ready_for_worker`
+`diagnosed_needs_fix`
+
+Director acceptance:
+- KOF XV current authority is authoritative Deep, not Fast;
+- Deep contains three grounded positive rows with exact accepted-state provenance;
+- the first divergence is `scripts/card_explanation_policy.py::_positive_reason()`, whose hard-coded lexical/template coverage rejects all three valid KOF positives;
+- canonical visual therefore gets `why_fit=[]`, and browser correctly shows the placeholder;
+- current snapshot shows 34 visible analyzed-fit Deep cards, only 7 with non-empty `why_fit` and 27 with empty `why_fit`, so this is a broader positive-explanation projection coverage defect;
+- ranking is unaffected: KOF XV remains `deep_fit`, total score 68.9, priority rank 3;
+- no Fast/Dossier/Deep rerun, provenance weakening, ranking change, browser workaround, publication change or Scheduled Task change is warranted by this diagnosis.
 
 Pinned symptom:
 - KOF XV / AppID 1498570 is near the top of the live feed;
