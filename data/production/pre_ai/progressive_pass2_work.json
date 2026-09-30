@@ -51,15 +51,15 @@
   },
   "scope": {
     "deep_total_current_coverage_target": 266,
-    "deep_first_pass_attempted_count": 77,
-    "deep_authoritative_completed_count": 65,
-    "deep_completed_fit_count": 58,
+    "deep_first_pass_attempted_count": 79,
+    "deep_authoritative_completed_count": 67,
+    "deep_completed_fit_count": 60,
     "deep_completed_not_fit_count": 7,
     "deep_incomplete_or_recovery_count": 12,
     "deep_waiting_for_dossier_count": 182,
-    "deep_ready_or_pending_count": 7,
-    "deep_normal_first_pass_remaining_count": 189,
-    "deep_remaining_until_all_authoritative_count": 201,
+    "deep_ready_or_pending_count": 5,
+    "deep_normal_first_pass_remaining_count": 187,
+    "deep_remaining_until_all_authoritative_count": 199,
     "deep_normal_first_pass_complete": false,
     "deep_all_current_authoritative_complete": false,
     "recovery_owned_count": 12,
@@ -67,9 +67,9 @@
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 3,
     "dossier_waiting_count": 182,
-    "pass2_attempted_count": 77,
-    "pass2_eligible_count": 7,
-    "normal_pass2_eligible_count": 7,
+    "pass2_attempted_count": 79,
+    "pass2_eligible_count": 5,
+    "normal_pass2_eligible_count": 5,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -299,129 +299,6 @@
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:1836730",
-      "taste_subject_key": "App_1836730",
-      "appid": "1836730",
-      "taste_fingerprint": "1c12fbf97f6d4530ab08e19943294679d1131f1e045baac1eb80ca0522b35a50",
-      "candidate_context_sha256": "0af28b66bdcd79a6f319cd31e1c4bc969047aeafdac3d06ca23654091ad8cfc9",
-      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
-      "work_id": "4647d9ca82dbfc539ac5a863e7519535ce4919026e4c429d0b05fc703ac38e68",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Echo Point Nova",
-        "short_description": "Echo Point Nova is an open-world FPS that offers unparalleled freedom and thrilling speed. Designed for both singleplayer and coop. From the creators of Severed Steel.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Action",
-          "Exploration"
-        ],
-        "core_fit_count": 0,
-        "release_date": "24 Sep, 2024",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1836730"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1836730.json",
-      "dossier_content_sha256": "f294c4cdb31c7dce85b2b43c46decb5ae141683a62ff5263caf258043712c920",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-20T07:36:23Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "ca4eb09f2721f44188c81641efe10403cbd99d1083736a20a32ac5b74a27b083",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--4647d9ca82dbfc539ac5a863e7519535ce4919026e4c429d0b05fc703ac38e68--ca4eb09f2721f44188c81641efe10403cbd99d1083736a20a32ac5b74a27b083.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--4647d9ca82dbfc539ac5a863e7519535ce4919026e4c429d0b05fc703ac38e68--ca4eb09f2721f44188c81641efe10403cbd99d1083736a20a32ac5b74a27b083.json",
-      "sequence": 4
-    },
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:1969080",
-      "taste_subject_key": "App_1969080",
-      "appid": "1969080",
-      "taste_fingerprint": "b565b8d4cf8b18ccc0def2d9015b3fa64edcce5be7bf2d3ba8f812a91e26bc22",
-      "candidate_context_sha256": "9319c8ee16fdce540c277fbb2116ae8e5b97eaed6c03827536816ddee0d55254",
-      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
-      "work_id": "87cc5625f9f79e874d0cac5673b5715569ea063ccea5bae04dc1e0812de94ff8",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "A Building Full of Cats",
-        "short_description": "A Building Full of Cats is a hidden object game where you need to pet all the cats in the building. Don't leave any cats behind!",
-        "bundle_members": [],
-        "fit_tags": [],
-        "core_fit_count": 0,
-        "release_date": "7 Jul, 2022",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1969080"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1969080.json",
-      "dossier_content_sha256": "744087b5d21b320a45eb0b8a8f34d7ad8076e2c58f4fbe0368ed8f28dd4b1400",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-20T07:31:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "e790ade89478307957c7a395ca5d0a295a75703c271ac6c096a01a4641ca95e7",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--87cc5625f9f79e874d0cac5673b5715569ea063ccea5bae04dc1e0812de94ff8--e790ade89478307957c7a395ca5d0a295a75703c271ac6c096a01a4641ca95e7.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--87cc5625f9f79e874d0cac5673b5715569ea063ccea5bae04dc1e0812de94ff8--e790ade89478307957c7a395ca5d0a295a75703c271ac6c096a01a4641ca95e7.json",
-      "sequence": 5
-    },
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "family_id": "game:1793250",
       "taste_subject_key": "App_1793250",
       "appid": "1793250",
@@ -477,7 +354,7 @@
       "authorization_id": "95dda72c42189deeffd98d39d0e1234b6f93a6ad1d99cc94d4c0cf6051058101",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ea26dc17e9866afb0b3928f2ab4251cde8abaa95e86f346789b4b6c2c3cfd6d2--95dda72c42189deeffd98d39d0e1234b6f93a6ad1d99cc94d4c0cf6051058101.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ea26dc17e9866afb0b3928f2ab4251cde8abaa95e86f346789b4b6c2c3cfd6d2--95dda72c42189deeffd98d39d0e1234b6f93a6ad1d99cc94d4c0cf6051058101.json",
-      "sequence": 6
+      "sequence": 4
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -539,7 +416,7 @@
       "authorization_id": "05ba889bd2092954b4cd0c5c4d47e156010e234373245355dc0f123d07ef63c6",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--5aea7303db2de6b909dff6bc79cad25db92f6e0126dc4417818da0a2dcb71fa5--05ba889bd2092954b4cd0c5c4d47e156010e234373245355dc0f123d07ef63c6.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--5aea7303db2de6b909dff6bc79cad25db92f6e0126dc4417818da0a2dcb71fa5--05ba889bd2092954b4cd0c5c4d47e156010e234373245355dc0f123d07ef63c6.json",
-      "sequence": 7
+      "sequence": 5
     }
   ]
 }
