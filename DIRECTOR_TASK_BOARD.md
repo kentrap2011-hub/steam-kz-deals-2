@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` is free after completed read-only diagnostic `WORKER_TASK_STALE_LIVE_STATISTICS_PUBLICATION_DIAGNOSTIC_01.md`; status `diagnosed_needs_fix`.
+- `ЧАТ 1` assigned: `WORKER_TASK_CARD_EXPLANATION_PRODUCER_VALIDATOR_PUBLICATION_PARITY_FIX_01.md` — fix Deep linked explanation validation so fresh visual publication can resume without weakening provenance checks.
 - `ЧАТ 2` is free. `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md` is accepted complete via PR #125 / merge `070f30807acceffed36a342e1d442f5dcd1c99c7`.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
@@ -18,6 +18,35 @@
 - User-authorized current recovery direction: process current translations in ЧАТ 1 while ЧАТ 2 makes translation absence nonblocking and adds translation observability to Statistics. The earlier browser-asset decoupling proposal is not the current task; reassess it only if publication still lags after these authorized changes.
 - Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
+
+
+## ACTIVE — ЧАТ 1 — card explanation producer / validator publication parity fix
+
+Task:
+`WORKER_TASK_CARD_EXPLANATION_PRODUCER_VALIDATOR_PUBLICATION_PARITY_FIX_01.md`
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Status:
+`authorized_ready_for_worker`
+
+User requirement:
+- remove dependence on literal wording such as `теб` for authoritative linked Deep positives;
+- validate personalization through accepted Deep score-finding provenance instead;
+- preserve fail-closed candidate/profile/factor/binding checks;
+- restore normal full visual publication without manual redeploy or workflow bypass.
+
+Acceptance:
+- current real full visual build passes card explanation validation;
+- exact material binding remains green;
+- canonical visual advances beyond the known stale 06:26 payload;
+- normal Pages deployment receives the fresh canonical visual;
+- live Statistics no longer reflect the old Dossier `60/200/6` and Deep `41/37/4/7/206/8/221` snapshot;
+- top `Скидки: обновлено` mailing-source timestamp is out of scope.
+
+Expected report:
+`reviews/worker_reports/card-explanation-producer-validator-publication-parity-fix-01.md`
 
 
 ## ACCEPTED — ЧАТ 1 — stale live Statistics publication diagnostic
