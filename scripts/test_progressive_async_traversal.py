@@ -306,7 +306,7 @@ def exact_authority_and_path_reuse():
             )
         finally:
             os.chdir(previous_cwd)
-        assert valid_receipts[0]['status'] == 'accepted'
+        assert valid_receipts[0]['status'] == 'accepted', valid_receipts[0]
         assert valid_state['entries'][item['family_id']]['normal_first_pass_attempted'] is True
         assert progressive_work_authority.commit_is_ancestor(
             confirmation_commit, valid_add, repo
