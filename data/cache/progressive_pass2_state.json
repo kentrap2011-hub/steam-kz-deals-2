@@ -42295,8 +42295,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-29T16:00:45+00:00",
-      "work_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+      "accepted_at_utc": "2026-09-30T06:39:04+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "53a3868e05e15eb4d6675fdda16fecf99c63c6b2233dbe62b53ef422f39edc85",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -42312,8 +42312,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "5c33e8bbb941530691cd9b2e324e8935871d9c1a125fe217c9f0fa21477bf16c",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "6c6526cbf670a1d31903cd48a4f11ac8094418e9fe4404285002bf0616d8e186",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -42427,20 +42427,567 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "37ddf9c3e4f5d03af2deb77fd2d8a9f8c4044e73d210149505b64c785b4785c8",
+          "family_id": "game:1556790",
+          "taste_subject_key": "App_1556790",
+          "appid": "1556790",
+          "taste_fingerprint": "05e7d9d35ed2eb17e36734258dbb15494886d146d1b80624722fa5d20a0b7764",
+          "candidate_context_sha256": "18d114ab6d93ceb7b30926e25881f8b4d8e65fe7960662fa0ea0f89009e785cf",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "53a3868e05e15eb4d6675fdda16fecf99c63c6b2233dbe62b53ef422f39edc85",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "6c6526cbf670a1d31903cd48a4f11ac8094418e9fe4404285002bf0616d8e186",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:39:04+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:1556790:5c33e8bbb9415306",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "5c33e8bbb941530691cd9b2e324e8935871d9c1a125fe217c9f0fa21477bf16c",
+            "prior_accepted_at_utc": "2026-09-29T16:00:45+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "moderate",
+            "prior_confidence": "medium",
+            "prior_taste_factors": {
+              "gameplay_mastery": 82,
+              "development_variety": 70,
+              "structure_pacing_direction": 72,
+              "identity_hooks": 75,
+              "breadth_of_match": 76
+            },
+            "prior_positive_evidence": [
+              "Grounded gunplay, class roles and large mountain-front maps create a deliberate team-oriented shooter loop with clear tactical responsibilities.",
+              "Long battles reward positioning, map knowledge and cooperation rather than only reflex shooting.",
+              "Historical detail and the unusual Alpine front give the combat a distinctive identity."
+            ],
+            "prior_work_id": "37ddf9c3e4f5d03af2deb77fd2d8a9f8c4044e73d210149505b64c785b4785c8"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "moderate",
+          "confidence": "medium",
+          "positive_evidence": [
+            "Grounded gunplay, class roles and large mountain maps create deliberate team-oriented combat.",
+            "Long battles reward positioning, map knowledge and cooperation, while the Alpine front gives the game a distinct historical identity."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 82,
+            "development_variety": 70,
+            "structure_pacing_direction": 72,
+            "identity_hooks": 76,
+            "breadth_of_match": 77
+          },
+          "score_findings": [
+            {
+              "finding_id": "isonzo-team-combat",
+              "text_ru": "Классовые роли, позиционирование и знание больших горных карт делают бои командными и тактическими, а не только проверкой реакции.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                  "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                  "match_text_ru": "Тебе нравится, когда разные ситуации требуют менять тактику."
+                },
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Рост понимания карт и исполнения — сильный положительный сигнал для тебя."
+                },
+                {
+                  "json_pointer": "/taste_profile/9/pattern",
+                  "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+                  "match_text_ru": "Распределение ролей и совместные решения усиливают ценность игры."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 82
+                },
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 70
+                },
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 72
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 77
+                }
+              ]
+            },
+            {
+              "finding_id": "isonzo-setting",
+              "text_ru": "Исторические детали и необычный альпийский фронт дают боям собственный характер, а не просто заменяют декорации типичного военного шутера.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Яркая и узнаваемая подача повышает для тебя запоминаемость игры."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 76
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "other_grounded_taste_risk",
+                "text_ru": "Часть оружия и классовых возможностей требует узких заданий, которые на фоне высокой летальности могут превращать развитие в навязанный гринд.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Есть свежий отчёт о плохой частоте кадров даже на низких настройках.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Русскоязычные игроки сообщали о недоступных регионах серверов и высокой задержке; применимость зависит от региона и маршрута подключения.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1556790:5c33e8bbb9415306",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:39:04+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:39:04+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+            "work_id": "37ddf9c3e4f5d03af2deb77fd2d8a9f8c4044e73d210149505b64c785b4785c8",
+            "family_id": "game:1556790",
+            "taste_subject_key": "App_1556790",
+            "appid": "1556790",
+            "taste_fingerprint": "05e7d9d35ed2eb17e36734258dbb15494886d146d1b80624722fa5d20a0b7764",
+            "candidate_context_sha256": "18d114ab6d93ceb7b30926e25881f8b4d8e65fe7960662fa0ea0f89009e785cf",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-29T16:00:45+00:00",
+            "work_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+            "dossier_content_sha256": "53a3868e05e15eb4d6675fdda16fecf99c63c6b2233dbe62b53ef422f39edc85",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "5c33e8bbb941530691cd9b2e324e8935871d9c1a125fe217c9f0fa21477bf16c",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+              "work_id": "37ddf9c3e4f5d03af2deb77fd2d8a9f8c4044e73d210149505b64c785b4785c8",
+              "family_id": "game:1556790",
+              "taste_subject_key": "App_1556790",
+              "appid": "1556790",
+              "taste_fingerprint": "05e7d9d35ed2eb17e36734258dbb15494886d146d1b80624722fa5d20a0b7764",
+              "candidate_context_sha256": "18d114ab6d93ceb7b30926e25881f8b4d8e65fe7960662fa0ea0f89009e785cf",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "53a3868e05e15eb4d6675fdda16fecf99c63c6b2233dbe62b53ef422f39edc85",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "5c33e8bbb941530691cd9b2e324e8935871d9c1a125fe217c9f0fa21477bf16c",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-29T16:00:45+00:00",
+              "run_start_anchor_commit": "010acccfb84238991f060ad680d11c73b3c29b21",
+              "run_start_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+              "run_started_at_utc": "2026-09-29T15:56:59+00:00",
+              "work_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+              "fit_level": "moderate",
+              "confidence": "medium",
+              "positive_evidence": [
+                "Grounded gunplay, class roles and large mountain-front maps create a deliberate team-oriented shooter loop with clear tactical responsibilities.",
+                "Long battles reward positioning, map knowledge and cooperation rather than only reflex shooting.",
+                "Historical detail and the unusual Alpine front give the combat a distinctive identity."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 82,
+                "development_variety": 70,
+                "structure_pacing_direction": 72,
+                "identity_hooks": 75,
+                "breadth_of_match": 76
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "other_grounded_taste_risk",
+                    "text_ru": "Часть оружия и классовых возможностей открывается через узко заданные задания, которые на фоне высокой летальности матчей могут превращать развитие в навязанный гринд вместо естественного освоения.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 1
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Есть свежий единичный отчёт о плохой частоте кадров даже на низких настройках, поэтому производительность на отдельных ПК остаётся техническим предупреждением.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 2
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "В мае 2026 года русскоязычные игроки сообщали о недоступности некоторых регионов серверов и высокой задержке в Азии; применимость зависит от текущего маршрута и региона подключения.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 3
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "moderate",
+            "confidence": "medium",
+            "positive_evidence": [
+              "Grounded gunplay, class roles and large mountain-front maps create a deliberate team-oriented shooter loop with clear tactical responsibilities.",
+              "Long battles reward positioning, map knowledge and cooperation rather than only reflex shooting.",
+              "Historical detail and the unusual Alpine front give the combat a distinctive identity."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 82,
+              "development_variety": 70,
+              "structure_pacing_direction": 72,
+              "identity_hooks": 75,
+              "breadth_of_match": 76
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "other_grounded_taste_risk",
+                  "text_ru": "Часть оружия и классовых возможностей открывается через узко заданные задания, которые на фоне высокой летальности матчей могут превращать развитие в навязанный гринд вместо естественного освоения.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Есть свежий единичный отчёт о плохой частоте кадров даже на низких настройках, поэтому производительность на отдельных ПК остаётся техническим предупреждением.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "В мае 2026 года русскоязычные игроки сообщали о недоступности некоторых регионов серверов и высокой задержке в Азии; применимость зависит от текущего маршрута и региона подключения.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1556790:5c33e8bbb9415306",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "5c33e8bbb941530691cd9b2e324e8935871d9c1a125fe217c9f0fa21477bf16c",
+        "prior_accepted_at_utc": "2026-09-29T16:00:45+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "moderate",
+        "prior_confidence": "medium",
+        "prior_taste_factors": {
+          "gameplay_mastery": 82,
+          "development_variety": 70,
+          "structure_pacing_direction": 72,
+          "identity_hooks": 75,
+          "breadth_of_match": 76
+        },
+        "prior_positive_evidence": [
+          "Grounded gunplay, class roles and large mountain-front maps create a deliberate team-oriented shooter loop with clear tactical responsibilities.",
+          "Long battles reward positioning, map knowledge and cooperation rather than only reflex shooting.",
+          "Historical detail and the unusual Alpine front give the combat a distinctive identity."
+        ],
+        "prior_work_id": "37ddf9c3e4f5d03af2deb77fd2d8a9f8c4044e73d210149505b64c785b4785c8"
+      },
       "fit_level": "moderate",
       "confidence": "medium",
       "positive_evidence": [
-        "Grounded gunplay, class roles and large mountain-front maps create a deliberate team-oriented shooter loop with clear tactical responsibilities.",
-        "Long battles reward positioning, map knowledge and cooperation rather than only reflex shooting.",
-        "Historical detail and the unusual Alpine front give the combat a distinctive identity."
+        "Grounded gunplay, class roles and large mountain maps create deliberate team-oriented combat.",
+        "Long battles reward positioning, map knowledge and cooperation, while the Alpine front gives the game a distinct historical identity."
       ],
       "taste_factors": {
         "gameplay_mastery": 82,
         "development_variety": 70,
         "structure_pacing_direction": 72,
-        "identity_hooks": 75,
-        "breadth_of_match": 76
+        "identity_hooks": 76,
+        "breadth_of_match": 77
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "isonzo-team-combat",
+          "text_ru": "Классовые роли, позиционирование и знание больших горных карт делают бои командными и тактическими, а не только проверкой реакции.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Тебе нравится, когда разные ситуации требуют менять тактику."
+            },
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Рост понимания карт и исполнения — сильный положительный сигнал для тебя."
+            },
+            {
+              "json_pointer": "/taste_profile/9/pattern",
+              "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+              "match_text_ru": "Распределение ролей и совместные решения усиливают ценность игры."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 82
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 70
+            },
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 72
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 77
+            }
+          ]
+        },
+        {
+          "finding_id": "isonzo-setting",
+          "text_ru": "Исторические детали и необычный альпийский фронт дают боям собственный характер, а не просто заменяют декорации типичного военного шутера.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Яркая и узнаваемая подача повышает для тебя запоминаемость игры."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 76
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -42462,7 +43009,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "other_grounded_taste_risk",
-            "text_ru": "Часть оружия и классовых возможностей открывается через узко заданные задания, которые на фоне высокой летальности матчей могут превращать развитие в навязанный гринд вместо естественного освоения.",
+            "text_ru": "Часть оружия и классовых возможностей требует узких заданий, которые на фоне высокой летальности могут превращать развитие в навязанный гринд.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -42473,7 +43020,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Есть свежий единичный отчёт о плохой частоте кадров даже на низких настройках, поэтому производительность на отдельных ПК остаётся техническим предупреждением.",
+            "text_ru": "Есть свежий отчёт о плохой частоте кадров даже на низких настройках.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -42484,7 +43031,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "В мае 2026 года русскоязычные игроки сообщали о недоступности некоторых регионов серверов и высокой задержке в Азии; применимость зависит от текущего маршрута и региона подключения.",
+            "text_ru": "Русскоязычные игроки сообщали о недоступных регионах серверов и высокой задержке; применимость зависит от региона и маршрута подключения.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -42511,8 +43058,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-29T16:02:04+00:00",
-      "work_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+      "accepted_at_utc": "2026-09-30T06:39:04+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "2d629873c3c2ebb0e8427f88305aae300e47019c78c22a1517ef14521edce901",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -42528,8 +43075,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "1d1881721494b7276da99c2ad71aaa2dbd372905a85b81ecdb4e3f27e1be7ec3",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "85005a855502822739a9900b80c162d276b5b25e6981de4b118d77aed64c9e1a",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -42643,20 +43190,579 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "dac7b6181a46f0f1396d74ffeef16a83f683e99942c9dc92f9b947f5f5953215",
+          "family_id": "game:15170",
+          "taste_subject_key": "App_15170",
+          "appid": "15170",
+          "taste_fingerprint": "b24bacd24b1641b04b15c488f1c54ae2e809e96d56cff56594cf3dd1ba70958e",
+          "candidate_context_sha256": "30fe1b3875c953ea8fc0a0ed607f891fa46b815c4db107cf490cfb48abddf971",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "2d629873c3c2ebb0e8427f88305aae300e47019c78c22a1517ef14521edce901",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "85005a855502822739a9900b80c162d276b5b25e6981de4b118d77aed64c9e1a",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:39:04+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:15170:1d1881721494b727",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "1d1881721494b7276da99c2ad71aaa2dbd372905a85b81ecdb4e3f27e1be7ec3",
+            "prior_accepted_at_utc": "2026-09-29T16:02:04+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "strong",
+            "prior_confidence": "high",
+            "prior_taste_factors": {
+              "gameplay_mastery": 91,
+              "development_variety": 93,
+              "structure_pacing_direction": 82,
+              "identity_hooks": 78,
+              "breadth_of_match": 91
+            },
+            "prior_positive_evidence": [
+              "Turn-based battles, faction differences and hero development create a deep mastery loop with many strategic choices.",
+              "Build freedom and map exploration provide clear progression with tangible effects on armies, skills and tactics.",
+              "Campaign and scenario maps continually combine exploration, resource decisions, army growth and combat instead of relying on one isolated system."
+            ],
+            "prior_work_id": "dac7b6181a46f0f1396d74ffeef16a83f683e99942c9dc92f9b947f5f5953215"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "strong",
+          "confidence": "high",
+          "positive_evidence": [
+            "Turn-based battles, faction differences and hero development create a deep strategic mastery loop.",
+            "Build freedom and map exploration provide progression with tangible effects on armies, skills and tactics.",
+            "Campaign maps combine exploration, resources, army growth and combat rather than relying on a single isolated system."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 92,
+            "development_variety": 94,
+            "structure_pacing_direction": 83,
+            "identity_hooks": 80,
+            "breadth_of_match": 92
+          },
+          "score_findings": [
+            {
+              "finding_id": "heroes5-strategy-growth",
+              "text_ru": "Фракции, развитие героев, сбор армии и пошаговые бои дают глубокую систему, где решения по билду реально меняют последующую тактику.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Тебе особенно нравятся системы, которые можно глубоко осваивать."
+                },
+                {
+                  "json_pointer": "/taste_profile/2/pattern",
+                  "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                  "match_text_ru": "Прогрессия ценнее для тебя, когда улучшения заметно меняют возможности."
+                },
+                {
+                  "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                  "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                  "match_text_ru": "Разные ситуации должны требовать разных решений."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 92
+                },
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 94
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 92
+                }
+              ]
+            },
+            {
+              "finding_id": "heroes5-map-loop",
+              "text_ru": "Исследование карт, ресурсы, развитие героя и сражения постоянно связаны друг с другом, поэтому кампания регулярно даёт понятный следующий слой развития, а фракционные различия создают собственную идентичность.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Тебе важна эволюция опыта по мере прохождения."
+                },
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Характерные механические различия помогают игре сильнее запоминаться."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 83
+                },
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 80
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "unchanged_repetition",
+                "text_ru": "В отдельных кампаниях скачки сложности, гринд и повторяющиеся шаблоны миссий могут превращать длинные сценарии в рутину.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Русский язык в текущих Steam-установках доступен непоследовательно: есть свежие сообщения и о наличии, и об отсутствии.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "На некоторых современных системах встречаются проблемы сохранений и камеры, решаемые сменой системной локали.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:15170:1d1881721494b727",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:39:04+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:39:04+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+            "work_id": "dac7b6181a46f0f1396d74ffeef16a83f683e99942c9dc92f9b947f5f5953215",
+            "family_id": "game:15170",
+            "taste_subject_key": "App_15170",
+            "appid": "15170",
+            "taste_fingerprint": "b24bacd24b1641b04b15c488f1c54ae2e809e96d56cff56594cf3dd1ba70958e",
+            "candidate_context_sha256": "30fe1b3875c953ea8fc0a0ed607f891fa46b815c4db107cf490cfb48abddf971",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-29T16:02:04+00:00",
+            "work_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+            "dossier_content_sha256": "2d629873c3c2ebb0e8427f88305aae300e47019c78c22a1517ef14521edce901",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "1d1881721494b7276da99c2ad71aaa2dbd372905a85b81ecdb4e3f27e1be7ec3",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+              "work_id": "dac7b6181a46f0f1396d74ffeef16a83f683e99942c9dc92f9b947f5f5953215",
+              "family_id": "game:15170",
+              "taste_subject_key": "App_15170",
+              "appid": "15170",
+              "taste_fingerprint": "b24bacd24b1641b04b15c488f1c54ae2e809e96d56cff56594cf3dd1ba70958e",
+              "candidate_context_sha256": "30fe1b3875c953ea8fc0a0ed607f891fa46b815c4db107cf490cfb48abddf971",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "2d629873c3c2ebb0e8427f88305aae300e47019c78c22a1517ef14521edce901",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "1d1881721494b7276da99c2ad71aaa2dbd372905a85b81ecdb4e3f27e1be7ec3",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-29T16:02:04+00:00",
+              "run_start_anchor_commit": "010acccfb84238991f060ad680d11c73b3c29b21",
+              "run_start_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+              "run_started_at_utc": "2026-09-29T15:56:59+00:00",
+              "work_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+              "fit_level": "strong",
+              "confidence": "high",
+              "positive_evidence": [
+                "Turn-based battles, faction differences and hero development create a deep mastery loop with many strategic choices.",
+                "Build freedom and map exploration provide clear progression with tangible effects on armies, skills and tactics.",
+                "Campaign and scenario maps continually combine exploration, resource decisions, army growth and combat instead of relying on one isolated system."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 91,
+                "development_variety": 93,
+                "structure_pacing_direction": 82,
+                "identity_hooks": 78,
+                "breadth_of_match": 91
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "unchanged_repetition",
+                    "text_ru": "В отдельных кампаниях скачки сложности, гринд и повторяющиеся шаблоны миссий могут накапливаться и превращать длинные сценарии в рутину вместо развития тактики.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 1
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Доступность русского языка в текущих Steam-установках неоднородна: есть свежие сообщения и о полностью русской версии, и об отсутствии русского языка в списке.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 2
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "На отдельных современных системах встречается проблема с путём сохранений и камерой, которую удаётся исправить сменой системной локали для не-Unicode программ.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 3
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "strong",
+            "confidence": "high",
+            "positive_evidence": [
+              "Turn-based battles, faction differences and hero development create a deep mastery loop with many strategic choices.",
+              "Build freedom and map exploration provide clear progression with tangible effects on armies, skills and tactics.",
+              "Campaign and scenario maps continually combine exploration, resource decisions, army growth and combat instead of relying on one isolated system."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 91,
+              "development_variety": 93,
+              "structure_pacing_direction": 82,
+              "identity_hooks": 78,
+              "breadth_of_match": 91
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "unchanged_repetition",
+                  "text_ru": "В отдельных кампаниях скачки сложности, гринд и повторяющиеся шаблоны миссий могут накапливаться и превращать длинные сценарии в рутину вместо развития тактики.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Доступность русского языка в текущих Steam-установках неоднородна: есть свежие сообщения и о полностью русской версии, и об отсутствии русского языка в списке.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "На отдельных современных системах встречается проблема с путём сохранений и камерой, которую удаётся исправить сменой системной локали для не-Unicode программ.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:15170:1d1881721494b727",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "1d1881721494b7276da99c2ad71aaa2dbd372905a85b81ecdb4e3f27e1be7ec3",
+        "prior_accepted_at_utc": "2026-09-29T16:02:04+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "strong",
+        "prior_confidence": "high",
+        "prior_taste_factors": {
+          "gameplay_mastery": 91,
+          "development_variety": 93,
+          "structure_pacing_direction": 82,
+          "identity_hooks": 78,
+          "breadth_of_match": 91
+        },
+        "prior_positive_evidence": [
+          "Turn-based battles, faction differences and hero development create a deep mastery loop with many strategic choices.",
+          "Build freedom and map exploration provide clear progression with tangible effects on armies, skills and tactics.",
+          "Campaign and scenario maps continually combine exploration, resource decisions, army growth and combat instead of relying on one isolated system."
+        ],
+        "prior_work_id": "dac7b6181a46f0f1396d74ffeef16a83f683e99942c9dc92f9b947f5f5953215"
+      },
       "fit_level": "strong",
       "confidence": "high",
       "positive_evidence": [
-        "Turn-based battles, faction differences and hero development create a deep mastery loop with many strategic choices.",
-        "Build freedom and map exploration provide clear progression with tangible effects on armies, skills and tactics.",
-        "Campaign and scenario maps continually combine exploration, resource decisions, army growth and combat instead of relying on one isolated system."
+        "Turn-based battles, faction differences and hero development create a deep strategic mastery loop.",
+        "Build freedom and map exploration provide progression with tangible effects on armies, skills and tactics.",
+        "Campaign maps combine exploration, resources, army growth and combat rather than relying on a single isolated system."
       ],
       "taste_factors": {
-        "gameplay_mastery": 91,
-        "development_variety": 93,
-        "structure_pacing_direction": 82,
-        "identity_hooks": 78,
-        "breadth_of_match": 91
+        "gameplay_mastery": 92,
+        "development_variety": 94,
+        "structure_pacing_direction": 83,
+        "identity_hooks": 80,
+        "breadth_of_match": 92
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "heroes5-strategy-growth",
+          "text_ru": "Фракции, развитие героев, сбор армии и пошаговые бои дают глубокую систему, где решения по билду реально меняют последующую тактику.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Тебе особенно нравятся системы, которые можно глубоко осваивать."
+            },
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Прогрессия ценнее для тебя, когда улучшения заметно меняют возможности."
+            },
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Разные ситуации должны требовать разных решений."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 92
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 94
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 92
+            }
+          ]
+        },
+        {
+          "finding_id": "heroes5-map-loop",
+          "text_ru": "Исследование карт, ресурсы, развитие героя и сражения постоянно связаны друг с другом, поэтому кампания регулярно даёт понятный следующий слой развития, а фракционные различия создают собственную идентичность.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Тебе важна эволюция опыта по мере прохождения."
+            },
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Характерные механические различия помогают игре сильнее запоминаться."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 83
+            },
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 80
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -42678,7 +43784,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "unchanged_repetition",
-            "text_ru": "В отдельных кампаниях скачки сложности, гринд и повторяющиеся шаблоны миссий могут накапливаться и превращать длинные сценарии в рутину вместо развития тактики.",
+            "text_ru": "В отдельных кампаниях скачки сложности, гринд и повторяющиеся шаблоны миссий могут превращать длинные сценарии в рутину.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -42689,7 +43795,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Доступность русского языка в текущих Steam-установках неоднородна: есть свежие сообщения и о полностью русской версии, и об отсутствии русского языка в списке.",
+            "text_ru": "Русский язык в текущих Steam-установках доступен непоследовательно: есть свежие сообщения и о наличии, и об отсутствии.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -42700,7 +43806,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "На отдельных современных системах встречается проблема с путём сохранений и камерой, которую удаётся исправить сменой системной локали для не-Unicode программ.",
+            "text_ru": "На некоторых современных системах встречаются проблемы сохранений и камеры, решаемые сменой системной локали.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -42727,8 +43833,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-29T16:03:33+00:00",
-      "work_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+      "accepted_at_utc": "2026-09-30T06:39:04+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "6c9110e83f48df3ea4315fda1cbb0bc046a657c965ac2bd52388dd2b606f0d00",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -42744,8 +43850,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "eeac1edb8ccbd161bc0ceef9d9a21aa3a0240413d75222f92b83fa024dd41f08",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "4a7b37ba4e0404636d03213d819c038372b4a14f74a6b86a8eeaccb44af308d3",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -42844,20 +43950,522 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "8ef7eba7114521f467b1b32d166d07589c692d841ad3dbe57270703452128367",
+          "family_id": "game:15370",
+          "taste_subject_key": "App_15370",
+          "appid": "15370",
+          "taste_fingerprint": "dd6dae7eb509e7cf49773f4c10222615eba2f3fc0865aae2f3e96ffbb72bf352",
+          "candidate_context_sha256": "86e1b9249f307863d98cb6b474616b351f09b28873785fd311ce7013c2796f43",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "6c9110e83f48df3ea4315fda1cbb0bc046a657c965ac2bd52388dd2b606f0d00",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "4a7b37ba4e0404636d03213d819c038372b4a14f74a6b86a8eeaccb44af308d3",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:39:04+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:15370:eeac1edb8ccbd161",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "eeac1edb8ccbd161bc0ceef9d9a21aa3a0240413d75222f92b83fa024dd41f08",
+            "prior_accepted_at_utc": "2026-09-29T16:03:33+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "strong",
+            "prior_confidence": "high",
+            "prior_taste_factors": {
+              "gameplay_mastery": 93,
+              "development_variety": 96,
+              "structure_pacing_direction": 82,
+              "identity_hooks": 82,
+              "breadth_of_match": 94
+            },
+            "prior_positive_evidence": [
+              "The Orc faction and rage mechanic add a substantially different strategic identity rather than a cosmetic faction variant.",
+              "Alternative unit upgrades widen army-building choices and make progression more flexible across multiple factions.",
+              "The expansion strengthens the already deep Heroes V loop of hero development, army composition, map exploration and tactical combat."
+            ],
+            "prior_work_id": "8ef7eba7114521f467b1b32d166d07589c692d841ad3dbe57270703452128367"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "strong",
+          "confidence": "high",
+          "positive_evidence": [
+            "The Orc faction, rage mechanic and alternative upgrades substantially widen strategic choices.",
+            "The expansion strengthens the already deep loop of hero development, army composition, map exploration and tactical combat."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 94,
+            "development_variety": 96,
+            "structure_pacing_direction": 82,
+            "identity_hooks": 84,
+            "breadth_of_match": 95
+          },
+          "score_findings": [
+            {
+              "finding_id": "tribes-orcs-upgrades",
+              "text_ru": "Орки с rage-механикой и альтернативные улучшения существ дают не косметическую фракцию, а новые способы строить армию и решать бои.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Тебе нравится глубоко осваивать отличающиеся системы."
+                },
+                {
+                  "json_pointer": "/taste_profile/2/pattern",
+                  "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                  "match_text_ru": "Новые улучшения ценны, когда они реально меняют варианты игры."
+                },
+                {
+                  "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                  "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                  "match_text_ru": "Разные игровые наборы должны вести к разным решениям."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 94
+                },
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 96
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 95
+                },
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 84
+                }
+              ]
+            },
+            {
+              "finding_id": "tribes-campaign-pressure",
+              "text_ru": "Кампания сохраняет понятный стратегический цикл, но отдельные таймеры и поздние миссии резко повышают давление и делают сюжетную часть менее ровной, чем сами системы.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/5/pattern",
+                  "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+                  "match_text_ru": "Тебе важен ясный вектор и темп, а сложность сама по себе не является плюсом."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "qualifies",
+                  "normalized_value": 82
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Некоторые ограниченные временем и поздние миссии заметно сложнее остальной кампании, а сюжет местами слабее стратегических систем.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "На отдельных Windows-конфигурациях встречаются проблемы сохранений и камеры/ввода, которые решаются сменой системной локали.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:15370:eeac1edb8ccbd161",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:39:04+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:39:04+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+            "work_id": "8ef7eba7114521f467b1b32d166d07589c692d841ad3dbe57270703452128367",
+            "family_id": "game:15370",
+            "taste_subject_key": "App_15370",
+            "appid": "15370",
+            "taste_fingerprint": "dd6dae7eb509e7cf49773f4c10222615eba2f3fc0865aae2f3e96ffbb72bf352",
+            "candidate_context_sha256": "86e1b9249f307863d98cb6b474616b351f09b28873785fd311ce7013c2796f43",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-29T16:03:33+00:00",
+            "work_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+            "dossier_content_sha256": "6c9110e83f48df3ea4315fda1cbb0bc046a657c965ac2bd52388dd2b606f0d00",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "eeac1edb8ccbd161bc0ceef9d9a21aa3a0240413d75222f92b83fa024dd41f08",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+              "work_id": "8ef7eba7114521f467b1b32d166d07589c692d841ad3dbe57270703452128367",
+              "family_id": "game:15370",
+              "taste_subject_key": "App_15370",
+              "appid": "15370",
+              "taste_fingerprint": "dd6dae7eb509e7cf49773f4c10222615eba2f3fc0865aae2f3e96ffbb72bf352",
+              "candidate_context_sha256": "86e1b9249f307863d98cb6b474616b351f09b28873785fd311ce7013c2796f43",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "6c9110e83f48df3ea4315fda1cbb0bc046a657c965ac2bd52388dd2b606f0d00",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "eeac1edb8ccbd161bc0ceef9d9a21aa3a0240413d75222f92b83fa024dd41f08",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-29T16:03:33+00:00",
+              "run_start_anchor_commit": "010acccfb84238991f060ad680d11c73b3c29b21",
+              "run_start_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+              "run_started_at_utc": "2026-09-29T15:56:59+00:00",
+              "work_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+              "fit_level": "strong",
+              "confidence": "high",
+              "positive_evidence": [
+                "The Orc faction and rage mechanic add a substantially different strategic identity rather than a cosmetic faction variant.",
+                "Alternative unit upgrades widen army-building choices and make progression more flexible across multiple factions.",
+                "The expansion strengthens the already deep Heroes V loop of hero development, army composition, map exploration and tactical combat."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 93,
+                "development_variety": 96,
+                "structure_pacing_direction": 82,
+                "identity_hooks": 82,
+                "breadth_of_match": 94
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Некоторые ограниченные по времени и поздние миссии заметно сложнее остальной кампании, а сюжетная часть местами слабее самих стратегических систем.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 1
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "На отдельных Windows-конфигурациях встречаются проблемы сохранений и камеры/ввода, которые удаётся исправить сменой системной локали для не-Unicode программ.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 2
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "strong",
+            "confidence": "high",
+            "positive_evidence": [
+              "The Orc faction and rage mechanic add a substantially different strategic identity rather than a cosmetic faction variant.",
+              "Alternative unit upgrades widen army-building choices and make progression more flexible across multiple factions.",
+              "The expansion strengthens the already deep Heroes V loop of hero development, army composition, map exploration and tactical combat."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 93,
+              "development_variety": 96,
+              "structure_pacing_direction": 82,
+              "identity_hooks": 82,
+              "breadth_of_match": 94
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Некоторые ограниченные по времени и поздние миссии заметно сложнее остальной кампании, а сюжетная часть местами слабее самих стратегических систем.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "На отдельных Windows-конфигурациях встречаются проблемы сохранений и камеры/ввода, которые удаётся исправить сменой системной локали для не-Unicode программ.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:15370:eeac1edb8ccbd161",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "eeac1edb8ccbd161bc0ceef9d9a21aa3a0240413d75222f92b83fa024dd41f08",
+        "prior_accepted_at_utc": "2026-09-29T16:03:33+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "strong",
+        "prior_confidence": "high",
+        "prior_taste_factors": {
+          "gameplay_mastery": 93,
+          "development_variety": 96,
+          "structure_pacing_direction": 82,
+          "identity_hooks": 82,
+          "breadth_of_match": 94
+        },
+        "prior_positive_evidence": [
+          "The Orc faction and rage mechanic add a substantially different strategic identity rather than a cosmetic faction variant.",
+          "Alternative unit upgrades widen army-building choices and make progression more flexible across multiple factions.",
+          "The expansion strengthens the already deep Heroes V loop of hero development, army composition, map exploration and tactical combat."
+        ],
+        "prior_work_id": "8ef7eba7114521f467b1b32d166d07589c692d841ad3dbe57270703452128367"
+      },
       "fit_level": "strong",
       "confidence": "high",
       "positive_evidence": [
-        "The Orc faction and rage mechanic add a substantially different strategic identity rather than a cosmetic faction variant.",
-        "Alternative unit upgrades widen army-building choices and make progression more flexible across multiple factions.",
-        "The expansion strengthens the already deep Heroes V loop of hero development, army composition, map exploration and tactical combat."
+        "The Orc faction, rage mechanic and alternative upgrades substantially widen strategic choices.",
+        "The expansion strengthens the already deep loop of hero development, army composition, map exploration and tactical combat."
       ],
       "taste_factors": {
-        "gameplay_mastery": 93,
+        "gameplay_mastery": 94,
         "development_variety": 96,
         "structure_pacing_direction": 82,
-        "identity_hooks": 82,
-        "breadth_of_match": 94
+        "identity_hooks": 84,
+        "breadth_of_match": 95
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "tribes-orcs-upgrades",
+          "text_ru": "Орки с rage-механикой и альтернативные улучшения существ дают не косметическую фракцию, а новые способы строить армию и решать бои.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Тебе нравится глубоко осваивать отличающиеся системы."
+            },
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Новые улучшения ценны, когда они реально меняют варианты игры."
+            },
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Разные игровые наборы должны вести к разным решениям."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 94
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 96
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 95
+            },
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 84
+            }
+          ]
+        },
+        {
+          "finding_id": "tribes-campaign-pressure",
+          "text_ru": "Кампания сохраняет понятный стратегический цикл, но отдельные таймеры и поздние миссии резко повышают давление и делают сюжетную часть менее ровной, чем сами системы.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/5/pattern",
+              "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+              "match_text_ru": "Тебе важен ясный вектор и темп, а сложность сама по себе не является плюсом."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "qualifies",
+              "normalized_value": 82
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -42875,7 +44483,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Некоторые ограниченные по времени и поздние миссии заметно сложнее остальной кампании, а сюжетная часть местами слабее самих стратегических систем.",
+            "text_ru": "Некоторые ограниченные временем и поздние миссии заметно сложнее остальной кампании, а сюжет местами слабее стратегических систем.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -42886,7 +44494,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "На отдельных Windows-конфигурациях встречаются проблемы сохранений и камеры/ввода, которые удаётся исправить сменой системной локали для не-Unicode программ.",
+            "text_ru": "На отдельных Windows-конфигурациях встречаются проблемы сохранений и камеры/ввода, которые решаются сменой системной локали.",
             "evidence_refs": [
               {
                 "kind": "observation",

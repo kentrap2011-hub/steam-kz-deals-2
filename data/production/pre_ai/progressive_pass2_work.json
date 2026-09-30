@@ -68,7 +68,7 @@
     "current_analysis_incomplete_count": 3,
     "dossier_waiting_count": 206,
     "pass2_attempted_count": 52,
-    "pass2_eligible_count": 9,
+    "pass2_eligible_count": 6,
     "normal_pass2_eligible_count": 8,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": true,
@@ -96,14 +96,14 @@
       "migration_id": "deep-score-evidence-explainability-alignment-01",
       "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
       "total_count": 43,
-      "pending_count": 9,
+      "pending_count": 6,
       "submitted_count": 0,
-      "accepted_count": 34,
-      "accepted_completed_count": 34,
+      "accepted_count": 37,
+      "accepted_completed_count": 37,
       "incomplete_count": 0,
       "already_compliant_count": 0,
       "stale_or_missing_prior_count": 0,
-      "last_accepted_at_utc": "2026-09-30T06:38:05+00:00",
+      "last_accepted_at_utc": "2026-09-30T06:39:04+00:00",
       "complete": false
     }
   },
@@ -203,268 +203,6 @@
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:1556790",
-      "taste_subject_key": "App_1556790",
-      "appid": "1556790",
-      "taste_fingerprint": "05e7d9d35ed2eb17e36734258dbb15494886d146d1b80624722fa5d20a0b7764",
-      "candidate_context_sha256": "18d114ab6d93ceb7b30926e25881f8b4d8e65fe7960662fa0ea0f89009e785cf",
-      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
-      "work_id": "37ddf9c3e4f5d03af2deb77fd2d8a9f8c4044e73d210149505b64c785b4785c8",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "score_explainability_migration",
-      "migration_sequence": 36,
-      "semantic_input": {
-        "title": "Isonzo",
-        "short_description": "Ferocious Alpine warfare will test your tactical skills in this authentic WW1 FPS. Battle among the scenic peaks, rugged valleys and idyllic towns of northern Italy. The Great War on the Italian Front is brought to life and elevated to unexpected heights!",
-        "bundle_members": [],
-        "fit_tags": [],
-        "core_fit_count": 0,
-        "release_date": "13 Sep, 2022",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1556790"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1556790.json",
-      "dossier_content_sha256": "53a3868e05e15eb4d6675fdda16fecf99c63c6b2233dbe62b53ef422f39edc85",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-19T11:37:15Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "score_migration_provenance": {
-        "migration_id": "deep-score-evidence-explainability-alignment-01",
-        "migration_target_id": "deep-score-explainability-01:game:1556790:5c33e8bbb9415306",
-        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
-        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
-        "prior_authorization_id": "5c33e8bbb941530691cd9b2e324e8935871d9c1a125fe217c9f0fa21477bf16c",
-        "prior_accepted_at_utc": "2026-09-29T16:00:45+00:00",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
-          "gameplay_mastery": 82,
-          "development_variety": 70,
-          "structure_pacing_direction": 72,
-          "identity_hooks": 75,
-          "breadth_of_match": 76
-        },
-        "prior_positive_evidence": [
-          "Grounded gunplay, class roles and large mountain-front maps create a deliberate team-oriented shooter loop with clear tactical responsibilities.",
-          "Long battles reward positioning, map knowledge and cooperation rather than only reflex shooting.",
-          "Historical detail and the unusual Alpine front give the combat a distinctive identity."
-        ],
-        "prior_work_id": "37ddf9c3e4f5d03af2deb77fd2d8a9f8c4044e73d210149505b64c785b4785c8"
-      },
-      "authorization_id": "6c6526cbf670a1d31903cd48a4f11ac8094418e9fe4404285002bf0616d8e186",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--37ddf9c3e4f5d03af2deb77fd2d8a9f8c4044e73d210149505b64c785b4785c8--6c6526cbf670a1d31903cd48a4f11ac8094418e9fe4404285002bf0616d8e186.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--37ddf9c3e4f5d03af2deb77fd2d8a9f8c4044e73d210149505b64c785b4785c8--6c6526cbf670a1d31903cd48a4f11ac8094418e9fe4404285002bf0616d8e186.json",
-      "sequence": 2
-    },
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:15170",
-      "taste_subject_key": "App_15170",
-      "appid": "15170",
-      "taste_fingerprint": "b24bacd24b1641b04b15c488f1c54ae2e809e96d56cff56594cf3dd1ba70958e",
-      "candidate_context_sha256": "30fe1b3875c953ea8fc0a0ed607f891fa46b815c4db107cf490cfb48abddf971",
-      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
-      "work_id": "dac7b6181a46f0f1396d74ffeef16a83f683e99942c9dc92f9b947f5f5953215",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "score_explainability_migration",
-      "migration_sequence": 37,
-      "semantic_input": {
-        "title": "Heroes of Might & Magic V",
-        "short_description": "Witness the amazing evolution of the genre-defining strategy game as it becomes a next-generation phenomenon, melding classic deep fantasy with next-generation visuals and gameplay. In the renowned Might &amp; Magic universe, demon swarms spread chaos over the land in a relentless assault.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Fantasy",
-          "RPG"
-        ],
-        "core_fit_count": 1,
-        "release_date": "13 May, 2008",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "15170"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_15170.json",
-      "dossier_content_sha256": "2d629873c3c2ebb0e8427f88305aae300e47019c78c22a1517ef14521edce901",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-19T11:34:18Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "score_migration_provenance": {
-        "migration_id": "deep-score-evidence-explainability-alignment-01",
-        "migration_target_id": "deep-score-explainability-01:game:15170:1d1881721494b727",
-        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
-        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
-        "prior_authorization_id": "1d1881721494b7276da99c2ad71aaa2dbd372905a85b81ecdb4e3f27e1be7ec3",
-        "prior_accepted_at_utc": "2026-09-29T16:02:04+00:00",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "strong",
-        "prior_confidence": "high",
-        "prior_taste_factors": {
-          "gameplay_mastery": 91,
-          "development_variety": 93,
-          "structure_pacing_direction": 82,
-          "identity_hooks": 78,
-          "breadth_of_match": 91
-        },
-        "prior_positive_evidence": [
-          "Turn-based battles, faction differences and hero development create a deep mastery loop with many strategic choices.",
-          "Build freedom and map exploration provide clear progression with tangible effects on armies, skills and tactics.",
-          "Campaign and scenario maps continually combine exploration, resource decisions, army growth and combat instead of relying on one isolated system."
-        ],
-        "prior_work_id": "dac7b6181a46f0f1396d74ffeef16a83f683e99942c9dc92f9b947f5f5953215"
-      },
-      "authorization_id": "85005a855502822739a9900b80c162d276b5b25e6981de4b118d77aed64c9e1a",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--dac7b6181a46f0f1396d74ffeef16a83f683e99942c9dc92f9b947f5f5953215--85005a855502822739a9900b80c162d276b5b25e6981de4b118d77aed64c9e1a.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--dac7b6181a46f0f1396d74ffeef16a83f683e99942c9dc92f9b947f5f5953215--85005a855502822739a9900b80c162d276b5b25e6981de4b118d77aed64c9e1a.json",
-      "sequence": 3
-    },
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:15370",
-      "taste_subject_key": "App_15370",
-      "appid": "15370",
-      "taste_fingerprint": "dd6dae7eb509e7cf49773f4c10222615eba2f3fc0865aae2f3e96ffbb72bf352",
-      "candidate_context_sha256": "86e1b9249f307863d98cb6b474616b351f09b28873785fd311ce7013c2796f43",
-      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
-      "work_id": "8ef7eba7114521f467b1b32d166d07589c692d841ad3dbe57270703452128367",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "score_explainability_migration",
-      "migration_sequence": 38,
-      "semantic_input": {
-        "title": "Heroes of Might & Magic V: Tribes of the East",
-        "short_description": "For the first time, play as the Orc faction and recruit heroes, build armies and manage cities as you explore and conquer legendary lands. Use tactics, skills and magic to outsmart fantasy armies while developing your heroes and unveiling the dark plot that threatens to tear the world of Ashan apart.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Fantasy",
-          "RPG",
-          "Singleplayer"
-        ],
-        "core_fit_count": 1,
-        "release_date": "10 Oct, 2008",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "15370"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_15370.json",
-      "dossier_content_sha256": "6c9110e83f48df3ea4315fda1cbb0bc046a657c965ac2bd52388dd2b606f0d00",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-19T11:34:18Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "score_migration_provenance": {
-        "migration_id": "deep-score-evidence-explainability-alignment-01",
-        "migration_target_id": "deep-score-explainability-01:game:15370:eeac1edb8ccbd161",
-        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
-        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
-        "prior_authorization_id": "eeac1edb8ccbd161bc0ceef9d9a21aa3a0240413d75222f92b83fa024dd41f08",
-        "prior_accepted_at_utc": "2026-09-29T16:03:33+00:00",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "strong",
-        "prior_confidence": "high",
-        "prior_taste_factors": {
-          "gameplay_mastery": 93,
-          "development_variety": 96,
-          "structure_pacing_direction": 82,
-          "identity_hooks": 82,
-          "breadth_of_match": 94
-        },
-        "prior_positive_evidence": [
-          "The Orc faction and rage mechanic add a substantially different strategic identity rather than a cosmetic faction variant.",
-          "Alternative unit upgrades widen army-building choices and make progression more flexible across multiple factions.",
-          "The expansion strengthens the already deep Heroes V loop of hero development, army composition, map exploration and tactical combat."
-        ],
-        "prior_work_id": "8ef7eba7114521f467b1b32d166d07589c692d841ad3dbe57270703452128367"
-      },
-      "authorization_id": "4a7b37ba4e0404636d03213d819c038372b4a14f74a6b86a8eeaccb44af308d3",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--8ef7eba7114521f467b1b32d166d07589c692d841ad3dbe57270703452128367--4a7b37ba4e0404636d03213d819c038372b4a14f74a6b86a8eeaccb44af308d3.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--8ef7eba7114521f467b1b32d166d07589c692d841ad3dbe57270703452128367--4a7b37ba4e0404636d03213d819c038372b4a14f74a6b86a8eeaccb44af308d3.json",
-      "sequence": 4
-    },
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "family_id": "game:15390",
       "taste_subject_key": "App_15390",
       "appid": "15390",
@@ -549,7 +287,7 @@
       "authorization_id": "4770276078f15b0447e4e90e158fcb6773014b2d43fac07a59199cb51cd7232c",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--258be2302da4fdc18267494a3770a4baf3e13bd809cec595597dc9a9066e25ce--4770276078f15b0447e4e90e158fcb6773014b2d43fac07a59199cb51cd7232c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--258be2302da4fdc18267494a3770a4baf3e13bd809cec595597dc9a9066e25ce--4770276078f15b0447e4e90e158fcb6773014b2d43fac07a59199cb51cd7232c.json",
-      "sequence": 5
+      "sequence": 2
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -637,7 +375,7 @@
       "authorization_id": "0b546546cfae014fd9be92a9b046ad7e9084a747952e1641b08a322986cc99e8",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--8cad5fd1ed968726684bff7b74db69356323e1eeeba1d06db6b3c40d30638e00--0b546546cfae014fd9be92a9b046ad7e9084a747952e1641b08a322986cc99e8.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--8cad5fd1ed968726684bff7b74db69356323e1eeeba1d06db6b3c40d30638e00--0b546546cfae014fd9be92a9b046ad7e9084a747952e1641b08a322986cc99e8.json",
-      "sequence": 6
+      "sequence": 3
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -725,7 +463,7 @@
       "authorization_id": "b087bd645968cbe36a4043a8b058497dd9af58d09fb8978f44467e18e85ebbeb",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--bdfbe05110ae49d2fe43c6e5a225d23ed39525a09147aa0dc5f049a1695cc2b5--b087bd645968cbe36a4043a8b058497dd9af58d09fb8978f44467e18e85ebbeb.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--bdfbe05110ae49d2fe43c6e5a225d23ed39525a09147aa0dc5f049a1695cc2b5--b087bd645968cbe36a4043a8b058497dd9af58d09fb8978f44467e18e85ebbeb.json",
-      "sequence": 7
+      "sequence": 4
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -815,7 +553,7 @@
       "authorization_id": "4d9204b43e4f68077e2dc5a83999803fb357c2e2abe424cf085d9cf95c1f462c",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--b5767f14dcc858391e7c853bef83067fa32353908668db9f9668cc7cbc6211ca--4d9204b43e4f68077e2dc5a83999803fb357c2e2abe424cf085d9cf95c1f462c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--b5767f14dcc858391e7c853bef83067fa32353908668db9f9668cc7cbc6211ca--4d9204b43e4f68077e2dc5a83999803fb357c2e2abe424cf085d9cf95c1f462c.json",
-      "sequence": 8
+      "sequence": 5
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -906,7 +644,7 @@
       "authorization_id": "8802bda9c1a5e6f3e57034d320687f399842b594231e187bc5051cc938c6b2ce",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--7d14e2b5a2abde60325579f9379b9b8d13352a94ae7ccde800b7de29d5b8133e--8802bda9c1a5e6f3e57034d320687f399842b594231e187bc5051cc938c6b2ce.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--7d14e2b5a2abde60325579f9379b9b8d13352a94ae7ccde800b7de29d5b8133e--8802bda9c1a5e6f3e57034d320687f399842b594231e187bc5051cc938c6b2ce.json",
-      "sequence": 9
+      "sequence": 6
     }
   ]
 }
