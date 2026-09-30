@@ -1,9 +1,9 @@
 {
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-STATUS-V2",
   "schema_version": 2,
-  "snapshot_id": "9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689",
-  "prepared_required_sha256": "d304f153533d39227d0ad551e7a4195454ccc8f164c4a73c252f171ae5ac3316",
-  "group_plan_sha256": "a1f59224b5acac2ef85750f8a6c6b847352ee6d62c5d448faa1323cdf1f4a65b",
+  "snapshot_id": "6f796bba9f36cf8090012b26b05bb350a315251f360a0e9c08453de5b6d8717a",
+  "prepared_required_sha256": "73b47aab1794df0b729c69d1532df3f202786bcd9b4a7d9f862d3beb7215a60f",
+  "group_plan_sha256": "740447e3151d958fabd8090846514a4fabf0047b03ee96a1e07f23c151d677e8",
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
@@ -18,260 +18,17 @@
     "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
     "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
-  "next_pending_sequence": 29,
-  "accepted_group_count": 6,
-  "failed_group_count": 22,
-  "pending_group_count": 53,
+  "next_pending_sequence": 1,
+  "accepted_group_count": 0,
+  "failed_group_count": 0,
+  "pending_group_count": 70,
   "normal_first_pass_complete": false,
   "all_groups_accepted": false,
   "full_backlog_complete": false,
   "candidate_count": 0,
   "valid_candidate_count": 0,
   "invalid_candidate_count": 0,
-  "failed_groups_pending_recovery": [
-    {
-      "sequence": 1,
-      "group_sha256": "04895176c2feba5bd7ab04bea968b363d2652debdea591ed6afc967d06e6ae6f",
-      "failure": {
-        "validator_error": "provenance.player_feedback_records[4] Reddit feedback item cannot use a non-Reddit parent source",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000001--04895176c2feba5bd7ab04bea968b363d2652debdea591ed6afc967d06e6ae6f.json",
-        "artifact_sha256": "518b6257d923509fb7c2ea49bf3bc304efe04d740e122390c2f54a1dfeeb8836",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000001/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000001--04895176c2feba5bd7ab04bea968b363d2652debdea591ed6afc967d06e6ae6f.json.invalid-518b6257d923",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 4,
-      "group_sha256": "6ca3d668198b4ad11b4b838d7b7cf67afc1d500c63713b7f448535fc20ebdbf2",
-      "failure": {
-        "validator_error": "provenance.player_feedback_records[0].url must identify one attributable feedback item, not a collection/search/index surface",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000004--6ca3d668198b4ad11b4b838d7b7cf67afc1d500c63713b7f448535fc20ebdbf2.json",
-        "artifact_sha256": "9461a9753d4da9f2b51516d14a36596891067054d8e842b49baef84304b6e411",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000004/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000004--6ca3d668198b4ad11b4b838d7b7cf67afc1d500c63713b7f448535fc20ebdbf2.json.invalid-9461a9753d4d",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 7,
-      "group_sha256": "efb7a4fea632ac7692beb47636f8bcf336abc0fb2954cc355fe6e999c5d32b97",
-      "failure": {
-        "validator_error": "provenance.player_feedback_records[4] acquisition_mode requires concrete_item_collection parent provenance",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000007--efb7a4fea632ac7692beb47636f8bcf336abc0fb2954cc355fe6e999c5d32b97.json",
-        "artifact_sha256": "eaba69a73bc95d0efe640d9b2a89db9d66089961115bb5050fb999f22e1f9f2f",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000007/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000007--efb7a4fea632ac7692beb47636f8bcf336abc0fb2954cc355fe6e999c5d32b97.json.invalid-eaba69a73bc9",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 8,
-      "group_sha256": "5400e8abcd28abc6453906fe65a76c132dc456684cfd616b2672abdbab86f8e5",
-      "failure": {
-        "validator_error": "observation 0 durable claim lacks durable-trait feedback",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000008--5400e8abcd28abc6453906fe65a76c132dc456684cfd616b2672abdbab86f8e5.json",
-        "artifact_sha256": "033c38888bdd25e5a2c5ad4948a0ea087ff4e27e5bb2a26b6fa6122099a15d2f",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000008/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000008--5400e8abcd28abc6453906fe65a76c132dc456684cfd616b2672abdbab86f8e5.json.invalid-033c38888bdd",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 9,
-      "group_sha256": "79ebc086424b6e9b2a8a431db054ec812b493023a3318a90632bd84e489606fd",
-      "failure": {
-        "validator_error": "observation 3 current claim lacks recent dated current-state feedback",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000009--79ebc086424b6e9b2a8a431db054ec812b493023a3318a90632bd84e489606fd.json",
-        "artifact_sha256": "a4b50b50d93f8718a8a5616ca241fcecc1c0bf553b502a64ad239d156b4a2aac",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000009/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000009--79ebc086424b6e9b2a8a431db054ec812b493023a3318a90632bd84e489606fd.json.invalid-a4b50b50d93f",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 10,
-      "group_sha256": "a31ba438f68b6b573bd03d3f899f29c807572ee2f7b581ce598ecc848ee8ea3b",
-      "failure": {
-        "validator_error": "provenance.player_feedback_records[4] acquisition_mode requires concrete_item_collection parent provenance",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000010--a31ba438f68b6b573bd03d3f899f29c807572ee2f7b581ce598ecc848ee8ea3b.json",
-        "artifact_sha256": "7d336f21e111fe3d54a7992100f05045b0fe33ccc8b4d57e02c61e12d6a70a1a",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000010/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000010--a31ba438f68b6b573bd03d3f899f29c807572ee2f7b581ce598ecc848ee8ea3b.json.invalid-7d336f21e111",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 11,
-      "group_sha256": "cf712929a575816aa5b3ca8623564b75e96d15fb0d49ceb76faee39fbafdadc9",
-      "failure": {
-        "validator_error": "provenance.player_feedback_records[4] acquisition_mode requires concrete_item_collection parent provenance",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000011--cf712929a575816aa5b3ca8623564b75e96d15fb0d49ceb76faee39fbafdadc9.json",
-        "artifact_sha256": "096ef769e2fcf72f05540565d3834ec95022b3d3ae26956e213269e3a3cd5462",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000011/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000011--cf712929a575816aa5b3ca8623564b75e96d15fb0d49ceb76faee39fbafdadc9.json.invalid-096ef769e2fc",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 12,
-      "group_sha256": "0c7add64482cec22cb5ca5d1deea5b89bef98e0ba4e595992a44952b3b6bc0d6",
-      "failure": {
-        "validator_error": "provenance.player_feedback_records[4] acquisition_mode requires concrete_item_collection parent provenance",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000012--0c7add64482cec22cb5ca5d1deea5b89bef98e0ba4e595992a44952b3b6bc0d6.json",
-        "artifact_sha256": "426a2c4c4e48a3ff6654861f7acbd23589dbfd6d8763e9d0c2697060253ce9c8",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000012/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000012--0c7add64482cec22cb5ca5d1deea5b89bef98e0ba4e595992a44952b3b6bc0d6.json.invalid-426a2c4c4e48",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 13,
-      "group_sha256": "7eeb821432b415164a0c94c783a97e0fe669618de4e1b7cc625ec325c3718ba0",
-      "failure": {
-        "validator_error": "observation 0 current claim lacks recent dated current-state feedback",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000013--7eeb821432b415164a0c94c783a97e0fe669618de4e1b7cc625ec325c3718ba0.json",
-        "artifact_sha256": "f02f6decfee1487b6b53c6696629ca0849271cdba01796557c3869d6dc52ff17",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000013/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000013--7eeb821432b415164a0c94c783a97e0fe669618de4e1b7cc625ec325c3718ba0.json.invalid-f02f6decfee1",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 14,
-      "group_sha256": "b5b74468c69ccc639370d0be131f4a6470ba136608cae20ccd2cd02014b8f3b9",
-      "failure": {
-        "validator_error": "observation 1 bound player-feedback source must also appear in source_ids",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000014--b5b74468c69ccc639370d0be131f4a6470ba136608cae20ccd2cd02014b8f3b9.json",
-        "artifact_sha256": "e1c555a3e470bfaee9e365b11ef465ec13a2b36aab8a967f4a684739399c90ec",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000014/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000014--b5b74468c69ccc639370d0be131f4a6470ba136608cae20ccd2cd02014b8f3b9.json.invalid-e1c555a3e470",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 16,
-      "group_sha256": "20c08df56824fbfb82bcc7ef45a8cdf6360f8ee962101d40d413ecd6fdf99572",
-      "failure": {
-        "validator_error": "provenance.player_feedback_records[1] acquisition_mode requires concrete_item_collection parent provenance",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000016--20c08df56824fbfb82bcc7ef45a8cdf6360f8ee962101d40d413ecd6fdf99572.json",
-        "artifact_sha256": "c81a924c92ce656c98de1654f48d04a670b2ed8ed8eecffc3afe2ab877f1c218",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000016/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000016--20c08df56824fbfb82bcc7ef45a8cdf6360f8ee962101d40d413ecd6fdf99572.json.invalid-c81a924c92ce",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 17,
-      "group_sha256": "37d92c8a9b953f00f38c5e57a891df5b555684150b18104cb139478fbf44efb8",
-      "failure": {
-        "validator_error": "provenance.player_feedback_records[5] acquisition_mode requires concrete_item_collection parent provenance",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000017--37d92c8a9b953f00f38c5e57a891df5b555684150b18104cb139478fbf44efb8.json",
-        "artifact_sha256": "86c29798115b3f27b0e3eb49611320b2681cffe8d677f2deb950dfb62a0ffbf2",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000017/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000017--37d92c8a9b953f00f38c5e57a891df5b555684150b18104cb139478fbf44efb8.json.invalid-86c29798115b",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 18,
-      "group_sha256": "14b88e2e41bca400ca711b1ed2f65681c99007f3249d59b9f97e3f4153edb51f",
-      "failure": {
-        "validator_error": "duplicate or aliased attributable player-feedback item is forbidden",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000018--14b88e2e41bca400ca711b1ed2f65681c99007f3249d59b9f97e3f4153edb51f.json",
-        "artifact_sha256": "14bd8c54412fbdf36c20ebba6f6e3f620059b8cb7c7131881921f58bc813a82f",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000018/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000018--14b88e2e41bca400ca711b1ed2f65681c99007f3249d59b9f97e3f4153edb51f.json.invalid-14bd8c54412f",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 19,
-      "group_sha256": "b14723f2e480114cae21a520101be053637c81b9dbb16b184f78431d309b0694",
-      "failure": {
-        "validator_error": "observation 3 current claim lacks recent dated current-state feedback",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000019--b14723f2e480114cae21a520101be053637c81b9dbb16b184f78431d309b0694.json",
-        "artifact_sha256": "6f94d3d03bed5e0a16b36f605ce5de7c4b602f03f137500d789bc8ee96858048",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000019/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000019--b14723f2e480114cae21a520101be053637c81b9dbb16b184f78431d309b0694.json.invalid-6f94d3d03bed",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 20,
-      "group_sha256": "6631f36d2c46c7075bf0811c79fda63a83556afc77bf2fb2b7d79a4f57cbf2c9",
-      "failure": {
-        "validator_error": "provenance.player_feedback_records[4] acquisition_mode requires concrete_item_collection parent provenance",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000020--6631f36d2c46c7075bf0811c79fda63a83556afc77bf2fb2b7d79a4f57cbf2c9.json",
-        "artifact_sha256": "1392603384b148e76fcc036333629a40ff41424329d565fc3be26420b9fb1d2d",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000020/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000020--6631f36d2c46c7075bf0811c79fda63a83556afc77bf2fb2b7d79a4f57cbf2c9.json.invalid-1392603384b1",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 21,
-      "group_sha256": "e43065967e5c6fd22f579ac9a383539049ffa60510a8a30b1e27b161429bf96f",
-      "failure": {
-        "validator_error": "provenance.player_feedback_records[4] acquisition_mode requires concrete_item_collection parent provenance",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000021--e43065967e5c6fd22f579ac9a383539049ffa60510a8a30b1e27b161429bf96f.json",
-        "artifact_sha256": "11518bb82e43b19e3efb30807b5e5764239b7b2f3aedef9f0dad4c882a42529d",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000021/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000021--e43065967e5c6fd22f579ac9a383539049ffa60510a8a30b1e27b161429bf96f.json.invalid-11518bb82e43",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 22,
-      "group_sha256": "a404b2c6cee249ce354beb7aae612d9cb65add9e1ebfb782783b4b397c9060e2",
-      "failure": {
-        "validator_error": "overall moderate evidence requires at least one moderately recurring observation",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000022--a404b2c6cee249ce354beb7aae612d9cb65add9e1ebfb782783b4b397c9060e2.json",
-        "artifact_sha256": "54c0beac3fe887d9ca33b97c19ec6926cc6ed1451ed4b8b8db0537b38157deec",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000022/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000022--a404b2c6cee249ce354beb7aae612d9cb65add9e1ebfb782783b4b397c9060e2.json.invalid-54c0beac3fe8",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 23,
-      "group_sha256": "be7e13a0d40cacada3dfb23180d395cf3edf39b81cd004cc3385a4378b0af320",
-      "failure": {
-        "validator_error": "player-feedback ids must be sequential dossier-local feedback-NNN tokens",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000023--be7e13a0d40cacada3dfb23180d395cf3edf39b81cd004cc3385a4378b0af320.json",
-        "artifact_sha256": "fc0cdd1907e29c889953de7ffe7b492c8339defcace8aa826a8071a825d1d743",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000023/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000023--be7e13a0d40cacada3dfb23180d395cf3edf39b81cd004cc3385a4378b0af320.json.invalid-fc0cdd1907e2",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 24,
-      "group_sha256": "1f069943eb814381e4335eb6b784294dc4d8263cb9bf74387aee6f41c74d9aad",
-      "failure": {
-        "validator_error": "observation 0 durable claim lacks durable-trait feedback",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000024--1f069943eb814381e4335eb6b784294dc4d8263cb9bf74387aee6f41c74d9aad.json",
-        "artifact_sha256": "fec68989167f7292946e5d4273ce3ec0facb2a4421b8e3f8a93247888c05ab6d",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000024/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000024--1f069943eb814381e4335eb6b784294dc4d8263cb9bf74387aee6f41c74d9aad.json.invalid-fec68989167f",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 25,
-      "group_sha256": "0ff3ab70ec8571cad9b99b77fe83cc8b14d6b8c4c92e602e7a2828fd568ae902",
-      "failure": {
-        "validator_error": "player-feedback ids must be sequential dossier-local feedback-NNN tokens",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000025--0ff3ab70ec8571cad9b99b77fe83cc8b14d6b8c4c92e602e7a2828fd568ae902.json",
-        "artifact_sha256": "1381a81c83ca408fd879df33516c0a464f3256e6a0f44b054cf9704b1e98b900",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000025/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000025--0ff3ab70ec8571cad9b99b77fe83cc8b14d6b8c4c92e602e7a2828fd568ae902.json.invalid-1381a81c83ca",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 26,
-      "group_sha256": "fe9aa3aa855f0cd01b9f1609eb3402495d3ec92030a95ddb7d971fc7bc2e4c5f",
-      "failure": {
-        "validator_error": "provenance.sources[2].exact_product_binding source_appid does not match exact dossier appid",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000026--fe9aa3aa855f0cd01b9f1609eb3402495d3ec92030a95ddb7d971fc7bc2e4c5f.json",
-        "artifact_sha256": "da6af4f3f41dd06efdd2210dcc3afca0a40f33f327ee078c3451aaac28fbb3f2",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000026/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000026--fe9aa3aa855f0cd01b9f1609eb3402495d3ec92030a95ddb7d971fc7bc2e4c5f.json.invalid-da6af4f3f41d",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 28,
-      "group_sha256": "84948ca7b3d66ce57b40fc247e782713603401ddc82a1ad8921fdc3d9d16477c",
-      "failure": {
-        "validator_error": "observation 0 has unsupported category",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000028--84948ca7b3d66ce57b40fc247e782713603401ddc82a1ad8921fdc3d9d16477c.json",
-        "artifact_sha256": "4fbec00ddfedfaaedbc2cfffaf578dd1f2148c8bd4ebb7480d2011857b39eb2d",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000028/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000028--84948ca7b3d66ce57b40fc247e782713603401ddc82a1ad8921fdc3d9d16477c.json.invalid-4fbec00ddfed",
-        "recovery_eligible": true
-      }
-    }
-  ],
+  "failed_groups_pending_recovery": [],
   "candidate_groups": [],
   "malformed_current_snapshot_artifacts": [],
   "canonical_progress_authority": false,
