@@ -26933,7 +26933,7 @@
     },
     "game:1337010": {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
       "work_id": "a3b8764b345ffc0f3e5cd5f01acabd92cc75a57a07dec15e76ff5310731c8ab9",
       "family_id": "game:1337010",
       "taste_subject_key": "App_1337010",
@@ -26947,8 +26947,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-28T16:53:12+00:00",
-      "work_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+      "accepted_at_utc": "2026-09-30T06:32:42+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "0671451a6b422407424e50b98bda8af4209b5b5d84b88c57117f1ef05d6d1fbe",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -26964,8 +26964,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "2ad09f2a66fbd7db34bf968d8126fc424e4197cd35b00e330146684c50493ac3",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "3b1c18950b15828b9a892a9631660ae7f3d9168681431f2b2ef791402db70315",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -27064,20 +27064,550 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "a3b8764b345ffc0f3e5cd5f01acabd92cc75a57a07dec15e76ff5310731c8ab9",
+          "family_id": "game:1337010",
+          "taste_subject_key": "App_1337010",
+          "appid": "1337010",
+          "taste_fingerprint": "54517756930c08a21cf777d25f525dc379f539fc635c4a1a10125cc160c45412",
+          "candidate_context_sha256": "924747aa91f33b1e294f0dfda0c60974962434eb1c52261578a9f176c36dc35c",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "0671451a6b422407424e50b98bda8af4209b5b5d84b88c57117f1ef05d6d1fbe",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "3b1c18950b15828b9a892a9631660ae7f3d9168681431f2b2ef791402db70315",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:32:42+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:1337010:2ad09f2a66fbd7db",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "2ad09f2a66fbd7db34bf968d8126fc424e4197cd35b00e330146684c50493ac3",
+            "prior_accepted_at_utc": "2026-09-28T16:53:12+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "moderate",
+            "prior_confidence": "medium",
+            "prior_taste_factors": {
+              "gameplay_mastery": 38,
+              "development_variety": 55,
+              "structure_pacing_direction": 82,
+              "identity_hooks": 77,
+              "breadth_of_match": 64
+            },
+            "prior_positive_evidence": [
+              "Photography is the central discovery mechanic and gives exploration a concrete purpose: finding, identifying and cataloguing wildlife rather than wandering through an empty world.",
+              "Small tasks feed into one clear wildlife-reserve objective, matching the profile's preference for exploration with an understandable vector.",
+              "The warm visual presentation and relaxed wildlife theme provide a distinct cozy identity, while the short runtime limits the cost of its mechanically simple structure."
+            ],
+            "prior_work_id": "a3b8764b345ffc0f3e5cd5f01acabd92cc75a57a07dec15e76ff5310731c8ab9"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "moderate",
+          "confidence": "medium",
+          "positive_evidence": [
+            "Photography gives island exploration a concrete discovery goal through finding and cataloguing wildlife.",
+            "Small tasks contribute to one clear conservation objective, while the warm presentation gives the short experience a distinct cozy identity."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 40,
+            "development_variety": 55,
+            "structure_pacing_direction": 84,
+            "identity_hooks": 80,
+            "breadth_of_match": 65
+          },
+          "score_findings": [
+            {
+              "finding_id": "alba-photography",
+              "text_ru": "Фотографирование и каталогизация животных превращают прогулку по острову в конкретный поиск и дают исследованию понятную цель.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/5/pattern",
+                  "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+                  "match_text_ru": "Тебе нравится исследование, когда оно имеет ясный вектор."
+                },
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Новые находки и задачи помогают удерживать ощущение развития опыта."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 40
+                },
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 55
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 65
+                }
+              ]
+            },
+            {
+              "finding_id": "alba-conservation",
+              "text_ru": "Мелкие задания складываются в одну понятную цель по сохранению природы, поэтому структура не превращается в бесцельное блуждание.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 4
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/5/pattern",
+                  "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+                  "match_text_ru": "Для тебя особенно важен понятный следующий шаг и общий вектор исследования."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 84
+                }
+              ]
+            },
+            {
+              "finding_id": "alba-cozy-identity",
+              "text_ru": "Тёплый визуальный стиль, спокойная атмосфера и тема дикой природы дают игре собственное мягкое лицо, несмотря на простые механики.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 5
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Яркая художественная идентичность заметно повышает для тебя запоминаемость игры."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 80
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Игра очень короткая: для расслабленного приключения это плюс, но желающим длинного коллекционного процесса контента может не хватить.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "unchanged_repetition",
+                "text_ru": "При добивании коллекции приходится многократно пересекать остров и снова сканировать местность в поиске оставшихся животных.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1337010:2ad09f2a66fbd7db",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:32:42+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:32:42+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+            "work_id": "a3b8764b345ffc0f3e5cd5f01acabd92cc75a57a07dec15e76ff5310731c8ab9",
+            "family_id": "game:1337010",
+            "taste_subject_key": "App_1337010",
+            "appid": "1337010",
+            "taste_fingerprint": "54517756930c08a21cf777d25f525dc379f539fc635c4a1a10125cc160c45412",
+            "candidate_context_sha256": "924747aa91f33b1e294f0dfda0c60974962434eb1c52261578a9f176c36dc35c",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-28T16:53:12+00:00",
+            "work_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+            "dossier_content_sha256": "0671451a6b422407424e50b98bda8af4209b5b5d84b88c57117f1ef05d6d1fbe",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "2ad09f2a66fbd7db34bf968d8126fc424e4197cd35b00e330146684c50493ac3",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+              "work_id": "a3b8764b345ffc0f3e5cd5f01acabd92cc75a57a07dec15e76ff5310731c8ab9",
+              "family_id": "game:1337010",
+              "taste_subject_key": "App_1337010",
+              "appid": "1337010",
+              "taste_fingerprint": "54517756930c08a21cf777d25f525dc379f539fc635c4a1a10125cc160c45412",
+              "candidate_context_sha256": "924747aa91f33b1e294f0dfda0c60974962434eb1c52261578a9f176c36dc35c",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "0671451a6b422407424e50b98bda8af4209b5b5d84b88c57117f1ef05d6d1fbe",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "2ad09f2a66fbd7db34bf968d8126fc424e4197cd35b00e330146684c50493ac3",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-28T16:53:12+00:00",
+              "run_start_anchor_commit": "06ec757a4eae872e5173977f8a0e4633562fb7ac",
+              "run_start_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+              "run_started_at_utc": "2026-09-28T16:43:36+00:00",
+              "work_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+              "fit_level": "moderate",
+              "confidence": "medium",
+              "positive_evidence": [
+                "Photography is the central discovery mechanic and gives exploration a concrete purpose: finding, identifying and cataloguing wildlife rather than wandering through an empty world.",
+                "Small tasks feed into one clear wildlife-reserve objective, matching the profile's preference for exploration with an understandable vector.",
+                "The warm visual presentation and relaxed wildlife theme provide a distinct cozy identity, while the short runtime limits the cost of its mechanically simple structure."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 38,
+                "development_variety": 55,
+                "structure_pacing_direction": 82,
+                "identity_hooks": 77,
+                "breadth_of_match": 64
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Игра короткая и заканчивается быстро для тех, кто ждёт длинного коллекционного приключения, но для расслабленного компактного опыта это скорее ограничение объёма, чем проблема качества.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 2
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "unchanged_repetition",
+                    "text_ru": "При попытке закрыть всё на 100% поиск последних животных превращается в повторные переходы по острову и сканирование уже знакомых мест, что может утомить после исчезновения первоначальной новизны.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 3
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "moderate",
+            "confidence": "medium",
+            "positive_evidence": [
+              "Photography is the central discovery mechanic and gives exploration a concrete purpose: finding, identifying and cataloguing wildlife rather than wandering through an empty world.",
+              "Small tasks feed into one clear wildlife-reserve objective, matching the profile's preference for exploration with an understandable vector.",
+              "The warm visual presentation and relaxed wildlife theme provide a distinct cozy identity, while the short runtime limits the cost of its mechanically simple structure."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 38,
+              "development_variety": 55,
+              "structure_pacing_direction": 82,
+              "identity_hooks": 77,
+              "breadth_of_match": 64
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 2
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Игра короткая и заканчивается быстро для тех, кто ждёт длинного коллекционного приключения, но для расслабленного компактного опыта это скорее ограничение объёма, чем проблема качества.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                },
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "unchanged_repetition",
+                  "text_ru": "При попытке закрыть всё на 100% поиск последних животных превращается в повторные переходы по острову и сканирование уже знакомых мест, что может утомить после исчезновения первоначальной новизны.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1337010:2ad09f2a66fbd7db",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "2ad09f2a66fbd7db34bf968d8126fc424e4197cd35b00e330146684c50493ac3",
+        "prior_accepted_at_utc": "2026-09-28T16:53:12+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "moderate",
+        "prior_confidence": "medium",
+        "prior_taste_factors": {
+          "gameplay_mastery": 38,
+          "development_variety": 55,
+          "structure_pacing_direction": 82,
+          "identity_hooks": 77,
+          "breadth_of_match": 64
+        },
+        "prior_positive_evidence": [
+          "Photography is the central discovery mechanic and gives exploration a concrete purpose: finding, identifying and cataloguing wildlife rather than wandering through an empty world.",
+          "Small tasks feed into one clear wildlife-reserve objective, matching the profile's preference for exploration with an understandable vector.",
+          "The warm visual presentation and relaxed wildlife theme provide a distinct cozy identity, while the short runtime limits the cost of its mechanically simple structure."
+        ],
+        "prior_work_id": "a3b8764b345ffc0f3e5cd5f01acabd92cc75a57a07dec15e76ff5310731c8ab9"
+      },
       "fit_level": "moderate",
       "confidence": "medium",
       "positive_evidence": [
-        "Photography is the central discovery mechanic and gives exploration a concrete purpose: finding, identifying and cataloguing wildlife rather than wandering through an empty world.",
-        "Small tasks feed into one clear wildlife-reserve objective, matching the profile's preference for exploration with an understandable vector.",
-        "The warm visual presentation and relaxed wildlife theme provide a distinct cozy identity, while the short runtime limits the cost of its mechanically simple structure."
+        "Photography gives island exploration a concrete discovery goal through finding and cataloguing wildlife.",
+        "Small tasks contribute to one clear conservation objective, while the warm presentation gives the short experience a distinct cozy identity."
       ],
       "taste_factors": {
-        "gameplay_mastery": 38,
+        "gameplay_mastery": 40,
         "development_variety": 55,
-        "structure_pacing_direction": 82,
-        "identity_hooks": 77,
-        "breadth_of_match": 64
+        "structure_pacing_direction": 84,
+        "identity_hooks": 80,
+        "breadth_of_match": 65
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "alba-photography",
+          "text_ru": "Фотографирование и каталогизация животных превращают прогулку по острову в конкретный поиск и дают исследованию понятную цель.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/5/pattern",
+              "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+              "match_text_ru": "Тебе нравится исследование, когда оно имеет ясный вектор."
+            },
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Новые находки и задачи помогают удерживать ощущение развития опыта."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 40
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 55
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 65
+            }
+          ]
+        },
+        {
+          "finding_id": "alba-conservation",
+          "text_ru": "Мелкие задания складываются в одну понятную цель по сохранению природы, поэтому структура не превращается в бесцельное блуждание.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 4
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/5/pattern",
+              "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+              "match_text_ru": "Для тебя особенно важен понятный следующий шаг и общий вектор исследования."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 84
+            }
+          ]
+        },
+        {
+          "finding_id": "alba-cozy-identity",
+          "text_ru": "Тёплый визуальный стиль, спокойная атмосфера и тема дикой природы дают игре собственное мягкое лицо, несмотря на простые механики.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 5
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Яркая художественная идентичность заметно повышает для тебя запоминаемость игры."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 80
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -27095,7 +27625,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Игра короткая и заканчивается быстро для тех, кто ждёт длинного коллекционного приключения, но для расслабленного компактного опыта это скорее ограничение объёма, чем проблема качества.",
+            "text_ru": "Игра очень короткая: для расслабленного приключения это плюс, но желающим длинного коллекционного процесса контента может не хватить.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -27106,7 +27636,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "unchanged_repetition",
-            "text_ru": "При попытке закрыть всё на 100% поиск последних животных превращается в повторные переходы по острову и сканирование уже знакомых мест, что может утомить после исчезновения первоначальной новизны.",
+            "text_ru": "При добивании коллекции приходится многократно пересекать остров и снова сканировать местность в поиске оставшихся животных.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -27119,7 +27649,7 @@
     },
     "game:13500": {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
       "work_id": "26e284eecd5fbb2272427e81c6918e8cb9c74d301a84d2bdfbc760554813299e",
       "family_id": "game:13500",
       "taste_subject_key": "App_13500",
@@ -27133,8 +27663,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-28T16:53:58+00:00",
-      "work_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+      "accepted_at_utc": "2026-09-30T06:32:42+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "b4420102e34319bbcf517190c3958e631e0541a93256372056c999c016319f1b",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -27150,8 +27680,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "90d87ca156127ec47c793e1dae1010ecdecb9f106f4090a52d0bc7ec8d97b8d5",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "1ea30a31f48f0f8b22fc1c54ece9e3242f488680beca9d65439e37fd02622fa0",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -27280,20 +27810,662 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "26e284eecd5fbb2272427e81c6918e8cb9c74d301a84d2bdfbc760554813299e",
+          "family_id": "game:13500",
+          "taste_subject_key": "App_13500",
+          "appid": "13500",
+          "taste_fingerprint": "ca4ac0694ab4752278eb5997c23ced553b869051d1ca3660fdd2b9a201730358",
+          "candidate_context_sha256": "bbabb448bc8f147058b228c99b11cc8c7ad84118898ce95455f5f72589429bd4",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "b4420102e34319bbcf517190c3958e631e0541a93256372056c999c016319f1b",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "1ea30a31f48f0f8b22fc1c54ece9e3242f488680beca9d65439e37fd02622fa0",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:32:42+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:13500:90d87ca156127ec4",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "90d87ca156127ec47c793e1dae1010ecdecb9f106f4090a52d0bc7ec8d97b8d5",
+            "prior_accepted_at_utc": "2026-09-28T16:53:58+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "strong",
+            "prior_confidence": "medium",
+            "prior_taste_factors": {
+              "gameplay_mastery": 92,
+              "development_variety": 80,
+              "structure_pacing_direction": 64,
+              "identity_hooks": 87,
+              "breadth_of_match": 86
+            },
+            "prior_positive_evidence": [
+              "Acrobatic platforming, environmental movement, time powers and the expanded combo system make both traversal and combat expressive, matching the profile's strongest movement and mastery signals.",
+              "Weapon interactions and combat options broaden over the campaign, so progression comes through learning a larger toolkit rather than only raising statistics.",
+              "The darker tone, Dahaka pursuits and aggressive audiovisual identity give the sequel a memorable personality distinct from Sands of Time."
+            ],
+            "prior_work_id": "26e284eecd5fbb2272427e81c6918e8cb9c74d301a84d2bdfbc760554813299e"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "strong",
+          "confidence": "high",
+          "positive_evidence": [
+            "Expanded free-form combat and acrobatic platforming create expressive traversal and fighting.",
+            "Weapon interactions, combo options and time powers broaden the usable toolkit across the campaign.",
+            "The darker tone and Dahaka pursuit give the sequel a distinctive audiovisual identity."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 93,
+            "development_variety": 82,
+            "structure_pacing_direction": 66,
+            "identity_hooks": 89,
+            "breadth_of_match": 88
+          },
+          "score_findings": [
+            {
+              "finding_id": "ww-movement-combat",
+              "text_ru": "Акробатика, движения по окружению, оружейные взаимодействия, силы времени и расширенные комбо делают и перемещение, и бой выразительными — это очень сильное совпадение с твоим профилем.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/1/pattern",
+                  "profile_value_sha256": "03ee46ab2d98957c01bd73fe09574b97f6da1eef6a0ceb054817add03d66d5e1",
+                  "match_text_ru": "Само движение и управление может быть для тебя самостоятельным источником удовольствия."
+                },
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Тебе особенно нравится осваивать сложные приёмы и становиться заметно лучше."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 93
+                },
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 82
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 88
+                }
+              ]
+            },
+            {
+              "finding_id": "ww-dark-identity",
+              "text_ru": "Тёмный тон, погони Дахаки, тяжёлая музыка и более агрессивный образ Принца дают игре очень узнаваемую личность, даже если не всем нравится отход от атмосферы первой части.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Яркая художественная идентичность сильно повышает для тебя шанс запомнить игру."
+                },
+                {
+                  "json_pointer": "/taste_profile/3/pattern",
+                  "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+                  "match_text_ru": "Сюжетная и персонажная подача для тебя остаётся важным дополнительным крючком."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 89
+                }
+              ]
+            },
+            {
+              "finding_id": "ww-structure-friction",
+              "text_ru": "Переходы между прошлым и настоящим дают интересную архитектуру уровней, но большое количество возвратов и не всегда ясная следующая цель заметно ухудшают навигационный темп.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/5/pattern",
+                  "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+                  "match_text_ru": "Ты любишь исследовать, но не любишь теряться без понимания следующего шага."
+                },
+                {
+                  "json_pointer": "/taste_profile/8/pattern",
+                  "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+                  "match_text_ru": "Повтор знакомых участков становится минусом, если не даёт достаточно нового опыта."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "qualifies",
+                  "normalized_value": 66
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              },
+              {
+                "kind": "observation",
+                "index": 4
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "difficulty_punishment",
+                "text_ru": "На высокой сложности запас здоровья врагов, агрессивные группы, чекпоинты и повторы боссов местами превращают испытание в затяжной slog вместо чистого теста навыка.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "directionlessness",
+                "text_ru": "Возвраты по дворцу между двумя эпохами иногда оставляют непонимание следующей цели и усиливают лишний backtracking.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Тёмная подача очень характерная, но часть игроков предпочитает более лёгкую атмосферу и ясный рассказ Sands of Time.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Старая ПК-версия может быть капризной на современных системах; есть свежий успешный Steam Deck опыт после настройки разрешения и V-Sync.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 4
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:13500:90d87ca156127ec4",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:32:42+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:32:42+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+            "work_id": "26e284eecd5fbb2272427e81c6918e8cb9c74d301a84d2bdfbc760554813299e",
+            "family_id": "game:13500",
+            "taste_subject_key": "App_13500",
+            "appid": "13500",
+            "taste_fingerprint": "ca4ac0694ab4752278eb5997c23ced553b869051d1ca3660fdd2b9a201730358",
+            "candidate_context_sha256": "bbabb448bc8f147058b228c99b11cc8c7ad84118898ce95455f5f72589429bd4",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-28T16:53:58+00:00",
+            "work_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+            "dossier_content_sha256": "b4420102e34319bbcf517190c3958e631e0541a93256372056c999c016319f1b",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "90d87ca156127ec47c793e1dae1010ecdecb9f106f4090a52d0bc7ec8d97b8d5",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+              "work_id": "26e284eecd5fbb2272427e81c6918e8cb9c74d301a84d2bdfbc760554813299e",
+              "family_id": "game:13500",
+              "taste_subject_key": "App_13500",
+              "appid": "13500",
+              "taste_fingerprint": "ca4ac0694ab4752278eb5997c23ced553b869051d1ca3660fdd2b9a201730358",
+              "candidate_context_sha256": "bbabb448bc8f147058b228c99b11cc8c7ad84118898ce95455f5f72589429bd4",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "b4420102e34319bbcf517190c3958e631e0541a93256372056c999c016319f1b",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "90d87ca156127ec47c793e1dae1010ecdecb9f106f4090a52d0bc7ec8d97b8d5",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-28T16:53:58+00:00",
+              "run_start_anchor_commit": "06ec757a4eae872e5173977f8a0e4633562fb7ac",
+              "run_start_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+              "run_started_at_utc": "2026-09-28T16:43:36+00:00",
+              "work_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+              "fit_level": "strong",
+              "confidence": "medium",
+              "positive_evidence": [
+                "Acrobatic platforming, environmental movement, time powers and the expanded combo system make both traversal and combat expressive, matching the profile's strongest movement and mastery signals.",
+                "Weapon interactions and combat options broaden over the campaign, so progression comes through learning a larger toolkit rather than only raising statistics.",
+                "The darker tone, Dahaka pursuits and aggressive audiovisual identity give the sequel a memorable personality distinct from Sands of Time."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 92,
+                "development_variety": 80,
+                "structure_pacing_direction": 64,
+                "identity_hooks": 87,
+                "breadth_of_match": 86
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 4
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "difficulty_punishment",
+                    "text_ru": "На высокой сложности часть поздних боёв может превращаться в затяжной барьер из-за большого здоровья врагов, агрессивных групп, чекпоинтов и повторов боссов. Это хуже соответствует предпочтению сложности, которая в первую очередь раскрывается через чистое освоение механик.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 1
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "directionlessness",
+                    "text_ru": "Постоянные переходы между прошлым и настоящим одной и той же крепости создают сильную структуру времени, но одновременно дают возвраты и моменты, когда неясно, куда двигаться дальше — это напрямую задевает чувствительность профиля к потерянности.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 2
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Мрачный тон, тяжёлая музыка и более агрессивный Принц сильно выделяют игру, но часть игроков предпочитает более лёгкую атмосферу и ясную подачу Sands of Time.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 3
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Старая ПК-версия может быть капризной на современном железе; свежий отчёт на Steam Deck описывает успешное прохождение после настройки разрешения и V-Sync, поэтому это скорее техническое предупреждение.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 4
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "strong",
+            "confidence": "medium",
+            "positive_evidence": [
+              "Acrobatic platforming, environmental movement, time powers and the expanded combo system make both traversal and combat expressive, matching the profile's strongest movement and mastery signals.",
+              "Weapon interactions and combat options broaden over the campaign, so progression comes through learning a larger toolkit rather than only raising statistics.",
+              "The darker tone, Dahaka pursuits and aggressive audiovisual identity give the sequel a memorable personality distinct from Sands of Time."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 92,
+              "development_variety": 80,
+              "structure_pacing_direction": 64,
+              "identity_hooks": 87,
+              "breadth_of_match": 86
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                },
+                {
+                  "kind": "observation",
+                  "index": 4
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "difficulty_punishment",
+                  "text_ru": "На высокой сложности часть поздних боёв может превращаться в затяжной барьер из-за большого здоровья врагов, агрессивных групп, чекпоинтов и повторов боссов. Это хуже соответствует предпочтению сложности, которая в первую очередь раскрывается через чистое освоение механик.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "directionlessness",
+                  "text_ru": "Постоянные переходы между прошлым и настоящим одной и той же крепости создают сильную структуру времени, но одновременно дают возвраты и моменты, когда неясно, куда двигаться дальше — это напрямую задевает чувствительность профиля к потерянности.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Мрачный тон, тяжёлая музыка и более агрессивный Принц сильно выделяют игру, но часть игроков предпочитает более лёгкую атмосферу и ясную подачу Sands of Time.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Старая ПК-версия может быть капризной на современном железе; свежий отчёт на Steam Deck описывает успешное прохождение после настройки разрешения и V-Sync, поэтому это скорее техническое предупреждение.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 4
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:13500:90d87ca156127ec4",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "90d87ca156127ec47c793e1dae1010ecdecb9f106f4090a52d0bc7ec8d97b8d5",
+        "prior_accepted_at_utc": "2026-09-28T16:53:58+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "strong",
+        "prior_confidence": "medium",
+        "prior_taste_factors": {
+          "gameplay_mastery": 92,
+          "development_variety": 80,
+          "structure_pacing_direction": 64,
+          "identity_hooks": 87,
+          "breadth_of_match": 86
+        },
+        "prior_positive_evidence": [
+          "Acrobatic platforming, environmental movement, time powers and the expanded combo system make both traversal and combat expressive, matching the profile's strongest movement and mastery signals.",
+          "Weapon interactions and combat options broaden over the campaign, so progression comes through learning a larger toolkit rather than only raising statistics.",
+          "The darker tone, Dahaka pursuits and aggressive audiovisual identity give the sequel a memorable personality distinct from Sands of Time."
+        ],
+        "prior_work_id": "26e284eecd5fbb2272427e81c6918e8cb9c74d301a84d2bdfbc760554813299e"
+      },
       "fit_level": "strong",
-      "confidence": "medium",
+      "confidence": "high",
       "positive_evidence": [
-        "Acrobatic platforming, environmental movement, time powers and the expanded combo system make both traversal and combat expressive, matching the profile's strongest movement and mastery signals.",
-        "Weapon interactions and combat options broaden over the campaign, so progression comes through learning a larger toolkit rather than only raising statistics.",
-        "The darker tone, Dahaka pursuits and aggressive audiovisual identity give the sequel a memorable personality distinct from Sands of Time."
+        "Expanded free-form combat and acrobatic platforming create expressive traversal and fighting.",
+        "Weapon interactions, combo options and time powers broaden the usable toolkit across the campaign.",
+        "The darker tone and Dahaka pursuit give the sequel a distinctive audiovisual identity."
       ],
       "taste_factors": {
-        "gameplay_mastery": 92,
-        "development_variety": 80,
-        "structure_pacing_direction": 64,
-        "identity_hooks": 87,
-        "breadth_of_match": 86
+        "gameplay_mastery": 93,
+        "development_variety": 82,
+        "structure_pacing_direction": 66,
+        "identity_hooks": 89,
+        "breadth_of_match": 88
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "ww-movement-combat",
+          "text_ru": "Акробатика, движения по окружению, оружейные взаимодействия, силы времени и расширенные комбо делают и перемещение, и бой выразительными — это очень сильное совпадение с твоим профилем.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/1/pattern",
+              "profile_value_sha256": "03ee46ab2d98957c01bd73fe09574b97f6da1eef6a0ceb054817add03d66d5e1",
+              "match_text_ru": "Само движение и управление может быть для тебя самостоятельным источником удовольствия."
+            },
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Тебе особенно нравится осваивать сложные приёмы и становиться заметно лучше."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 93
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 82
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 88
+            }
+          ]
+        },
+        {
+          "finding_id": "ww-dark-identity",
+          "text_ru": "Тёмный тон, погони Дахаки, тяжёлая музыка и более агрессивный образ Принца дают игре очень узнаваемую личность, даже если не всем нравится отход от атмосферы первой части.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 3
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Яркая художественная идентичность сильно повышает для тебя шанс запомнить игру."
+            },
+            {
+              "json_pointer": "/taste_profile/3/pattern",
+              "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+              "match_text_ru": "Сюжетная и персонажная подача для тебя остаётся важным дополнительным крючком."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 89
+            }
+          ]
+        },
+        {
+          "finding_id": "ww-structure-friction",
+          "text_ru": "Переходы между прошлым и настоящим дают интересную архитектуру уровней, но большое количество возвратов и не всегда ясная следующая цель заметно ухудшают навигационный темп.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 2
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/5/pattern",
+              "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+              "match_text_ru": "Ты любишь исследовать, но не любишь теряться без понимания следующего шага."
+            },
+            {
+              "json_pointer": "/taste_profile/8/pattern",
+              "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+              "match_text_ru": "Повтор знакомых участков становится минусом, если не даёт достаточно нового опыта."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "qualifies",
+              "normalized_value": 66
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -27319,7 +28491,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "difficulty_punishment",
-            "text_ru": "На высокой сложности часть поздних боёв может превращаться в затяжной барьер из-за большого здоровья врагов, агрессивных групп, чекпоинтов и повторов боссов. Это хуже соответствует предпочтению сложности, которая в первую очередь раскрывается через чистое освоение механик.",
+            "text_ru": "На высокой сложности запас здоровья врагов, агрессивные группы, чекпоинты и повторы боссов местами превращают испытание в затяжной slog вместо чистого теста навыка.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -27330,7 +28502,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "directionlessness",
-            "text_ru": "Постоянные переходы между прошлым и настоящим одной и той же крепости создают сильную структуру времени, но одновременно дают возвраты и моменты, когда неясно, куда двигаться дальше — это напрямую задевает чувствительность профиля к потерянности.",
+            "text_ru": "Возвраты по дворцу между двумя эпохами иногда оставляют непонимание следующей цели и усиливают лишний backtracking.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -27341,7 +28513,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Мрачный тон, тяжёлая музыка и более агрессивный Принц сильно выделяют игру, но часть игроков предпочитает более лёгкую атмосферу и ясную подачу Sands of Time.",
+            "text_ru": "Тёмная подача очень характерная, но часть игроков предпочитает более лёгкую атмосферу и ясный рассказ Sands of Time.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -27352,7 +28524,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Старая ПК-версия может быть капризной на современном железе; свежий отчёт на Steam Deck описывает успешное прохождение после настройки разрешения и V-Sync, поэтому это скорее техническое предупреждение.",
+            "text_ru": "Старая ПК-версия может быть капризной на современных системах; есть свежий успешный Steam Deck опыт после настройки разрешения и V-Sync.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -27983,7 +29155,7 @@
     },
     "game:1196630": {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
       "work_id": "49171339d9100b3a7beb50fc9e522a61b9963ab5527e17fe7bf0aea9144731a9",
       "family_id": "game:1196630",
       "taste_subject_key": "App_1196630",
@@ -27997,8 +29169,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-29T03:13:50+00:00",
-      "work_authority_commit": "a4048d9577b0ae03421dc38c077d894d0b4e5471",
+      "accepted_at_utc": "2026-09-30T06:32:42+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "0911556a2f587d8c938ed0cefda3ed4d573a88f71d5dbe1c1c5120abfc7d1d1b",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -28014,8 +29186,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "db7bbddff694a0a8d5d8ff135c7bee11946ad33bcd2dfb4e5b4dfe5ed2e1970d",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "5d168745a05483bd423efe91cb6e2f5a090bdd3c4cf0e9765623ec302f237800",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -28129,20 +29301,569 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "49171339d9100b3a7beb50fc9e522a61b9963ab5527e17fe7bf0aea9144731a9",
+          "family_id": "game:1196630",
+          "taste_subject_key": "App_1196630",
+          "appid": "1196630",
+          "taste_fingerprint": "a2664ee0b350698f77872ae122435db9dcdfba92fb67f0aa5899631172da2971",
+          "candidate_context_sha256": "72b43e209d53c6062c391759efcf26f4123902356c6cb81e41e9dee02bee20b8",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "0911556a2f587d8c938ed0cefda3ed4d573a88f71d5dbe1c1c5120abfc7d1d1b",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "5d168745a05483bd423efe91cb6e2f5a090bdd3c4cf0e9765623ec302f237800",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:32:42+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:1196630:db7bbddff694a0a8",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "db7bbddff694a0a8d5d8ff135c7bee11946ad33bcd2dfb4e5b4dfe5ed2e1970d",
+            "prior_accepted_at_utc": "2026-09-29T03:13:50+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "moderate",
+            "prior_confidence": "medium",
+            "prior_taste_factors": {
+              "gameplay_mastery": 67,
+              "development_variety": 84,
+              "structure_pacing_direction": 66,
+              "identity_hooks": 73,
+              "breadth_of_match": 75
+            },
+            "prior_positive_evidence": [
+              "The large monster roster, turn-based battles, exploration and side quests create a clear collection-and-development loop with many concrete goals.",
+              "Dynamic enemy scaling keeps ordinary encounters relevant instead of letting progression erase all challenge.",
+              "Colorful creature art, story and self-aware humor give the adventure a recognizable identity beyond pure collecting."
+            ],
+            "prior_work_id": "49171339d9100b3a7beb50fc9e522a61b9963ab5527e17fe7bf0aea9144731a9"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "moderate",
+          "confidence": "medium",
+          "positive_evidence": [
+            "The large monster roster, turn-based battles, exploration and side quests create a clear collection-and-development loop.",
+            "Dynamic scaling keeps ordinary encounters relevant rather than allowing progression to erase all challenge.",
+            "Colorful creature art, story and self-aware humor give the adventure a recognizable identity."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 68,
+            "development_variety": 84,
+            "structure_pacing_direction": 68,
+            "identity_hooks": 75,
+            "breadth_of_match": 77
+          },
+          "score_findings": [
+            {
+              "finding_id": "nexomon-loop",
+              "text_ru": "Большой набор существ, пошаговые бои, исследование и побочные задания создают постоянные конкретные цели по сбору и развитию команды.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/2/pattern",
+                  "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                  "match_text_ru": "Тебе нравится прогрессия, когда её цель и эффект хорошо видны."
+                },
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Новые варианты и задачи помогают удерживать развитие опыта."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 68
+                },
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 84
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 77
+                }
+              ]
+            },
+            {
+              "finding_id": "nexomon-identity",
+              "text_ru": "Яркие существа, сюжет и самоирония дают игре узнаваемое лицо и делают приключение больше, чем просто сбор коллекции.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Яркий стиль и подача заметно повышают для тебя запоминаемость."
+                },
+                {
+                  "json_pointer": "/taste_profile/3/pattern",
+                  "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+                  "match_text_ru": "Сюжетный крючок для тебя важен, когда поддерживает игровой цикл."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 75
+                },
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 68
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Динамическое масштабирование поддерживает вызов, но у части игроков превращается в дополнительные лечение, ресурсы и гринд.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Юмор и длина приключения нравятся не всем: часть шуток кажется натянутой, а кампания — длиннее необходимого.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "unchanged_repetition",
+                "text_ru": "Сбор оставшихся редких существ и эндгейм-комплишн могут стать заметно гриндовыми даже после приятной основной кампании.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1196630:db7bbddff694a0a8",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:32:42+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:32:42+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+            "work_id": "49171339d9100b3a7beb50fc9e522a61b9963ab5527e17fe7bf0aea9144731a9",
+            "family_id": "game:1196630",
+            "taste_subject_key": "App_1196630",
+            "appid": "1196630",
+            "taste_fingerprint": "a2664ee0b350698f77872ae122435db9dcdfba92fb67f0aa5899631172da2971",
+            "candidate_context_sha256": "72b43e209d53c6062c391759efcf26f4123902356c6cb81e41e9dee02bee20b8",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-29T03:13:50+00:00",
+            "work_authority_commit": "a4048d9577b0ae03421dc38c077d894d0b4e5471",
+            "dossier_content_sha256": "0911556a2f587d8c938ed0cefda3ed4d573a88f71d5dbe1c1c5120abfc7d1d1b",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "db7bbddff694a0a8d5d8ff135c7bee11946ad33bcd2dfb4e5b4dfe5ed2e1970d",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+              "work_id": "49171339d9100b3a7beb50fc9e522a61b9963ab5527e17fe7bf0aea9144731a9",
+              "family_id": "game:1196630",
+              "taste_subject_key": "App_1196630",
+              "appid": "1196630",
+              "taste_fingerprint": "a2664ee0b350698f77872ae122435db9dcdfba92fb67f0aa5899631172da2971",
+              "candidate_context_sha256": "72b43e209d53c6062c391759efcf26f4123902356c6cb81e41e9dee02bee20b8",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "0911556a2f587d8c938ed0cefda3ed4d573a88f71d5dbe1c1c5120abfc7d1d1b",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "db7bbddff694a0a8d5d8ff135c7bee11946ad33bcd2dfb4e5b4dfe5ed2e1970d",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-29T03:13:50+00:00",
+              "run_start_anchor_commit": "90c5cb8347908b2430bc0a23102329b34402c379",
+              "run_start_authority_commit": "a4048d9577b0ae03421dc38c077d894d0b4e5471",
+              "run_started_at_utc": "2026-09-29T03:09:15+00:00",
+              "work_authority_commit": "a4048d9577b0ae03421dc38c077d894d0b4e5471",
+              "fit_level": "moderate",
+              "confidence": "medium",
+              "positive_evidence": [
+                "The large monster roster, turn-based battles, exploration and side quests create a clear collection-and-development loop with many concrete goals.",
+                "Dynamic enemy scaling keeps ordinary encounters relevant instead of letting progression erase all challenge.",
+                "Colorful creature art, story and self-aware humor give the adventure a recognizable identity beyond pure collecting."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 67,
+                "development_variety": 84,
+                "structure_pacing_direction": 66,
+                "identity_hooks": 73,
+                "breadth_of_match": 75
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "difficulty_punishment",
+                    "text_ru": "Динамическое масштабирование иногда превращает поддержание сложности в повторный гринд, лечение и давление ресурсов; в такие моменты препятствие зависит не только от освоения боевой системы.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 1
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "История и юмор многим нравятся, но часть игроков считает шутки натянутыми, а приключение — длиннее необходимого.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 2
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "unchanged_repetition",
+                    "text_ru": "При сборе редких существ и закрытии эндгейма поиск оставшихся монстров может перейти в заметно повторяющийся гринд даже после приятного основного прохождения.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 3
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "moderate",
+            "confidence": "medium",
+            "positive_evidence": [
+              "The large monster roster, turn-based battles, exploration and side quests create a clear collection-and-development loop with many concrete goals.",
+              "Dynamic enemy scaling keeps ordinary encounters relevant instead of letting progression erase all challenge.",
+              "Colorful creature art, story and self-aware humor give the adventure a recognizable identity beyond pure collecting."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 67,
+              "development_variety": 84,
+              "structure_pacing_direction": 66,
+              "identity_hooks": 73,
+              "breadth_of_match": 75
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "difficulty_punishment",
+                  "text_ru": "Динамическое масштабирование иногда превращает поддержание сложности в повторный гринд, лечение и давление ресурсов; в такие моменты препятствие зависит не только от освоения боевой системы.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "История и юмор многим нравятся, но часть игроков считает шутки натянутыми, а приключение — длиннее необходимого.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                },
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "unchanged_repetition",
+                  "text_ru": "При сборе редких существ и закрытии эндгейма поиск оставшихся монстров может перейти в заметно повторяющийся гринд даже после приятного основного прохождения.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1196630:db7bbddff694a0a8",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "db7bbddff694a0a8d5d8ff135c7bee11946ad33bcd2dfb4e5b4dfe5ed2e1970d",
+        "prior_accepted_at_utc": "2026-09-29T03:13:50+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "moderate",
+        "prior_confidence": "medium",
+        "prior_taste_factors": {
+          "gameplay_mastery": 67,
+          "development_variety": 84,
+          "structure_pacing_direction": 66,
+          "identity_hooks": 73,
+          "breadth_of_match": 75
+        },
+        "prior_positive_evidence": [
+          "The large monster roster, turn-based battles, exploration and side quests create a clear collection-and-development loop with many concrete goals.",
+          "Dynamic enemy scaling keeps ordinary encounters relevant instead of letting progression erase all challenge.",
+          "Colorful creature art, story and self-aware humor give the adventure a recognizable identity beyond pure collecting."
+        ],
+        "prior_work_id": "49171339d9100b3a7beb50fc9e522a61b9963ab5527e17fe7bf0aea9144731a9"
+      },
       "fit_level": "moderate",
       "confidence": "medium",
       "positive_evidence": [
-        "The large monster roster, turn-based battles, exploration and side quests create a clear collection-and-development loop with many concrete goals.",
-        "Dynamic enemy scaling keeps ordinary encounters relevant instead of letting progression erase all challenge.",
-        "Colorful creature art, story and self-aware humor give the adventure a recognizable identity beyond pure collecting."
+        "The large monster roster, turn-based battles, exploration and side quests create a clear collection-and-development loop.",
+        "Dynamic scaling keeps ordinary encounters relevant rather than allowing progression to erase all challenge.",
+        "Colorful creature art, story and self-aware humor give the adventure a recognizable identity."
       ],
       "taste_factors": {
-        "gameplay_mastery": 67,
+        "gameplay_mastery": 68,
         "development_variety": 84,
-        "structure_pacing_direction": 66,
-        "identity_hooks": 73,
-        "breadth_of_match": 75
+        "structure_pacing_direction": 68,
+        "identity_hooks": 75,
+        "breadth_of_match": 77
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "nexomon-loop",
+          "text_ru": "Большой набор существ, пошаговые бои, исследование и побочные задания создают постоянные конкретные цели по сбору и развитию команды.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Тебе нравится прогрессия, когда её цель и эффект хорошо видны."
+            },
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Новые варианты и задачи помогают удерживать развитие опыта."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 68
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 84
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 77
+            }
+          ]
+        },
+        {
+          "finding_id": "nexomon-identity",
+          "text_ru": "Яркие существа, сюжет и самоирония дают игре узнаваемое лицо и делают приключение больше, чем просто сбор коллекции.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 2
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Яркий стиль и подача заметно повышают для тебя запоминаемость."
+            },
+            {
+              "json_pointer": "/taste_profile/3/pattern",
+              "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+              "match_text_ru": "Сюжетный крючок для тебя важен, когда поддерживает игровой цикл."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 75
+            },
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 68
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -28162,9 +29883,9 @@
         ],
         "findings": [
           {
-            "disposition": "confirmed_personal_risk",
-            "risk_code": "difficulty_punishment",
-            "text_ru": "Динамическое масштабирование иногда превращает поддержание сложности в повторный гринд, лечение и давление ресурсов; в такие моменты препятствие зависит не только от освоения боевой системы.",
+            "disposition": "caution",
+            "risk_code": null,
+            "text_ru": "Динамическое масштабирование поддерживает вызов, но у части игроков превращается в дополнительные лечение, ресурсы и гринд.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -28175,7 +29896,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "История и юмор многим нравятся, но часть игроков считает шутки натянутыми, а приключение — длиннее необходимого.",
+            "text_ru": "Юмор и длина приключения нравятся не всем: часть шуток кажется натянутой, а кампания — длиннее необходимого.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -28186,7 +29907,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "unchanged_repetition",
-            "text_ru": "При сборе редких существ и закрытии эндгейма поиск оставшихся монстров может перейти в заметно повторяющийся гринд даже после приятного основного прохождения.",
+            "text_ru": "Сбор оставшихся редких существ и эндгейм-комплишн могут стать заметно гриндовыми даже после приятной основной кампании.",
             "evidence_refs": [
               {
                 "kind": "observation",
