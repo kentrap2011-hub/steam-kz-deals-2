@@ -51,15 +51,15 @@
   },
   "scope": {
     "deep_total_current_coverage_target": 266,
-    "deep_first_pass_attempted_count": 81,
-    "deep_authoritative_completed_count": 69,
-    "deep_completed_fit_count": 62,
+    "deep_first_pass_attempted_count": 84,
+    "deep_authoritative_completed_count": 72,
+    "deep_completed_fit_count": 65,
     "deep_completed_not_fit_count": 7,
     "deep_incomplete_or_recovery_count": 12,
     "deep_waiting_for_dossier_count": 182,
-    "deep_ready_or_pending_count": 3,
-    "deep_normal_first_pass_remaining_count": 185,
-    "deep_remaining_until_all_authoritative_count": 197,
+    "deep_ready_or_pending_count": 0,
+    "deep_normal_first_pass_remaining_count": 182,
+    "deep_remaining_until_all_authoritative_count": 194,
     "deep_normal_first_pass_complete": false,
     "deep_all_current_authoritative_complete": false,
     "recovery_owned_count": 12,
@@ -67,9 +67,9 @@
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 3,
     "dossier_waiting_count": 182,
-    "pass2_attempted_count": 81,
-    "pass2_eligible_count": 3,
-    "normal_pass2_eligible_count": 3,
+    "pass2_attempted_count": 84,
+    "pass2_eligible_count": 0,
+    "normal_pass2_eligible_count": 0,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -107,194 +107,5 @@
       "complete": true
     }
   },
-  "items": [
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:214770",
-      "taste_subject_key": "App_214770",
-      "appid": "214770",
-      "taste_fingerprint": "2e962305e0ecdebc2a3ff99e0d488837a907b9beba3fd69ff665083852ea1157",
-      "candidate_context_sha256": "2d679a91e058fd652a7b4032216e12d70d7141968147da281e2919588530d436",
-      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
-      "work_id": "2a4d8605250156aaf4800c1c058d716507d70079e04b743aa279a39b1e1eed16",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Guacamelee! Gold Edition",
-        "short_description": "Guacamelee! is a Metroidvania-style action-platformer set in a magical Mexican-inspired world. The game draws its inspiration from traditional Mexican culture and folklore, and features many interesting and unique characters.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Action"
-        ],
-        "core_fit_count": 0,
-        "release_date": "8 Aug, 2013",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "214770"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_214770.json",
-      "dossier_content_sha256": "25a594366e79680576c3a722525c2214df14bf03445faed6f8557ab9376c1c45",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-20T11:59:35Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "235ab08a3e703afd66b87eef766258b211061d53d05e8c3fe53e57a82997ca84",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--2a4d8605250156aaf4800c1c058d716507d70079e04b743aa279a39b1e1eed16--235ab08a3e703afd66b87eef766258b211061d53d05e8c3fe53e57a82997ca84.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--2a4d8605250156aaf4800c1c058d716507d70079e04b743aa279a39b1e1eed16--235ab08a3e703afd66b87eef766258b211061d53d05e8c3fe53e57a82997ca84.json",
-      "sequence": 1
-    },
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:2173800",
-      "taste_subject_key": "App_2173800",
-      "appid": "2173800",
-      "taste_fingerprint": "68e264ef444fd2a212efe4a288a3651901f8cf96f92972f4dd99765528fc4649",
-      "candidate_context_sha256": "1aac712275d8b1b757a38ab078b0a011c525fcd19fe12cad46e8c7e5a6a3ab42",
-      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
-      "work_id": "28f639642597171963b961781cf2c1aeb5f56ebca3b6fadacbaef60a250989ad",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Projekt: Passion - Season 1",
-        "short_description": "A futuristic adult visual novel filled with sex, comedy, drama, violence, and more sex. Go on a fun-filled space adventure and develop relationships with a diverse cast of characters with their own personalities and motivations.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Choices Matter"
-        ],
-        "core_fit_count": 1,
-        "release_date": "26 May, 2023",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "2173800"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2173800.json",
-      "dossier_content_sha256": "e0801076d146ae595d5ea275377592a2931fd90b760c1f2ab5742614c327df0d",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-20T11:59:35Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "8b0f5d7c0a87034f5190893f95babb39a26bcec1a4d4fe3c4f58c6d4e7777cc5",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--28f639642597171963b961781cf2c1aeb5f56ebca3b6fadacbaef60a250989ad--8b0f5d7c0a87034f5190893f95babb39a26bcec1a4d4fe3c4f58c6d4e7777cc5.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--28f639642597171963b961781cf2c1aeb5f56ebca3b6fadacbaef60a250989ad--8b0f5d7c0a87034f5190893f95babb39a26bcec1a4d4fe3c4f58c6d4e7777cc5.json",
-      "sequence": 2
-    },
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:214870",
-      "taste_subject_key": "App_214870",
-      "appid": "214870",
-      "taste_fingerprint": "1856cdb624fba3f17d491dbe9afaab89d956762c6ef6d4066c70d887d339983f",
-      "candidate_context_sha256": "00f384262b196ec41b2cf2065fb3fcef0a78e5551c493cee61db905a53ccf424",
-      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
-      "work_id": "45dc2734a00a725817147af4b6f2fd5c31df817dc6d3b86af513f06b51724c4b",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Painkiller Hell & Damnation",
-        "short_description": "Evil has returned! Demonic powers are manifesting themselves as a myriad of dark creatures, fighting over the fates of imprisoned souls caught in Purgatory.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Action",
-          "Horror",
-          "Singleplayer"
-        ],
-        "core_fit_count": 1,
-        "release_date": "31 Oct, 2012",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "214870"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_214870.json",
-      "dossier_content_sha256": "374f01e96d8a722669ec90e6fb65546017d518c0920e557e85b4a7173689792b",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-20T11:59:35Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "a56b54c98bdd98fe2fa2170ef31169a2ff75b47e6f43c2c014a48208ba5c18d4",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--45dc2734a00a725817147af4b6f2fd5c31df817dc6d3b86af513f06b51724c4b--a56b54c98bdd98fe2fa2170ef31169a2ff75b47e6f43c2c014a48208ba5c18d4.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--45dc2734a00a725817147af4b6f2fd5c31df817dc6d3b86af513f06b51724c4b--a56b54c98bdd98fe2fa2170ef31169a2ff75b47e6f43c2c014a48208ba5c18d4.json",
-      "sequence": 3
-    }
-  ]
+  "items": []
 }
