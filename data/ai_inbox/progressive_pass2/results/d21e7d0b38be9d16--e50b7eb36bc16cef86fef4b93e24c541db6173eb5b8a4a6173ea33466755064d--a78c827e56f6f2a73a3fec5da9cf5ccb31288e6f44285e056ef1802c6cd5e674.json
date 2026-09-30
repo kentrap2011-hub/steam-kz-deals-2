@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "98f766a847449a9697ba6c4a2370ffad08aee506",
+  "run_start_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+  "run_started_at_utc": "2026-09-30T11:59:25+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+  "work_id": "e50b7eb36bc16cef86fef4b93e24c541db6173eb5b8a4a6173ea33466755064d",
+  "family_id": "game:1917450",
+  "taste_subject_key": "App_1917450",
+  "appid": "1917450",
+  "taste_fingerprint": "5ed1c96840ef1e9bc286cfc1d0c45e90d3d7528f1da2aaaaf86a6a7efd86c7e5",
+  "candidate_context_sha256": "d7565965b8cb60e46ab5e6311db89f03ea630b53ab98b944aa64c4bb7a1d2e9c",
+  "dossier_content_sha256": "2960cb8e3727c92365244d8860a698a21e9aad8f30d2c03604b772796873f849",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "a78c827e56f6f2a73a3fec5da9cf5ccb31288e6f44285e056ef1802c6cd5e674",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "The compact visual novel is strongly carried by artwork, animation, music, story and world-building.",
+    "The presentation quality gives the short prequel a distinctive authored identity."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 28,
+    "development_variety": 42,
+    "structure_pacing_direction": 76,
+    "identity_hooks": 91,
+    "breadth_of_match": 57
+  },
+  "score_findings": [
+    {
+      "finding_id": "fault-presentation",
+      "text_ru": "Анимация персонажей, рисунок, музыка и world-building — главная ценность: короткая история ощущается очень авторской и качественно поставленной.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "Сюжет и персонажи для тебя особенно важны в играх с небольшим количеством механики."
+        },
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Сильная художественная подача может быть самостоятельным крючком."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 76
+        },
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 91
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 57
+        }
+      ]
+    },
+    {
+      "finding_id": "fault-low-gameplay",
+      "text_ru": "Это почти линейная kinetic visual novel без заметной системы выбора и механического слоя, поэтому пространство для освоения и развития геймплея очень ограничено.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Активное механическое освоение обычно является для тебя сильным плюсом."
+        },
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Тебе важно, чтобы игровой опыт развивался не только сюжетно."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 28
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 42
+        }
+      ]
+    }
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "История примерно на шесть часов, а главный герой в начале может раздражать, хотя его раскрытие улучшается позже.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Для давних поклонников серии это боковой приквел вместо продолжения основной сюжетной линии.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      }
+    ]
+  }
+}
