@@ -49541,12 +49541,12 @@
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "pass2_attempted": true,
       "normal_first_pass_attempted": true,
-      "authoritative_completed": false,
-      "outcome": "analysis_incomplete",
-      "analysis_issue_code": "terminal_execution_failure",
-      "attempt_consumption_source": "github_derived_semantic_contract_failure",
-      "accepted_at_utc": "2026-09-30T03:24:16+00:00",
-      "work_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
+      "authoritative_completed": true,
+      "outcome": "analyzed_not_fit",
+      "analysis_issue_code": null,
+      "attempt_consumption_source": "accepted_result",
+      "accepted_at_utc": "2026-09-30T12:06:52+00:00",
+      "work_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
       "dossier_content_sha256": "27942c6a8503e4991d3e468208d11cf92d45d8286459096f1288abb9bff677fc",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -49562,11 +49562,38 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "f938b2ec18f080adb6fe5d867dc46ddb43e9ce8da11566cc64807d6f95cce443",
-      "work_mode": "normal_first_pass",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
+      "authorization_id": "9049c31d90687acc1a33d80087925fff5bdb1e19b83dada28c6732bd874d07ec",
+      "work_mode": "recovery",
+      "recovery_authorization_id": "c2ef1322b725a4551341e7e013f2949ecba572bc636b313a1e64e64c3950cc19",
+      "recovery_reason": "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
+      "recovery_condition_binding": {
+        "semantic_input": {
+          "title": "Blazing Sails",
+          "short_description": "Fight for survival in Blazing Sails, a fast-paced pirate PvP game! Create your own unique pirate and ship. Band together with other players to command your mighty vessel! Explore different game-modes, maps, weapons, ship types and more while eliminating other crews in epic battles on land and sea!",
+          "bundle_members": [],
+          "fit_tags": [],
+          "core_fit_count": 0,
+          "release_date": "13 Nov, 2023",
+          "release_year": null,
+          "semantic_condition": {
+            "ai_condition": "taste_subject_include_controls_purchase_family",
+            "requires_ai_base_support": false,
+            "base_appids": [
+              "1158940"
+            ]
+          }
+        },
+        "defect_fix_binding": {
+          "task_id": "deep-invalid-not-fit-contract-loop-fix-01",
+          "validated_fix_commit": "b21bdfd773162e9856c1b12015b1b497b4999363",
+          "prior_run_start_anchor_commit": "4d1a1c573289358713897559e79b754907ff91c8",
+          "prior_run_start_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
+          "prior_result_commit": "911e1b1e00fdc5dbed1bff3d9e3f0148a18c58ac",
+          "prior_ingest_rejection_commit": "5651782bb91a18aaaedc1b26b5973159e3e021d0",
+          "prior_result_authorization_id": "f938b2ec18f080adb6fe5d867dc46ddb43e9ce8da11566cc64807d6f95cce443",
+          "prior_rejection_reason": "confirmed personal negative requires high confidence"
+        }
+      },
       "normal_first_pass": {
         "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
         "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
@@ -49620,64 +49647,169 @@
           "prior_appid": "1158940"
         }
       },
-      "recovery_attempts": [],
-      "recovery_owned": true,
-      "recovery_authorization": {
-        "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-        "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
-        "work_id": "ddb33cb3665250557120ce1deaa1af3f23fe213fd96119e7335f5d17a9c01fe9",
-        "family_id": "game:1158940",
-        "taste_subject_key": "App_1158940",
-        "appid": "1158940",
-        "taste_fingerprint": "b8a83e5bd64e4bfc511b81bf1e6bb046d4592f26954d595f78eb57a94f490c4e",
-        "candidate_context_sha256": "0ac8cc5ecda123341399c8ebe65e37814e963e783140ef1e6b79e51ccb747832",
-        "recovery_authorization_id": "c2ef1322b725a4551341e7e013f2949ecba572bc636b313a1e64e64c3950cc19",
-        "status": "authorized",
-        "recovery_reason": "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
-        "recovery_condition_binding": {
-          "semantic_input": {
-            "title": "Blazing Sails",
-            "short_description": "Fight for survival in Blazing Sails, a fast-paced pirate PvP game! Create your own unique pirate and ship. Band together with other players to command your mighty vessel! Explore different game-modes, maps, weapons, ship types and more while eliminating other crews in epic battles on land and sea!",
-            "bundle_members": [],
-            "fit_tags": [],
-            "core_fit_count": 0,
-            "release_date": "13 Nov, 2023",
-            "release_year": null,
-            "semantic_condition": {
-              "ai_condition": "taste_subject_include_controls_purchase_family",
-              "requires_ai_base_support": false,
-              "base_appids": [
-                "1158940"
-              ]
+      "recovery_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "ddb33cb3665250557120ce1deaa1af3f23fe213fd96119e7335f5d17a9c01fe9",
+          "family_id": "game:1158940",
+          "taste_subject_key": "App_1158940",
+          "appid": "1158940",
+          "taste_fingerprint": "b8a83e5bd64e4bfc511b81bf1e6bb046d4592f26954d595f78eb57a94f490c4e",
+          "candidate_context_sha256": "0ac8cc5ecda123341399c8ebe65e37814e963e783140ef1e6b79e51ccb747832",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "27942c6a8503e4991d3e468208d11cf92d45d8286459096f1288abb9bff677fc",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "9049c31d90687acc1a33d80087925fff5bdb1e19b83dada28c6732bd874d07ec",
+          "work_mode": "recovery",
+          "recovery_authorization_id": "c2ef1322b725a4551341e7e013f2949ecba572bc636b313a1e64e64c3950cc19",
+          "recovery_reason": "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
+          "recovery_condition_binding": {
+            "semantic_input": {
+              "title": "Blazing Sails",
+              "short_description": "Fight for survival in Blazing Sails, a fast-paced pirate PvP game! Create your own unique pirate and ship. Band together with other players to command your mighty vessel! Explore different game-modes, maps, weapons, ship types and more while eliminating other crews in epic battles on land and sea!",
+              "bundle_members": [],
+              "fit_tags": [],
+              "core_fit_count": 0,
+              "release_date": "13 Nov, 2023",
+              "release_year": null,
+              "semantic_condition": {
+                "ai_condition": "taste_subject_include_controls_purchase_family",
+                "requires_ai_base_support": false,
+                "base_appids": [
+                  "1158940"
+                ]
+              }
+            },
+            "defect_fix_binding": {
+              "task_id": "deep-invalid-not-fit-contract-loop-fix-01",
+              "validated_fix_commit": "b21bdfd773162e9856c1b12015b1b497b4999363",
+              "prior_run_start_anchor_commit": "4d1a1c573289358713897559e79b754907ff91c8",
+              "prior_run_start_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
+              "prior_result_commit": "911e1b1e00fdc5dbed1bff3d9e3f0148a18c58ac",
+              "prior_ingest_rejection_commit": "5651782bb91a18aaaedc1b26b5973159e3e021d0",
+              "prior_result_authorization_id": "f938b2ec18f080adb6fe5d867dc46ddb43e9ce8da11566cc64807d6f95cce443",
+              "prior_rejection_reason": "confirmed personal negative requires high confidence"
             }
           },
-          "defect_fix_binding": {
-            "task_id": "deep-invalid-not-fit-contract-loop-fix-01",
-            "validated_fix_commit": "b21bdfd773162e9856c1b12015b1b497b4999363",
-            "prior_run_start_anchor_commit": "4d1a1c573289358713897559e79b754907ff91c8",
-            "prior_run_start_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
-            "prior_result_commit": "911e1b1e00fdc5dbed1bff3d9e3f0148a18c58ac",
-            "prior_ingest_rejection_commit": "5651782bb91a18aaaedc1b26b5973159e3e021d0",
-            "prior_result_authorization_id": "f938b2ec18f080adb6fe5d867dc46ddb43e9ce8da11566cc64807d6f95cce443",
-            "prior_rejection_reason": "confirmed personal negative requires high confidence"
+          "migration_provenance": null,
+          "outcome": "analyzed_not_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T12:06:52+00:00",
+          "run_start_anchor_commit": "98f766a847449a9697ba6c4a2370ffad08aee506",
+          "run_start_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+          "run_started_at_utc": "2026-09-30T11:59:25+00:00",
+          "work_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "confidence": "high",
+          "not_fit_basis": "confirmed_personal_negative",
+          "not_fit_evidence": [
+            "The strongest mechanics depend on coordinated crews and full PvP matches.",
+            "Low population is a long-running problem and dated 2026 reviews still report difficulty finding enough players without bringing friends.",
+            "Because access to the core loop is unreliable, the game's otherwise appealing coordination and role variety do not form a dependable fit."
+          ],
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "other_grounded_taste_risk",
+                "text_ru": "Главная ценность игры — полноценные PvP-матчи с координацией экипажа, но низкая популяция остаётся устойчивой проблемой и в датированных отзывах 2026 года; без своей компании основной цикл ненадёжно доступен.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Есть единичный свежий отчёт о вылетах при создании аккаунта, которые прекратились после нескольких перезапусков.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
           }
-        },
-        "dossier_content_sha256": "27942c6a8503e4991d3e468208d11cf92d45d8286459096f1288abb9bff677fc",
-        "dossier_compatibility_binding": {
-          "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-          "evidence_contract_version": 2,
-          "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-          "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-          "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-          "worker_schema_version": 2,
-          "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-          "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-          "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-          "dossier_schema_version": 2,
-          "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-          "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-        },
-        "authorized_at_utc": "2026-09-30T06:43:26+00:00"
+        }
+      ],
+      "recovery_owned": false,
+      "recovery_authorization": null,
+      "confidence": "high",
+      "not_fit_basis": "confirmed_personal_negative",
+      "not_fit_evidence": [
+        "The strongest mechanics depend on coordinated crews and full PvP matches.",
+        "Low population is a long-running problem and dated 2026 reviews still report difficulty finding enough players without bringing friends.",
+        "Because access to the core loop is unreliable, the game's otherwise appealing coordination and role variety do not form a dependable fit."
+      ],
+      "negative_assessment": {
+        "status": "completed",
+        "evaluated_candidate_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ],
+        "findings": [
+          {
+            "disposition": "confirmed_personal_risk",
+            "risk_code": "other_grounded_taste_risk",
+            "text_ru": "Главная ценность игры — полноценные PvP-матчи с координацией экипажа, но низкая популяция остаётся устойчивой проблемой и в датированных отзывах 2026 года; без своей компании основной цикл ненадёжно доступен.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 2
+              }
+            ]
+          },
+          {
+            "disposition": "caution",
+            "risk_code": null,
+            "text_ru": "Есть единичный свежий отчёт о вылетах при создании аккаунта, которые прекратились после нескольких перезапусков.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ]
+          }
+        ]
       }
     },
     "game:1921980": {
@@ -53361,6 +53493,322 @@
               {
                 "kind": "observation",
                 "index": 3
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "game:200170": {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "2c1cade92ba0b7e1515e45a228c34396b258de489734352d5bce3a5c14c11f03",
+      "family_id": "game:200170",
+      "taste_subject_key": "App_200170",
+      "appid": "200170",
+      "taste_fingerprint": "d5eb27a10f86ee2bec0f05418c070c1f6dbf29d587b906f317efeb5613975ebd",
+      "candidate_context_sha256": "08e45c460509bd14789b5a80b4afb9f5871f25c72b4d29f1a662f33a6aee6321",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "pass2_attempted": true,
+      "normal_first_pass_attempted": true,
+      "authoritative_completed": true,
+      "outcome": "analyzed_fit",
+      "analysis_issue_code": null,
+      "attempt_consumption_source": "accepted_result",
+      "accepted_at_utc": "2026-09-30T12:06:52+00:00",
+      "work_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+      "dossier_content_sha256": "0a51a581bf79aeedaea2f5fe887379bbf58e8942a5b72bab0665b7f6251eef06",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "authorization_id": "c6b97dc0dacedf3185ca2bbaf71a96fb4512b230474b1cad2847c52c20c4ff21",
+      "work_mode": "normal_first_pass",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "normal_first_pass": {
+        "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+        "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+        "work_id": "2c1cade92ba0b7e1515e45a228c34396b258de489734352d5bce3a5c14c11f03",
+        "family_id": "game:200170",
+        "taste_subject_key": "App_200170",
+        "appid": "200170",
+        "taste_fingerprint": "d5eb27a10f86ee2bec0f05418c070c1f6dbf29d587b906f317efeb5613975ebd",
+        "candidate_context_sha256": "08e45c460509bd14789b5a80b4afb9f5871f25c72b4d29f1a662f33a6aee6321",
+        "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+        "dossier_content_sha256": "0a51a581bf79aeedaea2f5fe887379bbf58e8942a5b72bab0665b7f6251eef06",
+        "dossier_compatibility_binding": {
+          "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+          "evidence_contract_version": 2,
+          "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+          "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+          "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+          "worker_schema_version": 2,
+          "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+          "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+          "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+          "dossier_schema_version": 2,
+          "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+          "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+        },
+        "authorization_id": "c6b97dc0dacedf3185ca2bbaf71a96fb4512b230474b1cad2847c52c20c4ff21",
+        "work_mode": "normal_first_pass",
+        "recovery_authorization_id": null,
+        "recovery_reason": null,
+        "recovery_condition_binding": null,
+        "migration_provenance": null,
+        "outcome": "analyzed_fit",
+        "analysis_issue_code": null,
+        "attempt_consumption_source": "accepted_result",
+        "accepted_at_utc": "2026-09-30T12:06:52+00:00",
+        "run_start_anchor_commit": "98f766a847449a9697ba6c4a2370ffad08aee506",
+        "run_start_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+        "run_started_at_utc": "2026-09-30T11:59:25+00:00",
+        "work_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+        "score_evidence_contract": {
+          "schema_version": 1,
+          "contract": "DEEP-SCORE-EVIDENCE-V1",
+          "required": true
+        },
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "Turn-based artillery, destructible terrain, water physics and worm classes create a readable tactical sandbox.",
+          "Playing with friends remains the strongest source of long-term entertainment."
+        ],
+        "taste_factors": {
+          "gameplay_mastery": 82,
+          "development_variety": 76,
+          "structure_pacing_direction": 78,
+          "identity_hooks": 72,
+          "breadth_of_match": 84
+        },
+        "score_findings": [
+          {
+            "finding_id": "worms-tactics",
+            "text_ru": "Разрушаемый рельеф, вода, классы червей и большой арсенал постоянно меняют позиционную задачу, поэтому матчи требуют расчёта и импровизации.",
+            "candidate_evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 0
+              }
+            ],
+            "profile_evidence_refs": [
+              {
+                "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                "match_text_ru": "Тебе нравятся ситуации, где окружение заставляет менять тактику."
+              },
+              {
+                "json_pointer": "/mastery_profile/summary",
+                "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                "match_text_ru": "Точное исполнение и знание арсенала дают заметный рост навыка."
+              }
+            ],
+            "factor_impacts": [
+              {
+                "factor_id": "gameplay_mastery",
+                "effect": "supports",
+                "normalized_value": 82
+              },
+              {
+                "factor_id": "development_variety",
+                "effect": "supports",
+                "normalized_value": 76
+              },
+              {
+                "factor_id": "structure_pacing_direction",
+                "effect": "supports",
+                "normalized_value": 78
+              },
+              {
+                "factor_id": "breadth_of_match",
+                "effect": "supports",
+                "normalized_value": 84
+              }
+            ]
+          },
+          {
+            "finding_id": "worms-friends",
+            "text_ru": "С друзьями непредсказуемые взаимодействия оружия и разрушений создают общие ситуации и воспоминания — именно такой совместный формат особенно усиливает игру для тебя.",
+            "candidate_evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              }
+            ],
+            "profile_evidence_refs": [
+              {
+                "json_pointer": "/taste_profile/9/pattern",
+                "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+                "match_text_ru": "Совместные решения и общие игровые истории — сильный усилитель твоего профиля."
+              },
+              {
+                "json_pointer": "/taste_profile/7/pattern",
+                "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                "match_text_ru": "Узнаваемый хаотичный стиль помогает игре сохранять собственное лицо."
+              }
+            ],
+            "factor_impacts": [
+              {
+                "factor_id": "identity_hooks",
+                "effect": "supports",
+                "normalized_value": 72
+              }
+            ]
+          }
+        ],
+        "score_explainability_status": "linked_v1",
+        "base_support_compatible": null,
+        "negative_assessment": {
+          "status": "completed",
+          "evaluated_candidate_refs": [
+            {
+              "kind": "observation",
+              "index": 2
+            }
+          ],
+          "findings": [
+            {
+              "disposition": "caution",
+              "risk_code": null,
+              "text_ru": "Публичный онлайн в 2026 году малолюден: для сетевых матчей часто приходится заранее искать соперников, хотя игра с собственной компанией от этого не страдает.",
+              "evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "recovery_attempts": [],
+      "recovery_owned": false,
+      "recovery_authorization": null,
+      "fit_level": "moderate",
+      "confidence": "medium",
+      "positive_evidence": [
+        "Turn-based artillery, destructible terrain, water physics and worm classes create a readable tactical sandbox.",
+        "Playing with friends remains the strongest source of long-term entertainment."
+      ],
+      "taste_factors": {
+        "gameplay_mastery": 82,
+        "development_variety": 76,
+        "structure_pacing_direction": 78,
+        "identity_hooks": 72,
+        "breadth_of_match": 84
+      },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "worms-tactics",
+          "text_ru": "Разрушаемый рельеф, вода, классы червей и большой арсенал постоянно меняют позиционную задачу, поэтому матчи требуют расчёта и импровизации.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Тебе нравятся ситуации, где окружение заставляет менять тактику."
+            },
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Точное исполнение и знание арсенала дают заметный рост навыка."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 82
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 76
+            },
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 78
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 84
+            }
+          ]
+        },
+        {
+          "finding_id": "worms-friends",
+          "text_ru": "С друзьями непредсказуемые взаимодействия оружия и разрушений создают общие ситуации и воспоминания — именно такой совместный формат особенно усиливает игру для тебя.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/9/pattern",
+              "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+              "match_text_ru": "Совместные решения и общие игровые истории — сильный усилитель твоего профиля."
+            },
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Узнаваемый хаотичный стиль помогает игре сохранять собственное лицо."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 72
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
+      "base_support_compatible": null,
+      "negative_assessment": {
+        "status": "completed",
+        "evaluated_candidate_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ],
+        "findings": [
+          {
+            "disposition": "caution",
+            "risk_code": null,
+            "text_ru": "Публичный онлайн в 2026 году малолюден: для сетевых матчей часто приходится заранее искать соперников, хотя игра с собственной компанией от этого не страдает.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 2
               }
             ]
           }
