@@ -206,29 +206,57 @@ C/D appear stable on average mainly because coarse pairwise relation patterns qu
 
 ## 10. Real historical stress cases
 
-### Mass Effect — polished/rich game with decisive personal onboarding friction
+The three mandatory stress scenarios are bound explicitly in `mandatory_stress_cases_v4.json`.
+
+### Mandatory 1 — one dominant property legitimately drives high fit: Mirror's Edge
+
+Hidden truth: 4/5 (75).
+
+The direct held-out explanation says the game is an almost ideal match for the user's love of parkour, reinforced by the clean, recognizable visual identity. This is a real case where one dominant property can legitimately carry a high overall fit.
+
+Predictions:
+- baseline 75.7;
+- A 70;
+- C 66;
+- D 84.2.
+
+The case supports the architectural requirement that a single strongly proven property must be allowed to matter a great deal. A rigid small category cap would be undesirable here.
+
+### Mandatory 2 — superficial similarity to a favorite must not create high fit: Castlevania: Lords of Shadow
+
+Hidden truth: 3/5 (50).
+
+The held-out explanation explicitly says that resemblance to Devil May Cry does **not** raise the rating: it creates a direct unfavorable comparison because this implementation feels markedly weaker than DMC.
+
+Predictions:
+- baseline 73.6;
+- A 72;
+- C 84.2;
+- D 84.2.
+
+All four approaches overpredicted the game. This is direct evidence that merely adding pairwise anchors or richer evidence findings does not automatically prevent a superficial-similarity failure.
+
+### Mandatory 3 — many positive surface properties offset by one meaningful negative: Mass Effect
 
 Hidden truth: 2/5 (25).
 
-The user repeatedly failed to get through the opening because of information overload, too much reading, unengaging early mechanics, slow-feeling controls, and combat that did not feel exciting.
+Public candidate evidence offers characters, dialogue, builds, progression and a broad RPG structure. The hidden direct explanation is instead dominated by difficult onboarding, information overload, too much reading, too many mechanics at once, an unengaging opening, slow-feeling controls and combat that did not feel exciting.
 
 Predictions:
-
 - baseline 82.1;
 - A 85;
 - C 100;
 - D 100.
 
-All methods confused externally rich RPG properties with personal fit. This is the strongest false-positive stress case.
+This is the strongest false-positive stress case. All methods confused externally rich RPG properties with personal fit and failed to identify the personally decisive entry friction.
 
-### Grand Theft Auto V — surface richness does not imply novelty-relative-to-history
+### Additional stress — Grand Theft Auto V: surface richness does not imply novelty-relative-to-history
 
 Hidden truth: 2.5/5 (37.5).
 
 The user liked heists, but expected far more novelty and variety after earlier GTA entries, found too few new mechanics, and disliked the ending.
 
 Predictions:
-
 - baseline 86.2;
 - A 83;
 - C 96;
@@ -236,14 +264,13 @@ Predictions:
 
 All architectures missed the importance of **relative novelty against the user's own franchise history**.
 
-### Postal 2 — objective shallowness can coexist with personal novelty value
+### Additional stress — Postal 2: conventional shallowness can coexist with personal novelty value
 
 Hidden truth: 3.5/5 (62.5).
 
-The strong remembered value came from childhood novelty, absurd freedom, and taboo interactions, not from technical depth.
+The strong remembered value came from childhood novelty, absurd freedom, and unusual interactions, not from conventional mechanical depth.
 
 Predictions:
-
 - baseline 53.4;
 - A 42;
 - C 50;
@@ -251,14 +278,13 @@ Predictions:
 
 D's negative evidence layer over-penalized conventional weaknesses and erased the personal contextual hook.
 
-### Assassin's Creed — repetition did not dominate the first-series experience
+### Additional stress — Assassin's Creed: repetition did not dominate the first-series experience
 
 Hidden truth: 4/5 (75).
 
 Parkour, the assassin fantasy, and first-contact novelty outweighed the repetitive mission structure.
 
 Predictions:
-
 - baseline 63;
 - A 55;
 - C 66;
@@ -277,9 +303,9 @@ However, production-grade traceability was **not** proven:
 - D stored record-level candidate/profile provenance labels, not exact fact-index/profile-card pointers.
 - therefore content support looked acceptable in manual review, but exact machine-auditable evidence lineage remains below the current production evidence-contract standard.
 
-The blinded UI sample itself was compact and readable: score, uncertainty interval, one positive, one negative.
+The complete blinded user-audit sample (`blinded_user_audit_sample_v4.json`) contains the requested user-facing surface: final score, strongest reason up, strongest reason down, anchor comparisons, uncertainty interval, and candidate/profile linkage while keeping held-out truth hidden. It is compact and structurally auditable.
 
-That readability is not sufficient proof of reliability. In the sample, Mass Effect displayed a D score of 100 while hidden truth was 25. A plausible explanation can therefore make a badly wrong score look more trustworthy, which is a deployment risk.
+That readability is not sufficient proof of reliability. In the sample, Mass Effect displayed a D score of 100 while hidden truth was 25. Its visible negative finding did not expose the actual onboarding/information-overload failure later revealed by the hidden user explanation. A plausible explanation can therefore make a badly wrong score look more trustworthy, which is a deployment risk.
 
 No human UI preference study was conducted; this was a structural audit only.
 
@@ -422,6 +448,9 @@ Final artifacts used for decision:
 - `experiments/personal_taste_scoring/backtest_01/evaluation_records_v4.json`
 - `experiments/personal_taste_scoring/backtest_01/stress_cases_v4.json`
 - `experiments/personal_taste_scoring/backtest_01/explanation_and_cost_audit_v4.json`
+- `experiments/personal_taste_scoring/backtest_01/worked_semantic_records_v4.json`
+- `experiments/personal_taste_scoring/backtest_01/mandatory_stress_cases_v4.json`
+- `experiments/personal_taste_scoring/backtest_01/blinded_user_audit_sample_v4.json`
 
 Superseded/audit-only artifacts retained to preserve the leakage history:
 
