@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 52,
     "deep_completed_not_fit_count": 3,
     "deep_incomplete_or_recovery_count": 9,
-    "deep_waiting_for_dossier_count": 164,
-    "deep_ready_or_pending_count": 0,
+    "deep_waiting_for_dossier_count": 161,
+    "deep_ready_or_pending_count": 3,
     "deep_normal_first_pass_remaining_count": 164,
     "deep_remaining_until_all_authoritative_count": 173,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 3,
-    "dossier_waiting_count": 164,
+    "dossier_waiting_count": 161,
     "pass2_attempted_count": 64,
-    "pass2_eligible_count": 0,
-    "normal_pass2_eligible_count": 0,
+    "pass2_eligible_count": 3,
+    "normal_pass2_eligible_count": 3,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -107,5 +107,200 @@
       "complete": true
     }
   },
-  "items": []
+  "items": [
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1577120",
+      "taste_subject_key": "App_1577120",
+      "appid": "1577120",
+      "taste_fingerprint": "3328d5e9ab739e26bfc3bc5efdee326d4103219291f1d0749ddd5fc47dc5a9a7",
+      "candidate_context_sha256": "bb43a68b890b731e48ee2585af9e7d69d126b42301312b5984b7aa2f6094186a",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "58f5b4b96cc406374a7ab32f4e759a576c6a269a63645c150c990e468dba28da",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "The Quarry",
+        "short_description": "When the sun goes down on the last night of summer camp, nine teenage counselors are plunged into an unpredictable night of horror. The only thing worse than the blood-drenched locals and creatures hunting them are the unimaginable choices you must make to help them survive.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Choices Matter",
+          "Cinematic",
+          "Horror",
+          "Story Rich"
+        ],
+        "core_fit_count": 4,
+        "release_date": "9 Jun, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1577120"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1577120.json",
+      "dossier_content_sha256": "e4e83744bc4ed95e1006bfff6cd4945eea8f154a7667ab1bf63afa847b24f986",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-21T15:35:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "e43137b025d519d1f6bc99d89c405c85f90a5d2a3384af3b9eb3d1884b5e233d",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--58f5b4b96cc406374a7ab32f4e759a576c6a269a63645c150c990e468dba28da--e43137b025d519d1f6bc99d89c405c85f90a5d2a3384af3b9eb3d1884b5e233d.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--58f5b4b96cc406374a7ab32f4e759a576c6a269a63645c150c990e468dba28da--e43137b025d519d1f6bc99d89c405c85f90a5d2a3384af3b9eb3d1884b5e233d.json",
+      "sequence": 1
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:15100",
+      "taste_subject_key": "App_15100",
+      "appid": "15100",
+      "taste_fingerprint": "aedb094a7cee5cafdb669393fefa06b2be802f6ebb24a6bd84b2bf5c084c8b4c",
+      "candidate_context_sha256": "0737e583e37cdf2fa1728d8d7e764f5c9f3fae9c95a579bb2dded2b7700319ea",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "5ae2e9ee8a08706f68a335d0fa9b3f80a91c8e81a282d2e5a73f5068b0043bdd",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Assassin's Creed™: Director's Cut Edition",
+        "short_description": "Assassin's Creed™ is the next-gen game developed by Ubisoft Montreal that redefines the action genre. While other games claim to be next-gen with impressive graphics and physics, Assassin's Creed merges technology, game design, theme and emotions into a world where you instigate chaos and become a vulnerable, yet powerful, agent of...",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Adventure",
+          "Combat",
+          "Stealth",
+          "Third Person"
+        ],
+        "core_fit_count": 2,
+        "release_date": "9 Apr, 2008",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "15100"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_15100.json",
+      "dossier_content_sha256": "3f5c585e3261e5a78948490500681f6f9492c1d488277484ca4b4d1b03b4d041",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-21T15:35:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "86dfd53a41e2b393f714964533706fef77e3a2e54138422e46147965eaca1583",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--5ae2e9ee8a08706f68a335d0fa9b3f80a91c8e81a282d2e5a73f5068b0043bdd--86dfd53a41e2b393f714964533706fef77e3a2e54138422e46147965eaca1583.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--5ae2e9ee8a08706f68a335d0fa9b3f80a91c8e81a282d2e5a73f5068b0043bdd--86dfd53a41e2b393f714964533706fef77e3a2e54138422e46147965eaca1583.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:15120",
+      "taste_subject_key": "App_15120",
+      "appid": "15120",
+      "taste_fingerprint": "c37ab424981cff629c540fc7b6f674cc9c3e0c6914be92d6df744a0d97f44546",
+      "candidate_context_sha256": "6227495d2eef938dd75b9e6a58fd5a7e1e010f30aa2f0e45652f4a40bd4b872c",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "cf4481304254f78f9ffd63836b115fac2a756788d81475e2fb9f219f47dc7044",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Tom Clancy's Rainbow Six® Vegas 2",
+        "short_description": "Tom Clancy's Rainbow Six® Vegas 2 - the sequel to the award-winning next-generation first-person shooter - returns to Sin City. Tom Clancy's Rainbow Six Vegas 2 is your last chance to rescue America's sexiest city from an escalating terrorist siege that will force you into heart-pounding action from beginning to end.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Singleplayer"
+        ],
+        "core_fit_count": 0,
+        "release_date": "16 Apr, 2008",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "15120"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_15120.json",
+      "dossier_content_sha256": "0c161a875f941551923b8c632ba3f3b27eaa048839bd9573d9526b8777cacf92",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-21T15:35:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "6797a18ecce44ace161901ec4ddc777c223668554bad690faf3b24a61a9a3b80",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--cf4481304254f78f9ffd63836b115fac2a756788d81475e2fb9f219f47dc7044--6797a18ecce44ace161901ec4ddc777c223668554bad690faf3b24a61a9a3b80.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--cf4481304254f78f9ffd63836b115fac2a756788d81475e2fb9f219f47dc7044--6797a18ecce44ace161901ec4ddc777c223668554bad690faf3b24a61a9a3b80.json",
+      "sequence": 3
+    }
+  ]
 }
