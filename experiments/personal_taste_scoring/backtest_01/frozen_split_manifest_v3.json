@@ -1,0 +1,283 @@
+{
+  "experiment_id": "personal-taste-scoring-offline-backtest-01",
+  "split_version": "blind-v3-cross-reference-safe",
+  "supersedes": "blind-v2-after-quarantined-diagnostic-leak",
+  "reason_for_supersession": "Four v2 held-out titles had direct cross-references in training-card explanations, which violates held-out information isolation.",
+  "seed": "backtest01-blind-v3",
+  "heldout_count": 30,
+  "training_count": 90,
+  "source_versions": {
+    "gaming_taste_live_blob_sha": "9b9926031889dbd98ba6585c57836d52c739a0bb",
+    "ratings_blob_sha": "1317bf7add5d279c95992f97c3970b29ccaa3056",
+    "final_ranking_policy_blob_sha": "f472b74ef36abb15ac8bbdd1a21d8eac802c130c",
+    "priority_ranking_blob_sha": "317bd06d4b5f45540816a952bd553e4476e0dd6b",
+    "progressive_pass2_worker_prompt_blob_sha": "df5ac13d2cf47f42a5ec24aaec7e786f226c33a6"
+  },
+  "leakage_controls": [
+    "The original diagnostic split remains quarantined because rating bands were exposed before scoring.",
+    "Four blind-v2 candidates with direct training-card cross-references were removed before prediction.",
+    "Final v3 held-out titles have zero exact/alias references in textual fields of the 90 training cards under the documented alias rules.",
+    "Held-out direct ratings, why_this_rating, what_liked, what_disliked and separate_remarks are excluded from evaluator input.",
+    "Global derived taste_profile/contextual_preferences are excluded from evaluator input because their derivation may include held-out examples.",
+    "Preference evidence is restricted to the 90 non-held-out stopgame_cards."
+  ],
+  "replaced_v2_titles": [
+    "Devil May Cry 3: Dante's Awakening",
+    "Grand Theft Auto: San Andreas",
+    "Grand Theft Auto: Vice City",
+    "The Walking Dead: A New Frontier"
+  ],
+  "replacement_titles": [
+    "A Plague Tale: Innocence",
+    "Batman: Arkham Knight",
+    "Dead Space",
+    "The Last of Us: Part II"
+  ],
+  "heldout_titles": [
+    "A Plague Tale: Innocence",
+    "Batman: Arkham Knight",
+    "Castlevania: Lords of Shadow",
+    "Cyberpunk 2077",
+    "Darksiders",
+    "Dead Space",
+    "Grand Theft Auto III",
+    "Grand Theft Auto V",
+    "Half-Life: Blue Shift",
+    "Hogwarts Legacy",
+    "Lucius II",
+    "Mafia II",
+    "Mass Effect",
+    "Mirror's Edge",
+    "Need for Speed: Most Wanted",
+    "Perfect World",
+    "Postal 2",
+    "Prince of Persia: Warrior Within",
+    "Prototype",
+    "Red Dead Redemption",
+    "Resident Evil 4",
+    "Tekken 3",
+    "The Banner Saga 2",
+    "The Elder Scrolls IV: Oblivion",
+    "The Exit 8",
+    "The Last of Us: Part II",
+    "The Suffering",
+    "The Witcher 3: Wild Hunt - Blood and Wine",
+    "The Witcher 3: Wild Hunt - Hearts of Stone",
+    "WarCraft 3: The Frozen Throne"
+  ],
+  "training_titles": [
+    "A Plague Tale: Requiem",
+    "Assassin's Creed",
+    "Batman: Arkham Asylum",
+    "Batman: Arkham City",
+    "Batman: Arkham Origins",
+    "Battle City",
+    "BioShock",
+    "BloodRayne",
+    "BloodRayne 2",
+    "Borderlands",
+    "Comix Zone",
+    "Crysis",
+    "Cuphead",
+    "Cuphead: The Delicious Last Course",
+    "DOOM 3",
+    "Dark Messiah of Might and Magic",
+    "Dark Sector",
+    "Darksiders II",
+    "Deadpool",
+    "Deus Ex: Human Revolution",
+    "Devil May Cry 3: Dante's Awakening",
+    "Devil May Cry 4",
+    "Devil May Cry 5",
+    "Diablo III",
+    "Dying Light: The Beast",
+    "Earthworm Jim",
+    "Enter The Matrix",
+    "Fallout 3",
+    "Fallout 4",
+    "Far Cry",
+    "Felix The Cat",
+    "Final Fantasy VII Remake",
+    "Grand Theft Auto IV",
+    "Grand Theft Auto: San Andreas",
+    "Grand Theft Auto: Vice City",
+    "Gwent: The Witcher Card Game",
+    "Half-Life",
+    "Half-Life 2",
+    "Half-Life 2: Episode One",
+    "Half-Life 2: Episode Two",
+    "Heroes of Might and Magic V",
+    "HighStreet 5",
+    "Hitman: Blood Money",
+    "Left 4 Dead",
+    "Leisure Suit Larry: Magna Cum Laude",
+    "Lucius",
+    "Manhunt",
+    "Marvel's Spider-Man",
+    "Marvel's Spider-Man: Miles Morales",
+    "Max Payne",
+    "Max Payne 2: The Fall of Max Payne",
+    "Max Payne 3",
+    "Medal of Honor",
+    "Need for Speed: Underground 2",
+    "Overlord 2",
+    "Portal",
+    "Portal 2",
+    "Prince of Persia (2008)",
+    "Prince of Persia: The Sands of Time",
+    "Prince of Persia: The Two Thrones",
+    "Rayman Legends",
+    "Red Dead Redemption II",
+    "Resident Evil 4 (2023)",
+    "Sanitarium",
+    "Silent Hill",
+    "Silent Hill f",
+    "Spore",
+    "StarCraft II: Wings of Liberty",
+    "Stray",
+    "The Banner Saga",
+    "The Last of Us: Left Behind",
+    "The Last of Us: Part I",
+    "The Legend of Dragoon",
+    "The Walking Dead",
+    "The Walking Dead: A New Frontier",
+    "The Walking Dead: Michonne",
+    "The Walking Dead: Season Two",
+    "The Walking Dead: The Final Season",
+    "The Witcher",
+    "The Witcher 3: Wild Hunt",
+    "Tomb Raider (2013)",
+    "Ultimate Mortal Kombat 3",
+    "Ultimate Spider-Man",
+    "Until Dawn",
+    "Vampire: The Masquerade - Bloodlines",
+    "WarCraft 3: Reign of Chaos",
+    "Warcraft II: Tides of Darkness",
+    "Warhammer 40,000: Dawn of War",
+    "Wars & Warriors: Joan of Arc",
+    "Петька 4: День независимости"
+  ],
+  "training_cross_reference_check": [
+    {
+      "title": "A Plague Tale: Innocence",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Batman: Arkham Knight",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Castlevania: Lords of Shadow",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Cyberpunk 2077",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Darksiders",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Dead Space",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Grand Theft Auto III",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Grand Theft Auto V",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Half-Life: Blue Shift",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Hogwarts Legacy",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Lucius II",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Mafia II",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Mass Effect",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Mirror's Edge",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Need for Speed: Most Wanted",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Perfect World",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Postal 2",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Prince of Persia: Warrior Within",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Prototype",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Red Dead Redemption",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Resident Evil 4",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "Tekken 3",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "The Banner Saga 2",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "The Elder Scrolls IV: Oblivion",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "The Exit 8",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "The Last of Us: Part II",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "The Suffering",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "The Witcher 3: Wild Hunt - Blood and Wine",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "The Witcher 3: Wild Hunt - Hearts of Stone",
+      "training_reference_hits": 0
+    },
+    {
+      "title": "WarCraft 3: The Frozen Throne",
+      "training_reference_hits": 0
+    }
+  ],
+  "rating_strata_internal_only": "10 low / 10 mid / 10 high; exact title-to-band mapping intentionally absent from manifest"
+}
