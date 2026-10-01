@@ -386,6 +386,39 @@ def run():
     assert qualifiers and 'Сюжетный' in qualifiers[0]
     assert qualifier_provenance[0]['source'] == 'deep_score_finding_qualifier'
 
+    # Publication parity regression: producer-owned Deep score qualifiers share
+    # the caution surface but are not negative-assessment findings. They remain
+    # valid under completed_no_relevant_negative when their linked score
+    # provenance is complete.
+    qualifier_card = copy.deepcopy(valid_card)
+    qualifier_card['cautions'] = copy.deepcopy(qualifiers)
+    qualifier_card['caution_provenance'] = copy.deepcopy(qualifier_provenance)
+    qualifier_card['negative_assessment_status'] = 'completed_no_relevant_negative'
+    assert card_validator.validate_item(qualifier_card) == []
+
+    qualifier_missing_profile = copy.deepcopy(qualifier_card)
+    qualifier_missing_profile['caution_provenance'][0]['profile_evidence_refs'] = []
+    assert_card_error(
+        qualifier_missing_profile,
+        'Deep score qualifier lacks exact candidate/profile evidence refs',
+    )
+
+    qualifier_supports = copy.deepcopy(qualifier_card)
+    qualifier_supports['caution_provenance'][0]['factor_impacts'][0]['effect'] = 'supports'
+    assert_card_error(
+        qualifier_supports,
+        'Deep score qualifier has incompatible factor impacts',
+    )
+
+    qualifier_partial_binding = copy.deepcopy(qualifier_card)
+    qualifier_partial_binding['caution_provenance'][0]['semantic_binding'].pop(
+        'authorization_id', None
+    )
+    assert_card_error(
+        qualifier_partial_binding,
+        'Deep score qualifier lacks exact accepted-state binding',
+    )
+
     # Existing grounded negative/caution path remains independent and does not
     # become a second penalty merely because a score qualifier is visible.
     deep_cautions, _ = card_explanation_policy.deep_cautions(semantic)
