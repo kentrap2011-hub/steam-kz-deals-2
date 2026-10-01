@@ -1,0 +1,105 @@
+{
+  "experiment_id": "personal-taste-scoring-offline-backtest-01",
+  "cases": [
+    {
+      "title": "Mass Effect",
+      "purpose": "polished game with objectively rich characters/systems but a decisive personal onboarding/text/combat-friction mismatch",
+      "truth": {
+        "rating": 2,
+        "score_0_100": 25,
+        "why_this_rating": "2/5: слишком тяжёлый вход и информационная перегрузка не компенсируются ни ранним сюжетом, ни боевой системой.",
+        "what_liked": [],
+        "what_disliked": [
+          "Пытался начать примерно три раза.",
+          "С самого начала механики не завораживают.",
+          "Слишком много текста/информации, которую нужно читать.",
+          "Сразу вываливают много механик, которые надо понять.",
+          "Начало сюжета не цепляет.",
+          "Управление ощущается неэкшоновским и медленным.",
+          "Бои не кажутся зрелищными и особенно интересными."
+        ],
+        "discussion_confidence": "высокая"
+      },
+      "predictions": {
+        "baseline": 82.1,
+        "A": 85,
+        "C_BT": 100,
+        "D": 100
+      },
+      "observation": "false_positive_surface_fit_or_missing_personal_dealbreaker"
+    },
+    {
+      "title": "Grand Theft Auto V",
+      "purpose": "surface-rich sequel where the user specifically penalized lack of novelty/variety relative to prior beloved entries",
+      "truth": {
+        "rating": 2.5,
+        "score_0_100": 37.5,
+        "why_this_rating": "2.5/5: огромные ожидания столкнулись с ощущением малого количества нового и менее разнообразного опыта; финал дополнительно разочаровал.",
+        "what_liked": [
+          "Ограбления понравились."
+        ],
+        "what_disliked": [
+          "После огромных ожиданий игра не показалась чем-то особенным.",
+          "Разнообразие хуже, чем в Vice City и San Andreas.",
+          "Не увидел особо новых механик.",
+          "Финал, где спасают обоих, показался слабым и оставил ощущение, что к этой точке шли зря.",
+          "Ограблений, которые нравились, слишком мало."
+        ],
+        "discussion_confidence": "высокая"
+      },
+      "predictions": {
+        "baseline": 86.2,
+        "A": 83,
+        "C_BT": 96,
+        "D": 96
+      },
+      "observation": "false_positive_surface_fit_or_missing_personal_dealbreaker"
+    },
+    {
+      "title": "Postal 2",
+      "purpose": "externally shallow/repetitive game whose personal childhood novelty and taboo sandbox freedom remained a positive hook",
+      "truth": {
+        "rating": 3.5,
+        "score_0_100": 62.5,
+        "why_this_rating": "3.5/5: подтверждён сильный детский вау-эффект от необычных, абсурдных и табуированных возможностей, которые делали игру весёлой и запоминающейся; причина, почему оценка не выше, пока не объяснена.",
+        "what_liked": [
+          "В детстве сильный вау-эффект давали необычные и запретные по ощущению возможности, например возможность мочиться или использовать кошку как часть абсурдного игрового взаимодействия.",
+          "Такой хулиганский абсурд воспринимался весёлым именно потому, что подобного почти не встречалось в других играх."
+        ],
+        "what_disliked": [],
+        "discussion_confidence": "средняя"
+      },
+      "predictions": {
+        "baseline": 53.4,
+        "A": 42,
+        "C_BT": 50,
+        "D": 34
+      },
+      "observation": "overpenalized_negative"
+    },
+    {
+      "title": "Assassin's Creed",
+      "purpose": "repetitive structure that nevertheless scored high because first-series novelty, parkour and assassin fantasy mattered more",
+      "truth": {
+        "rating": 4,
+        "score_0_100": 75,
+        "why_this_rating": "4/5: первое знакомство с серией удачно соединило любимый паркур с новой темой ассасинов и ощущением интересной истории.",
+        "what_liked": [
+          "Напоминала Prince of Persia.",
+          "Очень понравилась тема скрытных убийц.",
+          "Любишь паркур, и он был важной частью привлекательности.",
+          "Сюжет в памяти остался как потенциально интересный."
+        ],
+        "what_disliked": [],
+        "discussion_confidence": "средняя"
+      },
+      "predictions": {
+        "baseline": 63,
+        "A": 55,
+        "C_BT": 66,
+        "D": 50
+      },
+      "observation": "false_negative_contextual_hook_or_novelty"
+    }
+  ]
+}
