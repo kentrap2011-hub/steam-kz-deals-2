@@ -1,0 +1,153 @@
+{
+  "experiment_id": "personal-taste-scoring-targeted-offline-backtest-02",
+  "artifact": "stability_input",
+  "version": "v1",
+  "selection_rule": "4 per hidden family by FNV-1a(seed|blind_id); family labels omitted from evaluator input",
+  "selection_seed": "backtest02-stability-v1",
+  "cases": [
+    {
+      "blind_id": "B08",
+      "title": "Sanitarium",
+      "facts": [
+        "story-led point-and-click adventure with psychologically surreal settings",
+        "puzzles are integrated into narrative and atmosphere",
+        "pixel hunting, mazes and some unclear interactions can create friction"
+      ],
+      "sources": [
+        "https://tulipclaymore.wordpress.com/2012/07/19/sanitarium-1998/",
+        "https://gamefaqs.gamespot.com/pc/52149-sanitarium/reviews/149699"
+      ]
+    },
+    {
+      "blind_id": "B10",
+      "title": "The Banner Saga 2",
+      "facts": [
+        "turn-based tactical combat emphasizes positioning, armor/health tradeoffs and unit abilities",
+        "strategic caravan decisions feed narrative consequences",
+        "refines the first game's systems but is narratively dependent on prior context"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/the-banner-saga-2-review/1900-6416411/"
+      ]
+    },
+    {
+      "blind_id": "B11",
+      "title": "Resident Evil 4",
+      "facts": [
+        "third-person horror-action with deliberately paced shooting",
+        "frequent set-pieces/bosses and clear forward direction maintain momentum",
+        "long adventure includes secrets and bonus content, with sustained action variety"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/resident-evil-4-review/1900-6115968/"
+      ]
+    },
+    {
+      "blind_id": "B12",
+      "title": "The Elder Scrolls IV: Oblivion",
+      "facts": [
+        "large open-ended RPG with extensive character customization and exploration",
+        "many guilds, side quests and activities support different play styles",
+        "quest tracking gives clear goals despite the world's breadth"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/the-elder-scrolls-iv-oblivion-review/1900-6146661/"
+      ]
+    },
+    {
+      "blind_id": "B13",
+      "title": "Marvel's Spider-Man",
+      "facts": [
+        "web-swinging traversal has an accessible but expressive movement system",
+        "acrobatic combat expands through skills/gadgets and supports some stealth",
+        "story and superhero identity are prominent while recurring city crimes/activities repeat"
+      ],
+      "sources": [
+        "https://www.gamespot.com/articles/best-games-of-2018-marvels-spider-man/1100-6463901/"
+      ]
+    },
+    {
+      "blind_id": "B15",
+      "title": "Mafia II",
+      "facts": [
+        "story-led crime action with a detailed city",
+        "strong narrative/action focus",
+        "open city is underused and offers little meaningful side content"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/mafia-ii-review/1900-6274280/"
+      ]
+    },
+    {
+      "blind_id": "B16",
+      "title": "WarCraft 3: The Frozen Throne",
+      "facts": [
+        "expansion adds multiple campaigns, units, heroes and substantial mechanical depth",
+        "campaign missions deliberately vary objectives and often depart from standard base-building",
+        "bonus campaign shifts toward hero-led RPG-like exploration"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/warcraft-iii-the-frozen-throne-review/1900-6070848/"
+      ]
+    },
+    {
+      "blind_id": "B17",
+      "title": "The Witcher 3: Wild Hunt - Hearts of Stone",
+      "facts": [
+        "compact story-focused expansion built around character-rich branching quests",
+        "story subverts expectations and uses varied combat/non-combat quest situations",
+        "some minigame/detective passages interrupt pacing"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/the-witcher-3-wild-hunt-hearts-of-stone-review/1900-6416268/"
+      ]
+    }
+  ],
+  "architecture_a_questions": [
+    "strongest_like_reasons",
+    "strongest_dislike_reasons",
+    "decisive_negative_cap",
+    "decisive_positive_context_hook",
+    "superficial_similarity_check",
+    "franchise_relative_novelty",
+    "onboarding_first_hours_dominance",
+    "missing_uncertain_evidence"
+  ],
+  "calibration_anchors": [
+    {
+      "title": "Half-Life",
+      "rating": 1.5,
+      "score": 12.5
+    },
+    {
+      "title": "Fallout 4",
+      "rating": 2,
+      "score": 25
+    },
+    {
+      "title": "Deus Ex: Human Revolution",
+      "rating": 2.5,
+      "score": 37.5
+    },
+    {
+      "title": "Stray",
+      "rating": 3,
+      "score": 50
+    },
+    {
+      "title": "Tomb Raider (2013)",
+      "rating": 3.5,
+      "score": 62.5
+    },
+    {
+      "title": "Batman: Arkham Asylum",
+      "rating": 4,
+      "score": 75
+    },
+    {
+      "title": "Red Dead Redemption II",
+      "rating": 4.5,
+      "score": 87.5
+    }
+  ]
+}

@@ -1,5 +1,18 @@
 # CURRENT TASK
 
+## COMPLETE — Personal taste scoring targeted offline backtest 02
+Статус: `evidence_inconclusive`.
+- task: `WORKER_TASK_PERSONAL_TASTE_SCORING_TARGETED_OFFLINE_BACKTEST_02.md`;
+- mode: `READ-ONLY / OFFLINE EXPERIMENT`;
+- durable report: `reviews/worker_reports/personal-taste-scoring-targeted-offline-backtest-02.md`; report commit: `0d154478c168dbf7bfd1985e465f6040935f6ff2`;
+- preregistration commit `e26eba6409f8284bfc464c0e68a7faabf28bbccc` preceded blind primary predictions `1f03b783fb7d41c50a74c9f95dd5e0eb7d510e35` and stability reruns `82a470a37801cbf147dcebc3b97c17eb3aca6a95`; truth unblinded only afterward;
+- final dataset: 20 hard cases, balanced 10/10; all 20 reuse backtest-01 final blind-v4 held-out identities after two fresh-split attempts were rejected fail-closed for setup leakage; no prior prediction was used as model evidence;
+- Architecture A improved overall MAE 20.47 -> 15.58, RMSE 25.36 -> 19.65, pairwise 0.634 -> 0.676 and ECE 18.46 -> 12.18, with stable reruns;
+- however A still had Family-1 false-high 0.80, severe-deal-breaker miss 0.857, Family-2 false-low 0.20, decisive-positive miss 0.286 and only 6/17 strict decisive-reason matches; five preregistered core gates failed;
+- semantic conclusion: Evidence remains inconclusive; neither production implementation of A nor a baseline-better verdict is justified;
+- no production scoring/ranking, Deep/Dossier contract/state, canonical Taste profile, visual payload, scheduler/queue/retry owner or Scheduled Task was changed;
+- next bounded action: collect 20 newly explained historical game ratings outside the current canonical 120-card profile, covering play-order/franchise context, social-context value and sustained-development drop-off, then run the same frozen baseline-vs-A protocol once without changing thresholds.
+
 ## COMPLETE — Dossier exhausted fail-closed loop fix 01
 Статус: `implementation_complete_needs_next_semantic_invocation`.
 - task: `WORKER_TASK_DOSSIER_EXHAUSTED_FAIL_CLOSED_LOOP_FIX_01.md`;

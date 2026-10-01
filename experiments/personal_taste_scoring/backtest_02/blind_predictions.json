@@ -1,0 +1,1092 @@
+{
+  "experiment_id": "personal-taste-scoring-targeted-offline-backtest-02",
+  "artifact": "blind_primary_predictions",
+  "version": "v1",
+  "evaluator_input_path": "experiments/personal_taste_scoring/backtest_02/evaluator_input.json",
+  "truth_unblinded": false,
+  "prior_backtest_predictions_used": false,
+  "production_state_used": false,
+  "semantic_worker": "current bounded ChatGPT worker; single blind pass",
+  "predictions": [
+    {
+      "blind_id": "B01",
+      "title": "Tekken 3",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 92,
+          "development_variety": 82,
+          "structure_pacing_direction": 75,
+          "identity_hooks": 88,
+          "breadth_of_match": 78
+        },
+        "score_0_100": 85.1,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=92.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=82.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=75.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=88.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=78."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Deep character-specific mastery, combos, roster identity and extra modes are a strong fit."
+          ],
+          "strongest_dislike_reasons": [
+            "A pure fighting loop can still become repetitive if mastery alone is not enough."
+          ],
+          "decisive_negative_cap": null,
+          "decisive_positive_context_hook": {
+            "polarity": "positive",
+            "class": "mastery_identity",
+            "text": "Character mastery can legitimately dominate because it changes the whole play experience."
+          },
+          "superficial_similarity_check": "Similarity to other fighters is not sufficient; the causal hook is learnable character mastery.",
+          "franchise_relative_novelty": "Series-relative novelty may matter, but no evidence says this entry is merely derivative.",
+          "onboarding_first_hours_dominance": false,
+          "missing_uncertain_evidence": [
+            "No direct evidence about preferred roster/character or long-session repetition."
+          ]
+        },
+        "score_0_100": 80,
+        "strongest_reason_up": "Deep character-specific mastery, combos, roster identity and extra modes are a strong fit.",
+        "strongest_reason_down": "A pure fighting loop can still become repetitive if mastery alone is not enough.",
+        "decisive_factor": {
+          "polarity": "positive",
+          "class": "mastery_identity",
+          "text": "Character mastery can legitimately dominate because it changes the whole play experience."
+        },
+        "anchor_comparison": "above Batman: Arkham Asylum (75), below Red Dead Redemption II (87.5)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B02",
+      "title": "Cyberpunk 2077",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 80,
+          "development_variety": 90,
+          "structure_pacing_direction": 72,
+          "identity_hooks": 88,
+          "breadth_of_match": 90
+        },
+        "score_0_100": 83.2,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=80.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=90.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=72.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=88.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=90."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Characters, quests, multiple combat approaches and progression provide several real hooks."
+          ],
+          "strongest_dislike_reasons": [
+            "Large open-world breadth may turn into low-value ambient/checklist content; RPG-system density may add entry friction."
+          ],
+          "decisive_negative_cap": {
+            "polarity": "negative",
+            "class": "open_world_breadth_friction",
+            "text": "Do not let feature breadth alone justify a high score; uneven meaningfulness can cap fit."
+          },
+          "decisive_positive_context_hook": null,
+          "superficial_similarity_check": "Surface similarity to other large RPGs is not positive evidence by itself.",
+          "franchise_relative_novelty": "Novelty relative to other open-world RPGs is uncertain and should not be assumed.",
+          "onboarding_first_hours_dominance": true,
+          "missing_uncertain_evidence": [
+            "Candidate facts do not directly describe tutorial clarity or information load."
+          ]
+        },
+        "score_0_100": 68,
+        "strongest_reason_up": "Characters, quests, multiple combat approaches and progression provide several real hooks.",
+        "strongest_reason_down": "Large open-world breadth may turn into low-value ambient/checklist content; RPG-system density may add entry friction.",
+        "decisive_factor": {
+          "polarity": "negative",
+          "class": "open_world_breadth_friction",
+          "text": "Do not let feature breadth alone justify a high score; uneven meaningfulness can cap fit."
+        },
+        "anchor_comparison": "above Tomb Raider (62.5), below Batman: Arkham Asylum (75)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B03",
+      "title": "Prototype",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 90,
+          "development_variety": 82,
+          "structure_pacing_direction": 78,
+          "identity_hooks": 82,
+          "breadth_of_match": 75
+        },
+        "score_0_100": 83.7,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=90.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=82.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=78.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=82.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=75."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Extreme agility, direct superpowers, frequent action changes and bosses create a strong action/traversal hook."
+          ],
+          "strongest_dislike_reasons": [
+            "Open-world mission structure could still repeat and story quality is only weakly evidenced."
+          ],
+          "decisive_negative_cap": null,
+          "decisive_positive_context_hook": {
+            "polarity": "positive",
+            "class": "movement_power_fantasy",
+            "text": "Fast direct movement and power expression can carry the experience even if other layers are ordinary."
+          },
+          "superficial_similarity_check": "Do not reward open-world similarity; the causal positives are agility and power expression.",
+          "franchise_relative_novelty": "If this feels like a first strong encounter with its movement/power fantasy, novelty could raise fit, but evidence is indirect.",
+          "onboarding_first_hours_dominance": false,
+          "missing_uncertain_evidence": [
+            "Long-term mission repetition is not well evidenced."
+          ]
+        },
+        "score_0_100": 78,
+        "strongest_reason_up": "Extreme agility, direct superpowers, frequent action changes and bosses create a strong action/traversal hook.",
+        "strongest_reason_down": "Open-world mission structure could still repeat and story quality is only weakly evidenced.",
+        "decisive_factor": {
+          "polarity": "positive",
+          "class": "movement_power_fantasy",
+          "text": "Fast direct movement and power expression can carry the experience even if other layers are ordinary."
+        },
+        "anchor_comparison": "above Batman: Arkham Asylum (75), below Red Dead Redemption II (87.5)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B04",
+      "title": "Perfect World",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 58,
+          "development_variety": 78,
+          "structure_pacing_direction": 55,
+          "identity_hooks": 68,
+          "breadth_of_match": 82
+        },
+        "score_0_100": 65.8,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=58.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=78.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=55.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=68.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=82."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Character customization, flight and a large persistent world can create discovery and identity hooks."
+          ],
+          "strongest_dislike_reasons": [
+            "Quest/leveling grind and repetition are central risks and can dominate a broad-content MMO."
+          ],
+          "decisive_negative_cap": {
+            "polarity": "negative",
+            "class": "grind_repetition",
+            "text": "Potential grind/repetition should cap the score despite breadth and customization."
+          },
+          "decisive_positive_context_hook": null,
+          "superficial_similarity_check": "MMO/open-world similarity is not causal preference evidence.",
+          "franchise_relative_novelty": "Flight may feel novel, but novelty is not enough if routine leveling dominates.",
+          "onboarding_first_hours_dominance": true,
+          "missing_uncertain_evidence": [
+            "No evidence about social context or whether the user played with others, which could materially change fit."
+          ]
+        },
+        "score_0_100": 45,
+        "strongest_reason_up": "Character customization, flight and a large persistent world can create discovery and identity hooks.",
+        "strongest_reason_down": "Quest/leveling grind and repetition are central risks and can dominate a broad-content MMO.",
+        "decisive_factor": {
+          "polarity": "negative",
+          "class": "grind_repetition",
+          "text": "Potential grind/repetition should cap the score despite breadth and customization."
+        },
+        "anchor_comparison": "below Stray (50), above Deus Ex: Human Revolution (37.5)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B05",
+      "title": "The Suffering",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 72,
+          "development_variety": 48,
+          "structure_pacing_direction": 64,
+          "identity_hooks": 78,
+          "breadth_of_match": 50
+        },
+        "score_0_100": 64.2,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=72.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=48.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=64.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=78.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=50."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Fast direct combat and distinctive horror creature/visual atmosphere provide immediate hooks."
+          ],
+          "strongest_dislike_reasons": [
+            "Limited enemy/tactical variety and straightforward repetition can erode interest."
+          ],
+          "decisive_negative_cap": {
+            "polarity": "negative",
+            "class": "repetition_limited_variety",
+            "text": "If the combat loop stops developing, repetition caps a higher score."
+          },
+          "decisive_positive_context_hook": null,
+          "superficial_similarity_check": "Horror similarity alone is neutral; the relevant positives are fast combat and atmosphere.",
+          "franchise_relative_novelty": "No franchise-relative novelty evidence.",
+          "onboarding_first_hours_dominance": false,
+          "missing_uncertain_evidence": [
+            "Unclear how much horror atmosphere versus combat matters for this specific user."
+          ]
+        },
+        "score_0_100": 58,
+        "strongest_reason_up": "Fast direct combat and distinctive horror creature/visual atmosphere provide immediate hooks.",
+        "strongest_reason_down": "Limited enemy/tactical variety and straightforward repetition can erode interest.",
+        "decisive_factor": {
+          "polarity": "negative",
+          "class": "repetition_limited_variety",
+          "text": "If the combat loop stops developing, repetition caps a higher score."
+        },
+        "anchor_comparison": "above Stray (50), below Tomb Raider (62.5)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B06",
+      "title": "The Witcher 3: Wild Hunt - Blood and Wine",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 78,
+          "development_variety": 90,
+          "structure_pacing_direction": 82,
+          "identity_hooks": 92,
+          "breadth_of_match": 88
+        },
+        "score_0_100": 84.6,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=78.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=90.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=82.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=92.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=88."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "A vivid new region, substantial quests, story, exploration and mysteries provide genuine novelty within a known formula."
+          ],
+          "strongest_dislike_reasons": [
+            "It still inherits the long Witcher 3 structure and can contain side-content overhead."
+          ],
+          "decisive_negative_cap": null,
+          "decisive_positive_context_hook": {
+            "polarity": "positive",
+            "class": "franchise_novelty",
+            "text": "A substantial new region and mysteries can outweigh ordinary expansion repetition."
+          },
+          "superficial_similarity_check": "Similarity to Witcher 3 is not enough; the new region and content density are the causal positives.",
+          "franchise_relative_novelty": "Yes: novelty relative to the base game is directly material here.",
+          "onboarding_first_hours_dominance": false,
+          "missing_uncertain_evidence": [
+            "No direct evidence about whether expansion length or side content becomes tiring."
+          ]
+        },
+        "score_0_100": 82,
+        "strongest_reason_up": "A vivid new region, substantial quests, story, exploration and mysteries provide genuine novelty within a known formula.",
+        "strongest_reason_down": "It still inherits the long Witcher 3 structure and can contain side-content overhead.",
+        "decisive_factor": {
+          "polarity": "positive",
+          "class": "franchise_novelty",
+          "text": "A substantial new region and mysteries can outweigh ordinary expansion repetition."
+        },
+        "anchor_comparison": "above Batman: Arkham Asylum (75), below Red Dead Redemption II (87.5)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B07",
+      "title": "Prince of Persia: Warrior Within",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 90,
+          "development_variety": 85,
+          "structure_pacing_direction": 68,
+          "identity_hooks": 78,
+          "breadth_of_match": 72
+        },
+        "score_0_100": 81.9,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=90.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=85.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=68.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=78.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=72."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Central parkour plus deeper free-form combat and dual-wield expression align with movement/mastery preferences."
+          ],
+          "strongest_dislike_reasons": [
+            "Backtracking/repetition and a darker tonal shift can create friction."
+          ],
+          "decisive_negative_cap": null,
+          "decisive_positive_context_hook": {
+            "polarity": "positive",
+            "class": "parkour_combat_mastery",
+            "text": "Parkour plus deeper combat can outweigh moderate backtracking."
+          },
+          "superficial_similarity_check": "Franchise similarity is not enough; deeper combat and traversal are the causal positives.",
+          "franchise_relative_novelty": "Yes: relative mechanical development versus an earlier entry matters positively; tonal novelty could cut either way.",
+          "onboarding_first_hours_dominance": false,
+          "missing_uncertain_evidence": [
+            "No direct evidence on tolerance for the darker tone."
+          ]
+        },
+        "score_0_100": 78,
+        "strongest_reason_up": "Central parkour plus deeper free-form combat and dual-wield expression align with movement/mastery preferences.",
+        "strongest_reason_down": "Backtracking/repetition and a darker tonal shift can create friction.",
+        "decisive_factor": {
+          "polarity": "positive",
+          "class": "parkour_combat_mastery",
+          "text": "Parkour plus deeper combat can outweigh moderate backtracking."
+        },
+        "anchor_comparison": "above Batman: Arkham Asylum (75), below Red Dead Redemption II (87.5)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B08",
+      "title": "Sanitarium",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 45,
+          "development_variety": 55,
+          "structure_pacing_direction": 50,
+          "identity_hooks": 82,
+          "breadth_of_match": 55
+        },
+        "score_0_100": 54.9,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=45.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=55.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=50.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=82.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=55."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Psychological atmosphere, surreal identity and story-integrated puzzles can be memorable."
+          ],
+          "strongest_dislike_reasons": [
+            "Pixel hunting, mazes and unclear interactions can create exactly the kind of avoidable friction that blocks engagement."
+          ],
+          "decisive_negative_cap": {
+            "polarity": "negative",
+            "class": "interaction_clarity",
+            "text": "Unclear interaction friction may dominate an otherwise interesting atmosphere."
+          },
+          "decisive_positive_context_hook": null,
+          "superficial_similarity_check": "Point-and-click/story similarity is not itself positive evidence.",
+          "franchise_relative_novelty": "Novelty of surreal presentation may help, but cannot erase interaction friction.",
+          "onboarding_first_hours_dominance": true,
+          "missing_uncertain_evidence": [
+            "Direct tolerance for classic-adventure interface friction is uncertain."
+          ]
+        },
+        "score_0_100": 50,
+        "strongest_reason_up": "Psychological atmosphere, surreal identity and story-integrated puzzles can be memorable.",
+        "strongest_reason_down": "Pixel hunting, mazes and unclear interactions can create exactly the kind of avoidable friction that blocks engagement.",
+        "decisive_factor": {
+          "polarity": "negative",
+          "class": "interaction_clarity",
+          "text": "Unclear interaction friction may dominate an otherwise interesting atmosphere."
+        },
+        "anchor_comparison": "around Stray (50), below Tomb Raider (62.5)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B09",
+      "title": "Grand Theft Auto III",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 72,
+          "development_variety": 75,
+          "structure_pacing_direction": 70,
+          "identity_hooks": 85,
+          "breadth_of_match": 78
+        },
+        "score_0_100": 75,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=72.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=75.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=70.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=85.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=78."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Systemic free roaming, a clockwork city and optional mayhem offer freedom and a strong identity."
+          ],
+          "strongest_dislike_reasons": [
+            "Mission/gameplay systems are older and could feel less varied or refined than later open-world experiences."
+          ],
+          "decisive_negative_cap": null,
+          "decisive_positive_context_hook": {
+            "polarity": "positive",
+            "class": "first_contact_open_world_freedom",
+            "text": "If this represents first-contact novelty with a systemic 3D city, that context can materially raise enjoyment."
+          },
+          "superficial_similarity_check": "Do not reward GTA/open-world label alone; free-form city interaction is the causal hook.",
+          "franchise_relative_novelty": "Yes: franchise/history novelty is potentially decisive and should be considered explicitly.",
+          "onboarding_first_hours_dominance": false,
+          "missing_uncertain_evidence": [
+            "The evaluator lacks exact evidence about when this was played relative to later GTA games."
+          ]
+        },
+        "score_0_100": 72,
+        "strongest_reason_up": "Systemic free roaming, a clockwork city and optional mayhem offer freedom and a strong identity.",
+        "strongest_reason_down": "Mission/gameplay systems are older and could feel less varied or refined than later open-world experiences.",
+        "decisive_factor": {
+          "polarity": "positive",
+          "class": "first_contact_open_world_freedom",
+          "text": "If this represents first-contact novelty with a systemic 3D city, that context can materially raise enjoyment."
+        },
+        "anchor_comparison": "above Tomb Raider (62.5), near Batman: Arkham Asylum (75)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B10",
+      "title": "The Banner Saga 2",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 78,
+          "development_variety": 80,
+          "structure_pacing_direction": 65,
+          "identity_hooks": 70,
+          "breadth_of_match": 74
+        },
+        "score_0_100": 74.8,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=78.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=80.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=65.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=70.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=74."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Tactical positioning, armor/health tradeoffs and narrative consequences provide meaningful decision-making."
+          ],
+          "strongest_dislike_reasons": [
+            "Narrative dependence on prior context can reduce onboarding clarity and emotional impact."
+          ],
+          "decisive_negative_cap": {
+            "polarity": "negative",
+            "class": "prior_context_dependency",
+            "text": "Dependence on the first game's context can cap fit if the player is not fully invested."
+          },
+          "decisive_positive_context_hook": null,
+          "superficial_similarity_check": "Tactical similarity to other strategy games is not positive by itself.",
+          "franchise_relative_novelty": "Sequel novelty is mostly refinement rather than a new hook.",
+          "onboarding_first_hours_dominance": true,
+          "missing_uncertain_evidence": [
+            "Unknown strength of attachment to the first game's story and systems."
+          ]
+        },
+        "score_0_100": 62,
+        "strongest_reason_up": "Tactical positioning, armor/health tradeoffs and narrative consequences provide meaningful decision-making.",
+        "strongest_reason_down": "Narrative dependence on prior context can reduce onboarding clarity and emotional impact.",
+        "decisive_factor": {
+          "polarity": "negative",
+          "class": "prior_context_dependency",
+          "text": "Dependence on the first game's context can cap fit if the player is not fully invested."
+        },
+        "anchor_comparison": "around Tomb Raider (62.5), above Stray (50)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B11",
+      "title": "Resident Evil 4",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 88,
+          "development_variety": 90,
+          "structure_pacing_direction": 85,
+          "identity_hooks": 82,
+          "breadth_of_match": 82
+        },
+        "score_0_100": 86.6,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=88.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=90.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=85.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=82.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=82."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Clear direction, varied set-pieces/bosses, paced shooting and sustained action variety are a strong structural fit."
+          ],
+          "strongest_dislike_reasons": [
+            "Deliberate aiming/pacing may feel less fluid than modern action, but no major candidate-specific blocker is evident."
+          ],
+          "decisive_negative_cap": null,
+          "decisive_positive_context_hook": {
+            "polarity": "positive",
+            "class": "varied_directed_action",
+            "text": "Sustained variety plus clear forward direction can legitimately support a high score."
+          },
+          "superficial_similarity_check": "Horror/action similarity is not enough; the causal fit is variety and clear momentum.",
+          "franchise_relative_novelty": "First-contact novelty may matter but is not needed for a strong prediction.",
+          "onboarding_first_hours_dominance": false,
+          "missing_uncertain_evidence": [
+            "Control feel relative to the user's expectations is uncertain."
+          ]
+        },
+        "score_0_100": 82,
+        "strongest_reason_up": "Clear direction, varied set-pieces/bosses, paced shooting and sustained action variety are a strong structural fit.",
+        "strongest_reason_down": "Deliberate aiming/pacing may feel less fluid than modern action, but no major candidate-specific blocker is evident.",
+        "decisive_factor": {
+          "polarity": "positive",
+          "class": "varied_directed_action",
+          "text": "Sustained variety plus clear forward direction can legitimately support a high score."
+        },
+        "anchor_comparison": "above Batman: Arkham Asylum (75), below Red Dead Redemption II (87.5)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B12",
+      "title": "The Elder Scrolls IV: Oblivion",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 72,
+          "development_variety": 92,
+          "structure_pacing_direction": 75,
+          "identity_hooks": 82,
+          "breadth_of_match": 95
+        },
+        "score_0_100": 80.7,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=72.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=92.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=75.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=82.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=95."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Exploration, customization, guilds and many side activities create broad agency."
+          ],
+          "strongest_dislike_reasons": [
+            "Very broad RPG systems can produce information/choice overload and diffuse direction even though quest tracking is clear."
+          ],
+          "decisive_negative_cap": {
+            "polarity": "negative",
+            "class": "breadth_onboarding_overload",
+            "text": "Feature breadth is not automatically fit; onboarding/system load should cap confidence and score."
+          },
+          "decisive_positive_context_hook": null,
+          "superficial_similarity_check": "Similarity to large RPG favorites is explicitly not enough.",
+          "franchise_relative_novelty": "Relative novelty versus later open-world RPGs could change the experience substantially, but timing is unknown.",
+          "onboarding_first_hours_dominance": true,
+          "missing_uncertain_evidence": [
+            "No direct candidate evidence about tutorial/system-learning burden; this is a risk, not a fact."
+          ]
+        },
+        "score_0_100": 60,
+        "strongest_reason_up": "Exploration, customization, guilds and many side activities create broad agency.",
+        "strongest_reason_down": "Very broad RPG systems can produce information/choice overload and diffuse direction even though quest tracking is clear.",
+        "decisive_factor": {
+          "polarity": "negative",
+          "class": "breadth_onboarding_overload",
+          "text": "Feature breadth is not automatically fit; onboarding/system load should cap confidence and score."
+        },
+        "anchor_comparison": "below Tomb Raider (62.5), above Stray (50)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B13",
+      "title": "Marvel's Spider-Man",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 90,
+          "development_variety": 82,
+          "structure_pacing_direction": 75,
+          "identity_hooks": 95,
+          "breadth_of_match": 78
+        },
+        "score_0_100": 85.5,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=90.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=82.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=75.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=95.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=78."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Expressive web traversal, acrobatic combat, gadgets and strong superhero identity are multiple concrete hooks."
+          ],
+          "strongest_dislike_reasons": [
+            "Recurring city crimes/activities can become repetitive checklist content."
+          ],
+          "decisive_negative_cap": null,
+          "decisive_positive_context_hook": {
+            "polarity": "positive",
+            "class": "traversal_identity",
+            "text": "Traversal and superhero embodiment can outweigh repetitive side activities if the core loop stays satisfying."
+          },
+          "superficial_similarity_check": "Superhero/franchise similarity is not enough; traversal and combat expression are causal.",
+          "franchise_relative_novelty": "Novelty of modern free-form Spider-Man traversal could matter strongly depending on prior series history.",
+          "onboarding_first_hours_dominance": false,
+          "missing_uncertain_evidence": [
+            "Unknown how much repetitive side content the user completed or tolerated."
+          ]
+        },
+        "score_0_100": 82,
+        "strongest_reason_up": "Expressive web traversal, acrobatic combat, gadgets and strong superhero identity are multiple concrete hooks.",
+        "strongest_reason_down": "Recurring city crimes/activities can become repetitive checklist content.",
+        "decisive_factor": {
+          "polarity": "positive",
+          "class": "traversal_identity",
+          "text": "Traversal and superhero embodiment can outweigh repetitive side activities if the core loop stays satisfying."
+        },
+        "anchor_comparison": "above Batman: Arkham Asylum (75), below Red Dead Redemption II (87.5)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B14",
+      "title": "Borderlands",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 78,
+          "development_variety": 85,
+          "structure_pacing_direction": 58,
+          "identity_hooks": 62,
+          "breadth_of_match": 74
+        },
+        "score_0_100": 73.6,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=78.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=85.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=58.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=62.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=74."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Shooting, skill progression and constant loot provide clear progression feedback."
+          ],
+          "strongest_dislike_reasons": [
+            "Quest/enemy repetition and a loot-centric loop risk turning progression into routine rather than meaningful development."
+          ],
+          "decisive_negative_cap": {
+            "polarity": "negative",
+            "class": "loot_grind_repetition",
+            "text": "Repetitive loot/quest structure should cap the score unless the loot loop itself is proven personally rewarding."
+          },
+          "decisive_positive_context_hook": null,
+          "superficial_similarity_check": "Shooter/RPG similarity is not sufficient; no credit for genre blend alone.",
+          "franchise_relative_novelty": "Novelty of the shooter-RPG combination might help on first contact, but is unproven.",
+          "onboarding_first_hours_dominance": true,
+          "missing_uncertain_evidence": [
+            "No direct evidence that randomized loot is a personally valued hook."
+          ]
+        },
+        "score_0_100": 52,
+        "strongest_reason_up": "Shooting, skill progression and constant loot provide clear progression feedback.",
+        "strongest_reason_down": "Quest/enemy repetition and a loot-centric loop risk turning progression into routine rather than meaningful development.",
+        "decisive_factor": {
+          "polarity": "negative",
+          "class": "loot_grind_repetition",
+          "text": "Repetitive loot/quest structure should cap the score unless the loot loop itself is proven personally rewarding."
+        },
+        "anchor_comparison": "around Stray (50), below Tomb Raider (62.5)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B15",
+      "title": "Mafia II",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 68,
+          "development_variety": 52,
+          "structure_pacing_direction": 78,
+          "identity_hooks": 82,
+          "breadth_of_match": 50
+        },
+        "score_0_100": 66.6,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=68.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=52.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=78.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=82.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=50."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Strong story/action focus and detailed crime-world identity can create a directed, character-led experience."
+          ],
+          "strongest_dislike_reasons": [
+            "The open city offers little meaningful side content, so breadth may feel decorative rather than interactive."
+          ],
+          "decisive_negative_cap": null,
+          "decisive_positive_context_hook": {
+            "polarity": "positive",
+            "class": "directed_story_identity",
+            "text": "A focused story can outweigh weak open-world side content if the city mainly supports atmosphere."
+          },
+          "superficial_similarity_check": "GTA-like crime/open-world resemblance should not drive the score.",
+          "franchise_relative_novelty": "Novelty versus other crime games is uncertain; judge the focused story rather than franchise adjacency.",
+          "onboarding_first_hours_dominance": false,
+          "missing_uncertain_evidence": [
+            "Character/story quality is described only broadly in candidate evidence."
+          ]
+        },
+        "score_0_100": 66,
+        "strongest_reason_up": "Strong story/action focus and detailed crime-world identity can create a directed, character-led experience.",
+        "strongest_reason_down": "The open city offers little meaningful side content, so breadth may feel decorative rather than interactive.",
+        "decisive_factor": {
+          "polarity": "positive",
+          "class": "directed_story_identity",
+          "text": "A focused story can outweigh weak open-world side content if the city mainly supports atmosphere."
+        },
+        "anchor_comparison": "above Tomb Raider (62.5), below Batman: Arkham Asylum (75)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B16",
+      "title": "WarCraft 3: The Frozen Throne",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 88,
+          "development_variety": 95,
+          "structure_pacing_direction": 90,
+          "identity_hooks": 90,
+          "breadth_of_match": 88
+        },
+        "score_0_100": 90.3,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=88.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=95.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=90.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=90.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=88."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Varied campaign objectives, added heroes/units, mechanical depth and an RPG-like bonus campaign match the known value of Warcraft III's varied format."
+          ],
+          "strongest_dislike_reasons": [
+            "Expansion familiarity could reduce novelty; complexity may be demanding, but no strong blocker is evident."
+          ],
+          "decisive_negative_cap": null,
+          "decisive_positive_context_hook": {
+            "polarity": "positive",
+            "class": "franchise_development_variety",
+            "text": "Substantial mechanical and mission-format development is the relevant reason, not mere franchise similarity."
+          },
+          "superficial_similarity_check": "Explicitly causal match: varied mission formats and hero-led play, not the Warcraft label.",
+          "franchise_relative_novelty": "Yes: relative novelty/development versus the base game is central and positive.",
+          "onboarding_first_hours_dominance": false,
+          "missing_uncertain_evidence": [
+            "Exact story/character appeal of this expansion is not described in candidate facts."
+          ]
+        },
+        "score_0_100": 88,
+        "strongest_reason_up": "Varied campaign objectives, added heroes/units, mechanical depth and an RPG-like bonus campaign match the known value of Warcraft III's varied format.",
+        "strongest_reason_down": "Expansion familiarity could reduce novelty; complexity may be demanding, but no strong blocker is evident.",
+        "decisive_factor": {
+          "polarity": "positive",
+          "class": "franchise_development_variety",
+          "text": "Substantial mechanical and mission-format development is the relevant reason, not mere franchise similarity."
+        },
+        "anchor_comparison": "near Red Dead Redemption II (87.5), above Batman: Arkham Asylum (75)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B17",
+      "title": "The Witcher 3: Wild Hunt - Hearts of Stone",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 70,
+          "development_variety": 82,
+          "structure_pacing_direction": 80,
+          "identity_hooks": 90,
+          "breadth_of_match": 70
+        },
+        "score_0_100": 77.7,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=70.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=82.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=80.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=90.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=70."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Character-rich branching quests and varied story/combat situations create focused narrative value."
+          ],
+          "strongest_dislike_reasons": [
+            "Some minigame/detective passages can interrupt pacing; as an expansion it may feel less novel than a whole new region."
+          ],
+          "decisive_negative_cap": null,
+          "decisive_positive_context_hook": {
+            "polarity": "positive",
+            "class": "focused_story_characters",
+            "text": "Strong focused character/story content can outweigh modest pacing interruptions."
+          },
+          "superficial_similarity_check": "Similarity to Witcher 3 is not enough; character-rich branching quests are the causal positive.",
+          "franchise_relative_novelty": "Relative novelty is moderate rather than transformative; this tempers but does not erase fit.",
+          "onboarding_first_hours_dominance": false,
+          "missing_uncertain_evidence": [
+            "No direct evidence about tolerance for its specific minigame interruptions."
+          ]
+        },
+        "score_0_100": 78,
+        "strongest_reason_up": "Character-rich branching quests and varied story/combat situations create focused narrative value.",
+        "strongest_reason_down": "Some minigame/detective passages can interrupt pacing; as an expansion it may feel less novel than a whole new region.",
+        "decisive_factor": {
+          "polarity": "positive",
+          "class": "focused_story_characters",
+          "text": "Strong focused character/story content can outweigh modest pacing interruptions."
+        },
+        "anchor_comparison": "above Batman: Arkham Asylum (75), below Red Dead Redemption II (87.5)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B18",
+      "title": "Red Dead Redemption",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 82,
+          "development_variety": 90,
+          "structure_pacing_direction": 82,
+          "identity_hooks": 95,
+          "breadth_of_match": 92
+        },
+        "score_0_100": 86.8,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=82.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=90.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=82.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=95.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=92."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "A lively Western world, varied missions/activities and strong immersion align with the same underlying strengths as the high-rated RDR2 anchor."
+          ],
+          "strongest_dislike_reasons": [
+            "Older controls/system refinement could reduce fit relative to RDR2, though candidate evidence does not directly document that friction."
+          ],
+          "decisive_negative_cap": null,
+          "decisive_positive_context_hook": {
+            "polarity": "positive",
+            "class": "world_immersion_variety",
+            "text": "World immersion and meaningful varied activity are causal positives; sequel resemblance alone is not."
+          },
+          "superficial_similarity_check": "Do not score high merely because RDR2 is a strong anchor; compare underlying world/mission qualities.",
+          "franchise_relative_novelty": "Franchise-relative novelty is important: first-contact with the formula could raise this, playing after RDR2 could lower it.",
+          "onboarding_first_hours_dominance": false,
+          "missing_uncertain_evidence": [
+            "Play order relative to RDR2 and control-friction evidence are missing."
+          ]
+        },
+        "score_0_100": 82,
+        "strongest_reason_up": "A lively Western world, varied missions/activities and strong immersion align with the same underlying strengths as the high-rated RDR2 anchor.",
+        "strongest_reason_down": "Older controls/system refinement could reduce fit relative to RDR2, though candidate evidence does not directly document that friction.",
+        "decisive_factor": {
+          "polarity": "positive",
+          "class": "world_immersion_variety",
+          "text": "World immersion and meaningful varied activity are causal positives; sequel resemblance alone is not."
+        },
+        "anchor_comparison": "above Batman: Arkham Asylum (75), below Red Dead Redemption II (87.5)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B19",
+      "title": "Hogwarts Legacy",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 78,
+          "development_variety": 82,
+          "structure_pacing_direction": 60,
+          "identity_hooks": 92,
+          "breadth_of_match": 78
+        },
+        "score_0_100": 78.3,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=78.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=82.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=60.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=92.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=78."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Spell combat, Hogwarts exploration and castle detail provide distinctive fantasy/identity hooks."
+          ],
+          "strongest_dislike_reasons": [
+            "Outside the castle, repetitive checklist tasks and repetitive progression/combat can dominate the longer experience."
+          ],
+          "decisive_negative_cap": {
+            "polarity": "negative",
+            "class": "open_world_checklist_repetition",
+            "text": "Repetitive open-world checklist content should cap a high identity-driven first impression."
+          },
+          "decisive_positive_context_hook": null,
+          "superficial_similarity_check": "Harry Potter identity/familiarity is not sufficient evidence of sustained fit.",
+          "franchise_relative_novelty": "Initial novelty of Hogwarts can be strong but may decay as repetition grows; that trajectory matters.",
+          "onboarding_first_hours_dominance": false,
+          "missing_uncertain_evidence": [
+            "No direct evidence on personal attachment to the setting; identity hook strength is uncertain."
+          ]
+        },
+        "score_0_100": 58,
+        "strongest_reason_up": "Spell combat, Hogwarts exploration and castle detail provide distinctive fantasy/identity hooks.",
+        "strongest_reason_down": "Outside the castle, repetitive checklist tasks and repetitive progression/combat can dominate the longer experience.",
+        "decisive_factor": {
+          "polarity": "negative",
+          "class": "open_world_checklist_repetition",
+          "text": "Repetitive open-world checklist content should cap a high identity-driven first impression."
+        },
+        "anchor_comparison": "above Stray (50), below Tomb Raider (62.5)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    },
+    {
+      "blind_id": "B20",
+      "title": "Need for Speed: Most Wanted",
+      "baseline": {
+        "taste_factors": {
+          "gameplay_mastery": 82,
+          "development_variety": 72,
+          "structure_pacing_direction": 80,
+          "identity_hooks": 80,
+          "breadth_of_match": 62
+        },
+        "score_0_100": 77.4,
+        "factor_rationales": {
+          "gameplay_mastery": "Judged from direct control/combat/traversal facts only; normalized=82.",
+          "development_variety": "Judged from progression/mission/system development facts only; normalized=72.",
+          "structure_pacing_direction": "Judged from direction/pacing/repetition facts only; normalized=80.",
+          "identity_hooks": "Judged from story/character/world/fantasy identity facts only; normalized=80.",
+          "breadth_of_match": "Judged from number of independently evidenced match surfaces; normalized=62."
+        }
+      },
+      "architecture_a": {
+        "pre_score_analysis": {
+          "strongest_like_reasons": [
+            "Blacklist progression and escalating police pursuits make racing more tactical and varied than a plain race loop."
+          ],
+          "strongest_dislike_reasons": [
+            "Core racing remains familiar and can repeat despite chase variety."
+          ],
+          "decisive_negative_cap": null,
+          "decisive_positive_context_hook": {
+            "polarity": "positive",
+            "class": "pursuit_variety_mastery",
+            "text": "Police pursuit tactics materially diversify the loop and can justify a strong fit."
+          },
+          "superficial_similarity_check": "Racing-series similarity is not enough; the pursuit layer is the causal hook.",
+          "franchise_relative_novelty": "Franchise-relative novelty may be important if the pursuit structure felt new at the time.",
+          "onboarding_first_hours_dominance": false,
+          "missing_uncertain_evidence": [
+            "No direct evidence on car customization/handling preferences for this entry."
+          ]
+        },
+        "score_0_100": 75,
+        "strongest_reason_up": "Blacklist progression and escalating police pursuits make racing more tactical and varied than a plain race loop.",
+        "strongest_reason_down": "Core racing remains familiar and can repeat despite chase variety.",
+        "decisive_factor": {
+          "polarity": "positive",
+          "class": "pursuit_variety_mastery",
+          "text": "Police pursuit tactics materially diversify the loop and can justify a strong fit."
+        },
+        "anchor_comparison": "around Batman: Arkham Asylum (75), below Red Dead Redemption II (87.5)",
+        "uncertainty": "medium",
+        "evidence_basis": "frozen candidate facts + leakage-safe training deck + fixed calibration anchors"
+      }
+    }
+  ]
+}
