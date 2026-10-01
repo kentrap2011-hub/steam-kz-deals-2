@@ -2,8 +2,8 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` assigned: `WORKER_TASK_CARD_EXPLANATION_PRODUCER_VALIDATOR_PUBLICATION_PARITY_FIX_01.md` — fix Deep linked explanation validation so fresh visual publication can resume without weakening provenance checks.
-- `ЧАТ 2` assigned: `WORKER_TASK_DEEP_INVALID_NOT_FIT_CURRENT_STATE_REGRESSION_FIX_01.md` — fix the stale PASS 2 regression that pins mutable Deep production state and blocks PR #132.
+- `ЧАТ 1` pending resume: PR #132 implementation is ready but still open; dependency from ЧАТ 2 is now fixed/merged, so ЧАТ 1 must refresh/rebase from current main and rerun mandatory validation.
+- `ЧАТ 2` is free after accepted PR #133 / merge `b6019c11fa202c73e5470af3d2eb9a4b5900f476`; stale PASS 2 current-state regression is fixed and green.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -20,7 +20,7 @@
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
 
 
-## ACTIVE — ЧАТ 2 — Deep invalid-not-fit current-state regression fix
+## ACCEPTED — ЧАТ 2 — Deep invalid-not-fit current-state regression fix
 
 Task:
 `WORKER_TASK_DEEP_INVALID_NOT_FIT_CURRENT_STATE_REGRESSION_FIX_01.md`
@@ -29,21 +29,18 @@ Mode:
 `IMPLEMENT / VALIDATE`
 
 Status:
-`authorized_ready_for_worker`
+`complete_ready_for_director_acceptance`
 
-Purpose:
-- make `scripts/test_deep_invalid_not_fit_contract_loop.py` validate durable historical/attempt invariants instead of requiring mutable current entries to remain forever `analysis_incomplete`;
-- preserve the actual loop-prevention contract;
-- unblock mandatory PASS 2 validation for PR #132.
+Director acceptance:
+- PR #133 merged as `b6019c11fa202c73e5470af3d2eb9a4b5900f476`;
+- final PASS 2 core run `36808488154` succeeded;
+- final backlog run `36808488153` succeeded;
+- regression now pins immutable historical attempt provenance instead of mutable current Deep outcome;
+- no Deep/Dossier semantic execution or production state mutation;
+- PR #132 implementation was not modified.
 
-Hard boundary:
-- do not modify PR #132 implementation;
-- no semantic Deep/Dossier execution;
-- no Scheduled Task changes.
-
-Expected report:
-`reviews/worker_reports/deep-invalid-not-fit-current-state-regression-fix-01.md`
-
+Next dependency action:
+- ЧАТ 1 must refresh/rebase PR #132 onto current main and rerun mandatory validation.
 
 ## ACTIVE — ЧАТ 1 — card explanation producer / validator publication parity fix
 
