@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` pending resume: PR #132 implementation is ready but still open; dependency from ЧАТ 2 is now fixed/merged, so ЧАТ 1 must refresh/rebase from current main and rerun mandatory validation.
+- `ЧАТ 1` is free after completed card-explanation publication parity work: PR #132 merged as `a225989b2a914e580114a5ec6212ae1486516af8`, follow-up PR #136 merged as `7a0b6d87b38c23afe3fee116c8425ff336eaf230`, and normal visual/Pages publication succeeded.
 - `ЧАТ 2` is free after accepted PR #133 / merge `b6019c11fa202c73e5470af3d2eb9a4b5900f476`; stale PASS 2 current-state regression is fixed and green.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
@@ -42,7 +42,7 @@ Director acceptance:
 Next dependency action:
 - ЧАТ 1 must refresh/rebase PR #132 onto current main and rerun mandatory validation.
 
-## ACTIVE — ЧАТ 1 — card explanation producer / validator publication parity fix
+## ACCEPTED — ЧАТ 1 — card explanation producer / validator publication parity fix
 
 Task:
 `WORKER_TASK_CARD_EXPLANATION_PRODUCER_VALIDATOR_PUBLICATION_PARITY_FIX_01.md`
@@ -51,25 +51,18 @@ Mode:
 `IMPLEMENT / VALIDATE`
 
 Status:
-`authorized_ready_for_worker`
+`complete_ready_for_director_acceptance`
 
-User requirement:
-- remove dependence on literal wording such as `теб` for authoritative linked Deep positives;
-- validate personalization through accepted Deep score-finding provenance instead;
-- preserve fail-closed candidate/profile/factor/binding checks;
-- restore normal full visual publication without manual redeploy or workflow bypass.
-
-Acceptance:
-- current real full visual build passes card explanation validation;
-- exact material binding remains green;
-- canonical visual advances beyond the known stale 06:26 payload;
-- normal Pages deployment receives the fresh canonical visual;
-- live Statistics no longer reflect the old Dossier `60/200/6` and Deep `41/37/4/7/206/8/221` snapshot;
-- top `Скидки: обновлено` mailing-source timestamp is out of scope.
-
-Expected report:
-`reviews/worker_reports/card-explanation-producer-validator-publication-parity-fix-01.md`
-
+Director acceptance:
+- PR #132 merged as `a225989b2a914e580114a5ec6212ae1486516af8`;
+- final PR checks PASS 2 `36855327276` and backlog `36855327307` succeeded;
+- post-merge qualifier parity issue was fixed in bounded follow-up PR #136 / merge `7a0b6d87b38c23afe3fee116c8425ff336eaf230`;
+- successful normal full visual build `36855944330`;
+- canonical visual commit `0cd51fb46182561c8cbd237bb630a870654db99b`;
+- normal Pages deploy `36856010448` succeeded;
+- deployed `web/data/current.json` matches the new canonical visual blob exactly;
+- live/deployed Statistics are no longer the old stale Dossier `60/200/6` and Deep `41/37/4/7/206/8/221` snapshot;
+- no manual build/deploy, semantic Deep/Dossier execution, ranking change or Scheduled Task change was used.
 
 ## ACCEPTED — ЧАТ 1 — stale live Statistics publication diagnostic
 
