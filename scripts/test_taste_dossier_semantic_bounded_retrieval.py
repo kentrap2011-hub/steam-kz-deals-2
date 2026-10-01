@@ -97,12 +97,12 @@ class SemanticBoundedRetrievalRegressionTests(unittest.TestCase):
         self.assertEqual(dossier_owner["owner"], "github_control_plane")
         self.assertEqual(
             dossier_owner["scheduled_chatgpt_role"],
-            "bounded_semantic_candidate_generation_and_create_only_transport_only",
+            "bounded_semantic_candidate_or_exact_exhaustion_terminal_generation_and_create_only_transport_only",
         )
         self.assertFalse(dossier_owner["new_queue_retry_loop_or_scheduler_created"])
         self.assertIn("second_dossier_scheduler", PERSISTENCE["forbidden"])
         self.assertIn("independent_dossier_queue", PERSISTENCE["forbidden"])
-        self.assertEqual(PERSISTENCE["buffered_transport"]["mode"], "immutable_create_only_one_file_per_predeclared_group")
+        self.assertEqual(PERSISTENCE["buffered_transport"]["mode"], "immutable_create_only_exactly_one_candidate_or_terminal_outcome_file_per_predeclared_group")
 
     def test_sembound_11_existing_v2_identity_privacy_russian_and_transport_guards_remain(self):
         self.assertEqual(SCHEMA["schema"], "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2")

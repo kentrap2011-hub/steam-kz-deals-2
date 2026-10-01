@@ -1,5 +1,13 @@
 # CURRENT TASK
 
+## IN PROGRESS — Dossier exhausted fail-closed loop fix 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_DOSSIER_EXHAUSTED_FAIL_CLOSED_LOOP_FIX_01.md`;
+- branch: `fix/dossier-exhausted-fail-closed-loop-01`;
+- scope: add an exact-bound create-only terminal receipt for genuine semantic route exhaustion so GitHub consumes one normal Dossier first-pass attempt into the existing failed/recovery state, while malformed/stale/wrong-binding/runtime stops consume zero attempts;
+- preserve valid dossier candidate flow, strict evidence/privacy validation, existing GitHub-owned recovery, canonical-writer serialization, and Scheduled Task configuration;
+- do not execute Dossier or Deep semantic work and do not manually mutate current production group 5.
+
 ## COMPLETE — Personal taste scoring offline backtest 01
 Статус: `evidence_inconclusive`.
 - task: `WORKER_TASK_PERSONAL_TASTE_SCORING_OFFLINE_BACKTEST_01.md`;

@@ -29,11 +29,19 @@ from taste_steam_review_dossier_group_progress import (
     set_group_state,
 )
 from taste_steam_review_dossier_strict import validate_dossiers_against_expected_items
+from taste_steam_review_dossier_terminal import (
+    current_snapshot_terminal_receipts,
+    expected_terminal_receipt_path,
+    validate_terminal_receipt,
+)
 
 
 _BUFFER_NAME_RE = re.compile(r"^(?P<snapshot>[0-9a-f]{64})--g(?P<sequence>[0-9]{6})--(?P<group>[0-9a-f]{64})\.json$")
 _DEFAULT_FAILED_QUARANTINE = Path("data/quarantine/taste_steam_review_dossier_inbox/failed_group")
 _DEFAULT_FAILURE_AUDIT = Path("data/audit/taste_steam_review_dossier_group_failures.jsonl")
+_DEFAULT_RETRYABLE_REJECTION_QUARANTINE = Path("data/quarantine/taste_steam_review_dossier_inbox/retryable_transport")
+_DEFAULT_RETRYABLE_REJECTION_AUDIT = Path("data/audit/taste_steam_review_dossier_transport_rejections.jsonl")
+_DEFAULT_TERMINAL_RECEIPT_ARCHIVE = Path("data/audit/taste_steam_review_dossier_terminal_receipts")
 
 
 def expected_buffer_path(descriptor, contract):
@@ -101,6 +109,10 @@ def _current_snapshot_candidates(buffer_dir, snapshot_id):
         name = path.name
         if not name.startswith(prefix):
             continue
+        # Terminal receipts share the inbox and have their own strict scanner.
+        # Never reinterpret them as malformed/alternate Dossier candidates.
+        if name.endswith("--terminal.json"):
+            continue
         match = _BUFFER_NAME_RE.fullmatch(name)
         if not match or match.group("snapshot") != snapshot_id:
             partial = re.match(rf"^{re.escape(snapshot_id)}--g([0-9]{{6}})--", name)
@@ -159,68 +171,224 @@ def _failure_entry(*, manifest, descriptor, paths, validator_error, quarantine_r
     }
 
 
+def _transport_rejection_entry(*, manifest, descriptor, paths, validator_error, transport_kind, quarantine_root):
+    targets = []
+    for path in paths:
+        if not path.exists():
+            continue
+        artifact_sha = hashlib.sha256(path.read_bytes()).hexdigest()
+        target = (
+            Path(quarantine_root)
+            / manifest["snapshot_id"]
+            / f"g{int(descriptor['sequence']):06d}"
+            / f"{path.name}.rejected-{artifact_sha[:12]}"
+        )
+        targets.append(target)
+    artifact_sha = (
+        hashlib.sha256(paths[0].read_bytes()).hexdigest()
+        if len(paths) == 1 and paths[0].exists()
+        else canonical_sha256([p.as_posix() for p in paths])
+    )
+    return {
+        "descriptor": descriptor,
+        "paths": list(paths),
+        "quarantine_targets": targets,
+        "rejection": {
+            "transport_kind": transport_kind,
+            "validator_error": validator_error,
+            "artifact_sha256": artifact_sha,
+            "normal_first_pass_attempt_consumed": False,
+            "group_state_remains_pending": True,
+        },
+    }
+
+
+def _semantic_terminal_failure_entry(*, manifest, descriptor, path, receipt, archive_root):
+    artifact_sha = hashlib.sha256(path.read_bytes()).hexdigest()
+    archive_target = (
+        Path(archive_root)
+        / manifest["snapshot_id"]
+        / f"g{int(descriptor['sequence']):06d}--{descriptor['group_sha256']}--terminal.json"
+    )
+    stop_class = receipt["semantic_stop_class"]
+    failure = {
+        "validator_error": f"semantic_exhaustion:{stop_class}",
+        "artifact_path": path.as_posix(),
+        "artifact_sha256": artifact_sha,
+        "quarantine_artifact_path": archive_target.as_posix(),
+        "recovery_eligible": True,
+        "failure_class": "semantic_exhaustion",
+        "semantic_stop_class": stop_class,
+        "normal_first_pass_attempt_consumed": True,
+        "valid_dossier_produced": False,
+        "terminal_receipt_archive_path": archive_target.as_posix(),
+    }
+    return {
+        "descriptor": descriptor,
+        "path": path,
+        "archive_target": archive_target,
+        "receipt": receipt,
+        "failure": failure,
+    }
+
+
 def plan_buffered_drain(
     manifest,
     contract,
     buffer_dir,
     *,
     failed_quarantine_root=_DEFAULT_FAILED_QUARANTINE,
+    retryable_rejection_root=_DEFAULT_RETRYABLE_REJECTION_QUARANTINE,
+    terminal_receipt_archive_root=_DEFAULT_TERMINAL_RECEIPT_ARCHIVE,
 ):
-    """Validate/classify every present pending group independently."""
+    """Validate/classify present transports without conflating transport failure with semantic exhaustion."""
     manifest = ensure_group_progress(manifest, contract)
     validate_manifest(manifest, contract)
     group_plan = validate_group_plan(manifest, contract, required=True)
     candidates, malformed_names = _current_snapshot_candidates(buffer_dir, manifest["snapshot_id"])
+    terminal_receipts, malformed_terminal_names = current_snapshot_terminal_receipts(
+        buffer_dir, manifest["snapshot_id"]
+    )
     groups = {int(group["sequence"]): group for group in group_plan["groups"]}
+    state_by_sequence = {
+        int(entry["sequence"]): entry for entry in manifest["group_progress"]["groups"]
+    }
     accepted = []
     failed = []
+    rejected = []
+    terminal_replays = []
     next_manifest = copy.deepcopy(manifest)
+    pending = set(pending_sequences(manifest, contract))
 
-    for sequence in pending_sequences(manifest, contract):
+    for sequence in sorted(pending):
         descriptor = groups[sequence]
         paths = candidates.get(sequence, [])
+        terminal_paths = terminal_receipts.get(sequence, [])
+
+        if paths and terminal_paths:
+            rejected.append(_transport_rejection_entry(
+                manifest=manifest,
+                descriptor=descriptor,
+                paths=list(paths) + list(terminal_paths),
+                validator_error="conflicting_candidate_and_terminal_receipt",
+                transport_kind="conflicting_group_transports",
+                quarantine_root=retryable_rejection_root,
+            ))
+            continue
+
+        if terminal_paths:
+            deterministic = expected_terminal_receipt_path(descriptor, contract)
+            if len(terminal_paths) != 1:
+                rejected.append(_transport_rejection_entry(
+                    manifest=manifest,
+                    descriptor=descriptor,
+                    paths=terminal_paths,
+                    validator_error="duplicate_or_alternate_terminal_receipt",
+                    transport_kind="terminal_receipt",
+                    quarantine_root=retryable_rejection_root,
+                ))
+                continue
+            path = terminal_paths[0]
+            if path.as_posix() != deterministic.as_posix():
+                rejected.append(_transport_rejection_entry(
+                    manifest=manifest,
+                    descriptor=descriptor,
+                    paths=terminal_paths,
+                    validator_error="non_deterministic_terminal_receipt_path",
+                    transport_kind="terminal_receipt",
+                    quarantine_root=retryable_rejection_root,
+                ))
+                continue
+            try:
+                receipt = json.loads(path.read_text(encoding="utf-8"))
+                validate_terminal_receipt(receipt, descriptor)
+            except (ValueError, json.JSONDecodeError, UnicodeDecodeError, OSError, KeyError, TypeError) as exc:
+                rejected.append(_transport_rejection_entry(
+                    manifest=manifest,
+                    descriptor=descriptor,
+                    paths=terminal_paths,
+                    validator_error=str(exc),
+                    transport_kind="terminal_receipt",
+                    quarantine_root=retryable_rejection_root,
+                ))
+                continue
+            entry = _semantic_terminal_failure_entry(
+                manifest=manifest,
+                descriptor=descriptor,
+                path=path,
+                receipt=receipt,
+                archive_root=terminal_receipt_archive_root,
+            )
+            failed.append(entry)
+            next_manifest = set_group_state(
+                next_manifest, contract, sequence, FAILED, failure=entry["failure"]
+            )
+            continue
+
         if not paths:
             continue
         deterministic = expected_buffer_path(descriptor, contract)
         if len(paths) != 1:
-            entry = _failure_entry(
+            rejected.append(_transport_rejection_entry(
                 manifest=manifest,
                 descriptor=descriptor,
                 paths=paths,
                 validator_error="duplicate_or_alternate_buffer_artifact",
-                quarantine_root=failed_quarantine_root,
-            )
-            failed.append(entry)
-            next_manifest = set_group_state(next_manifest, contract, sequence, FAILED, failure=entry["failure"])
+                transport_kind="dossier_candidate",
+                quarantine_root=retryable_rejection_root,
+            ))
             continue
         path = paths[0]
         if path.as_posix() != deterministic.as_posix():
-            entry = _failure_entry(
+            rejected.append(_transport_rejection_entry(
                 manifest=manifest,
                 descriptor=descriptor,
                 paths=paths,
                 validator_error="non_deterministic_buffer_path",
-                quarantine_root=failed_quarantine_root,
-            )
-            failed.append(entry)
-            next_manifest = set_group_state(next_manifest, contract, sequence, FAILED, failure=entry["failure"])
+                transport_kind="dossier_candidate",
+                quarantine_root=retryable_rejection_root,
+            ))
             continue
         try:
             artifact = json.loads(path.read_text(encoding="utf-8"))
             docs = validate_buffer_artifact(artifact, descriptor, manifest, contract)
         except (ValueError, json.JSONDecodeError, UnicodeDecodeError, OSError, KeyError, TypeError) as exc:
-            entry = _failure_entry(
+            rejected.append(_transport_rejection_entry(
                 manifest=manifest,
                 descriptor=descriptor,
                 paths=paths,
                 validator_error=str(exc),
-                quarantine_root=failed_quarantine_root,
-            )
-            failed.append(entry)
-            next_manifest = set_group_state(next_manifest, contract, sequence, FAILED, failure=entry["failure"])
+                transport_kind="dossier_candidate",
+                quarantine_root=retryable_rejection_root,
+            ))
             continue
         accepted.append({"path": path, "descriptor": descriptor, "dossiers": docs})
         next_manifest = set_group_state(next_manifest, contract, sequence, ACCEPTED)
+
+    # Exact replay of an already-consumed semantic terminal receipt is a cleanup-only no-op.
+    for sequence, terminal_paths in sorted(terminal_receipts.items()):
+        if sequence in pending or sequence not in groups:
+            continue
+        entry = state_by_sequence[sequence]
+        descriptor = groups[sequence]
+        if entry["state"] != FAILED or len(terminal_paths) != 1:
+            continue
+        path = terminal_paths[0]
+        if path.as_posix() != expected_terminal_receipt_path(descriptor, contract).as_posix():
+            continue
+        try:
+            receipt = json.loads(path.read_text(encoding="utf-8"))
+            validate_terminal_receipt(receipt, descriptor)
+        except (ValueError, json.JSONDecodeError, UnicodeDecodeError, OSError, KeyError, TypeError):
+            continue
+        failure = entry.get("failure") or {}
+        artifact_sha = hashlib.sha256(path.read_bytes()).hexdigest()
+        if (
+            failure.get("failure_class") == "semantic_exhaustion"
+            and failure.get("artifact_sha256") == artifact_sha
+            and failure.get("semantic_stop_class") == receipt.get("semantic_stop_class")
+        ):
+            terminal_replays.append(path)
 
     prefix_count = accepted_contiguous_prefix_item_count(next_manifest, contract)
     next_remaining = list(next_manifest["prepared_required_items"])[prefix_count:]
@@ -235,10 +403,15 @@ def plan_buffered_drain(
     return {
         "accepted": accepted,
         "failed": failed,
+        "rejected": rejected,
+        "terminal_replays": terminal_replays,
         "accepted_count": len(accepted),
         "accepted_dossier_count": sum(len(entry["dossiers"]) for entry in accepted),
         "failed_count": len(failed),
-        "malformed_current_snapshot_artifacts": [path.as_posix() for path in malformed_names],
+        "rejected_count": len(rejected),
+        "malformed_current_snapshot_artifacts": [
+            path.as_posix() for path in list(malformed_names) + list(malformed_terminal_names)
+        ],
         "next_manifest": next_manifest,
     }
 
@@ -256,8 +429,9 @@ def apply_buffered_drain(
     manifest_path,
     store_dir,
     failure_audit_path=_DEFAULT_FAILURE_AUDIT,
+    rejection_audit_path=_DEFAULT_RETRYABLE_REJECTION_AUDIT,
 ):
-    """Apply independent group classifications locally for one atomic Git commit."""
+    """Apply accepted dossiers, consumed semantic terminals, and retryable transport cleanup."""
     persisted = []
     for entry in plan["accepted"]:
         for doc in entry["dossiers"]:
@@ -270,11 +444,12 @@ def apply_buffered_drain(
             })
 
     for entry in plan["failed"]:
-        for source, target in zip(entry["paths"], entry["quarantine_targets"]):
-            target.parent.mkdir(parents=True, exist_ok=True)
-            if target.exists():
-                raise ValueError(f"failed-group quarantine target already exists: {target.as_posix()}")
-            shutil.move(source.as_posix(), target.as_posix())
+        source = entry["path"]
+        target = entry["archive_target"]
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if target.exists():
+            raise ValueError(f"semantic terminal receipt archive already exists: {target.as_posix()}")
+        shutil.move(source.as_posix(), target.as_posix())
         _append_failure_audit(failure_audit_path, {
             "schema": "TASTE-STEAM-REVIEW-DOSSIER-GROUP-FAILURE-AUDIT-V1",
             "recorded_at_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
@@ -285,9 +460,26 @@ def apply_buffered_drain(
             "normal_forward_progress_blocked": False,
         })
 
+    for entry in plan["rejected"]:
+        for source, target in zip(entry["paths"], entry["quarantine_targets"]):
+            target.parent.mkdir(parents=True, exist_ok=True)
+            if target.exists():
+                raise ValueError(f"retryable transport quarantine target already exists: {target.as_posix()}")
+            shutil.move(source.as_posix(), target.as_posix())
+        _append_failure_audit(rejection_audit_path, {
+            "schema": "TASTE-STEAM-REVIEW-DOSSIER-TRANSPORT-REJECTION-AUDIT-V1",
+            "recorded_at_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+            "snapshot_id": plan["next_manifest"]["snapshot_id"],
+            "sequence": entry["descriptor"]["sequence"],
+            "group_sha256": entry["descriptor"]["group_sha256"],
+            **entry["rejection"],
+        })
+
     atomic_write_json(manifest_path, plan["next_manifest"])
     for entry in plan["accepted"]:
         entry["path"].unlink()
+    for path in plan["terminal_replays"]:
+        path.unlink()
     return persisted
 
 
@@ -299,6 +491,9 @@ def drain_buffered_groups(
     store_dir="data/cache/taste_steam_review_dossiers",
     failed_quarantine_root=_DEFAULT_FAILED_QUARANTINE,
     failure_audit_path=_DEFAULT_FAILURE_AUDIT,
+    retryable_rejection_root=_DEFAULT_RETRYABLE_REJECTION_QUARANTINE,
+    rejection_audit_path=_DEFAULT_RETRYABLE_REJECTION_AUDIT,
+    terminal_receipt_archive_root=_DEFAULT_TERMINAL_RECEIPT_ARCHIVE,
 ):
     manifest_path = Path(manifest_path)
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -307,20 +502,26 @@ def drain_buffered_groups(
         contract,
         buffer_dir,
         failed_quarantine_root=failed_quarantine_root,
+        retryable_rejection_root=retryable_rejection_root,
+        terminal_receipt_archive_root=terminal_receipt_archive_root,
     )
     persisted = apply_buffered_drain(
         plan,
         manifest_path=manifest_path,
         store_dir=store_dir,
         failure_audit_path=failure_audit_path,
+        rejection_audit_path=rejection_audit_path,
     )
     progress = plan["next_manifest"]["group_progress"]
     return {
         "accepted_group_count_this_run": plan["accepted_count"],
         "accepted_dossier_count_this_run": plan["accepted_dossier_count"],
         "failed_group_count_this_run": plan["failed_count"],
+        "retryable_transport_rejection_count_this_run": plan["rejected_count"],
+        "terminal_replay_cleanup_count_this_run": len(plan["terminal_replays"]),
         "accepted_sequences": [entry["descriptor"]["sequence"] for entry in plan["accepted"]],
         "failed_sequences": [entry["descriptor"]["sequence"] for entry in plan["failed"]],
+        "rejected_sequences": [entry["descriptor"]["sequence"] for entry in plan["rejected"]],
         "malformed_current_snapshot_artifacts": plan["malformed_current_snapshot_artifacts"],
         "persisted": persisted,
         "snapshot_id": plan["next_manifest"]["snapshot_id"],
@@ -336,3 +537,4 @@ def drain_buffered_groups(
         "legacy_contiguous_remaining_required_count": plan["next_manifest"]["remaining_required_count"],
         "full_backlog_complete": plan["next_manifest"]["full_backlog_complete"],
     }
+

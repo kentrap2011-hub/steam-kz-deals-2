@@ -22,6 +22,10 @@ from taste_steam_review_dossier_strict import (
     validate_dossier_strict,
 )
 from taste_steam_review_dossier_test_fixture import web_dossier
+from taste_steam_review_dossier_terminal import (
+    TERMINAL_RECEIPT_SCHEMA,
+    expected_terminal_receipt_path,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_CONTRACT = load_contract(ROOT / "config/taste_steam_review_dossier_contract.json")
@@ -78,6 +82,40 @@ def write_group(work, contract, sequence, mutate=None):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(artifact, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return path
+
+
+def terminal_receipt(work, sequence):
+    descriptor = work["submission_group_plan"]["groups"][sequence - 1]
+    receipt = copy.deepcopy(descriptor)
+    receipt["schema"] = TERMINAL_RECEIPT_SCHEMA
+    receipt["schema_version"] = 1
+    receipt.update({
+        "execution_status": "semantic_exhaustion_no_valid_dossier",
+        "semantic_stop_class": "existence_established_access_unresolved",
+        "valid_dossier_produced": False,
+        "normal_first_pass_attempt_consumed": True,
+        "blocked_game": {
+            "appid": descriptor["items"][0]["appid"],
+            "title": descriptor["items"][0]["title"],
+        },
+        "route_exhaustion": {
+            "russian": "exhausted",
+            "source_diversification": "exhausted",
+            "identity": "not_applicable",
+            "temporal": "not_applicable",
+            "next_required_step_status": "none_all_required_routes_exhausted",
+        },
+    })
+    return receipt
+
+
+def write_terminal(work, contract, sequence):
+    descriptor = work["submission_group_plan"]["groups"][sequence - 1]
+    path = expected_terminal_receipt_path(descriptor, contract)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    receipt = terminal_receipt(work, sequence)
+    path.write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return path, receipt
 
 
 class WebEvidenceSchemaTests(unittest.TestCase):
@@ -348,6 +386,82 @@ class RecoveryLifecycleTests(unittest.TestCase):
                 process_recovery_request(request_path=request_path, recovery_contract_path=recovery_path, dossier_contract_path=contract_path, manifest_path=manifest_path)
             self.assertTrue(p1.exists())
 
+    def test_semantic_terminal_failed_group_requires_github_authorization_and_no_replay_for_reopen(self):
+        with tempfile.TemporaryDirectory() as td:
+            contract = contract_for(td)
+            store = Path(td) / "store"
+            work = build_daily_work_manifest(queue(range(390000, 390003)), contract, store, now=NOW)
+            work["web_evidence_contract_binding"] = current_worker_contract_binding()
+            manifest_path = Path(contract["paths"]["work_manifest"])
+            manifest_path.write_text(json.dumps(work), encoding="utf-8")
+            contract_path, recovery_path, recovery = self._write_contracts(td, contract)
+
+            terminal_path, terminal_doc = write_terminal(work, contract, 1)
+            consumed = drain_inbox_state(
+                manifest_path=manifest_path,
+                contract_path=contract_path,
+                store_dir=store,
+                buffer_dir=contract["paths"]["submission_inbox_dir"],
+                failure_audit_path=Path(td) / "failure.jsonl",
+                retryable_rejection_root=Path(td) / "retryable",
+                rejection_audit_path=Path(td) / "rejection.jsonl",
+                terminal_receipt_archive_root=Path(td) / "terminal-archive",
+                fail_on_blocked=False,
+            )
+            self.assertEqual(consumed["failed_sequences"], [1])
+            self.assertTrue(consumed["normal_first_pass_complete"])
+            self.assertFalse(terminal_path.exists())
+
+            no_request = process_recovery_request(
+                request_path=Path(recovery["request"]["path"]),
+                recovery_contract_path=recovery_path,
+                dossier_contract_path=contract_path,
+                manifest_path=manifest_path,
+            )
+            self.assertEqual(no_request["status"], "no_recovery_request")
+            self.assertEqual(
+                json.loads(manifest_path.read_text())["group_progress"]["groups"][0]["state"],
+                "failed_or_invalid_pending_recovery",
+            )
+
+            descriptor = work["submission_group_plan"]["groups"][0]
+            request = {
+                "schema": recovery["request"]["schema"],
+                "schema_version": 1,
+                "action": "reopen_failed_group",
+                "snapshot_id": work["snapshot_id"],
+                "sequence": 1,
+                "group_sha256": descriptor["group_sha256"],
+                "artifact_path": expected_buffer_path(descriptor, contract).as_posix(),
+                "reason": "explicit regression recovery authorization",
+            }
+            request_path = Path(recovery["request"]["path"])
+            request_path.parent.mkdir(parents=True, exist_ok=True)
+            request_path.write_text(json.dumps(request), encoding="utf-8")
+
+            terminal_path.parent.mkdir(parents=True, exist_ok=True)
+            terminal_path.write_text(json.dumps(terminal_doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "outcome paths"):
+                process_recovery_request(
+                    request_path=request_path,
+                    recovery_contract_path=recovery_path,
+                    dossier_contract_path=contract_path,
+                    manifest_path=manifest_path,
+                )
+            terminal_path.unlink()
+
+            reopened = process_recovery_request(
+                request_path=request_path,
+                recovery_contract_path=recovery_path,
+                dossier_contract_path=contract_path,
+                manifest_path=manifest_path,
+            )
+            self.assertEqual(reopened["status"], "failed_group_reopened_pending")
+            self.assertEqual(
+                json.loads(manifest_path.read_text())["group_progress"]["groups"][0]["state"],
+                "pending",
+            )
+
     def test_stale_cleanup_and_lost_wakeup_regressions(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td) / "buffer"
@@ -392,13 +506,16 @@ class RecoveryLifecycleTests(unittest.TestCase):
                 buffer_dir=contract["paths"]["submission_inbox_dir"],
                 failed_quarantine_root=Path(td) / "failed-group-quarantine",
                 failure_audit_path=Path(td) / "failed-group-audit.jsonl",
+                retryable_rejection_root=Path(td) / "retryable-transport-quarantine",
+                rejection_audit_path=Path(td) / "retryable-transport-audit.jsonl",
                 fail_on_blocked=False,
             )
-            self.assertEqual(classified["status"], "group_state_advanced")
-            self.assertEqual(classified["failed_sequences"], [2])
+            self.assertEqual(classified["status"], "retryable_transport_rejected")
+            self.assertEqual(classified["failed_sequences"], [])
+            self.assertEqual(classified["rejected_sequences"], [2])
             after = json.loads(manifest_path.read_text())
             self.assertEqual(after["completed_required_count"], current_progress)
-            self.assertEqual(after["group_progress"]["groups"][1]["state"], "failed_or_invalid_pending_recovery")
+            self.assertEqual(after["group_progress"]["groups"][1]["state"], "pending")
             self.assertEqual(after["group_progress"]["groups"][2]["state"], "pending")
 
 

@@ -86,6 +86,7 @@ def _setup_candidate(td, *, invalid=False):
         "work": work,
         "quarantine": root / "quarantine",
         "audit": root / "failures.jsonl",
+        "rejection_audit": root / "rejections.jsonl",
     }
 
 
@@ -97,6 +98,8 @@ def _drain(env):
         buffer_dir=env["contract"]["paths"]["submission_inbox_dir"],
         failed_quarantine_root=env["quarantine"],
         failure_audit_path=env["audit"],
+        retryable_rejection_root=env["quarantine"],
+        rejection_audit_path=env["rejection_audit"],
         fail_on_blocked=False,
     )
 
@@ -206,28 +209,30 @@ class CanonicalWriterCoalescingLivenessTests(unittest.TestCase):
             self.assertIsNone(index2["next_pending_sequence"])
             self.assertEqual(index2["accepted_group_count"], 1)
 
-    def test_invalid_present_candidate_fails_once_and_enters_existing_recovery_state(self):
+    def test_invalid_present_candidate_is_quarantined_retryable_without_attempt_consumption(self):
         with tempfile.TemporaryDirectory() as td:
             env = _setup_candidate(td, invalid=True)
             first = _drain(env)
             self.assertEqual(first["accepted_group_count_this_run"], 0)
-            self.assertEqual(first["failed_group_count_this_run"], 1)
+            self.assertEqual(first["failed_group_count_this_run"], 0)
+            self.assertEqual(first["retryable_transport_rejection_count_this_run"], 1)
             self.assertFalse(env["candidate"].exists())
 
             after = json.loads(env["manifest_path"].read_text(encoding="utf-8"))
             entry = after["group_progress"]["groups"][0]
-            self.assertEqual(entry["state"], "failed_or_invalid_pending_recovery")
-            self.assertTrue(entry["failure"]["recovery_eligible"])
+            self.assertEqual(entry["state"], "pending")
             index = json.loads(Path(env["contract"]["paths"]["worker_index"]).read_text(encoding="utf-8"))
-            self.assertEqual(index["failed_group_sequences"], [1])
-            self.assertEqual(index["pending_group_sequences"], [])
-            self.assertIsNone(index["next_pending_sequence"])
-            self.assertEqual(len(env["audit"].read_text(encoding="utf-8").splitlines()), 1)
+            self.assertEqual(index["failed_group_sequences"], [])
+            self.assertEqual(index["pending_group_sequences"], [1])
+            self.assertEqual(index["next_pending_sequence"], 1)
+            self.assertFalse(env["audit"].exists())
+            self.assertEqual(len(env["rejection_audit"].read_text(encoding="utf-8").splitlines()), 1)
 
             second = _drain(env)
             self.assertEqual(second["accepted_group_count_this_run"], 0)
             self.assertEqual(second["failed_group_count_this_run"], 0)
-            self.assertEqual(len(env["audit"].read_text(encoding="utf-8").splitlines()), 1)
+            self.assertEqual(second["retryable_transport_rejection_count_this_run"], 0)
+            self.assertEqual(len(env["rejection_audit"].read_text(encoding="utf-8").splitlines()), 1)
 
     def test_every_shared_writer_reconciles_state_before_dependent_projection_or_write(self):
         actual = set()
