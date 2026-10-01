@@ -1,0 +1,319 @@
+{
+  "experiment_id": "personal-taste-scoring-targeted-offline-backtest-02",
+  "input_version": "blind-final-v1",
+  "source_versions": {
+    "candidate_evidence_blob_sha": "92730d68fc49fcf90d9520d84aade03ecb3c9cfa",
+    "training_input_blob_sha": "47b7aa3e1e9148b547ddd2c08fb34bb0830b6923",
+    "baseline_policy_blob_sha": "f472b74ef36abb15ac8bbdd1a21d8eac802c130c",
+    "baseline_code_blob_sha": "317bd06d4b5f45540816a952bd553e4476e0dd6b"
+  },
+  "forbidden_fields": [
+    "rating",
+    "why_this_rating",
+    "what_liked",
+    "what_disliked",
+    "separate_remarks",
+    "family",
+    "prior_backtest_predictions",
+    "current_production_score",
+    "current_rank"
+  ],
+  "training_input_ref": "experiments/personal_taste_scoring/backtest_01/evaluator_training_input_v4.json",
+  "calibration_anchors": [
+    {
+      "title": "Half-Life",
+      "rating": 1.5,
+      "score": 12.5
+    },
+    {
+      "title": "Fallout 4",
+      "rating": 2,
+      "score": 25
+    },
+    {
+      "title": "Deus Ex: Human Revolution",
+      "rating": 2.5,
+      "score": 37.5
+    },
+    {
+      "title": "Stray",
+      "rating": 3,
+      "score": 50
+    },
+    {
+      "title": "Tomb Raider (2013)",
+      "rating": 3.5,
+      "score": 62.5
+    },
+    {
+      "title": "Batman: Arkham Asylum",
+      "rating": 4,
+      "score": 75
+    },
+    {
+      "title": "Red Dead Redemption II",
+      "rating": 4.5,
+      "score": 87.5
+    }
+  ],
+  "baseline_weights": {
+    "gameplay_mastery": 18,
+    "development_variety": 12,
+    "structure_pacing_direction": 8,
+    "identity_hooks": 8,
+    "breadth_of_match": 4
+  },
+  "architecture_a_questions": [
+    "strongest_like_reasons",
+    "strongest_dislike_reasons",
+    "decisive_negative_cap",
+    "decisive_positive_context_hook",
+    "superficial_similarity_check",
+    "franchise_relative_novelty",
+    "onboarding_first_hours_dominance",
+    "missing_uncertain_evidence"
+  ],
+  "cases": [
+    {
+      "blind_id": "B01",
+      "title": "Tekken 3",
+      "facts": [
+        "3D fighting game with large roster, deep move/combo sets and multiple modes",
+        "mastery differs by character and rewards practice",
+        "extra modes broaden the loop beyond ordinary arcade fights"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/tekken-3-review/1900-2549648/"
+      ]
+    },
+    {
+      "blind_id": "B02",
+      "title": "Cyberpunk 2077",
+      "facts": [
+        "first-person open-world action RPG with combat, stealth/hacking and character progression",
+        "main characters and side quests are a major narrative focus",
+        "large city/open-world structure can contain unevenly meaningful ambient content"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/cyberpunk-2077-review/1900-6417622/"
+      ]
+    },
+    {
+      "blind_id": "B03",
+      "title": "Prototype",
+      "facts": [
+        "fast-paced open-world action built around extreme agility and superpowers",
+        "varied missions and boss battles support frequent action changes",
+        "story mystery provides forward momentum"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/prototype-review/1900-6211887/"
+      ]
+    },
+    {
+      "blind_id": "B04",
+      "title": "Perfect World",
+      "facts": [
+        "MMORPG built around questing/leveling, skill progression and extensive character customization",
+        "movement includes flight and a large persistent world",
+        "contemporary player reports describe both broad content and potential grind/repetition"
+      ],
+      "sources": [
+        "https://forums.mmorpg.com/discussion/150376/unbiased-review-on-perfect-world"
+      ]
+    },
+    {
+      "blind_id": "B05",
+      "title": "The Suffering",
+      "facts": [
+        "horror-themed action game that favors fast combat over slow survival-horror resource management",
+        "creature design and visual scares create atmosphere",
+        "straightforward structure and limited enemy/tactical variety can become repetitive"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/the-suffering-review/1900-6091054/"
+      ]
+    },
+    {
+      "blind_id": "B06",
+      "title": "The Witcher 3: Wild Hunt - Blood and Wine",
+      "facts": [
+        "large new Toussaint region with a vivid visual identity and many quests",
+        "mixes story, exploration, combat and side content over a substantial expansion",
+        "new region and mysteries provide a stronger sense of novelty than a small add-on"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/the-witcher-3-wild-hunt-blood-and-wine-review/1900-6416443/"
+      ]
+    },
+    {
+      "blind_id": "B07",
+      "title": "Prince of Persia: Warrior Within",
+      "facts": [
+        "parkour/platforming remains central while combat is deeper and more free-form than Sands of Time",
+        "dual wielding and combo options expand combat expression",
+        "darker, more serious tone; backtracking/repetition can be friction"
+      ],
+      "sources": [
+        "https://www.gamespot.com/games/prince-of-persia-warrior-within/"
+      ]
+    },
+    {
+      "blind_id": "B08",
+      "title": "Sanitarium",
+      "facts": [
+        "story-led point-and-click adventure with psychologically surreal settings",
+        "puzzles are integrated into narrative and atmosphere",
+        "pixel hunting, mazes and some unclear interactions can create friction"
+      ],
+      "sources": [
+        "https://tulipclaymore.wordpress.com/2012/07/19/sanitarium-1998/",
+        "https://gamefaqs.gamespot.com/pc/52149-sanitarium/reviews/149699"
+      ]
+    },
+    {
+      "blind_id": "B09",
+      "title": "Grand Theft Auto III",
+      "facts": [
+        "open clockwork city supports free roaming and systemic mayhem",
+        "73 story missions provide directed progression while remaining optional between free-roam periods",
+        "vehicle/on-foot sandbox is central"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/grand-theft-auto-iii-review/1900-2868062/"
+      ]
+    },
+    {
+      "blind_id": "B10",
+      "title": "The Banner Saga 2",
+      "facts": [
+        "turn-based tactical combat emphasizes positioning, armor/health tradeoffs and unit abilities",
+        "strategic caravan decisions feed narrative consequences",
+        "refines the first game's systems but is narratively dependent on prior context"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/the-banner-saga-2-review/1900-6416411/"
+      ]
+    },
+    {
+      "blind_id": "B11",
+      "title": "Resident Evil 4",
+      "facts": [
+        "third-person horror-action with deliberately paced shooting",
+        "frequent set-pieces/bosses and clear forward direction maintain momentum",
+        "long adventure includes secrets and bonus content, with sustained action variety"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/resident-evil-4-review/1900-6115968/"
+      ]
+    },
+    {
+      "blind_id": "B12",
+      "title": "The Elder Scrolls IV: Oblivion",
+      "facts": [
+        "large open-ended RPG with extensive character customization and exploration",
+        "many guilds, side quests and activities support different play styles",
+        "quest tracking gives clear goals despite the world's breadth"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/the-elder-scrolls-iv-oblivion-review/1900-6146661/"
+      ]
+    },
+    {
+      "blind_id": "B13",
+      "title": "Marvel's Spider-Man",
+      "facts": [
+        "web-swinging traversal has an accessible but expressive movement system",
+        "acrobatic combat expands through skills/gadgets and supports some stealth",
+        "story and superhero identity are prominent while recurring city crimes/activities repeat"
+      ],
+      "sources": [
+        "https://www.gamespot.com/articles/best-games-of-2018-marvels-spider-man/1100-6463901/"
+      ]
+    },
+    {
+      "blind_id": "B14",
+      "title": "Borderlands",
+      "facts": [
+        "first-person shooting is paired with RPG leveling, skill trees and constant randomized loot",
+        "combat and reward progression form the central loop",
+        "quest structure and enemy patterns can become repetitive, especially solo"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/borderlands-review/1900-6237470/"
+      ]
+    },
+    {
+      "blind_id": "B15",
+      "title": "Mafia II",
+      "facts": [
+        "story-led crime action with a detailed city",
+        "strong narrative/action focus",
+        "open city is underused and offers little meaningful side content"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/mafia-ii-review/1900-6274280/"
+      ]
+    },
+    {
+      "blind_id": "B16",
+      "title": "WarCraft 3: The Frozen Throne",
+      "facts": [
+        "expansion adds multiple campaigns, units, heroes and substantial mechanical depth",
+        "campaign missions deliberately vary objectives and often depart from standard base-building",
+        "bonus campaign shifts toward hero-led RPG-like exploration"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/warcraft-iii-the-frozen-throne-review/1900-6070848/"
+      ]
+    },
+    {
+      "blind_id": "B17",
+      "title": "The Witcher 3: Wild Hunt - Hearts of Stone",
+      "facts": [
+        "compact story-focused expansion built around character-rich branching quests",
+        "story subverts expectations and uses varied combat/non-combat quest situations",
+        "some minigame/detective passages interrupt pacing"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/the-witcher-3-wild-hunt-hearts-of-stone-review/1900-6416268/"
+      ]
+    },
+    {
+      "blind_id": "B18",
+      "title": "Red Dead Redemption",
+      "facts": [
+        "large lively Western open world with random encounters and optional activities",
+        "linear central story can be paused for exploration",
+        "story missions and side activities are varied and tied to character/world immersion"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/red-dead-redemption-review/1900-6262940/"
+      ]
+    },
+    {
+      "blind_id": "B19",
+      "title": "Hogwarts Legacy",
+      "facts": [
+        "spell combat and Hogwarts exploration are the strongest distinctive systems",
+        "castle contains puzzles, activity and environmental detail",
+        "large outside open world relies heavily on repetitive checklist tasks; combat and progression can become repetitive"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/hogwarts-legacy-review-sleight-of-hand/1900-6418032/"
+      ]
+    },
+    {
+      "blind_id": "B20",
+      "title": "Need for Speed: Most Wanted",
+      "facts": [
+        "street racing career organized around the Blacklist",
+        "police pursuits add escalating pressure, roadblocks and tactical escape play",
+        "core racing is familiar but chases materially diversify the loop"
+      ],
+      "sources": [
+        "https://www.gamespot.com/reviews/need-for-speed-most-wanted-review/1900-6140377/"
+      ]
+    }
+  ]
+}
