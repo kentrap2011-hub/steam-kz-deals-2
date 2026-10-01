@@ -1,0 +1,64 @@
+{
+  "explanation_audit": {
+    "experiment_id": "personal-taste-scoring-offline-backtest-01",
+    "scope": "manual evidence/rationale audit over frozen blind prediction records",
+    "architecture_A": {
+      "rationale_statements": 60,
+      "obvious_content_level_unsupported": 0,
+      "unsupported_rate": 0,
+      "exact_evidence_pointers": 0,
+      "comment": "Positive/negative statements were authored from frozen candidate facts and training patterns, but A did not preserve exact evidence pointers."
+    },
+    "architecture_C": {
+      "pairwise_relations": 210,
+      "per_relation_rationale_with_exact_refs": 0,
+      "comment": "The graph is connected through seven common fixed anchors per candidate, but per-edge explanations were not persisted; candidate-candidate cycles/non-transitivity cannot be tested in this star design."
+    },
+    "architecture_D": {
+      "findings": 60,
+      "obvious_content_level_unsupported": 0,
+      "unsupported_rate": 0,
+      "exact_candidate_fact_index_pointers": 0,
+      "exact_profile_evidence_pointers": 0,
+      "comment": "D preserved record-level provenance labels, not exact fact/profile pointers. Content was manually cross-checked as supported, but traceability is below production evidence-contract quality."
+    },
+    "ui_audit": {
+      "sample_size": 8,
+      "blind_file": "blinded_ui_sample_v4.json",
+      "readability": "score + interval + one positive + one negative is compact and understandable",
+      "critical_issue": "readable explanations can still accompany badly wrong scores; Mass Effect was displayed at 100 while hidden truth was 25, so explanation readability must not be confused with score reliability",
+      "human_user_feedback_collected": false
+    }
+  },
+  "cost_audit": {
+    "experiment_id": "personal-taste-scoring-offline-backtest-01",
+    "measurement_note": "This ChatGPT/connector run did not expose per-candidate LLM latency or token telemetry. Runtime seconds are therefore not fabricated; semantic decision counts are used as the reproducible cost proxy.",
+    "per_candidate": {
+      "baseline": {
+        "semantic_decision_units": 5,
+        "description": "five normalized factor judgments",
+        "deterministic_work": "18/12/8/8/4 weighted sum",
+        "measured_semantic_runtime_seconds": null
+      },
+      "A": {
+        "semantic_decision_units": 3,
+        "description": "one holistic calibrated score plus dominant positive and negative rationale",
+        "deterministic_work": "none beyond scale interpretation",
+        "measured_semantic_runtime_seconds": null
+      },
+      "C": {
+        "semantic_decision_units": 7,
+        "description": "seven candidate-vs-anchor pairwise judgments",
+        "deterministic_work": "Bradley-Terry grid fit plus Thurstone sensitivity fit",
+        "measured_semantic_runtime_seconds": null
+      },
+      "D": {
+        "semantic_decision_units": 9,
+        "description": "two evidence findings plus seven pairwise judgments",
+        "deterministic_work": "Bradley-Terry grid fit",
+        "measured_semantic_runtime_seconds": null
+      }
+    },
+    "implementation_observation": "All four can be batched into one semantic record per candidate; C/D add deterministic mapping but their semantic comparison burden is materially higher than A."
+  }
+}
