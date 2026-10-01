@@ -1,16 +1,28 @@
 # CURRENT TASK
 
-## BLOCKED — Card explanation producer / validator publication parity fix 01
-Статус: `blocked`.
+## ACTIVE — Card explanation producer / validator publication parity fix 01
+Статус: `revalidating_on_current_main`.
 - task: `WORKER_TASK_CARD_EXPLANATION_PRODUCER_VALIDATOR_PUBLICATION_PARITY_FIX_01.md`;
 - implementation PR: `#132`; branch: `fix/card-explanation-producer-validator-publication-parity-01`;
-- implementation code head: `9b2c094aaa1c868162e2e6e269a92789b4dde131`;
-- linked Deep card reasons no longer depend on the literal substring `теб`; producer and validator now share structured accepted-state binding requirements, while legacy/non-Deep behavior stays unchanged;
-- task-specific Deep score-evidence regression passes on PR run `36735554783`, and backlog run `36735554878` passes;
-- merge/publication acceptance is blocked because the mandatory PASS 2 workflow then fails in the separate existing `test_deep_invalid_not_fit_contract_loop.py` current-state assertion; this task does not modify that Deep state-machine regression;
-- no Deep/Dossier semantic execution, ranking change, manual visual build/deploy, scheduler/retry ownership change or Scheduled Task change was performed;
-- report: `reviews/worker_reports/card-explanation-producer-validator-publication-parity-fix-01.md`;
-- next bounded action: repair/reconcile that separate current-state PASS 2 regression, then revalidate PR #132 before merge.
+- previous implementation head: `093c45a39829ee8f47145170b412d14de61910be`;
+- current-main reconciliation anchor: `6b7076258713d5997d32a1868a37ac1ff7f89f9e`;
+- prerequisite PR #133 is merged as `b6019c11fa202c73e5470af3d2eb9a4b5900f476` and its final PASS 2 core run `36808488154` is green;
+- next step: revalidate PR #132 on current main, merge only if mandatory checks are green, then observe only the normal automatic visual build and Pages deploy;
+- no semantic Deep/Dossier execution, manual visual workflow dispatch, ranking change, scheduler/retry-owner change or Scheduled Task change is authorized.
+
+
+## COMPLETE — Deep invalid-not-fit current-state regression fix 01
+Статус: `complete_ready_for_director_acceptance`.
+- task: `WORKER_TASK_DEEP_INVALID_NOT_FIT_CURRENT_STATE_REGRESSION_FIX_01.md`;
+- implementation PR: `#133`; merge: `b6019c11fa202c73e5470af3d2eb9a4b5900f476`;
+- historical consumed-attempt provenance is now the immutable regression anchor; later authorized recovery/completion no longer makes the test fail;
+- the same exact consumed work identity is still forbidden from re-entering current work as `normal_first_pass`;
+- final-head PASS 2 core run `36808488154` and backlog run `36808488153` passed;
+- a separate date-drifting PASS 2 test fixture was stabilized from the expired 2026-10-01 default to 2099 without changing production expiry semantics;
+- no semantic Deep/Dossier execution, result-state edit, Scheduled Task change, scheduler/queue/retry-owner change or RANK-013 change;
+- report: `reviews/worker_reports/deep-invalid-not-fit-current-state-regression-fix-01.md`;
+- next bounded action: ЧАТ 1 refreshes PR #132 from merged `main` and reruns its mandatory validation; ЧАТ 2 does not modify PR #132.
+
 
 ## COMPLETE — Deep score evidence / explainability alignment 01
 Статус: `migration_prepared_needs_semantic_execution`.
