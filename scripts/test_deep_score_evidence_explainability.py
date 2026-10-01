@@ -9,6 +9,7 @@ import priority_ranking
 import progressive_pass2
 import progressive_work_authority
 import refine_visual_ranking
+import validate_card_explanations as card_validator
 
 
 KOF_FAMILY = 'game:1498570'
@@ -152,6 +153,35 @@ def accept_one(item, doc, state):
     return out, receipts
 
 
+def linked_deep_card(entry, reasons, provenance):
+    return {
+        'id': entry['family_id'],
+        'title': 'THE KING OF FIGHTERS XV',
+        'analysis_state': 'analyzed_fit',
+        'effective_analysis_source': 'deep',
+        'analysis_semantic_generation_id': entry['semantic_generation_id'],
+        'score_explainability_status': 'linked_v1',
+        'why_fit': copy.deepcopy(reasons),
+        'why_fit_status': {
+            'has_described_fit': True,
+            'grounding': 'grounded',
+        },
+        'why_fit_provenance': copy.deepcopy(provenance),
+        'risks': [],
+        'risk_codes': [],
+        'risk_status': {'has_described_risk': False},
+        'risk_provenance': [],
+        'cautions': [],
+        'caution_provenance': [],
+        'negative_assessment_status': 'completed_no_relevant_negative',
+    }
+
+
+def assert_card_error(card, needle):
+    errors = card_validator.validate_item(card)
+    assert any(needle in error for error in errors), (needle, errors)
+
+
 MANIFEST = progressive_pass2.load_score_explainability_manifest()
 CURRENT_STATE = progressive_pass2.load_state()
 ORIGINAL_STATE = progressive_pass2._json_at_commit(
@@ -242,6 +272,116 @@ def run():
     assert 'Хопы' in reasons[0]
     assert 'Большой состав' in reasons[1]
     assert all(row['source'] == 'deep_score_finding' for row in provenance)
+
+    # Card publication parity regression: linked Deep positives are validated by
+    # accepted structured provenance, not by a magic Russian substring.
+    semantic_no_magic_word = copy.deepcopy(semantic)
+    for finding in semantic_no_magic_word['deep_score_findings']:
+        finding['text_ru'] = (
+            finding['text_ru']
+            .replace('для тебя', 'для игрока')
+            .replace('Для тебя', 'Для игрока')
+            .replace('тебе', 'игроку')
+            .replace('Тебе', 'Игроку')
+        )
+    no_magic_reasons, no_magic_provenance = card_explanation_policy.deep_score_reasons(
+        semantic_no_magic_word
+    )
+    assert len(no_magic_reasons) == 2
+    assert all('теб' not in reason.casefold() for reason in no_magic_reasons)
+    for row in no_magic_provenance:
+        assert row['source'] == 'deep_score_finding'
+        assert row['finding_id']
+        assert row['evidence_refs']
+        assert row['profile_evidence_refs']
+        assert any(impact.get('effect') == 'supports' for impact in row['factor_impacts'])
+        for field in card_explanation_policy.DEEP_SCORE_REQUIRED_BINDING_FIELDS:
+            assert row['semantic_binding'].get(field) not in {None, ''}
+
+    valid_card = linked_deep_card(accepted, no_magic_reasons, no_magic_provenance)
+    assert card_validator.validate_item(valid_card) == []
+
+    incomplete_producer_binding = copy.deepcopy(semantic_no_magic_word)
+    incomplete_producer_binding['deep_score_evidence_binding'].pop('profile_pin_sha256', None)
+    hidden_reasons, hidden_provenance = card_explanation_policy.deep_score_reasons(
+        incomplete_producer_binding
+    )
+    assert hidden_reasons == []
+    assert hidden_provenance == []
+
+    missing_profile = copy.deepcopy(valid_card)
+    missing_profile['why_fit_provenance'][0]['profile_evidence_refs'] = []
+    assert_card_error(missing_profile, 'lacks exact candidate/profile evidence refs')
+
+    missing_candidate = copy.deepcopy(valid_card)
+    missing_candidate['why_fit_provenance'][0]['evidence_refs'] = []
+    assert_card_error(missing_candidate, 'lacks exact candidate/profile evidence refs')
+
+    missing_impacts = copy.deepcopy(valid_card)
+    missing_impacts['why_fit_provenance'][0]['factor_impacts'] = []
+    assert_card_error(missing_impacts, 'lacks score-factor provenance')
+
+    non_supporting_impacts = copy.deepcopy(valid_card)
+    non_supporting_impacts['why_fit_provenance'][0]['factor_impacts'][0]['effect'] = 'qualifies'
+    for impact in non_supporting_impacts['why_fit_provenance'][0]['factor_impacts'][1:]:
+        impact['effect'] = 'qualifies'
+    assert_card_error(non_supporting_impacts, 'lacks supporting score-factor provenance')
+
+    wrong_family = copy.deepcopy(valid_card)
+    wrong_family['why_fit_provenance'][0]['semantic_binding']['family_id'] = 'game:wrong'
+    assert_card_error(wrong_family, 'family binding mismatch')
+
+    wrong_generation = copy.deepcopy(valid_card)
+    wrong_generation['why_fit_provenance'][0]['semantic_binding']['semantic_generation_id'] = 'wrong-generation'
+    assert_card_error(wrong_generation, 'generation binding mismatch')
+
+    partial_binding = copy.deepcopy(valid_card)
+    partial_binding['why_fit_provenance'][0]['semantic_binding'].pop('authorization_id', None)
+    assert_card_error(partial_binding, 'lacks exact accepted-state binding')
+
+    wrong_source = copy.deepcopy(valid_card)
+    wrong_source['why_fit_provenance'][0]['source'] = 'taste_positive_evidence'
+    assert_card_error(wrong_source, 'not sourced from an accepted score finding')
+
+    generic = copy.deepcopy(valid_card)
+    generic['why_fit'][0] = 'Игра прошла строгий вкусовой отбор и выглядит подходящей.'
+    assert_card_error(generic, 'generic positive fallback is visible')
+
+    commercial = copy.deepcopy(valid_card)
+    commercial['why_fit'][0] = 'Скидка и высокий рейтинг делают этот вариант особенно выгодным.'
+    assert_card_error(commercial, 'commercial/ranking-only language')
+
+    unlinked = copy.deepcopy(valid_card)
+    unlinked['score_explainability_status'] = 'migration_required'
+    assert_card_error(unlinked, 'not linked to accepted score evidence')
+    assert_card_error(unlinked, 'legacy unlinked Deep result exposes a positive reason before migration')
+
+    ungrounded_status = copy.deepcopy(valid_card)
+    ungrounded_status['why_fit_status']['grounding'] = 'insufficient_evidence'
+    assert_card_error(ungrounded_status, 'why_fit_status is not grounded')
+
+    legacy_reason = {
+        'id': 'game:legacy',
+        'title': 'Legacy fixture',
+        'analysis_state': 'analyzed_fit',
+        'effective_analysis_source': 'fast',
+        'why_fit': ['Развитие способностей тебе подходит по прежнему правилу.'],
+        'why_fit_status': {'has_described_fit': True, 'grounding': 'grounded'},
+        'why_fit_provenance': [{
+            'source': 'taste_positive_evidence',
+            'evidence': 'You unlock new abilities as the campaign progresses.',
+        }],
+        'risks': [],
+        'risk_codes': [],
+        'risk_status': {'has_described_risk': False},
+        'risk_provenance': [],
+        'cautions': [],
+        'caution_provenance': [],
+    }
+    assert card_validator.validate_item(legacy_reason) == []
+    legacy_without_link_text = copy.deepcopy(legacy_reason)
+    legacy_without_link_text['why_fit'][0] = 'Развитие способностей хорошо сочетается с прогрессией.'
+    assert_card_error(legacy_without_link_text, 'positive lacks explicit personal-taste link')
     qualifiers, qualifier_provenance = card_explanation_policy.deep_score_qualifiers(semantic)
     assert qualifiers and 'Сюжетный' in qualifiers[0]
     assert qualifier_provenance[0]['source'] == 'deep_score_finding_qualifier'
