@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 52,
     "deep_completed_not_fit_count": 3,
     "deep_incomplete_or_recovery_count": 9,
-    "deep_waiting_for_dossier_count": 155,
-    "deep_ready_or_pending_count": 9,
+    "deep_waiting_for_dossier_count": 152,
+    "deep_ready_or_pending_count": 12,
     "deep_normal_first_pass_remaining_count": 164,
     "deep_remaining_until_all_authoritative_count": 173,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 3,
-    "dossier_waiting_count": 155,
+    "dossier_waiting_count": 152,
     "pass2_attempted_count": 64,
-    "pass2_eligible_count": 9,
-    "normal_pass2_eligible_count": 9,
+    "pass2_eligible_count": 12,
+    "normal_pass2_eligible_count": 12,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -620,6 +620,132 @@
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1909270",
+      "taste_subject_key": "App_1909270",
+      "appid": "1909270",
+      "taste_fingerprint": "b4135dacc8d55522374b5d9404ea443e4b5336bd8492aeb0beff72fa9023de28",
+      "candidate_context_sha256": "fcac71c906ef9f3dff026d4dd8f7eaa703e0f7632377b40127cf83fc1ac8b8a5",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "f714f1b170a10c355a3d5a06f494022e5d2551a8a5e7506878150354819c6719",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "The Adventures of MICOCO",
+        "short_description": "Explore ruins filled with puzzles and hidden tentacles as the cute adventurer Micoco! Will you be able to discover the secrets behind these ancient structures?",
+        "bundle_members": [],
+        "fit_tags": [
+          "Dark Fantasy",
+          "JRPG"
+        ],
+        "core_fit_count": 2,
+        "release_date": "8 Nov, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1909270"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1909270.json",
+      "dossier_content_sha256": "832c00b20571ae37b30948ac1a0984b095958ab09a92be572727721b7f29d172",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-21T15:35:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "91189f8789e566511a0ee2a51146e88397cb79c7de23d456c5b1ccd3d9878871",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--f714f1b170a10c355a3d5a06f494022e5d2551a8a5e7506878150354819c6719--91189f8789e566511a0ee2a51146e88397cb79c7de23d456c5b1ccd3d9878871.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--f714f1b170a10c355a3d5a06f494022e5d2551a8a5e7506878150354819c6719--91189f8789e566511a0ee2a51146e88397cb79c7de23d456c5b1ccd3d9878871.json",
+      "sequence": 9
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:2106840",
+      "taste_subject_key": "App_2106840",
+      "appid": "2106840",
+      "taste_fingerprint": "d7d95b00b084b956751a52d4429f4566afcb6c42fb1c3fed581f804392787902",
+      "candidate_context_sha256": "9ba86bf9bc8baf208d25d4d65a5b7ddc6f999ccdb8896cc838c2712a1ff97963",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "aada748111cef3ee7bb4fe838cf4f9a73aca10f38d5e117e3a1a37c3e90b5e95",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "PARANORMASIGHT: The Seven Mysteries of Honjo",
+        "short_description": "How far would you go to bring someone back from the dead? Discover the depths that some will go to in this horror-adventure game.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Horror"
+        ],
+        "core_fit_count": 1,
+        "release_date": "8 Mar, 2023",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "2106840"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2106840.json",
+      "dossier_content_sha256": "a16da652e4e04148ed2633439195ed5f806719ac5983d8717cab68569049f904",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-21T15:35:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "bfd3888588006e7a328ce55fbee6d38d644b43935302387b3481d064e01953d0",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--aada748111cef3ee7bb4fe838cf4f9a73aca10f38d5e117e3a1a37c3e90b5e95--bfd3888588006e7a328ce55fbee6d38d644b43935302387b3481d064e01953d0.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--aada748111cef3ee7bb4fe838cf4f9a73aca10f38d5e117e3a1a37c3e90b5e95--bfd3888588006e7a328ce55fbee6d38d644b43935302387b3481d064e01953d0.json",
+      "sequence": 10
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "family_id": "game:1629520",
       "taste_subject_key": "App_1629520",
       "appid": "1629520",
@@ -675,7 +801,69 @@
       "authorization_id": "b6ec82a06f37c925f5256128c1653cbbabc68de60973518aa7bf9a999f39bc2b",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--355779a28ddd2fee1f016578375ecd1dea05896462a5b610ccf1165c1eaec2d1--b6ec82a06f37c925f5256128c1653cbbabc68de60973518aa7bf9a999f39bc2b.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--355779a28ddd2fee1f016578375ecd1dea05896462a5b610ccf1165c1eaec2d1--b6ec82a06f37c925f5256128c1653cbbabc68de60973518aa7bf9a999f39bc2b.json",
-      "sequence": 9
+      "sequence": 11
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:2103140",
+      "taste_subject_key": "App_2103140",
+      "appid": "2103140",
+      "taste_fingerprint": "aee51b9ede4ac0ac65074ea65b1f8fe9a7abb667e7b7ea8f0614a09fb00c00e3",
+      "candidate_context_sha256": "cf3eff60c9396224e6be7ca48ee08358e2fe2d36e9fd5472ce31fa70e9297ae3",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "b29c0f9e08ae6097b37b36dfbc57f1ea25877f6dbc6b7feb35271667fef2936d",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Magicraft",
+        "short_description": "\"Magicraft\" is a Roguelike game that uses a variety of spells to match unimaginable spell effects, and the construction of ultra-high degrees of freedom cannot even be exhausted by developers.",
+        "bundle_members": [],
+        "fit_tags": [
+          "RPG"
+        ],
+        "core_fit_count": 0,
+        "release_date": "1 Nov, 2024",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "2103140"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2103140.json",
+      "dossier_content_sha256": "237fa64bfb60374bcbc7ef9f17b31a03f025670f6480618dc632db4739bee261",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-21T15:35:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "6d760ef6403450c2a5d35506ee52e1fb5c7bd735b8e62be91b05b622fee70f99",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--b29c0f9e08ae6097b37b36dfbc57f1ea25877f6dbc6b7feb35271667fef2936d--6d760ef6403450c2a5d35506ee52e1fb5c7bd735b8e62be91b05b622fee70f99.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--b29c0f9e08ae6097b37b36dfbc57f1ea25877f6dbc6b7feb35271667fef2936d--6d760ef6403450c2a5d35506ee52e1fb5c7bd735b8e62be91b05b622fee70f99.json",
+      "sequence": 12
     }
   ]
 }
