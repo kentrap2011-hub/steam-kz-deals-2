@@ -1,12 +1,16 @@
 # CURRENT TASK
 
-## IN PROGRESS — Deep invalid-not-fit current-state regression fix 01
-Статус: `in_progress`.
+## COMPLETE — Deep invalid-not-fit current-state regression fix 01
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_DEEP_INVALID_NOT_FIT_CURRENT_STATE_REGRESSION_FIX_01.md`;
-- branch: `fix/deep-invalid-not-fit-current-state-regression-fix-01`;
-- scope: make `scripts/test_deep_invalid_not_fit_contract_loop.py` validate durable consumed-attempt / recovery invariants without pinning mutable current Deep outcome to `analysis_incomplete`;
-- preserve the invalid-not-fit contract, explicit GitHub-owned recovery, malformed-transport zero-attempt behavior, frozen-start/async traversal, RANK-013 and PR #132 implementation;
-- no semantic Deep/Dossier execution and no Scheduled Task/scheduler/queue/retry-owner change.
+- implementation PR: `#133`; branch: `fix/deep-invalid-not-fit-current-state-regression-fix-01`;
+- historical consumed-attempt provenance is now the immutable regression anchor; later authorized recovery/completion no longer makes the test fail;
+- the same exact consumed work identity is still forbidden from re-entering current work as `normal_first_pass`;
+- PASS 2 core run `36808341769` and backlog run `36808341778` passed;
+- a separate date-drifting PASS 2 test fixture was stabilized from the expired 2026-10-01 default to 2099 without changing production expiry semantics;
+- no semantic Deep/Dossier execution, result-state edit, Scheduled Task change, scheduler/queue/retry-owner change or RANK-013 change;
+- report: `reviews/worker_reports/deep-invalid-not-fit-current-state-regression-fix-01.md`;
+- next bounded action: merge PR #133, then ЧАТ 1 refreshes PR #132 from new `main` and reruns its mandatory validation.
 
 
 ## COMPLETE — Deep score evidence / explainability alignment 01
