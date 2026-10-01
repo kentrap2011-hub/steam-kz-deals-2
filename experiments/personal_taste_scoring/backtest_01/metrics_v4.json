@@ -1,0 +1,831 @@
+{
+  "experiment_id": "personal-taste-scoring-offline-backtest-01",
+  "definitions": {
+    "truth_score": "25*(rating-1)",
+    "high": "score>=75 / rating>=4",
+    "low": "score<=37.5 / rating<=2.5",
+    "severe_dealbreaker_miss": "true rating<=2.5 with explicit disliked evidence and non-low discussion confidence, but predicted score>=60",
+    "pairwise_accuracy": "all held-out pairs with unequal true ratings; predicted ties count 0.5",
+    "calibration_ece": "weighted absolute prediction-vs-truth gap in 0-25/25-50/50-75/75-100 predicted-score bins"
+  },
+  "metrics": {
+    "baseline": {
+      "spearman": 0.3651,
+      "pairwise_accuracy": 0.6483,
+      "mae": 20.55,
+      "median_ae": 16.5,
+      "rmse": 25.5,
+      "calibration_ece": 18.22,
+      "calibration_bins": [
+        {
+          "bin": "25-49.9",
+          "n": 2,
+          "mean_prediction": 46.2,
+          "mean_truth": 25,
+          "gap": 21.2
+        },
+        {
+          "bin": "50-74.9",
+          "n": 11,
+          "mean_prediction": 64.6,
+          "mean_truth": 53.4,
+          "gap": 11.2
+        },
+        {
+          "bin": "75-100",
+          "n": 17,
+          "mean_prediction": 83.5,
+          "mean_truth": 61,
+          "gap": 22.4
+        }
+      ],
+      "predicted_high_n": 17,
+      "high_precision": 0.47058823529411764,
+      "high_recall": 0.8,
+      "predicted_low_n": 0,
+      "low_precision": null,
+      "low_recall": 0,
+      "decisive_low_n": 10,
+      "severe_dealbreaker_misses": 7,
+      "severe_dealbreaker_miss_rate": 0.7,
+      "severe_titles": [
+        "Borderlands",
+        "Cyberpunk 2077",
+        "Grand Theft Auto III",
+        "Grand Theft Auto V",
+        "Mafia II",
+        "Mass Effect",
+        "The Elder Scrolls IV: Oblivion"
+      ]
+    },
+    "A": {
+      "spearman": 0.2939,
+      "pairwise_accuracy": 0.6243,
+      "mae": 19.43,
+      "median_ae": 15.5,
+      "rmse": 24.92,
+      "calibration_ece": 13.97,
+      "calibration_bins": [
+        {
+          "bin": "25-49.9",
+          "n": 4,
+          "mean_prediction": 37.5,
+          "mean_truth": 37.5,
+          "gap": 0
+        },
+        {
+          "bin": "50-74.9",
+          "n": 11,
+          "mean_prediction": 64.4,
+          "mean_truth": 55.7,
+          "gap": 8.7
+        },
+        {
+          "bin": "75-100",
+          "n": 15,
+          "mean_prediction": 82.4,
+          "mean_truth": 60.8,
+          "gap": 21.6
+        }
+      ],
+      "predicted_high_n": 15,
+      "high_precision": 0.4666666666666667,
+      "high_recall": 0.7,
+      "predicted_low_n": 2,
+      "low_precision": 1,
+      "low_recall": 0.2,
+      "decisive_low_n": 10,
+      "severe_dealbreaker_misses": 7,
+      "severe_dealbreaker_miss_rate": 0.7,
+      "severe_titles": [
+        "Borderlands",
+        "Cyberpunk 2077",
+        "Grand Theft Auto III",
+        "Grand Theft Auto V",
+        "Mafia II",
+        "Mass Effect",
+        "The Elder Scrolls IV: Oblivion"
+      ]
+    },
+    "C_BT": {
+      "spearman": 0.1109,
+      "pairwise_accuracy": 0.548,
+      "mae": 24.95,
+      "median_ae": 21,
+      "rmse": 31.8,
+      "calibration_ece": 20.94,
+      "calibration_bins": [
+        {
+          "bin": "25-49.9",
+          "n": 2,
+          "mean_prediction": 34,
+          "mean_truth": 25,
+          "gap": 9
+        },
+        {
+          "bin": "50-74.9",
+          "n": 10,
+          "mean_prediction": 62.1,
+          "mean_truth": 58.8,
+          "gap": 3.4
+        },
+        {
+          "bin": "75-100",
+          "n": 18,
+          "mean_prediction": 89.7,
+          "mean_truth": 57.6,
+          "gap": 32
+        }
+      ],
+      "predicted_high_n": 18,
+      "high_precision": 0.3888888888888889,
+      "high_recall": 0.7,
+      "predicted_low_n": 2,
+      "low_precision": 1,
+      "low_recall": 0.2,
+      "decisive_low_n": 10,
+      "severe_dealbreaker_misses": 7,
+      "severe_dealbreaker_miss_rate": 0.7,
+      "severe_titles": [
+        "Borderlands",
+        "Cyberpunk 2077",
+        "Grand Theft Auto III",
+        "Grand Theft Auto V",
+        "Mafia II",
+        "Mass Effect",
+        "The Elder Scrolls IV: Oblivion"
+      ]
+    },
+    "C_Thurstone": {
+      "spearman": 0.1109,
+      "pairwise_accuracy": 0.548,
+      "mae": 23.83,
+      "median_ae": 17.4,
+      "rmse": 30.79,
+      "calibration_ece": 19.69,
+      "calibration_bins": [
+        {
+          "bin": "25-49.9",
+          "n": 2,
+          "mean_prediction": 34.8,
+          "mean_truth": 25,
+          "gap": 9.8
+        },
+        {
+          "bin": "50-74.9",
+          "n": 10,
+          "mean_prediction": 61.5,
+          "mean_truth": 58.8,
+          "gap": 2.7
+        },
+        {
+          "bin": "75-100",
+          "n": 18,
+          "mean_prediction": 87.9,
+          "mean_truth": 57.6,
+          "gap": 30.2
+        }
+      ],
+      "predicted_high_n": 18,
+      "high_precision": 0.3888888888888889,
+      "high_recall": 0.7,
+      "predicted_low_n": 2,
+      "low_precision": 1,
+      "low_recall": 0.2,
+      "decisive_low_n": 10,
+      "severe_dealbreaker_misses": 7,
+      "severe_dealbreaker_miss_rate": 0.7,
+      "severe_titles": [
+        "Borderlands",
+        "Cyberpunk 2077",
+        "Grand Theft Auto III",
+        "Grand Theft Auto V",
+        "Mafia II",
+        "Mass Effect",
+        "The Elder Scrolls IV: Oblivion"
+      ]
+    },
+    "D": {
+      "spearman": 0.287,
+      "pairwise_accuracy": 0.6201,
+      "mae": 27.41,
+      "median_ae": 21.7,
+      "rmse": 32.9,
+      "calibration_ece": 25.51,
+      "calibration_bins": [
+        {
+          "bin": "0-24.9",
+          "n": 2,
+          "mean_prediction": 15.8,
+          "mean_truth": 25,
+          "gap": 9.2
+        },
+        {
+          "bin": "25-49.9",
+          "n": 2,
+          "mean_prediction": 34,
+          "mean_truth": 50,
+          "gap": 16
+        },
+        {
+          "bin": "50-74.9",
+          "n": 6,
+          "mean_prediction": 55.3,
+          "mean_truth": 62.5,
+          "gap": 7.2
+        },
+        {
+          "bin": "75-100",
+          "n": 20,
+          "mean_prediction": 91.1,
+          "mean_truth": 57.5,
+          "gap": 33.6
+        }
+      ],
+      "predicted_high_n": 20,
+      "high_precision": 0.4,
+      "high_recall": 0.8,
+      "predicted_low_n": 4,
+      "low_precision": 0.75,
+      "low_recall": 0.3,
+      "decisive_low_n": 10,
+      "severe_dealbreaker_misses": 7,
+      "severe_dealbreaker_miss_rate": 0.7,
+      "severe_titles": [
+        "Borderlands",
+        "Cyberpunk 2077",
+        "Grand Theft Auto III",
+        "Grand Theft Auto V",
+        "Mafia II",
+        "Mass Effect",
+        "The Elder Scrolls IV: Oblivion"
+      ]
+    }
+  },
+  "cross_genre": {
+    "action": {
+      "n": 11,
+      "baseline": {
+        "mae": 12.07,
+        "spearman": 0.461
+      },
+      "A": {
+        "mae": 10.86,
+        "spearman": 0.486
+      },
+      "C_BT": {
+        "mae": 14.35,
+        "spearman": 0.353
+      },
+      "C_Thurstone": {
+        "mae": 13.19,
+        "spearman": 0.353
+      },
+      "D": {
+        "mae": 19.06,
+        "spearman": 0.563
+      }
+    },
+    "open_world": {
+      "n": 9,
+      "baseline": {
+        "mae": 28.31,
+        "spearman": 0.017
+      },
+      "A": {
+        "mae": 28.11,
+        "spearman": -0.087
+      },
+      "C_BT": {
+        "mae": 34.98,
+        "spearman": -0.455
+      },
+      "C_Thurstone": {
+        "mae": 33.51,
+        "spearman": -0.455
+      },
+      "D": {
+        "mae": 37.84,
+        "spearman": -0.179
+      }
+    },
+    "narrative_strategy": {
+      "n": 6,
+      "baseline": {
+        "mae": 24.9,
+        "spearman": 0.377
+      },
+      "A": {
+        "mae": 24.67,
+        "spearman": 0.221
+      },
+      "C_BT": {
+        "mae": 34.13,
+        "spearman": 0.029
+      },
+      "C_Thurstone": {
+        "mae": 32.97,
+        "spearman": 0.029
+      },
+      "D": {
+        "mae": 33.73,
+        "spearman": 0.063
+      }
+    },
+    "experimental_sandbox": {
+      "n": 4,
+      "baseline": {
+        "mae": 19.88,
+        "spearman": 0.316
+      },
+      "A": {
+        "mae": 15.63,
+        "spearman": 0.316
+      },
+      "C_BT": {
+        "mae": 17.77,
+        "spearman": 0.5
+      },
+      "C_Thurstone": {
+        "mae": 17.63,
+        "spearman": 0.5
+      },
+      "D": {
+        "mae": 17.43,
+        "spearman": 0.5
+      }
+    }
+  },
+  "stability": {
+    "A": {
+      "mean_abs_change_from_primary": 1.56,
+      "max_abs_change_from_primary": 2,
+      "mean_within_case_range": 3.13,
+      "max_within_case_range": 4
+    },
+    "C": {
+      "mean_abs_change_from_primary": 0.79,
+      "max_abs_change_from_primary": 8.6,
+      "mean_within_case_range": 1.58,
+      "max_within_case_range": 8.6
+    },
+    "D": {
+      "mean_abs_change_from_primary": 1.11,
+      "max_abs_change_from_primary": 9.6,
+      "mean_within_case_range": 2.23,
+      "max_within_case_range": 9.6
+    }
+  },
+  "per_game": [
+    {
+      "title": "Mass Effect",
+      "rating": 2,
+      "truth_score": 25,
+      "baseline": 82.1,
+      "baseline_abs_error": 57.1,
+      "A": 85,
+      "A_abs_error": 60,
+      "C_BT": 100,
+      "C_BT_abs_error": 75,
+      "C_Thurstone": 100,
+      "C_Thurstone_abs_error": 75,
+      "D": 100,
+      "D_abs_error": 75
+    },
+    {
+      "title": "Grand Theft Auto III",
+      "rating": 2,
+      "truth_score": 25,
+      "baseline": 70.2,
+      "baseline_abs_error": 45.2,
+      "A": 74,
+      "A_abs_error": 49,
+      "C_BT": 84.2,
+      "C_BT_abs_error": 59.2,
+      "C_Thurstone": 82.2,
+      "C_Thurstone_abs_error": 57.2,
+      "D": 84.2,
+      "D_abs_error": 59.2
+    },
+    {
+      "title": "Cyberpunk 2077",
+      "rating": 2.5,
+      "truth_score": 37.5,
+      "baseline": 79.4,
+      "baseline_abs_error": 41.9,
+      "A": 82,
+      "A_abs_error": 44.5,
+      "C_BT": 100,
+      "C_BT_abs_error": 62.5,
+      "C_Thurstone": 100,
+      "C_Thurstone_abs_error": 62.5,
+      "D": 96,
+      "D_abs_error": 58.5
+    },
+    {
+      "title": "Grand Theft Auto V",
+      "rating": 2.5,
+      "truth_score": 37.5,
+      "baseline": 86.2,
+      "baseline_abs_error": 48.7,
+      "A": 83,
+      "A_abs_error": 45.5,
+      "C_BT": 96,
+      "C_BT_abs_error": 58.5,
+      "C_Thurstone": 92.4,
+      "C_Thurstone_abs_error": 54.9,
+      "D": 96,
+      "D_abs_error": 58.5
+    },
+    {
+      "title": "Red Dead Redemption",
+      "rating": 3,
+      "truth_score": 50,
+      "baseline": 85.6,
+      "baseline_abs_error": 35.6,
+      "A": 84,
+      "A_abs_error": 34,
+      "C_BT": 100,
+      "C_BT_abs_error": 50,
+      "C_Thurstone": 100,
+      "C_Thurstone_abs_error": 50,
+      "D": 100,
+      "D_abs_error": 50
+    },
+    {
+      "title": "Mafia II",
+      "rating": 2.5,
+      "truth_score": 37.5,
+      "baseline": 69.9,
+      "baseline_abs_error": 32.4,
+      "A": 74,
+      "A_abs_error": 36.5,
+      "C_BT": 74.6,
+      "C_BT_abs_error": 37.1,
+      "C_Thurstone": 73.2,
+      "C_Thurstone_abs_error": 35.7,
+      "D": 84.2,
+      "D_abs_error": 46.7
+    },
+    {
+      "title": "The Elder Scrolls IV: Oblivion",
+      "rating": 2.5,
+      "truth_score": 37.5,
+      "baseline": 82.9,
+      "baseline_abs_error": 45.4,
+      "A": 80,
+      "A_abs_error": 42.5,
+      "C_BT": 84.2,
+      "C_BT_abs_error": 46.7,
+      "C_Thurstone": 82.2,
+      "C_Thurstone_abs_error": 44.7,
+      "D": 84.2,
+      "D_abs_error": 46.7
+    },
+    {
+      "title": "Castlevania: Lords of Shadow",
+      "rating": 3,
+      "truth_score": 50,
+      "baseline": 73.6,
+      "baseline_abs_error": 23.6,
+      "A": 72,
+      "A_abs_error": 22,
+      "C_BT": 84.2,
+      "C_BT_abs_error": 34.2,
+      "C_Thurstone": 82.2,
+      "C_Thurstone_abs_error": 32.2,
+      "D": 84.2,
+      "D_abs_error": 34.2
+    },
+    {
+      "title": "The Banner Saga 2",
+      "rating": 3,
+      "truth_score": 50,
+      "baseline": 78.2,
+      "baseline_abs_error": 28.2,
+      "A": 73,
+      "A_abs_error": 23,
+      "C_BT": 84.2,
+      "C_BT_abs_error": 34.2,
+      "C_Thurstone": 82.2,
+      "C_Thurstone_abs_error": 32.2,
+      "D": 84.2,
+      "D_abs_error": 34.2
+    },
+    {
+      "title": "Borderlands",
+      "rating": 2.5,
+      "truth_score": 37.5,
+      "baseline": 67.4,
+      "baseline_abs_error": 29.9,
+      "A": 64,
+      "A_abs_error": 26.5,
+      "C_BT": 74.6,
+      "C_BT_abs_error": 37.1,
+      "C_Thurstone": 73.2,
+      "C_Thurstone_abs_error": 35.7,
+      "D": 66,
+      "D_abs_error": 28.5
+    },
+    {
+      "title": "Postal 2",
+      "rating": 3.5,
+      "truth_score": 62.5,
+      "baseline": 53.4,
+      "baseline_abs_error": 9.1,
+      "A": 42,
+      "A_abs_error": 20.5,
+      "C_BT": 50,
+      "C_BT_abs_error": 12.5,
+      "C_Thurstone": 50,
+      "C_Thurstone_abs_error": 12.5,
+      "D": 34,
+      "D_abs_error": 28.5
+    },
+    {
+      "title": "Assassin's Creed",
+      "rating": 4,
+      "truth_score": 75,
+      "baseline": 63,
+      "baseline_abs_error": 12,
+      "A": 55,
+      "A_abs_error": 20,
+      "C_BT": 66,
+      "C_BT_abs_error": 9,
+      "C_Thurstone": 65.2,
+      "C_Thurstone_abs_error": 9.8,
+      "D": 50,
+      "D_abs_error": 25
+    },
+    {
+      "title": "Prince of Persia: Warrior Within",
+      "rating": 4,
+      "truth_score": 75,
+      "baseline": 84.6,
+      "baseline_abs_error": 9.6,
+      "A": 85,
+      "A_abs_error": 10,
+      "C_BT": 96,
+      "C_BT_abs_error": 21,
+      "C_Thurstone": 92.4,
+      "C_Thurstone_abs_error": 17.4,
+      "D": 100,
+      "D_abs_error": 25
+    },
+    {
+      "title": "The Witcher 3: Wild Hunt - Hearts of Stone",
+      "rating": 4,
+      "truth_score": 75,
+      "baseline": 85.4,
+      "baseline_abs_error": 10.4,
+      "A": 85,
+      "A_abs_error": 10,
+      "C_BT": 96,
+      "C_BT_abs_error": 21,
+      "C_Thurstone": 92.4,
+      "C_Thurstone_abs_error": 17.4,
+      "D": 100,
+      "D_abs_error": 25
+    },
+    {
+      "title": "Need for Speed: Most Wanted",
+      "rating": 3.5,
+      "truth_score": 62.5,
+      "baseline": 77.5,
+      "baseline_abs_error": 15,
+      "A": 78,
+      "A_abs_error": 15.5,
+      "C_BT": 84.2,
+      "C_BT_abs_error": 21.7,
+      "C_Thurstone": 82.2,
+      "C_Thurstone_abs_error": 19.7,
+      "D": 84.2,
+      "D_abs_error": 21.7
+    },
+    {
+      "title": "Prototype",
+      "rating": 3.5,
+      "truth_score": 62.5,
+      "baseline": 81.9,
+      "baseline_abs_error": 19.4,
+      "A": 79,
+      "A_abs_error": 16.5,
+      "C_BT": 84.2,
+      "C_BT_abs_error": 21.7,
+      "C_Thurstone": 82.2,
+      "C_Thurstone_abs_error": 19.7,
+      "D": 84.2,
+      "D_abs_error": 21.7
+    },
+    {
+      "title": "Resident Evil 4",
+      "rating": 3.5,
+      "truth_score": 62.5,
+      "baseline": 86.3,
+      "baseline_abs_error": 23.8,
+      "A": 79,
+      "A_abs_error": 16.5,
+      "C_BT": 84.2,
+      "C_BT_abs_error": 21.7,
+      "C_Thurstone": 82.2,
+      "C_Thurstone_abs_error": 19.7,
+      "D": 84.2,
+      "D_abs_error": 21.7
+    },
+    {
+      "title": "Marvel's Spider-Man",
+      "rating": 4,
+      "truth_score": 75,
+      "baseline": 84.9,
+      "baseline_abs_error": 9.9,
+      "A": 84,
+      "A_abs_error": 9,
+      "C_BT": 84.2,
+      "C_BT_abs_error": 9.2,
+      "C_Thurstone": 82.2,
+      "C_Thurstone_abs_error": 7.2,
+      "D": 96,
+      "D_abs_error": 21
+    },
+    {
+      "title": "Tekken 3",
+      "rating": 4,
+      "truth_score": 75,
+      "baseline": 86.4,
+      "baseline_abs_error": 11.4,
+      "A": 82,
+      "A_abs_error": 7,
+      "C_BT": 84.2,
+      "C_BT_abs_error": 9.2,
+      "C_Thurstone": 82.2,
+      "C_Thurstone_abs_error": 7.2,
+      "D": 96,
+      "D_abs_error": 21
+    },
+    {
+      "title": "The Witcher 3: Wild Hunt - Blood and Wine",
+      "rating": 4,
+      "truth_score": 75,
+      "baseline": 86.2,
+      "baseline_abs_error": 11.2,
+      "A": 83,
+      "A_abs_error": 8,
+      "C_BT": 84.2,
+      "C_BT_abs_error": 9.2,
+      "C_Thurstone": 82.2,
+      "C_Thurstone_abs_error": 7.2,
+      "D": 96,
+      "D_abs_error": 21
+    },
+    {
+      "title": "Hogwarts Legacy",
+      "rating": 3.5,
+      "truth_score": 62.5,
+      "baseline": 67,
+      "baseline_abs_error": 4.5,
+      "A": 58,
+      "A_abs_error": 4.5,
+      "C_BT": 66,
+      "C_BT_abs_error": 3.5,
+      "C_Thurstone": 65.2,
+      "C_Thurstone_abs_error": 2.7,
+      "D": 50,
+      "D_abs_error": 12.5
+    },
+    {
+      "title": "Perfect World",
+      "rating": 3.5,
+      "truth_score": 62.5,
+      "baseline": 65.4,
+      "baseline_abs_error": 2.9,
+      "A": 54,
+      "A_abs_error": 8.5,
+      "C_BT": 66,
+      "C_BT_abs_error": 3.5,
+      "C_Thurstone": 65.2,
+      "C_Thurstone_abs_error": 2.7,
+      "D": 50,
+      "D_abs_error": 12.5
+    },
+    {
+      "title": "The Suffering",
+      "rating": 3.5,
+      "truth_score": 62.5,
+      "baseline": 65.2,
+      "baseline_abs_error": 2.7,
+      "A": 54,
+      "A_abs_error": 8.5,
+      "C_BT": 57.8,
+      "C_BT_abs_error": 4.7,
+      "C_Thurstone": 57.4,
+      "C_Thurstone_abs_error": 5.1,
+      "D": 50,
+      "D_abs_error": 12.5
+    },
+    {
+      "title": "WarCraft 3: The Frozen Throne",
+      "rating": 4.5,
+      "truth_score": 87.5,
+      "baseline": 95,
+      "baseline_abs_error": 7.5,
+      "A": 91,
+      "A_abs_error": 3.5,
+      "C_BT": 100,
+      "C_BT_abs_error": 12.5,
+      "C_Thurstone": 100,
+      "C_Thurstone_abs_error": 12.5,
+      "D": 100,
+      "D_abs_error": 12.5
+    },
+    {
+      "title": "Darksiders",
+      "rating": 4,
+      "truth_score": 75,
+      "baseline": 80.7,
+      "baseline_abs_error": 5.7,
+      "A": 76,
+      "A_abs_error": 1,
+      "C_BT": 84.2,
+      "C_BT_abs_error": 9.2,
+      "C_Thurstone": 82.2,
+      "C_Thurstone_abs_error": 7.2,
+      "D": 84.2,
+      "D_abs_error": 9.2
+    },
+    {
+      "title": "Half-Life: Blue Shift",
+      "rating": 2,
+      "truth_score": 25,
+      "baseline": 43.4,
+      "baseline_abs_error": 18.4,
+      "A": 30,
+      "A_abs_error": 5,
+      "C_BT": 34,
+      "C_BT_abs_error": 9,
+      "C_Thurstone": 34.8,
+      "C_Thurstone_abs_error": 9.8,
+      "D": 15.8,
+      "D_abs_error": 9.2
+    },
+    {
+      "title": "Lucius II",
+      "rating": 2,
+      "truth_score": 25,
+      "baseline": 49,
+      "baseline_abs_error": 24,
+      "A": 34,
+      "A_abs_error": 9,
+      "C_BT": 34,
+      "C_BT_abs_error": 9,
+      "C_Thurstone": 34.8,
+      "C_Thurstone_abs_error": 9.8,
+      "D": 15.8,
+      "D_abs_error": 9.2
+    },
+    {
+      "title": "Mirror's Edge",
+      "rating": 4,
+      "truth_score": 75,
+      "baseline": 75.7,
+      "baseline_abs_error": 0.7,
+      "A": 70,
+      "A_abs_error": 5,
+      "C_BT": 66,
+      "C_BT_abs_error": 9,
+      "C_Thurstone": 65.2,
+      "C_Thurstone_abs_error": 9.8,
+      "D": 84.2,
+      "D_abs_error": 9.2
+    },
+    {
+      "title": "Sanitarium",
+      "rating": 4,
+      "truth_score": 75,
+      "baseline": 61.2,
+      "baseline_abs_error": 13.8,
+      "A": 60,
+      "A_abs_error": 15,
+      "C_BT": 50,
+      "C_BT_abs_error": 25,
+      "C_Thurstone": 50,
+      "C_Thurstone_abs_error": 25,
+      "D": 66,
+      "D_abs_error": 9
+    },
+    {
+      "title": "The Exit 8",
+      "rating": 2.5,
+      "truth_score": 37.5,
+      "baseline": 54,
+      "baseline_abs_error": 16.5,
+      "A": 44,
+      "A_abs_error": 6.5,
+      "C_BT": 50,
+      "C_BT_abs_error": 12.5,
+      "C_Thurstone": 50,
+      "C_Thurstone_abs_error": 12.5,
+      "D": 34,
+      "D_abs_error": 3.5
+    }
+  ]
+}
