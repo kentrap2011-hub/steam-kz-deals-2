@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` is free after completed card-explanation publication parity work: PR #132 merged as `a225989b2a914e580114a5ec6212ae1486516af8`, follow-up PR #136 merged as `7a0b6d87b38c23afe3fee116c8425ff336eaf230`, and normal visual/Pages publication succeeded.
+- `ЧАТ 1` assigned: `WORKER_TASK_PERSONAL_TASTE_SCORING_ARCHITECTURE_RESEARCH_01.md` — independent research/design of a better personal-taste scoring architecture with external web research and multiple alternatives.
 - `ЧАТ 2` is free after accepted PR #133 / merge `b6019c11fa202c73e5470af3d2eb9a4b5900f476`; stale PASS 2 current-state regression is fixed and green.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
@@ -18,6 +18,34 @@
 - User-authorized current recovery direction: process current translations in ЧАТ 1 while ЧАТ 2 makes translation absence nonblocking and adds translation observability to Statistics. The earlier browser-asset decoupling proposal is not the current task; reassess it only if publication still lags after these authorized changes.
 - Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
+
+
+## ACTIVE — ЧАТ 1 — personal taste scoring architecture research
+
+Task:
+`WORKER_TASK_PERSONAL_TASTE_SCORING_ARCHITECTURE_RESEARCH_01.md`
+
+Mode:
+`READ-ONLY / RESEARCH / DESIGN`
+
+Status:
+`authorized_ready_for_worker`
+
+Purpose:
+- do not anchor on the current five-factor scoring design;
+- research external recommender/preference-learning/explainable-scoring practices;
+- produce at least four materially different architectures;
+- compare them consistently;
+- recommend one architecture and one serious runner-up;
+- describe migration if a rewrite is superior.
+
+Hard boundary:
+- no implementation;
+- no production/scoring/ranking/Deep/Dossier changes;
+- no Scheduled Task changes.
+
+Expected report:
+`reviews/worker_reports/personal-taste-scoring-architecture-research-01.md`
 
 
 ## ACCEPTED — ЧАТ 2 — Deep invalid-not-fit current-state regression fix
