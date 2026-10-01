@@ -1,5 +1,17 @@
 # CURRENT TASK
 
+## COMPLETE — Personal taste scoring architecture research 01
+Статус: `research_complete_ready_for_director_review`.
+- task: `WORKER_TASK_PERSONAL_TASTE_SCORING_ARCHITECTURE_RESEARCH_01.md`;
+- durable report: `reviews/worker_reports/personal-taste-scoring-architecture-research-01.md`;
+- report commit: `ccadf306f998f20d36f830302c22adf579c9ffe4`;
+- recommendation: replace the fixed five-factor capped personal-taste score with an anchor-calibrated, evidence-grounded hybrid where Deep produces grounded findings + pairwise anchor comparisons and GitHub deterministically derives the rating-equivalent 0–100 personal-fit score;
+- serious runner-up: pure pairwise latent-preference model;
+- current 120 rating+reason examples in `gaming_taste_live.json` are reusable calibration evidence; old five-factor scores must not be mixed numerically with the new scale;
+- RANK-013 stage precedence should remain separate initially; commercial purchase value remains separate from personal taste;
+- no production/scoring/ranking/Deep/Dossier/visual/Scheduled Task implementation or state was changed;
+- next bounded action: one separate READ-ONLY / OFFLINE EXPERIMENT backtesting the recommended hybrid against pairwise-only, holistic semantic and current five-factor baseline before any production contract change.
+
 ## COMPLETE — Card explanation producer / validator publication parity fix 01
 Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_CARD_EXPLANATION_PRODUCER_VALIDATOR_PUBLICATION_PARITY_FIX_01.md`;
