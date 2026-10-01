@@ -1,0 +1,158 @@
+{
+  "experiment_id": "personal-taste-scoring-targeted-offline-backtest-02",
+  "split_version": "final-v1",
+  "selection_seed": "personal-taste-scoring-targeted-offline-backtest-02-final-v2",
+  "source_profile_blob_sha": "9b9926031889dbd98ba6585c57836d52c739a0bb",
+  "backtest01_split_blob_sha": "dfeac6173545eb6aa22162ffd14135c5c9e1ab77",
+  "candidate_evidence_blob_sha": "92730d68fc49fcf90d9520d84aade03ecb3c9cfa",
+  "family_balance": {
+    "family_1": 10,
+    "family_2": 10
+  },
+  "prior_backtest01_heldout_overlap_count": 20,
+  "cases": [
+    {
+      "title": "Tekken 3",
+      "family": "family_2_conventionally_flawed_personally_memorable",
+      "blind_id": "B01"
+    },
+    {
+      "title": "Cyberpunk 2077",
+      "family": "family_1_externally_strong_personally_underwhelming",
+      "blind_id": "B02"
+    },
+    {
+      "title": "Prototype",
+      "family": "family_1_externally_strong_personally_underwhelming",
+      "blind_id": "B03"
+    },
+    {
+      "title": "Perfect World",
+      "family": "family_2_conventionally_flawed_personally_memorable",
+      "blind_id": "B04"
+    },
+    {
+      "title": "The Suffering",
+      "family": "family_2_conventionally_flawed_personally_memorable",
+      "blind_id": "B05"
+    },
+    {
+      "title": "The Witcher 3: Wild Hunt - Blood and Wine",
+      "family": "family_2_conventionally_flawed_personally_memorable",
+      "blind_id": "B06"
+    },
+    {
+      "title": "Prince of Persia: Warrior Within",
+      "family": "family_2_conventionally_flawed_personally_memorable",
+      "blind_id": "B07"
+    },
+    {
+      "title": "Sanitarium",
+      "family": "family_2_conventionally_flawed_personally_memorable",
+      "blind_id": "B08"
+    },
+    {
+      "title": "Grand Theft Auto III",
+      "family": "family_1_externally_strong_personally_underwhelming",
+      "blind_id": "B09"
+    },
+    {
+      "title": "The Banner Saga 2",
+      "family": "family_1_externally_strong_personally_underwhelming",
+      "blind_id": "B10"
+    },
+    {
+      "title": "Resident Evil 4",
+      "family": "family_1_externally_strong_personally_underwhelming",
+      "blind_id": "B11"
+    },
+    {
+      "title": "The Elder Scrolls IV: Oblivion",
+      "family": "family_1_externally_strong_personally_underwhelming",
+      "blind_id": "B12"
+    },
+    {
+      "title": "Marvel's Spider-Man",
+      "family": "family_2_conventionally_flawed_personally_memorable",
+      "blind_id": "B13"
+    },
+    {
+      "title": "Borderlands",
+      "family": "family_1_externally_strong_personally_underwhelming",
+      "blind_id": "B14"
+    },
+    {
+      "title": "Mafia II",
+      "family": "family_1_externally_strong_personally_underwhelming",
+      "blind_id": "B15"
+    },
+    {
+      "title": "WarCraft 3: The Frozen Throne",
+      "family": "family_2_conventionally_flawed_personally_memorable",
+      "blind_id": "B16"
+    },
+    {
+      "title": "The Witcher 3: Wild Hunt - Hearts of Stone",
+      "family": "family_2_conventionally_flawed_personally_memorable",
+      "blind_id": "B17"
+    },
+    {
+      "title": "Red Dead Redemption",
+      "family": "family_1_externally_strong_personally_underwhelming",
+      "blind_id": "B18"
+    },
+    {
+      "title": "Hogwarts Legacy",
+      "family": "family_1_externally_strong_personally_underwhelming",
+      "blind_id": "B19"
+    },
+    {
+      "title": "Need for Speed: Most Wanted",
+      "family": "family_2_conventionally_flawed_personally_memorable",
+      "blind_id": "B20"
+    }
+  ],
+  "selection_rules": {
+    "family_1_rating_max": 3.5,
+    "family_2_rating_min": 3.5,
+    "strong_negative_tokens": [
+      "скуч",
+      "неинтерес",
+      "не зацеп",
+      "брос",
+      "хуже",
+      "непонят",
+      "однообраз",
+      "повтор",
+      "затянут",
+      "управлен",
+      "финал",
+      "концов",
+      "разочар",
+      "рутин",
+      "слаб"
+    ],
+    "public_conventional_weakness_tokens": [
+      "repet",
+      "dated",
+      "rough",
+      "simple",
+      "limited",
+      "short",
+      "technical",
+      "clunky",
+      "linear",
+      "shallow",
+      "old",
+      "weak",
+      "filler",
+      "grind",
+      "same",
+      "uneven",
+      "friction",
+      "bugs"
+    ],
+    "nonoverlap": true,
+    "no_prediction_based_selection": true
+  }
+}
