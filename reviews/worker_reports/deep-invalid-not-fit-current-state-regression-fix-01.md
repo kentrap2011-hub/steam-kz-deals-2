@@ -8,7 +8,7 @@ Repository: `kentrap2011-hub/steam-kz-deals-2`.
 
 Branch: `fix/deep-invalid-not-fit-current-state-regression-fix-01`.
 
-Pull request: #133, `Make Deep invalid-loop regression state-aware`.
+Pull request: #133, `Make Deep invalid-loop regression state-aware` — merged to `main` as `b6019c11fa202c73e5470af3d2eb9a4b5900f476`.
 
 Scope: repair the stale current-state assumptions in `scripts/test_deep_invalid_not_fit_contract_loop.py` without weakening the invalid-not-fit contract or changing production Deep/Dossier state.
 
@@ -90,13 +90,14 @@ The failed pre-stabilization PASS 2 run was `36808215954`; backlog run `36808215
 
 ## Validation
 
-Validated code head before this report: `0e59843b1641fcabc554b3255c98fb0b15107cfa`.
+Validated code head before report closeout: `44d2499a64fdde6b428ebe041fb33f066d898966`.
 
 GitHub Actions:
-- Validate Progressive PASS 2 core: run `36808341769` / #538 — success.
-- Validate backlog dispositions: run `36808341778` / #1521 — success.
+- Validate Progressive PASS 2 core on final PR head: run `36808488154` / #539 — success.
+- Validate backlog dispositions on final PR head: run `36808488153` / #1522 — success.
+- Earlier code-head PASS 2 run `36808341769` / #538 and backlog run `36808341778` / #1521 were also successful.
 
-PASS 2 run `36808341769` passed:
+Final-head PASS 2 run `36808488154` passed:
 - visual material freshness regressions;
 - progressive async traversal + invalid transport;
 - Deep parallel frozen-start;
@@ -147,13 +148,14 @@ This worker does not merge or otherwise change PR #132. Final PR #132 merge/publ
 - state-aware regression commit: `5de9b8c8b1fdf08562487551add028747fbb9306`;
 - cleanup commit: `cefb2be82d18e0e0dba83fadbd282ec6427a8660`;
 - deterministic fixture-expiry commit: `0e59843b1641fcabc554b3255c98fb0b15107cfa`;
-- green PASS 2 run: `36808341769`;
-- green backlog run: `36808341778`;
+- final green PASS 2 run: `36808488154`;
+- final green backlog run: `36808488153`;
+- PR #133 merge: `b6019c11fa202c73e5470af3d2eb9a4b5900f476`;
 - dependency PR #132 observed implementation head/report context: `9b2c094aaa1c868162e2e6e269a92789b4dde131`.
 
 ## Recommended next step
 
-Merge PR #133, then have ЧАТ 1 refresh PR #132 from the resulting `main` and rerun PR #132 mandatory validation without changing its implementation logic.
+ЧАТ 1 should refresh/rebase PR #132 from `main@b6019c11fa202c73e5470af3d2eb9a4b5900f476` (or a later descendant) and rerun PR #132 mandatory validation without changing its implementation logic.
 
 ## Efficiency / reusable lesson
 
