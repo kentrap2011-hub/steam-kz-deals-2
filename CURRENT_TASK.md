@@ -1,15 +1,14 @@
 # CURRENT TASK
 
 ## ACTIVE — Card explanation producer / validator publication parity fix 01
-Статус: `implementation_complete_publication_pending`.
-- task: `WORKER_TASK_CARD_EXPLANATION_PRODUCER_VALIDATOR_PUBLICATION_PARITY_FIX_01.md`;
-- implementation PR: `#132`; branch: `fix/card-explanation-producer-validator-publication-parity-01`;
-- reconciled current-main head: `f2bfe892a157501cff69fac53e131ece0afadd85` over `main@6b7076258713d5997d32a1868a37ac1ff7f89f9e`, compare `behind_by=0`;
-- prerequisite PR #133 is merged as `b6019c11fa202c73e5470af3d2eb9a4b5900f476`;
-- fresh PASS 2 core run `36855124640` and backlog run `36855124796` passed; Deep score-evidence, Deep invalid-not-fit current-state, and visual material freshness regressions are green;
-- implementation code is unchanged after the green validation; only worker-report/CURRENT_TASK closeout metadata is being updated before merge;
-- next step: merge PR #132 after the metadata-only backlog check is green, then observe only the normal automatic visual build and Pages deploy;
-- no semantic Deep/Dossier execution, manual visual workflow dispatch, ranking change, scheduler/retry-owner change or Scheduled Task change is authorized.
+Статус: `needs_fix_post_merge_qualifier_parity`.
+- original implementation PR: `#132`; merge: `a225989b2a914e580114a5ec6212ae1486516af8`;
+- pre-merge PASS 2 core `36855327276` and backlog `36855327307` were green;
+- first normal post-merge visual run `36855413554` / #1102 built the fresh candidate but failed generated card explanation validation on four Deep score-qualifier cautions;
+- confirmed root cause: producer emits `deep_score_finding_qualifier` on the existing caution surface, while validator accepted only `deep_dossier_caution`;
+- bounded follow-up branch: `fix/card-explanation-score-qualifier-validator-parity-01`;
+- follow-up changes only validator parity + regression coverage; Deep score semantics, negative-risk semantics, ranking, producer text, scheduler/retry ownership and Scheduled Tasks remain unchanged;
+- next step: validate/merge the bounded follow-up, then observe only the normal automatic visual build and Pages deploy; no manual build/deploy dispatch.
 
 ## COMPLETE — Deep invalid-not-fit current-state regression fix 01
 Статус: `complete_ready_for_director_acceptance`.
