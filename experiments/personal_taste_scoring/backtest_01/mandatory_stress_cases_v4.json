@@ -1,0 +1,347 @@
+{
+  "experiment_id": "personal-taste-scoring-offline-backtest-01",
+  "cases": [
+    {
+      "scenario": "dominant_property_legitimately_drives_high_fit",
+      "title": "Mirror's Edge",
+      "why_case_is_valid": "Held-out truth says parkour is the main attraction and the clean visual identity reinforces it. This is a real case where one dominant property can legitimately carry a high fit.",
+      "predictions": {
+        "baseline": {
+          "score_0_100": 75.7,
+          "band": "high"
+        },
+        "architecture_a": {
+          "score_0_100": 70,
+          "band": "high"
+        },
+        "architecture_c": {
+          "score_0_100": 66,
+          "band": "high",
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "architecture_d": {
+          "score_0_100": 84.2,
+          "band": "very_high",
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        }
+      },
+      "truth": {
+        "rating": 4,
+        "score_0_100": 75,
+        "why_this_rating": "4/5: почти идеальное попадание в любовь к паркуру и визуально чистой, узнаваемой эстетике."
+      },
+      "semantic_findings": {
+        "major_positive": "ярко выраженное мастерство движения и ощущение потока",
+        "major_negative": "неясные цели и остановки на пробах/ошибках могут разрушать темп",
+        "uncertainty": "high",
+        "one_dominant_property_drove_conclusion": true,
+        "dominant_property_polarity": "positive",
+        "superficial_similarity_trap_detected": false,
+        "candidate_evidence_link": "candidate:Mirror's Edge:facts",
+        "profile_linkage": [
+          "training-card patterns/anchors"
+        ]
+      }
+    },
+    {
+      "scenario": "superficial_similarity_to_favorite_must_not_create_high_fit",
+      "title": "Castlevania: Lords of Shadow",
+      "why_case_is_valid": "Held-out truth explicitly says resemblance to Devil May Cry does not raise fit; it creates an unfavorable direct comparison because the implementation feels weaker.",
+      "predictions": {
+        "baseline": {
+          "score_0_100": 73.6,
+          "band": "high"
+        },
+        "architecture_a": {
+          "score_0_100": 72,
+          "band": "high"
+        },
+        "architecture_c": {
+          "score_0_100": 84.2,
+          "band": "very_high",
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "architecture_d": {
+          "score_0_100": 84.2,
+          "band": "very_high",
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        }
+      },
+      "truth": {
+        "rating": 3,
+        "score_0_100": 50,
+        "why_this_rating": "3/5: знакомая по Devil May Cry формула сама по себе не отталкивает, но конкретная реализация ощущается существенно слабее DMC, из-за чего интерес не удержался и игра не была пройдена до конца."
+      },
+      "semantic_findings": {
+        "major_positive": "комбо-бой, боссы и постепенное открытие инструментов",
+        "major_negative": "подсказки/QTE и ограниченная свобода ломают самостоятельное освоение",
+        "uncertainty": "medium",
+        "one_dominant_property_drove_conclusion": false,
+        "dominant_property_polarity": null,
+        "superficial_similarity_trap_detected": true,
+        "candidate_evidence_link": "candidate:Castlevania: Lords of Shadow:facts",
+        "profile_linkage": [
+          "training-card patterns/anchors"
+        ]
+      }
+    },
+    {
+      "scenario": "many_positive_surface_properties_offset_by_meaningful_negative",
+      "title": "Mass Effect",
+      "why_case_is_valid": "Public candidate evidence offers characters, dialogue, builds and a broad RPG structure, but hidden truth is dominated by onboarding/information overload, slow-feeling controls and unengaging combat.",
+      "predictions": {
+        "baseline": {
+          "score_0_100": 82.1,
+          "band": "very_high"
+        },
+        "architecture_a": {
+          "score_0_100": 85,
+          "band": "very_high"
+        },
+        "architecture_c": {
+          "score_0_100": 100,
+          "band": "very_high",
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ]
+        },
+        "architecture_d": {
+          "score_0_100": 100,
+          "band": "very_high",
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ]
+        }
+      },
+      "truth": {
+        "rating": 2,
+        "score_0_100": 25,
+        "why_this_rating": "2/5: слишком тяжёлый вход и информационная перегрузка не компенсируются ни ранним сюжетом, ни боевой системой."
+      },
+      "semantic_findings": {
+        "major_positive": "персонажи, ветвящиеся диалоги, развитие и большой сюжетный контекст",
+        "major_negative": "часть побочного исследования может быть менее насыщенной, чем главная линия",
+        "uncertainty": "medium",
+        "one_dominant_property_drove_conclusion": false,
+        "dominant_property_polarity": null,
+        "superficial_similarity_trap_detected": false,
+        "candidate_evidence_link": "candidate:Mass Effect:facts",
+        "profile_linkage": [
+          "training-card patterns/anchors"
+        ]
+      }
+    }
+  ]
+}
