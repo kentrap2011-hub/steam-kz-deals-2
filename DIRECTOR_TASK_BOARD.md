@@ -3,7 +3,7 @@
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
 - `ЧАТ 1` active: PR #138 implements `WORKER_TASK_DOSSIER_EXHAUSTED_FAIL_CLOSED_LOOP_FIX_01.md`, but the PR is not yet merge-ready after main advanced; final report/checks are still pending.
-- `ЧАТ 2` is free after completed `WORKER_TASK_PERSONAL_TASTE_SCORING_OFFLINE_BACKTEST_01.md`; result status `evidence_inconclusive`, so no production scoring rewrite is authorized.
+- `ЧАТ 2` assigned: `WORKER_TASK_PERSONAL_TASTE_SCORING_TARGETED_OFFLINE_BACKTEST_02.md` — focused baseline vs Architecture A experiment on hard personal-preference cases.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -18,6 +18,28 @@
 - User-authorized current recovery direction: process current translations in ЧАТ 1 while ЧАТ 2 makes translation absence nonblocking and adds translation observability to Statistics. The earlier browser-asset decoupling proposal is not the current task; reassess it only if publication still lags after these authorized changes.
 - Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
+
+
+## ACTIVE — ЧАТ 2 — personal taste scoring targeted offline backtest 02
+
+Task:
+`WORKER_TASK_PERSONAL_TASTE_SCORING_TARGETED_OFFLINE_BACKTEST_02.md`
+
+Mode:
+`READ-ONLY / OFFLINE EXPERIMENT`
+
+Status:
+`authorized_ready_for_worker`
+
+Purpose:
+- compare only current baseline vs refined Architecture A;
+- use a fresh pre-registered 20-game set balanced between externally strong-but-personally-disliked and conventionally flawed-but-personally-liked cases;
+- freeze leakage prevention and decision thresholds before scoring;
+- test decisive negatives, decisive positives, superficial similarity, novelty/context, calibration and rerun stability;
+- do not implement any production change.
+
+Expected report:
+`reviews/worker_reports/personal-taste-scoring-targeted-offline-backtest-02.md`
 
 
 ## ACCEPTED — ЧАТ 1 — personal taste scoring architecture research
