@@ -1,5 +1,16 @@
 # CURRENT TASK
 
+## IN PROGRESS — Personal taste scoring targeted offline backtest 02
+Статус: `in_progress`.
+- task: `WORKER_TASK_PERSONAL_TASTE_SCORING_TARGETED_OFFLINE_BACKTEST_02.md`;
+- mode: `READ-ONLY / OFFLINE EXPERIMENT`;
+- branch: `experiment/personal-taste-scoring-targeted-offline-backtest-02`;
+- scope: current five-factor baseline vs refined Architecture A only, 20 fresh hard historical cases when available;
+- required ordering: deterministic split + leakage controls + numeric decision thresholds are frozen and committed before any held-out prediction artifact;
+- production scoring/ranking, Deep/Dossier contracts/state, canonical Taste profile, visual payload and Scheduled Tasks are out of scope;
+- durable report: `reviews/worker_reports/personal-taste-scoring-targeted-offline-backtest-02.md`.
+
+
 ## COMPLETE — Personal taste scoring offline backtest 01
 Статус: `evidence_inconclusive`.
 - task: `WORKER_TASK_PERSONAL_TASTE_SCORING_OFFLINE_BACKTEST_01.md`;
