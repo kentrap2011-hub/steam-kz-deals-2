@@ -1,0 +1,278 @@
+{
+  "experiment_id": "personal-taste-scoring-offline-backtest-01",
+  "sample_version": "blinded-user-audit-v4",
+  "architecture": "D",
+  "rendering_intent": "Exact compact/expanded information surface required by the task; contains no held-out truth.",
+  "sample": [
+    {
+      "title": "Mirror's Edge",
+      "personal_fit_score": 84.2,
+      "uncertainty_interval_90": [
+        54,
+        100
+      ],
+      "strongest_reason_up": "ярко выраженное мастерство движения и ощущение потока",
+      "strongest_reason_down": "неясные цели и остановки на пробах/ошибках могут разрушать темп",
+      "anchor_comparisons": [
+        {
+          "anchor_game": "Half-Life",
+          "anchor_user_rating": 1.5,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Fallout 4",
+          "anchor_user_rating": 2,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Deus Ex: Human Revolution",
+          "anchor_user_rating": 2.5,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Stray",
+          "anchor_user_rating": 3,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Tomb Raider (2013)",
+          "anchor_user_rating": 3.5,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Batman: Arkham Asylum",
+          "anchor_user_rating": 4,
+          "relation": "roughly_equal"
+        },
+        {
+          "anchor_game": "Red Dead Redemption II",
+          "anchor_user_rating": 4.5,
+          "relation": "anchor_better"
+        }
+      ],
+      "evidence_linkage": {
+        "candidate": "candidate:Mirror's Edge:facts",
+        "profile": [
+          "training-card patterns/anchors"
+        ]
+      },
+      "truth_visible_to_viewer": false
+    },
+    {
+      "title": "Castlevania: Lords of Shadow",
+      "personal_fit_score": 84.2,
+      "uncertainty_interval_90": [
+        54,
+        100
+      ],
+      "strongest_reason_up": "комбо-бой, боссы и постепенное открытие инструментов",
+      "strongest_reason_down": "подсказки/QTE и ограниченная свобода ломают самостоятельное освоение",
+      "anchor_comparisons": [
+        {
+          "anchor_game": "Half-Life",
+          "anchor_user_rating": 1.5,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Fallout 4",
+          "anchor_user_rating": 2,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Deus Ex: Human Revolution",
+          "anchor_user_rating": 2.5,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Stray",
+          "anchor_user_rating": 3,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Tomb Raider (2013)",
+          "anchor_user_rating": 3.5,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Batman: Arkham Asylum",
+          "anchor_user_rating": 4,
+          "relation": "roughly_equal"
+        },
+        {
+          "anchor_game": "Red Dead Redemption II",
+          "anchor_user_rating": 4.5,
+          "relation": "anchor_better"
+        }
+      ],
+      "evidence_linkage": {
+        "candidate": "candidate:Castlevania: Lords of Shadow:facts",
+        "profile": [
+          "training-card patterns/anchors"
+        ]
+      },
+      "truth_visible_to_viewer": false
+    },
+    {
+      "title": "Mass Effect",
+      "personal_fit_score": 100,
+      "uncertainty_interval_90": [
+        72.4,
+        100
+      ],
+      "strongest_reason_up": "персонажи, ветвящиеся диалоги, развитие и большой сюжетный контекст",
+      "strongest_reason_down": "часть побочного исследования может быть менее насыщенной, чем главная линия",
+      "anchor_comparisons": [
+        {
+          "anchor_game": "Half-Life",
+          "anchor_user_rating": 1.5,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Fallout 4",
+          "anchor_user_rating": 2,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Deus Ex: Human Revolution",
+          "anchor_user_rating": 2.5,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Stray",
+          "anchor_user_rating": 3,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Tomb Raider (2013)",
+          "anchor_user_rating": 3.5,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Batman: Arkham Asylum",
+          "anchor_user_rating": 4,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Red Dead Redemption II",
+          "anchor_user_rating": 4.5,
+          "relation": "roughly_equal"
+        }
+      ],
+      "evidence_linkage": {
+        "candidate": "candidate:Mass Effect:facts",
+        "profile": [
+          "training-card patterns/anchors"
+        ]
+      },
+      "truth_visible_to_viewer": false
+    },
+    {
+      "title": "Hogwarts Legacy",
+      "personal_fit_score": 50,
+      "uncertainty_interval_90": [
+        19.8,
+        80.2
+      ],
+      "strongest_reason_up": "исследование Хогвартса, заклинания и визуальная идентичность",
+      "strongest_reason_down": "чеклисты, обязательные побочные активности и повторяемый бой совпадают с известным риском скуки",
+      "anchor_comparisons": [
+        {
+          "anchor_game": "Half-Life",
+          "anchor_user_rating": 1.5,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Fallout 4",
+          "anchor_user_rating": 2,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Deus Ex: Human Revolution",
+          "anchor_user_rating": 2.5,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Stray",
+          "anchor_user_rating": 3,
+          "relation": "roughly_equal"
+        },
+        {
+          "anchor_game": "Tomb Raider (2013)",
+          "anchor_user_rating": 3.5,
+          "relation": "anchor_better"
+        },
+        {
+          "anchor_game": "Batman: Arkham Asylum",
+          "anchor_user_rating": 4,
+          "relation": "anchor_better"
+        },
+        {
+          "anchor_game": "Red Dead Redemption II",
+          "anchor_user_rating": 4.5,
+          "relation": "anchor_better"
+        }
+      ],
+      "evidence_linkage": {
+        "candidate": "candidate:Hogwarts Legacy:facts",
+        "profile": [
+          "training-card patterns/anchors"
+        ]
+      },
+      "truth_visible_to_viewer": false
+    },
+    {
+      "title": "The Exit 8",
+      "personal_fit_score": 34,
+      "uncertainty_interval_90": [
+        0.6,
+        63.2
+      ],
+      "strongest_reason_up": "короткая необычная проверка наблюдательности",
+      "strongest_reason_down": "повторение одного коридора — сама основа игры; почти нет развития механик",
+      "anchor_comparisons": [
+        {
+          "anchor_game": "Half-Life",
+          "anchor_user_rating": 1.5,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Fallout 4",
+          "anchor_user_rating": 2,
+          "relation": "candidate_better"
+        },
+        {
+          "anchor_game": "Deus Ex: Human Revolution",
+          "anchor_user_rating": 2.5,
+          "relation": "roughly_equal"
+        },
+        {
+          "anchor_game": "Stray",
+          "anchor_user_rating": 3,
+          "relation": "anchor_better"
+        },
+        {
+          "anchor_game": "Tomb Raider (2013)",
+          "anchor_user_rating": 3.5,
+          "relation": "anchor_better"
+        },
+        {
+          "anchor_game": "Batman: Arkham Asylum",
+          "anchor_user_rating": 4,
+          "relation": "anchor_better"
+        },
+        {
+          "anchor_game": "Red Dead Redemption II",
+          "anchor_user_rating": 4.5,
+          "relation": "anchor_better"
+        }
+      ],
+      "evidence_linkage": {
+        "candidate": "candidate:The Exit 8:facts",
+        "profile": [
+          "training-card patterns/anchors"
+        ]
+      },
+      "truth_visible_to_viewer": false
+    }
+  ]
+}
