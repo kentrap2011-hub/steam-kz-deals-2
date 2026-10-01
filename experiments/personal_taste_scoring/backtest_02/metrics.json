@@ -1,0 +1,328 @@
+{
+  "experiment_id": "personal-taste-scoring-targeted-offline-backtest-02",
+  "artifact": "metrics",
+  "version": "v1",
+  "baseline": {
+    "overall": {
+      "n": 20,
+      "mae": 20.47,
+      "rmse": 25.358312246677617,
+      "spearman": 0.3297477875954479,
+      "pairwise_accuracy": 0.6339869281045751,
+      "calibration_ece": 18.46000000000001,
+      "calibration_bands": [
+        {
+          "predicted_band": [
+            50,
+            75
+          ],
+          "n": 6,
+          "predicted_mean": 66.64999999999999,
+          "truth_mean": 54.166666666666664,
+          "absolute_gap": 12.483333333333327
+        },
+        {
+          "predicted_band": [
+            75,
+            100
+          ],
+          "n": 14,
+          "predicted_mean": 82.62857142857145,
+          "truth_mean": 61.607142857142854,
+          "absolute_gap": 21.021428571428594
+        }
+      ],
+      "high_prediction_count": 14,
+      "high_score_precision": 0.42857142857142855,
+      "low_prediction_count": 0,
+      "low_score_precision": null
+    },
+    "family_1": {
+      "n": 10,
+      "mae": 32.68,
+      "rmse": 34.42952221567996,
+      "spearman": 0.5085133809309825,
+      "pairwise_accuracy": 0.7142857142857143,
+      "calibration_ece": 32.679999999999986,
+      "calibration_bands": [
+        {
+          "predicted_band": [
+            50,
+            75
+          ],
+          "n": 3,
+          "predicted_mean": 71.66666666666666,
+          "truth_mean": 41.666666666666664,
+          "absolute_gap": 29.999999999999993
+        },
+        {
+          "predicted_band": [
+            75,
+            100
+          ],
+          "n": 7,
+          "predicted_mean": 82.04285714285713,
+          "truth_mean": 48.214285714285715,
+          "absolute_gap": 33.828571428571415
+        }
+      ],
+      "high_prediction_count": 7,
+      "high_score_precision": 0,
+      "low_prediction_count": 0,
+      "low_score_precision": null
+    },
+    "family_2": {
+      "n": 10,
+      "mae": 8.260000000000002,
+      "rmse": 10.034739657808766,
+      "spearman": 0.6866065623255951,
+      "pairwise_accuracy": 0.8888888888888888,
+      "calibration_ece": 7.259999999999997,
+      "calibration_bands": [
+        {
+          "predicted_band": [
+            50,
+            75
+          ],
+          "n": 3,
+          "predicted_mean": 61.63333333333333,
+          "truth_mean": 66.66666666666667,
+          "absolute_gap": 5.0333333333333385
+        },
+        {
+          "predicted_band": [
+            75,
+            100
+          ],
+          "n": 7,
+          "predicted_mean": 83.21428571428571,
+          "truth_mean": 75,
+          "absolute_gap": 8.214285714285708
+        }
+      ],
+      "high_prediction_count": 7,
+      "high_score_precision": 0.8571428571428571,
+      "low_prediction_count": 0,
+      "low_score_precision": null
+    },
+    "family1_false_high": 1,
+    "family2_false_low": 0,
+    "severe_deal_breaker_miss": 1,
+    "decisive_positive_miss": 0
+  },
+  "architecture_a": {
+    "overall": {
+      "n": 20,
+      "mae": 15.575,
+      "rmse": 19.654198024849553,
+      "spearman": 0.44164400094337714,
+      "pairwise_accuracy": 0.6764705882352942,
+      "calibration_ece": 12.175,
+      "calibration_bands": [
+        {
+          "predicted_band": [
+            25,
+            50
+          ],
+          "n": 1,
+          "predicted_mean": 45,
+          "truth_mean": 62.5,
+          "absolute_gap": 17.5
+        },
+        {
+          "predicted_band": [
+            50,
+            75
+          ],
+          "n": 9,
+          "predicted_mean": 60.666666666666664,
+          "truth_mean": 47.22222222222222,
+          "absolute_gap": 13.444444444444443
+        },
+        {
+          "predicted_band": [
+            75,
+            100
+          ],
+          "n": 10,
+          "predicted_mean": 80.5,
+          "truth_mean": 70,
+          "absolute_gap": 10.5
+        }
+      ],
+      "high_prediction_count": 10,
+      "high_score_precision": 0.6,
+      "low_prediction_count": 0,
+      "low_score_precision": null
+    },
+    "family_1": {
+      "n": 10,
+      "mae": 22.65,
+      "rmse": 25.449459719216044,
+      "spearman": 0.258218568790652,
+      "pairwise_accuracy": 0.5857142857142857,
+      "calibration_ece": 21.75,
+      "calibration_bands": [
+        {
+          "predicted_band": [
+            50,
+            75
+          ],
+          "n": 7,
+          "predicted_mean": 62.57142857142857,
+          "truth_mean": 41.07142857142857,
+          "absolute_gap": 21.5
+        },
+        {
+          "predicted_band": [
+            75,
+            100
+          ],
+          "n": 3,
+          "predicted_mean": 80.66666666666667,
+          "truth_mean": 58.333333333333336,
+          "absolute_gap": 22.333333333333336
+        }
+      ],
+      "high_prediction_count": 3,
+      "high_score_precision": 0,
+      "low_prediction_count": 0,
+      "low_score_precision": null
+    },
+    "family_2": {
+      "n": 10,
+      "mae": 8.5,
+      "rmse": 11.175866856758809,
+      "spearman": 0.753606578176797,
+      "pairwise_accuracy": 0.9259259259259259,
+      "calibration_ece": 8.500000000000002,
+      "calibration_bands": [
+        {
+          "predicted_band": [
+            25,
+            50
+          ],
+          "n": 1,
+          "predicted_mean": 45,
+          "truth_mean": 62.5,
+          "absolute_gap": 17.5
+        },
+        {
+          "predicted_band": [
+            50,
+            75
+          ],
+          "n": 2,
+          "predicted_mean": 54,
+          "truth_mean": 68.75,
+          "absolute_gap": 14.75
+        },
+        {
+          "predicted_band": [
+            75,
+            100
+          ],
+          "n": 7,
+          "predicted_mean": 80.42857142857143,
+          "truth_mean": 75,
+          "absolute_gap": 5.428571428571431
+        }
+      ],
+      "high_prediction_count": 7,
+      "high_score_precision": 0.8571428571428571,
+      "low_prediction_count": 0,
+      "low_score_precision": null
+    },
+    "family1_false_high": 0.8,
+    "family2_false_low": 0.2,
+    "severe_deal_breaker_miss": 0.8571428571428571,
+    "decisive_positive_miss": 0.2857142857142857
+  },
+  "stability": {
+    "repeat_observations": 16,
+    "mean_absolute_score_delta": 1.625,
+    "max_absolute_score_delta": 2,
+    "band_change_rate": 0,
+    "decisive_factor_class_and_polarity_agreement": 1,
+    "positive_negative_polarity_reversals": 0,
+    "material_explanation_drift_rate": 0,
+    "passes_preregistered_thresholds": true
+  },
+  "explanation_accuracy": {
+    "audit_eligible": 17,
+    "architecture_a_strict_rate": 0.35294117647058826,
+    "baseline_factor_alignment_proxy_rate": 0.4117647058823529,
+    "baseline_comparability_limit": "The baseline output is numerically fair but its stored factor notes are generic; explanation comparison therefore remains weaker evidence than score comparison."
+  },
+  "decision_gates": {
+    "gate_1_mae": {
+      "pass": true,
+      "baseline": 20.47,
+      "a": 15.575,
+      "absolute_improvement": 4.895,
+      "relative_improvement": 0.23913043478260868
+    },
+    "gate_2_rmse": {
+      "pass": true,
+      "baseline": 25.358312246677617,
+      "a": 19.654198024849553
+    },
+    "gate_3_ordering": {
+      "pass": true,
+      "baseline_pairwise": 0.6339869281045751,
+      "a_pairwise": 0.6764705882352942,
+      "baseline_spearman": 0.3297477875954479,
+      "a_spearman": 0.44164400094337714
+    },
+    "gate_4_family1_false_high": {
+      "pass": false,
+      "baseline": 1,
+      "a": 0.8
+    },
+    "gate_5_family2_false_low": {
+      "pass": false,
+      "baseline": 0,
+      "a": 0.2
+    },
+    "gate_6_severe_deal_breaker": {
+      "pass": false,
+      "baseline": 1,
+      "a": 0.8571428571428571
+    },
+    "gate_7_decisive_positive": {
+      "pass": false,
+      "baseline": 0,
+      "a": 0.2857142857142857
+    },
+    "gate_8_stability": {
+      "pass": true,
+      "repeat_observations": 16,
+      "mean_absolute_score_delta": 1.625,
+      "max_absolute_score_delta": 2,
+      "band_change_rate": 0,
+      "decisive_factor_class_and_polarity_agreement": 1,
+      "positive_negative_polarity_reversals": 0,
+      "material_explanation_drift_rate": 0,
+      "passes_preregistered_thresholds": true
+    },
+    "gate_9_explanations": {
+      "pass": false,
+      "a_strict_rate": 0.35294117647058826,
+      "baseline_factor_alignment_proxy_rate": 0.4117647058823529,
+      "comparability_limit": "The baseline output is numerically fair but its stored factor notes are generic; explanation comparison therefore remains weaker evidence than score comparison."
+    },
+    "gate_10_secondary": {
+      "pass": true,
+      "baseline_ece": 18.46000000000001,
+      "a_ece": 12.175,
+      "baseline_high_precision": 0.42857142857142855,
+      "a_high_precision": 0.6,
+      "baseline_low_precision": null,
+      "a_low_precision": null
+    }
+  },
+  "decision": {
+    "semantic_conclusion": "Evidence remains inconclusive",
+    "status": "evidence_inconclusive"
+  }
+}
