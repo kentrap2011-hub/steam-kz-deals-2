@@ -121,6 +121,7 @@ class ExhaustedTerminalReceiptTests(unittest.TestCase):
             ("malformed", lambda r: r.__setitem__("semantic_stop_class", "worker_failure")),
             ("unexhausted", lambda r: r["route_exhaustion"].__setitem__("next_required_step_status", "blocked")),
             ("pending_route", lambda r: r["route_exhaustion"].__setitem__("source_diversification", "pending")),
+            ("unresolved_identity", lambda r: r["route_exhaustion"].__setitem__("identity", "exhausted")),
         ):
             with self.subTest(name=name), tempfile.TemporaryDirectory() as td:
                 contract, store, work = self._work(td)
