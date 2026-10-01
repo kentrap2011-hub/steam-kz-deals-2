@@ -14,9 +14,9 @@ Implementation branch: `fix/card-explanation-producer-validator-publication-pari
 
 Current implementation head: `9b2c094aaa1c868162e2e6e269a92789b4dde131`.
 
-Status: `needs_fix`.
+Status: `complete_ready_for_director_acceptance`.
 
-PR #132 was reconciled, validated and merged, but its first normal post-merge full visual build exposed a second producer/validator parity mismatch on the existing caution surface. A bounded follow-up implementation is now required before publication acceptance.
+PR #132 was reconciled, validated and merged. Its first normal post-merge full visual build exposed a second producer/validator parity mismatch on the existing caution surface; bounded follow-up PR #136 fixed that mismatch. The following normal full visual build, canonical persistence and Pages deployment all succeeded.
 
 ## 2. START / fresh-main reconciliation
 
@@ -133,7 +133,11 @@ Added to `scripts/test_deep_score_evidence_explainability.py`:
 13. non-grounded Deep fit status -> FAIL;
 14. incomplete producer binding -> reason hidden;
 15. non-Deep legacy positive retaining the old textual rule -> PASS/FAIL as before;
-16. KOF XV accepted linked Deep reasons remain valid without vocabulary dependence.
+16. KOF XV accepted linked Deep reasons remain valid without vocabulary dependence;
+17. valid linked Deep score qualifier on the caution surface under `completed_no_relevant_negative` -> PASS;
+18. score qualifier missing profile refs -> FAIL;
+19. score qualifier carrying `supports` impact -> FAIL;
+20. score qualifier with partial accepted-state binding -> FAIL.
 
 On PR head `9b2c094aaa1c868162e2e6e269a92789b4dde131`, Progressive PASS 2 run `36735554783` reached the changed regression and printed:
 
@@ -186,109 +190,158 @@ Execution ownership and package-purchase validation scopes are unchanged by PR #
 
 PR #132 merged as `a225989b2a914e580114a5ec6212ae1486516af8`.
 
-The normal existing push trigger automatically started:
+Its first normal push-triggered visual build `36855413554` / #1102 built a fresh candidate but exposed a second parity mismatch: four visible score qualifiers used producer-owned provenance `deep_score_finding_qualifier`, while the validator accepted only `deep_dossier_caution`.
 
-- Build daily visual payload run `36855413554` / #1102.
+That bounded mismatch was fixed in follow-up PR #136:
 
-No manual workflow dispatch was used.
+- PR: `#136` — `Accept linked Deep score qualifiers on caution surface`;
+- branch: `fix/card-explanation-score-qualifier-validator-parity-01`;
+- validator change: `015f264c84f60ee3c18f42b7f0a59dde89f378a9`;
+- regression coverage: `600063f62d32c0e883ef24ebab702c027832199a`;
+- validated head: `ddb3bd94448400a696c4dc876f0e6d2f5156ed23`;
+- PASS 2 PR run `36855825768` / #547 — **success**;
+- backlog PR run `36855825765` / #1532 — **success**;
+- merge: `7a0b6d87b38c23afe3fee116c8425ff336eaf230`.
 
-The full visual candidate build step succeeded, but `Validate generated card explanations` failed with exactly four violations:
+The follow-up did not reinterpret qualifiers as negative risks. It accepts `deep_score_finding_qualifier` only when the card is `linked_v1`, the finding has only lowering/qualifying score impacts, and candidate/profile/accepted-state provenance is complete. Existing `deep_dossier_caution` continues to require its own negative-assessment status.
 
-- Greak: Memories of Azur;
-- Grand Theft Auto IV: The Complete Edition;
-- ENDER LILIES: Quietus of the Knights;
-- Tom Clancy's Splinter Cell®.
+The next normal push-triggered visual build:
 
-All four failures were:
-
-`caution provenance is not producer-owned Deep caution`.
-
-Confirmed second parity mismatch: `build_final_visual_payload.py` already projects score qualifiers from `deep_score_qualifiers()` onto the existing `cautions` surface with provenance source `deep_score_finding_qualifier`, while `validate_card_explanations.py` accepted only `deep_dossier_caution`.
-
-This is the same producer/validator parity class as the original task, not a new score or negative-risk semantic rule.
-
-Bounded follow-up branch:
-`fix/card-explanation-score-qualifier-validator-parity-01`.
-
-The follow-up validator accepts `deep_score_finding_qualifier` only when it remains `linked_v1` and preserves exact finding/factor/candidate/profile/accepted-state provenance. Dossier cautions retain their separate negative-assessment-status rule.
+- run `36855944330` / #1103 — **success**;
+- fresh candidate generation — **success**;
+- `CARD_EXPLANATION_VALIDATION=PASS`;
+- `VISUAL_MATERIAL_BINDING=pass`;
+- generated visual: 219 visible items, with the current progressive projection;
+- no manual workflow dispatch was used.
 
 ## 10. Canonical visual persistence
 
-Not performed.
+Build #1103 persisted the fresh canonical visual through the normal workflow:
 
-`data/production/visual/current.json` was not manually edited or replaced.
+- canonical commit: `0cd51fb46182561c8cbd237bb630a870654db99b` — `Refresh daily visual payload`;
+- canonical `data/production/visual/current.json` blob: `a18d12092fe6fe0aa9c22d8f2c927ea89549e0b3`;
+- generated at: `2026-10-01T11:32:18.179861+00:00`;
+- exact material binding validation passed before commit.
 
-No claim is made that the stale canonical visual identified by the accepted diagnostic has been superseded.
+The published production contract binds the visual to current canonical sources, including:
+
+- chatgpt payload blob `88102c2b1a7d22765e24303a2d41b5d499642566`;
+- store snapshot blob `f7beff661139375f24604428737a6a6bfed673bd`;
+- family graph blob `bf8a22c71cc9be50446c82d6949906cd9e586223`;
+- history snapshot blob `f122832fa9d9223671d45c914a4464874f3c5d5e`;
+- Dossier work blob `6a71928c4f62e4941656ebc1b8b0a0707b7eb027`;
+- PASS 2 state blob `d90b004de91c4eaaf23225c1edf15f4919198071`.
+
+Those blob IDs match the current files on `main`.
 
 ## 11. Automatic Pages deployment
 
-Not performed because there is no merged implementation and therefore no normal post-merge publication run to observe.
+The normal `workflow_run` trigger started Pages deployment automatically:
 
-No Pages deployment was manually triggered.
+- Deploy visual mailing run `36856010448` / #1139 — **success**;
+- Pages artifact ID: `11157892993`;
+- Pages build version: `0cd51fb46182561c8cbd237bb630a870654db99b`;
+- environment URL: `https://kentrap2011-hub.github.io/steam-kz-deals-2/`;
+- GitHub Pages reported deployment success.
+
+The uploaded Pages artifact contains `web/data/current.json`. Direct inspection of that exact artifact produced Git blob SHA:
+
+`a18d12092fe6fe0aa9c22d8f2c927ea89549e0b3`.
+
+That exactly equals the canonical `data/production/visual/current.json` blob, proving the deployed payload is the newly persisted canonical visual, not an older staging copy.
+
+The existing freshness receipt remains truthful to its separate semantics and reports `degraded/no_fresh_build reason=deterministic_refresh_preserved_semantic_history` with `material_binding=exact`; this does not contradict the proven full visual rebuild/persistence/deploy above.
 
 ## 12. Published Statistics freshness
 
-Not yet accepted.
+The deployed Pages artifact no longer contains the known stale Statistics snapshot.
 
-This worker does not claim the live/deployed Statistics have advanced beyond the known stale snapshot:
+Published Dossier values are now:
 
-- Dossier `60 / 200 / 6`, last record `2026-09-30T06:25:51Z`;
-- Deep `41 / 37 / 4 / 7 / 206 / 8 / 221`, last record `2026-09-30T02:07:06Z`.
+- total current scope: `228`;
+- accepted: `64`;
+- pending: `164`;
+- failed/recovery: `0`;
+- last write: `null` under the current snapshot semantics.
 
-The top-page `Скидки: обновлено 24 сент., 03:12` semantics were not changed.
+Published Deep values are now:
+
+- total current coverage target: `222`;
+- first-pass attempted: `60`;
+- authoritative completed: `51`;
+- fit: `48`;
+- not-fit: `3`;
+- incomplete/recovery: `9`;
+- waiting for Dossier: `162`;
+- ready/pending: `0`;
+- normal first-pass remaining: `162`;
+- remaining until all authoritative: `171`;
+- last write: `2026-09-30T16:35:28+00:00`.
+
+Therefore the deployed payload is not the old stale snapshot:
+
+- old Dossier: `60 / 200 / 6`, last record `2026-09-30T06:25:51Z`;
+- old Deep: `41 / 37 / 4 / 7 / 206 / 8 / 221`, last record `2026-09-30T02:07:06Z`.
+
+The top-page `Скидки: обновлено 24 сент., 03:12` semantics remain unchanged as required. The deployed payload still carries `source_mailing_updated_at_utc=2026-09-23T23:12:47.031485+00:00`; that field is not the visual publication timestamp.
 
 ## 13. Unresolved
 
-PR #132 itself is merged, but end-to-end publication is not yet accepted because automatic build #1102 exposed the score-qualifier caution validator mismatch described above.
+No blocker remains for this task.
 
-The bounded follow-up implementation is in progress. Until its validation and normal post-merge publication succeed:
-
-- canonical visual persistence remains pending;
-- Pages deployment of the repaired fresh payload remains pending;
-- published Statistics freshness remains pending.
+The original positive-reason lexical mismatch and the follow-up score-qualifier caution mismatch are both fixed and regression-covered. The normal build/persist/deploy chain completed successfully.
 
 ## 14. Exact PR/commit/run/artifact refs
 
-Implementation:
+Primary implementation:
 
-- PR: #132 — `Validate linked Deep card reasons by provenance`;
-- branch: `fix/card-explanation-producer-validator-publication-parity-01`;
-- fresh-main anchor: `bf6e2b2288c745f5d2ed67ef73cdbfcec819e1cb`;
-- pre-reconciliation implementation head: `9b2c094aaa1c868162e2e6e269a92789b4dde131`;
-- reconciled validated head: `f2bfe892a157501cff69fac53e131ece0afadd85`;
-- initial validator fix: `97f54a33fcf9e040ac243b7368477ab380b5d297`;
-- task tracking: `a15c82bc753300ed562b4105cf0f82faf41d8d8b`;
-- initial regression coverage: `7c9ccee8562f3981771e36767acc7267a847c6de`;
-- producer binding parity: `486d3a2abf4831a53e5c0241e01ee92b27ecc03f`;
-- validator binding parity: `04bc13f88c2155ac36c2334d9a2d4a6acbf600b7`;
-- final regression correction: `9b2c094aaa1c868162e2e6e269a92789b4dde131`.
-
-Validation:
-
-- reconciled PASS 2 PR run: `36855124640` / #542 — success;
-- reconciled backlog PR run: `36855124796` / #1528 — success;
-- Deep score evidence explainability step — success;
-- Deep invalid-not-fit current-state regression step — success;
-- visual material freshness regression step — success;
-- prior accepted ownership run: `36676280614` — success;
-- prior accepted package purchase run: `36676280584` — success;
-- last observed green main PASS 2 before current production-state advancement: `36697091309` / #524 — success.
-
+- PR #132 — `Validate linked Deep card reasons by provenance`;
+- original branch: `fix/card-explanation-producer-validator-publication-parity-01`;
+- reconciled main anchor: `6b7076258713d5997d32a1868a37ac1ff7f89f9e`;
+- reconciled code head: `f2bfe892a157501cff69fac53e131ece0afadd85`;
+- final PR #132 metadata head: `e7c7379d3fcc9f1bd64212dd71d0804ad91126a4`;
 - PR #132 merge: `a225989b2a914e580114a5ec6212ae1486516af8`;
-- first automatic post-merge visual run: `36855413554` / #1102 — failed at generated card explanation validation after candidate build success.
+- final pre-merge PASS 2: `36855327276` / #544 — success;
+- final pre-merge backlog: `36855327307` / #1530 — success.
+
+Bounded post-merge parity follow-up:
+
+- PR #136 — `Accept linked Deep score qualifiers on caution surface`;
+- branch: `fix/card-explanation-score-qualifier-validator-parity-01`;
+- validator commit: `015f264c84f60ee3c18f42b7f0a59dde89f378a9`;
+- regression commit: `600063f62d32c0e883ef24ebab702c027832199a`;
+- validated head: `ddb3bd94448400a696c4dc876f0e6d2f5156ed23`;
+- PR PASS 2: `36855825768` / #547 — success;
+- PR backlog: `36855825765` / #1532 — success;
+- merge: `7a0b6d87b38c23afe3fee116c8425ff336eaf230`;
+- post-merge PASS 2: `36855944331` / #548 — success;
+- post-merge backlog: `36855944325` / #1533 — success.
+
+Publication:
+
+- first PR #132 post-merge build: `36855413554` / #1102 — failed on qualifier parity, no persistence;
+- successful normal full visual build: `36855944330` / #1103;
+- canonical visual commit: `0cd51fb46182561c8cbd237bb630a870654db99b`;
+- canonical visual blob: `a18d12092fe6fe0aa9c22d8f2c927ea89549e0b3`;
+- Pages deploy: `36856010448` / #1139 — success;
+- Pages artifact: `11157892993`;
+- Pages build version: `0cd51fb46182561c8cbd237bb630a870654db99b`;
+- deployed `web/data/current.json` Git blob: `a18d12092fe6fe0aa9c22d8f2c927ea89549e0b3`.
+
+No manual build/deploy, Deep/Dossier semantic execution, ranking change, scheduler/retry-owner change or Scheduled Task change was used for acceptance.
 
 ## 15. Status
 
-`needs_fix`
+`complete_ready_for_director_acceptance`
 
-PR #132 is merged, but the automatic full visual build exposed a second, bounded producer/validator parity defect for Deep score qualifiers on the caution surface. Publication acceptance remains open.
+The producer/validator parity defect is fixed end to end. Both required PR validations and the normal post-merge visual publication chain succeeded, and the deployed Pages payload is byte-identical at Git-blob level to the newly persisted canonical visual.
 
 ## 16. Recommended next step — exactly one bounded next action
 
-Validate and merge the bounded score-qualifier caution parity follow-up, then observe the normal automatic visual build and Pages deploy without manual workflow dispatch.
+Director accepts this completed task and closes the card-explanation publication-parity work item.
 
 ## 17. Efficiency / reusable lesson
 
 For contract-backed semantic output, producer and validator should share one structural binding definition. Phrase-level heuristics such as requiring `теб` are appropriate only for legacy text-derived evidence; once an accepted structured provenance contract exists, duplicating personalization semantics as a later lexical rule creates false publication failures.
 
-A second reusable lesson is that production-state regression tests must distinguish immutable historical facts from mutable current outcomes. Pinning a current entry forever to one workflow state makes unrelated PR validation fail as production legitimately advances.
+A second reusable lesson is that a shared UI surface may carry more than one canonical provenance subtype. Validator logic must validate each producer-owned subtype by its own contract instead of assuming that every `cautions` row is a negative-assessment finding. Finally, production-state regression tests must distinguish immutable historical facts from mutable current outcomes.

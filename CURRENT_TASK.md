@@ -1,14 +1,19 @@
 # CURRENT TASK
 
-## ACTIVE — Card explanation producer / validator publication parity fix 01
-Статус: `needs_fix_post_merge_qualifier_parity`.
-- original implementation PR: `#132`; merge: `a225989b2a914e580114a5ec6212ae1486516af8`;
-- pre-merge PASS 2 core `36855327276` and backlog `36855327307` were green;
-- first normal post-merge visual run `36855413554` / #1102 built the fresh candidate but failed generated card explanation validation on four Deep score-qualifier cautions;
-- confirmed root cause: producer emits `deep_score_finding_qualifier` on the existing caution surface, while validator accepted only `deep_dossier_caution`;
-- bounded follow-up branch: `fix/card-explanation-score-qualifier-validator-parity-01`;
-- follow-up changes only validator parity + regression coverage; Deep score semantics, negative-risk semantics, ranking, producer text, scheduler/retry ownership and Scheduled Tasks remain unchanged;
-- next step: validate/merge the bounded follow-up, then observe only the normal automatic visual build and Pages deploy; no manual build/deploy dispatch.
+## COMPLETE — Card explanation producer / validator publication parity fix 01
+Статус: `complete_ready_for_director_acceptance`.
+- task: `WORKER_TASK_CARD_EXPLANATION_PRODUCER_VALIDATOR_PUBLICATION_PARITY_FIX_01.md`;
+- primary PR: `#132`; merge: `a225989b2a914e580114a5ec6212ae1486516af8`;
+- bounded qualifier-parity follow-up PR: `#136`; merge: `7a0b6d87b38c23afe3fee116c8425ff336eaf230`;
+- linked Deep positives are validated by exact structured accepted provenance rather than literal `теб`; legacy/non-Deep compatibility remains unchanged;
+- producer-owned `deep_score_finding_qualifier` is now valid on the existing caution surface only with linked-v1 finding/factor/candidate/profile/accepted-state proof; `deep_dossier_caution` keeps its separate negative-assessment-status rule;
+- final PR #136 PASS 2 `36855825768` and backlog `36855825765` passed; post-merge PASS 2 `36855944331` and backlog `36855944325` passed;
+- normal full visual build `36855944330` / #1103 passed card validation and exact material binding, persisted commit `0cd51fb46182561c8cbd237bb630a870654db99b`, visual blob `a18d12092fe6fe0aa9c22d8f2c927ea89549e0b3`;
+- automatic Pages deploy `36856010448` / #1139 succeeded, artifact `11157892993`, build version `0cd51fb46182561c8cbd237bb630a870654db99b`; deployed `web/data/current.json` has the same Git blob `a18d12092fe6fe0aa9c22d8f2c927ea89549e0b3`;
+- deployed Statistics are no longer the stale snapshot: Dossier `64 / 164 / 0`; Deep attempted/authoritative/fit/not-fit/incomplete/waiting/ready/remaining-all `60 / 51 / 48 / 3 / 9 / 162 / 0 / 171`;
+- no manual build/deploy, semantic Deep/Dossier execution, RANK-013 change, scheduler/retry-owner change or Scheduled Task change;
+- report: `reviews/worker_reports/card-explanation-producer-validator-publication-parity-fix-01.md`;
+- next bounded action: Director accepts and closes this completed work item.
 
 ## COMPLETE — Deep invalid-not-fit current-state regression fix 01
 Статус: `complete_ready_for_director_acceptance`.
