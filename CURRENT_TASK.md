@@ -1,5 +1,14 @@
 # CURRENT TASK
 
+## IN PROGRESS — Deep invalid-not-fit current-state regression fix 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_DEEP_INVALID_NOT_FIT_CURRENT_STATE_REGRESSION_FIX_01.md`;
+- branch: `fix/deep-invalid-not-fit-current-state-regression-fix-01`;
+- scope: make `scripts/test_deep_invalid_not_fit_contract_loop.py` validate durable consumed-attempt / recovery invariants without pinning mutable current Deep outcome to `analysis_incomplete`;
+- preserve the invalid-not-fit contract, explicit GitHub-owned recovery, malformed-transport zero-attempt behavior, frozen-start/async traversal, RANK-013 and PR #132 implementation;
+- no semantic Deep/Dossier execution and no Scheduled Task/scheduler/queue/retry-owner change.
+
+
 ## COMPLETE — Deep score evidence / explainability alignment 01
 Статус: `migration_prepared_needs_semantic_execution`.
 - task: `WORKER_TASK_DEEP_SCORE_EVIDENCE_EXPLAINABILITY_ALIGNMENT_01.md`;
