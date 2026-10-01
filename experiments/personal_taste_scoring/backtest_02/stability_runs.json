@@ -1,0 +1,180 @@
+{
+  "experiment_id": "personal-taste-scoring-targeted-offline-backtest-02",
+  "artifact": "architecture_a_stability_runs",
+  "version": "v1",
+  "truth_unblinded": false,
+  "prior_primary_rationales_file_reopened": false,
+  "note": "Same bounded semantic worker, two additional blind passes from stability_input; therefore this measures within-worker repeatability, not independent-judge variance.",
+  "runs": [
+    {
+      "run_id": "rerun_1",
+      "predictions": [
+        {
+          "blind_id": "B08",
+          "score_0_100": 48,
+          "decisive_factor": {
+            "polarity": "negative",
+            "class": "interaction_clarity"
+          },
+          "explanation": "Unclear interaction friction remains the main cap; atmosphere is the main positive.",
+          "uncertainty": "medium"
+        },
+        {
+          "blind_id": "B10",
+          "score_0_100": 64,
+          "decisive_factor": {
+            "polarity": "negative",
+            "class": "prior_context_dependency"
+          },
+          "explanation": "Tactical depth is positive, but dependence on prior narrative context remains the main risk.",
+          "uncertainty": "medium"
+        },
+        {
+          "blind_id": "B11",
+          "score_0_100": 80,
+          "decisive_factor": {
+            "polarity": "positive",
+            "class": "varied_directed_action"
+          },
+          "explanation": "Varied directed set-pieces and clear momentum remain the strongest holistic positive.",
+          "uncertainty": "medium"
+        },
+        {
+          "blind_id": "B12",
+          "score_0_100": 58,
+          "decisive_factor": {
+            "polarity": "negative",
+            "class": "breadth_onboarding_overload"
+          },
+          "explanation": "Broad RPG choice remains attractive, but system breadth/onboarding uncertainty is the material cap.",
+          "uncertainty": "medium"
+        },
+        {
+          "blind_id": "B13",
+          "score_0_100": 84,
+          "decisive_factor": {
+            "polarity": "positive",
+            "class": "traversal_identity"
+          },
+          "explanation": "Traversal and superhero embodiment remain the decisive positive; repetitive city tasks are secondary.",
+          "uncertainty": "medium"
+        },
+        {
+          "blind_id": "B15",
+          "score_0_100": 64,
+          "decisive_factor": {
+            "polarity": "positive",
+            "class": "directed_story_identity"
+          },
+          "explanation": "Focused story/action identity remains the main positive despite underused open-world space.",
+          "uncertainty": "medium"
+        },
+        {
+          "blind_id": "B16",
+          "score_0_100": 87,
+          "decisive_factor": {
+            "polarity": "positive",
+            "class": "franchise_development_variety"
+          },
+          "explanation": "Mission-format variety and hero-led mechanical development remain the decisive positive.",
+          "uncertainty": "medium"
+        },
+        {
+          "blind_id": "B17",
+          "score_0_100": 80,
+          "decisive_factor": {
+            "polarity": "positive",
+            "class": "focused_story_characters"
+          },
+          "explanation": "Focused character-rich branching story remains the main positive; pacing interruptions are secondary.",
+          "uncertainty": "medium"
+        }
+      ]
+    },
+    {
+      "run_id": "rerun_2",
+      "predictions": [
+        {
+          "blind_id": "B08",
+          "score_0_100": 52,
+          "decisive_factor": {
+            "polarity": "negative",
+            "class": "interaction_clarity"
+          },
+          "explanation": "Surreal story/atmosphere helps, but pixel-hunting and unclear interactions still form the decisive negative.",
+          "uncertainty": "medium"
+        },
+        {
+          "blind_id": "B10",
+          "score_0_100": 60,
+          "decisive_factor": {
+            "polarity": "negative",
+            "class": "prior_context_dependency"
+          },
+          "explanation": "Tactics and consequences fit, but sequel-context dependence is still the strongest cap.",
+          "uncertainty": "medium"
+        },
+        {
+          "blind_id": "B11",
+          "score_0_100": 83,
+          "decisive_factor": {
+            "polarity": "positive",
+            "class": "varied_directed_action"
+          },
+          "explanation": "Sustained action variety, bosses and clear direction remain the decisive positive.",
+          "uncertainty": "medium"
+        },
+        {
+          "blind_id": "B12",
+          "score_0_100": 61,
+          "decisive_factor": {
+            "polarity": "negative",
+            "class": "breadth_onboarding_overload"
+          },
+          "explanation": "Exploration is attractive, but broad systems may overload first-hours engagement and cap the score.",
+          "uncertainty": "medium"
+        },
+        {
+          "blind_id": "B13",
+          "score_0_100": 81,
+          "decisive_factor": {
+            "polarity": "positive",
+            "class": "traversal_identity"
+          },
+          "explanation": "Expressive swinging/combat and superhero identity remain decisive over repetitive side activities.",
+          "uncertainty": "medium"
+        },
+        {
+          "blind_id": "B15",
+          "score_0_100": 68,
+          "decisive_factor": {
+            "polarity": "positive",
+            "class": "directed_story_identity"
+          },
+          "explanation": "Directed story/action focus remains more important than the weak side-content layer.",
+          "uncertainty": "medium"
+        },
+        {
+          "blind_id": "B16",
+          "score_0_100": 89,
+          "decisive_factor": {
+            "polarity": "positive",
+            "class": "franchise_development_variety"
+          },
+          "explanation": "Substantial campaign/mechanical variety remains the decisive positive rather than franchise familiarity.",
+          "uncertainty": "medium"
+        },
+        {
+          "blind_id": "B17",
+          "score_0_100": 77,
+          "decisive_factor": {
+            "polarity": "positive",
+            "class": "focused_story_characters"
+          },
+          "explanation": "Character-rich branching quests remain decisive; minigame interruptions modestly lower fit.",
+          "uncertainty": "medium"
+        }
+      ]
+    }
+  ]
+}
