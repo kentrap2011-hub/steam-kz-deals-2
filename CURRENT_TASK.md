@@ -1,12 +1,18 @@
 # CURRENT TASK
 
-## IN PROGRESS — Personal taste scoring offline backtest 01
-Статус: `in_progress`.
+## COMPLETE — Personal taste scoring offline backtest 01
+Статус: `evidence_inconclusive`.
 - task: `WORKER_TASK_PERSONAL_TASTE_SCORING_OFFLINE_BACKTEST_01.md`;
 - mode: `READ-ONLY / OFFLINE EXPERIMENT`;
-- scope: frozen deterministic held-out backtest of current five-factor baseline vs Architectures A, C and D; no production scoring/ranking/Deep/Dossier/visual/Scheduled Task changes;
 - durable report: `reviews/worker_reports/personal-taste-scoring-offline-backtest-01.md`;
-- allowed experiment artifacts only under `experiments/personal_taste_scoring/backtest_01/`.
+- final report commit: `00c3bd90ac09d95690830082f09062a71a9870ba`;
+- final blind-v4 dataset: 30 held-out / 90 training; predictions were frozen before truth unblinding and leakage-contaminated preliminary splits were superseded fail-closed;
+- Architecture A is the strongest new experimental candidate on MAE/RMSE/calibration, while the current five-factor baseline remains stronger on rank correlation and pairwise ordering;
+- Architecture C and research-preferred Architecture D did not validate as replacements; D had the weakest primary MAE/calibration and severe high-score saturation;
+- no candidate showed clear overall superiority and all methods missed 7/10 decisive low-rating cases under the experiment definition;
+- no production scoring/ranking/Deep/Dossier/visual/Scheduled Task file was changed; current production source blobs were reverified unchanged at closeout;
+- next bounded action from the report: one pre-registered offline baseline-vs-A backtest on 20 fresh newly explained games balanced around the two dominant failure classes.
+
 ## COMPLETE — Personal taste scoring architecture research 01
 Статус: `research_complete_ready_for_director_review`.
 - task: `WORKER_TASK_PERSONAL_TASTE_SCORING_ARCHITECTURE_RESEARCH_01.md`;
