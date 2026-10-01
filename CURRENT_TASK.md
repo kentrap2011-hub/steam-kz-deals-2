@@ -1,5 +1,12 @@
 # CURRENT TASK
 
+## IN PROGRESS — Personal taste scoring offline backtest 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_PERSONAL_TASTE_SCORING_OFFLINE_BACKTEST_01.md`;
+- mode: `READ-ONLY / OFFLINE EXPERIMENT`;
+- scope: frozen deterministic held-out backtest of current five-factor baseline vs Architectures A, C and D; no production scoring/ranking/Deep/Dossier/visual/Scheduled Task changes;
+- durable report: `reviews/worker_reports/personal-taste-scoring-offline-backtest-01.md`;
+- allowed experiment artifacts only under `experiments/personal_taste_scoring/backtest_01/`.
 ## COMPLETE — Personal taste scoring architecture research 01
 Статус: `research_complete_ready_for_director_review`.
 - task: `WORKER_TASK_PERSONAL_TASTE_SCORING_ARCHITECTURE_RESEARCH_01.md`;
