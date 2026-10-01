@@ -1,0 +1,366 @@
+{
+  "experiment_id": "personal-taste-scoring-targeted-offline-backtest-02",
+  "artifact": "explanation_audit",
+  "version": "v1",
+  "taxonomy": [
+    "missed_decisive_negative",
+    "overweighted_generic_richness",
+    "superficial_similarity",
+    "missed_novelty_context",
+    "missed_first_contact_effect",
+    "missed_franchise_relative_novelty_expectation",
+    "invented_importance",
+    "correct_decisive_factor_wrong_magnitude",
+    "missed_decisive_positive",
+    "overweighted_conventional_friction",
+    "correct_reasoning_and_score_band"
+  ],
+  "audit_eligible_count": 17,
+  "architecture_a_strict_match_count": 6,
+  "baseline_factor_alignment_proxy_count": 7,
+  "baseline_comparability_limit": "The baseline output is numerically fair but its stored factor notes are generic; explanation comparison therefore remains weaker evidence than score comparison.",
+  "cases": [
+    {
+      "blind_id": "B01",
+      "truth_root": "character variety and enjoyable fighting; mostly casual rather than deep mastery",
+      "severe_deal_breaker": false,
+      "decisive_positive": true,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": false,
+        "primary_error_taxonomy": [
+          "invented_importance"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": true,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B02",
+      "truth_root": "story failed to hook and perceived mechanical development stopped, causing boredom",
+      "severe_deal_breaker": true,
+      "decisive_positive": false,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": false,
+        "primary_error_taxonomy": [
+          "missed_decisive_negative"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": false,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B03",
+      "truth_root": "movement, power fantasy and ability growth outweighed a forgettable story",
+      "severe_deal_breaker": false,
+      "decisive_positive": false,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": true,
+        "primary_error_taxonomy": [
+          "correct_decisive_factor_wrong_magnitude"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": true,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B04",
+      "truth_root": "social role, cooperative dungeons and flight made the MMO memorable",
+      "severe_deal_breaker": false,
+      "decisive_positive": true,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": false,
+        "primary_error_taxonomy": [
+          "missed_novelty_context"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": false,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B05",
+      "truth_root": "positive memory exists but reasons are not remembered",
+      "severe_deal_breaker": false,
+      "decisive_positive": false,
+      "audit_eligible": false,
+      "architecture_a": {
+        "strict_decisive_reason_match": null,
+        "primary_error_taxonomy": [
+          "invented_importance"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": null,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B06",
+      "truth_root": "story was the confirmed positive; stopping came from accumulated universe fatigue, not a Blood and Wine defect",
+      "severe_deal_breaker": false,
+      "decisive_positive": true,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": false,
+        "primary_error_taxonomy": [
+          "missed_novelty_context"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": true,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B07",
+      "truth_root": "serious tone plus the liked Prince of Persia parkour formula",
+      "severe_deal_breaker": false,
+      "decisive_positive": true,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": true,
+        "primary_error_taxonomy": [
+          "invented_importance"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": true,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B08",
+      "truth_root": "atmosphere, puzzles and emotionally affecting tragic human/child stories",
+      "severe_deal_breaker": false,
+      "decisive_positive": true,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": false,
+        "primary_error_taxonomy": [
+          "missed_decisive_positive",
+          "overweighted_conventional_friction"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": true,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B09",
+      "truth_root": "felt crude, heavy and unfinished relative to the more mature Vice City",
+      "severe_deal_breaker": true,
+      "decisive_positive": false,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": false,
+        "primary_error_taxonomy": [
+          "missed_franchise_relative_novelty_expectation"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": false,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B10",
+      "truth_root": "almost no perceived development versus the first game; novelty disappeared",
+      "severe_deal_breaker": true,
+      "decisive_positive": false,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": false,
+        "primary_error_taxonomy": [
+          "missed_franchise_relative_novelty_expectation"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": false,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B11",
+      "truth_root": "good but not exceptional; no wow effect",
+      "severe_deal_breaker": false,
+      "decisive_positive": false,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": false,
+        "primary_error_taxonomy": [
+          "overweighted_generic_richness"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": false,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B12",
+      "truth_root": "navigation/next-step clarity failure created more friction than desire to explore",
+      "severe_deal_breaker": true,
+      "decisive_positive": false,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": true,
+        "primary_error_taxonomy": [
+          "correct_decisive_factor_wrong_magnitude"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": false,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B13",
+      "truth_root": "rating known but direct reason not explained",
+      "severe_deal_breaker": false,
+      "decisive_positive": false,
+      "audit_eligible": false,
+      "architecture_a": {
+        "strict_decisive_reason_match": null,
+        "primary_error_taxonomy": [
+          "invented_importance"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": null,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B14",
+      "truth_root": "visual novelty attracted initially, but boring core gameplay could not sustain interest",
+      "severe_deal_breaker": true,
+      "decisive_positive": false,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": false,
+        "primary_error_taxonomy": [
+          "missed_decisive_negative"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": false,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B15",
+      "truth_root": "high reputation did not translate into any memorable mechanics, story or atmosphere",
+      "severe_deal_breaker": true,
+      "decisive_positive": false,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": false,
+        "primary_error_taxonomy": [
+          "overweighted_generic_richness"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": false,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B16",
+      "truth_root": "rating high but Frozen Throne-specific reason not directly explained",
+      "severe_deal_breaker": false,
+      "decisive_positive": false,
+      "audit_eligible": false,
+      "architecture_a": {
+        "strict_decisive_reason_match": null,
+        "primary_error_taxonomy": [
+          "invented_importance"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": null,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B17",
+      "truth_root": "liked story is the only confirmed reason for the high rating",
+      "severe_deal_breaker": false,
+      "decisive_positive": true,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": true,
+        "primary_error_taxonomy": [
+          "correct_reasoning_and_score_band"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": true,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B18",
+      "truth_root": "after RDR2, the first game felt mechanically weaker, emptier and less atmospheric",
+      "severe_deal_breaker": true,
+      "decisive_positive": false,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": false,
+        "primary_error_taxonomy": [
+          "missed_franchise_relative_novelty_expectation",
+          "superficial_similarity"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": false,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B19",
+      "truth_root": "excellent first half/castle/combat, then repetition and stalled development reduced the result",
+      "severe_deal_breaker": false,
+      "decisive_positive": false,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": true,
+        "primary_error_taxonomy": [
+          "correct_reasoning_and_score_band"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": false,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    },
+    {
+      "blind_id": "B20",
+      "truth_root": "police chases, stronger story, music, nitro and manual shifting outweighed weaker tuning depth",
+      "severe_deal_breaker": false,
+      "decisive_positive": true,
+      "audit_eligible": true,
+      "architecture_a": {
+        "strict_decisive_reason_match": true,
+        "primary_error_taxonomy": [
+          "correct_decisive_factor_wrong_magnitude"
+        ]
+      },
+      "baseline": {
+        "factor_alignment_proxy": true,
+        "note": "Baseline blind artifact stored normalized factors and generic factor notes, not Architecture-A-style concrete decisive-reason text; this is a factor-alignment proxy and must not be overstated as production explanation parity."
+      }
+    }
+  ]
+}
