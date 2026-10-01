@@ -23,7 +23,7 @@ from test_taste_steam_review_dossier_buffered_submission import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-NOW = datetime(2026, 10, 1, 12, 0, tzinfo=timezone)
+NOW = datetime(2026, 10, 1, 12, 0, tzinfo=timezone.utc)
 BASE_CONTRACT = load_contract(ROOT / "config/taste_steam_review_dossier_contract.json")
 
 
