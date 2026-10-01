@@ -107,23 +107,51 @@ def validate_item(game):
     if cautions:
         if len(caution_provenance) != len(cautions):
             errors.append(f'{title}: visible caution count and provenance count differ')
+        has_dossier_caution = False
         for row in caution_provenance[:len(cautions)]:
-            if row.get('source') != 'deep_dossier_caution' or row.get('disposition') != 'caution':
-                errors.append(f'{title}: caution provenance is not producer-owned Deep caution')
-                continue
-            if not row.get('evidence_refs'):
-                errors.append(f'{title}: Deep caution lacks exact Dossier evidence refs')
+            source = row.get('source')
             binding = row.get('semantic_binding') or {}
-            if binding.get('semantic_source') != 'progressive_pass2':
-                errors.append(f'{title}: Deep caution lacks exact accepted-state binding')
+            if source == 'deep_dossier_caution':
+                has_dossier_caution = True
+                if row.get('disposition') != 'caution':
+                    errors.append(f'{title}: Deep Dossier caution lacks caution disposition')
+                if not row.get('evidence_refs'):
+                    errors.append(f'{title}: Deep caution lacks exact Dossier evidence refs')
+                if binding.get('semantic_source') != 'progressive_pass2':
+                    errors.append(f'{title}: Deep caution lacks exact accepted-state binding')
+            elif source == 'deep_score_finding_qualifier':
+                impacts = row.get('factor_impacts') or []
+                effects = {
+                    impact.get('effect')
+                    for impact in impacts
+                    if isinstance(impact, dict)
+                }
+                if game.get('score_explainability_status') != 'linked_v1':
+                    errors.append(f'{title}: Deep score qualifier is not linked to accepted score evidence')
+                if not row.get('finding_id') or not impacts:
+                    errors.append(f'{title}: Deep score qualifier lacks score-factor provenance')
+                elif not effects.intersection({'lowers', 'qualifies'}) or 'supports' in effects:
+                    errors.append(f'{title}: Deep score qualifier has incompatible factor impacts')
+                if not row.get('evidence_refs') or not row.get('profile_evidence_refs'):
+                    errors.append(f'{title}: Deep score qualifier lacks exact candidate/profile evidence refs')
+                if any(binding.get(field) in {None, ''} for field in DEEP_SCORE_REQUIRED_BINDING_FIELDS):
+                    errors.append(f'{title}: Deep score qualifier lacks exact accepted-state binding')
+                if binding.get('semantic_source') != 'progressive_pass2':
+                    errors.append(f'{title}: Deep score qualifier has wrong semantic source')
+            else:
+                errors.append(f'{title}: caution provenance is not producer-owned Deep caution or score qualifier')
+                continue
             if str(binding.get('family_id') or '') != str(game.get('id') or ''):
                 errors.append(f'{title}: Deep caution family binding mismatch')
             if str(binding.get('semantic_generation_id') or '') != str(
                 game.get('analysis_semantic_generation_id') or ''
             ):
                 errors.append(f'{title}: Deep caution generation binding mismatch')
-        if negative_status not in {'completed_with_caution', 'completed_with_confirmed_risk'}:
-            errors.append(f'{title}: cautions visible under incompatible negative-assessment status')
+        if (
+            has_dossier_caution
+            and negative_status not in {'completed_with_caution', 'completed_with_confirmed_risk'}
+        ):
+            errors.append(f'{title}: Dossier cautions visible under incompatible negative-assessment status')
     elif caution_provenance:
         errors.append(f'{title}: caution provenance exists without visible caution')
 
