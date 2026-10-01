@@ -1,12 +1,16 @@
 # CURRENT TASK
 
-## IN PROGRESS — Dossier exhausted fail-closed loop fix 01
-Статус: `in_progress`.
+## COMPLETE — Dossier exhausted fail-closed loop fix 01
+Статус: `implementation_complete_needs_next_semantic_invocation`.
 - task: `WORKER_TASK_DOSSIER_EXHAUSTED_FAIL_CLOSED_LOOP_FIX_01.md`;
-- branch: `fix/dossier-exhausted-fail-closed-loop-01`;
-- scope: add an exact-bound create-only terminal receipt for genuine semantic route exhaustion so GitHub consumes one normal Dossier first-pass attempt into the existing failed/recovery state, while malformed/stale/wrong-binding/runtime stops consume zero attempts;
-- preserve valid dossier candidate flow, strict evidence/privacy validation, existing GitHub-owned recovery, canonical-writer serialization, and Scheduled Task configuration;
-- do not execute Dossier or Deep semantic work and do not manually mutate current production group 5.
+- implementation PR: `#138`; final head: `78ce397bab6742dce553a094f8c4d92ea6cb0fd1`; merge: `4b9e34e273ccb42ecb643cd4a8064e75d654bc3c`;
+- exact-bound create-only `TASTE-STEAM-REVIEW-DOSSIER-TERMINAL-RECEIPT-V1` now lets GitHub consume genuine route-exhausted no-Dossier outcomes into the existing failed/recovery state;
+- malformed/stale/wrong-binding/unexhausted transport is quarantined with zero semantic-attempt consumption and remains ordinary pending work;
+- final PR validation: Dossier runtime `36905347096`, execution ownership `36905346841`, backlog dispositions `36905347241`, PASS 2 core `36905347238` — all success;
+- post-merge production remains intentionally unchanged until a fresh semantic invocation: snapshot `f26a7466…`, group 5 `04fa6289…` pending, accepted/failed/pending groups `4/0/51`, `next_pending_sequence=5`;
+- no Dossier/Deep semantic execution, manual group-5 state edit, new scheduler/queue/retry owner, or Scheduled Task change occurred;
+- report: `reviews/worker_reports/dossier-exhausted-fail-closed-loop-fix-01.md`; report commit: `af0e707b3ec3fbda565ce388a9cee13deb6b484d`;
+- next bounded action: let the existing Taste Steam Review Dossier Scheduled Task perform its next normal invocation under the new runtime contract, without schedule changes.
 
 ## COMPLETE — Personal taste scoring offline backtest 01
 Статус: `evidence_inconclusive`.
