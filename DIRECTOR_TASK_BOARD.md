@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` assigned: `WORKER_TASK_PERSONAL_TASTE_SCORING_ARCHITECTURE_RESEARCH_01.md` — independent research/design of a better personal-taste scoring architecture with external web research and multiple alternatives.
+- `ЧАТ 1` is free after completed research `WORKER_TASK_PERSONAL_TASTE_SCORING_ARCHITECTURE_RESEARCH_01.md`; report status `research_complete_ready_for_director_review`.
 - `ЧАТ 2` is free after accepted PR #133 / merge `b6019c11fa202c73e5470af3d2eb9a4b5900f476`; stale PASS 2 current-state regression is fixed and green.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
@@ -20,7 +20,7 @@
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
 
 
-## ACTIVE — ЧАТ 1 — personal taste scoring architecture research
+## ACCEPTED — ЧАТ 1 — personal taste scoring architecture research
 
 Task:
 `WORKER_TASK_PERSONAL_TASTE_SCORING_ARCHITECTURE_RESEARCH_01.md`
@@ -29,24 +29,16 @@ Mode:
 `READ-ONLY / RESEARCH / DESIGN`
 
 Status:
-`authorized_ready_for_worker`
+`research_complete_ready_for_director_review`
 
-Purpose:
-- do not anchor on the current five-factor scoring design;
-- research external recommender/preference-learning/explainable-scoring practices;
-- produce at least four materially different architectures;
-- compare them consistently;
-- recommend one architecture and one serious runner-up;
-- describe migration if a rewrite is superior.
-
-Hard boundary:
-- no implementation;
-- no production/scoring/ranking/Deep/Dossier changes;
-- no Scheduled Task changes.
-
-Expected report:
-`reviews/worker_reports/personal-taste-scoring-architecture-research-01.md`
-
+Director acceptance:
+- four materially different architectures researched;
+- external recommender/preference-learning/calibration/explainability literature reviewed;
+- current five-factor architecture was not treated as a constraint;
+- strongest candidate: anchor-calibrated evidence-grounded hybrid;
+- serious runner-up: pure pairwise latent preference model;
+- recommended next step is a bounded offline backtest against known historical user ratings before implementation;
+- no production/scoring/ranking/Deep/Dossier or Scheduled Task changes were made.
 
 ## ACCEPTED — ЧАТ 2 — Deep invalid-not-fit current-state regression fix
 
