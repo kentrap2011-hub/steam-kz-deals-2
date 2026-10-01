@@ -14,9 +14,9 @@ Implementation branch: `fix/card-explanation-producer-validator-publication-pari
 
 Current implementation head: `9b2c094aaa1c868162e2e6e269a92789b4dde131`.
 
-Status: `implementation_complete_publication_pending`.
+Status: `needs_fix`.
 
-The implementation is complete on the dedicated branch and has been reconciled onto current `main`. The previously external PASS 2 blocker was fixed separately by PR #133. Fresh required PR validation is green; merge and normal post-merge publication verification are the remaining steps.
+PR #132 was reconciled, validated and merged, but its first normal post-merge full visual build exposed a second producer/validator parity mismatch on the existing caution surface. A bounded follow-up implementation is now required before publication acceptance.
 
 ## 2. START / fresh-main reconciliation
 
@@ -184,11 +184,33 @@ Execution ownership and package-purchase validation scopes are unchanged by PR #
 
 ## 9. Automatic post-merge visual build
 
-Not applicable yet because PR #132 was not merged.
+PR #132 merged as `a225989b2a914e580114a5ec6212ae1486516af8`.
 
-No Build daily visual payload workflow was manually triggered.
+The normal existing push trigger automatically started:
 
-The task's required normal post-merge full visual candidate / card-validation acceptance therefore remains pending.
+- Build daily visual payload run `36855413554` / #1102.
+
+No manual workflow dispatch was used.
+
+The full visual candidate build step succeeded, but `Validate generated card explanations` failed with exactly four violations:
+
+- Greak: Memories of Azur;
+- Grand Theft Auto IV: The Complete Edition;
+- ENDER LILIES: Quietus of the Knights;
+- Tom Clancy's Splinter Cell®.
+
+All four failures were:
+
+`caution provenance is not producer-owned Deep caution`.
+
+Confirmed second parity mismatch: `build_final_visual_payload.py` already projects score qualifiers from `deep_score_qualifiers()` onto the existing `cautions` surface with provenance source `deep_score_finding_qualifier`, while `validate_card_explanations.py` accepted only `deep_dossier_caution`.
+
+This is the same producer/validator parity class as the original task, not a new score or negative-risk semantic rule.
+
+Bounded follow-up branch:
+`fix/card-explanation-score-qualifier-validator-parity-01`.
+
+The follow-up validator accepts `deep_score_finding_qualifier` only when it remains `linked_v1` and preserves exact finding/factor/candidate/profile/accepted-state provenance. Dossier cautions retain their separate negative-assessment-status rule.
 
 ## 10. Canonical visual persistence
 
@@ -217,18 +239,13 @@ The top-page `Скидки: обновлено 24 сент., 03:12` semantics we
 
 ## 13. Unresolved
 
-No implementation/validation blocker remains before merge.
+PR #132 itself is merged, but end-to-end publication is not yet accepted because automatic build #1102 exposed the score-qualifier caution validator mismatch described above.
 
-The prior unrelated PASS 2 blocker was repaired by PR #133, and the same current-state regression now passes on PR #132's reconciled validation run `36855124640`.
+The bounded follow-up implementation is in progress. Until its validation and normal post-merge publication succeed:
 
-Remaining acceptance is runtime-only and must occur through the normal post-merge trigger graph:
-
-- automatic full visual build;
-- card explanation validation;
-- exact material binding;
-- canonical visual persistence;
-- automatic Pages deployment;
-- published Statistics freshness verification.
+- canonical visual persistence remains pending;
+- Pages deployment of the repaired fresh payload remains pending;
+- published Statistics freshness remains pending.
 
 ## 14. Exact PR/commit/run/artifact refs
 
@@ -257,17 +274,18 @@ Validation:
 - prior accepted package purchase run: `36676280584` — success;
 - last observed green main PASS 2 before current production-state advancement: `36697091309` / #524 — success.
 
-No post-merge visual run, canonical visual commit, Pages run or Pages artifact exists for this unmerged task.
+- PR #132 merge: `a225989b2a914e580114a5ec6212ae1486516af8`;
+- first automatic post-merge visual run: `36855413554` / #1102 — failed at generated card explanation validation after candidate build success.
 
 ## 15. Status
 
-`implementation_complete_publication_pending`
+`needs_fix`
 
-The implementation is reconciled with current main and required PR validation is green. Merge and normal automatic publication verification remain.
+PR #132 is merged, but the automatic full visual build exposed a second, bounded producer/validator parity defect for Deep score qualifiers on the caution surface. Publication acceptance remains open.
 
 ## 16. Recommended next step — exactly one bounded next action
 
-Merge PR #132 at the validated reconciled head, then observe the existing automatic visual build and Pages deploy without manual workflow dispatch.
+Validate and merge the bounded score-qualifier caution parity follow-up, then observe the normal automatic visual build and Pages deploy without manual workflow dispatch.
 
 ## 17. Efficiency / reusable lesson
 
