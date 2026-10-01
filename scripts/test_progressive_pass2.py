@@ -183,7 +183,7 @@ def assert_persisted_projection_invariants(state_doc, scope, items):
     assert int(scope.get('recovery_pending_count') or 0) <= ready
 
 
-def dossier_record(appid, title, binding, *, digest=None, expires='2026-10-01T00:00:00Z', resolved=True):
+def dossier_record(appid, title, binding, *, digest=None, expires='2099-01-01T00:00:00Z', resolved=True):
     return {
         'path': f'data/cache/taste_steam_review_dossiers/App_{appid}.json',
         'content_sha256': digest or (str(appid)[-1] * 64),
