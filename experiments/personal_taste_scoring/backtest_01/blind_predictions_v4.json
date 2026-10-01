@@ -1,0 +1,4463 @@
+{
+  "experiment_id": "personal-taste-scoring-offline-backtest-01",
+  "prediction_version": "blind-v4-predictions-v1",
+  "frozen_before_unblinding": true,
+  "anchors": [
+    {
+      "title": "Half-Life",
+      "rating": 1.5,
+      "score": 12.5
+    },
+    {
+      "title": "Fallout 4",
+      "rating": 2,
+      "score": 25
+    },
+    {
+      "title": "Deus Ex: Human Revolution",
+      "rating": 2.5,
+      "score": 37.5
+    },
+    {
+      "title": "Stray",
+      "rating": 3,
+      "score": 50
+    },
+    {
+      "title": "Tomb Raider (2013)",
+      "rating": 3.5,
+      "score": 62.5
+    },
+    {
+      "title": "Batman: Arkham Asylum",
+      "rating": 4,
+      "score": 75
+    },
+    {
+      "title": "Red Dead Redemption II",
+      "rating": 4.5,
+      "score": 87.5
+    }
+  ],
+  "rating_equivalent_mapping": "score = 25 * (rating - 1)",
+  "pairwise_model": {
+    "anchor_utility": "u=(score-50)/20",
+    "BT_probability": "sigmoid(u_candidate-u_anchor)",
+    "tie_encoding": "0.5 pseudo-outcome",
+    "score_mapping": "clamp(50+20*u_MLE,0,100)",
+    "uncertainty": "5th..95th percentile of normalized likelihood over u grid [-4,4] step .01",
+    "sensitivity_model": "Thurstone/probit with same fixed anchor utilities"
+  },
+  "records": [
+    {
+      "title": "Assassin's Creed",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 75,
+          "development_variety": 45,
+          "structure_pacing_direction": 50,
+          "identity_hooks": 80,
+          "breadth_of_match": 55
+        },
+        "score_0_100": 63,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 55,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "паркур и историческая идентичность",
+        "dominant_negative": "повторяющийся цикл расследование→убийство",
+        "uncertainty": "high"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 66,
+          "interval_90": [
+            36.8,
+            99.4
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 65.2,
+          "interval_90": [
+            39,
+            93.8
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "паркур и историческая идентичность",
+            "candidate_evidence_ref": "candidate:Assassin's Creed:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "повторяющийся цикл расследование→убийство",
+            "candidate_evidence_ref": "candidate:Assassin's Creed:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "high"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 50,
+          "interval_90": [
+            19.8,
+            80.2
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Borderlands",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 78,
+          "development_variety": 72,
+          "structure_pacing_direction": 50,
+          "identity_hooks": 55,
+          "breadth_of_match": 65
+        },
+        "score_0_100": 67.4,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 64,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "стрельба + постоянная прокачка/лут",
+        "dominant_negative": "квестовый цикл и враги могут стать однообразными",
+        "uncertainty": "medium"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 74.6,
+          "interval_90": [
+            45.2,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 73.2,
+          "interval_90": [
+            47,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "стрельба + постоянная прокачка/лут",
+            "candidate_evidence_ref": "candidate:Borderlands:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "квестовый цикл и враги могут стать однообразными",
+            "candidate_evidence_ref": "candidate:Borderlands:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "medium"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 66,
+          "interval_90": [
+            36.8,
+            99.4
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Castlevania: Lords of Shadow",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 82,
+          "development_variety": 75,
+          "structure_pacing_direction": 55,
+          "identity_hooks": 72,
+          "breadth_of_match": 72
+        },
+        "score_0_100": 73.6,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 72,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "комбо-бой, боссы и постепенное открытие инструментов",
+        "dominant_negative": "подсказки/QTE и ограниченная свобода ломают самостоятельное освоение",
+        "uncertainty": "medium"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 82.2,
+          "interval_90": [
+            55,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "комбо-бой, боссы и постепенное открытие инструментов",
+            "candidate_evidence_ref": "candidate:Castlevania: Lords of Shadow:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "подсказки/QTE и ограниченная свобода ломают самостоятельное освоение",
+            "candidate_evidence_ref": "candidate:Castlevania: Lords of Shadow:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "medium"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Cyberpunk 2077",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 75,
+          "development_variety": 85,
+          "structure_pacing_direction": 65,
+          "identity_hooks": 90,
+          "breadth_of_match": 90
+        },
+        "score_0_100": 79.4,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 82,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "персонажи, квесты и широкий набор способов играть",
+        "dominant_negative": "часть открытого мира может ощущаться менее содержательной, чем лучшие сюжетные линии",
+        "uncertainty": "medium"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 100,
+          "interval_90": [
+            72.4,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 100,
+          "interval_90": [
+            73,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "персонажи, квесты и широкий набор способов играть",
+            "candidate_evidence_ref": "candidate:Cyberpunk 2077:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "часть открытого мира может ощущаться менее содержательной, чем лучшие сюжетные линии",
+            "candidate_evidence_ref": "candidate:Cyberpunk 2077:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ],
+          "superficial_similarity_trap": "medium"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 96,
+          "interval_90": [
+            63.2,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Darksiders",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 82,
+          "development_variety": 85,
+          "structure_pacing_direction": 75,
+          "identity_hooks": 75,
+          "breadth_of_match": 85
+        },
+        "score_0_100": 80.7,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 76,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "постоянно добавляемые механики, бой и головоломки",
+        "dominant_negative": "слабее выраженная история и перегруженное управление",
+        "uncertainty": "low"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 82.2,
+          "interval_90": [
+            55,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "постоянно добавляемые механики, бой и головоломки",
+            "candidate_evidence_ref": "candidate:Darksiders:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "слабее выраженная история и перегруженное управление",
+            "candidate_evidence_ref": "candidate:Darksiders:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "low"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Grand Theft Auto III",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 68,
+          "development_variety": 70,
+          "structure_pacing_direction": 65,
+          "identity_hooks": 78,
+          "breadth_of_match": 75
+        },
+        "score_0_100": 70.2,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 74,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "свободный системный город и чередование миссий с собственной игрой",
+        "dominant_negative": "ранняя формула серии менее развита, чем у более поздних GTA",
+        "uncertainty": "medium"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 82.2,
+          "interval_90": [
+            55,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "свободный системный город и чередование миссий с собственной игрой",
+            "candidate_evidence_ref": "candidate:Grand Theft Auto III:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "ранняя формула серии менее развита, чем у более поздних GTA",
+            "candidate_evidence_ref": "candidate:Grand Theft Auto III:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "medium"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Grand Theft Auto V",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 85,
+          "development_variety": 90,
+          "structure_pacing_direction": 80,
+          "identity_hooks": 85,
+          "breadth_of_match": 95
+        },
+        "score_0_100": 86.2,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 83,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "разнообразный открытый мир и многослойные миссии со сменой ролей",
+        "dominant_negative": "масштаб может размывать личную привязанность к отдельным активностям",
+        "uncertainty": "medium"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 96,
+          "interval_90": [
+            63.2,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 92.4,
+          "interval_90": [
+            63.8,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "разнообразный открытый мир и многослойные миссии со сменой ролей",
+            "candidate_evidence_ref": "candidate:Grand Theft Auto V:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "масштаб может размывать личную привязанность к отдельным активностям",
+            "candidate_evidence_ref": "candidate:Grand Theft Auto V:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ],
+          "superficial_similarity_trap": "medium"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 96,
+          "interval_90": [
+            63.2,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Half-Life: Blue Shift",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 45,
+          "development_variety": 35,
+          "structure_pacing_direction": 50,
+          "identity_hooks": 50,
+          "breadth_of_match": 35
+        },
+        "score_0_100": 43.4,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 30,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "короткая и ясная версия знакомой Half-Life структуры",
+        "dominant_negative": "почти нет новых механик; опирается на формулу игры, которая в training имеет сильный негатив",
+        "uncertainty": "low"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 34,
+          "interval_90": [
+            0.6,
+            63.2
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 34.8,
+          "interval_90": [
+            6.2,
+            61
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "короткая и ясная версия знакомой Half-Life структуры",
+            "candidate_evidence_ref": "candidate:Half-Life: Blue Shift:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "почти нет новых механик; опирается на формулу игры, которая в training имеет сильный негатив",
+            "candidate_evidence_ref": "candidate:Half-Life: Blue Shift:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "low"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 15.8,
+          "interval_90": [
+            0,
+            46
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Hogwarts Legacy",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 70,
+          "development_variety": 68,
+          "structure_pacing_direction": 42,
+          "identity_hooks": 82,
+          "breadth_of_match": 70
+        },
+        "score_0_100": 67,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 58,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "исследование Хогвартса, заклинания и визуальная идентичность",
+        "dominant_negative": "чеклисты, обязательные побочные активности и повторяемый бой совпадают с известным риском скуки",
+        "uncertainty": "high"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 66,
+          "interval_90": [
+            36.8,
+            99.4
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 65.2,
+          "interval_90": [
+            39,
+            93.8
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "исследование Хогвартса, заклинания и визуальная идентичность",
+            "candidate_evidence_ref": "candidate:Hogwarts Legacy:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "чеклисты, обязательные побочные активности и повторяемый бой совпадают с известным риском скуки",
+            "candidate_evidence_ref": "candidate:Hogwarts Legacy:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "high"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 50,
+          "interval_90": [
+            19.8,
+            80.2
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Lucius II",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 45,
+          "development_variety": 55,
+          "structure_pacing_direction": 40,
+          "identity_hooks": 60,
+          "breadth_of_match": 45
+        },
+        "score_0_100": 49,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 34,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "песочница допускает разные способы решения",
+        "dominant_negative": "баги, слабый ИИ и повторяемый цикл усиливают уже известный риск недоделанности серии",
+        "uncertainty": "medium"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 34,
+          "interval_90": [
+            0.6,
+            63.2
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 34.8,
+          "interval_90": [
+            6.2,
+            61
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "песочница допускает разные способы решения",
+            "candidate_evidence_ref": "candidate:Lucius II:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "баги, слабый ИИ и повторяемый цикл усиливают уже известный риск недоделанности серии",
+            "candidate_evidence_ref": "candidate:Lucius II:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "medium"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 15.8,
+          "interval_90": [
+            0,
+            46
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Mafia II",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 72,
+          "development_variety": 55,
+          "structure_pacing_direction": 75,
+          "identity_hooks": 85,
+          "breadth_of_match": 65
+        },
+        "score_0_100": 69.9,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 74,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "сильная история и персонажи с направленным темпом",
+        "dominant_negative": "детализированный город почти не используется как живой самостоятельный мир",
+        "uncertainty": "low"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 74.6,
+          "interval_90": [
+            45.2,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 73.2,
+          "interval_90": [
+            47,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "сильная история и персонажи с направленным темпом",
+            "candidate_evidence_ref": "candidate:Mafia II:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "детализированный город почти не используется как живой самостоятельный мир",
+            "candidate_evidence_ref": "candidate:Mafia II:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "low"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Marvel's Spider-Man",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 88,
+          "development_variety": 80,
+          "structure_pacing_direction": 78,
+          "identity_hooks": 92,
+          "breadth_of_match": 85
+        },
+        "score_0_100": 84.9,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 84,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "сильное ощущение движения, потоковый бой и узнаваемая геройская идентичность",
+        "dominant_negative": "часть городских активностей повторяется",
+        "uncertainty": "medium"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 82.2,
+          "interval_90": [
+            55,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "сильное ощущение движения, потоковый бой и узнаваемая геройская идентичность",
+            "candidate_evidence_ref": "candidate:Marvel's Spider-Man:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "часть городских активностей повторяется",
+            "candidate_evidence_ref": "candidate:Marvel's Spider-Man:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ],
+          "superficial_similarity_trap": "medium"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 96,
+          "interval_90": [
+            63.2,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Mass Effect",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 72,
+          "development_variety": 88,
+          "structure_pacing_direction": 78,
+          "identity_hooks": 95,
+          "breadth_of_match": 92
+        },
+        "score_0_100": 82.1,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 85,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "персонажи, ветвящиеся диалоги, развитие и большой сюжетный контекст",
+        "dominant_negative": "часть побочного исследования может быть менее насыщенной, чем главная линия",
+        "uncertainty": "medium"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 100,
+          "interval_90": [
+            72.4,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 100,
+          "interval_90": [
+            73,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "персонажи, ветвящиеся диалоги, развитие и большой сюжетный контекст",
+            "candidate_evidence_ref": "candidate:Mass Effect:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "часть побочного исследования может быть менее насыщенной, чем главная линия",
+            "candidate_evidence_ref": "candidate:Mass Effect:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ],
+          "superficial_similarity_trap": "medium"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 100,
+          "interval_90": [
+            72.4,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Mirror's Edge",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 90,
+          "development_variety": 62,
+          "structure_pacing_direction": 60,
+          "identity_hooks": 85,
+          "breadth_of_match": 65
+        },
+        "score_0_100": 75.7,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 70,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "ярко выраженное мастерство движения и ощущение потока",
+        "dominant_negative": "неясные цели и остановки на пробах/ошибках могут разрушать темп",
+        "uncertainty": "high"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 66,
+          "interval_90": [
+            36.8,
+            99.4
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 65.2,
+          "interval_90": [
+            39,
+            93.8
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "ярко выраженное мастерство движения и ощущение потока",
+            "candidate_evidence_ref": "candidate:Mirror's Edge:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "неясные цели и остановки на пробах/ошибках могут разрушать темп",
+            "candidate_evidence_ref": "candidate:Mirror's Edge:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "high"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Need for Speed: Most Wanted",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 82,
+          "development_variety": 75,
+          "structure_pacing_direction": 70,
+          "identity_hooks": 80,
+          "breadth_of_match": 75
+        },
+        "score_0_100": 77.5,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 78,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "гонки дополнены эскалацией полицейских погонь и карьерной целью",
+        "dominant_negative": "базовый гоночный цикл сам по себе меняется умеренно",
+        "uncertainty": "low"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 82.2,
+          "interval_90": [
+            55,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "гонки дополнены эскалацией полицейских погонь и карьерной целью",
+            "candidate_evidence_ref": "candidate:Need for Speed: Most Wanted:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "базовый гоночный цикл сам по себе меняется умеренно",
+            "candidate_evidence_ref": "candidate:Need for Speed: Most Wanted:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "low"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Perfect World",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 65,
+          "development_variety": 80,
+          "structure_pacing_direction": 45,
+          "identity_hooks": 60,
+          "breadth_of_match": 75
+        },
+        "score_0_100": 65.4,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 54,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "много систем развития, кастомизации и мира для исследования",
+        "dominant_negative": "MMO-гринд и повторяемые задания несут высокий риск рутины; публичное evidence слабее",
+        "uncertainty": "high"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 66,
+          "interval_90": [
+            36.8,
+            99.4
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 65.2,
+          "interval_90": [
+            39,
+            93.8
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "много систем развития, кастомизации и мира для исследования",
+            "candidate_evidence_ref": "candidate:Perfect World:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "MMO-гринд и повторяемые задания несут высокий риск рутины; публичное evidence слабее",
+            "candidate_evidence_ref": "candidate:Perfect World:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "high"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 50,
+          "interval_90": [
+            19.8,
+            80.2
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Postal 2",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 55,
+          "development_variety": 55,
+          "structure_pacing_direction": 40,
+          "identity_hooks": 65,
+          "breadth_of_match": 45
+        },
+        "score_0_100": 53.4,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 42,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "свободная песочница и необычные способы взаимодействия",
+        "dominant_negative": "повторение, технические паузы и слабая основная механика быстро исчерпывают новизну",
+        "uncertainty": "high"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 50,
+          "interval_90": [
+            19.8,
+            80.2
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 50,
+          "interval_90": [
+            23.2,
+            76.8
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "свободная песочница и необычные способы взаимодействия",
+            "candidate_evidence_ref": "candidate:Postal 2:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "повторение, технические паузы и слабая основная механика быстро исчерпывают новизну",
+            "candidate_evidence_ref": "candidate:Postal 2:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "high"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 34,
+          "interval_90": [
+            0.6,
+            63.2
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Prince of Persia: Warrior Within",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 88,
+          "development_variety": 80,
+          "structure_pacing_direction": 82,
+          "identity_hooks": 88,
+          "breadth_of_match": 82
+        },
+        "score_0_100": 84.6,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 85,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "паркур плюс более глубокий бой и более взрослый тон",
+        "dominant_negative": "возвраты по локациям могут добавить повторения",
+        "uncertainty": "low"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 96,
+          "interval_90": [
+            63.2,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 92.4,
+          "interval_90": [
+            63.8,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "паркур плюс более глубокий бой и более взрослый тон",
+            "candidate_evidence_ref": "candidate:Prince of Persia: Warrior Within:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "возвраты по локациям могут добавить повторения",
+            "candidate_evidence_ref": "candidate:Prince of Persia: Warrior Within:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ],
+          "superficial_similarity_trap": "low"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 100,
+          "interval_90": [
+            72.4,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Prototype",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 90,
+          "development_variety": 78,
+          "structure_pacing_direction": 72,
+          "identity_hooks": 78,
+          "breadth_of_match": 85
+        },
+        "score_0_100": 81.9,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 79,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "скорость, сверхспособности и высокая свобода перемещения/боя",
+        "dominant_negative": "открытый мир может уступать самой сильной части — непосредственному действию",
+        "uncertainty": "medium"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 82.2,
+          "interval_90": [
+            55,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "скорость, сверхспособности и высокая свобода перемещения/боя",
+            "candidate_evidence_ref": "candidate:Prototype:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "открытый мир может уступать самой сильной части — непосредственному действию",
+            "candidate_evidence_ref": "candidate:Prototype:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "medium"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Red Dead Redemption",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 82,
+          "development_variety": 86,
+          "structure_pacing_direction": 82,
+          "identity_hooks": 92,
+          "breadth_of_match": 95
+        },
+        "score_0_100": 85.6,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 84,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "живой мир, случайные события, сильная история и занятия вне сюжета",
+        "dominant_negative": "часть обязательных поездок/миссий может замедлять темп",
+        "uncertainty": "low"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 100,
+          "interval_90": [
+            72.4,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 100,
+          "interval_90": [
+            73,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "живой мир, случайные события, сильная история и занятия вне сюжета",
+            "candidate_evidence_ref": "candidate:Red Dead Redemption:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "часть обязательных поездок/миссий может замедлять темп",
+            "candidate_evidence_ref": "candidate:Red Dead Redemption:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ],
+          "superficial_similarity_trap": "low"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 100,
+          "interval_90": [
+            72.4,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Resident Evil 4",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 90,
+          "development_variety": 82,
+          "structure_pacing_direction": 88,
+          "identity_hooks": 82,
+          "breadth_of_match": 88
+        },
+        "score_0_100": 86.3,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 79,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "ясный вектор, напряжённый бой и постоянные смены ситуаций",
+        "dominant_negative": "длинная интенсивная формула способна утомить ближе к финалу",
+        "uncertainty": "medium"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 82.2,
+          "interval_90": [
+            55,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "ясный вектор, напряжённый бой и постоянные смены ситуаций",
+            "candidate_evidence_ref": "candidate:Resident Evil 4:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "длинная интенсивная формула способна утомить ближе к финалу",
+            "candidate_evidence_ref": "candidate:Resident Evil 4:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "medium"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Sanitarium",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 45,
+          "development_variety": 65,
+          "structure_pacing_direction": 65,
+          "identity_hooks": 88,
+          "breadth_of_match": 62
+        },
+        "score_0_100": 61.2,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 60,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "сильная сюрреалистическая история и атмосфера",
+        "dominant_negative": "pixel hunting/лабиринты и неясные интеракции конфликтуют с неприятием непрозрачных задач",
+        "uncertainty": "high"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 50,
+          "interval_90": [
+            19.8,
+            80.2
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 50,
+          "interval_90": [
+            23.2,
+            76.8
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "сильная сюрреалистическая история и атмосфера",
+            "candidate_evidence_ref": "candidate:Sanitarium:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "pixel hunting/лабиринты и неясные интеракции конфликтуют с неприятием непрозрачных задач",
+            "candidate_evidence_ref": "candidate:Sanitarium:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "high"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 66,
+          "interval_90": [
+            36.8,
+            99.4
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "Tekken 3",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 95,
+          "development_variety": 82,
+          "structure_pacing_direction": 75,
+          "identity_hooks": 88,
+          "breadth_of_match": 80
+        },
+        "score_0_100": 86.4,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 82,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "глубокое освоение бойца, комбо и разные режимы",
+        "dominant_negative": "часть дополнительных режимов поверхностна; сюжет не является основным крючком",
+        "uncertainty": "medium"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 82.2,
+          "interval_90": [
+            55,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "глубокое освоение бойца, комбо и разные режимы",
+            "candidate_evidence_ref": "candidate:Tekken 3:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "часть дополнительных режимов поверхностна; сюжет не является основным крючком",
+            "candidate_evidence_ref": "candidate:Tekken 3:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ],
+          "superficial_similarity_trap": "medium"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 96,
+          "interval_90": [
+            63.2,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "The Banner Saga 2",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 80,
+          "development_variety": 82,
+          "structure_pacing_direction": 65,
+          "identity_hooks": 78,
+          "breadth_of_match": 85
+        },
+        "score_0_100": 78.2,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 73,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "тактические решения, позиционирование и связь механик с последствиями",
+        "dominant_negative": "полная сила истории зависит от контекста первой части",
+        "uncertainty": "medium"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 82.2,
+          "interval_90": [
+            55,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "тактические решения, позиционирование и связь механик с последствиями",
+            "candidate_evidence_ref": "candidate:The Banner Saga 2:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "полная сила истории зависит от контекста первой части",
+            "candidate_evidence_ref": "candidate:The Banner Saga 2:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "medium"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "The Elder Scrolls IV: Oblivion",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 72,
+          "development_variety": 95,
+          "structure_pacing_direction": 78,
+          "identity_hooks": 88,
+          "breadth_of_match": 95
+        },
+        "score_0_100": 82.9,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 80,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "широкая вариативность, ясные квестовые цели и живой набор побочных историй",
+        "dominant_negative": "очень большой объём может превратиться в рассеянный/затяжной опыт",
+        "uncertainty": "medium"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 82.2,
+          "interval_90": [
+            55,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "широкая вариативность, ясные квестовые цели и живой набор побочных историй",
+            "candidate_evidence_ref": "candidate:The Elder Scrolls IV: Oblivion:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "очень большой объём может превратиться в рассеянный/затяжной опыт",
+            "candidate_evidence_ref": "candidate:The Elder Scrolls IV: Oblivion:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "medium"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "The Exit 8",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 48,
+          "development_variety": 38,
+          "structure_pacing_direction": 75,
+          "identity_hooks": 80,
+          "breadth_of_match": 35
+        },
+        "score_0_100": 54,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 44,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "короткая необычная проверка наблюдательности",
+        "dominant_negative": "повторение одного коридора — сама основа игры; почти нет развития механик",
+        "uncertainty": "high"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 50,
+          "interval_90": [
+            19.8,
+            80.2
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 50,
+          "interval_90": [
+            23.2,
+            76.8
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "короткая необычная проверка наблюдательности",
+            "candidate_evidence_ref": "candidate:The Exit 8:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "повторение одного коридора — сама основа игры; почти нет развития механик",
+            "candidate_evidence_ref": "candidate:The Exit 8:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "high"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 34,
+          "interval_90": [
+            0.6,
+            63.2
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "The Suffering",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 72,
+          "development_variety": 50,
+          "structure_pacing_direction": 68,
+          "identity_hooks": 75,
+          "breadth_of_match": 55
+        },
+        "score_0_100": 65.2,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 54,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "прямой темповый хоррор-экшен и сильная атмосфера",
+        "dominant_negative": "ограниченное разнообразие врагов/тактики повышает риск однообразия",
+        "uncertainty": "high"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 57.8,
+          "interval_90": [
+            28.4,
+            89.4
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 57.4,
+          "interval_90": [
+            31.4,
+            84.6
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "прямой темповый хоррор-экшен и сильная атмосфера",
+            "candidate_evidence_ref": "candidate:The Suffering:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "ограниченное разнообразие врагов/тактики повышает риск однообразия",
+            "candidate_evidence_ref": "candidate:The Suffering:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "anchor_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ],
+          "superficial_similarity_trap": "high"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 50,
+          "interval_90": [
+            19.8,
+            80.2
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "The Witcher 3: Wild Hunt - Blood and Wine",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 82,
+          "development_variety": 88,
+          "structure_pacing_direction": 80,
+          "identity_hooks": 95,
+          "breadth_of_match": 95
+        },
+        "score_0_100": 86.2,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 83,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "новый яркий регион, сильные квесты и сочетание истории с исследованием",
+        "dominant_negative": "большой объём расширения может утомить, если знакомая формула уже насыщена",
+        "uncertainty": "low"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "anchor_better"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 84.2,
+          "interval_90": [
+            54,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 82.2,
+          "interval_90": [
+            55,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "новый яркий регион, сильные квесты и сочетание истории с исследованием",
+            "candidate_evidence_ref": "candidate:The Witcher 3: Wild Hunt - Blood and Wine:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "большой объём расширения может утомить, если знакомая формула уже насыщена",
+            "candidate_evidence_ref": "candidate:The Witcher 3: Wild Hunt - Blood and Wine:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ],
+          "superficial_similarity_trap": "low"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 96,
+          "interval_90": [
+            63.2,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "The Witcher 3: Wild Hunt - Hearts of Stone",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 78,
+          "development_variety": 85,
+          "structure_pacing_direction": 88,
+          "identity_hooks": 98,
+          "breadth_of_match": 90
+        },
+        "score_0_100": 85.4,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 85,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "компактная сильная история, персонажи и разнообразные квестовые ситуации",
+        "dominant_negative": "отдельные мини-игровые/детективные отрезки ломают темп",
+        "uncertainty": "low"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "roughly_equal"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 96,
+          "interval_90": [
+            63.2,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 92.4,
+          "interval_90": [
+            63.8,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "компактная сильная история, персонажи и разнообразные квестовые ситуации",
+            "candidate_evidence_ref": "candidate:The Witcher 3: Wild Hunt - Hearts of Stone:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "отдельные мини-игровые/детективные отрезки ломают темп",
+            "candidate_evidence_ref": "candidate:The Witcher 3: Wild Hunt - Hearts of Stone:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ],
+          "superficial_similarity_trap": "low"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 100,
+          "interval_90": [
+            72.4,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    },
+    {
+      "title": "WarCraft 3: The Frozen Throne",
+      "input_binding": {
+        "split": "blind-v4-final",
+        "candidate_evidence": "public-candidate-evidence-v4",
+        "training": "training-only-v4"
+      },
+      "baseline": {
+        "factor_values": {
+          "gameplay_mastery": 92,
+          "development_variety": 98,
+          "structure_pacing_direction": 92,
+          "identity_hooks": 98,
+          "breadth_of_match": 100
+        },
+        "score_0_100": 95,
+        "derivation": "exact current 18/12/8/8/4 normalized-factor formula, rescaled from taste 0..50 to 0..100"
+      },
+      "architecture_a": {
+        "score_0_100": 91,
+        "calibration": "holistic rating-equivalent judgment against frozen training anchors",
+        "dominant_positive": "максимально сильное сочетание миссионного разнообразия, героев, сюжета и развития механик",
+        "dominant_negative": "часть бонусной кампании содержит возвраты и повторные бои",
+        "uncertainty": "low"
+      },
+      "architecture_c": {
+        "semantic_output": {
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ]
+        },
+        "bradley_terry": {
+          "score_0_100": 100,
+          "interval_90": [
+            72.4,
+            100
+          ]
+        },
+        "thurstone_sensitivity": {
+          "score_0_100": 100,
+          "interval_90": [
+            73,
+            100
+          ]
+        },
+        "explanation_surface": "pairwise rationale only; no separate evidence-finding layer"
+      },
+      "architecture_d": {
+        "semantic_output": {
+          "positive_finding": {
+            "text": "максимально сильное сочетание миссионного разнообразия, героев, сюжета и развития механик",
+            "candidate_evidence_ref": "candidate:WarCraft 3: The Frozen Throne:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "negative_finding": {
+            "text": "часть бонусной кампании содержит возвраты и повторные бои",
+            "candidate_evidence_ref": "candidate:WarCraft 3: The Frozen Throne:facts",
+            "profile_evidence_refs": [
+              "training-card patterns/anchors"
+            ]
+          },
+          "pairwise_relations": [
+            {
+              "anchor_game": "Half-Life",
+              "anchor_rating": 1.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Fallout 4",
+              "anchor_rating": 2,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Deus Ex: Human Revolution",
+              "anchor_rating": 2.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Stray",
+              "anchor_rating": 3,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Tomb Raider (2013)",
+              "anchor_rating": 3.5,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Batman: Arkham Asylum",
+              "anchor_rating": 4,
+              "relation": "candidate_better"
+            },
+            {
+              "anchor_game": "Red Dead Redemption II",
+              "anchor_rating": 4.5,
+              "relation": "roughly_equal"
+            }
+          ],
+          "superficial_similarity_trap": "low"
+        },
+        "deterministic_mapping": {
+          "model": "Bradley-Terry with fixed rating-equivalent anchor utilities; tie encoded as half-win/half-loss",
+          "score_0_100": 100,
+          "interval_90": [
+            72.4,
+            100
+          ]
+        },
+        "semantic_worker_authors_final_numeric_score": false
+      }
+    }
+  ]
+}
