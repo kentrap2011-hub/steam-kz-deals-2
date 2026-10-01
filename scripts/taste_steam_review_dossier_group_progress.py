@@ -114,6 +114,18 @@ def validate_group_progress(manifest, contract, progress=None):
                 raise ValueError("failed dossier group recovery metadata is incomplete")
             if failure.get("recovery_eligible") is not True:
                 raise ValueError("failed dossier group must remain recovery eligible")
+            failure_class = failure.get("failure_class")
+            if failure_class == "semantic_exhaustion":
+                if not isinstance(failure.get("semantic_stop_class"), str) or not failure["semantic_stop_class"]:
+                    raise ValueError("semantic-exhaustion dossier failure requires semantic_stop_class")
+                if failure.get("normal_first_pass_attempt_consumed") is not True:
+                    raise ValueError("semantic-exhaustion dossier failure must consume one normal first-pass attempt")
+                if failure.get("valid_dossier_produced") is not False:
+                    raise ValueError("semantic-exhaustion dossier failure cannot claim a valid dossier")
+                if not isinstance(failure.get("terminal_receipt_archive_path"), str) or not failure["terminal_receipt_archive_path"]:
+                    raise ValueError("semantic-exhaustion dossier failure requires terminal receipt archive path")
+            elif failure_class is not None:
+                raise ValueError("unsupported dossier failure_class")
         elif failure is not None:
             raise ValueError("non-failed dossier group cannot carry failure metadata")
     expected_summary = _summarize(manifest, entries)

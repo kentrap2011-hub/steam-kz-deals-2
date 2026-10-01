@@ -278,7 +278,7 @@ class PurposeCoverageSufficiencyTests(unittest.TestCase):
     def test_cov_13_no_new_scheduler_queue_retry_or_backlog_owner(self):
         owner = OWNERSHIP["taste_steam_review_dossier_nonblocking_progress"]
         self.assertEqual(owner["owner"], "github_control_plane")
-        self.assertEqual(owner["scheduled_chatgpt_role"], "bounded_semantic_candidate_generation_and_create_only_transport_only")
+        self.assertEqual(owner["scheduled_chatgpt_role"], "bounded_semantic_candidate_or_exact_exhaustion_terminal_generation_and_create_only_transport_only")
         self.assertFalse(owner["new_queue_retry_loop_or_scheduler_created"])
         self.assertIn("second_dossier_scheduler", PERSISTENCE["forbidden"])
         self.assertIn("independent_dossier_queue", PERSISTENCE["forbidden"])
@@ -286,7 +286,7 @@ class PurposeCoverageSufficiencyTests(unittest.TestCase):
     def test_cov_14_buffered_traversal_persistence_and_recovery_ownership_unchanged(self):
         self.assertEqual(CONTROL["checkpointing"]["owner"], "github_control_plane")
         self.assertEqual(CONTROL["checkpointing"]["semantics"], "internal_durability_boundary_not_scope_quota")
-        self.assertEqual(PERSISTENCE["buffered_transport"]["mode"], "immutable_create_only_one_file_per_predeclared_group")
+        self.assertEqual(PERSISTENCE["buffered_transport"]["mode"], "immutable_create_only_exactly_one_candidate_or_terminal_outcome_file_per_predeclared_group")
         self.assertFalse(PERSISTENCE["buffered_transport"]["worker_overwrite_update_delete_allowed"])
         self.assertIn("own_failed_group_recovery_projection_and_recovery_eligibility", CONTROL["ownership"]["github_responsibilities"])
 

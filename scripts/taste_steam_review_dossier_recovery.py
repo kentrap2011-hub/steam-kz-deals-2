@@ -25,6 +25,7 @@ from taste_steam_review_dossier_group_progress import (
     next_pending_sequence,
     reopen_failed_group,
 )
+from taste_steam_review_dossier_terminal import expected_terminal_receipt_path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RECOVERY_CONTRACT = ROOT / "config/taste_steam_review_dossier_recovery_contract.json"
@@ -134,6 +135,7 @@ def process_recovery_request(
     request = json.loads(request_path.read_text(encoding="utf-8"))
     sequence, descriptor = _validate_request(request, recovery, manifest, plan)
     expected = expected_buffer_path(descriptor, contract)
+    expected_terminal = expected_terminal_receipt_path(descriptor, contract)
     if request.get("artifact_path") != expected.as_posix():
         raise ValueError("recovery request artifact path is not the deterministic group path")
 
@@ -144,8 +146,8 @@ def process_recovery_request(
             raise ValueError("reopen recovery requires a canonically failed group")
         if not progress["normal_first_pass_complete"]:
             raise ValueError("reopen recovery is separate and may run only after normal first pass completes")
-        if expected.exists():
-            raise ValueError("reopen recovery requires the deterministic active inbox path to be empty")
+        if expected.exists() or expected_terminal.exists():
+            raise ValueError("reopen recovery requires deterministic active inbox outcome paths to be empty")
         reopened = reopen_failed_group(manifest, contract, sequence)
         atomic_write_json(manifest_path, reopened)
         recorded_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat()

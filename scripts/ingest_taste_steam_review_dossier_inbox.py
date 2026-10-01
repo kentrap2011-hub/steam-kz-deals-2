@@ -70,13 +70,16 @@ def drain_inbox_state(
     buffer_dir=None,
     failed_quarantine_root=None,
     failure_audit_path=None,
+    retryable_rejection_root=None,
+    rejection_audit_path=None,
+    terminal_receipt_archive_root=None,
     fail_on_blocked=True,
 ):
-    """Classify all present pending buffered groups independently from repository state.
+    """Classify present Dossier transports independently from repository state.
 
-    Group-level semantic invalidity is canonical failed/incomplete state, not a
-    global drain failure. fail_on_blocked is retained only for legacy/runtime
-    compatibility and does not turn one failed group into a head-of-line blocker.
+    A valid semantic-exhaustion terminal receipt consumes one exact normal first-pass
+    group attempt into the existing failed/recovery state. Invalid transport remains
+    retryable normal work after quarantine and never impersonates semantic exhaustion.
     """
     contract = load_contract(contract_path)
     manifest_path = Path(manifest_path)
@@ -90,6 +93,12 @@ def drain_inbox_state(
             drain_kwargs["failed_quarantine_root"] = failed_quarantine_root
         if failure_audit_path is not None:
             drain_kwargs["failure_audit_path"] = failure_audit_path
+        if retryable_rejection_root is not None:
+            drain_kwargs["retryable_rejection_root"] = retryable_rejection_root
+        if rejection_audit_path is not None:
+            drain_kwargs["rejection_audit_path"] = rejection_audit_path
+        if terminal_receipt_archive_root is not None:
+            drain_kwargs["terminal_receipt_archive_root"] = terminal_receipt_archive_root
         result = drain_buffered_groups(
             manifest_path=manifest_path,
             contract=contract,
@@ -101,9 +110,13 @@ def drain_inbox_state(
             result["accepted_group_count_this_run"]
             or result["failed_group_count_this_run"]
         )
+        transport_reconciled = bool(
+            result.get("retryable_transport_rejection_count_this_run")
+            or result.get("terminal_replay_cleanup_count_this_run")
+        )
         current = json.loads(manifest_path.read_text(encoding="utf-8"))
         validate_manifest(current, contract)
-        if changed:
+        if changed or transport_reconciled:
             write_worker_projection(current, contract)
         result["mode"] = "buffered_nonblocking_group_drain"
         if result["all_groups_accepted"]:
@@ -112,6 +125,10 @@ def drain_inbox_state(
             result["status"] = "normal_first_pass_complete_with_failures"
         elif changed:
             result["status"] = "group_state_advanced"
+        elif result.get("retryable_transport_rejection_count_this_run"):
+            result["status"] = "retryable_transport_rejected"
+        elif result.get("terminal_replay_cleanup_count_this_run"):
+            result["status"] = "terminal_replay_cleaned"
         else:
             result["status"] = "no_pending_artifact_available"
         return result

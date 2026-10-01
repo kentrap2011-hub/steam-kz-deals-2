@@ -172,6 +172,8 @@
       "immutable_group_plan",
       "per_group_pending_accepted_failed_state",
       "strict_validation",
+      "semantic_terminal_receipt_validation_and_attempt_consumption",
+      "retryable_invalid_transport_quarantine_without_attempt_consumption",
       "deterministic_recent_older_unknown_derivation_from_factual_publication_dates",
       "canonical_dossier_persistence",
       "failed_group_quarantine_and_recovery_eligibility",
@@ -179,12 +181,14 @@
       "normal_first_pass_completeness",
       "all_groups_accepted_completeness"
     ],
-    "scheduled_chatgpt_role": "bounded_semantic_candidate_generation_and_create_only_transport_only",
+    "scheduled_chatgpt_role": "bounded_semantic_candidate_or_exact_exhaustion_terminal_generation_and_create_only_transport_only",
     "failed_group_blocks_unrelated_groups": false,
     "new_queue_retry_loop_or_scheduler_created": false,
     "scheduled_worker_may_edit_own_schedule": false,
     "scheduled_chatgpt_temporal_role": "supply_factual_publication_dates_or_null_only_not_temporal_classification",
-    "unknown_date_recent_support_rule": "unknown_date_never_satisfies_recent_support"
+    "unknown_date_recent_support_rule": "unknown_date_never_satisfies_recent_support",
+    "semantic_exhaustion_terminal_rule": "only_after_all_required_semantic_routes_are_exhausted_and_no_valid_complete_group_can_be_produced;github_validates_exact_binding_before_one normal_first_pass_attempt_is_consumed",
+    "transport_failure_rule": "malformed_stale_wrong_identity_write_failure_or_unexhausted_runtime_tool_stop_consumes_zero semantic_attempts_and_remains_normal_pending_work"
   },
   "progressive_personalization_phase_c_pass2_core": {
     "status": "production_active",

@@ -104,7 +104,7 @@ class LanguageBindingRegressionTests(unittest.TestCase):
         self.assertTrue(buffered["buffer"]["multiple_pending_groups_same_snapshot_allowed"])
         self.assertEqual(
             buffered["drain"]["acceptance_rule"],
-            "strict_validate_each_present_pending_group_independently;persist_valid_groups_and_classify_invalid_groups_failed_or_invalid_pending_recovery",
+            "strict_validate_each_present_pending_group_transport_independently;persist_valid_dossier_candidates;consume_valid_semantic_exhaustion_terminal_receipts_into_failed_or_invalid_pending_recovery;quarantine_invalid_transport_without_consuming_attempt",
         )
         self.assertEqual(buffered["drain"]["owner"], "github_control_plane")
 
