@@ -1,0 +1,124 @@
+{
+  "experiment_id": "personal-taste-scoring-targeted-offline-backtest-02",
+  "version": "preblind-v1",
+  "prediction_artifacts_exist": false,
+  "incidents": [
+    {
+      "id": "02-A",
+      "status": "rejected_before_scoring",
+      "reason": "family direction leaked via family-coded sequential IDs",
+      "scope": "20 attempted fresh titles quarantined"
+    },
+    {
+      "id": "02-B",
+      "status": "rejected_before_scoring",
+      "reason": "training-deck inspection exposed direct truth for attempted fresh held-outs",
+      "scope": "replacement attempted fresh titles quarantined"
+    }
+  ],
+  "final_controls": {
+    "uses_only_backtest01_final_blind_v4_heldouts": true,
+    "excludes_prior_report_truth_exposed_titles": [
+      "Mirror's Edge",
+      "Castlevania: Lords of Shadow",
+      "Mass Effect",
+      "Grand Theft Auto V",
+      "Postal 2",
+      "Assassin's Creed",
+      "Half-Life: Blue Shift",
+      "Lucius II",
+      "The Exit 8"
+    ],
+    "heldout_truth_absent_from_allowed_training_input": true,
+    "prior_backtest_predictions_forbidden": true,
+    "family_labels_hidden_from_evaluator": true,
+    "global_derived_profile_summaries_withheld": true,
+    "current_rating_reason_likes_dislikes_remarks_withheld": true
+  },
+  "allowed_training_input": {
+    "path": "experiments/personal_taste_scoring/backtest_01/evaluator_training_input_v4.json",
+    "blob_sha": "47b7aa3e1e9148b547ddd2c08fb34bb0830b6923"
+  },
+  "training_cross_reference_check": [
+    {
+      "title": "Borderlands",
+      "hits": 0
+    },
+    {
+      "title": "Cyberpunk 2077",
+      "hits": 0
+    },
+    {
+      "title": "Grand Theft Auto III",
+      "hits": 0
+    },
+    {
+      "title": "Hogwarts Legacy",
+      "hits": 0
+    },
+    {
+      "title": "Mafia II",
+      "hits": 0
+    },
+    {
+      "title": "Marvel's Spider-Man",
+      "hits": 0
+    },
+    {
+      "title": "Need for Speed: Most Wanted",
+      "hits": 0
+    },
+    {
+      "title": "Perfect World",
+      "hits": 0
+    },
+    {
+      "title": "Prince of Persia: Warrior Within",
+      "hits": 0
+    },
+    {
+      "title": "Prototype",
+      "hits": 0
+    },
+    {
+      "title": "Red Dead Redemption",
+      "hits": 0
+    },
+    {
+      "title": "Resident Evil 4",
+      "hits": 0
+    },
+    {
+      "title": "Sanitarium",
+      "hits": 0
+    },
+    {
+      "title": "Tekken 3",
+      "hits": 0
+    },
+    {
+      "title": "The Banner Saga 2",
+      "hits": 0
+    },
+    {
+      "title": "The Elder Scrolls IV: Oblivion",
+      "hits": 0
+    },
+    {
+      "title": "The Suffering",
+      "hits": 0
+    },
+    {
+      "title": "The Witcher 3: Wild Hunt - Blood and Wine",
+      "hits": 0
+    },
+    {
+      "title": "The Witcher 3: Wild Hunt - Hearts of Stone",
+      "hits": 0
+    },
+    {
+      "title": "WarCraft 3: The Frozen Throne",
+      "hits": 0
+    }
+  ]
+}
