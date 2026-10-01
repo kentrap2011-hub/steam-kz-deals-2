@@ -13,6 +13,10 @@ from taste_steam_review_dossier_group_progress import reopen_failed_group
 from taste_steam_review_dossier_parallel_validation import build_parallel_validation_status
 from taste_steam_review_dossier_strict import current_worker_contract_binding
 from taste_steam_review_dossier_test_fixture import web_dossier
+from taste_steam_review_dossier_terminal import (
+    TERMINAL_RECEIPT_SCHEMA,
+    expected_terminal_receipt_path,
+)
 from taste_steam_review_dossier_web import build_daily_work_manifest_web
 from taste_steam_review_dossier_worker_projection import (
     buffered_candidate_descriptor_projection,
@@ -62,8 +66,44 @@ def write_candidate(work, contract, sequence, mutate=None):
     return path
 
 
+def terminal_receipt(work, sequence):
+    descriptor = work["submission_group_plan"]["groups"][sequence - 1]
+    receipt = copy.deepcopy(descriptor)
+    receipt["schema"] = TERMINAL_RECEIPT_SCHEMA
+    receipt["schema_version"] = 1
+    receipt.update({
+        "execution_status": "semantic_exhaustion_no_valid_dossier",
+        "semantic_stop_class": "existence_established_retrieval_unresolved",
+        "valid_dossier_produced": False,
+        "normal_first_pass_attempt_consumed": True,
+        "blocked_game": {
+            "appid": descriptor["items"][0]["appid"],
+            "title": descriptor["items"][0]["title"],
+        },
+        "route_exhaustion": {
+            "russian": "exhausted",
+            "source_diversification": "exhausted",
+            "identity": "not_applicable",
+            "temporal": "not_applicable",
+            "next_required_step_status": "none_all_required_routes_exhausted",
+        },
+    })
+    return receipt
+
+
+def write_terminal(work, contract, sequence):
+    descriptor = work["submission_group_plan"]["groups"][sequence - 1]
+    path = expected_terminal_receipt_path(descriptor, contract)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(terminal_receipt(work, sequence), ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return path
+
+
 class ParallelValidationTests(unittest.TestCase):
-    def test_bad_group_5_does_not_block_good_groups_6_and_7(self):
+    def test_invalid_transport_group_5_stays_pending_while_good_groups_6_and_7_continue(self):
         with tempfile.TemporaryDirectory() as td:
             contract = contract_for(td)
             store = Path(td) / "store"
@@ -91,20 +131,32 @@ class ParallelValidationTests(unittest.TestCase):
             )
             p6 = write_candidate(current, contract, 6)
             p7 = write_candidate(current, contract, 7)
-            second = plan_buffered_drain(current, contract, contract["paths"]["submission_inbox_dir"], failed_quarantine_root=quarantine)
+            second = plan_buffered_drain(
+                current,
+                contract,
+                contract["paths"]["submission_inbox_dir"],
+                retryable_rejection_root=quarantine,
+            )
 
-            self.assertEqual([x["descriptor"]["sequence"] for x in second["failed"]], [5])
+            self.assertEqual(second["failed"], [])
+            self.assertEqual([x["descriptor"]["sequence"] for x in second["rejected"]], [5])
             self.assertEqual([x["descriptor"]["sequence"] for x in second["accepted"]], [6, 7])
-            apply_buffered_drain(second, manifest_path=manifest_path, store_dir=store, failure_audit_path=audit)
+            apply_buffered_drain(
+                second,
+                manifest_path=manifest_path,
+                store_dir=store,
+                failure_audit_path=audit,
+                rejection_audit_path=Path(td) / "rejection.jsonl",
+            )
             final = json.loads(manifest_path.read_text(encoding="utf-8"))
 
             self.assertFalse(p5.exists())
             self.assertFalse(p6.exists())
             self.assertFalse(p7.exists())
             self.assertEqual(final["group_progress"]["accepted_group_count"], 6)
-            self.assertEqual(final["group_progress"]["failed_group_count"], 1)
-            self.assertEqual(final["group_progress"]["pending_group_count"], 0)
-            self.assertTrue(final["group_progress"]["normal_first_pass_complete"])
+            self.assertEqual(final["group_progress"]["failed_group_count"], 0)
+            self.assertEqual(final["group_progress"]["pending_group_count"], 1)
+            self.assertFalse(final["group_progress"]["normal_first_pass_complete"])
             self.assertFalse(final["group_progress"]["all_groups_accepted"])
             self.assertFalse(final["full_backlog_complete"])
             self.assertEqual(final["completed_required_count"], 12)  # legacy contiguous accepted prefix only
@@ -118,14 +170,14 @@ class ParallelValidationTests(unittest.TestCase):
                     self.assertTrue((store / f"App_{appid}.json").exists())
 
             index, _ = build_worker_projection(final, contract)
-            self.assertIsNone(index["next_pending_sequence"])
-            self.assertEqual(index["failed_group_sequences"], [5])
-            self.assertTrue(index["normal_first_pass_complete"])
+            self.assertEqual(index["next_pending_sequence"], 5)
+            self.assertEqual(index["failed_group_sequences"], [])
+            self.assertFalse(index["normal_first_pass_complete"])
             self.assertFalse(index["all_groups_accepted"])
 
             status = build_parallel_validation_status(final, contract, contract["paths"]["submission_inbox_dir"])
-            self.assertEqual(status["failed_group_count"], 1)
-            self.assertEqual(status["failed_groups_pending_recovery"][0]["sequence"], 5)
+            self.assertEqual(status["failed_group_count"], 0)
+            self.assertEqual(status["failed_groups_pending_recovery"], [])
             self.assertEqual(status["candidate_count"], 0)
 
     def test_failed_group_recovery_is_separate_and_never_fabricates_acceptance(self):
@@ -134,17 +186,21 @@ class ParallelValidationTests(unittest.TestCase):
             store = Path(td) / "store"
             manifest_path = Path(td) / "work.json"
             work = build_daily_work_manifest_web(queue(range(820001, 820007)), contract, store)
-            p1 = write_candidate(
-                work, contract, 1,
-                lambda artifact: artifact["dossiers"][0].__setitem__("schema_version", 1),
-            )
+            p1 = write_terminal(work, contract, 1)
             write_candidate(work, contract, 2)
             plan = plan_buffered_drain(
-                work, contract, contract["paths"]["submission_inbox_dir"],
-                failed_quarantine_root=Path(td) / "quarantine",
+                work,
+                contract,
+                contract["paths"]["submission_inbox_dir"],
+                terminal_receipt_archive_root=Path(td) / "terminal-archive",
             )
             manifest_path.write_text(json.dumps(work), encoding="utf-8")
-            apply_buffered_drain(plan, manifest_path=manifest_path, store_dir=store, failure_audit_path=Path(td) / "audit.jsonl")
+            apply_buffered_drain(
+                plan,
+                manifest_path=manifest_path,
+                store_dir=store,
+                failure_audit_path=Path(td) / "audit.jsonl",
+            )
             failed = json.loads(manifest_path.read_text(encoding="utf-8"))
             self.assertFalse(p1.exists())
             self.assertTrue(failed["group_progress"]["normal_first_pass_complete"])
@@ -180,12 +236,13 @@ class ParallelValidationTests(unittest.TestCase):
         self.assertIn("next_pending_sequence", runtime_text)
         self.assertIn("Exact buffered identity serialization", runtime_text)
         self.assertIn("top-level `items` is mandatory", runtime_text)
+        self.assertIn("Exact semantic-exhaustion terminal receipt", runtime_text)
         self.assertIn("must never enable, disable, pause, delete, reschedule, or edit its own Scheduled Task", runtime_text)
 
         runtime_contract = BASE_CONTRACT["worker_runtime_prompt"]
         self.assertEqual(
             runtime_contract["revision"],
-            "nonblocking-group-progress-v2-exact-buffer-identity",
+            "nonblocking-group-progress-v3-semantic-exhaustion-terminal-receipt",
         )
         self.assertFalse(runtime_contract["semantic_evidence_binding"])
         self.assertFalse(runtime_contract["descriptor_binding"])

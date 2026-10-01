@@ -305,7 +305,7 @@ class PragmaticEvidenceModelRegressionTests(unittest.TestCase):
     def test_prag_14_no_scheduler_queue_retry_crawler_or_author_registry_added(self):
         ownership = OWNERSHIP["taste_steam_review_dossier_nonblocking_progress"]
         self.assertEqual(ownership["owner"], "github_control_plane")
-        self.assertEqual(ownership["scheduled_chatgpt_role"], "bounded_semantic_candidate_generation_and_create_only_transport_only")
+        self.assertEqual(ownership["scheduled_chatgpt_role"], "bounded_semantic_candidate_or_exact_exhaustion_terminal_generation_and_create_only_transport_only")
         self.assertFalse(ownership["new_queue_retry_loop_or_scheduler_created"])
         self.assertFalse(ownership["scheduled_worker_may_edit_own_schedule"])
         self.assertFalse(EVIDENCE["transient_author_fallback"]["persistent_author_registry_allowed"])
@@ -319,7 +319,7 @@ class PragmaticEvidenceModelRegressionTests(unittest.TestCase):
         self.assertTrue(CONTROL["buffered_submission"]["buffer"]["multiple_pending_groups_same_snapshot_allowed"])
         self.assertEqual(
             CONTROL["buffered_submission"]["drain"]["acceptance_rule"],
-            "strict_validate_each_present_pending_group_independently;persist_valid_groups_and_classify_invalid_groups_failed_or_invalid_pending_recovery",
+            "strict_validate_each_present_pending_group_transport_independently;persist_valid_dossier_candidates;consume_valid_semantic_exhaustion_terminal_receipts_into_failed_or_invalid_pending_recovery;quarantine_invalid_transport_without_consuming_attempt",
         )
         self.assertEqual(
             OWNERSHIP["taste_steam_review_dossier_nonblocking_progress"]["github_owns"],
@@ -327,6 +327,8 @@ class PragmaticEvidenceModelRegressionTests(unittest.TestCase):
                 "immutable_group_plan",
                 "per_group_pending_accepted_failed_state",
                 "strict_validation",
+                "semantic_terminal_receipt_validation_and_attempt_consumption",
+                "retryable_invalid_transport_quarantine_without_attempt_consumption",
                 "deterministic_recent_older_unknown_derivation_from_factual_publication_dates",
                 "canonical_dossier_persistence",
                 "failed_group_quarantine_and_recovery_eligibility",
