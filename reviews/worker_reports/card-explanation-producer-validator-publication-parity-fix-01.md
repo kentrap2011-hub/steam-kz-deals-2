@@ -14,9 +14,9 @@ Implementation branch: `fix/card-explanation-producer-validator-publication-pari
 
 Current implementation head: `9b2c094aaa1c868162e2e6e269a92789b4dde131`.
 
-Status: `blocked`.
+Status: `implementation_complete_publication_pending`.
 
-The implementation for this task is complete on the dedicated branch, but the task cannot be merged or receive the required post-merge publication acceptance while the mandatory Progressive PASS 2 core workflow is red on a separate existing production-state regression outside this task.
+The implementation is complete on the dedicated branch and has been reconciled onto current `main`. The previously external PASS 2 blocker was fixed separately by PR #133. Fresh required PR validation is green; merge and normal post-merge publication verification are the remaining steps.
 
 ## 2. START / fresh-main reconciliation
 
@@ -33,9 +33,11 @@ Read before writes:
 - `CURRENT_TASK.md`;
 - relevant ownership contract and implementation routes.
 
-The fresh-main write anchor was:
+The original fresh-main write anchor was:
 
 `bf6e2b2288c745f5d2ed67ef73cdbfcec819e1cb`.
+
+Before merge, PR #132 was reconciled with current `main@6b7076258713d5997d32a1868a37ac1ff7f89f9e` through merge commit `f2bfe892a157501cff69fac53e131ece0afadd85`. The compare then showed `behind_by=0`.
 
 Immediately before the merge decision, `main` was refreshed again and remained exactly at the same commit. The implementation branch was six commits ahead and zero behind, with no concurrent main reconciliation required.
 
@@ -160,23 +162,25 @@ No scheduler, queue, retry loop, semantic worker or Scheduled Task was added or 
 
 ## 8. Fresh-main merge reconciliation
 
-Fresh-main merge check:
+Fresh-main reconciliation completed against:
 
-- `main = bf6e2b2288c745f5d2ed67ef73cdbfcec819e1cb`;
-- PR head = `9b2c094aaa1c868162e2e6e269a92789b4dde131`;
-- branch behind main = 0;
-- PR mergeable = true.
+- current `main`: `6b7076258713d5997d32a1868a37ac1ff7f89f9e`;
+- prerequisite PR #133 merge: `b6019c11fa202c73e5470af3d2eb9a4b5900f476`;
+- reconciled PR #132 head: `f2bfe892a157501cff69fac53e131ece0afadd85`;
+- compare after reconciliation: `behind_by=0`;
+- PR mergeability: true.
 
-PR #132 changes only:
+Only `CURRENT_TASK.md` overlapped with main changes since the old PR base; source implementation files did not. The reconciliation preserved current main and production records and added the PR implementation on top.
 
-- `CURRENT_TASK.md`;
-- `scripts/card_explanation_policy.py`;
-- `scripts/test_deep_score_evidence_explainability.py`;
-- `scripts/validate_card_explanations.py`.
+Fresh required validation on the reconciled head:
 
-No newer production record would be overwritten by this diff.
+- Progressive PASS 2 core PR run `36855124640` / #542 — **success**;
+- backlog dispositions PR run `36855124796` / #1528 — **success**;
+- Visual material freshness regressions — **success**;
+- Deep score evidence explainability regression — **success**;
+- Deep invalid-not-fit contract loop regression — **success**.
 
-Merge was intentionally not performed because the task explicitly requires Progressive PASS 2 core to remain green, and the final mandatory workflow is red on a separate baseline assertion.
+Execution ownership and package-purchase validation scopes are unchanged by PR #132; the PR does not touch their watched contract/ranking/package paths.
 
 ## 9. Automatic post-merge visual build
 
@@ -213,22 +217,18 @@ The top-page `Скидки: обновлено 24 сент., 03:12` semantics we
 
 ## 13. Unresolved
 
-One external blocker prevents merge and post-merge acceptance.
+No implementation/validation blocker remains before merge.
 
-Mandatory Progressive PASS 2 core run:
+The prior unrelated PASS 2 blocker was repaired by PR #133, and the same current-state regression now passes on PR #132's reconciled validation run `36855124640`.
 
-- run: `36735554783` / #531;
-- changed Deep score-evidence regression: PASS;
-- failure occurs afterward in `scripts/test_deep_invalid_not_fit_contract_loop.py`;
-- exact failing assertion: `pinned_entry['outcome'] == 'analysis_incomplete'`.
+Remaining acceptance is runtime-only and must occur through the normal post-merge trigger graph:
 
-That existing regression pins three historical production entries to remain permanently `analysis_incomplete`. Current production state has advanced, so at least one pinned entry no longer has that outcome.
-
-This test and the Deep invalid-not-fit state machine are outside the current card-explanation producer/validator task and were not modified.
-
-The last observed green main PASS 2 core before the later production-state advances was run `36697091309` / #524 at `49151c6e688174e965493020624e63f48e20eebc`. Between that commit and the current fresh-main anchor there are 59 commits, including substantial canonical Progressive PASS 2 state advancement. The current task must not repair that separate regression.
-
-Execution ownership and package-purchase validation scopes are not touched by PR #132. Their accepted PR #128 validations were green (`36676280614` and `36676280584` respectively), but they were not re-triggered for PR #132 because its changed paths are outside those workflow filters.
+- automatic full visual build;
+- card explanation validation;
+- exact material binding;
+- canonical visual persistence;
+- automatic Pages deployment;
+- published Statistics freshness verification.
 
 ## 14. Exact PR/commit/run/artifact refs
 
@@ -237,7 +237,8 @@ Implementation:
 - PR: #132 — `Validate linked Deep card reasons by provenance`;
 - branch: `fix/card-explanation-producer-validator-publication-parity-01`;
 - fresh-main anchor: `bf6e2b2288c745f5d2ed67ef73cdbfcec819e1cb`;
-- current head: `9b2c094aaa1c868162e2e6e269a92789b4dde131`;
+- pre-reconciliation implementation head: `9b2c094aaa1c868162e2e6e269a92789b4dde131`;
+- reconciled validated head: `f2bfe892a157501cff69fac53e131ece0afadd85`;
 - initial validator fix: `97f54a33fcf9e040ac243b7368477ab380b5d297`;
 - task tracking: `a15c82bc753300ed562b4105cf0f82faf41d8d8b`;
 - initial regression coverage: `7c9ccee8562f3981771e36767acc7267a847c6de`;
@@ -247,10 +248,11 @@ Implementation:
 
 Validation:
 
-- PASS 2 PR run: `36735554783` / #531 — overall failure only after the task-specific Deep score-evidence regression passed;
-- PASS 2 task-specific step: `DEEP_SCORE_EVIDENCE_EXPLAINABILITY=PASS`;
-- exact material freshness regression step in the same run: success;
-- backlog run: `36735554878` / #1515 — success;
+- reconciled PASS 2 PR run: `36855124640` / #542 — success;
+- reconciled backlog PR run: `36855124796` / #1528 — success;
+- Deep score evidence explainability step — success;
+- Deep invalid-not-fit current-state regression step — success;
+- visual material freshness regression step — success;
 - prior accepted ownership run: `36676280614` — success;
 - prior accepted package purchase run: `36676280584` — success;
 - last observed green main PASS 2 before current production-state advancement: `36697091309` / #524 — success.
@@ -259,13 +261,13 @@ No post-merge visual run, canonical visual commit, Pages run or Pages artifact e
 
 ## 15. Status
 
-`blocked`
+`implementation_complete_publication_pending`
 
-The card-explanation producer/validator parity implementation and its dedicated regressions are complete, but merge and end-to-end publication acceptance are blocked by an unrelated mandatory PASS 2 regression that is red against current production state.
+The implementation is reconciled with current main and required PR validation is green. Merge and normal automatic publication verification remain.
 
 ## 16. Recommended next step — exactly one bounded next action
 
-Fix or reconcile the separate current-state regression in `scripts/test_deep_invalid_not_fit_contract_loop.py` so Progressive PASS 2 core is green again; then PR #132 can be revalidated and merged without changing this task's implementation.
+Merge PR #132 at the validated reconciled head, then observe the existing automatic visual build and Pages deploy without manual workflow dispatch.
 
 ## 17. Efficiency / reusable lesson
 
