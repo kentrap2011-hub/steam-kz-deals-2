@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "448f12da0193d4b5d43b65042e6e6826f39f571d1ae260055913ef11a3125f18",
+  "prepared_required_sha256": "a5e6dff106b40a80f3df028732033fc12d75d2897eda70f5b60198463befbc57",
+  "group_plan_sha256": "33ec781e82ff8e1e241231b4680ab02c792ac454b9da98ac3b279377b612fc2f",
+  "group_count": 130,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 4,
+  "start_index": 9,
+  "end_index_exclusive": 12,
+  "appids": [
+    "1159290",
+    "1169040",
+    "1202540"
+  ],
+  "items_sha256": "bfdfa5c5c4051f7c2fb88064d48c8214ee05c91a62484583e9c8884311b99dfc",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "e2e7dbe310dda84a2d96349a1d419da7d5cc5e6b065536b4f80ee274882ec2ad",
+  "items": [
+    {
+      "key": "App_1159290",
+      "appid": "1159290",
+      "title": "The Bloodline",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1159290.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1169040",
+      "appid": "1169040",
+      "title": "Necesse",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1169040.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1202540",
+      "appid": "1202540",
+      "title": "Marco & The Galaxy Dragon",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1202540.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "e6428b293a0b57fd3fbd67cb6d7b401abece8c9c40660828a1769e33ed86690c"
+}
