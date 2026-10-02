@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` is free after merged PR #138 / Dossier exhausted fail-closed loop fix; implementation status `implementation_complete_needs_next_semantic_invocation`.
+- `ЧАТ 1` assigned: `WORKER_TASK_BOUNDED_PERSONAL_TASTE_CALIBRATION_QUESTIONNAIRE_DESIGN_01.md` — determine a finite high-information calibration questionnaire with a frozen primary-question count; clarifications do not consume extra slots.
 - `ЧАТ 2` is free after merged PR #139 / targeted taste backtest 02; result status `evidence_inconclusive`, so no scoring rewrite is authorized.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
@@ -18,6 +18,29 @@
 - User-authorized current recovery direction: process current translations in ЧАТ 1 while ЧАТ 2 makes translation absence nonblocking and adds translation observability to Statistics. The earlier browser-asset decoupling proposal is not the current task; reassess it only if publication still lags after these authorized changes.
 - Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
+
+
+## ACTIVE — ЧАТ 1 — bounded personal taste calibration questionnaire design
+
+Task:
+`WORKER_TASK_BOUNDED_PERSONAL_TASTE_CALIBRATION_QUESTIONNAIRE_DESIGN_01.md`
+
+Mode:
+`READ-ONLY / RESEARCH / DESIGN`
+
+Status:
+`authorized_ready_for_worker`
+
+Purpose:
+- determine the smallest defensible fixed number N of primary calibration questions from current profile gaps and prior backtest failures;
+- freeze N before the questionnaire begins;
+- allow clarifications within a primary question without incrementing the counter;
+- prohibit hidden extra preference questions disguised as clarifications;
+- design progress UX, adaptive content within fixed length, and profile-update semantics;
+- do not ask the questionnaire or change production in this task.
+
+Expected report:
+`reviews/worker_reports/bounded-personal-taste-calibration-questionnaire-design-01.md`
 
 
 ## ACCEPTED — ЧАТ 2 — personal taste scoring targeted offline backtest 02
