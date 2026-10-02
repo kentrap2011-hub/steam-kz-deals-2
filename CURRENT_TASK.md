@@ -1299,3 +1299,13 @@
 - pinned reconciliation state commit: `9131071437f98f64c911f1700bbdea373fa6ce6f`;
 - final validated reconciliation tree: `3a41184d7293b23f1f9c9fe184f31222ed91b8f4` / no-op validation head `c53d7907d1b37316411ad7e96acd2264e760dc65`;
 - semantic recovery intentionally not executed in developer chat.
+
+## ACTIVE — personal taste game-guess diagnostic 01
+
+- Worker slot: `ЧАТ 2`.
+- Task: `WORKER_TASK_PERSONAL_TASTE_GAME_GUESS_DIAGNOSTIC_01.md`.
+- Status: `interactive_diagnostic_in_progress`.
+- Scope: semantic game-guess diagnostic from canonical Taste/profile evidence plus the completed 14-question calibration report as noncanonical context.
+- Anti-cheating: do not inspect the current deal/catalog rows or use web/commercial metadata to identify the offer before the correct guess.
+- Attempt counter: starts at 0; only an explicitly named concrete game increments it.
+- Completion report: `reviews/worker_reports/personal-taste-game-guess-diagnostic-01.md`.
