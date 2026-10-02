@@ -1,5 +1,16 @@
 # CURRENT TASK
 
+## IN PROGRESS — Bounded personal taste calibration questionnaire run 01
+Статус: `questionnaire_running_0_of_14`.
+- task: `WORKER_TASK_BOUNDED_PERSONAL_TASTE_CALIBRATION_QUESTIONNAIRE_RUN_01.md`;
+- mode: `INTERACTIVE / BOUNDED CALIBRATION`;
+- fixed total: exactly 14 primary questions; clarifications do not increment the counter;
+- canonical design: `reviews/worker_reports/bounded-personal-taste-calibration-questionnaire-design-01.md`;
+- canonical Taste profile is not modified during the run;
+- completion report: `reviews/worker_reports/bounded-personal-taste-calibration-questionnaire-run-01.md`;
+- current progress: 0 / 14; next primary question: Q01 `cal01_entry_friction_threshold`.
+
+
 ## COMPLETE — Bounded personal taste calibration questionnaire design 01
 Статус: `design_complete_ready_for_director_review`.
 - task: `WORKER_TASK_BOUNDED_PERSONAL_TASTE_CALIBRATION_QUESTIONNAIRE_DESIGN_01.md`;
