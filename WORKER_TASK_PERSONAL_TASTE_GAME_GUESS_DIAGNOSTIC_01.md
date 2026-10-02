@@ -16,7 +16,7 @@ Run an interactive diagnostic with the user.
 
 The user has one currently very interesting game offer in mind and wants to see on which guess the system can identify the exact game from the user's taste and clues.
 
-This is a diagnostic of taste understanding, not a catalog-search exercise.
+This is a diagnostic of combined taste understanding and deal-value judgment. Current price/discount may be used as evidence, but this must not become a mechanical catalog-enumeration exercise.
 
 There is NO maximum number of guesses.
 
@@ -61,22 +61,26 @@ Do not reset the counter.
 
 ## Anti-cheating boundary
 
-Before the correct guess, do NOT:
-- search the current Steam/deals candidate list for matching games;
-- inspect the current offer catalog to narrow candidates mechanically;
-- search the web for the user's current sale/offer;
-- search by price, discount, AppID, sale end time or exact commercial metadata;
-- ask the user for AppID, exact price, discount percentage, store URL or other direct identifier;
-- use repository deal rows to enumerate candidates.
+User-approved amendment during the live diagnostic:
+- current price and discount are part of the hypothesis and may be checked for a small number of semantically plausible candidate games;
+- price/value may influence which game is guessed next and how strongly the offer fits the user's buying interest;
+- the worker may use current public commercial metadata for those already-semantic candidate hypotheses.
+
+Before the correct guess, still do NOT:
+- mechanically enumerate or filter the current Steam/deals candidate list to solve the title;
+- perform a broad catalog search whose primary key is price/discount;
+- ask the user for AppID, store URL, title fragments, publisher/developer, or other direct identifiers;
+- use repository deal rows as a candidate-enumeration list.
 
 The worker MAY use:
 - canonical taste/profile evidence;
 - the completed 14-question calibration report as noncanonical diagnostic context;
 - general game knowledge already available to the model;
 - clues voluntarily provided by the user;
-- answers to clarifying questions.
+- answers to clarifying questions;
+- current price/discount/value evidence for a bounded set of semantically plausible candidate games.
 
-The purpose is to test semantic taste understanding.
+The purpose is to test combined semantic taste understanding + deal-value judgment, without reducing the exercise to catalog matching.
 
 ## Clarifications
 
@@ -94,7 +98,9 @@ Do not ask direct-identification questions whose only purpose is narrowing the t
 - exact developer/publisher;
 - first letter;
 - platform-only identifiers;
-- exact price/discount.
+- AppID/store URL/title fragments.
+
+Price/value questions are allowed when they test purchase-value reasoning rather than acting as a disguised direct identifier.
 
 A clarification should improve the taste hypothesis, not mechanically solve a twenty-questions puzzle.
 
@@ -157,9 +163,9 @@ On success:
 
 Do NOT:
 - impose an attempt limit;
-- use current deal-list/catalog lookup to cheat;
-- use web search to identify the offer before the correct guess;
-- ask for direct identifiers;
+- mechanically enumerate/filter the current deal-list/catalog to identify the title;
+- use broad web/catalog search keyed mainly by price/discount to identify the offer;
+- ask for direct identifiers such as AppID/store URL/title fragments;
 - modify canonical Taste profile;
 - modify scoring/ranking;
 - run Deep/Dossier;
