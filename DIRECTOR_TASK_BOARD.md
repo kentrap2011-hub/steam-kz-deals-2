@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` assigned: `WORKER_TASK_BOUNDED_PERSONAL_TASTE_CALIBRATION_QUESTIONNAIRE_RUN_01.md` — run the approved 14-question calibration interactively; clarifications stay inside the same question number.
+- `ЧАТ 1` is free after completed `WORKER_TASK_BOUNDED_PERSONAL_TASTE_CALIBRATION_QUESTIONNAIRE_RUN_01.md`; questionnaire finished 14/14 and is ready for a separate reviewed profile-update task.
 - `ЧАТ 2` is free after merged PR #139 / targeted taste backtest 02; result status `evidence_inconclusive`, so no scoring rewrite is authorized.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
@@ -20,7 +20,7 @@
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
 
 
-## ACTIVE — ЧАТ 1 — bounded personal taste calibration questionnaire run
+## ACCEPTED — ЧАТ 1 — bounded personal taste calibration questionnaire run
 
 Task:
 `WORKER_TASK_BOUNDED_PERSONAL_TASTE_CALIBRATION_QUESTIONNAIRE_RUN_01.md`
@@ -29,18 +29,16 @@ Mode:
 `INTERACTIVE / BOUNDED CALIBRATION`
 
 Status:
-`authorized_ready_for_worker`
+`questionnaire_complete_ready_for_profile_update`
 
-Purpose:
-- run exactly 14 primary questions, one at a time;
-- keep clarifications inside the same primary-question counter;
-- never add question 15 or an automatic second round;
-- preserve direct answers separately from inference;
-- do not mutate the canonical profile until a later reviewed profile-update task.
-
-Expected report:
-`reviews/worker_reports/bounded-personal-taste-calibration-questionnaire-run-01.md`
-
+Director acceptance:
+- questionnaire completed exactly 14/14;
+- no question 15 and no automatic second round;
+- clarifications stayed attached to the same primary question;
+- canonical Taste profile was not modified;
+- strongest new evidence includes gameplay-feel sensitivity, context-dependent repetition tolerance, sequel-improvement expectations, strong personal-hook dominance over generic polish, and rejection of automatic similarity bonuses;
+- unresolved items remain explicit: information-density veto, universal first-contact-vs-sequel weighting, and nostalgia magnitude;
+- next step is a separate reviewed profile-update/validation task.
 
 ## ACCEPTED — ЧАТ 1 — bounded personal taste calibration questionnaire design
 
