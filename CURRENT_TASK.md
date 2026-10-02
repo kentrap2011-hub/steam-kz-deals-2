@@ -1,5 +1,14 @@
 # CURRENT TASK
 
+## IN PROGRESS — Bounded personal taste calibration questionnaire design 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_BOUNDED_PERSONAL_TASTE_CALIBRATION_QUESTIONNAIRE_DESIGN_01.md`;
+- mode: `READ-ONLY / RESEARCH / DESIGN`;
+- scope: choose and justify a finite frozen N of primary calibration questions from current profile evidence and prior backtest failures; clarifications stay within the same primary slot;
+- only durable output: `reviews/worker_reports/bounded-personal-taste-calibration-questionnaire-design-01.md`;
+- no questionnaire execution, profile/scoring/ranking/Deep/Dossier/production/Scheduled Task changes.
+
+
 ## COMPLETE — Personal taste scoring targeted offline backtest 02
 Статус: `evidence_inconclusive`.
 - task: `WORKER_TASK_PERSONAL_TASTE_SCORING_TARGETED_OFFLINE_BACKTEST_02.md`;
