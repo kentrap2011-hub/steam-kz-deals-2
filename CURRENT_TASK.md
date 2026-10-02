@@ -1,15 +1,16 @@
 # CURRENT TASK
 
-## IN PROGRESS — Bounded personal taste calibration questionnaire run 01
-Статус: `questionnaire_running_0_of_14`.
+## COMPLETE — Bounded personal taste calibration questionnaire run 01
+Статус: `questionnaire_complete_ready_for_profile_update`.
 - task: `WORKER_TASK_BOUNDED_PERSONAL_TASTE_CALIBRATION_QUESTIONNAIRE_RUN_01.md`;
 - mode: `INTERACTIVE / BOUNDED CALIBRATION`;
-- fixed total: exactly 14 primary questions; clarifications do not increment the counter;
-- canonical design: `reviews/worker_reports/bounded-personal-taste-calibration-questionnaire-design-01.md`;
-- canonical Taste profile is not modified during the run;
-- completion report: `reviews/worker_reports/bounded-personal-taste-calibration-questionnaire-run-01.md`;
-- current progress: 0 / 14; next primary question: Q01 `cal01_entry_friction_threshold`.
-
+- completed exactly 14 / 14 primary questions; no question 15 and no second round;
+- clarifications remained attached to their original primary question;
+- strongest new rules: gameplay feel can dominate story weakness; repetition is contextual rather than intrinsically negative; sequels need noticeable improvement/development; strong personal impact can outweigh merely uniform polish; similarity to favourites gives no automatic bonus;
+- unresolved: information-density veto, universal novelty-vs-expectation weighting, nostalgia magnitude independent of age/taste drift;
+- canonical Taste profile, production scoring/ranking, Deep/Dossier state, site and Scheduled Tasks were not changed;
+- durable report: `reviews/worker_reports/bounded-personal-taste-calibration-questionnaire-run-01.md`;
+- next bounded action: separate profile-update/validation task reviews the questionnaire and converts only approved evidence into a canonical profile delta.
 
 ## COMPLETE — Bounded personal taste calibration questionnaire design 01
 Статус: `design_complete_ready_for_director_review`.
