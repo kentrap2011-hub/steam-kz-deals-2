@@ -3,7 +3,7 @@
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
 - `ЧАТ 1` is free after completed `WORKER_TASK_BOUNDED_PERSONAL_TASTE_CALIBRATION_QUESTIONNAIRE_RUN_01.md`; questionnaire finished 14/14 and is ready for a separate reviewed profile-update task.
-- `ЧАТ 2` is free after merged PR #139 / targeted taste backtest 02; result status `evidence_inconclusive`, so no scoring rewrite is authorized.
+- `ЧАТ 2` assigned: `WORKER_TASK_PERSONAL_TASTE_GAME_GUESS_DIAGNOSTIC_01.md` — interactive unlimited-attempt diagnostic; each named game is one attempt, clarifications do not count, current deal catalog/web lookup is forbidden before the correct guess.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -18,6 +18,30 @@
 - User-authorized current recovery direction: process current translations in ЧАТ 1 while ЧАТ 2 makes translation absence nonblocking and adds translation observability to Statistics. The earlier browser-asset decoupling proposal is not the current task; reassess it only if publication still lags after these authorized changes.
 - Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
+
+
+## ACTIVE — ЧАТ 2 — personal taste game-guess diagnostic
+
+Task:
+`WORKER_TASK_PERSONAL_TASTE_GAME_GUESS_DIAGNOSTIC_01.md`
+
+Mode:
+`INTERACTIVE / DIAGNOSTIC`
+
+Status:
+`authorized_ready_for_worker`
+
+Purpose:
+- guess the exact game from taste/profile understanding and user clues;
+- no maximum number of attempts;
+- one explicitly named game = one attempt;
+- clarifying questions do not count as attempts;
+- do not inspect current deal catalog or search the web to identify the offer before the correct guess;
+- use current profile plus the completed 14-question calibration report as diagnostic context only;
+- do not mutate profile/scoring/production.
+
+Expected report:
+`reviews/worker_reports/personal-taste-game-guess-diagnostic-01.md`
 
 
 ## ACCEPTED — ЧАТ 1 — bounded personal taste calibration questionnaire run
