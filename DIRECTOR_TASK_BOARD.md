@@ -2,8 +2,8 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` is free after completed `WORKER_TASK_BOUNDED_PERSONAL_TASTE_CALIBRATION_QUESTIONNAIRE_RUN_01.md`; questionnaire finished 14/14 and is ready for a separate reviewed profile-update task.
-- `ЧАТ 2` assigned: `WORKER_TASK_PERSONAL_TASTE_GAME_GUESS_DIAGNOSTIC_01.md` — interactive unlimited-attempt diagnostic; each named game is one attempt, clarifications do not count, current deal catalog/web lookup is forbidden before the correct guess.
+- `ЧАТ 1` assigned: `WORKER_TASK_FRESH_DEAL_DISCOVERY_REFRESH_FIX_01.md` — repair fresh Steam deal discovery so newly discounted games can enter the canonical candidate universe instead of only refreshing prices on the old shortlist.
+- `ЧАТ 2` is free after completed `WORKER_TASK_PERSONAL_TASTE_GAME_GUESS_DIAGNOSTIC_01.md`; Mirror's Edge Catalyst was guessed correctly on attempt 2 and no production/profile state was changed.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -20,7 +20,30 @@
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
 
 
-## ACTIVE — ЧАТ 2 — personal taste game-guess diagnostic
+## ACTIVE — ЧАТ 1 — fresh deal discovery refresh fix
+
+Task:
+`WORKER_TASK_FRESH_DEAL_DISCOVERY_REFRESH_FIX_01.md`
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Status:
+`authorized_ready_for_worker`
+
+Purpose:
+- repair the stale candidate-universe refresh defect;
+- make a normal production refresh discover newly discounted games, not only recheck prices for previously known candidates;
+- use Mirror's Edge Catalyst / AppID 1233570 only as a regression probe, never as a special case;
+- add a fail-closed freshness/binding check so fresh prices over stale discovery cannot masquerade as a fresh recommendation universe;
+- reuse the existing GitHub-owned production pipeline and scheduler;
+- do not run semantic Deep/Dossier or modify ChatGPT Scheduled Tasks.
+
+Expected report:
+`reviews/worker_reports/fresh-deal-discovery-refresh-fix-01.md`
+
+
+## ACCEPTED — ЧАТ 2 — personal taste game-guess diagnostic
 
 Task:
 `WORKER_TASK_PERSONAL_TASTE_GAME_GUESS_DIAGNOSTIC_01.md`
@@ -29,19 +52,14 @@ Mode:
 `INTERACTIVE / DIAGNOSTIC`
 
 Status:
-`authorized_ready_for_worker`
+`diagnostic_complete_correct_guess_at_attempt_2`
 
-Purpose:
-- guess the exact game from taste/profile understanding and user clues;
-- no maximum number of attempts;
-- one explicitly named game = one attempt;
-- clarifying questions do not count as attempts;
-- do not inspect current deal catalog or search the web to identify the offer before the correct guess;
-- use current profile plus the completed 14-question calibration report as diagnostic context only;
-- do not mutate profile/scoring/production.
-
-Expected report:
-`reviews/worker_reports/personal-taste-game-guess-diagnostic-01.md`
+Director acceptance:
+- successful game: Mirror's Edge Catalyst;
+- correct on explicit attempt 2;
+- movement/continuous-flow fit and the current unusually deep deal were decisive;
+- the run exposed a finer movement distinction but did not justify direct scoring changes;
+- no canonical Taste profile, production scoring/ranking, Deep/Dossier state or Scheduled Task was modified.
 
 
 ## ACCEPTED — ЧАТ 1 — bounded personal taste calibration questionnaire run
