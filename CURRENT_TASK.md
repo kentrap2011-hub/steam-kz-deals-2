@@ -1,13 +1,16 @@
 # CURRENT TASK
 
-## IN PROGRESS — Bounded personal taste calibration questionnaire design 01
-Статус: `in_progress`.
+## COMPLETE — Bounded personal taste calibration questionnaire design 01
+Статус: `design_complete_ready_for_director_review`.
 - task: `WORKER_TASK_BOUNDED_PERSONAL_TASTE_CALIBRATION_QUESTIONNAIRE_DESIGN_01.md`;
 - mode: `READ-ONLY / RESEARCH / DESIGN`;
-- scope: choose and justify a finite frozen N of primary calibration questions from current profile evidence and prior backtest failures; clarifications stay within the same primary slot;
-- only durable output: `reviews/worker_reports/bounded-personal-taste-calibration-questionnaire-design-01.md`;
-- no questionnaire execution, profile/scoring/ranking/Deep/Dossier/production/Scheduled Task changes.
-
+- durable report: `reviews/worker_reports/bounded-personal-taste-calibration-questionnaire-design-01.md`;
+- report commit: `cf77e3b1687d027b9601dca4e19660861b751090`;
+- fixed questionnaire length: `N=14` primary questions; clarifications remain inside the current primary slot and cannot add independent preference targets;
+- first calibration run has no early finish; later-slot redundancy is handled only by same-slot reassignment to the next highest-value unresolved target;
+- report verification: all 24 required sections present, status and exactly one bounded next action present;
+- no questionnaire was asked; no canonical profile, scoring/ranking, Deep/Dossier contract/state, production semantic worker, site publication, Scheduled Task, or implementation PR was changed;
+- next bounded action: Director reviews the design and either accepts it or returns one bounded correction before any questionnaire run.
 
 ## COMPLETE — Personal taste scoring targeted offline backtest 02
 Статус: `evidence_inconclusive`.
