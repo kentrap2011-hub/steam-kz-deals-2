@@ -1300,12 +1300,15 @@
 - final validated reconciliation tree: `3a41184d7293b23f1f9c9fe184f31222ed91b8f4` / no-op validation head `c53d7907d1b37316411ad7e96acd2264e760dc65`;
 - semantic recovery intentionally not executed in developer chat.
 
-## ACTIVE — personal taste game-guess diagnostic 01
+## COMPLETE — personal taste game-guess diagnostic 01
 
-- Worker slot: `ЧАТ 2`.
-- Task: `WORKER_TASK_PERSONAL_TASTE_GAME_GUESS_DIAGNOSTIC_01.md`.
-- Status: `interactive_diagnostic_in_progress`.
-- Scope: combined taste + deal-value game-guess diagnostic from canonical Taste/profile evidence plus the completed 14-question calibration report as noncanonical context.
-- User-approved boundary amendment: current price/discount may be checked for bounded semantically plausible candidates and may influence guesses; mechanical catalog enumeration/filtering remains forbidden.
-- Attempt counter: 1 completed attempt (`Sunset Overdrive`) — incorrect; only an explicitly named concrete game increments it.
-- Completion report: `reviews/worker_reports/personal-taste-game-guess-diagnostic-01.md`.
+- Status: `diagnostic_complete_correct_guess_at_attempt_2`.
+- Correct game: `Mirror's Edge Catalyst`.
+- Attempt 1: `Sunset Overdrive` — incorrect.
+- Attempt 2: `Mirror's Edge Catalyst` — correct.
+- User-approved live amendment: current price/discount became part of the combined taste + deal-value diagnostic; mechanical catalog enumeration remained forbidden.
+- Decisive signals: pleasant continuous movement as the gameplay core, canonical positive `Mirror's Edge` movement benchmark, and an extreme current discount.
+- Diagnostic gap: the original no-price boundary did not match the intended purchase-oriented experiment.
+- Possible later profile refinement: distinguish intrinsic continuous-movement flow from movement valued mainly for mastery/challenge.
+- Canonical Taste profile and production scoring/ranking were not modified.
+- Report: `reviews/worker_reports/personal-taste-game-guess-diagnostic-01.md`.
