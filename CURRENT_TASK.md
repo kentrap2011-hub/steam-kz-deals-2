@@ -1305,7 +1305,7 @@
 - Worker slot: `ЧАТ 2`.
 - Task: `WORKER_TASK_PERSONAL_TASTE_GAME_GUESS_DIAGNOSTIC_01.md`.
 - Status: `interactive_diagnostic_in_progress`.
-- Scope: semantic game-guess diagnostic from canonical Taste/profile evidence plus the completed 14-question calibration report as noncanonical context.
-- Anti-cheating: do not inspect the current deal/catalog rows or use web/commercial metadata to identify the offer before the correct guess.
-- Attempt counter: starts at 0; only an explicitly named concrete game increments it.
+- Scope: combined taste + deal-value game-guess diagnostic from canonical Taste/profile evidence plus the completed 14-question calibration report as noncanonical context.
+- User-approved boundary amendment: current price/discount may be checked for bounded semantically plausible candidates and may influence guesses; mechanical catalog enumeration/filtering remains forbidden.
+- Attempt counter: 1 completed attempt (`Sunset Overdrive`) — incorrect; only an explicitly named concrete game increments it.
 - Completion report: `reviews/worker_reports/personal-taste-game-guess-diagnostic-01.md`.
