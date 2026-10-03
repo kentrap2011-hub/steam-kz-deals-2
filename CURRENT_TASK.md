@@ -1,5 +1,15 @@
 # CURRENT TASK
 
+## ACTIVE — Dossier frozen invocation rollover safety fix 01
+Статус: `implementation_in_progress_branch_only`.
+- task: `WORKER_TASK_DOSSIER_FROZEN_INVOCATION_ROLLOVER_SAFETY_FIX_01.md`;
+- branch: `fix/dossier-frozen-invocation-rollover-safety-01`;
+- scope: frozen GitHub-prepared Dossier invocation authority, rollover-safe late result persistence, exact current-cache reuse, focused regressions;
+- verified incident: snapshot A `448f12da…` / g1 `50ee2826…` was replaced by snapshot B `a9a1390c…` before publication even though the three exact games and active evidence binding remained compatible;
+- architecture: GitHub remains control plane; proposed nonce-only marker commit selects its actual parent as immutable authority; old result may persist neutral cache only against that proof and may never be rebound as a new-snapshot group;
+- sequencing gate: implementation branch work is allowed, but PR creation remains forbidden until `WORKER_TASK_PR_PRODUCTION_TRIGGER_ISOLATION_FIX_01.md` is accepted in `main`;
+- next bounded action: implement the frozen-authority validator, rollover-safe ingest/cache reconciliation and focused regression suite on this branch without opening a PR.
+
 ## COMPLETE — Bounded personal taste calibration questionnaire run 01
 Статус: `questionnaire_complete_ready_for_profile_update`.
 - task: `WORKER_TASK_BOUNDED_PERSONAL_TASTE_CALIBRATION_QUESTIONNAIRE_RUN_01.md`;
