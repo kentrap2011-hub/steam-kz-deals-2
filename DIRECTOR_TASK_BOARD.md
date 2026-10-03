@@ -1,11 +1,13 @@
 # DIRECTOR TASK BOARD
 
+`DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
+
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` assigned: `WORKER_TASK_MIRRORS_EDGE_CATALYST_POST_REFRESH_ABSENCE_DIAGNOSTIC_01.md` — diagnose why Mirror's Edge Catalyst (AppID 1233570) is still absent after PR #140, tracing the first failing production stage without implementing a fix.
+- `ЧАТ 1` is free after completed `WORKER_TASK_MIRRORS_EDGE_CATALYST_POST_REFRESH_ABSENCE_DIAGNOSTIC_01.md`; diagnosis is durable on `main` and must not be repeated. Root cause: post-PR-#140 live discovery still times out before persistence because the intended Steam input bound remains ineffective against the live ~100k-row result set.
 - `ЧАТ 2` is free after accepted `WORKER_TASK_DOSSIER_FROZEN_INVOCATION_ROLLOVER_SAFETY_FIX_01.md`; PR #143 is merged, durable report is on `main`, and all required PR checks were green.
-- Manual Russian-description semantic run is authorized as a separate one-shot worker using `config/russian_description_manual_semantic_worker_prompt.md`; current canonical status is `translation_required` with 82 queued descriptions and 0 nontranslatable blockers. This does not occupy ЧАТ 1/2 and does not authorize any Scheduled Task change.
-- Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
+- Manual Russian-description semantic worker is ACTIVE as a separate one-shot worker using `config/russian_description_manual_semantic_worker_prompt.md`; checkpoint 1 has already been submitted as `32caa3b35fb750cd31da7198f28e34855928edd6`. Before any continuation/status claim, check canonical ingest/current queue; do not redo checkpoint 1. This does not occupy ЧАТ 1/2 and does not authorize any Scheduled Task change.
+- Progressive Deep semantic worker is ACTIVE/RECENT: run start `0b47a0fe3830dfbcec37fa5a2395d6be08169067`, results already submitted for AppID 1577120 (`7005c0f...`) and AppID 1237980 (`0622b864...`). Do not rebuild/reorder/restart its scope. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -21,7 +23,7 @@
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
 
 
-## AUTHORIZED SEMANTIC — Russian description manual translation
+## ACTIVE SEMANTIC — Russian description manual translation
 
 Mode:
 `MANUAL ONE-SHOT SEMANTIC WORKER`
@@ -30,18 +32,20 @@ Canonical prompt:
 `config/russian_description_manual_semantic_worker_prompt.md`
 
 Status:
-`authorized_ready_for_user_launch`
+`active_checkpoint_1_submitted_pending_fresh_canonical_check`
 
-Current observed queue at authorization:
-- status: `translation_required`;
-- queue_count: 82;
-- nontranslatable_blocker_count: 0;
+Current handoff facts:
+- checkpoint 1 submission: `32caa3b35fb750cd31da7198f28e34855928edd6`;
+- authorization commit: `30f59b693cdef3eca520ddc78334850fdf850948`;
+- at handoff snapshot the canonical status still showed 82 queued/untranslated, so acceptance had not yet been observed;
+- before continuation, check whether GitHub ingest consumed checkpoint 1 and reread the fresh queue/status;
+- do not redo checkpoint 1;
 - GitHub remains owner of queue/order/bindings/ingest/completeness;
 - no Scheduled Task action is authorized;
 - this semantic run does not occupy physical worker slots ЧАТ 1/2.
 
 
-## ACTIVE — ЧАТ 1 — Mirror's Edge Catalyst post-refresh absence diagnostic
+## ACCEPTED — ЧАТ 1 — Mirror's Edge Catalyst post-refresh absence diagnostic
 
 Task:
 `WORKER_TASK_MIRRORS_EDGE_CATALYST_POST_REFRESH_ABSENCE_DIAGNOSTIC_01.md`
@@ -50,14 +54,16 @@ Mode:
 `DIAGNOSTIC / READ-ONLY PRODUCTION TRACE`
 
 Status:
-`authorized_ready_for_worker`
+`diagnosis_complete_root_cause_identified`
 
-Purpose:
-- trace AppID 1233570 through current discovery -> shortlist -> mailing -> pre-AI -> semantic -> visual/publication stages;
-- identify the first causal stage of absence;
-- determine whether PR #140 is defective or merely never reached live acceptance;
-- produce a durable diagnostic report only;
-- no implementation, special case, production dispatch, semantic worker execution, or Scheduled Task changes.
+Director handoff:
+- diagnosis report is on `main`;
+- post-PR-#140 production discovery run `37120664964` really executed but hit the 60-minute collector timeout;
+- live Steam still exposed about 100307 rows despite the intended category bound;
+- canonical discovery therefore remained stale and Catalyst never reached downstream stages;
+- PR #140 freshness fail-closed guards work, but its live discovery-bounding path is insufficient;
+- do not redo diagnosis;
+- wait for explicit user authorization before creating the bounded implementation follow-up.
 
 
 ## ACCEPTED — ЧАТ 1 — fresh deal discovery refresh fix
