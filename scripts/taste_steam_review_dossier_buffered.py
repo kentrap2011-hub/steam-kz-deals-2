@@ -349,8 +349,6 @@ def reconcile_current_pending_groups_from_cache(
         frozen_authority_audit_path=frozen_authority_audit_path,
         retryable_rejection_root=retryable_rejection_root,
         terminal_receipt_archive_root=terminal_receipt_archive_root,
-        frozen_authority_audit_path=frozen_authority_audit_path,
-        repo_root=repo_root,
     )
 
     prefix_count = accepted_contiguous_prefix_item_count(next_manifest, contract)
