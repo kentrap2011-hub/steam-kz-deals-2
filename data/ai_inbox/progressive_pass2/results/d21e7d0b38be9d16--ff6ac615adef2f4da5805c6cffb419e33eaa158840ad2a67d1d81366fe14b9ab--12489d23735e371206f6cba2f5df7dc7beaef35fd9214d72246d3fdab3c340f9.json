@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "0b47a0fe3830dfbcec37fa5a2395d6be08169067",
+  "run_start_authority_commit": "43dccbbb780627bab1f194821a2d315dd428723f",
+  "run_started_at_utc": "2026-10-03T16:47:36+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+  "work_id": "ff6ac615adef2f4da5805c6cffb419e33eaa158840ad2a67d1d81366fe14b9ab",
+  "family_id": "game:2366980",
+  "taste_subject_key": "App_2366980",
+  "appid": "2366980",
+  "taste_fingerprint": "b18c0a89cdf7c316bc98f2e299eed4b3cd618fc84842e13ee13e57603f389993",
+  "candidate_context_sha256": "20e1d5eebca8a63aee98fe0f481df195a3f56e90d761438ba323606d5fb63dcd",
+  "dossier_content_sha256": "6e574ede072111c3835f262758e29fd5f4a3130d37089bfac59f53d73f7599e3",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "12489d23735e371206f6cba2f5df7dc7beaef35fd9214d72246d3fdab3c340f9",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Сюрреалистический юмор, сильная озвучка, рисованная анимация и плотность визуальных шуток — устойчивые сильные стороны и прямое совпадение с твоей любовью к яркой подаче и юмору.",
+    "Короткая продолжительность помогает комедийному ритму и не даёт почти немеханическому core loop слишком сильно растянуться.",
+    "Эксцентричные жители и постоянные маленькие сценки создают запоминающуюся идентичность даже при очень простой интерактивности."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 35,
+    "development_variety": 35,
+    "structure_pacing_direction": 86,
+    "identity_hooks": 95,
+    "breadth_of_match": 70
+  },
+  "score_findings": [
+    {
+      "finding_id": "humor-and-presentation",
+      "text_ru": "Сюрреалистический британский юмор, озвучка, рисованная анимация, визуальные шутки и эксцентричные жители — главный содержательный крючок игры и именно та подача, которая в твоём профиле уже умеет вытягивать простой геймплей.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/stopgame_cards/23/what_liked/0",
+          "profile_value_sha256": "d965cbf57cbcaa0062509aca5b6fbe230de4fe1cc17c41090615d21f2022a6ed",
+          "match_text_ru": "Юмор уже является прямым подтверждённым положительным сигналом в твоём игровом опыте."
+        },
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Узнаваемый визуальный язык, юмор и подача способны заметно усилить для тебя игру."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 95
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 70
+        }
+      ]
+    },
+    {
+      "finding_id": "compact-comic-pacing",
+      "text_ru": "Кампания рассчитана всего на несколько часов, поэтому шутки и сценки сменяют друг друга быстро и почти не успевают растянуть минималистичный игровой цикл.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/tемп/note",
+          "profile_value_sha256": "a79a54657031ce862cf6c6d317d9adbc854a447415cf166fe07efc3487e41761",
+          "match_text_ru": "Тебе не нужен постоянный экшен, но игра должна регулярно давать новую причину продолжать."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 86
+        }
+      ]
+    },
+    {
+      "finding_id": "minimal-interaction",
+      "text_ru": "Большинство задач сводится к движению, прыжку и удару по окружению; сложных боёв, пазлов или пространства для освоения почти нет, поэтому механический слой остаётся очень тонким.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Мастерство и поиск подхода — один из сильных положительных сигналов твоего профиля, а здесь этого слоя почти нет."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "lowers",
+          "normalized_value": 35
+        }
+      ]
+    },
+    {
+      "finding_id": "limited-replay-development",
+      "text_ru": "Линейная структура и шутки, рассчитанные на первое открытие, оставляют мало нового для повторного прохождения; возвращение в основном нужно ради достижений или любимых сцен.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/lowers",
+          "profile_value_sha256": "9af4e57dc35172ff77fd80946c8385d99dff55971301a04cb17db942fe3c717c",
+          "match_text_ru": "Когда формула быстро раскрывается и затем не развивается, твой интерес обычно снижается."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "lowers",
+          "normalized_value": 35
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Почти весь геймплей ограничен движением, прыжками и ударом по окружению, а механического вызова практически нет; для тебя это риск слишком низкой активной вовлечённости, если юмор не удержит внимание.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Игра очень короткая: для комедийного темпа это плюс, но после нескольких часов контент заканчивается.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Повторное прохождение даёт мало нового, потому что структура линейна, а большая часть юмора работает сильнее при первом открытии сцен.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть изолированная жалоба на вылеты при паузе или переключении из игры в отдельных сценах.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  }
+}
