@@ -1,7 +1,8 @@
 # Taste Dossier Scheduled Runtime — frozen invocation traversal
 
 Runtime contract: `TASTE-STEAM-REVIEW-DOSSIER-RUNTIME-PROMPT-V1`  
-Revision: `frozen-invocation-rollover-v1`
+Revision: `nonblocking-group-progress-v3-semantic-exhaustion-terminal-receipt`
+Frozen-authority extension: `frozen-invocation-rollover-v1`
 
 This file governs Scheduled Dossier **runtime traversal, frozen run-start authority, stop behavior, schedule authority, exact buffered candidate identity serialization, and exact semantic-exhaustion terminal transport**. It is intentionally not part of the dossier semantic evidence compatibility binding. The semantic research/content rules remain in `config/taste_steam_review_dossier_worker_prompt.md`, `config/taste_steam_review_dossier_schema.json`, and `config/taste_steam_review_dossier_web_evidence_contract.json`.
 
@@ -92,7 +93,7 @@ A successful create means only `candidate buffered`. It does not mean canonical 
 
 If daily rollover happened after the marker, still publish the exact old frozen identity. Never rewrite it as the new snapshot/group. GitHub may accept its validated Dossiers into neutral cache, but current snapshot progress may advance only through a separate exact current-cache reconciliation.
 
-## Exact authority-referenced semantic-exhaustion terminal receipt
+## Exact semantic-exhaustion terminal receipt
 
 The semantic worker prompt still owns evidence research and the fail-closed execution ledger. Create a terminal receipt only when **all** of these are true for the exact frozen group:
 
