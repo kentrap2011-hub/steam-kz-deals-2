@@ -76,7 +76,8 @@ def validate_terminal_receipt(receipt, descriptor):
         "blocked_game",
         "route_exhaustion",
     }
-    expected_fields = descriptor_fields | terminal_fields
+    optional_fields = {"run_start_authority"} if "run_start_authority" in receipt else set()
+    expected_fields = descriptor_fields | terminal_fields | optional_fields
     if set(receipt) != expected_fields:
         raise ValueError("dossier terminal receipt field set is invalid")
 
