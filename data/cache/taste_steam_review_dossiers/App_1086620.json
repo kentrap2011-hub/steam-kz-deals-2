@@ -4,21 +4,19 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
-    "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
-    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
-    "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
   "appid": "1086620",
   "title": "Selfloss",
-  "generated_at_utc": "2026-09-23T18:34:00Z",
-  "expires_at_utc": "2026-10-13T18:34:00Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Selfloss",
@@ -31,42 +29,247 @@
       {
         "kind": "appid",
         "value": "1086620"
-      },
-      {
-        "kind": "developer",
-        "value": "Goodwin Games"
       }
     ]
   },
-  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "friction",
-      "statement": "Russian player feedback describes an interesting story but reports bugs and artificially difficult sections that create substantial frustration.",
+      "category": "mechanics",
+      "statement": "The central play loop combines exploration, staff-based light combat, environmental interaction, puzzles and boat travel. Players describe the concept as distinctive, but execution quality varies across these activities.",
       "sentiment": "mixed",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "russian"
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "source_ids": [
+        "source-002",
+        "source-003"
       ],
-      "evidence_status": "durable",
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-004",
+        "feedback-005"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "friction",
+      "statement": "Control feel is a recurring complaint: players report stiff or inconsistent movement, camera obstruction, awkward boat handling, timing-sensitive fishing and contextual inputs that can make otherwise simple actions tiring.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
+      "mention_count": 3,
       "source_ids": [
         "source-002"
       ],
       "player_feedback_ids": [
-        "fallback-001"
+        "feedback-002",
+        "feedback-003",
+        "feedback-004"
+      ],
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "structure",
+      "statement": "Exploration and puzzles can be relaxing when the route is clear, but unclear switches, passages or camera framing can leave players circling areas and interrupt the intended atmosphere.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-005"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "other",
+      "statement": "The visual direction, subdued music and myth-inspired atmosphere are repeatedly praised. Story reception is more divided: some players find the journey moving, while others find its meaning or character motivation difficult to follow.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-005"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "pacing",
+      "statement": "Selfloss aims for a measured, contemplative journey rather than constant action. For some players that supports the atmosphere; for others, navigation and mechanical friction turn the slow pace into boredom.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-005"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "difficulty",
+      "statement": "Players describe most challenge as coming less from demanding combat strategy than from control, camera, fishing or navigation friction; puzzle clarity can be a bigger obstacle than enemy difficulty.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-005"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "The same slow, atmospheric design is experienced as meditative and beautiful by some players but as tedious when unclear navigation or awkward controls dominate.",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-005"
       ]
     }
   ],
-  "conflicts": [],
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "source_mix_status": "single_source_only",
-    "single_source_reason": "One contract-usable exact-product Russian user-review collection supplied the serialized durable finding.",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
     "russian_attempt": "found_and_used",
-    "overall_strength": "limited",
-    "stop_reason": "evidence_stable"
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            4
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            5
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            4
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            2
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2,
+            4,
+            5
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        }
+      ],
+      "closure_basis": "compact_central_experience",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
   },
   "provenance": {
     "sources": [
@@ -74,34 +277,89 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1086620/Selfloss/",
-        "publication_date": "2024-09-05",
+        "url": "https://store.steampowered.com/app/1086620/",
+        "publication_date": null,
         "language": "non_russian",
-        "freshness": "older",
         "evidence_role": "identity",
-        "player_feedback": false
+        "player_feedback": false,
+        "freshness": "unknown"
       },
       {
         "source_id": "source-002",
         "source_type": "store_user_reviews",
-        "domain": "metacritic.com",
-        "url": "https://www.metacritic.com/game/selfloss/user-reviews/",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1086620/Selfloss/?curator_clanid=11116029&l=russian",
         "publication_date": null,
-        "language": "mixed",
-        "freshness": "unknown",
+        "language": "russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection"
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid_title_release",
+          "appid": "1086620",
+          "title": "Selfloss",
+          "release_year": 2024
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/pcgaming/comments/1f9mcui",
+        "publication_date": "2024-09-05",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "Selfloss",
+          "release_year": 2024
+        },
+        "freshness": "older"
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "fallback-001",
+        "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "publication_date": "2025-01-01",
+        "publication_date": null,
         "language": "russian",
-        "identity_mode": "transient_author_deduped"
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-003",
+        "publication_date": "2024-09-08",
+        "language": "non_russian",
+        "acquisition_mode": "search_result_observation"
       }
     ]
-  }
+  },
+  "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+  "generated_at_utc": "2026-10-03T13:24:00Z",
+  "expires_at_utc": "2026-10-23T13:24:00Z"
 }
