@@ -15,14 +15,14 @@
     "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
     "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
-  "appid": "1222140",
-  "title": "Detroit: Become Human",
+  "appid": "1216710",
+  "title": "Cyber Manhunt",
   "generated_at_utc": "2026-10-03T16:34:23Z",
   "expires_at_utc": "2026-10-23T16:34:23Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Detroit: Become Human",
-    "release_year": 2020,
+    "work_title": "Cyber Manhunt",
+    "release_year": 2021,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "source-001"
@@ -30,50 +30,152 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1222140"
+        "value": "1216710"
       }
     ]
   },
-  "summary": "Evidence summary: 8 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 7 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "structure",
-      "statement": "Branching choices and visible consequence flowcharts are the defining system. Players repeatedly report that decisions materially change scenes, relationships, survival and endings, which encourages experimentation across runs.",
+      "category": "mechanics",
+      "statement": "Investigations revolve around searching public data, social engineering, account access and deduction. Players repeatedly find the information-gathering loop engaging because clues build toward a coherent picture of a target.",
       "sentiment": "positive",
       "recurrence": "moderate",
-      "mention_count": 5,
+      "mention_count": 3,
       "evidence_languages": [
-        "russian",
         "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "source-002",
-        "source-004",
-        "source-005",
-        "source-006"
+        "source-003"
       ],
       "player_feedback_ids": [
-        "feedback-001",
         "feedback-002",
+        "feedback-003",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "The cases are strongly authored and mostly linear rather than open-ended simulations; some players value the focused mystery structure, while others want more branches, failure states and alternative approaches.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Riddles and timed events create difficulty spikes. Players report that some clues or wording are vague enough to cause repeated attempts even after the broader solution is understood.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-004",
         "feedback-005",
-        "feedback-006",
         "feedback-007"
       ]
     },
     {
-      "category": "repetition",
-      "statement": "Replay value is unusually high for the genre because players can deliberately reverse earlier decisions and uncover substantial alternate routes, although some optional flowchart branches matter more locally than globally.",
+      "category": "other",
+      "statement": "The story's focus on privacy, cyberbullying, manipulation and the ethics of big-data investigation is a recurring strength, with players describing the themes as thought-provoking even when individual scenarios simplify real hacking.",
       "sentiment": "positive",
       "recurrence": "moderate",
-      "mention_count": 4,
+      "mention_count": 3,
       "evidence_languages": [
-        "russian",
         "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "translation",
+      "statement": "English translation quality is a recurring historical complaint in this text-heavy game, including awkward phrasing and errors that can make clues harder to parse. No recent dated player evidence was found to establish the present translation state.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "uncertain",
+      "source_ids": [
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-005",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "localization",
+      "statement": "Russian is not officially supported, and a Russian-language Steam review describes the lack of Russian as a meaningful accessibility issue. The retrieved Russian record is old, so present practical impact is not treated as current-state evidence.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "uncertain",
+      "source_ids": [
+        "source-001",
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "Repeated clue collection, data entry and minigames can become tedious for players who approach the title as a realistic hacking simulator rather than as a narrative puzzle game.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-004"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "The same tightly scripted investigation structure is praised for narrative momentum and deduction, but criticized for linearity and for occasional clue or translation friction that limits free-form problem solving.",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "source_ids": [
         "source-003",
         "source-004",
         "source-005"
@@ -81,143 +183,8 @@
       "player_feedback_ids": [
         "feedback-002",
         "feedback-004",
-        "feedback-005",
-        "feedback-006"
-      ]
-    },
-    {
-      "category": "other",
-      "statement": "Character attachment, emotional stakes and cinematic presentation are recurring strengths; first-time players describe becoming invested in the three android protagonists and in the consequences of their choices.",
-      "sentiment": "positive",
-      "recurrence": "moderate",
-      "mention_count": 4,
-      "evidence_languages": [
-        "russian",
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-002",
-        "source-004",
-        "source-005",
-        "source-006"
-      ],
-      "player_feedback_ids": [
-        "feedback-001",
-        "feedback-005",
         "feedback-006",
         "feedback-007"
-      ]
-    },
-    {
-      "category": "mechanics",
-      "statement": "Moment-to-moment interaction is deliberately light and centered on walking, investigation prompts, dialogue selection and QTE sequences rather than conventional action systems.",
-      "sentiment": "neutral",
-      "recurrence": "moderate",
-      "mention_count": 2,
-      "evidence_languages": [
-        "russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-002",
-        "source-003"
-      ],
-      "player_feedback_ids": [
-        "feedback-001",
-        "feedback-003"
-      ]
-    },
-    {
-      "category": "difficulty",
-      "statement": "QTEs can create sudden difficulty spikes inside otherwise smooth narrative pacing; players report that mistakes in late chapters can sharply alter outcomes, making execution pressure part of the choice experience.",
-      "sentiment": "mixed",
-      "recurrence": "limited",
-      "mention_count": 2,
-      "evidence_languages": [
-        "russian",
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-003",
-        "source-006"
-      ],
-      "player_feedback_ids": [
-        "feedback-003",
-        "feedback-007"
-      ]
-    },
-    {
-      "category": "pacing",
-      "statement": "Pacing varies by storyline: tense investigation and action sections contrast with slower domestic or travel sequences, and some players find individual character arcs substantially less engaging than others.",
-      "sentiment": "mixed",
-      "recurrence": "limited",
-      "mention_count": 2,
-      "evidence_languages": [
-        "russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-002",
-        "source-003"
-      ],
-      "player_feedback_ids": [
-        "feedback-002",
-        "feedback-004"
-      ]
-    },
-    {
-      "category": "other",
-      "statement": "The android-rights premise provokes both emotional engagement and disagreement. Some players embrace the moral framing, while others object that the game pushes its preferred interpretation too forcefully or leaves philosophical questions underexplored.",
-      "sentiment": "mixed",
-      "recurrence": "limited",
-      "mention_count": 2,
-      "evidence_languages": [
-        "russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-003"
-      ],
-      "player_feedback_ids": [
-        "feedback-003",
-        "feedback-004"
-      ]
-    },
-    {
-      "category": "friction",
-      "statement": "The chapter system lets players revisit scenes, but changing an earlier decision requires continuing forward from that point for the consequences to propagate; this can make targeted route exploration more cumbersome than simply selecting any later branch.",
-      "sentiment": "mixed",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-004"
-      ],
-      "player_feedback_ids": [
-        "feedback-005"
-      ]
-    }
-  ],
-  "conflicts": [
-    {
-      "statement": "Players broadly agree that choices meaningfully branch the experience, but differ on the underlying narrative framing: the consequence system drives strong emotional investment for some while others find the story's themes too prescriptive or uneven.",
-      "recurrence": "moderate",
-      "mention_count": 4,
-      "source_ids": [
-        "source-002",
-        "source-003",
-        "source-004"
-      ],
-      "player_feedback_ids": [
-        "feedback-001",
-        "feedback-003",
-        "feedback-004",
-        "feedback-005"
       ]
     }
   ],
@@ -235,15 +202,14 @@
           "dimension": "core_play_mechanics",
           "state": "covered",
           "observation_indices": [
-            3
+            0
           ]
         },
         {
           "dimension": "controls_game_feel",
           "state": "covered",
           "observation_indices": [
-            3,
-            4
+            6
           ]
         },
         {
@@ -255,22 +221,22 @@
           "dimension": "variety_repetition_over_time",
           "state": "covered",
           "observation_indices": [
-            1
+            6
           ]
         },
         {
           "dimension": "difficulty_mastery_learning_friction",
           "state": "covered",
           "observation_indices": [
-            4
+            2
           ]
         },
         {
           "dimension": "pacing_structure_direction",
           "state": "covered",
           "observation_indices": [
-            0,
-            5
+            1,
+            2
           ]
         },
         {
@@ -278,7 +244,7 @@
           "state": "covered",
           "observation_indices": [
             0,
-            7
+            1
           ]
         },
         {
@@ -290,8 +256,7 @@
           "dimension": "story_characters_identity_hooks",
           "state": "covered",
           "observation_indices": [
-            2,
-            6
+            3
           ]
         },
         {
@@ -299,24 +264,27 @@
           "state": "covered",
           "observation_indices": [
             0,
-            1,
-            2
+            3
           ]
         },
         {
           "dimension": "recurring_complaints_tradeoffs",
           "state": "covered",
           "observation_indices": [
+            1,
+            2,
             4,
             5,
-            6,
-            7
+            6
           ]
         },
         {
           "dimension": "technical_performance_localization_regional",
-          "state": "not_material_or_not_applicable",
-          "observation_indices": []
+          "state": "covered",
+          "observation_indices": [
+            4,
+            5
+          ]
         }
       ],
       "closure_basis": "broad_neutral_picture",
@@ -330,7 +298,7 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1222140/Detroit_Become_Human/",
+        "url": "https://store.steampowered.com/app/1216710/Cyber_Manhunt/",
         "publication_date": null,
         "language": "non_russian",
         "evidence_role": "identity",
@@ -339,17 +307,17 @@
       },
       {
         "source_id": "source-002",
-        "source_type": "steam_reviews",
-        "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1222140/reviews/?l=russian",
+        "source_type": "store_user_reviews",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1216710/_/?curator_clanid=34077545&l=russian",
         "publication_date": null,
         "language": "russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection",
+        "feedback_surface_mode": "search_result_representation",
         "exact_product_binding": {
           "basis": "source_appid",
-          "appid": "1222140",
+          "appid": "1216710",
           "title": null,
           "release_year": null
         },
@@ -359,15 +327,15 @@
         "source_id": "source-003",
         "source_type": "steam_reviews",
         "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1222140/negativereviews/?browsefilter=toprated&l=russian",
+        "url": "https://steamcommunity.com/app/1216710/reviews/?browsefilter=toprated",
         "publication_date": null,
-        "language": "russian",
+        "language": "non_russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
         "feedback_surface_mode": "concrete_item_collection",
         "exact_product_binding": {
           "basis": "source_appid",
-          "appid": "1222140",
+          "appid": "1216710",
           "title": null,
           "release_year": null
         },
@@ -375,90 +343,90 @@
       },
       {
         "source_id": "source-004",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/DetroitBecomeHuman/comments/1udimeg/first_time_player_a_few_thoughts/",
-        "publication_date": "2026-06-23",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1216710/discussions/0/4633595582109372493/",
+        "publication_date": "2020-08-25",
         "language": "non_russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
-        "freshness": "recent"
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1216710",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "older"
       },
       {
         "source_id": "source-005",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/DetroitBecomeHuman/comments/1wqgssx/first_play_through/",
-        "publication_date": "2026-09-26",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1216710/discussions/0/3103512736626099306/",
+        "publication_date": "2021-02-09",
         "language": "non_russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
-        "freshness": "recent"
-      },
-      {
-        "source_id": "source-006",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/DetroitBecomeHuman/comments/1rueldi/i_finished_my_first_playthrough_of_the_game_today/",
-        "publication_date": "2026-03-15",
-        "language": "non_russian",
-        "evidence_role": "durable_trait",
-        "player_feedback": true,
-        "freshness": "recent"
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1216710",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "older"
       }
     ],
     "player_feedback_records": [
       {
         "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "publication_date": null,
+        "publication_date": "2020-08-28",
         "language": "russian",
-        "acquisition_mode": "inspected_collection_item"
+        "acquisition_mode": "search_result_observation"
       },
       {
         "feedback_id": "feedback-002",
-        "source_id": "source-002",
-        "publication_date": null,
-        "language": "russian",
+        "source_id": "source-003",
+        "publication_date": "2023-07-13",
+        "language": "non_russian",
         "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-003",
         "source_id": "source-003",
-        "publication_date": "2025-07-09",
-        "language": "russian",
+        "publication_date": "2021-12-27",
+        "language": "non_russian",
         "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-004",
         "source_id": "source-003",
-        "publication_date": "2025-11-27",
-        "language": "russian",
+        "publication_date": "2021-03-10",
+        "language": "non_russian",
         "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-005",
-        "source_id": "source-004",
-        "publication_date": "2026-06-23",
+        "source_id": "source-003",
+        "publication_date": "2020-08-25",
         "language": "non_russian",
-        "acquisition_mode": "stable_item",
-        "url": "https://www.reddit.com/r/DetroitBecomeHuman/comments/1udimeg/first_time_player_a_few_thoughts/"
+        "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-006",
-        "source_id": "source-005",
-        "publication_date": "2026-09-26",
+        "source_id": "source-004",
+        "publication_date": "2020-08-25",
         "language": "non_russian",
-        "acquisition_mode": "stable_item",
-        "url": "https://www.reddit.com/r/DetroitBecomeHuman/comments/1wqgssx/first_play_through/"
+        "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-007",
-        "source_id": "source-006",
-        "publication_date": "2026-03-15",
+        "source_id": "source-005",
+        "publication_date": "2021-02-09",
         "language": "non_russian",
-        "acquisition_mode": "stable_item",
-        "url": "https://www.reddit.com/r/DetroitBecomeHuman/comments/1rueldi/i_finished_my_first_playthrough_of_the_game_today/"
+        "acquisition_mode": "inspected_collection_item"
       }
     ]
   }
