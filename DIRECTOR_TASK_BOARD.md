@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` assigned: `WORKER_TASK_FRESH_DEAL_DISCOVERY_REFRESH_FIX_01.md` — repair fresh Steam deal discovery so newly discounted games can enter the canonical candidate universe instead of only refreshing prices on the old shortlist.
+- `ЧАТ 1` active on PR #140 `Fix stale deal discovery freshness handoff`; branch has 22 commits and core fresh-discovery regressions pass, but `Steam KZ production shortlist` CI is failing in historical visual freshness regression under shallow checkout; final report/merge are still pending and branch must reconcile with current main before completion.
 - `ЧАТ 2` is free after completed `WORKER_TASK_PERSONAL_TASTE_GAME_GUESS_DIAGNOSTIC_01.md`; Mirror's Edge Catalyst was guessed correctly on attempt 2 and no production/profile state was changed.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
@@ -29,7 +29,7 @@ Mode:
 `IMPLEMENT / VALIDATE`
 
 Status:
-`authorized_ready_for_worker`
+`implementation_in_progress_pr_140_ci_failure_pending`
 
 Purpose:
 - repair the stale candidate-universe refresh defect;
