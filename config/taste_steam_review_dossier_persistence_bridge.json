@@ -2,19 +2,21 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-PERSISTENCE-BRIDGE-V1",
   "version": 1,
   "status": "active",
-  "contract_revision": "semantic-exhaustion-terminal-receipt-2026-10-01",
+  "contract_revision": "frozen-invocation-rollover-safety-2026-10-03",
   "parent_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "ownership": {
-    "submission_producer": "scheduled_chatgpt_dossier_worker_candidate_or_exact_semantic_terminal",
+    "submission_producer": "scheduled_chatgpt_dossier_worker_exact_marker_parent_bound_candidate_or_semantic_terminal",
     "submission_transport": "connected_github_contents_create_file",
     "worker_read_projection_producer": "github_actions_control_plane",
     "validation_persistence_progress_completeness": "github_actions_control_plane_per_group",
     "direct_semantic_worker_canonical_state_write": false,
     "buffer_cleanup": "github_actions_control_plane",
-    "gap_retry_stale_replay_interpretation": "github_actions_control_plane_failed_group_recovery_separate_from_normal_first_pass"
+    "gap_retry_stale_replay_interpretation": "github_actions_control_plane_failed_group_recovery_separate_from_normal_first_pass",
+    "frozen_invocation_authority": "github_actual_marker_parent_plus_git_history",
+    "current_snapshot_progress_reconciliation": "github_actions_control_plane_exact_current_cache_validation"
   },
   "transition": {
-    "rule": "compact_worker_index_and_immutable_group_descriptors_are_the_active_worker_read_surface;create_only_buffered_dossier_candidate_or_exact_semantic_exhaustion_terminal_receipt_are_the_active_live_worker_transports;legacy_current_checkpoint_create_only_is_retained_only_as_an_implemented_compatibility_fallback",
+    "rule": "compact worker projection remains the current start surface; each semantic invocation creates one nonce-only marker whose actual Git parent freezes its work view; create-only candidate/terminal transports may arrive after rollover and are classified without rebinding old group identity",
     "active_worker_read_mode": "compact_worker_index_and_immutable_group_descriptors_v1",
     "active_transport_mode": "buffered_group_candidate_or_semantic_terminal_create_only_v1",
     "compatibility_fallback_transport_mode": "current_checkpoint_create_only_v1",
@@ -29,7 +31,10 @@
       "worker_prompt_alignment",
       "contract_runtime_regression_validation",
       "director_authorized_live_prompt_installation",
-      "exact_bound_semantic_exhaustion_terminal_receipt_validation_and_zero_attempt_invalid_transport_rejection"
+      "exact_bound_semantic_exhaustion_terminal_receipt_validation_and_zero_attempt_invalid_transport_rejection",
+      "github_selected_marker_parent_frozen_invocation_authority",
+      "late_old_snapshot_candidate_neutral_cache_persistence_without_current_group_rebinding",
+      "exact_current_cache_group_reconciliation_after_persistence"
     ]
   },
   "worker_read_projection": {
@@ -44,9 +49,9 @@
     "source_rule": "index_and_descriptors_are_mechanically_derived_only_from_the_current_full_canonical_manifest_and_its_validated_immutable_group_plan",
     "same_snapshot_descriptor_rule": "descriptor_bytes_are_immutable_when_canonical_progress_advances",
     "same_snapshot_progress_rule": "index next_pending_sequence and group counts change from canonical manifest.group_progress; descriptor bytes remain immutable",
-    "daily_rollover_rule": "new_snapshot_projection_replaces_the_active_projection_and_old_snapshot_descriptor_directories_are_removed_from_current_tree",
-    "worker_rule": "start_from_next_pending_sequence;after_successful_create_only_candidate_or_semantic_terminal_publication_re_read_index_for_liveness_and_continue_to_the_next_pending_predeclared_group_in_plan_order",
-    "liveness_rule": "between_locally_sequential_groups_re_read_index_only_for_snapshot_plan_and_binding_liveness_not_as_a_progress_gate",
+    "daily_rollover_rule": "new snapshot replaces only the active current-tree projection; a pre-rollover marker parent preserves immutable historical authority in Git",
+    "worker_rule": "preflight current index, create one nonce-only marker, freeze the actual marker-parent index/descriptors/cache view, then traverse only that frozen pending list",
+    "liveness_rule": "marker parent is the invocation liveness boundary; later main movement is not a semantic cancellation signal",
     "failure_rule": "missing_stale_mismatched_or_unreadable_projection_fails_closed_without_full_manifest_reconstruction_fallback"
   },
   "submission": {
@@ -74,7 +79,7 @@
     "action": "github_contents_create_file",
     "mode": "immutable_create_only_exactly_one_candidate_or_terminal_outcome_file_per_predeclared_group",
     "path_template": "data/ai_inbox/taste_steam_review_dossiers/{snapshot_id}--g{sequence:06d}--{group_sha256}.json",
-    "descriptor_source": "validated_compact_worker_group_descriptor_projected_from_full_canonical_manifest",
+    "descriptor_source": "exact_descriptor_from_the_github_selected_marker_parent_frozen_view",
     "multiple_pending_groups_same_snapshot_allowed": true,
     "alternate_retry_filenames_allowed": false,
     "worker_overwrite_update_delete_allowed": false,
@@ -92,15 +97,26 @@
       "source_queue_sha256"
     ],
     "group_identity_rule": "must_exactly_match_the_immutable_github_predeclared_group_descriptor_and_must_not_depend_on_mutable_scope_sha256",
-    "successful_create_rule": "within_the_same_invocation_the_worker_may_continue_to_the_next_pending_predeclared_group_without_waiting_for_canonical_ingest",
+    "successful_create_rule": "worker may continue through the frozen pending list without waiting for ingest or rereading mutable current snapshot liveness",
     "existing_expected_artifact_rule": "if_a_deterministic_candidate_or_terminal_receipt_for_a_pending_group_already_exists_do_not_overwrite_rename_or_create_alternate;github_must_classify_transport_state_and_future_invocations_resume_from_next_pending",
-    "interrupted_invocation_rule": "next_invocation_reloads_github_worker_index_next_pending_sequence_and_never_restarts_from_a_historical_failed_group",
+    "interrupted_invocation_rule": "next invocation creates a new marker from then-current GitHub state; no old authority commit is worker-selected",
     "buffer_semantics": {
       "transport_only": true,
       "canonical_progress": false,
       "retry_state": false,
       "chatgpt_queue": false,
       "completeness_authority": false
+    },
+    "run_start_reference": {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-REFERENCE-V1",
+      "required_fields": [
+        "schema",
+        "schema_version",
+        "run_start_anchor_commit",
+        "run_start_nonce"
+      ],
+      "worker_selected_authority_commit_allowed": false,
+      "authority_resolution": "github derives actual single parent of durable marker commit"
     }
   },
   "ingest": {
@@ -108,7 +124,7 @@
     "workflow": ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml",
     "adapter": "scripts/ingest_taste_steam_review_dossier_inbox.py",
     "canonical_ingest": "scripts/ingest_taste_steam_review_dossiers.py",
-    "same_snapshot_only": true,
+    "same_snapshot_only": false,
     "source_queue_reread": false,
     "canonical_validation_source": "full_canonical_work_manifest_not_worker_projection",
     "accepted_submission_cleanup": "delete_inbox_artifact_in_same_canonical_commit",
@@ -119,16 +135,22 @@
       "data/production/pre_ai/taste_steam_review_dossier_worker_groups/**",
       "data/ai_inbox/taste_steam_review_dossiers/**"
     ],
-    "runtime_status": "active_state_based_nonblocking_candidate_or_semantic_terminal_drain_with_retryable_invalid_transport_rejection_and_legacy_current_checkpoint_compatibility_fallback"
+    "runtime_status": "active_state_based_current_and_marker_parent_frozen_transport_drain_with_exact_current_cache_reconciliation_retryable_invalid_transport_rejection_and_legacy_current_checkpoint_compatibility_fallback",
+    "authority_modes": [
+      "current_snapshot_exact_group_transport",
+      "github_verified_marker_parent_frozen_old_snapshot_transport"
+    ],
+    "old_snapshot_progress_rule": "authority-proven old transport may update neutral cache/audit only; it never directly mutates current group state",
+    "current_cache_reconciliation_rule": "after valid cache persistence mark a current pending group accepted only if every exact current item strictly validates from fresh current-compatible cache"
   },
   "buffered_drain": {
     "status": "active",
     "owner": "github_actions_control_plane",
     "trigger_semantics": "buffer_push_is_only_a_wake_up_signal_not_the_queue_record",
-    "state_source": "current_repository_full_canonical_manifest_group_plan_and_buffer",
+    "state_source": "current canonical manifest plus transport inbox plus immutable Git history for authority-referenced frozen transports",
     "worker_projection_is_acceptance_authority": false,
     "expected_sequence_source": "github_owned_manifest_group_progress_pending_projection",
-    "acceptance_rule": "strict_validate_every_present_pending_group_transport_independently;persist_valid_dossier_candidate;consume_valid_semantic_exhaustion_terminal_receipt;quarantine_invalid_transport_with_zero_attempt_consumption",
+    "acceptance_rule": "strictly classify current transports against current manifest; independently validate authority-referenced old transports against their real marker-parent descriptor; persist valid neutral dossiers without old-to-new group rebinding",
     "gap_rule": "missing_pending_groups_remain_pending_and_do_not_block_other_present_pending_groups",
     "exact_validation_required": [
       "snapshot_id",
@@ -145,8 +167,8 @@
       "each_dossier_against_canonical_dossier_contract"
     ],
     "blocking_expected_group_classes": [],
-    "unrelated_old_snapshot_artifacts_rule": "cannot_mutate_or_advance_the_current_snapshot_and_are_left_for_github_owned_stale_cleanup",
-    "replay_rule": "accepted_sequence_never_repersists_dossiers;failed_semantic_terminal_exact_replay_is_cleanup_only_and_never_consumes_again",
+    "unrelated_old_snapshot_artifacts_rule": "legacy old transports without frozen authority remain inert; authority-proven old candidates may populate neutral cache and authority-proven terminals may be audited without mutating current group state",
+    "replay_rule": "accepted current sequence never repersists; one frozen authority/group consumption is audit-idempotent and replay cleanup cannot overwrite current-compatible cache",
     "duplicate_rule": "candidate_terminal_conflicts_or_alternate_paths_are_retryable_invalid_transport_and consume_zero_semantic_attempts",
     "idempotency_rule": "every_rerun_rederives_expected_sequence_and_buffer_truth_from_github_canonical_state",
     "cleanup_rule": "only_github_may_delete_consume_or_mark_buffer_artifacts",
@@ -164,7 +186,9 @@
       "duplicate_or_alternate_transport",
       "candidate_terminal_conflict"
     ],
-    "retryable_transport_rule": "invalid_transport_is_quarantined_for_audit_group_remains_pending_and_no_semantic_attempt_is_consumed"
+    "retryable_transport_rule": "invalid_transport_is_quarantined_for_audit_group_remains_pending_and_no_semantic_attempt_is_consumed",
+    "current_cache_reconciliation_rule": "current pending group advances only when all exact current items independently pass strict fresh cache validation",
+    "partial_overlap_rule": "partial compatible cache overlap never advances current group and remains available for per-item semantic reuse"
   },
   "canonical_writer": {
     "rule": "all_github_processes_that_can_mutate_the_dossier_canonical_manifest_or_synchronize_its_worker_projection_must_share_one_serialized_canonical_writer_boundary",
@@ -176,22 +200,28 @@
     "workflow_mechanism": "github_actions_concurrency_group_taste-steam-review-dossier-canonical-writer_cancel_in_progress_false"
   },
   "daily_rollover": {
-    "old_snapshot_buffer_may_mutate_new_snapshot": false,
-    "old_snapshot_worker_projection_may_authorize_current_publication": false,
-    "validation_rule": "current_snapshot_binding_is_mandatory_before_any_canonical_persistence",
+    "old_snapshot_buffer_may_directly_mutate_new_snapshot_progress": false,
+    "old_snapshot_worker_projection_may_be_rebound_as_current": false,
+    "frozen_authority_rule": "a pre-rollover nonce-only marker commit selects its actual parent as immutable old-snapshot authority",
+    "late_candidate_rule": "strict authority-proven compatible old candidate may populate neutral cache only",
+    "late_terminal_rule": "strict authority-proven old terminal is audited against old authority only",
+    "current_progress_rule": "new snapshot moves only from its own exact transport or all-items exact current-compatible cache reconciliation",
     "cleanup_owner": "github_actions_control_plane"
   },
   "failure": {
     "partial_or_mismatched_submission": "fail_closed_no_canonical_commit",
     "missing_or_mismatched_worker_projection": "scheduled_worker_stops_fail_closed_without_reconstructing_from_full_manifest_partial_fields",
-    "stale_or_replayed_submission": "fail_closed_against_current_manifest_binding_in_legacy_compatibility_mode;buffered_mode_replay_is_idempotent_no_advance_and_stale_never_mutates_current_snapshot",
+    "stale_or_replayed_submission": "legacy stale remains inert/fail-closed; marker-parent frozen late result is allowed only under exact authority/current-compatibility proof and replay is audit-idempotent",
     "concurrent_canonical_change": "rebase_conflict_or_push_failure_fails_closed",
     "retry_loop_created": false,
     "group_semantic_failure": "github_validated_exact_semantic_terminal_receipt_consumes_one_normal_first_pass_attempt_into_failed_or_invalid_pending_recovery_no_global_block_no_schedule_edit",
     "schedule_edit_by_worker": "forbidden",
     "normal_first_pass_completion": "normal_first_pass_complete_when_pending_group_count_zero_even_if_failed_group_count_nonzero",
     "all_evidence_success": "full_backlog_complete_and_all_groups_accepted_only_when_failed_and_pending_counts_are_zero",
-    "invalid_transport": "quarantine_retryable_transport_leave_group_pending_zero_semantic_attempt_consumption"
+    "invalid_transport": "quarantine_retryable_transport_leave_group_pending_zero_semantic_attempt_consumption",
+    "frozen_authority_invalid": "quarantine authority-bearing transport leave current snapshot progress unchanged",
+    "frozen_binding_incompatible": "quarantine no cache write no current progress mutation",
+    "partial_current_cache_overlap": "leave current group pending while allowing per-item cache reuse"
   },
   "forbidden": [
     "workflow_dispatch_as_required_worker_transport",
@@ -208,7 +238,10 @@
     "independent_dossier_queue",
     "checkpoint_as_quota",
     "taste_semantic_producer_changes",
-    "scheduled_worker_enable_disable_or_edit_own_schedule"
+    "scheduled_worker_enable_disable_or_edit_own_schedule",
+    "worker_selected_historical_authority_commit",
+    "old_group_identity_rebinding_to_new_snapshot",
+    "partial_cache_overlap_as_current_group_acceptance"
   ],
   "terminal_receipt_transport": {
     "status": "active",
@@ -219,15 +252,16 @@
     "action": "github_contents_create_file",
     "mode": "immutable_create_only_one_terminal_receipt_per_exact_predeclared_group",
     "path_template": "data/ai_inbox/taste_steam_review_dossiers/{snapshot_id}--g{sequence:06d}--{group_sha256}--terminal.json",
-    "descriptor_source": "exact_current_immutable_worker_group_descriptor",
+    "descriptor_source": "exact_marker_parent_frozen_descriptor",
     "only_consuming_execution_status": "semantic_exhaustion_no_valid_dossier",
     "required_no_valid_dossier": true,
     "required_attempt_consumed": true,
     "required_next_step_status": "none_all_required_routes_exhausted",
     "transport_runtime_failure_forbidden": true,
     "invalid_or_wrong_binding_rule": "quarantine_transport_leave_group_pending_zero_attempt_consumption",
-    "accepted_rule": "archive_receipt_and_classify_exact_pending_group_failed_or_invalid_pending_recovery",
+    "accepted_rule": "current-snapshot terminal may classify its exact current pending group failed; post-rollover frozen terminal is archived/audited against old authority only and never changes new snapshot group state",
     "replay_rule": "exact_replay_after_consumption_is_cleanup_only_no_second_attempt",
-    "privacy_rule": "no_raw_player_text_snippets_quotes_usernames_author_identity_profile_urls_or_material_attempt_payloads"
+    "privacy_rule": "no_raw_player_text_snippets_quotes_usernames_author_identity_profile_urls_or_material_attempt_payloads",
+    "run_start_reference_required_for_new_runtime": true
   }
 }

@@ -76,6 +76,41 @@ def _runtime_prompt_binding(contract):
     }
 
 
+def _frozen_invocation_projection(contract):
+    frozen = contract.get("frozen_invocation_authority") or {}
+    paths = contract.get("paths") or {}
+    required = {
+        "status": "active",
+        "owner": "github_control_plane",
+        "marker_schema": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-MARKER-V1",
+        "marker_schema_version": 1,
+        "reference_schema": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-REFERENCE-V1",
+        "reference_schema_version": 1,
+        "authority_selection": "actual_single_git_parent_of_the_durable_marker_commit",
+    }
+    for field, value in required.items():
+        if frozen.get(field) != value:
+            raise ValueError(f"dossier frozen invocation contract mismatch: {field}")
+    marker_template = frozen.get("marker_path_template")
+    expected_template = paths.get("run_start_marker_root", "").rstrip("/") + "/{run_start_nonce}.json"
+    if marker_template != expected_template:
+        raise ValueError("dossier frozen invocation marker path template mismatch")
+    if frozen.get("worker_selected_authority_commit_allowed") is not False:
+        raise ValueError("dossier frozen invocation must forbid worker-selected authority")
+    return {
+        "marker_schema": frozen["marker_schema"],
+        "marker_schema_version": frozen["marker_schema_version"],
+        "marker_path_template": marker_template,
+        "marker_allowed_fields": copy.deepcopy(frozen.get("marker_allowed_fields")),
+        "reference_schema": frozen["reference_schema"],
+        "reference_schema_version": frozen["reference_schema_version"],
+        "authority_selection": frozen["authority_selection"],
+        "worker_selected_authority_commit_allowed": False,
+        "later_main_movement_rule": frozen.get("later_main_movement_rule"),
+        "daily_rollover_rule": frozen.get("daily_rollover_rule"),
+    }
+
+
 def _buffer_identity_fields(contract):
     fields = (
         ((contract.get("buffered_submission") or {}).get("group_plan") or {})
@@ -147,6 +182,7 @@ def _index_for_manifest(manifest, contract, plan, projection, binding):
         "descriptor_path_template": projection["descriptor_path_template"],
         "buffer_identity_fields": _buffer_identity_fields(contract),
         "buffer_candidate_serialization_rule": projection["buffer_candidate_serialization_rule"],
+        "frozen_invocation_authority": _frozen_invocation_projection(contract),
     }
 
 

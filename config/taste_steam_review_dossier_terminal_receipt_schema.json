@@ -167,6 +167,32 @@
           "const": "none_all_required_routes_exhausted"
         }
       }
+    },
+    "run_start_authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "schema_version",
+        "run_start_anchor_commit",
+        "run_start_nonce"
+      ],
+      "properties": {
+        "schema": {
+          "const": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-REFERENCE-V1"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "run_start_anchor_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "run_start_nonce": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        }
+      }
     }
   }
 }
