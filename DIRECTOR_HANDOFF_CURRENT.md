@@ -15,7 +15,7 @@ Preserve context and token budget.
 
 Start in this order only:
 
-1. Read current `CHAT_PROTOCOL.md` and perform only its required Director START gate.
+1. Read current `DIRECTOR_PROTOCOL.md` and `CHAT_PROTOCOL.md`; perform only the required Director START gate.
 2. Read this file fully.
 3. Read only the top/current section of `DIRECTOR_TASK_BOARD.md`.
 4. For a concrete user request, open only the exact task/report/config/artifact referenced here or by that request.
