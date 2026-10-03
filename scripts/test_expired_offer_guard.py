@@ -1,6 +1,7 @@
 import json
 import tempfile
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 import build_pre_ai_store_snapshot as target
@@ -31,9 +32,13 @@ def make_item(appid, discount_pct, final_cents, original_cents, end_epoch_marker
 
 
 def main():
+    source_stamp = datetime.now(timezone.utc).isoformat()
     index = {
         'item_count': 4,
-        'source_updated_at_utc': 'test-source',
+        'source_item_count': 4,
+        'source_complete': True,
+        'manifest_complete': True,
+        'source_updated_at_utc': source_stamp,
     }
     feed = {
         'App_1': {'key': 'App_1', 'appid': '1', 'title': 'Future', 'source_discount_percent': 50, 'source_final_kzt': 500.0},
@@ -55,11 +60,33 @@ def main():
         'OUT_DIR': target.OUT_DIR,
         'STORE_OUT': target.STORE_OUT,
         'METADATA_OUT': target.METADATA_OUT,
+        'MANIFEST': target.MANIFEST,
+        'SHORTLIST_INDEX': target.SHORTLIST_INDEX,
+        'MAILING_INDEX': target.MAILING_INDEX,
     }
     try:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            target.load_feed = lambda: (index, feed)
+            manifest_path = root / 'manifest.json'
+            shortlist_path = root / 'shortlist_index.json'
+            mailing_path = root / 'mailing_index.json'
+            manifest_path.write_text(json.dumps({
+                'updated_at_utc': source_stamp,
+                'complete': True,
+                'source_has_known_gaps': False,
+                'shortlist_items': 4,
+            }), encoding='utf-8')
+            shortlist_path.write_text(json.dumps({
+                'source_updated_at_utc': source_stamp,
+                'source_complete': True,
+                'source_has_known_gaps': False,
+                'item_count': 4,
+            }), encoding='utf-8')
+            mailing_path.write_text(json.dumps(index), encoding='utf-8')
+            target.MANIFEST = manifest_path
+            target.SHORTLIST_INDEX = shortlist_path
+            target.MAILING_INDEX = mailing_path
+            target.load_feed = lambda supplied_index=None: (index, feed)
             target.fetch_batches = lambda requested: ([(key, items[key]) for key in feed], 1)
             target.compare_with_control = lambda metadata: {'control_available': False, 'test': True}
             target.OUT_DIR = root

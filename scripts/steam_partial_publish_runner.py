@@ -172,6 +172,87 @@ def write_shortlist(selected, columns, chunk_size):
     return (len(selected) + chunk_size - 1) // chunk_size
 
 
+STORE_BROWSE_URL = 'https://api.steampowered.com/IStoreBrowseService/GetItems/v1/'
+REVIEW_FALLBACK_BATCH_SIZE = 100
+
+
+def conservative_global_display_percent(value):
+    if value is None:
+        return None
+    # StoreBrowse exposes Steam's displayed whole percent. The canonical global
+    # rule normally compares the more precise AppReviews percentage. Subtract
+    # half a point so fallback can never turn an ambiguous rounded boundary
+    # into a new positive eligibility result.
+    return max(0.0, float(value) - 0.5)
+
+
+def storebrowse_review_pair(store_item):
+    reviews = (store_item or {}).get('reviews') or {}
+    global_summary = reviews.get('summary_filtered') or {}
+    russian_summary = reviews.get('summary_language_specific') or {}
+
+    global_count = int(global_summary.get('review_count') or 0)
+    global_display = global_summary.get('percent_positive')
+    global_ok = global_display is not None or global_count == 0
+
+    russian_count = int(russian_summary.get('review_count') or 0)
+    russian_display = russian_summary.get('percent_positive')
+
+    return {
+        'global': {
+            'ok': global_ok,
+            'positive': conservative_global_display_percent(global_display),
+            'count': global_count,
+            'rate_limited': False,
+            'source': 'storebrowse_summary_filtered_conservative_display',
+        },
+        'russian': {
+            # Missing language-specific summary is equivalent to no usable
+            # Russian-language sample; global review eligibility can still pass.
+            'ok': True,
+            'positive': float(russian_display) if russian_display is not None else None,
+            'count': russian_count,
+            'rate_limited': False,
+            'source': 'storebrowse_summary_language_specific',
+        },
+    }
+
+
+def fetch_storebrowse_review_fallback(appids):
+    results = {}
+    request_count = 0
+    ordered = [str(appid) for appid in appids if str(appid).isdigit()]
+    for start in range(0, len(ordered), REVIEW_FALLBACK_BATCH_SIZE):
+        batch = ordered[start:start + REVIEW_FALLBACK_BATCH_SIZE]
+        payload = {
+            'ids': [{'appid': int(appid)} for appid in batch],
+            'context': {
+                'language': 'russian',
+                'country_code': 'KZ',
+                'steam_realm': 1,
+            },
+            'data_request': {
+                'include_reviews': True,
+                'include_basic_info': True,
+                'apply_user_filters': False,
+            },
+        }
+        response = requests.get(
+            STORE_BROWSE_URL,
+            params={'input_json': json.dumps(payload, separators=(',', ':'))},
+            headers={'User-Agent': 'steam-kz-deals/1.0', 'Accept': 'application/json'},
+            timeout=30,
+        )
+        response.raise_for_status()
+        request_count += 1
+        returned = ((response.json().get('response') or {}).get('store_items') or [])
+        for store_item in returned:
+            appid = str(store_item.get('appid') or store_item.get('id') or '')
+            if appid in batch:
+                results[appid] = storebrowse_review_pair(store_item)
+    return results, request_count
+
+
 def run():
     started = datetime.now(timezone.utc)
     failures = FailureQueue()
@@ -235,6 +316,9 @@ def run():
 
     review_cache = {}
     review_api_failed_requests = 0
+    review_failed_results = {}
+    review_storebrowse_fallback_appids = 0
+    review_storebrowse_fallback_requests = 0
     if review_appids:
         with ThreadPoolExecutor(max_workers=core['REVIEW_WORKERS']) as executor:
             futures = {
@@ -250,33 +334,60 @@ def run():
                     error = exc
                 else:
                     error = None
-                if (
-                    result is None
-                    or not result.get('global', {}).get('ok')
-                    or not result.get('russian', {}).get('ok')
-                ):
-                    if result:
-                        if not result.get('global', {}).get('ok'):
-                            review_api_failed_requests += 1
-                        if not result.get('russian', {}).get('ok'):
-                            review_api_failed_requests += 1
-                    else:
-                        review_api_failed_requests += 2
-                    for key in review_item_keys.get(appid, []):
-                        item = catalog.get(key) or {}
-                        failures.record_game(
-                            key,
-                            appid=appid,
-                            name=item.get('title'),
-                            stage='review_enrichment',
-                            error=error or RuntimeError(
-                                'Steam Reviews API did not return both required summaries'
-                            ),
-                            prior_site_data_exists=key in previous_by_key,
-                        )
-                        failed_keys.add(key)
+
+                global_ok = bool(result and result.get('global', {}).get('ok'))
+                russian_ok = bool(result and result.get('russian', {}).get('ok'))
+                if global_ok and russian_ok:
+                    review_cache[appid] = result
                     continue
-                review_cache[appid] = result
+
+                review_api_failed_requests += int(not global_ok) + int(not russian_ok)
+                review_failed_results[appid] = {
+                    'result': result,
+                    'error': error,
+                }
+
+        if review_failed_results:
+            try:
+                fallback, review_storebrowse_fallback_requests = (
+                    fetch_storebrowse_review_fallback(review_failed_results)
+                )
+            except Exception as exc:
+                print('StoreBrowse review fallback failed:', exc)
+                fallback = {}
+
+            for appid, failure in review_failed_results.items():
+                original = failure.get('result') or {}
+                fallback_pair = fallback.get(appid) or {}
+                merged = {}
+                for language in ('global', 'russian'):
+                    exact = original.get(language) or {}
+                    alternate = fallback_pair.get(language) or {}
+                    if exact.get('ok'):
+                        merged[language] = exact
+                    elif alternate.get('ok'):
+                        merged[language] = alternate
+                    else:
+                        merged[language] = exact or alternate
+
+                if merged.get('global', {}).get('ok') and merged.get('russian', {}).get('ok'):
+                    review_cache[appid] = merged
+                    review_storebrowse_fallback_appids += 1
+                    continue
+
+                for key in review_item_keys.get(appid, []):
+                    item = catalog.get(key) or {}
+                    failures.record_game(
+                        key,
+                        appid=appid,
+                        name=item.get('title'),
+                        stage='review_enrichment',
+                        error=failure.get('error') or RuntimeError(
+                            'Steam review sources did not return required summaries'
+                        ),
+                        prior_site_data_exists=key in previous_by_key,
+                    )
+                    failed_keys.add(key)
 
     for item in items:
         if item['key'] in failed_keys:
@@ -460,6 +571,9 @@ def run():
         'source': 'Steam Store',
         'country_code': 'kz',
         'region': 'Kazakhstan',
+        'search_category1': core['SEARCH_CATEGORY1'],
+        'search_category_types': core['SEARCH_CATEGORY_TYPES'],
+        'search_specials_only': True,
         'started_at_utc': started.isoformat(),
         'updated_at_utc': finished.isoformat(),
         'page_size': core['PAGE_SIZE'],
@@ -484,6 +598,14 @@ def run():
         'review_candidate_appids': len(review_appids),
         'review_api_requests': logical_review_requests,
         'review_api_failed_requests': review_api_failed_requests,
+        'review_rate_limit_circuit_open': core['review_rate_limit_event'].is_set(),
+        'review_storebrowse_fallback_appids': review_storebrowse_fallback_appids,
+        'review_storebrowse_fallback_requests': review_storebrowse_fallback_requests,
+        'review_storebrowse_fallback_policy': (
+            'only_for_missing_appreviews_components; '
+            'global_display_percent_is_half_point_conservative; '
+            'russian_uses_language_specific_display_percent'
+        ),
         'review_api_failure_rate': (
             round(review_api_failed_requests / logical_review_requests, 6)
             if logical_review_requests

@@ -6,6 +6,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from discovery_freshness import require_fresh_discovery
+
+MANIFEST = Path('data/production/manifest.json')
+SHORTLIST_INDEX = Path('data/production/shortlist/index.json')
 MAILING_INDEX = Path('data/production/mailing/index.json')
 OLD_METADATA = Path('data/cache/content_metadata.json')
 OUT_DIR = Path('data/production/pre_ai')
@@ -43,8 +47,8 @@ def original_kzt(option):
     return None if value is None else float(value) / 100.0
 
 
-def load_feed():
-    index = json.loads(MAILING_INDEX.read_text(encoding='utf-8'))
+def load_feed(index=None):
+    index = index or json.loads(MAILING_INDEX.read_text(encoding='utf-8'))
     columns = index['columns']
     ci = {name: i for i, name in enumerate(columns)}
     required = {'key', 'appid', 'discount_percent', 'final_kzt', 'title'}
@@ -319,10 +323,30 @@ def compare_with_control(metadata_entries):
 
 def main():
     started = time.monotonic()
-    index, feed = load_feed()
+    manifest = json.loads(MANIFEST.read_text(encoding='utf-8'))
+    shortlist_index = json.loads(SHORTLIST_INDEX.read_text(encoding='utf-8'))
+    index = json.loads(MAILING_INDEX.read_text(encoding='utf-8'))
+
+    # A Store price refresh is not a discovery refresh. Refuse to query current
+    # prices over an old candidate universe; the existing Steam production
+    # collector -> mailing handoff must establish this production cycle first.
+    require_fresh_discovery(
+        manifest,
+        shortlist_index,
+        index,
+        datetime.now(timezone.utc),
+    )
+
+    index, feed = load_feed(index)
     requested = requested_ids(feed)
     paired, request_count = fetch_batches(requested)
     observed = datetime.now(timezone.utc)
+    discovery_freshness = require_fresh_discovery(
+        manifest,
+        shortlist_index,
+        index,
+        observed,
+    )
 
     store_entries = {}
     metadata_entries = {}
@@ -456,6 +480,7 @@ def main():
         'discovery_source_path': 'data/production/mailing/index.json',
         'discovery_source_updated_at_utc': index.get('source_updated_at_utc'),
         'observed_at_utc': observed.isoformat(),
+        'discovery_freshness': discovery_freshness,
         'display_timezone': 'Europe/Berlin',
         'source_item_count': len(feed),
         'classified_source_candidate_count': len(store_entries) + len(inactive_entries),
@@ -486,6 +511,7 @@ def main():
         'source_path': 'data/production/mailing/index.json',
         'source_updated_at_utc': index.get('source_updated_at_utc'),
         'observed_at_utc': observed.isoformat(),
+        'discovery_freshness': discovery_freshness,
         'source_item_count': len(feed),
         'entry_count': len(metadata_entries),
         'complete_coverage': True,
