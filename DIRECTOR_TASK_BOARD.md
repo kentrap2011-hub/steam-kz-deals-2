@@ -2,8 +2,8 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` assigned: `WORKER_TASK_PR_PRODUCTION_TRIGGER_ISOLATION_FIX_01.md` — stop pull-request validation runs from starting production-mutating workflow chains on `main`.
-- `ЧАТ 2` assigned: `WORKER_TASK_DOSSIER_FROZEN_INVOCATION_ROLLOVER_SAFETY_FIX_01.md` — make an already-started exact Dossier group survive later daily snapshot rollover; branch work may proceed now, but PR opening is forbidden until the PR-production-trigger isolation fix is merged.
+- `ЧАТ 1` is free after accepted `WORKER_TASK_PR_PRODUCTION_TRIGGER_ISOLATION_FIX_01.md`; PR #141 and closeout PR #142 are merged, post-merge execution-ownership validation is green, and the main-branch production-source guards are present.
+- `ЧАТ 2` assigned: `WORKER_TASK_DOSSIER_FROZEN_INVOCATION_ROLLOVER_SAFETY_FIX_01.md` — make an already-started exact Dossier group survive later daily snapshot rollover. The sequencing gate is now satisfied because the PR-production-trigger isolation fix is merged; ЧАТ 2 may reconcile with current `main` and open its PR when ready.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -36,7 +36,7 @@ Director acceptance:
 - a separate incident discovered during PR validation showed that PR workflow completion can incorrectly trigger production, now assigned to a dedicated follow-up task.
 
 
-## ACTIVE — ЧАТ 1 — PR production trigger isolation
+## ACCEPTED — ЧАТ 1 — PR production trigger isolation
 
 Task:
 `WORKER_TASK_PR_PRODUCTION_TRIGGER_ISOLATION_FIX_01.md`
@@ -45,13 +45,17 @@ Mode:
 `IMPLEMENT / VALIDATE`
 
 Status:
-`authorized_ready_for_worker`
+`implementation_complete_ready_for_director_acceptance`
 
-Purpose:
-- prevent pull-request validation from triggering canonical production mutations;
-- audit equivalent `workflow_run` edges;
-- keep legitimate main/scheduled/manual production triggers working;
-- no semantic worker execution.
+Director acceptance:
+- PR #141 merged as `da71fb7578c5fe467da0ce8e3decfbc62a6465a4`;
+- closeout PR #142 merged as `89fb793b275e811023ea5f1a6e387a962240d289`;
+- the incident edge PR shortlist -> mailing -> pre-AI was confirmed and fixed;
+- all audited production-mutating `workflow_run` jobs now require successful upstream execution from `main`;
+- PR validation remains enabled;
+- post-merge `Validate execution ownership` run `37122344406` succeeded;
+- current `main` still contains the production-source guards;
+- no semantic worker or ChatGPT Scheduled Task was run or modified.
 
 
 ## ACTIVE — ЧАТ 2 — Dossier frozen invocation rollover safety
@@ -63,13 +67,13 @@ Mode:
 `IMPLEMENT / VALIDATE`
 
 Status:
-`authorized_branch_work_only_until_trigger_fix_merged`
+`authorized_ready_for_pr_after_current_main_reconciliation`
 
 Purpose:
 - preserve valid already-started Dossier semantic work across later daily snapshot replacement;
 - freeze exact GitHub-prepared group authority rather than requiring mutable-latest snapshot equality through publication;
 - preserve stale-work protection and truthful current-snapshot progress;
-- do not open PR until the PR-production-trigger isolation fix is confirmed merged on `main`;
+- PR-production-trigger sequencing gate is satisfied; reconcile with current `main` before opening PR;
 - do not run production Dossier or modify Scheduled Tasks.
 
 
