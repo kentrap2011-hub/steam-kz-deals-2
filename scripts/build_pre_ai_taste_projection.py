@@ -178,6 +178,79 @@ def decode_index_entry(index, key, cached, legacy_semantics):
 
 
 
+def classify_cache_reuse(
+    *,
+    index_integrity_ok,
+    cached,
+    current,
+    candidate_context_sha256,
+    profile_blob_sha,
+    taste_model_version,
+    taste_semantics_sha256,
+):
+    cache_presence = cached is not None
+    if cache_presence:
+        appid_ok = cached['appid'] == current['appid']
+        fp_ok = cached['taste_fingerprint'] == current['taste_fingerprint']
+        profile_ok = cached['profile_blob_sha'] == profile_blob_sha
+        model_ok = cached['taste_model_version'] == taste_model_version
+        semantics_ok = cached['taste_semantics_sha256'] == taste_semantics_sha256
+        cached_context = cached.get('candidate_context_sha256')
+        context_bound = bool(cached_context)
+        context_ok = context_bound and cached_context == candidate_context_sha256
+    else:
+        appid_ok = fp_ok = profile_ok = model_ok = semantics_ok = context_bound = context_ok = False
+
+    hit = bool(
+        index_integrity_ok
+        and cache_presence
+        and appid_ok
+        and profile_ok
+        and model_ok
+        and semantics_ok
+        and fp_ok
+        and context_ok
+    )
+    if hit:
+        status = 'cache_hit'
+        ai_reason = None
+    else:
+        status = 'ai_required'
+        if not index_integrity_ok:
+            ai_reason = 'taste_cache_index_integrity_invalid'
+        elif not cache_presence:
+            ai_reason = 'taste_cache_key_missing'
+        elif not appid_ok:
+            ai_reason = 'taste_cache_appid_mismatch'
+        elif not profile_ok:
+            ai_reason = 'canonical_profile_blob_changed_for_entry'
+        elif not model_ok:
+            ai_reason = 'taste_model_version_changed_for_entry'
+        elif not semantics_ok:
+            ai_reason = 'taste_policy_semantics_changed_for_entry'
+        elif not fp_ok:
+            ai_reason = 'taste_fingerprint_changed'
+        elif not context_bound:
+            ai_reason = 'candidate_context_binding_missing_for_entry'
+        else:
+            ai_reason = 'candidate_context_changed_for_entry'
+
+    return {
+        'cache_presence': cache_presence,
+        'appid_ok': appid_ok,
+        'fp_ok': fp_ok,
+        'profile_ok': profile_ok,
+        'model_ok': model_ok,
+        'semantics_ok': semantics_ok,
+        'context_bound': context_bound,
+        'context_ok': context_ok,
+        'hit': hit,
+        'status': status,
+        'ai_reason': ai_reason,
+    }
+
+
+
 def fetch_appdetails_descriptions(targets, max_workers=8):
     def fetch(item):
         key, appid = item
@@ -374,17 +447,29 @@ def main():
         current = feed[key]
         context = current_context[key]
         cached = decoded_entries.get(key) if index_integrity_ok else None
-        cache_presence = cached is not None
+        classification = classify_cache_reuse(
+            index_integrity_ok=index_integrity_ok,
+            cached=cached,
+            current=current,
+            candidate_context_sha256=context['candidate_context_sha256'],
+            profile_blob_sha=profile['blob_sha'],
+            taste_model_version=current_model,
+            taste_semantics_sha256=current_semantics,
+        )
+        cache_presence = classification['cache_presence']
+        appid_ok = classification['appid_ok']
+        fp_ok = classification['fp_ok']
+        profile_ok = classification['profile_ok']
+        model_ok = classification['model_ok']
+        semantics_ok = classification['semantics_ok']
+        context_bound = classification['context_bound']
+        context_ok = classification['context_ok']
+        hit = classification['hit']
+        status = classification['status']
+        ai_reason = classification['ai_reason']
+
         if cache_presence:
             raw_overlap += 1
-            appid_ok = cached['appid'] == current['appid']
-            fp_ok = cached['taste_fingerprint'] == current['taste_fingerprint']
-            profile_ok = cached['profile_blob_sha'] == profile['blob_sha']
-            model_ok = cached['taste_model_version'] == current_model
-            semantics_ok = cached['taste_semantics_sha256'] == current_semantics
-            cached_context = cached.get('candidate_context_sha256')
-            context_bound = bool(cached_context)
-            context_ok = context_bound and cached_context == context['candidate_context_sha256']
             appid_matches += int(appid_ok)
             fingerprint_matches += int(fp_ok)
             profile_matches += int(profile_ok)
@@ -392,43 +477,8 @@ def main():
             semantics_matches += int(semantics_ok)
             context_bound_entries += int(context_bound)
             context_matches += int(context_ok)
-        else:
-            appid_ok = fp_ok = profile_ok = model_ok = semantics_ok = context_bound = context_ok = False
-
-        hit = bool(
-            index_integrity_ok
-            and cache_presence
-            and appid_ok
-            and profile_ok
-            and model_ok
-            and semantics_ok
-            and fp_ok
-            and context_ok
-        )
         if hit:
             safe_hits += 1
-            status = 'cache_hit'
-            ai_reason = None
-        else:
-            status = 'ai_required'
-            if not index_integrity_ok:
-                ai_reason = 'taste_cache_index_integrity_invalid'
-            elif not cache_presence:
-                ai_reason = 'taste_cache_key_missing'
-            elif not appid_ok:
-                ai_reason = 'taste_cache_appid_mismatch'
-            elif not profile_ok:
-                ai_reason = 'canonical_profile_blob_changed_for_entry'
-            elif not model_ok:
-                ai_reason = 'taste_model_version_changed_for_entry'
-            elif not semantics_ok:
-                ai_reason = 'taste_policy_semantics_changed_for_entry'
-            elif not fp_ok:
-                ai_reason = 'taste_fingerprint_changed'
-            elif not context_bound:
-                ai_reason = 'candidate_context_binding_missing_for_entry'
-            else:
-                ai_reason = 'candidate_context_changed_for_entry'
         status_counts[status] += 1
 
         row = {

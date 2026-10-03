@@ -3,6 +3,27 @@ name: Steam KZ production shortlist
 on:
   workflow_dispatch:
 
+  # Lightweight deterministic validation only. The production collector job is
+  # explicitly disabled for pull_request events below.
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "scripts/steam_production.py"
+      - "scripts/steam_partial_publish.py"
+      - "scripts/steam_partial_publish_runner.py"
+      - "scripts/discovery_freshness.py"
+      - "scripts/build_pre_ai_store_snapshot.py"
+      - "scripts/build_pre_ai_taste_projection.py"
+      - "scripts/refresh_visual_commercial_fields.py"
+      - "scripts/build_final_visual_payload.py"
+      - "scripts/test_discovery_freshness.py"
+      - "scripts/test_fresh_deal_discovery_refresh.py"
+      - "scripts/test_steam_review_fallback.py"
+      - "scripts/test_expired_offer_guard.py"
+      - "scripts/test_commercial_refresh.py"
+      - ".github/workflows/steam-test.yml"
+
   # Разработческие изменения collectors/production validation проверяем автоматически.
   # Обычные production/data-коммиты этот тяжёлый workflow не запускают.
   push:
@@ -14,6 +35,9 @@ on:
       - "scripts/steam_partial_publish.py"
       - "scripts/steam_partial_publish_runner.py"
       - "scripts/test_steam_partial_publish.py"
+      - "scripts/discovery_freshness.py"
+      - "scripts/test_discovery_freshness.py"
+      - "scripts/test_fresh_deal_discovery_refresh.py"
       - "scripts/steam_traversal_recovery.py"
       - "scripts/test_steam_traversal_recovery.py"
       - "scripts/production_output_ownership.py"
@@ -44,7 +68,61 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  regression:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Required by historical material-freshness regression below.
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deterministic test dependencies
+        run: pip install requests beautifulsoup4
+
+      - name: Compile touched Python modules
+        run: |
+          python -m py_compile \
+            scripts/discovery_freshness.py \
+            scripts/build_pre_ai_store_snapshot.py \
+            scripts/build_pre_ai_taste_projection.py \
+            scripts/refresh_visual_commercial_fields.py \
+            scripts/build_final_visual_payload.py \
+            scripts/test_discovery_freshness.py \
+            scripts/test_fresh_deal_discovery_refresh.py \
+            scripts/test_expired_offer_guard.py \
+            scripts/test_commercial_refresh.py
+
+      - name: Run fresh discovery regressions
+        run: |
+          python scripts/test_discovery_freshness.py
+          python scripts/test_fresh_deal_discovery_refresh.py
+          python scripts/test_steam_review_fallback.py
+          python scripts/test_expired_offer_guard.py
+          python scripts/test_commercial_refresh.py
+          python scripts/test_steam_partial_publish.py
+          python scripts/test_production_output_ownership.py
+          python scripts/test_pre_ai_deal_contract_guard.py
+          python scripts/test_visual_freshness_receipt.py
+          python scripts/test_visual_material_freshness_guard.py
+          python scripts/test_backlog_disposition_validator.py
+          python scripts/validate_backlog_dispositions.py \
+            --base "${{ github.event.pull_request.base.sha }}" \
+            --head "${{ github.event.pull_request.head.sha }}"
+          python scripts/validate_execution_ownership.py
+          python scripts/test_progressive_personalization.py
+          python scripts/test_progressive_pass1.py
+
   collect:
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
@@ -64,6 +142,11 @@ jobs:
 
       - name: Regression test Steam partial publish
         run: python scripts/test_steam_partial_publish.py
+
+      - name: Regression test fresh deal discovery lifecycle
+        run: |
+          python scripts/test_discovery_freshness.py
+          python scripts/test_fresh_deal_discovery_refresh.py
 
       - name: Regression test Steam traversal recovery
         run: python scripts/test_steam_traversal_recovery.py

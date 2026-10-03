@@ -307,15 +307,16 @@ def current_commercial_lineage():
     store = base_builder.load_json(COMMERCIAL_STORE)
     family = base_builder.load_json(COMMERCIAL_FAMILY)
     source, _ = commercial_refresh.validate_commercial_binding(payload, store, family)
+    discovery_freshness = store.get('discovery_freshness') or {}
     lineage = {
         key: base_builder.git_sha(path)
         for key, path in COMMERCIAL_SOURCE_PATHS.items()
     }
-    return source, store.get('observed_at_utc'), lineage
+    return source, store.get('observed_at_utc'), lineage, discovery_freshness
 
 
 def stamp_paid_list_freshness(ready, *, scope, include_commercial_helper):
-    source, observed_at, lineage = current_commercial_lineage()
+    source, observed_at, lineage, discovery_freshness = current_commercial_lineage()
     contract = ready.setdefault('production_contract', {})
     for key, contract_key in COMMERCIAL_CONTRACT_KEYS.items():
         contract[contract_key] = lineage[key]
@@ -327,11 +328,13 @@ def stamp_paid_list_freshness(ready, *, scope, include_commercial_helper):
 
     ready['commercial_source_mailing_updated_at_utc'] = source
     ready['commercial_store_observed_at_utc'] = observed_at
+    ready['discovery_freshness'] = discovery_freshness
     paid = {
         'status': 'published',
         'scope': scope,
         'source_mailing_updated_at_utc': source,
         'store_observed_at_utc': observed_at,
+        'discovery_freshness': discovery_freshness,
         **lineage,
     }
     if helper_blob:

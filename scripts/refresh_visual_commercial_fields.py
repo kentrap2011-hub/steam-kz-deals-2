@@ -2,6 +2,8 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
+from discovery_freshness import require_store_snapshot_freshness
+
 import build_daily_visual_payload as base_builder
 
 ROOT = Path('.')
@@ -25,6 +27,7 @@ def current_docs():
 
 
 def validate_commercial_binding(payload, store_snapshot, family_graph):
+    freshness = require_store_snapshot_freshness(store_snapshot)
     source = payload.get('source_mailing_updated_at_utc')
     store_source = store_snapshot.get('discovery_source_updated_at_utc')
     family_source = family_graph.get('source_updated_at_utc')
@@ -34,6 +37,8 @@ def validate_commercial_binding(payload, store_snapshot, family_graph):
         raise ValueError('Commercial refresh requires complete store_snapshot')
     if family_graph.get('status') != 'complete':
         raise ValueError('Commercial refresh requires complete family_graph')
+    if freshness.get('discovery_generated_at_utc') != source:
+        raise ValueError('Commercial payload source does not match fresh discovery binding')
     if store_source != source or family_source != source:
         raise ValueError(
             'Commercial source mismatch: '

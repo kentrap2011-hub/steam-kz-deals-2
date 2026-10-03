@@ -22,10 +22,24 @@ REVIEW_URL = (
 PAGE_SIZE = 50
 REQUEST_DELAY = 0.9
 
+# Steam search's untyped "specials" result set expanded from ~13k rows to
+# >100k rows in late September 2026, making the canonical nightly discovery
+# exceed its 60-minute owner timeout. The production policy only models paid
+# games, substantive DLC and purchase bundles. Keep the authoritative discovery
+# universe explicit so unrelated software/demos/soundtracks/playtests/hardware
+# cannot silently expand the catalog traversal again.
+SEARCH_CATEGORY_TYPES = {
+    "games": "998",
+    "dlc": "21",
+    "bundles": "996",
+}
+SEARCH_CATEGORY1 = ",".join(SEARCH_CATEGORY_TYPES.values())
+
 # Запросы рейтингов делаем только для игр, которые
 # структурно могут пройти shortlist.
 REVIEW_WORKERS = 8
 REVIEW_RETRIES = 5
+REVIEW_RATE_LIMIT_CIRCUIT_THRESHOLD = 4
 
 # Для русскоязычного рейтинга не требуем тысячи
 # русских отзывов. Но мировой total_reviews всё равно
@@ -191,6 +205,18 @@ session.cookies.update({
 
 
 review_thread_local = threading.local()
+review_rate_limit_lock = threading.Lock()
+review_rate_limit_count = 0
+review_rate_limit_event = threading.Event()
+
+
+def rate_limited_review_result():
+    return {
+        "ok": False,
+        "positive": None,
+        "count": 0,
+        "rate_limited": True,
+    }
 
 
 def get_review_session():
@@ -249,18 +275,23 @@ def parse_release(text):
         return None
 
 
-def get_page(start, sort_by):
-    params = {
+def search_params(start, sort_by):
+    return {
         "query": "",
         "start": start,
         "count": PAGE_SIZE,
         "specials": 1,
+        "category1": SEARCH_CATEGORY1,
         "cc": "kz",
         "l": "english",
         "infinite": 1,
         "ignore_preferences": 1,
         "sort_by": sort_by,
     }
+
+
+def get_page(start, sort_by):
+    params = search_params(start, sort_by)
 
     last_error = None
 
@@ -311,6 +342,7 @@ def get_page(start, sort_by):
 
 
 def get_review_summary(appid, language):
+    global review_rate_limit_count
     """
     Возвращает рейтинг Steam Reviews для одного языка.
 
@@ -323,6 +355,9 @@ def get_review_summary(appid, language):
     filter_offtopic_activity=1 -> Steam исключает
     периоды review bombing так же, как делает по умолчанию.
     """
+    if review_rate_limit_event.is_set():
+        return rate_limited_review_result()
+
     params = {
         "json": 1,
         "filter": "all",
@@ -346,14 +381,16 @@ def get_review_summary(appid, language):
             )
 
             if response.status_code == 429:
-                retry_after = to_int(
-                    response.headers.get("Retry-After")
-                )
-                wait = (
-                    retry_after
-                    or min(30, 2 ** (attempt + 1))
-                )
-                time.sleep(wait)
+                with review_rate_limit_lock:
+                    review_rate_limit_count += 1
+                    if review_rate_limit_count >= REVIEW_RATE_LIMIT_CIRCUIT_THRESHOLD:
+                        review_rate_limit_event.set()
+
+                if review_rate_limit_event.is_set():
+                    return rate_limited_review_result()
+
+                retry_after = to_int(response.headers.get("Retry-After"))
+                time.sleep(min(1, retry_after or 1))
                 continue
 
             response.raise_for_status()
@@ -396,6 +433,7 @@ def get_review_summary(appid, language):
                 "ok": True,
                 "positive": percent,
                 "count": total,
+                "rate_limited": False,
             }
 
         except Exception as exc:
@@ -417,6 +455,7 @@ def get_review_summary(appid, language):
         "ok": False,
         "positive": None,
         "count": 0,
+        "rate_limited": False,
     }
 
 

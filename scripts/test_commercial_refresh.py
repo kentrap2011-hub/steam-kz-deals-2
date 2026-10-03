@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 import apply_fixed_package_purchase_options as package_options
 import priority_ranking
 import refresh_visual_commercial_fields as commercial_refresh
+from discovery_freshness import assess_discovery_freshness
 
 
 NOW = datetime(2026, 9, 1, 8, 0, tzinfo=timezone.utc)
@@ -19,10 +20,36 @@ def payload():
 
 
 def store_snapshot():
+    observed = '2026-09-01T07:00:00+00:00'
+    manifest = {
+        'updated_at_utc': SOURCE,
+        'complete': True,
+        'source_has_known_gaps': False,
+        'shortlist_items': 2,
+    }
+    shortlist = {
+        'source_updated_at_utc': SOURCE,
+        'source_complete': True,
+        'source_has_known_gaps': False,
+        'item_count': 2,
+    }
+    mailing = {
+        'source_updated_at_utc': SOURCE,
+        'source_complete': True,
+        'manifest_complete': True,
+        'item_count': 2,
+        'source_item_count': 2,
+    }
     return {
         'status': 'complete',
         'discovery_source_updated_at_utc': SOURCE,
-        'observed_at_utc': '2026-09-01T07:00:00+00:00',
+        'observed_at_utc': observed,
+        'discovery_freshness': assess_discovery_freshness(
+            manifest,
+            shortlist,
+            mailing,
+            observed,
+        ),
         'entries': {
             'App_1': {
                 'key': 'App_1',
@@ -134,6 +161,25 @@ def semantic_game(fid, title, appid):
         },
         'offers': [],
     }
+
+
+
+def test_stale_discovery_cannot_refresh_commercial_visual():
+    stale = store_snapshot()
+    stale['discovery_freshness'] = {}
+    try:
+        commercial_refresh.refresh_visual_commercial_fields(
+            {'source_mailing_updated_at_utc': SOURCE, 'items': []},
+            payload=payload(),
+            store_snapshot=stale,
+            family_graph=family_graph(),
+            history_snapshot=history_snapshot(),
+            now=NOW,
+        )
+    except ValueError as exc:
+        assert 'fresh current-cycle discovery universe' in str(exc)
+    else:
+        raise AssertionError('stale discovery must fail closed before commercial publication')
 
 
 def test_commercial_refresh_changes_only_commercial_state():
@@ -258,6 +304,7 @@ def test_package_comparison_uses_refreshed_current_prices_not_stale_family_price
 
 def main():
     tests = [
+        test_stale_discovery_cannot_refresh_commercial_visual,
         test_commercial_refresh_changes_only_commercial_state,
         test_stale_semantic_family_is_removed_instead_of_retaining_stale_price,
         test_package_comparison_uses_refreshed_current_prices_not_stale_family_price,
