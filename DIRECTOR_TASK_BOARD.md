@@ -2,8 +2,8 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` active on PR #140 `Fix stale deal discovery freshness handoff`; CI is now fully green and the durable report exists on the PR branch, but current `main` advanced again after validation. The branch is currently behind main by 4 commits and must reconcile/rerun required checks before merge.
-- `ЧАТ 2` is free after completed `WORKER_TASK_PERSONAL_TASTE_GAME_GUESS_DIAGNOSTIC_01.md`; Mirror's Edge Catalyst was guessed correctly on attempt 2 and no production/profile state was changed.
+- `ЧАТ 1` assigned: `WORKER_TASK_PR_PRODUCTION_TRIGGER_ISOLATION_FIX_01.md` — stop pull-request validation runs from starting production-mutating workflow chains on `main`.
+- `ЧАТ 2` assigned: `WORKER_TASK_DOSSIER_FROZEN_INVOCATION_ROLLOVER_SAFETY_FIX_01.md` — make an already-started exact Dossier group survive later daily snapshot rollover; branch work may proceed now, but PR opening is forbidden until the PR-production-trigger isolation fix is merged.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -20,27 +20,57 @@
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
 
 
-## ACTIVE — ЧАТ 1 — fresh deal discovery refresh fix
+## ACCEPTED — ЧАТ 1 — fresh deal discovery refresh fix
 
 Task:
 `WORKER_TASK_FRESH_DEAL_DISCOVERY_REFRESH_FIX_01.md`
+
+Status:
+`implementation_complete_live_refresh_pending`
+
+Director acceptance:
+- PR #140 merged as `7df5ed0cbe9dd9217c56344e0caab47dd366915f`;
+- required PR checks were green before merge;
+- fresh discovery handoff fix is now on `main`;
+- live production acceptance remains owned by the existing GitHub production chain;
+- a separate incident discovered during PR validation showed that PR workflow completion can incorrectly trigger production, now assigned to a dedicated follow-up task.
+
+
+## ACTIVE — ЧАТ 1 — PR production trigger isolation
+
+Task:
+`WORKER_TASK_PR_PRODUCTION_TRIGGER_ISOLATION_FIX_01.md`
 
 Mode:
 `IMPLEMENT / VALIDATE`
 
 Status:
-`implementation_complete_live_refresh_pending_but_resync_required`
+`authorized_ready_for_worker`
 
 Purpose:
-- repair the stale candidate-universe refresh defect;
-- make a normal production refresh discover newly discounted games, not only recheck prices for previously known candidates;
-- use Mirror's Edge Catalyst / AppID 1233570 only as a regression probe, never as a special case;
-- add a fail-closed freshness/binding check so fresh prices over stale discovery cannot masquerade as a fresh recommendation universe;
-- reuse the existing GitHub-owned production pipeline and scheduler;
-- do not run semantic Deep/Dossier or modify ChatGPT Scheduled Tasks.
+- prevent pull-request validation from triggering canonical production mutations;
+- audit equivalent `workflow_run` edges;
+- keep legitimate main/scheduled/manual production triggers working;
+- no semantic worker execution.
 
-Expected report:
-`reviews/worker_reports/fresh-deal-discovery-refresh-fix-01.md`
+
+## ACTIVE — ЧАТ 2 — Dossier frozen invocation rollover safety
+
+Task:
+`WORKER_TASK_DOSSIER_FROZEN_INVOCATION_ROLLOVER_SAFETY_FIX_01.md`
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Status:
+`authorized_branch_work_only_until_trigger_fix_merged`
+
+Purpose:
+- preserve valid already-started Dossier semantic work across later daily snapshot replacement;
+- freeze exact GitHub-prepared group authority rather than requiring mutable-latest snapshot equality through publication;
+- preserve stale-work protection and truthful current-snapshot progress;
+- do not open PR until the PR-production-trigger isolation fix is confirmed merged on `main`;
+- do not run production Dossier or modify Scheduled Tasks.
 
 
 ## ACCEPTED — ЧАТ 2 — personal taste game-guess diagnostic
