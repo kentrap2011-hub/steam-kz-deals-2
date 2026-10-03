@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` is free after accepted `WORKER_TASK_PR_PRODUCTION_TRIGGER_ISOLATION_FIX_01.md`; PR #141 and closeout PR #142 are merged, post-merge execution-ownership validation is green, and the main-branch production-source guards are present.
+- `ЧАТ 1` assigned: `WORKER_TASK_MIRRORS_EDGE_CATALYST_POST_REFRESH_ABSENCE_DIAGNOSTIC_01.md` — diagnose why Mirror's Edge Catalyst (AppID 1233570) is still absent after PR #140, tracing the first failing production stage without implementing a fix.
 - `ЧАТ 2` is free after accepted `WORKER_TASK_DOSSIER_FROZEN_INVOCATION_ROLLOVER_SAFETY_FIX_01.md`; PR #143 is merged, durable report is on `main`, and all required PR checks were green.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
@@ -18,6 +18,25 @@
 - User-authorized current recovery direction: process current translations in ЧАТ 1 while ЧАТ 2 makes translation absence nonblocking and adds translation observability to Statistics. The earlier browser-asset decoupling proposal is not the current task; reassess it only if publication still lags after these authorized changes.
 - Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
+
+
+## ACTIVE — ЧАТ 1 — Mirror's Edge Catalyst post-refresh absence diagnostic
+
+Task:
+`WORKER_TASK_MIRRORS_EDGE_CATALYST_POST_REFRESH_ABSENCE_DIAGNOSTIC_01.md`
+
+Mode:
+`DIAGNOSTIC / READ-ONLY PRODUCTION TRACE`
+
+Status:
+`authorized_ready_for_worker`
+
+Purpose:
+- trace AppID 1233570 through current discovery -> shortlist -> mailing -> pre-AI -> semantic -> visual/publication stages;
+- identify the first causal stage of absence;
+- determine whether PR #140 is defective or merely never reached live acceptance;
+- produce a durable diagnostic report only;
+- no implementation, special case, production dispatch, semantic worker execution, or Scheduled Task changes.
 
 
 ## ACCEPTED — ЧАТ 1 — fresh deal discovery refresh fix
