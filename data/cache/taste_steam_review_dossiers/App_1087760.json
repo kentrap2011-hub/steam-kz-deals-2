@@ -4,21 +4,19 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
-    "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
-    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
-    "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
   "appid": "1087760",
   "title": "The Gunk",
-  "generated_at_utc": "2026-09-23T21:30:00Z",
-  "expires_at_utc": "2026-10-13T21:30:00Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "The Gunk",
@@ -31,42 +29,298 @@
       {
         "kind": "appid",
         "value": "1087760"
-      },
-      {
-        "kind": "developer",
-        "value": "Image & Form Games"
       }
     ]
   },
-  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
       "category": "mechanics",
-      "statement": "Russian Steam player feedback describes the vacuum-cleaning mechanic as relaxing and the presentation as colorful, while noting the adventure is short.",
+      "statement": "Vacuuming away the gunk and watching areas recover is the central loop and is repeatedly described as satisfying, relaxing and visually rewarding.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-006",
+        "feedback-009"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "structure",
+      "statement": "Progress is largely linear, built around exploring small areas, clearing contamination and solving light path-opening puzzles. Players generally find the flow easy to follow rather than exploratory in a highly open-ended sense.",
+      "sentiment": "neutral",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "source_ids": [
+        "source-002",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-004",
+        "feedback-005",
+        "feedback-009"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "progression",
+      "statement": "Combat, puzzles and upgrades remain mechanically simple. Multiple players report that progression changes little about the challenge, which supports the relaxed tone but limits mechanical depth.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 2,
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-005",
+        "feedback-006"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "repetition",
+      "statement": "The cleaning loop can lose novelty over the short campaign: some players stay engaged by the restorative visual payoff, while others report boredom once the repeated exploration-cleaning pattern is familiar.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-006"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "pacing",
+      "statement": "Completed playthroughs are commonly described around five to seven hours. Some players value the concise, one-evening scale, while others consider the game too short for how little its systems evolve.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-004",
+        "feedback-007",
+        "feedback-008"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "other",
+      "statement": "The colorful alien world, atmosphere and presentation are recurring strengths. Story and character writing receive more mixed reactions, ranging from charming and pleasant to shallow or clichéd.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-005",
+        "feedback-006",
+        "feedback-009"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "difficulty",
+      "statement": "Combat and puzzles are generally described as low-pressure and easy. That makes the game accessible and relaxing for some players, but leaves little challenge for players looking for mechanical mastery.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-005",
+        "feedback-006",
+        "feedback-009"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "mechanics",
+      "statement": "One Russian player describes movement and camera control as responsive enough for the game's light platforming and exploration, reinforcing the low-friction feel of the cleaning loop in that account.",
       "sentiment": "positive",
       "recurrence": "anecdotal",
       "mention_count": 1,
-      "evidence_languages": [
-        "russian"
-      ],
-      "evidence_status": "durable",
       "source_ids": [
         "source-002"
       ],
       "player_feedback_ids": [
-        "fallback-001"
+        "feedback-005"
+      ],
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "durable"
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "The short, low-challenge cleaning loop is praised as cozy and therapeutic by some players but criticized by others as repetitive or mechanically shallow.",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003",
+        "feedback-006",
+        "feedback-009"
       ]
     }
   ],
-  "conflicts": [],
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "source_mix_status": "single_source_only",
-    "single_source_reason": "One exact-product Russian Steam review collection supplied the serialized player-feedback finding.",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
     "russian_attempt": "found_and_used",
-    "overall_strength": "limited",
-    "stop_reason": "evidence_stable"
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            7
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            2
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            6
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            4
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            5
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            5,
+            7
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            3,
+            4,
+            6
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
   },
   "provenance": {
     "sources": [
@@ -75,33 +329,128 @@
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
         "url": "https://store.steampowered.com/app/1087760/",
-        "publication_date": "2022-04-29",
+        "publication_date": null,
         "language": "non_russian",
-        "freshness": "older",
         "evidence_role": "identity",
-        "player_feedback": false
+        "player_feedback": false,
+        "freshness": "unknown"
       },
       {
         "source_id": "source-002",
-        "source_type": "steam_reviews",
+        "source_type": "store_user_reviews",
         "domain": "store.steampowered.com",
         "url": "https://store.steampowered.com/app/1087760/The_Gunk/?curator_clanid=41553298&l=russian",
         "publication_date": null,
         "language": "russian",
-        "freshness": "recent",
         "evidence_role": "durable_trait",
         "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection"
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid_title_release",
+          "appid": "1087760",
+          "title": "The Gunk",
+          "release_year": 2022
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1087760/reviews/?browsefilter=toprated",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1087760",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/CozyGamers/comments/1k7xtr4",
+        "publication_date": "2025-04-25",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "fallback-001",
+        "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "publication_date": "2026-03-27",
+        "publication_date": null,
         "language": "russian",
-        "identity_mode": "transient_author_deduped"
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-003",
+        "publication_date": "2022-05-07",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-007",
+        "source_id": "source-003",
+        "publication_date": "2024-10-06",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-008",
+        "source_id": "source-003",
+        "publication_date": "2024-01-26",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-009",
+        "source_id": "source-004",
+        "publication_date": "2025-04-25",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item",
+        "url": "https://www.reddit.com/r/CozyGamers/comments/1k7xtr4"
       }
     ]
-  }
+  },
+  "summary": "Evidence summary: 8 validated structured observations; consult observations and conflicts for supported findings.",
+  "generated_at_utc": "2026-10-03T13:24:00Z",
+  "expires_at_utc": "2026-10-23T13:24:00Z"
 }
