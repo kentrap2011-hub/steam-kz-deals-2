@@ -188,6 +188,32 @@ class FrozenInvocationHarness:
 
 
 class DossierFrozenInvocationRolloverTests(unittest.TestCase):
+    def test_unrelated_main_movement_after_marker_does_not_invalidate_current_frozen_group(self):
+        with tempfile.TemporaryDirectory() as td:
+            h = FrozenInvocationHarness(td)
+            a, _ = h.commit_snapshot([700001, 700002, 700003], "snapshot A")
+            _, anchor_commit, nonce = h.marker()
+            unrelated = h.repo / "notes/unrelated.txt"
+            unrelated.parent.mkdir(parents=True, exist_ok=True)
+            unrelated.write_text("unrelated canonical movement\n", encoding="utf-8")
+            _commit_all(h.repo, "unrelated main movement")
+            h.candidate(a, anchor_commit, nonce)
+            _commit_all(h.repo, "A candidate after unrelated movement")
+
+            result = h.drain()
+
+            self.assertEqual(result["accepted_group_count_this_run"], 1)
+            self.assertEqual(result["frozen_authority_accepted_count_this_run"], 0)
+            current = json.loads(h.manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(current["group_progress"]["groups"][0]["state"], "accepted")
+
+    def test_runtime_contract_requires_per_item_frozen_cache_reuse_before_web_research(self):
+        runtime = (ROOT / "config/taste_steam_review_dossier_runtime_prompt.md").read_text(encoding="utf-8")
+        self.assertIn("before material web research for each item", runtime)
+        self.assertIn("reuse a cached Dossier verbatim", runtime)
+        self.assertIn("perform semantic research only for descriptor items not satisfied", runtime)
+        self.assertIn("Partial overlap does not make a whole group complete", runtime)
+
     def test_a_to_b_rollover_persists_old_semantics_then_current_group_advances_only_from_cache(self):
         with tempfile.TemporaryDirectory() as td:
             h = FrozenInvocationHarness(td)
