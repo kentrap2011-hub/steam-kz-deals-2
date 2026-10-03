@@ -149,14 +149,30 @@ class FrozenInvocationHarness:
             "run_start_nonce": nonce,
         }
 
+    @staticmethod
+    def frozen_descriptor(work, sequence=1):
+        group = copy.deepcopy(work["submission_group_plan"]["groups"][sequence - 1])
+        return {
+            "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+            "schema_version": 1,
+            "snapshot_id": work["snapshot_id"],
+            "prepared_required_sha256": work["prepared_required_sha256"],
+            "group_plan_sha256": work["submission_group_plan"]["group_plan_sha256"],
+            "group_count": work["submission_group_plan"]["group_count"],
+            "web_evidence_contract_binding": copy.deepcopy(work["web_evidence_contract_binding"]),
+            **group,
+        }
+
     def candidate(self, work, anchor, nonce, sequence=1):
-        artifact = buffered_artifact(work, sequence)
+        descriptor = self.frozen_descriptor(work, sequence)
+        artifact = copy.deepcopy(descriptor)
+        artifact["schema"] = "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1"
+        artifact["schema_version"] = 1
         artifact["dossiers"] = [
             web_dossier(item["appid"], self.now, title=item["title"])
-            for item in work["submission_group_plan"]["groups"][sequence - 1]["items"]
+            for item in descriptor["items"]
         ]
         artifact["run_start_authority"] = self.reference(anchor, nonce)
-        descriptor = work["submission_group_plan"]["groups"][sequence - 1]
         path = Path(self.contract["paths"]["submission_inbox_dir"]) / (
             f"{descriptor['snapshot_id']}--g{int(sequence):06d}--{descriptor['group_sha256']}.json"
         )
@@ -164,9 +180,14 @@ class FrozenInvocationHarness:
         return path, artifact
 
     def terminal(self, work, anchor, nonce, sequence=1):
+        descriptor = self.frozen_descriptor(work, sequence)
         receipt = terminal_receipt(work, sequence)
+        receipt["group_plan_sha256"] = descriptor["group_plan_sha256"]
+        receipt["group_count"] = descriptor["group_count"]
+        receipt["web_evidence_contract_binding"] = copy.deepcopy(
+            descriptor["web_evidence_contract_binding"]
+        )
         receipt["run_start_authority"] = self.reference(anchor, nonce)
-        descriptor = work["submission_group_plan"]["groups"][sequence - 1]
         path = expected_terminal_receipt_path(descriptor, self.contract)
         _write_json(path, receipt)
         return path, receipt
