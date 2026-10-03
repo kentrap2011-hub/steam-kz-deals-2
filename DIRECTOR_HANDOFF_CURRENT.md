@@ -1,226 +1,210 @@
 # DIRECTOR HANDOFF — CURRENT
 
 Repository: `kentrap2011-hub/steam-kz-deals-2`
-Branch: `main`
-Purpose: compact handoff for a replacement Director chat without replaying prior conversation history.
+Source of truth: `main`
 
-## Start here
+This is the compact transfer point for the next Director chat.
 
-Read in this order:
-1. `DIRECTOR_PROTOCOL.md`
-2. `DIRECTOR_HANDOFF_CURRENT.md`
-3. `DIRECTOR_TASK_BOARD.md`
-4. `DIRECTOR_REVIEW_CHECKPOINTS.md`
+## CRITICAL START RULE FOR THE NEXT DIRECTOR
 
-Do not broadly inspect Git history, workflow history, old tasks, artifacts or source code just to rebuild context. Use exact current reports and minimum evidence. The Director delegates investigation/implementation to worker chats.
+Do **not** reconstruct the project by roaming through the entire repository.
 
-## User communication / operating rules
+Do **not** enumerate all PRs, branches, workflow history, old worker reports, or old Board sections just to rebuild context.
 
-- Russian, direct and practical.
-- Always label worker instructions as **НОВЫЙ ЧАТ** or **СУЩЕСТВУЮЩИЙ ЧАТ**.
-- Prefer copyable code blocks for worker commands.
-- Do not claim UI/user-visible incident fixed before actual device/site verification where required.
-- The user explicitly asked the Director not to spend time/context manually following CI/log/history. If a check becomes nontrivial, delegate it to the worker chat.
-- If Director preparation takes >1 minute, visibly explain what is taking time instead of silently waiting.
+Preserve context and token budget.
 
-## Current live worker state
+Start in this order only:
 
-### ЧАТ 1 — visual freshness release closeout only
+1. Read current `CHAT_PROTOCOL.md` and perform only its required Director START gate.
+2. Read this file fully.
+3. Read only the top/current section of `DIRECTOR_TASK_BOARD.md`.
+4. For a concrete user request, open only the exact task/report/config/artifact referenced here or by that request.
+5. Inspect wider GitHub history only when there is a specific contradiction, missing fact, failed check, or explicit user request.
+
+Treat old Board sections as historical unless this handoff explicitly points to them.
+
+## CURRENT PHYSICAL WORKER SLOTS
+
+### ЧАТ 1 — FREE
+
+The Mirror's Edge Catalyst diagnostic is complete.
 
 Task:
-`WORKER_TASK_VISUAL_FRESHNESS_RELEASE_01.md`
+`WORKER_TASK_MIRRORS_EDGE_CATALYST_POST_REFRESH_ABSENCE_DIAGNOSTIC_01.md`
 
 Report:
-`reviews/worker_reports/visual-freshness-release-01.md`
+`reviews/worker_reports/mirrors-edge-catalyst-post-refresh-absence-diagnostic-01.md`
 
-Current situation:
-- accepted visual-freshness fix has already landed unchanged on `main` via PR #13;
-- landing commit: `ddbf25d855f3ed7b86aca5ecbebb834e87178012`;
-- production build run `33788418064` failed upstream on `ChatGPT production payload is not complete`;
-- freshness protection itself worked correctly and emitted truthful `fresh_build=false / degraded/no_fresh_build` and uploaded its receipt artifact;
-- resulting workflow-run deploy `33788465486` was correctly skipped;
-- exact triggering-run binding is installed on `main`, but a successful build->deploy chain has not yet dynamically exercised it.
+Completion commits:
+- diagnostic report: `56b8387f56daa88b291f6638befd133e616b3906`;
+- closeout: `62cf27a2ef7fd4c3312fe9b4a629bc4f539434d8`.
 
-Important closeout issue:
-- worker report used status `STOP`, which is not an allowed task status.
-- Existing Chat 1 was instructed to change only the report status to an allowed exact status (likely `blocked` based on existing evidence), with **no new investigation or implementation**.
+Do not redo this investigation.
 
-Do not give Chat 1 new work until this status-only closeout is saved. After canonical closeout, Chat 1 can be deleted.
+### ЧАТ 2 — FREE
 
-Separate prepared recon for the upstream blocker:
-`WORKER_TASK_VISUAL_BUILD_INPUT_INCOMPLETE_RECON_01.md`
-Expected report:
-`reviews/worker_reports/visual-build-input-incomplete-recon-01.md`
+The Dossier frozen-invocation rollover-safety implementation is accepted.
 
-Do not start it before mandatory review ordering permits, unless a more urgent concrete production problem justifies it.
+Task:
+`WORKER_TASK_DOSSIER_FROZEN_INVOCATION_ROLLOVER_SAFETY_FIX_01.md`
 
-### ЧАТ 2 — Epic final CI closeout only
+PR:
+`#143`
 
-Recon report:
-`reviews/worker_reports/epic-giveaway-schema-recon-01.md`
-blob `32d487e13a916424693bd05d0d0ced41cf688bc2`
+Merge:
+`a354500fc83d20fff89d19c0752aa2810898861e`
 
-Fix task:
-`WORKER_TASK_EPIC_GIVEAWAY_SCHEMA_FIX_01.md`
+Report:
+`reviews/worker_reports/dossier-frozen-invocation-rollover-safety-fix-01.md`
 
-Fix report:
-`reviews/worker_reports/epic-giveaway-schema-fix-01.md`
-blob at first closeout: `4e79874e4d4d0b4ed9d101ec7dba8791686dd69b`
+## CURRENTLY WORKING / RECENT SEMANTIC CHATS
 
-Implemented:
-- parser now identifies current 100% Epic promotion first;
-- irrelevant/non-current elements can be skipped without requiring `price.totalPrice`;
-- actual current giveaways still require strict/fail-closed price contract;
-- no ITAD/IGDB/title guessing/fallback source was added.
+These do **not** occupy physical ЧАТ 1/2 slots.
 
-Key refs:
-- parser fix commit: `aa7cea8d06d4d71a5ff6fe4c23a71c2cbda28783`;
-- regression commit: `d59d31a311c54b1501b78f4ba8bfb456cebf5f3f`;
-- canonical code-run `33790369125` completed `success`;
-- regression run `33790442843` was still running when the previous Director last checked.
+### Russian-description manual semantic worker — ACTIVE
 
-Production itself is already recovered:
-- `data/production/giveaways/v1/current.json` is `snapshot_status=complete`;
-- Epic is `status=ok`, `complete=true`;
-- Epic candidate_count `1`, accepted_count `1`;
-- active giveaway is `Alone With You`, 100% discount, KZ available;
-- no Epic source error.
+Canonical prompt:
+`config/russian_description_manual_semantic_worker_prompt.md`
 
-The user explicitly asked not to have the Director keep polling this CI. Existing Chat 2 was instructed to wait/check run `33790442843` itself, then update the fix report with final CI evidence and final allowed Status, without new implementation or ITAD work.
+A one-shot run was authorized and has already submitted checkpoint 1.
 
-Do not delete Chat 2 until it reports final closeout.
+Relevant commits:
+- authorization: `30f59b693cdef3eca520ddc78334850fdf850948`;
+- checkpoint 1 submission: `32caa3b35fb750cd31da7198f28e34855928edd6`.
 
-## Mandatory review checkpoint — currently DUE
+At the final handoff snapshot, canonical translation status had **not yet reflected acceptance**:
+- status: `translation_required`;
+- queue_count: 82;
+- untranslated_game_count: 82;
+- last canonical successful translation timestamp still 2026-10-01.
 
-`DIRECTOR_REVIEW_CHECKPOINTS.md` currently has:
-`system_audit_due: true`
+Therefore the next Director must **not** tell the worker to redo checkpoint 1. First check whether GitHub ingest consumed it and reread the current queue/status. Continue only from fresh canonical translation state.
 
-Reason:
-The user-visible Epic giveaway incident has now been stabilized in production.
+No Scheduled Task action is authorized.
 
-Prepared short audit:
-`WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md`
+### Progressive Deep semantic worker — ACTIVE / RECENT
 
-Expected report:
-`reviews/system_audits/epic-post-incident-audit-01.md`
+A current Deep invocation started and has begun submitting results.
 
-Start this only after the existing Epic fix Chat 2 has final closeout. It should be a **NEW Chat 2** (or whichever slot is free) and is READ-ONLY/AUDIT.
+Relevant commits:
+- run start: `0b47a0fe3830dfbcec37fa5a2395d6be08169067`;
+- result AppID 1577120: `7005c0f0901e33e087494c92617bbe1e71b2bf0c`;
+- result AppID 1237980: `0622b86499dab789711b07ab7f08270eb0bda0e3`.
 
-Until this mandatory audit completes, do not start ordinary backlog/ITAD work unless the user explicitly gives a more urgent concrete production priority.
+Current PASS 2 manifest observed at handoff had 23 items.
 
-## Mobile feed incident — CLOSED and user accepted
+Do not rebuild, reorder, or restart Deep scope. If the user asks for status, inspect the current canonical PASS 2 work and the latest exact worker/result commits only.
 
-Original mobile blank/loading incident is fixed.
+### Dossier semantic worker — ACTIVE / RECENT
 
-Final production cache-first release:
-`f745dac844213880cd7eb984573877f58803a3f0`
+The frozen-authority behavior is already on `main` and recent Dossier work is progressing.
 
-Pages run:
-`33779042331` success.
+Canonical snapshot at handoff:
+`a9a1390c7821fcc69c06f83e57c0297df0016e0d90e637ddccd7185d53bd8b19`
 
-User real-device acceptance on affected Android phone:
-`works`.
+Observed current progress:
+- next_pending_sequence: 5;
+- accepted_group_count: 4;
+- pending_group_count: 127;
+- accepted_dossier_count: 12;
+- pending_dossier_count: 379;
+- failed_group_count: 0.
 
-Post-incident audit:
-`reviews/system_audits/mobile-post-incident-audit-01.md`
-blob `db07eb4f7848d18e3a8cc62d5cb754e245695db4`
+Recent commits:
+- group 3 buffered: `391afad22736b6dd3ca0990eff480fecd3af228d`;
+- group 3 ingested/reconciled: `1782812ec194cd8d78cd30c83d1a588008177bed` / `79f5e476774d122ba802655407d57ad54f3e3957`;
+- group 4 buffered: `98f10a2c2f5c934b7c1ae3d890d8c490c7544d2c`;
+- group 4 ingested: `1ae9bc6e55304ca5d773fb3a8b0b3f8e688003a1`.
 
-Systemic conclusion:
-- canonical `data/current.json` remains source of truth;
-- browser Cache Storage is only one bounded last-known-good presentation fallback;
-- no second renderer, polling, service worker, scheduler or unbounded client data plane.
+Do not assume these counts remain current; if asked, read only the current worker index.
 
-Remaining bounded follow-up:
-`WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`
+## MIRROR'S EDGE CATALYST — DIAGNOSIS COMPLETE
 
-Goal only:
-wire existing `tests/feed-bootstrap.test.js` into canonical Pages deploy regression gate and prove one passing normal Pages run. No client redesign.
+User-visible symptom:
+Mirror's Edge Catalyst (AppID `1233570`) still did not appear after PR #140.
 
-Prepared, not next while mandatory Epic post-incident audit is due.
+Do not re-diagnose.
 
-## Visual freshness — code active, full successful-chain proof pending
+Worker conclusion:
+`diagnosis_complete_root_cause_identified`.
 
-Accepted implementation:
-- `reviews/worker_reports/visual-freshness-chain-fix-01.md`
-- final acceptance `reviews/worker_reports/visual-freshness-chain-acceptance-02.md`
+First causal stage:
+**fresh Steam KZ discovery does not complete/persist**.
 
-The protection is now on production `main` and has already proved truthful degraded/no-fresh-build behavior.
+Key result:
+- a real post-PR-#140 production discovery run did execute on `main`;
+- run `37120664964` was cancelled at the 60-minute collector timeout;
+- live Steam still exposed about `100307` rows despite the PR #140 `category1=998,21,996` bounding attempt;
+- canonical discovery therefore remained the stale 2026-09-23 universe;
+- Catalyst never reached shortlist, mailing, pre-AI, semantic work, ranking, or Pages.
 
-Do NOT reopen/redesign the freshness solution just because the first production cycle could not complete the stronger successful-build -> exact-run deploy proof. The blocker is upstream payload completeness, not the accepted freshness receipt design.
+Important split conclusion:
+- PR #140 freshness/fail-closed guards are working;
+- PR #140's live discovery-input bounding is not sufficient against current Steam behavior;
+- live acceptance was attempted and failed in discovery itself;
+- this is not a Dossier/Deep/ranking/Pages problem.
 
-If `ChatGPT production payload is not complete` remains a real blocker after mandatory review, use the already prepared bounded recon:
-`WORKER_TASK_VISUAL_BUILD_INPUT_INCOMPLETE_RECON_01.md`.
+Smallest next action from the worker:
+a bounded implementation task on the **existing Steam KZ production shortlist owner only** to make live discovery input/traversal actually bounded enough to finish inside the existing production cycle, with no Catalyst special case and no second scheduler/collector.
 
-## Semantic runtime / completeness
+**Do not create that implementation task until the user authorizes fixing it.**
 
-Semantic runtime heartbeat/observability fix is accepted and closed.
+## RECENT ACCEPTED IMPLEMENTATIONS — DO NOT REOPEN WITHOUT NEW EVIDENCE
 
-Final acceptance:
-`reviews/worker_reports/semantic-runtime-completion-acceptance-02.md`
-blob `5b4a25c89845ab258651a30608658e90d7d1840d`.
+- PR #140 — fresh deal discovery freshness handoff:
+  merge `7df5ed0cbe9dd9217c56344e0caab47dd366915f`.
+  Freshness guards accepted; live discovery bounding remains the newly diagnosed unresolved part above.
 
-System Audit 02 still left one separate UI-truth gap:
-canonical degraded/incomplete semantic state is not visibly surfaced to the user. This is later bounded work, not reason to reopen runtime implementation now.
+- PR #141 — isolate PR validation from production `workflow_run` triggers:
+  merge `da71fb7578c5fe467da0ce8e3decfbc62a6465a4`.
+  PR validation can no longer masquerade as production authority.
 
-## Giveaway identity — ITAD prepared, NOT started
+- PR #143 — Dossier frozen invocation rollover safety:
+  merge `a354500fc83d20fff89d19c0752aa2810898861e`.
+  Already-started legitimate Dossier work no longer dies merely because a later daily snapshot replaces the current projection.
 
-Provider permission is confirmed.
+- PR #125 — Russian translations nonblocking + Statistics observability remains accepted.
 
-Prepared task:
-`WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
+- RANK-013 and accepted score/ranking architecture remain closed unless the user explicitly reopens them.
 
-Architecture:
-- provider-neutral identity interface;
-- active provider `itad`;
-- reserved future provider `igdb`;
-- no automatic fallback / dual voting;
-- downstream Steam identity consumer remains provider-agnostic.
+## IMPORTANT USER OPERATING RULES
 
-Status:
-`prepared_not_started`.
+- Director delegates implementation/diagnostics to worker chats; do not directly implement when user says “исправляем/делаем”.
+- Max two physical developer worker slots: ЧАТ 1 and ЧАТ 2.
+- Semantic workers (Dossier, Deep, manual translation) do not consume those physical slots.
+- User remains operator of semantic runs/Scheduled Task UI.
+- Never create/modify Scheduled Tasks unless explicitly requested.
+- GitHub is source of truth.
+- Explain simply in Russian.
+- When checking a chat, prefer a narrow status check: branch/PR/report/latest checks. Do not inspect raw logs unless needed.
+- Bootstrap for a physical worker must say `ЧАТ N`, point to the exact `WORKER_TASK_*.md`, and tell it not to start other tasks.
+- Full task instructions belong in GitHub task files, not in the bootstrap.
+- Concurrent GitHub writes are normal; never overwrite newer canonical production state.
 
-Do not start before current mandatory Epic post-incident audit and more urgent production blockers are cleared, unless user explicitly reprioritizes.
+## IMMEDIATE DIRECTOR PRIORITIES
 
-Twitch/IGDB remains waiting on Twitch Support.
+1. Preserve and monitor the currently active semantic translation / Deep / Dossier work without restarting it.
+2. If user asks about Catalyst, report the completed diagnosis above; do not redo it.
+3. If user says to fix Catalyst/discovery, create a new bounded implementation task for a free physical slot, based on the completed diagnostic report.
+4. If user asks about translation status, first check whether checkpoint 1 was ingested and then use the fresh canonical queue/status.
+5. If user asks about Dossier or Deep status, inspect only their current exact canonical index/work/results.
 
-## Taste Reviewer
+## HANDOFF SNAPSHOT
 
-Baseline report:
-`reviews/taste_reviews/baseline-01.md`
-blob `f243047d9bbb3d8515e7929e2962da66688243c4`.
+Final observed recent `main` activity included:
+- Deep result AppID 1237980: `0622b86499dab789711b07ab7f08270eb0bda0e3`;
+- Catalyst diagnostic closeout: `62cf27a2ef7fd4c3312fe9b4a629bc4f539434d8`;
+- Dossier/PASS2 reconciliation: `fb9bf4efa3445cbd27fc148035bd1b32e369e0d0`;
+- Russian translation checkpoint 1 submission: `32caa3b35fb750cd31da7198f28e34855928edd6`.
 
-Advisory only. Material Taste/ranking policy changes require a current Taste Review checkpoint before acceptance.
+This snapshot is descriptive only. Always trust newer exact canonical state if it has advanced.
 
-## Operational health watch
+## CONTEXT-CONSERVATION RULE
 
-An hourly ChatGPT automation named `Steam KZ Health Watch` was created.
+The next Director should assume this handoff is correct unless a **specific** current check contradicts it.
 
-Purpose:
-- check canonical project health;
-- notify only on new/materially worsened production problems;
-- known tracked incidents should not generate duplicate alerts.
+Do not spend context proving settled history again.
 
-This monitoring layer is not a second canonical scheduler/writer and must not become one.
+Do not fetch dozens of files “for completeness”.
 
-## Priority order right now
-
-Unless the user explicitly changes priority:
-1. Get **existing Chat 1** status-only visual-freshness report closeout; then delete it.
-2. Get **existing Chat 2** final CI/report closeout for Epic; then delete it.
-3. Start **NEW audit chat** for `WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md` because `system_audit_due=true`.
-4. After audit, choose between the concrete visual-build-input blocker recon and the prepared mobile deploy regression gate based on current production state; the visual-build blocker is likely higher priority if still active.
-5. ITAD implementation only after current review/production blockers permit it.
-
-## Context-protection rule
-
-The replacement Director must preserve this strictly:
-- exact expected report first;
-- minimum current evidence only;
-- no broad Git/workflow/history archaeology;
-- do not manually follow long-running CI if a worker chat can own that follow-up;
-- delegate investigation and implementation;
-- keep Director responses fast and decision-oriented.
-
-## Source of truth
-
-If this handoff conflicts with a newer `DIRECTOR_TASK_BOARD.md`, `DIRECTOR_REVIEW_CHECKPOINTS.md`, or exact newer worker report, prefer the newer durable evidence and update this handoff. Do not use chat memory as the final authority.
+Read the one exact file needed for the user's current question, answer it, and preserve the rest of the context window for actual decisions.
