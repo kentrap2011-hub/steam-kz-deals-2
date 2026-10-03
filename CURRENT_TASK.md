@@ -1,11 +1,15 @@
 # CURRENT TASK
 
-## IN PROGRESS — Mirror's Edge Catalyst post-refresh absence diagnostic 01
-Статус: `diagnostic_in_progress`.
+## COMPLETE — Mirror's Edge Catalyst post-refresh absence diagnostic 01
+Статус: `diagnosis_complete_root_cause_identified`.
 - task: `WORKER_TASK_MIRRORS_EDGE_CATALYST_POST_REFRESH_ABSENCE_DIAGNOSTIC_01.md`;
-- mode: `DIAGNOSTIC / READ-ONLY PRODUCTION TRACE`;
-- scope: trace AppID 1233570 through current discovery -> shortlist -> mailing -> pre-AI -> semantic -> visual/publication and identify the first causal absence without implementing a fix or dispatching production;
-- required report: `reviews/worker_reports/mirrors-edge-catalyst-post-refresh-absence-diagnostic-01.md`.
+- first causal stage: fresh Steam KZ discovery did run after PR #140, but run `37120664964` hit the existing 60-minute collector timeout while live Steam still reported `100307` rows; the canonical commit step never ran;
+- AppID `1233570` is therefore absent from manifest -> shortlist -> mailing -> pre-AI -> Fast/Dossier/Deep -> ranking, so Pages is not the first cause;
+- PR #140 freshness guards work fail-closed, but its `category1=998,21,996` live-input bound did not actually bound the post-merge Steam response;
+- no production rerun, semantic worker, Scheduled Task, ranking/profile change, or implementation fix was performed;
+- report: `reviews/worker_reports/mirrors-edge-catalyst-post-refresh-absence-diagnostic-01.md`;
+- report commit: `56b8387f56daa88b291f6638befd133e616b3906`;
+- next bounded action: separate implementation task on the existing Steam KZ discovery owner to repair the live input/traversal boundary and prove one normal successful production discovery run.
 
 ## COMPLETE — PR production trigger isolation fix 01
 Статус: `implementation_complete_ready_for_director_acceptance`.
