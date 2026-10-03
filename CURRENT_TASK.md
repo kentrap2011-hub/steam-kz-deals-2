@@ -1,5 +1,12 @@
 # CURRENT TASK
 
+## IN PROGRESS — Mirror's Edge Catalyst post-refresh absence diagnostic 01
+Статус: `diagnostic_in_progress`.
+- task: `WORKER_TASK_MIRRORS_EDGE_CATALYST_POST_REFRESH_ABSENCE_DIAGNOSTIC_01.md`;
+- mode: `DIAGNOSTIC / READ-ONLY PRODUCTION TRACE`;
+- scope: trace AppID 1233570 through current discovery -> shortlist -> mailing -> pre-AI -> semantic -> visual/publication and identify the first causal absence without implementing a fix or dispatching production;
+- required report: `reviews/worker_reports/mirrors-edge-catalyst-post-refresh-absence-diagnostic-01.md`.
+
 ## COMPLETE — PR production trigger isolation fix 01
 Статус: `implementation_complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_PR_PRODUCTION_TRIGGER_ISOLATION_FIX_01.md`;
