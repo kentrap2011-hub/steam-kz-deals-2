@@ -281,9 +281,9 @@ def _validate_frozen_current_compatibility(view, current_manifest, contract):
         current = current_items.get(appid)
         if current is None:
             continue
-        if current.get("title") != item.get("title") or current.get("key") != item.get("key"):
+        if current.get("title") != item.get("title"):
             raise ValueError(
-                "frozen Dossier exact product/work identity changed for a current appid"
+                "frozen Dossier exact product identity changed for a current appid"
             )
     return active_binding
 
@@ -575,7 +575,17 @@ def plan_buffered_drain(
                         contract,
                         repo_root=repo_root,
                     )
-                    if authority_view["descriptor"] != descriptor:
+                    expected_authority_descriptor = {
+                        "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+                        "schema_version": 1,
+                        "snapshot_id": manifest["snapshot_id"],
+                        "prepared_required_sha256": manifest["prepared_required_sha256"],
+                        "group_plan_sha256": group_plan["group_plan_sha256"],
+                        "group_count": group_plan["group_count"],
+                        "web_evidence_contract_binding": manifest["web_evidence_contract_binding"],
+                        **descriptor,
+                    }
+                    if authority_view["descriptor"] != expected_authority_descriptor:
                         raise ValueError("current terminal run-start authority descriptor mismatch")
                     _validate_frozen_current_compatibility(
                         authority_view,
@@ -646,7 +656,17 @@ def plan_buffered_drain(
                     contract,
                     repo_root=repo_root,
                 )
-                if authority_view["descriptor"] != descriptor:
+                expected_authority_descriptor = {
+                    "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+                    "schema_version": 1,
+                    "snapshot_id": manifest["snapshot_id"],
+                    "prepared_required_sha256": manifest["prepared_required_sha256"],
+                    "group_plan_sha256": group_plan["group_plan_sha256"],
+                    "group_count": group_plan["group_count"],
+                    "web_evidence_contract_binding": manifest["web_evidence_contract_binding"],
+                    **descriptor,
+                }
+                if authority_view["descriptor"] != expected_authority_descriptor:
                     raise ValueError("current candidate run-start authority descriptor mismatch")
                 _validate_frozen_current_compatibility(
                     authority_view,
