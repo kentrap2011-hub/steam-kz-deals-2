@@ -3,7 +3,7 @@
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
 - `ЧАТ 1` is free after accepted `WORKER_TASK_PR_PRODUCTION_TRIGGER_ISOLATION_FIX_01.md`; PR #141 and closeout PR #142 are merged, post-merge execution-ownership validation is green, and the main-branch production-source guards are present.
-- `ЧАТ 2` assigned: `WORKER_TASK_DOSSIER_FROZEN_INVOCATION_ROLLOVER_SAFETY_FIX_01.md` — make an already-started exact Dossier group survive later daily snapshot rollover. The sequencing gate is now satisfied because the PR-production-trigger isolation fix is merged; ЧАТ 2 may reconcile with current `main` and open its PR when ready.
+- `ЧАТ 2` is free after accepted `WORKER_TASK_DOSSIER_FROZEN_INVOCATION_ROLLOVER_SAFETY_FIX_01.md`; PR #143 is merged, durable report is on `main`, and all required PR checks were green.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -58,7 +58,7 @@ Director acceptance:
 - no semantic worker or ChatGPT Scheduled Task was run or modified.
 
 
-## ACTIVE — ЧАТ 2 — Dossier frozen invocation rollover safety
+## ACCEPTED — ЧАТ 2 — Dossier frozen invocation rollover safety
 
 Task:
 `WORKER_TASK_DOSSIER_FROZEN_INVOCATION_ROLLOVER_SAFETY_FIX_01.md`
@@ -67,14 +67,16 @@ Mode:
 `IMPLEMENT / VALIDATE`
 
 Status:
-`authorized_ready_for_pr_after_current_main_reconciliation`
+`implementation_complete_ready_for_director_acceptance`
 
-Purpose:
-- preserve valid already-started Dossier semantic work across later daily snapshot replacement;
-- freeze exact GitHub-prepared group authority rather than requiring mutable-latest snapshot equality through publication;
-- preserve stale-work protection and truthful current-snapshot progress;
-- PR-production-trigger sequencing gate is satisfied; reconcile with current `main` before opening PR;
-- do not run production Dossier or modify Scheduled Tasks.
+Director acceptance:
+- PR #143 merged as `a354500fc83d20fff89d19c0752aa2810898861e`;
+- durable report is present on `main`;
+- final PR-head checks were green: Dossier runtime, execution ownership, Progressive PASS 2 core, and backlog dispositions;
+- frozen GitHub-prepared Dossier authority now survives later daily snapshot rollover without rebinding old work to a new snapshot;
+- late valid results can be persisted/reused when current semantic/evidence/TTL compatibility permits;
+- forged historical authority, material binding changes, duplicate transport and false current-snapshot progress remain fail-closed;
+- no production Dossier semantic run or ChatGPT Scheduled Task was used as implementation validation.
 
 
 ## ACCEPTED — ЧАТ 2 — personal taste game-guess diagnostic
