@@ -1,0 +1,1446 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "a9a1390c7821fcc69c06f83e57c0297df0016e0d90e637ddccd7185d53bd8b19",
+  "prepared_required_sha256": "734115089fb720a991413599a723a090ee22ef7b482fb4dc27f1b383f31bb48c",
+  "group_plan_sha256": "47e5ed9e5e3e63190ce3d57ed526af8cc3001db076cf93e26fcf4b303444ff76",
+  "group_count": 131,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 4,
+  "start_index": 9,
+  "end_index_exclusive": 12,
+  "appids": [
+    "1159290",
+    "1169040",
+    "1202540"
+  ],
+  "items_sha256": "bfdfa5c5c4051f7c2fb88064d48c8214ee05c91a62484583e9c8884311b99dfc",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "098500b2454e7f473c0f4030e32a5668fd521d67bbb53a898541fb39c385f974",
+  "items": [
+    {
+      "key": "App_1159290",
+      "appid": "1159290",
+      "title": "The Bloodline",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1159290.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1169040",
+      "appid": "1169040",
+      "title": "Necesse",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1169040.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1202540",
+      "appid": "1202540",
+      "title": "Marco & The Galaxy Dragon",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1202540.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "0b33dc1df104277d49e53183e8dd54a934a3e6ab022e30c92ed848014362fc47",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1159290",
+      "title": "The Bloodline",
+      "generated_at_utc": "2026-10-03T16:34:23Z",
+      "expires_at_utc": "2026-10-23T16:34:23Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "The Bloodline",
+        "release_year": 2023,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1159290"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 8 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Combat is a major attraction: players praise its fluid feel, broad selection of melee, ranged and magical skills, and the freedom to combine movement and abilities in highly expressive ways.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-004",
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "Leveling, skill trees, hidden abilities, equipment and crafting create frequent progression hooks, but balance and completeness vary because some trees or systems remain much more developed than others.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-004",
+            "feedback-007",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "The sandbox is organized as large explorable zones connected by an overworld, with quests that can be pursued at the player's pace. Players like the sense of scale and freedom, while also describing some spaces and systems as unfinished or sparse.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-006",
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Early-access jank remains a recurring tradeoff: players report clunky interface behavior, incomplete systems and bugs that can interrupt quests, combat or navigation. Because recent surfaced reports lacked full dates, the present frequency is uncertain.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "uncertain",
+          "source_ids": [
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-006",
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Some progression activities and settlement or resource tasks are described as repetitive or tedious before their payoff, especially when the surrounding content remains incomplete.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-008",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "localization",
+          "statement": "Russian-speaking players have sought a translation or fan-made Russian patch, while Steam currently lists only English support. The retrieved Russian records establish demand but do not provide dated recent evidence of the present usability impact.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "uncertain",
+          "source_ids": [
+            "source-001",
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Players repeatedly emphasize the game's unusually broad sandbox ambition and potential, with freedom of build and play style acting as a strength even for reviewers who consider the implementation unfinished.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-004",
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Power balance is intentionally loose: some abilities can make the player extremely strong while other skills feel awkward or underdeveloped, making challenge highly dependent on build rather than uniformly tuned.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-009"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "The same breadth that makes the sandbox exciting also exposes its early-access incompleteness: varied skills, systems and exploration invite experimentation, but uneven balance, bugs and sparse content can undermine that freedom.",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "source_ids": [
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-006",
+            "feedback-008",
+            "feedback-009"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                3
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                7
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                4
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                6
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                6
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                6
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                3,
+                4,
+                5,
+                7
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                5
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1159290/The_Bloodline/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1159290/discussions/0/603020878754649698/",
+            "publication_date": "2025-01-30",
+            "language": "russian",
+            "evidence_role": "uncertain",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1159290",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1159290/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1159290",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1159290",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "uncertain",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1159290",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1159290/negativereviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1159290",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2025-01-30",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2025-04-13",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-003",
+            "publication_date": "2023-10-17",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": "2023-11-20",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
+            "publication_date": "2023-12-27",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-004",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-004",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-005",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-005",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1169040",
+      "title": "Necesse",
+      "generated_at_utc": "2026-10-03T16:34:23Z",
+      "expires_at_utc": "2026-10-23T16:34:23Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Necesse",
+        "release_year": 2025,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1169040"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 8 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "The central loop mixes top-down exploration, mining, crafting and boss combat with a Terraria-like gear progression. Players repeatedly find the combination approachable and capable of sustaining long sessions.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-007",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "Bosses unlock new tiers of gear and content in a clear linear progression, while the settlement system lets recruited NPCs automate farming, crafting, sorting and other routine work.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-007",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "coop",
+          "statement": "Co-op is repeatedly described as a natural fit for the sandbox loop; Russian and non-Russian players report that exploring, fighting and building with friends strengthens the experience, though solo play remains viable.",
+          "sentiment": "positive",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "The gear-up, boss, resource and base-work cycle can become repetitive, and endgame incursions are a recurring complaint when their rewards feel insufficient for the repeated effort.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-005",
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Boss design is praised for requiring movement and mechanics rather than pure stat checks, but recent Russian feedback also criticizes some enemy spawning and boss patterns as frustrating or poorly balanced.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Hunger and some missing quality-of-life interface features can feel like chores rather than meaningful survival pressure, especially once the player is already managing a larger settlement.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-004",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-008",
+            "feedback-010"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "A dated August 2026 Russian player report describes very low frame rate and stuttering. This is recent current-state evidence but remains one observed configuration rather than proof of a universal performance problem.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "The procedurally generated world supports free-form exploration, while quests, biomes and bosses provide direction. Colony management is optional enough that players can emphasize adventuring or town-building according to preference.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-004",
+            "source-005",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-007",
+            "feedback-009",
+            "feedback-010"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "The optional colony layer is a defining advantage for players who enjoy automation and town growth, but other players find that settlement management can distract from the exploration-and-material grind they wanted from the sandbox.",
+          "recurrence": "limited",
+          "mention_count": 3,
+          "source_ids": [
+            "source-004",
+            "source-005",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-007",
+            "feedback-009",
+            "feedback-010"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                7
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                7
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1,
+                2,
+                7
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                4,
+                5,
+                6
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                6
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1169040/Necesse/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "store_user_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1169040/Necesse/?l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1169040",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "other_player_feedback",
+            "domain": "steamstat.io",
+            "url": "https://steamstat.io/ru/app/1169040",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1169040",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1169040/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1169040",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/steamachievements/comments/1wujkdy/25_necesse/",
+            "publication_date": "2026-09-30",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-006",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/Necesse/comments/1vbkeuy/necesse_or_core_keeper/",
+            "publication_date": "2026-07-31",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": "2026-09-02",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
+            "publication_date": "2026-08-30",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-003",
+            "publication_date": "2026-08-30",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-004",
+            "publication_date": "2025-10-17",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-004",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-005",
+            "publication_date": "2026-09-30",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/steamachievements/comments/1wujkdy/25_necesse/"
+          },
+          {
+            "feedback_id": "feedback-010",
+            "source_id": "source-006",
+            "publication_date": "2026-07-31",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/Necesse/comments/1vbkeuy/necesse_or_core_keeper/"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1202540",
+      "title": "Marco & The Galaxy Dragon",
+      "generated_at_utc": "2026-10-03T16:34:23Z",
+      "expires_at_utc": "2026-10-23T16:34:23Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Marco & The Galaxy Dragon",
+        "release_year": 2020,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1202540"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 7 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "other",
+          "statement": "Presentation is the standout strength: players repeatedly praise the unusually large number of CGs, animated sequences and energetic visual direction, which can make the visual novel feel closer to an animated show.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Comedy, voice acting and music carry much of the experience. Players generally enjoy the chaotic tone and emotional beats, while some find the serious story elements clichéd, rushed or less developed.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "The story moves quickly and is short for a visual novel, commonly described as roughly a single-day or six-to-ten-hour read. That briskness is appealing to some but leaves others wishing the serious plot had more room.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "This is a highly linear visual novel with almost no meaningful choices; interaction is dominated by reading and watching, with only a couple of brief minigames rather than a branching gameplay structure.",
+          "sentiment": "neutral",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-004",
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "localization",
+          "statement": "Steam currently lists Russian as unsupported even though Russian-language player reviews exist. The retrieved Russian reviews focus on presentation and emotional tone rather than translation quality, so the practical impact of missing official Russian localization remains unresolved.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "uncertain",
+          "source_ids": [
+            "source-001",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-005",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "One surfaced player account reports that Steam Deck playback and the two minigames require compatibility tinkering and may not work cleanly. The record lacked a full publication date, so current prevalence cannot be established.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "uncertain",
+          "source_ids": [
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Because the narrative is linear and has very few choices, replay value depends mostly on revisiting the presentation, music and story rather than discovering substantially different routes.",
+          "sentiment": "neutral",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-004"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "The visual novel's fast, animation-heavy style is the main source of enthusiasm, but the same compact structure can make its serious story feel rushed and leaves little branching or mechanical depth.",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-004"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                6
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2,
+                4,
+                5
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                4,
+                5
+              ]
+            }
+          ],
+          "closure_basis": "compact_central_experience",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1202540/Marco__The_Galaxy_Dragon/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1202540/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1202540",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/visualnovels/comments/ql0n5c",
+            "publication_date": "2021-11-02",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "other_player_feedback",
+            "domain": "steamstat.io",
+            "url": "https://steamstat.io/ru/app/1202540",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1202540",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1202540",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "uncertain",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1202540",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2020-02-28",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2020-03-19",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": "2021-11-02",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/visualnovels/comments/ql0n5c"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-004",
+            "publication_date": "2026-06-20",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-004",
+            "publication_date": "2026-06-08",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-005",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          }
+        ]
+      }
+    }
+  ],
+  "run_start_authority": {
+    "schema": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-REFERENCE-V1",
+    "schema_version": 1,
+    "run_start_anchor_commit": "f95ee0f9c6c4f7c7d03604d4d88d723a3ddcdee2",
+    "run_start_nonce": "8f31c2d94aab4e35a980b2e17c6f4d01"
+  }
+}
