@@ -741,13 +741,117 @@ def _append_failure_audit(path, record):
         handle.write(json.dumps(record, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n")
 
 
+
+def _active_existing_dossier(appid, current_manifest, contract, store_dir):
+    existing = load_dossier_if_present(store_dir, appid)
+    if existing is None:
+        return None
+    title = existing.get("title") if isinstance(existing, dict) else None
+    if not isinstance(title, str) or not title:
+        return None
+    try:
+        docs = validate_dossiers_against_expected_items(
+            [existing],
+            [{"appid": str(appid), "title": title}],
+            contract,
+            expected_ttl_days=int(current_manifest["ttl_days"]),
+        )
+        compact_policy = load_compact_provenance_policy()
+        validate_compact_provenance(docs[0], compact_policy)
+    except (ValueError, KeyError, TypeError):
+        return None
+    return docs[0]
+
+
+def _authority_audit_record(
+    proof,
+    *,
+    outcome,
+    current_snapshot_id,
+    artifact_path,
+    artifact_sha256,
+    dossier_actions=None,
+    semantic_stop_class=None,
+):
+    record = {
+        "schema": "TASTE-STEAM-REVIEW-DOSSIER-FROZEN-INVOCATION-AUDIT-V1",
+        "recorded_at_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+        "consumed": True,
+        "consumption_key": list(frozen_consumption_key(proof)),
+        "outcome": outcome,
+        "authority_snapshot_id": proof["snapshot_id"],
+        "authority_sequence": proof["sequence"],
+        "authority_group_sha256": proof["group_sha256"],
+        "current_snapshot_id_at_ingest": current_snapshot_id,
+        "artifact_path": Path(artifact_path).as_posix(),
+        "artifact_sha256": artifact_sha256,
+        "authority": proof,
+    }
+    if dossier_actions is not None:
+        record["dossier_actions"] = dossier_actions
+    if semantic_stop_class is not None:
+        record["semantic_stop_class"] = semantic_stop_class
+    return record
+
+
+def _cleanup_authority_marker(proof, repo_root):
+    marker = Path(repo_root).resolve() / proof["marker_path"]
+    if marker.exists():
+        marker.unlink()
+
+
+def _persist_frozen_dossiers(
+    entry,
+    *,
+    current_manifest,
+    contract,
+    store_dir,
+):
+    actions = []
+    persisted = []
+    for doc in entry["dossiers"]:
+        appid = str(doc["appid"])
+        path = dossier_path(store_dir, appid)
+        existing = _active_existing_dossier(
+            appid,
+            current_manifest,
+            contract,
+            store_dir,
+        )
+        if existing is not None:
+            actions.append({
+                "appid": appid,
+                "action": "kept_existing_current_compatible",
+                "candidate_dossier_sha256": canonical_sha256(doc),
+                "kept_dossier_sha256": canonical_sha256(existing),
+            })
+            continue
+        atomic_write_json(path, doc)
+        sha = canonical_sha256(doc)
+        persisted.append({
+            "appid": appid,
+            "path": path.as_posix(),
+            "dossier_sha256": sha,
+        })
+        actions.append({
+            "appid": appid,
+            "action": "persisted_frozen_authority_dossier",
+            "candidate_dossier_sha256": sha,
+            "kept_dossier_sha256": sha,
+        })
+    return persisted, actions
+
+
 def apply_buffered_drain(
     plan,
     *,
     manifest_path,
     store_dir,
+    contract=None,
     failure_audit_path=_DEFAULT_FAILURE_AUDIT,
     rejection_audit_path=_DEFAULT_RETRYABLE_REJECTION_AUDIT,
+    frozen_authority_audit_path=_DEFAULT_FROZEN_AUTHORITY_AUDIT,
+    repo_root=Path("."),
 ):
     """Apply accepted dossiers, consumed semantic terminals, and retryable transport cleanup."""
     persisted = []
@@ -760,6 +864,55 @@ def apply_buffered_drain(
                 "path": path.as_posix(),
                 "dossier_sha256": canonical_sha256(doc),
             })
+
+    current_snapshot_id = plan["next_manifest"]["snapshot_id"]
+
+    for entry in plan.get("frozen_accepted", []):
+        frozen_persisted, dossier_actions = _persist_frozen_dossiers(
+            entry,
+            current_manifest=plan["next_manifest"],
+            contract=contract,
+            store_dir=store_dir,
+        )
+        persisted.extend(frozen_persisted)
+        artifact_sha = hashlib.sha256(entry["path"].read_bytes()).hexdigest()
+        _append_failure_audit(
+            frozen_authority_audit_path,
+            _authority_audit_record(
+                entry["proof"],
+                outcome="dossier_candidate_accepted_after_rollover",
+                current_snapshot_id=current_snapshot_id,
+                artifact_path=entry["path"],
+                artifact_sha256=artifact_sha,
+                dossier_actions=dossier_actions,
+            ),
+        )
+        _cleanup_authority_marker(entry["proof"], repo_root)
+
+    for entry in plan["accepted"]:
+        proof = entry.get("authority_proof")
+        if proof is not None:
+            artifact_sha = hashlib.sha256(entry["path"].read_bytes()).hexdigest()
+            _append_failure_audit(
+                frozen_authority_audit_path,
+                _authority_audit_record(
+                    proof,
+                    outcome="dossier_candidate_accepted_current_snapshot",
+                    current_snapshot_id=current_snapshot_id,
+                    artifact_path=entry["path"],
+                    artifact_sha256=artifact_sha,
+                    dossier_actions=[
+                        {
+                            "appid": str(doc["appid"]),
+                            "action": "persisted_current_group_dossier",
+                            "candidate_dossier_sha256": canonical_sha256(doc),
+                            "kept_dossier_sha256": canonical_sha256(doc),
+                        }
+                        for doc in entry["dossiers"]
+                    ],
+                ),
+            )
+            _cleanup_authority_marker(proof, repo_root)
 
     for entry in plan["failed"]:
         source = entry["path"]
@@ -777,6 +930,41 @@ def apply_buffered_drain(
             **entry["failure"],
             "normal_forward_progress_blocked": False,
         })
+        proof = entry.get("authority_proof")
+        if proof is not None:
+            _append_failure_audit(
+                frozen_authority_audit_path,
+                _authority_audit_record(
+                    proof,
+                    outcome="semantic_exhaustion_consumed_current_snapshot",
+                    current_snapshot_id=current_snapshot_id,
+                    artifact_path=source,
+                    artifact_sha256=entry["failure"]["artifact_sha256"],
+                    semantic_stop_class=entry["receipt"]["semantic_stop_class"],
+                ),
+            )
+            _cleanup_authority_marker(proof, repo_root)
+
+    for entry in plan.get("frozen_terminals", []):
+        source = entry["path"]
+        target = entry["archive_target"]
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if target.exists():
+            raise ValueError(f"frozen terminal receipt archive already exists: {target.as_posix()}")
+        artifact_sha = hashlib.sha256(source.read_bytes()).hexdigest()
+        shutil.move(source.as_posix(), target.as_posix())
+        _append_failure_audit(
+            frozen_authority_audit_path,
+            _authority_audit_record(
+                entry["proof"],
+                outcome="semantic_exhaustion_consumed_after_rollover",
+                current_snapshot_id=current_snapshot_id,
+                artifact_path=source,
+                artifact_sha256=artifact_sha,
+                semantic_stop_class=entry["receipt"]["semantic_stop_class"],
+            ),
+        )
+        _cleanup_authority_marker(entry["proof"], repo_root)
 
     for entry in plan["rejected"]:
         for source, target in zip(entry["paths"], entry["quarantine_targets"]):
@@ -793,9 +981,43 @@ def apply_buffered_drain(
             **entry["rejection"],
         })
 
+    for entry in plan.get("frozen_rejected", []):
+        source = entry["path"]
+        target = entry["quarantine_target"]
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if target.exists():
+            raise ValueError(f"frozen transport quarantine target already exists: {target.as_posix()}")
+        shutil.move(source.as_posix(), target.as_posix())
+        _append_failure_audit(rejection_audit_path, {
+            "schema": "TASTE-STEAM-REVIEW-DOSSIER-FROZEN-TRANSPORT-REJECTION-AUDIT-V1",
+            "recorded_at_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+            "current_snapshot_id": current_snapshot_id,
+            "artifact_path": source.as_posix(),
+            "artifact_sha256": entry["artifact_sha256"],
+            "validator_error": entry["validator_error"],
+            "current_snapshot_progress_changed": False,
+        })
+
+    cache_reused_sequences = []
+    if contract is not None:
+        reconciled, cache_reused_sequences = reconcile_current_pending_groups_from_cache(
+            plan["next_manifest"],
+            contract,
+            store_dir,
+        )
+        plan["next_manifest"] = reconciled
+    plan["cache_reused_sequences"] = cache_reused_sequences
+
     atomic_write_json(manifest_path, plan["next_manifest"])
     for entry in plan["accepted"]:
         entry["path"].unlink()
+    for entry in plan.get("frozen_accepted", []):
+        if entry["path"].exists():
+            entry["path"].unlink()
+    for replay in plan.get("frozen_replays", []):
+        if replay["path"].exists():
+            replay["path"].unlink()
+        _cleanup_authority_marker(replay["proof"], repo_root)
     for path in plan["terminal_replays"]:
         path.unlink()
     return persisted
