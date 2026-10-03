@@ -179,16 +179,26 @@
       "failed_group_quarantine_and_recovery_eligibility",
       "next_pending_projection",
       "normal_first_pass_completeness",
-      "all_groups_accepted_completeness"
+      "all_groups_accepted_completeness",
+      "nonce_only_run_start_marker_validation",
+      "actual_marker_parent_frozen_invocation_authority",
+      "git_history_authority_and_result_ancestry_validation",
+      "late_frozen_dossier_neutral_cache_persistence_without_old_to_new_group_rebinding",
+      "exact_current_group_cache_reconciliation",
+      "frozen_authority_consumption_audit_and_replay_deduplication"
     ],
-    "scheduled_chatgpt_role": "bounded_semantic_candidate_or_exact_exhaustion_terminal_generation_and_create_only_transport_only",
+    "scheduled_chatgpt_role": "bounded_semantic producer that creates one nonce-only run-start marker, freezes only GitHub's actual marker-parent view, reuses exact compatible frozen cache per item, and publishes create-only authority-referenced candidate or exhaustion terminal transport",
     "failed_group_blocks_unrelated_groups": false,
     "new_queue_retry_loop_or_scheduler_created": false,
     "scheduled_worker_may_edit_own_schedule": false,
     "scheduled_chatgpt_temporal_role": "supply_factual_publication_dates_or_null_only_not_temporal_classification",
     "unknown_date_recent_support_rule": "unknown_date_never_satisfies_recent_support",
     "semantic_exhaustion_terminal_rule": "only_after_all_required_semantic_routes_are_exhausted_and_no_valid_complete_group_can_be_produced;github_validates_exact_binding_before_one normal_first_pass_attempt_is_consumed",
-    "transport_failure_rule": "malformed_stale_wrong_identity_write_failure_or_unexhausted_runtime_tool_stop_consumes_zero semantic_attempts_and_remains_normal_pending_work"
+    "transport_failure_rule": "malformed_stale_wrong_identity_write_failure_or_unexhausted_runtime_tool_stop_consumes_zero semantic_attempts_and_remains_normal_pending_work",
+    "frozen_invocation_rollover_rule": "later main movement or daily rollover does not cancel an already marker-authorized invocation; old outcomes retain old identity and GitHub alone decides compatible cache persistence",
+    "current_progress_rule": "current snapshot group state may change only from its own strict transport or all-items strict current-compatible cache reconciliation; partial old/new overlap never advances a group",
+    "worker_selected_authority_commit_allowed": false,
+    "old_group_rebinding_to_current_allowed": false
   },
   "progressive_personalization_phase_c_pass2_core": {
     "status": "production_active",
