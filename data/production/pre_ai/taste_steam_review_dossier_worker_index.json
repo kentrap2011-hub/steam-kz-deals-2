@@ -10,9 +10,8 @@
   "prepared_required_sha256": "734115089fb720a991413599a723a090ee22ef7b482fb4dc27f1b383f31bb48c",
   "group_plan_sha256": "47e5ed9e5e3e63190ce3d57ed526af8cc3001db076cf93e26fcf4b303444ff76",
   "group_count": 131,
-  "next_pending_sequence": 3,
+  "next_pending_sequence": 4,
   "pending_group_sequences": [
-    3,
     4,
     5,
     6,
@@ -143,18 +142,18 @@
     131
   ],
   "failed_group_sequences": [],
-  "accepted_group_count": 2,
+  "accepted_group_count": 3,
   "failed_group_count": 0,
-  "pending_group_count": 129,
-  "accepted_dossier_count": 6,
+  "pending_group_count": 128,
+  "accepted_dossier_count": 9,
   "failed_dossier_count": 0,
-  "pending_dossier_count": 385,
+  "pending_dossier_count": 382,
   "normal_first_pass_complete": false,
   "all_groups_accepted": false,
-  "legacy_contiguous_expected_sequence": 3,
+  "legacy_contiguous_expected_sequence": 4,
   "prepared_required_count": 391,
-  "legacy_contiguous_completed_required_count": 6,
-  "legacy_contiguous_remaining_required_count": 385,
+  "legacy_contiguous_completed_required_count": 9,
+  "legacy_contiguous_remaining_required_count": 382,
   "full_backlog_complete": false,
   "ttl_days": 20,
   "sampling_policy": {
@@ -210,5 +209,21 @@
     "scope_source",
     "source_queue_sha256"
   ],
-  "buffer_candidate_serialization_rule": "verbatim_deep_copy_group_descriptor_replace_schema_marker_then_add_dossiers"
+  "buffer_candidate_serialization_rule": "verbatim_deep_copy_group_descriptor_replace_schema_marker_then_add_dossiers",
+  "frozen_invocation_authority": {
+    "marker_schema": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-MARKER-V1",
+    "marker_schema_version": 1,
+    "marker_path_template": "data/ai_inbox/taste_steam_review_dossiers/run_starts/{run_start_nonce}.json",
+    "marker_allowed_fields": [
+      "schema",
+      "schema_version",
+      "run_start_nonce"
+    ],
+    "reference_schema": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-REFERENCE-V1",
+    "reference_schema_version": 1,
+    "authority_selection": "actual_single_git_parent_of_the_durable_marker_commit",
+    "worker_selected_authority_commit_allowed": false,
+    "later_main_movement_rule": "does_not_invalidate_the_already_frozen_invocation_by_itself",
+    "daily_rollover_rule": "new_snapshot_becomes_the_only_current_progress_authority_but_does_not_cancel_already_authorized_old_snapshot_semantic_computation"
+  }
 }

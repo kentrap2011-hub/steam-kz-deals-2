@@ -4,21 +4,21 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
-    "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
-    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
-    "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
   "appid": "1127840",
   "title": "Landlord's Super",
-  "generated_at_utc": "2026-09-23T22:38:00Z",
-  "expires_at_utc": "2026-10-13T22:38:00Z",
+  "generated_at_utc": "2026-10-03T16:34:23Z",
+  "expires_at_utc": "2026-10-23T16:34:23Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Landlord's Super",
@@ -31,43 +31,254 @@
       {
         "kind": "appid",
         "value": "1127840"
-      },
-      {
-        "kind": "developer",
-        "value": "Minskworks"
       }
     ]
   },
-  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "localization",
-      "statement": "Russian-language player feedback historically identified the absence of Russian localization as a barrier, and current product metadata still lists no Russian language support.",
+      "category": "mechanics",
+      "statement": "Hands-on construction is the central attraction: players praise the freedom and dense sequence of physical building tasks, and current review material still describes the grind-and-progress loop as satisfying.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-004",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-004",
+        "feedback-007"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Earning money, upgrading tools and finishing properties gives a clear progression loop, but repeated money-making and jobs can become more routine after the first substantial build.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-004",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-004",
+        "feedback-007"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "The broader life-simulation layer is thinner than the construction system: players describe limited late-game or replayability and relatively shallow NPC or survival-style systems once the main building loop is understood.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Physical interactions around scaffolding, ladders and objects have been described as janky, and launch-era players reported save- or progress-disrupting bugs; a newer review also reports losing essential tools after jail. The present overall bug scope is not established by dated recent player evidence.",
       "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "uncertain",
+      "source_ids": [
+        "source-003",
+        "source-004",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-005",
+        "feedback-006",
+        "feedback-007"
+      ]
+    },
+    {
+      "category": "localization",
+      "statement": "Russian-speaking players discussed the absence of Russian localization and reliance on fan or machine translation after release. Steam still lists Russian as unsupported, but no dated recent Russian player record was found to establish the present practical impact.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
       "evidence_languages": [
         "russian"
       ],
-      "evidence_status": "historical",
+      "evidence_status": "uncertain",
       "source_ids": [
-        "source-002",
-        "source-003"
+        "source-001",
+        "source-002"
       ],
       "player_feedback_ids": [
-        "fallback-001"
+        "feedback-001",
+        "feedback-002"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "The deliberately specific 1980s-Britain setting and tactile building routine give the game a distinctive identity, while some players find the surrounding life-simulation world less developed than the construction itself.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-005"
       ]
     }
   ],
-  "conflicts": [],
+  "conflicts": [
+    {
+      "statement": "Players who focus on tactile house construction describe a satisfying and unusually detailed simulator, while others judge the surrounding life-simulation, polish and late-game depth as unfinished or too thin.",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "source_ids": [
+        "source-003",
+        "source-004",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-004",
+        "feedback-005",
+        "feedback-007"
+      ]
+    }
+  ],
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "source_mix_status": "single_source_only",
-    "single_source_reason": "One exact-product Steam Community thread supplied the bound Russian player-feedback item; current metadata was used only for temporal context.",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
     "russian_attempt": "found_and_used",
-    "overall_strength": "limited",
-    "stop_reason": "evidence_stable"
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            2
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            5
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            5
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "covered",
+          "observation_indices": [
+            3,
+            4
+          ]
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
   },
   "provenance": {
     "sources": [
@@ -76,11 +287,11 @@
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
         "url": "https://store.steampowered.com/app/1127840/Landlords_Super/",
-        "publication_date": "2023-05-25",
+        "publication_date": null,
         "language": "non_russian",
-        "freshness": "older",
         "evidence_role": "identity",
-        "player_feedback": false
+        "player_feedback": false,
+        "freshness": "unknown"
       },
       {
         "source_id": "source-002",
@@ -89,30 +300,121 @@
         "url": "https://steamcommunity.com/app/1127840/discussions/0/2270320616975477743/",
         "publication_date": "2020-04-27",
         "language": "mixed",
-        "freshness": "older",
-        "evidence_role": "historical",
+        "evidence_role": "uncertain",
         "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection"
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1127840",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "older"
       },
       {
         "source_id": "source-003",
-        "source_type": "professional_context",
-        "domain": "wasdland.com",
-        "url": "https://www.wasdland.com/game/landlords-super-1127840/",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1127840/discussions/0/3817410454875235435/",
+        "publication_date": "2023-06-08",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1127840",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1127840/discussions/0/3841053598850102639/",
+        "publication_date": "2023-05-30",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1127840",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-005",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1127840/reviews/",
         "publication_date": null,
         "language": "non_russian",
-        "freshness": "recent",
-        "evidence_role": "current_state",
-        "player_feedback": false
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1127840",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "fallback-001",
+        "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "publication_date": "2020-04-27",
+        "publication_date": "2023-06-11",
         "language": "russian",
-        "identity_mode": "transient_author_deduped"
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": "2023-06-12",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-003",
+        "publication_date": "2023-06-08",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-004",
+        "publication_date": "2023-05-30",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-004",
+        "publication_date": "2023-05-30",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-004",
+        "publication_date": "2023-05-31",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-007",
+        "source_id": "source-005",
+        "publication_date": null,
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
       }
     ]
   }
