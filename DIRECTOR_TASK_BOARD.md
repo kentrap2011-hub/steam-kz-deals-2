@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` active on PR #140 `Fix stale deal discovery freshness handoff`; branch has 22 commits and core fresh-discovery regressions pass, but `Steam KZ production shortlist` CI is failing in historical visual freshness regression under shallow checkout; final report/merge are still pending and branch must reconcile with current main before completion.
+- `ЧАТ 1` active on PR #140 `Fix stale deal discovery freshness handoff`; CI is now fully green and the durable report exists on the PR branch, but current `main` advanced again after validation. The branch is currently behind main by 4 commits and must reconcile/rerun required checks before merge.
 - `ЧАТ 2` is free after completed `WORKER_TASK_PERSONAL_TASTE_GAME_GUESS_DIAGNOSTIC_01.md`; Mirror's Edge Catalyst was guessed correctly on attempt 2 and no production/profile state was changed.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
@@ -29,7 +29,7 @@ Mode:
 `IMPLEMENT / VALIDATE`
 
 Status:
-`implementation_in_progress_pr_140_ci_failure_pending`
+`implementation_complete_live_refresh_pending_but_resync_required`
 
 Purpose:
 - repair the stale candidate-universe refresh defect;
