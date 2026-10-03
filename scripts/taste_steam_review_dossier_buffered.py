@@ -341,6 +341,16 @@ def reconcile_current_pending_groups_from_cache(
         next_manifest = set_group_state(next_manifest, contract, sequence, ACCEPTED)
         reused.append(sequence)
 
+    frozen_accepted, frozen_terminals, frozen_rejected, frozen_replays = _frozen_rollover_transports(
+        manifest,
+        contract,
+        buffer_dir,
+        repo_root=repo_root,
+        frozen_authority_audit_path=frozen_authority_audit_path,
+        retryable_rejection_root=retryable_rejection_root,
+        terminal_receipt_archive_root=terminal_receipt_archive_root,
+    )
+
     prefix_count = accepted_contiguous_prefix_item_count(next_manifest, contract)
     next_manifest.update(progress_fields(
         next_manifest["snapshot_id"],
@@ -399,6 +409,8 @@ def _frozen_rollover_transports(
     frozen_authority_audit_path=_DEFAULT_FROZEN_AUTHORITY_AUDIT,
     retryable_rejection_root=_DEFAULT_RETRYABLE_REJECTION_QUARANTINE,
     terminal_receipt_archive_root=_DEFAULT_TERMINAL_RECEIPT_ARCHIVE,
+    frozen_authority_audit_path=_DEFAULT_FROZEN_AUTHORITY_AUDIT,
+    repo_root=Path("."),
 ):
     """Resolve authority-bearing old-snapshot transports without rebinding them to current work."""
     root = Path(buffer_dir)
@@ -556,6 +568,25 @@ def plan_buffered_drain(
                 continue
             try:
                 receipt = json.loads(path.read_text(encoding="utf-8"))
+                authority_proof = None
+                if receipt.get("run_start_authority") is not None:
+                    authority_proof, authority_view = resolve_frozen_transport_authority(
+                        path,
+                        receipt,
+                        contract,
+                        repo_root=repo_root,
+                    )
+                    if authority_view["descriptor"] != descriptor:
+                        raise ValueError("current terminal run-start authority descriptor mismatch")
+                    _validate_frozen_current_compatibility(
+                        authority_view,
+                        manifest,
+                        contract,
+                    )
+                    if frozen_consumption_key(authority_proof) in _read_frozen_audit(
+                        frozen_authority_audit_path
+                    ):
+                        raise ValueError("current terminal run-start authority was already consumed")
                 validate_terminal_receipt(receipt, descriptor)
             except (ValueError, json.JSONDecodeError, UnicodeDecodeError, OSError, KeyError, TypeError) as exc:
                 rejected.append(_transport_rejection_entry(
@@ -574,6 +605,8 @@ def plan_buffered_drain(
                 receipt=receipt,
                 archive_root=terminal_receipt_archive_root,
             )
+            if authority_proof is not None:
+                entry["authority_proof"] = authority_proof
             failed.append(entry)
             next_manifest = set_group_state(
                 next_manifest, contract, sequence, FAILED, failure=entry["failure"]
@@ -606,6 +639,25 @@ def plan_buffered_drain(
             continue
         try:
             artifact = json.loads(path.read_text(encoding="utf-8"))
+            authority_proof = None
+            if artifact.get("run_start_authority") is not None:
+                authority_proof, authority_view = resolve_frozen_transport_authority(
+                    path,
+                    artifact,
+                    contract,
+                    repo_root=repo_root,
+                )
+                if authority_view["descriptor"] != descriptor:
+                    raise ValueError("current candidate run-start authority descriptor mismatch")
+                _validate_frozen_current_compatibility(
+                    authority_view,
+                    manifest,
+                    contract,
+                )
+                if frozen_consumption_key(authority_proof) in _read_frozen_audit(
+                    frozen_authority_audit_path
+                ):
+                    raise ValueError("current candidate run-start authority was already consumed")
             docs = validate_buffer_artifact(artifact, descriptor, manifest, contract)
         except (ValueError, json.JSONDecodeError, UnicodeDecodeError, OSError, KeyError, TypeError) as exc:
             rejected.append(_transport_rejection_entry(
@@ -617,7 +669,10 @@ def plan_buffered_drain(
                 quarantine_root=retryable_rejection_root,
             ))
             continue
-        accepted.append({"path": path, "descriptor": descriptor, "dossiers": docs})
+        accepted_entry = {"path": path, "descriptor": descriptor, "dossiers": docs}
+        if authority_proof is not None:
+            accepted_entry["authority_proof"] = authority_proof
+        accepted.append(accepted_entry)
         next_manifest = set_group_state(next_manifest, contract, sequence, ACCEPTED)
 
     # Exact replay of an already-consumed semantic terminal receipt is a cleanup-only no-op.
@@ -660,10 +715,18 @@ def plan_buffered_drain(
         "failed": failed,
         "rejected": rejected,
         "terminal_replays": terminal_replays,
+        "frozen_accepted": frozen_accepted,
+        "frozen_terminals": frozen_terminals,
+        "frozen_rejected": frozen_rejected,
+        "frozen_replays": frozen_replays,
         "accepted_count": len(accepted),
         "accepted_dossier_count": sum(len(entry["dossiers"]) for entry in accepted),
         "failed_count": len(failed),
         "rejected_count": len(rejected),
+        "frozen_accepted_count": len(frozen_accepted),
+        "frozen_terminal_count": len(frozen_terminals),
+        "frozen_rejected_count": len(frozen_rejected),
+        "frozen_replay_count": len(frozen_replays),
         "malformed_current_snapshot_artifacts": [
             path.as_posix() for path in list(malformed_names) + list(malformed_terminal_names)
         ],
