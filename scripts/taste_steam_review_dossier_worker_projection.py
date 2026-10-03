@@ -93,7 +93,7 @@ def _frozen_invocation_projection(contract):
             raise ValueError(f"dossier frozen invocation contract mismatch: {field}")
     marker_template = frozen.get("marker_path_template")
     expected_template = paths.get("run_start_marker_root", "").rstrip("/") + "/{run_start_nonce}.json"
-    if not expected_template.startswith("/") and marker_template != expected_template:
+    if marker_template != expected_template:
         raise ValueError("dossier frozen invocation marker path template mismatch")
     if frozen.get("worker_selected_authority_commit_allowed") is not False:
         raise ValueError("dossier frozen invocation must forbid worker-selected authority")
