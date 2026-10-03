@@ -65,7 +65,7 @@ After a successful create-only candidate or terminal publication, treat that fro
 
 If a deterministic candidate or terminal path already exists, never overwrite, update, rename, delete, or create an alternate filename. That transport remains GitHub-owned classification state. Stop that path fail-closed rather than inventing retry ownership.
 
-## Exact authority-referenced buffered candidate
+## Exact buffered identity serialization
 
 For a candidate, start from a **verbatim deep copy of the exact frozen group descriptor**. Replace only its top-level descriptor schema marker with:
 
