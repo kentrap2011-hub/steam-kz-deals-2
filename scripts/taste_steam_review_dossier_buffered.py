@@ -411,8 +411,6 @@ def _frozen_rollover_transports(
     frozen_authority_audit_path=_DEFAULT_FROZEN_AUTHORITY_AUDIT,
     retryable_rejection_root=_DEFAULT_RETRYABLE_REJECTION_QUARANTINE,
     terminal_receipt_archive_root=_DEFAULT_TERMINAL_RECEIPT_ARCHIVE,
-    frozen_authority_audit_path=_DEFAULT_FROZEN_AUTHORITY_AUDIT,
-    repo_root=Path("."),
 ):
     """Resolve authority-bearing old-snapshot transports without rebinding them to current work."""
     root = Path(buffer_dir)
