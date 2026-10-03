@@ -159,23 +159,31 @@ The same Dossier workflow also runs all prior daily snapshot, buffered submissio
 
 ## 10. Validation
 
-Final implementation head validated before report-only commit:
+Final implementation head before report:
 
 `39b62238d53a2eead29775931ceb1f8eddb471c9`
 
-Synchronized base:
+Final PR head at merge, including the durable report:
+
+`8d6d7132e0f4c9bd5d65a888f9cfc46cde42f1b3`
+
+Synchronized base at merge:
 
 `main@4c5c851bcf712c351a67afb670dc8116290cf894`
 
-Compare immediately before report: `behind_by=0`.
+Immediately before merge the PR compare state was `behind_by=0` and GitHub reported PR #143 mergeable.
 
-Green runs:
+All required validations were green on the final PR head:
 
-- `Validate buffered Steam review dossier runtime` — run `37130680399`, job `111224993354`, success; step `Frozen invocation rollover regression` succeeded.
-- `Validate execution ownership` — run `37130680398`, job `111224993500`, success; both `Validate component ownership boundaries` and `Validate workflow-run production authority` succeeded.
-- `Validate Progressive PASS 2 core` — run `37130680429`, job `111224993560`, success; core, Dossier integration and canonical-writer staging regressions succeeded.
+- `Validate buffered Steam review dossier runtime` — run `37131030381`, job `111226003438`, success; step `Frozen invocation rollover regression` succeeded.
+- `Validate execution ownership` — run `37131030397`, job `111226003880`, success; both `Validate component ownership boundaries` and `Validate workflow-run production authority` succeeded.
+- `Validate Progressive PASS 2 core` — run `37131030387`, job `111226003978`, success; core, Dossier integration and canonical-writer staging regressions succeeded.
+- `Validate backlog dispositions` — run `37131030391`, job `111226003662`, success; both backlog regression and deletion-disposition validation succeeded.
 
-The durable-report commit is intentionally documentation-only and separately triggers `Validate backlog dispositions`.
+Earlier implementation-head validation also succeeded before the report-only commit:
+- Dossier runtime `37130680399`;
+- execution ownership `37130680398`;
+- Progressive PASS 2 core `37130680429`.
 
 ## 11. Production safety
 
@@ -199,27 +207,34 @@ Implementation PR:
 
 `#143` — `Fix Dossier frozen invocation rollover safety`
 
-Final tested implementation head before report:
+Final implementation head before report:
 
 `39b62238d53a2eead29775931ceb1f8eddb471c9`
 
-Current synchronized base before report:
+Final PR head at merge:
+
+`8d6d7132e0f4c9bd5d65a888f9cfc46cde42f1b3`
+
+Synchronized base at merge:
 
 `4c5c851bcf712c351a67afb670dc8116290cf894`
 
+Implementation merge commit:
+
+`a354500fc83d20fff89d19c0752aa2810898861e`
+
 Final green validation refs:
 
-- Dossier runtime: run `37130680399`, job `111224993354`;
-- execution ownership: run `37130680398`, job `111224993500`;
-- Progressive PASS 2 core: run `37130680429`, job `111224993560`.
+- Dossier runtime: run `37131030381`, job `111226003438`;
+- execution ownership: run `37131030397`, job `111226003880`;
+- Progressive PASS 2 core: run `37131030387`, job `111226003978`;
+- backlog dispositions: run `37131030391`, job `111226003662`.
 
 Sequencing-gate implementation:
 
 - PR #141;
 - merge `da71fb7578c5fe467da0ce8e3decfbc62a6465a4`;
 - post-merge execution-ownership run `37122344406`.
-
-The exact implementation merge commit will be appended in the post-merge closeout update to this durable report.
 
 ## 13. Unresolved
 
