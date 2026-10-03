@@ -349,6 +349,8 @@ def reconcile_current_pending_groups_from_cache(
         frozen_authority_audit_path=frozen_authority_audit_path,
         retryable_rejection_root=retryable_rejection_root,
         terminal_receipt_archive_root=terminal_receipt_archive_root,
+        frozen_authority_audit_path=frozen_authority_audit_path,
+        repo_root=repo_root,
     )
 
     prefix_count = accepted_contiguous_prefix_item_count(next_manifest, contract)
@@ -1034,6 +1036,8 @@ def drain_buffered_groups(
     retryable_rejection_root=_DEFAULT_RETRYABLE_REJECTION_QUARANTINE,
     rejection_audit_path=_DEFAULT_RETRYABLE_REJECTION_AUDIT,
     terminal_receipt_archive_root=_DEFAULT_TERMINAL_RECEIPT_ARCHIVE,
+    frozen_authority_audit_path=_DEFAULT_FROZEN_AUTHORITY_AUDIT,
+    repo_root=Path("."),
 ):
     manifest_path = Path(manifest_path)
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -1049,19 +1053,31 @@ def drain_buffered_groups(
         plan,
         manifest_path=manifest_path,
         store_dir=store_dir,
+        contract=contract,
         failure_audit_path=failure_audit_path,
         rejection_audit_path=rejection_audit_path,
+        frozen_authority_audit_path=frozen_authority_audit_path,
+        repo_root=repo_root,
     )
     progress = plan["next_manifest"]["group_progress"]
     return {
         "accepted_group_count_this_run": plan["accepted_count"],
         "accepted_dossier_count_this_run": plan["accepted_dossier_count"],
         "failed_group_count_this_run": plan["failed_count"],
+        "cache_reused_group_count_this_run": len(plan.get("cache_reused_sequences", [])),
+        "frozen_authority_accepted_count_this_run": plan.get("frozen_accepted_count", 0),
+        "frozen_authority_terminal_count_this_run": plan.get("frozen_terminal_count", 0),
+        "frozen_authority_rejected_count_this_run": plan.get("frozen_rejected_count", 0),
+        "frozen_authority_replay_cleanup_count_this_run": plan.get("frozen_replay_count", 0),
         "retryable_transport_rejection_count_this_run": plan["rejected_count"],
         "terminal_replay_cleanup_count_this_run": len(plan["terminal_replays"]),
         "accepted_sequences": [entry["descriptor"]["sequence"] for entry in plan["accepted"]],
         "failed_sequences": [entry["descriptor"]["sequence"] for entry in plan["failed"]],
         "rejected_sequences": [entry["descriptor"]["sequence"] for entry in plan["rejected"]],
+        "cache_reused_sequences": list(plan.get("cache_reused_sequences", [])),
+        "frozen_authority_accepted_sequences": [
+            entry["descriptor"]["sequence"] for entry in plan.get("frozen_accepted", [])
+        ],
         "malformed_current_snapshot_artifacts": plan["malformed_current_snapshot_artifacts"],
         "persisted": persisted,
         "snapshot_id": plan["next_manifest"]["snapshot_id"],
