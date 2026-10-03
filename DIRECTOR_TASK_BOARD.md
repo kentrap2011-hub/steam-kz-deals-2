@@ -4,6 +4,7 @@
 
 - `ЧАТ 1` assigned: `WORKER_TASK_MIRRORS_EDGE_CATALYST_POST_REFRESH_ABSENCE_DIAGNOSTIC_01.md` — diagnose why Mirror's Edge Catalyst (AppID 1233570) is still absent after PR #140, tracing the first failing production stage without implementing a fix.
 - `ЧАТ 2` is free after accepted `WORKER_TASK_DOSSIER_FROZEN_INVOCATION_ROLLOVER_SAFETY_FIX_01.md`; PR #143 is merged, durable report is on `main`, and all required PR checks were green.
+- Manual Russian-description semantic run is authorized as a separate one-shot worker using `config/russian_description_manual_semantic_worker_prompt.md`; current canonical status is `translation_required` with 82 queued descriptions and 0 nontranslatable blockers. This does not occupy ЧАТ 1/2 and does not authorize any Scheduled Task change.
 - Next Deep semantic action, when the user chooses to run it: use the existing Progressive Deep semantic worker normally. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -18,6 +19,26 @@
 - User-authorized current recovery direction: process current translations in ЧАТ 1 while ЧАТ 2 makes translation absence nonblocking and adds translation observability to Statistics. The earlier browser-asset decoupling proposal is not the current task; reassess it only if publication still lags after these authorized changes.
 - Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
+
+
+## AUTHORIZED SEMANTIC — Russian description manual translation
+
+Mode:
+`MANUAL ONE-SHOT SEMANTIC WORKER`
+
+Canonical prompt:
+`config/russian_description_manual_semantic_worker_prompt.md`
+
+Status:
+`authorized_ready_for_user_launch`
+
+Current observed queue at authorization:
+- status: `translation_required`;
+- queue_count: 82;
+- nontranslatable_blocker_count: 0;
+- GitHub remains owner of queue/order/bindings/ingest/completeness;
+- no Scheduled Task action is authorized;
+- this semantic run does not occupy physical worker slots ЧАТ 1/2.
 
 
 ## ACTIVE — ЧАТ 1 — Mirror's Edge Catalyst post-refresh absence diagnostic
