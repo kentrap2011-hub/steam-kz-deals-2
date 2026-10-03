@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "0b47a0fe3830dfbcec37fa5a2395d6be08169067",
+  "run_start_authority_commit": "43dccbbb780627bab1f194821a2d315dd428723f",
+  "run_started_at_utc": "2026-10-03T16:47:36+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+  "work_id": "f714f1b170a10c355a3d5a06f494022e5d2551a8a5e7506878150354819c6719",
+  "family_id": "game:1909270",
+  "taste_subject_key": "App_1909270",
+  "appid": "1909270",
+  "taste_fingerprint": "b4135dacc8d55522374b5d9404ea443e4b5336bd8492aeb0beff72fa9023de28",
+  "candidate_context_sha256": "fcac71c906ef9f3dff026d4dd8f7eaa703e0f7632377b40127cf83fc1ac8b8a5",
+  "dossier_content_sha256": "832c00b20571ae37b30948ac1a0984b095958ab09a92be572727721b7f29d172",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "91189f8789e566511a0ee2a51146e88397cb79c7de23d456c5b1ccd3d9878871",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Основной опыт — очень короткий point-and-click/escape-room цикл: поиск предметов и выполнение строго заданной последовательности действий, без традиционной боевой или глубокой системной части.",
+    "Прогресс жёстко линейный: неправильный маршрут или взаимодействие может привести к game over и перезагрузке, а валидная последовательность не всегда ясно читается.",
+    "Dossier отдельно отмечает, что сложность чаще заключается не в содержательной дедукции, а в угадывании точного задуманного пути; игроки советуют частые сохранения или руководство.",
+    "Визуальная подача и компактность способны сделать одно прохождение приятным, но объём интерактивного геймплея и механического развития слишком ограничен для уверенного совпадения с закреплённым профилем."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Игра почти целиком сводится к поиску предметов и правильной последовательности взаимодействий, без традиционного боевого или глубокого RPG-слоя.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "directionlessness",
+        "text_ru": "Точная последовательность действий бывает неочевидной, а неправильный путь может привести к game over и перезагрузке; для тебя такой недостаток читаемости цели — подтверждённый риск лишних попыток без содержательного обучения.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Кампания рассчитана на очень короткую одиночную сессию, поэтому игра почти не успевает развить механики или предложить длительную эволюцию.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Часть игроков хвалит визуальную подачу и получает удовольствие от короткого приключения, но другие считают объём интерактивного геймплея слишком малым.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      }
+    ]
+  }
+}
