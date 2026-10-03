@@ -73,6 +73,8 @@ def drain_inbox_state(
     retryable_rejection_root=None,
     rejection_audit_path=None,
     terminal_receipt_archive_root=None,
+    frozen_authority_audit_path=None,
+    repo_root=Path("."),
     fail_on_blocked=True,
 ):
     """Classify present Dossier transports independently from repository state.
@@ -99,6 +101,9 @@ def drain_inbox_state(
             drain_kwargs["rejection_audit_path"] = rejection_audit_path
         if terminal_receipt_archive_root is not None:
             drain_kwargs["terminal_receipt_archive_root"] = terminal_receipt_archive_root
+        if frozen_authority_audit_path is not None:
+            drain_kwargs["frozen_authority_audit_path"] = frozen_authority_audit_path
+        drain_kwargs["repo_root"] = repo_root
         result = drain_buffered_groups(
             manifest_path=manifest_path,
             contract=contract,
@@ -109,10 +114,15 @@ def drain_inbox_state(
         changed = bool(
             result["accepted_group_count_this_run"]
             or result["failed_group_count_this_run"]
+            or result.get("cache_reused_group_count_this_run")
         )
         transport_reconciled = bool(
             result.get("retryable_transport_rejection_count_this_run")
             or result.get("terminal_replay_cleanup_count_this_run")
+            or result.get("frozen_authority_accepted_count_this_run")
+            or result.get("frozen_authority_terminal_count_this_run")
+            or result.get("frozen_authority_rejected_count_this_run")
+            or result.get("frozen_authority_replay_cleanup_count_this_run")
         )
         current = json.loads(manifest_path.read_text(encoding="utf-8"))
         validate_manifest(current, contract)
@@ -125,8 +135,16 @@ def drain_inbox_state(
             result["status"] = "normal_first_pass_complete_with_failures"
         elif changed:
             result["status"] = "group_state_advanced"
+        elif result.get("frozen_authority_accepted_count_this_run"):
+            result["status"] = "frozen_authority_dossier_persisted"
+        elif result.get("frozen_authority_terminal_count_this_run"):
+            result["status"] = "frozen_authority_terminal_recorded"
+        elif result.get("frozen_authority_rejected_count_this_run"):
+            result["status"] = "frozen_authority_transport_rejected"
         elif result.get("retryable_transport_rejection_count_this_run"):
             result["status"] = "retryable_transport_rejected"
+        elif result.get("frozen_authority_replay_cleanup_count_this_run"):
+            result["status"] = "frozen_authority_replay_cleaned"
         elif result.get("terminal_replay_cleanup_count_this_run"):
             result["status"] = "terminal_replay_cleaned"
         else:
