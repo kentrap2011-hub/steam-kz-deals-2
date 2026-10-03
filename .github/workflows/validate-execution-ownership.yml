@@ -30,14 +30,6 @@ on:
       - ".github/workflows/checkpoint-steamdb-history.yml"
       - ".github/workflows/export-steamdb-miss-manifest.yml"
       - ".github/workflows/build-daily-visual-payload.yml"
-      - "scripts/test_workflow_run_production_authority.py"
-      - ".github/workflows/build-mailing-feed.yml"
-      - ".github/workflows/build-feed-ingest-validation.yml"
-      - ".github/workflows/build-feed.yml"
-      - ".github/workflows/build-steamdb-cache-classification.yml"
-      - ".github/workflows/checkpoint-steamdb-history.yml"
-      - ".github/workflows/export-steamdb-miss-manifest.yml"
-      - ".github/workflows/build-daily-visual-payload.yml"
       - ".github/workflows/validate-execution-ownership.yml"
   push:
     branches: [main]
@@ -62,6 +54,14 @@ on:
       - "scripts/test_russian_description_manual_semantic_worker.py"
       - "scripts/test_russian_translation_publication_statistics.py"
       - "scripts/validate_russian_descriptions.py"
+      - "scripts/test_workflow_run_production_authority.py"
+      - ".github/workflows/build-mailing-feed.yml"
+      - ".github/workflows/build-feed-ingest-validation.yml"
+      - ".github/workflows/build-feed.yml"
+      - ".github/workflows/build-steamdb-cache-classification.yml"
+      - ".github/workflows/checkpoint-steamdb-history.yml"
+      - ".github/workflows/export-steamdb-miss-manifest.yml"
+      - ".github/workflows/build-daily-visual-payload.yml"
       - ".github/workflows/validate-execution-ownership.yml"
 
 permissions:
