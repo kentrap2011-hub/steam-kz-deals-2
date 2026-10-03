@@ -1,15 +1,16 @@
 # CURRENT TASK
 
-## ACTIVE — PR production trigger isolation fix 01
-Статус: `implementation_in_progress`.
+## COMPLETE — PR production trigger isolation fix 01
+Статус: `implementation_complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_PR_PRODUCTION_TRIGGER_ISOLATION_FIX_01.md`;
-- branch: `fix/pr-production-trigger-isolation-01`;
-- incident confirmed from GitHub run metadata: PR-only `Steam KZ production shortlist` run `37119438688` (event `pull_request`, head branch `fix/fresh-deal-discovery-refresh-fix-01`) triggered `Build mailing-optimized feed` run `37119485890`, then pre-AI run `37119499934` and canonical commit `7361a45644055276305347eb621ff8a5a8d1c9e3`;
-- implementation scope: guard every audited production-mutating `workflow_run` job with successful `main` source authority while preserving direct dispatch/push/schedule and PR validation;
-- no semantic worker or Scheduled Task execution is authorized;
-- durable report target: `reviews/worker_reports/pr-production-trigger-isolation-fix-01.md`.
-
-
+- implementation PR: `#141`; final tested head: `a55d03d78e90854f16c4064cb69f83b0c908b1e7`; merge: `da71fb7578c5fe467da0ce8e3decfbc62a6465a4`;
+- incident confirmed: PR-only shortlist run `37119438688` entered mailing run `37119485890`, then pre-AI run `37119499934` and canonical commit `7361a45644055276305347eb621ff8a5a8d1c9e3`;
+- every audited `workflow_run` job that can `git push` now requires successful `main` source authority; PR validation and existing direct production triggers remain enabled;
+- deterministic regression: `scripts/test_workflow_run_production_authority.py`, enforced by `Validate execution ownership`;
+- pre-merge rerun `37122063033` / job `111200693837` and post-merge run `37122344406` / job `111200784880` both passed the trigger-authority regression;
+- no semantic worker, manual production dispatch, canonical data repair, scheduler/queue/retry owner, or Scheduled Task was changed;
+- report: `reviews/worker_reports/pr-production-trigger-isolation-fix-01.md`;
+- next bounded action: Director reviews the durable report and records acceptance of this merged fix.
 ## COMPLETE — Bounded personal taste calibration questionnaire run 01
 Статус: `questionnaire_complete_ready_for_profile_update`.
 - task: `WORKER_TASK_BOUNDED_PERSONAL_TASTE_CALIBRATION_QUESTIONNAIRE_RUN_01.md`;
