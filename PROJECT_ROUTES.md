@@ -322,4 +322,19 @@ Currentness invariant after PPD-012:
 - when it re-enters, PPD-012 historical semantic-equivalence must prove the current semantic identity before the old revision can be selected current; a real profile/model/semantics/item-context change remains stale and may establish ordinary new work rather than replaying PPD-010;
 - regression coverage: `scripts/test_progressive_profile_semantic_identity_stability.py` classifies every frozen migration target individually as current+equivalent, current+stale, or outside current scope.
 
+## Production workflow_run authority / PR isolation
 
+**Что ищем:** почему validation-run или другой upstream GitHub Actions run может/не может запустить downstream, который пишет canonical production state в `main`.
+
+**Последняя проверка:** 2026-10-03.
+
+**Быстрая точка входа:**
+1. `.github/workflows/steam-test.yml` — `Steam KZ production shortlist`: PR запускает только `regression`; production `collect` исключает `pull_request`.
+2. `.github/workflows/build-mailing-feed.yml` — первый production-mutating downstream после shortlist.
+3. `.github/workflows/build-feed-ingest-validation.yml` и `.github/workflows/build-pre-ai-store-snapshot.yml` — mailing successors.
+4. `.github/workflows/build-daily-visual-payload.yml` — visual producer; все jobs, которые могут push в `main`, обязаны применять production-source guard.
+5. `.github/workflows/deploy-visual.yml` — read-only checkout / Pages publication; workflow-run trigger уже требует successful `main`.
+6. SteamDB workflow-run chain: `checkpoint-steamdb-history.yml` → `build-steamdb-cache-classification.yml` → `export-steamdb-miss-manifest.yml` → `ingest-steamdb-runtime-submissions.yml`.
+7. `scripts/test_workflow_run_production_authority.py` — каноническая regression/audit поверхность для mutating `workflow_run` jobs; вызывается из `validate-execution-ownership.yml`.
+
+**Инвариант:** имя upstream workflow и `conclusion == success` сами по себе не дают production authority. Для `workflow_run` job, способного записать canonical repository state, текущая минимальная authority — successful run с `head_branch == main`; direct `workflow_dispatch` / `push` / schedule поведение остаётся отдельным существующим entrypoint. PR-only run с feature head branch обязан skip mutating job.
