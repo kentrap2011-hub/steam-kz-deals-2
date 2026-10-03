@@ -134,3 +134,13 @@
 **Correct move:** every surviving workflow in the shared canonical-writer domain must reconcile current repository Dossier inbox state through the existing strict GitHub-owned drain before dependent projection/write. A valid candidate is persisted once, an invalid candidate enters the existing failed/recovery state once, and repeated reconcile is idempotent.
 
 **Evidence refs:** `reviews/worker_reports/taste-dossier-g000012-existing-artifact-collision-diagnostic-01.md`; `WORKER_TASK_TASTE_DOSSIER_CANONICAL_WRITER_COALESCING_LIVENESS_FIX_01.md`; `scripts/test_taste_dossier_canonical_writer_coalescing_liveness.py`.
+
+## PITFALL — workflow_run success mistaken for production authority
+
+**Симптом:** downstream workflow слушает production workflow по имени, проверяет только `github.event.workflow_run.conclusion == 'success'`, checkout'ит `main` и затем пишет canonical state. Если upstream workflow также имеет `pull_request` validation, успешная PR-проверка может запустить production mutation.
+
+**Почему это опасно:** `workflow_run` использует workflow name как routing signal, а не как доказательство того, что конкретный run был production-authorized. Checkout `ref: main` затем превращает чужой trigger context в реальную запись текущего production state.
+
+**Правило исправления:** каждый `workflow_run` job, который может писать canonical repository state, должен fail closed для не-production source и как минимум требовать одновременно `conclusion == 'success'` и `head_branch == 'main'`. Не отключать PR validation и не заменять эту границу вторым scheduler/chain.
+
+**Проверка:** `scripts/test_workflow_run_production_authority.py` должен перечислять весь текущий mutating workflow-run audit и доказывать main-success / PR-branch / failed-cancelled / direct-trigger cases. При добавлении нового mutating `workflow_run` edge тест обязан заставить его явно классифицировать.
