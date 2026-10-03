@@ -341,16 +341,6 @@ def reconcile_current_pending_groups_from_cache(
         next_manifest = set_group_state(next_manifest, contract, sequence, ACCEPTED)
         reused.append(sequence)
 
-    frozen_accepted, frozen_terminals, frozen_rejected, frozen_replays = _frozen_rollover_transports(
-        manifest,
-        contract,
-        buffer_dir,
-        repo_root=repo_root,
-        frozen_authority_audit_path=frozen_authority_audit_path,
-        retryable_rejection_root=retryable_rejection_root,
-        terminal_receipt_archive_root=terminal_receipt_archive_root,
-    )
-
     prefix_count = accepted_contiguous_prefix_item_count(next_manifest, contract)
     next_manifest.update(progress_fields(
         next_manifest["snapshot_id"],
@@ -505,6 +495,8 @@ def plan_buffered_drain(
     failed_quarantine_root=_DEFAULT_FAILED_QUARANTINE,
     retryable_rejection_root=_DEFAULT_RETRYABLE_REJECTION_QUARANTINE,
     terminal_receipt_archive_root=_DEFAULT_TERMINAL_RECEIPT_ARCHIVE,
+    frozen_authority_audit_path=_DEFAULT_FROZEN_AUTHORITY_AUDIT,
+    repo_root=Path("."),
 ):
     """Validate/classify present transports without conflating transport failure with semantic exhaustion."""
     manifest = ensure_group_progress(manifest, contract)
@@ -524,6 +516,15 @@ def plan_buffered_drain(
     terminal_replays = []
     next_manifest = copy.deepcopy(manifest)
     pending = set(pending_sequences(manifest, contract))
+    frozen_accepted, frozen_terminals, frozen_rejected, frozen_replays = _frozen_rollover_transports(
+        manifest,
+        contract,
+        buffer_dir,
+        repo_root=repo_root,
+        frozen_authority_audit_path=frozen_authority_audit_path,
+        retryable_rejection_root=retryable_rejection_root,
+        terminal_receipt_archive_root=terminal_receipt_archive_root,
+    )
 
     for sequence in sorted(pending):
         descriptor = groups[sequence]
@@ -1044,6 +1045,8 @@ def drain_buffered_groups(
         failed_quarantine_root=failed_quarantine_root,
         retryable_rejection_root=retryable_rejection_root,
         terminal_receipt_archive_root=terminal_receipt_archive_root,
+        frozen_authority_audit_path=frozen_authority_audit_path,
+        repo_root=repo_root,
     )
     persisted = apply_buffered_drain(
         plan,
