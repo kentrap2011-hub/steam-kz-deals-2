@@ -1,5 +1,15 @@
 # CURRENT TASK
 
+## ACTIVE — PR production trigger isolation fix 01
+Статус: `implementation_in_progress`.
+- task: `WORKER_TASK_PR_PRODUCTION_TRIGGER_ISOLATION_FIX_01.md`;
+- branch: `fix/pr-production-trigger-isolation-01`;
+- incident confirmed from GitHub run metadata: PR-only `Steam KZ production shortlist` run `37119438688` (event `pull_request`, head branch `fix/fresh-deal-discovery-refresh-fix-01`) triggered `Build mailing-optimized feed` run `37119485890`, then pre-AI run `37119499934` and canonical commit `7361a45644055276305347eb621ff8a5a8d1c9e3`;
+- implementation scope: guard every audited production-mutating `workflow_run` job with successful `main` source authority while preserving direct dispatch/push/schedule and PR validation;
+- no semantic worker or Scheduled Task execution is authorized;
+- durable report target: `reviews/worker_reports/pr-production-trigger-isolation-fix-01.md`.
+
+
 ## COMPLETE — Bounded personal taste calibration questionnaire run 01
 Статус: `questionnaire_complete_ready_for_profile_update`.
 - task: `WORKER_TASK_BOUNDED_PERSONAL_TASTE_CALIBRATION_QUESTIONNAIRE_RUN_01.md`;
