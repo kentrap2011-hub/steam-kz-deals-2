@@ -72,7 +72,7 @@ For a candidate, start from a **verbatim deep copy of the exact frozen group des
 - `schema: "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1"`;
 - `schema_version: 1`.
 
-Add `dossiers` in exact descriptor order. Then add exactly one runtime authority reference:
+Add `dossiers` in exact descriptor order. The top-level `items` is mandatory and must remain the exact ordered descriptor array from the frozen GitHub-prepared group; `items_sha256` never substitutes for it. Then add exactly one runtime authority reference:
 
 `run_start_authority` =
 - `schema: "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-REFERENCE-V1"`;
