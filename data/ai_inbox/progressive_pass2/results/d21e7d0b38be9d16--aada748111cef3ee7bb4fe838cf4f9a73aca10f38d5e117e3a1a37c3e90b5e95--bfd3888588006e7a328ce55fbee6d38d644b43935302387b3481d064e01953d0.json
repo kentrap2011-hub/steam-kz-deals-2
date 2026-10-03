@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "0b47a0fe3830dfbcec37fa5a2395d6be08169067",
+  "run_start_authority_commit": "43dccbbb780627bab1f194821a2d315dd428723f",
+  "run_started_at_utc": "2026-10-03T16:47:36+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+  "work_id": "aada748111cef3ee7bb4fe838cf4f9a73aca10f38d5e117e3a1a37c3e90b5e95",
+  "family_id": "game:2106840",
+  "taste_subject_key": "App_2106840",
+  "appid": "2106840",
+  "taste_fingerprint": "d7d95b00b084b956751a52d4429f4566afcb6c42fb1c3fed581f804392787902",
+  "candidate_context_sha256": "9ba86bf9bc8baf208d25d4d65a5b7ddc6f999ccdb8896cc838c2712a1ff97963",
+  "dossier_content_sha256": "a16da652e4e04148ed2633439195ed5f806719ac5983d8717cab68569049f904",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "bfd3888588006e7a328ce55fbee6d38d644b43935302387b3481d064e01953d0",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Главная сила — связанная сверхъестественная тайна, где несколько персонажей и отдельных линий постепенно складываются в общую картину.",
+    "Route map, смена перспектив, 360-градусный осмотр сцен и meta-пазлы добавляют содержательную интерактивность поверх чтения и помогают расследованию ощущаться игровым.",
+    "Арт-дирекшн, музыка, интерфейс и персонажная подача устойчиво хвалятся и создают сильную атмосферную идентичность."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 64,
+    "development_variety": 78,
+    "structure_pacing_direction": 88,
+    "identity_hooks": 95,
+    "breadth_of_match": 84
+  },
+  "score_findings": [
+    {
+      "finding_id": "interlocking-mystery",
+      "text_ru": "Несколько персонажей с разными мотивами постепенно соединяют отдельные проклятия и события в одну сверхъестественную загадку, поэтому именно раскрытие общей картины постоянно двигает историю вперёд.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/raises",
+          "profile_value_sha256": "f1997cf9d87235a0d984a3c5bceefb8aa566143fb2e8edddfb81312ba09aef35",
+          "match_text_ru": "Тебя особенно удерживает тайна, которую хочется постепенно раскрыть."
+        },
+        {
+          "json_pointer": "/taste_profile/13/raises",
+          "profile_value_sha256": "fd0e5a051cdf972884f0bfccd7dfd2c3cd50ec876ee4cd2ee491d416f2707058",
+          "match_text_ru": "Сильный сюжетный крючок сам по себе может быть для тебя достаточной причиной продолжать."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 88
+        },
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 95
+        }
+      ]
+    },
+    {
+      "finding_id": "interactive-investigation",
+      "text_ru": "Карта маршрутов, переключение перспектив, осмотр сцен на 360 градусов и редкие meta-пазлы заставляют не только читать текст, но и сопоставлять ветки и использовать сам интерфейс как часть расследования.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Тебе нравится, когда игра меняет формат задач и регулярно даёт новые способы взаимодействия."
+        },
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Поиск решения и понимание того, как устроена задача, являются положительным сигналом твоего профиля."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 64
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 78
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 84
+        }
+      ]
+    },
+    {
+      "finding_id": "atmospheric-presentation",
+      "text_ru": "Арт-дирекшн, музыка, интерфейс и оформление персонажей регулярно отмечаются как самостоятельная сильная сторона и усиливают хоррор-тайну.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Выразительная визуальная подача и атмосфера заметно усиливают твоё впечатление."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 95
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 84
+        }
+      ]
+    },
+    {
+      "finding_id": "simple-puzzle-layer",
+      "text_ru": "Обычные головоломки сравнительно простые, а основная интеллектуальная нагрузка лежит на чтении и связывании сюжетных деталей; meta-решения временами добавляют более необычный слой.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/evidence_log/73/evidence",
+          "profile_value_sha256": "6c94cc7dd9f37fb9bb1de064cb1f064b521852bfde78d2fec76542101b1876d2",
+          "match_text_ru": "Умеренно простые головоломки тебе подходят, когда они разбавляют приключение и не превращаются в тяжёлый барьер."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 64
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "После сильного хоррор-пролога середина сильнее уходит в экспозицию и мистическое расследование; часть игроков считает, что напряжение заметно проседает.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Истинная концовка вызывает заметно разделённую реакцию: её нередко считают слишком быстрой или хуже объяснённой, чем предшествующее построение тайны.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Обычные головоломки могут показаться слишком простыми, если ожидать отдельной сложной puzzle-системы; основная нагрузка здесь именно сюжетная.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  }
+}
