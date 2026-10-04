@@ -1,17 +1,24 @@
 # CURRENT TASK
 
 ## COMPLETE — Steam discovery maximal scope reduction diagnostic 01
-Статус: `diagnostic_complete_pending_user_product_choices`.
+Статус: `diagnostic_complete_product_choices_resolved`.
 - task: `WORKER_TASK_STEAM_DISCOVERY_MAXIMAL_SCOPE_REDUCTION_DIAGNOSTIC_01.md`;
 - confirmed bottleneck: current live KZ `specials=1` discovery expands to about 100,307 rows, while the combined `category1=998,21,996` request is not an effective live bound and the existing 60-minute collector times out before persistence;
 - last completed funnel: 12,977 raw → 9,923 review candidates → 1,615 broad → 609 shortlist/mailing; latest measurable ranking lookup contains 509 cards;
-- current shortlist invariant: every selected paid row is >=25% discount and <=4500 KZT, so those are safe necessary-condition gates under current collector semantics;
-- recommended design: keep the same GitHub owner, use explicit games/DLC/bundles partitions plus a live-verified KZ price bound and paid/free split, then apply the existing cheap necessary gates before review enrichment; do not use an arbitrary raw top-N;
-- a hard/near-hard ~100 final-site cap remains a separate user product decision because current policy explicitly has no artificial top-N;
-- no implementation, production-state mutation, scheduler/Scheduled Task change, new collector/queue/retry loop, ranking change, Fast/Dossier/Deep change, or Catalyst special case was performed;
+- product choices are now resolved by the user:
+  - hard visible cap: **at most 50** strong current offers;
+  - keep bundles/packages as independent opportunities and evaluate them before the cap;
+  - temporarily admit DLC only when the base game passes normal suitability/eligibility;
+  - later add owned Steam games and their DLC through a separate task;
+  - very obscure low-signal indie may be dropped early, with an exception path for exceptional quality/value;
+  - persist funnel counts so each rejection stage is visible;
+- current shortlist invariant remains: every selected paid row is >=25% discount and <=4500 KZT, so those remain safe necessary-condition gates unless bounded live validation proves a source representation unsafe;
+- no production implementation, scheduler/Scheduled Task change, Fast/Dossier/Deep semantic execution, or ranking mutation was performed in this diagnostic/chat;
 - report: `reviews/worker_reports/steam-discovery-maximal-scope-reduction-diagnostic-01.md`;
 - report commit: `b370991e4316be9ec775bb34463831ff8e88d225`;
-- next bounded action after approval: one implementation task on the existing GitHub discovery owner, starting with exact KZ bounded `maxprice=4500`/partition acceptance probes and contract alignment.
+- queued implementation task: `WORKER_TASK_STEAM_DISCOVERY_HARD_50_SELECTION_IMPLEMENT_01.md`;
+- queued owned-library follow-up: `WORKER_TASK_STEAM_OWNED_LIBRARY_DLC_SUPPORT_01.md`;
+- queued site task page: `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`.
 
 ## COMPLETE — Mirror's Edge Catalyst post-refresh absence diagnostic 01
 Статус: `diagnosis_complete_root_cause_identified`.
