@@ -4,21 +4,21 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
-    "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
-    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
-    "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
   "appid": "1238840",
   "title": "Battlefield™ 1",
-  "generated_at_utc": "2026-09-24T18:40:00Z",
-  "expires_at_utc": "2026-10-14T18:40:00Z",
+  "generated_at_utc": "2026-10-04T09:53:23Z",
+  "expires_at_utc": "2026-10-24T09:53:23Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Battlefield™ 1",
@@ -34,24 +34,174 @@
       }
     ]
   },
-  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 9 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "regional",
-      "statement": "A recent exact-app discussion reports Russia-specific access friction after an update, with one participant saying a VPN allowed the EA launcher to connect but made play impractical.",
+      "category": "mechanics",
+      "statement": "Players continue to praise weapon feedback and gunplay, while a current discussion shows that spread and suppression make the handling more methodical and divisive than shooters built around consistently tight accuracy.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002"
+      ]
+    },
+    {
+      "category": "multiplayer",
+      "statement": "Operations and other large-map modes are repeatedly valued for concentrated team pushes, spectacle and large-scale war atmosphere, especially when teams coordinate.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Sound design, destruction, historical presentation and battlefield atmosphere remain recurring strengths in long-term player feedback.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "An experienced player describes weapon and perk unlock requirements as a substantial grind, making some progression goals feel more like chores than rewards.",
       "sentiment": "negative",
       "recurrence": "anecdotal",
       "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "A recent Russian-language player describes multiplayer as active but demanding against veteran opponents, indicating a potentially steep entry experience for newcomers.",
+      "sentiment": "mixed",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Campaign feedback values the atmosphere and multiple war-story perspectives, but also describes the campaign as short and in part tutorial-like compared with the multiplayer focus.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-010",
+        "source-011"
+      ],
+      "player_feedback_ids": [
+        "feedback-010",
+        "feedback-011"
+      ]
+    },
+    {
+      "category": "multiplayer",
+      "statement": "Recent 2026 feedback indicates that multiplayer remains active with full servers available at common play times, while mode and server availability can vary and Russian feedback also notes cheating concerns.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
       "evidence_languages": [
         "russian",
         "non_russian"
       ],
       "evidence_status": "current",
       "source_ids": [
-        "source-002"
+        "source-005",
+        "source-006",
+        "source-007"
       ],
       "player_feedback_ids": [
-        "feedback-001"
+        "feedback-004",
+        "feedback-006",
+        "feedback-007"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Recent PC feedback reports launcher and compatibility friction, including Proton/Linux access blocked by anti-cheat and separate EA app launch failures for some players.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "source-008",
+        "source-009"
+      ],
+      "player_feedback_ids": [
+        "feedback-008",
+        "feedback-009"
+      ]
+    },
+    {
+      "category": "voice",
+      "statement": "Recent Russian-language feedback specifically praises the quality of the Russian voice-over, providing current player evidence for localization quality.",
+      "sentiment": "positive",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-004"
       ]
     }
   ],
@@ -59,11 +209,116 @@
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "source_mix_status": "single_source_only",
-    "single_source_reason": "The serialized current regional-access finding uses one recent exact-app Steam discussion item; additional player-feedback sources were not needed for this narrow current-state observation.",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
     "russian_attempt": "found_and_used",
-    "overall_strength": "limited",
-    "stop_reason": "evidence_stable"
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            5,
+            6
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            4
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            5
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            5
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            6
+          ]
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            5
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1,
+            2,
+            5,
+            8
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            3,
+            4,
+            6,
+            7
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "covered",
+          "observation_indices": [
+            7,
+            8
+          ]
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
   },
   "provenance": {
     "sources": [
@@ -71,33 +326,223 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1238840/Battlefield_1/",
-        "publication_date": "2016-10-20",
-        "language": "mixed",
-        "freshness": "older",
+        "url": "https://store.steampowered.com/app/1238840/Battlefield_1_/",
+        "publication_date": null,
+        "language": "non_russian",
         "evidence_role": "identity",
-        "player_feedback": false
+        "player_feedback": false,
+        "freshness": "unknown"
       },
       {
         "source_id": "source-002",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/battlefield_one/comments/1rt9fn8/battlefield_1_has_bad_gunplay/",
+        "publication_date": "2026-03-14",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/Battlefield/comments/18szwqx/battlefield_1_is_a_goddamn_masterpiece_and_i_wont/",
+        "publication_date": "2023-12-28",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/battlefield_one/comments/1nj9wci",
+        "publication_date": "2025-09-17",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-005",
+        "source_type": "other_player_feedback",
+        "domain": "steamstat.io",
+        "url": "https://steamstat.io/ru/app/1238840",
+        "publication_date": "2026-09-28",
+        "language": "russian",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1238840",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-006",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/battlefield_one/comments/1vh6rep/is_bf1_still_alive/",
+        "publication_date": "2026-08-06",
+        "language": "non_russian",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-007",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/battlefield_one/comments/1spagjd/what_happened_to_operations/",
+        "publication_date": "2026-04-18",
+        "language": "non_russian",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-008",
         "source_type": "steam_community",
         "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1238840/discussions/0/809099441085622734/",
-        "publication_date": "2026-04-04",
-        "language": "mixed",
-        "freshness": "recent",
+        "url": "https://steamcommunity.com/app/1238840/discussions/0/689744580780987649/",
+        "publication_date": "2025-12-24",
+        "language": "non_russian",
         "evidence_role": "current_state",
-        "player_feedback": true
+        "player_feedback": true,
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-009",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1238840/reviews/",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1238840",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-010",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/Battlefield/comments/1r4qy1m/who_else_really_loved_the_battlefield_1_campaign/",
+        "publication_date": "2026-02-14",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-011",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/battlefield_one/comments/1legfqw",
+        "publication_date": "2025-06-18",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
       }
     ],
     "player_feedback_records": [
       {
         "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "url": "https://steamcommunity.com/app/1238840/discussions/0/809099441085622734/",
-        "publication_date": "2026-04-04",
-        "language": "mixed",
-        "identity_mode": "stable_locator"
+        "url": "https://www.reddit.com/r/battlefield_one/comments/1rt9fn8/battlefield_1_has_bad_gunplay/",
+        "publication_date": "2026-03-14",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-003",
+        "url": "https://www.reddit.com/r/Battlefield/comments/18szwqx/battlefield_1_is_a_goddamn_masterpiece_and_i_wont/",
+        "publication_date": "2023-12-28",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-004",
+        "url": "https://www.reddit.com/r/battlefield_one/comments/1nj9wci",
+        "publication_date": "2025-09-17",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-005",
+        "publication_date": "2026-09-25",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-005",
+        "publication_date": "2026-09-25",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-006",
+        "url": "https://www.reddit.com/r/battlefield_one/comments/1vh6rep/is_bf1_still_alive/",
+        "publication_date": "2026-08-06",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-007",
+        "source_id": "source-007",
+        "url": "https://www.reddit.com/r/battlefield_one/comments/1spagjd/what_happened_to_operations/",
+        "publication_date": "2026-04-18",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-008",
+        "source_id": "source-008",
+        "url": "https://steamcommunity.com/app/1238840/discussions/0/689744580780987649/",
+        "publication_date": "2025-12-24",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-009",
+        "source_id": "source-009",
+        "publication_date": null,
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-010",
+        "source_id": "source-010",
+        "url": "https://www.reddit.com/r/Battlefield/comments/1r4qy1m/who_else_really_loved_the_battlefield_1_campaign/",
+        "publication_date": "2026-02-14",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-011",
+        "source_id": "source-011",
+        "url": "https://www.reddit.com/r/battlefield_one/comments/1legfqw",
+        "publication_date": "2025-06-18",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
       }
     ]
   }
