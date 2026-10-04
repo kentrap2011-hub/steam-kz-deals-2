@@ -190,6 +190,7 @@ def main():
         # without the new count still derives it from existing scope arithmetic.
         producer_status = {
             'scope_record_count': 2,
+            'translation_diagnostic_count': 1,
             'unique_base_app_key_count': 2,
             'resolved_direct_ru_count': 0,
             'resolved_translation_cache_count': 1,
@@ -206,6 +207,7 @@ def main():
             progressive.RUSSIAN_TRANSLATION_STATUS = original_status_path
         assert metrics['translation_observability'] == 'available'
         assert metrics['untranslated_game_count'] == 1
+        assert metrics['translation_diagnostic_count'] == 1
         assert metrics['last_translation_attempt_at_utc'] == failed_at
         assert metrics['last_successful_translation_at_utc'] == accepted_at
 
@@ -276,6 +278,9 @@ def main():
     assert 'Require meaningful Russian descriptions before canonical commit' not in build_workflow
     assert 'Require meaningful Russian descriptions for general visual changes' not in deploy_workflow
     assert "steps.ingest.outputs.submission_count != '0'" in ingest_workflow
+    ui = Path('web/progressive-personalization-ui.js').read_text(encoding='utf-8')
+    assert "label:'На диагностике перевода'" in ui
+    assert "key:'translation_diagnostic_count'" in ui
 
     print('Russian translation nonblocking publication/statistics regression: ok')
 
