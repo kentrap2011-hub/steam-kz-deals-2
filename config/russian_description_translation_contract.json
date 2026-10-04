@@ -23,7 +23,9 @@
         "validate returned keys, hashes, statuses, and Russian text quality",
         "merge validated results into the canonical translation cache",
         "invalidate stale cache entries when the source-text binding changes",
-        "rebuild downstream visual artifacts and publish explicit Russian-description diagnostics/observability"
+        "rebuild downstream visual artifacts and publish explicit Russian-description diagnostics/observability",
+        "classify exact-bound per-item translation quality failures into translation diagnostics",
+        "persist and resolve the canonical translation diagnostic state"
       ],
       "must_not_delegate": [
         "scope selection",
@@ -75,7 +77,8 @@
         "choose retry eligibility or completeness",
         "write directly to the canonical translation cache",
         "create or modify any Scheduled Task or recurring scheduler",
-        "continue after an accepted checkpoint without rereading the current GitHub-owned queue and bindings"
+        "continue after an accepted checkpoint without rereading the current GitHub-owned queue and bindings",
+        "translate or retry requests that GitHub has removed from the normal queue into translation diagnostics"
       ]
     }
   },
@@ -116,7 +119,8 @@
     "request_status_manifest": "data/production/pre_ai/chatgpt_ru_description_status.json",
     "runtime_submission_glob": "data/ai_inbox/russian_descriptions/*.json",
     "canonical_cache": "data/cache/russian_description_translations.json",
-    "note": "These are the canonical implemented translation artifacts. Semantic workers write only result transport; GitHub validates/persists cache and current status."
+    "note": "These are the canonical implemented translation artifacts. Semantic workers write only result transport; GitHub validates/persists cache and current status.",
+    "translation_diagnostics": "data/cache/russian_description_translation_diagnostics.json"
   },
   "request_identity": {
     "request_key_field": "request_id",
@@ -196,14 +200,16 @@
   "github_validation": {
     "exact_current_request_match_required": true,
     "unknown_output_key_action": "reject_submission",
-    "request_or_hash_mismatch_action": "reject_result_and_keep_current_request_unresolved",
+    "request_or_hash_mismatch_action": "reject_submission_fail_closed_before_persistence",
     "duplicate_request_id_action": "reject_submission",
     "translated_text_quality_function": "scripts/russian_description_quality.py::classify_description",
     "accepted_translated_text_quality": "good_ru",
-    "placeholder_or_technical_text_action": "reject_result_and_keep_current_request_unresolved",
-    "non_ru_or_weak_ru_result_action": "reject_result_and_keep_current_request_unresolved",
+    "placeholder_or_technical_text_action": "do_not_cache; quarantine exact current request in translation diagnostics; continue validating safe siblings",
+    "non_ru_or_weak_ru_result_action": "do_not_cache; quarantine exact current request in translation diagnostics; continue validating safe siblings",
     "worker_error_action": "do_not_cache; GitHub keeps request unresolved and applies GitHub-owned retry policy",
-    "fail_closed": true
+    "fail_closed": true,
+    "submission_level_failure_rule": "Malformed container/top-level schema, duplicate request identity, unknown/stale request identity, exact binding mismatch, invalid status, or unsafe cross-field contract corruption rejects the submission before any sibling persistence.",
+    "item_level_quality_failure_rule": "After exact current identity and record contract checks succeed, a translated result that does not classify as good_ru is isolated to GitHub-owned translation diagnostics; valid sibling results remain acceptable."
   },
   "persistence_and_invalidation": {
     "cache_owner": "github_control_plane",
@@ -223,8 +229,8 @@
     "owner": "github_control_plane",
     "chatgpt_retry_loop_allowed": false,
     "chatgpt_batch_quota_allowed": false,
-    "success_condition": "Translation semantic work is complete when every current translatable unresolved request has either an exact valid cache hit or a validated accepted result. Technical/missing-source blockers and any remaining untranslated records stay explicitly observable but do not by themselves block replacement/publication of the current visual payload.",
-    "stale_or_invalid_result": "remains unresolved and is eligible for GitHub-owned retry in the same/current canonical production lifecycle according to runtime state",
+    "success_condition": "Normal translation semantic work is complete when the current normal translation queue is empty. Current exact-bound quality failures may remain separately unresolved in translation diagnostics, while technical/missing-source blockers remain explicit; neither diagnostic nor nontranslatable blockers silently become ready_ru.",
+    "stale_or_invalid_result": "Submission/container or identity corruption remains fail-closed and does not create a diagnostic. An exact-bound translated result that fails good_ru enters diagnostics and is removed from the normal retry queue.",
     "production_completion_decider": "GitHub only"
   },
   "downstream": {
@@ -242,12 +248,28 @@
     "fields": {
       "untranslated_game_count": "Current number of scope records whose description is not resolved to exact valid ready_ru.",
       "last_translation_attempt_at_utc": "Advances when the current prepared translation work is actually checked/attempted: an exact-bound result submission is ingested, including a valid worker error, or the GitHub translation-scope check finds queue_count=0.",
-      "last_successful_translation_at_utc": "Advances when at least one exact-bound good_ru translation is accepted/persisted, or when the GitHub translation-scope check finds queue_count=0."
+      "last_successful_translation_at_utc": "Advances when at least one exact-bound good_ru translation is accepted/persisted, or when the GitHub translation-scope check finds queue_count=0.",
+      "translation_diagnostic_count": "Current number of unresolved translatable requests suppressed from the normal translation queue by an active exact-binding translation diagnostic."
     },
-    "partial_success_rule": "If one or more exact-bound translations are accepted, last_successful_translation_at_utc advances even when unresolved current items remain; untranslated_game_count is rebuilt honestly from the current scope.",
+    "partial_success_rule": "If one or more exact-bound translations are accepted, last_successful_translation_at_utc advances even when sibling exact-bound quality failures enter diagnostics or other unresolved current items remain; queue_count, translation_diagnostic_count and untranslated_game_count are rebuilt honestly from the current scope.",
     "failed_attempt_rule": "A current exact-bound valid error result advances last_translation_attempt_at_utc but not last_successful_translation_at_utc.",
     "invalid_or_stale_transport_rule": "A structurally invalid, stale, wrong-AppID or wrong-binding submission is rejected fail-closed and is not recorded as a successful/current-work translation attempt.",
     "zero_work_rule": "A current translation-scope check with queue_count=0 is both an attempt/check and a successful no-work outcome. An explicitly launched manual semantic worker records this only through a zero-result canonical submission ingested while the current queue is empty; the worker never supplies its own timestamp.",
-    "browser_rule": "The browser may format these producer-owned values only; it must not infer count or timestamps from page load, deploy time, commit time, card contents or payload age."
+    "browser_rule": "The browser may format producer-owned untranslated_game_count, translation_diagnostic_count and timestamps only; it must not infer them from cards, queue files, client state, page load, deploy time, commit time or payload age."
+  },
+  "diagnostic_quarantine": {
+    "owner": "github_control_plane",
+    "canonical_state": "data/cache/russian_description_translation_diagnostics.json",
+    "contract_id": "RUSSIAN-DESCRIPTION-TRANSLATION-DIAGNOSTICS-V1",
+    "entry_key": "request_id",
+    "trigger": "Only an exact-current, exact-bound status=translated result whose translated_text_ru fails the canonical good_ru quality gate after container/identity validation.",
+    "normal_queue_rule": "An active diagnostic entry matching the exact current request identity is excluded from the normal translation semantic queue and cannot be automatically retried by normal translation workers.",
+    "worker_role": "Semantic workers neither choose diagnostic eligibility nor diagnose/resolve/retry diagnostic entries.",
+    "source_change_rule": "A changed normalized source text creates a new request_id; an active diagnostic for the old request_id does not suppress the new current request.",
+    "direct_ready_ru_rule": "If deterministic current source resolution becomes ready_ru, no translation request exists and the historical diagnostic is not counted as current work.",
+    "explicit_resolution_rule": "A GitHub-owned explicit resolution marks the exact diagnostic entry resolved; if the exact source remains unresolved/translatable, normal queue construction may then emit that exact request again.",
+    "idempotency_rule": "Diagnostic state is keyed by exact request_id, so re-ingest cannot create duplicate diagnostic entries.",
+    "automatic_diagnostic_worker_allowed": false,
+    "separate_recurring_scheduler_allowed": false
   }
 }
