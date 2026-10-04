@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 108,
     "deep_completed_not_fit_count": 18,
     "deep_incomplete_or_recovery_count": 28,
-    "deep_waiting_for_dossier_count": 370,
-    "deep_ready_or_pending_count": 3,
+    "deep_waiting_for_dossier_count": 367,
+    "deep_ready_or_pending_count": 6,
     "deep_normal_first_pass_remaining_count": 373,
     "deep_remaining_until_all_authoritative_count": 401,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 19,
-    "dossier_waiting_count": 370,
+    "dossier_waiting_count": 367,
     "pass2_attempted_count": 154,
-    "pass2_eligible_count": 3,
-    "normal_pass2_eligible_count": 3,
+    "pass2_eligible_count": 6,
+    "normal_pass2_eligible_count": 6,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -237,6 +237,71 @@
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1282100",
+      "taste_subject_key": "App_1282100",
+      "appid": "1282100",
+      "taste_fingerprint": "9676889cbbd1518f162b01e6b420bcb45fd8bdffa97079ecd017aeaab4947bc6",
+      "candidate_context_sha256": "64e2a4e3ae9a02e4ce10ddbe562b6d8ed7c1174472a9fca1f0747aab7a8baf0a",
+      "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+      "work_id": "929a94376fa6c38be6201f454f530fbaa50aa8d278fe81a6f41c124cd50e937b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "REMNANT II®",
+        "short_description": "REMNANT II® pits survivors of humanity against new deadly creatures and god-like bosses across terrifying worlds. Play solo or co-op with two other friends to explore the depths of the unknown to stop an evil from destroying reality itself.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Adventure",
+          "RPG",
+          "Souls-like"
+        ],
+        "core_fit_count": 1,
+        "release_date": "25 Jul, 2023",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1282100"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1282100.json",
+      "dossier_content_sha256": "4adcba66835b0a7aabe9833f52b9d8bfa389be969fe8e047fba5bfefb0e1df88",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-24T17:15:48Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "9ab7cc116354a4eedae096380f60c3eddf0c998fa4595372141aaa856e43cb57",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--929a94376fa6c38be6201f454f530fbaa50aa8d278fe81a6f41c124cd50e937b--9ab7cc116354a4eedae096380f60c3eddf0c998fa4595372141aaa856e43cb57.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--929a94376fa6c38be6201f454f530fbaa50aa8d278fe81a6f41c124cd50e937b--9ab7cc116354a4eedae096380f60c3eddf0c998fa4595372141aaa856e43cb57.json",
+      "sequence": 3
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "family_id": "game:1262580",
       "taste_subject_key": "App_1262580",
       "appid": "1262580",
@@ -294,7 +359,134 @@
       "authorization_id": "133ba73f9e8730e5dea34d0aabc7ac2b403017a538b6b8c7780e354442456cfc",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--5d986cf943fe4137b11ead660c8e8ef1fb83bcfe45b9ffa6bae72eaef81a361a--133ba73f9e8730e5dea34d0aabc7ac2b403017a538b6b8c7780e354442456cfc.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--5d986cf943fe4137b11ead660c8e8ef1fb83bcfe45b9ffa6bae72eaef81a361a--133ba73f9e8730e5dea34d0aabc7ac2b403017a538b6b8c7780e354442456cfc.json",
-      "sequence": 3
+      "sequence": 4
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1300",
+      "taste_subject_key": "App_1300",
+      "appid": "1300",
+      "taste_fingerprint": "ef753dd37725d075225d93bdb47962747cfe39a5c4d7334db623d6de294b1bce",
+      "candidate_context_sha256": "04007dd2534cebb1e4fbb7aeaf9d7c9560fca87023fccdbca1a6431c6b566a1d",
+      "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+      "work_id": "c523f5fb2a0a5eb2f31fc9c18d790baba1c9bdbc9b9c87477d74d5a225602233",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "SiN Episodes: Emergence",
+        "short_description": "You are John Blade, commander of HardCorps, an elite security force dedicated to protecting the people of Freeport City. Four years have passed since your first battle with Elexis Sinclaire, a beautiful, brilliant, and ruthless scientist who is out to remake humanity according to her own twisted vision.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Cyberpunk",
+          "Sci-fi"
+        ],
+        "core_fit_count": 2,
+        "release_date": "10 May, 2006",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1300"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1300.json",
+      "dossier_content_sha256": "482669cfd712a532eafe6c75dbebb644379c70e8ea9fb17e9bcaed06ff3a0a53",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-24T17:15:48Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "2326ec6458a146e3416fffadf8f00c3b1696048b91cd6fabc699d7fea43d3741",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--c523f5fb2a0a5eb2f31fc9c18d790baba1c9bdbc9b9c87477d74d5a225602233--2326ec6458a146e3416fffadf8f00c3b1696048b91cd6fabc699d7fea43d3741.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--c523f5fb2a0a5eb2f31fc9c18d790baba1c9bdbc9b9c87477d74d5a225602233--2326ec6458a146e3416fffadf8f00c3b1696048b91cd6fabc699d7fea43d3741.json",
+      "sequence": 5
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1270210",
+      "taste_subject_key": "App_1270210",
+      "appid": "1270210",
+      "taste_fingerprint": "41e276e7df07c884e1273c0f285525ac70d2b47f8e1cdc86d9c58b1453460c0c",
+      "candidate_context_sha256": "9c07b20dfd2f95220ab386baadfdc74ab24bfdcb622e75935697c003fe8ea243",
+      "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+      "work_id": "50337bc1b17a7531ac3d42a5c3cb448870b66bbae73a4f0984085394c81ffafe",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Love of Magic",
+        "short_description": "Love of Magic is an erotic Urban Fantasy Sandbox RPG. Master your Magic. Find true Love. Discover your Destiny.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Fantasy",
+          "Story Rich"
+        ],
+        "core_fit_count": 2,
+        "release_date": "10 Dec, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1270210"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1270210.json",
+      "dossier_content_sha256": "d92c058d9e9af140cae56292cb62d15aa39bb2d0398317d07bbc1105fbc835ad",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-24T17:15:48Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "35f8b21293f5c470035c4d235a984bd813e270e9f980956a6a4c8fd031eca929",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--50337bc1b17a7531ac3d42a5c3cb448870b66bbae73a4f0984085394c81ffafe--35f8b21293f5c470035c4d235a984bd813e270e9f980956a6a4c8fd031eca929.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--50337bc1b17a7531ac3d42a5c3cb448870b66bbae73a4f0984085394c81ffafe--35f8b21293f5c470035c4d235a984bd813e270e9f980956a6a4c8fd031eca929.json",
+      "sequence": 6
     }
   ]
 }
