@@ -1,0 +1,258 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "842e306ef58eea9c187a70644c6d725bfc53c62b",
+  "run_start_authority_commit": "ce43fa5bc23b86e22ce0a9edff997a7f07f2579e",
+  "run_started_at_utc": "2026-10-04T09:52:38+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+  "work_id": "1113d34561cdf1302010cf07e34d9d26b2e3191697e9c77b8cbb44b383bc80ab",
+  "family_id": "game:1158890",
+  "taste_subject_key": "App_1158890",
+  "appid": "1158890",
+  "taste_fingerprint": "98e7652e4fcc13b9a4fd6a11257c2025b064f948b224bd044b9144f3a1738ff8",
+  "candidate_context_sha256": "7f50b08c812e438161a62c1e002be2b200082388a65de8f112f80558dca0a86d",
+  "dossier_content_sha256": "aac38cdff5dffe22f151e662f0db11409fc96fd037c13b10e47ec67e670d9056",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "c838ae748560c72a783e7102a2dcda88b7e775af8fddf01f92ee3f0c9b0c23ce",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Монохромная индустриальная визуальная подача и атмосфера — самая устойчиво хвалимая часть игры и сильный личный крючок для этого профиля.",
+    "Короткий кинематографичный маршрут сочетает платформинг, простые загадки, стелс и set-piece переходы, не растягивая опыт на десятки часов.",
+    "Лёгкие загадки работают как смена ритма, а не как отдельный тяжёлый puzzle-барьер."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 54,
+    "development_variety": 60,
+    "structure_pacing_direction": 78,
+    "identity_hooks": 94,
+    "breadth_of_match": 80
+  },
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "score_findings": [
+    {
+      "finding_id": "atmospheric-visual-identity",
+      "text_ru": "Монохромная индустриальная композиция, свет, масштаб и атмосфера — самая устойчиво хвалимая часть игры и создают сильную самостоятельную визуальную идентичность.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Узнаваемый визуальный язык и атмосфера способны заметно усиливать твоё впечатление."
+        },
+        {
+          "json_pointer": "/taste_profile/13/raises",
+          "profile_value_sha256": "fd0e5a051cdf972884f0bfccd7dfd2c3cd50ec876ee4cd2ee491d416f2707058",
+          "match_text_ru": "Яркая атмосфера или стиль могут быть для тебя самостоятельным крючком."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 94
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 80
+        }
+      ]
+    },
+    {
+      "finding_id": "light-puzzle-platforming",
+      "text_ru": "Бег, прыжки, простые взаимодействия, стелс и лёгкие загадки регулярно меняют тип действия, но сами механики скорее сопровождают подачу, чем дают глубокое освоение.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/evidence_log/73/evidence",
+          "profile_value_sha256": "6c94cc7dd9f37fb9bb1de064cb1f064b521852bfde78d2fec76542101b1876d2",
+          "match_text_ru": "Тебе нравятся умеренно простые головоломки, когда они разбавляют приключение и дают смену ритма."
+        },
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Смена типов активности поддерживает важный для тебя сигнал разнообразия."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 54
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 60
+        }
+      ]
+    },
+    {
+      "finding_id": "compact-cinematic-structure",
+      "text_ru": "Прохождение обычно занимает около двух–четырёх часов и ведёт по фиксированному кинематографичному маршруту, поэтому опыт не успевает сильно растянуть слабую механическую плотность.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/tемп/note",
+          "profile_value_sha256": "a79a54657031ce862cf6c6d317d9adbc854a447415cf166fe07efc3487e41761",
+          "match_text_ru": "Тебе не нужен постоянный экшен, но игра должна регулярно давать новую причину продолжать и не затягивать слабые участки."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 78
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Платформинг, стелс и загадки считаются рабочими, но механически менее изобретательными и плотными, чем визуальная подача.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Управление в целом простое, но есть жалобы на ограниченный контроль в падениях и местами неотзывчивое движение.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Два–четыре часа подходят компактному формату, но одновременно означают низкую повторную ценность для тех, кто ждёт более крупного приключения.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Социальная аллегория и environmental storytelling интригуют, но смысл становится яснее поздно, а финал для части игроков остаётся туманным или слабым.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть два старых сигнала о плохой производительности даже на подходящем железе, но Dossier не подтверждает, что проблема всё ещё типична сейчас.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Фиксированный кинематографичный маршрут и небольшие puzzle-пространства дают сравнительно мало плотного геймплея; если атмосфера не удержит, для тебя это реальный риск слишком пассивного опыта.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      }
+    ]
+  }
+}
