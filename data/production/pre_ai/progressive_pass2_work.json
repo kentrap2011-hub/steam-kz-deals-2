@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 113,
     "deep_completed_not_fit_count": 18,
     "deep_incomplete_or_recovery_count": 29,
-    "deep_waiting_for_dossier_count": 367,
-    "deep_ready_or_pending_count": 0,
+    "deep_waiting_for_dossier_count": 364,
+    "deep_ready_or_pending_count": 3,
     "deep_normal_first_pass_remaining_count": 367,
     "deep_remaining_until_all_authoritative_count": 396,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 19,
-    "dossier_waiting_count": 367,
+    "dossier_waiting_count": 364,
     "pass2_attempted_count": 160,
-    "pass2_eligible_count": 0,
-    "normal_pass2_eligible_count": 0,
+    "pass2_eligible_count": 3,
+    "normal_pass2_eligible_count": 3,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -107,5 +107,193 @@
       "complete": true
     }
   },
-  "items": []
+  "items": [
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1335790",
+      "taste_subject_key": "App_1335790",
+      "appid": "1335790",
+      "taste_fingerprint": "59a8820680d44dbb078349fbd07908ecaff7a1d7613c587b7eec9f7149fde0c3",
+      "candidate_context_sha256": "50b9e099d7c22c05cffee1dfd07739ee30119765c37b6055036ebb7a200d1730",
+      "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+      "work_id": "562436aaf92615e58791d811dbfe8f4054a5799775da2341da7b76c294e0c79f",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Operation: Tango",
+        "short_description": "It takes two to save the world in this cooperative spy adventure. Pair up with a friend as Agent or Hacker—with only your voices to connect you—and work together to bring a hi-tech global menace to its knees. Now with a FREE CONTENT UPDATE!",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure"
+        ],
+        "core_fit_count": 0,
+        "release_date": "1 Jun, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1335790"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1335790.json",
+      "dossier_content_sha256": "67dd517891190347bcbf68e7dfa62ef075a913606e0afdd125eb13addc9e70c9",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-24T17:38:37Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "086a77d5eae50021802b4d43735d097ce1900cd78d103603fc5234d1bd8b5472",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--562436aaf92615e58791d811dbfe8f4054a5799775da2341da7b76c294e0c79f--086a77d5eae50021802b4d43735d097ce1900cd78d103603fc5234d1bd8b5472.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--562436aaf92615e58791d811dbfe8f4054a5799775da2341da7b76c294e0c79f--086a77d5eae50021802b4d43735d097ce1900cd78d103603fc5234d1bd8b5472.json",
+      "sequence": 1
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1328350",
+      "taste_subject_key": "App_1328350",
+      "appid": "1328350",
+      "taste_fingerprint": "06c95bf1b09a20c3236d98a35d4577d88cdb3d2a8c0d3fd895bfdc078b6db9bd",
+      "candidate_context_sha256": "b810875059c2c3c019a6f67307bee4fb490cfad477ae28a218523a1f7bfe7295",
+      "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+      "work_id": "8ad31e795c041b1758cc0bb269a9c7891787471775a45aad8d879fca060c983c",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Turbo Overkill",
+        "short_description": "Enter Paradise as Johnny Turbo—half-metal, half-human, all-murder machine. Clean up the streets with a chainsaw leg, 15+ weapons and your hovercar as you battle the rogue AI Syn, rival bounty hunters and cyberpunks aplenty. Apogee’s most outrageous FPS since Duke Nukem 3D. Good hunting, Sir!",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Cyberpunk"
+        ],
+        "core_fit_count": 1,
+        "release_date": "11 Aug, 2023",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1328350"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1328350.json",
+      "dossier_content_sha256": "9d38111f3d2575b53e3187f310d08ebdf28be15d95e6e58849bba53b32c016a9",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-24T17:38:37Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "c4dfa93170aa9af75bb62c913e261a40e90d783fc99d052731e02962acd1b377",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--8ad31e795c041b1758cc0bb269a9c7891787471775a45aad8d879fca060c983c--c4dfa93170aa9af75bb62c913e261a40e90d783fc99d052731e02962acd1b377.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--8ad31e795c041b1758cc0bb269a9c7891787471775a45aad8d879fca060c983c--c4dfa93170aa9af75bb62c913e261a40e90d783fc99d052731e02962acd1b377.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1330000",
+      "taste_subject_key": "App_1330000",
+      "appid": "1330000",
+      "taste_fingerprint": "db9c5c8751911f881936d2909025f5917021dacabda141e993f34bcb61f372f1",
+      "candidate_context_sha256": "f0473fb45ad6dc26dc893cc694e7e0f31dabfef6cbe9933ada667ca18e0d3a55",
+      "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+      "work_id": "c66c316a371d9a59434f5369691def8f7c40ab8b789ed6413ddc36804e039ade",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Stolen Realm",
+        "short_description": "Stolen Realm is a simultaneous turn-based tactical dungeon crawling looter with action RPG elements where you control up to 6 heroes, solo or through online co-op, venturing forth in adventures set in a high-fantasy, low-poly world.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Fantasy"
+        ],
+        "core_fit_count": 1,
+        "release_date": "8 Mar, 2024",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1330000"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1330000.json",
+      "dossier_content_sha256": "3fb61192b6a6b49b20c367599a4f621b73786283c71c1d8e9e4dc4972b6eafe9",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-24T17:38:37Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "73149dd87b76e0436aa604bd0afc894d1279e6af340864587e7920ec3c91e6d4",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--c66c316a371d9a59434f5369691def8f7c40ab8b789ed6413ddc36804e039ade--73149dd87b76e0436aa604bd0afc894d1279e6af340864587e7920ec3c91e6d4.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--c66c316a371d9a59434f5369691def8f7c40ab8b789ed6413ddc36804e039ade--73149dd87b76e0436aa604bd0afc894d1279e6af340864587e7920ec3c91e6d4.json",
+      "sequence": 3
+    }
+  ]
 }
