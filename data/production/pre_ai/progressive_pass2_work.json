@@ -51,15 +51,15 @@
   },
   "scope": {
     "deep_total_current_coverage_target": 527,
-    "deep_first_pass_attempted_count": 151,
-    "deep_authoritative_completed_count": 123,
-    "deep_completed_fit_count": 105,
+    "deep_first_pass_attempted_count": 152,
+    "deep_authoritative_completed_count": 124,
+    "deep_completed_fit_count": 106,
     "deep_completed_not_fit_count": 18,
     "deep_incomplete_or_recovery_count": 28,
     "deep_waiting_for_dossier_count": 373,
-    "deep_ready_or_pending_count": 3,
-    "deep_normal_first_pass_remaining_count": 376,
-    "deep_remaining_until_all_authoritative_count": 404,
+    "deep_ready_or_pending_count": 2,
+    "deep_normal_first_pass_remaining_count": 375,
+    "deep_remaining_until_all_authoritative_count": 403,
     "deep_normal_first_pass_complete": false,
     "deep_all_current_authoritative_complete": false,
     "recovery_owned_count": 28,
@@ -67,9 +67,9 @@
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 19,
     "dossier_waiting_count": 373,
-    "pass2_attempted_count": 151,
-    "pass2_eligible_count": 3,
-    "normal_pass2_eligible_count": 3,
+    "pass2_attempted_count": 152,
+    "pass2_eligible_count": 2,
+    "normal_pass2_eligible_count": 2,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -108,69 +108,6 @@
     }
   },
   "items": [
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:1238840",
-      "taste_subject_key": "App_1238840",
-      "appid": "1238840",
-      "taste_fingerprint": "a7f74840c36ded431859a84c87a4896d49e1eeb5f265970ed4c23ccb297465b2",
-      "candidate_context_sha256": "aa4bd8e6b85d321f386bb43b146350e4d4d818d7ae0bfa7aa0f7acbeb14e6b7c",
-      "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
-      "work_id": "ad907764cf72366b0f3afbf8e18359cadbee6817b4881ec80e475446bc29d72d",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Battlefield™ 1",
-        "short_description": "Battlefield™ 1 takes you back to The Great War, WW1, where new technology and worldwide conflict changed the face of warfare forever.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Action",
-          "Singleplayer"
-        ],
-        "core_fit_count": 0,
-        "release_date": "11 Jun, 2020",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1238840"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1238840.json",
-      "dossier_content_sha256": "791585a3974e35998b6a4b18e8c863244705f9e427ae9c1589f1c362a51a12a7",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-24T09:53:23Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "e73983983b2f3f88e86d567ecdd2bb2ee84fc9ee3cbe4d53db5ca9ef9b328c00",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ad907764cf72366b0f3afbf8e18359cadbee6817b4881ec80e475446bc29d72d--e73983983b2f3f88e86d567ecdd2bb2ee84fc9ee3cbe4d53db5ca9ef9b328c00.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ad907764cf72366b0f3afbf8e18359cadbee6817b4881ec80e475446bc29d72d--e73983983b2f3f88e86d567ecdd2bb2ee84fc9ee3cbe4d53db5ca9ef9b328c00.json",
-      "sequence": 1
-    },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
@@ -234,7 +171,7 @@
       "authorization_id": "0077a4ce9726b7bc4756237f6c7d8e26788dcdfa4438964f0e5ab7dd7303a9e7",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--c074739d261a211d62a208a92c4e350af22d7497117f4e5fb35c867a12cfa4f0--0077a4ce9726b7bc4756237f6c7d8e26788dcdfa4438964f0e5ab7dd7303a9e7.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--c074739d261a211d62a208a92c4e350af22d7497117f4e5fb35c867a12cfa4f0--0077a4ce9726b7bc4756237f6c7d8e26788dcdfa4438964f0e5ab7dd7303a9e7.json",
-      "sequence": 2
+      "sequence": 1
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -296,7 +233,7 @@
       "authorization_id": "9376a575c3bf1cec5dce5434ee6a5404a850443c490eb66bf46e912981f06a66",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--db9065901a977b848d4f175bab8b8f34c8cdeaef9053c7e84f9fd083b03ec7fb--9376a575c3bf1cec5dce5434ee6a5404a850443c490eb66bf46e912981f06a66.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--db9065901a977b848d4f175bab8b8f34c8cdeaef9053c7e84f9fd083b03ec7fb--9376a575c3bf1cec5dce5434ee6a5404a850443c490eb66bf46e912981f06a66.json",
-      "sequence": 3
+      "sequence": 2
     }
   ]
 }
