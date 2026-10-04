@@ -100,6 +100,7 @@ for marker in [
     "manage retries or completeness",
     "write directly to the canonical translation cache",
     "create a separate recurring scheduler or daily quota",
+    "translate, retry, or resolve requests that GitHub has removed from the normal queue into translation diagnostics",
 ]:
     require(marker in worker_forbidden, f"scheduled worker prohibition missing: {marker}")
 require((owners.get("interactive_chat") or {}).get("production_catalog_translation_allowed") is False, "interactive chat must not translate the production catalog")
