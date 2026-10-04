@@ -90,7 +90,7 @@ def diagnostics_from(path):
 
 def main():
     source_a = 'Explore an abandoned station and find a safe route out.'
-    source_b = 'The complete edition includes a season pass and additional content.'
+    source_b = 'Fight across a distant galaxy, complete missions, and master several combat roles.'
     source_c = 'Investigate the old city, solve puzzles, and uncover its hidden mystery.'
     req_a = request('1', source_a, 'A')
     req_b = request('1237980', source_b, 'STAR WARS Battlefront')
