@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "1b1518fa3f1dd3beea301640a601a3ce9c73d2f2",
+  "run_start_authority_commit": "72bba05db6658cfaac8c49ef67cbf1bb11319374",
+  "run_started_at_utc": "2026-10-04T17:37:41+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+  "work_id": "929a94376fa6c38be6201f454f530fbaa50aa8d278fe81a6f41c124cd50e937b",
+  "family_id": "game:1282100",
+  "taste_subject_key": "App_1282100",
+  "appid": "1282100",
+  "taste_fingerprint": "9676889cbbd1518f162b01e6b420bcb45fd8bdffa97079ecd017aeaab4947bc6",
+  "candidate_context_sha256": "64e2a4e3ae9a02e4ce10ddbe562b6d8ed7c1174472a9fca1f0747aab7a8baf0a",
+  "dossier_content_sha256": "4adcba66835b0a7aabe9833f52b9d8bfa389be969fe8e047fba5bfefb0e1df88",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "9ab7cc116354a4eedae096380f60c3eddf0c998fa4595372141aaa856e43cb57",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Gunplay, архетипы и богатое билдостроение дают сильный цикл освоения и экспериментов.",
+    "Процедурно меняющиеся миры, секреты и дополнительные боссы поддерживают исследование и повторные прохождения.",
+    "Кооператив с дополняющими друг друга сборками хорошо совпадает с ценностью совместной тактики."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 92,
+    "development_variety": 90,
+    "structure_pacing_direction": 84,
+    "identity_hooks": 86,
+    "breadth_of_match": 94
+  },
+  "score_findings": [
+    {
+      "finding_id": "gunplay-build-crafting",
+      "text_ru": "Стрельба, архетипы, оружие и множество совместимых модификаций дают глубокое пространство для сборок: можно не только усиливать числа, но и менять сам способ прохождения боёв.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Тебе особенно нравится, когда результат зависит от освоения механик, таймингов и собственного навыка."
+        },
+        {
+          "json_pointer": "/taste_profile/2/raises",
+          "profile_value_sha256": "14b5578fa690e75089e182953960601edf5593fe7c4b57ccdc49878c88fa672a",
+          "match_text_ru": "Практически значимые улучшения героя, способностей и экипировки — прямой положительный сигнал твоего профиля."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 92
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 90
+        }
+      ]
+    },
+    {
+      "finding_id": "procedural-exploration",
+      "text_ru": "Процедурно меняющиеся миры, секреты, дополнительные боссы и Adventure Mode регулярно перестраивают маршрут и содержимое, поэтому повторное исследование чаще открывает новые ситуации.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Регулярное появление новых ситуаций и форматов поддерживает один из ключевых положительных сигналов твоего профиля."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 84
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 94
+        }
+      ]
+    },
+    {
+      "finding_id": "coop-complementary-builds",
+      "text_ru": "Кооператив позволяет сочетать разные архетипы и сборки и усиливает ценность экспериментов, а не просто добавляет второго игрока в тот же одиночный цикл.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9/raises",
+          "profile_value_sha256": "36b637056006eec4d8f770215639f59d7ccbc3bd78413fc61dd852f0486dfea8",
+          "match_text_ru": "Совместная тактика и распределение ролей заметно повышают для тебя ценность кооператива."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 94
+        }
+      ]
+    },
+    {
+      "finding_id": "world-art-lore-hook",
+      "text_ru": "Разные миры, арт-дирекшн и environmental lore создают сильный атмосферный крючок даже там, где центральный сюжет и персонажи работают слабее.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Выразительный визуальный язык и атмосфера способны заметно усиливать твоё впечатление."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 86
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Чтобы получить конкретный предмет или событие, иногда приходится многократно reroll-ить миры и повторять знакомые участки; для тебя это риск повторения без достаточного нового содержания.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Боссы часто дают запоминающиеся механики, но их качество и сложность неровные: часть боёв учится хорошо, часть ощущается перегруженной или слишком затянутой.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Кооператив — сильная сторона, но баланс и субъективное удовольствие в одиночной игре оцениваются заметно неоднозначнее.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Миры и environmental lore хвалят чаще, чем центральный сюжет и персонажей, поэтому сюжетный слой здесь скорее поддерживает исследование, чем ведёт игру сам по себе.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "felt_technical_burden",
+        "text_ru": "Свежие отзывы 2026 года всё ещё отмечают статтеры, просадки кадров и нестабильную производительность в бою на части PC-систем.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "В публичном co-op нет удобных встроенных средств общения, поэтому согласовывать цели с незнакомыми игроками бывает трудно.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
