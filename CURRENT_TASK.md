@@ -1,14 +1,17 @@
 # CURRENT TASK
 
-## Worker in progress — 2026-10-04
-
-### Steam discovery maximal scope reduction diagnostic 01
-Статус: `in_progress`.
+## COMPLETE — Steam discovery maximal scope reduction diagnostic 01
+Статус: `diagnostic_complete_pending_user_product_choices`.
 - task: `WORKER_TASK_STEAM_DISCOVERY_MAXIMAL_SCOPE_REDUCTION_DIAGNOSTIC_01.md`;
-- mode: `READ-ONLY / RECON`;
-- scope: bounded diagnostic of the existing GitHub-owned Steam KZ discovery path to reduce raw Steam scope while preserving the best offers;
-- no implementation, production-state mutation, scheduler/Scheduled Task change, new collector/queue/retry loop, or Catalyst special case is authorized;
-- required report: `reviews/worker_reports/steam-discovery-maximal-scope-reduction-diagnostic-01.md`.
+- confirmed bottleneck: current live KZ `specials=1` discovery expands to about 100,307 rows, while the combined `category1=998,21,996` request is not an effective live bound and the existing 60-minute collector times out before persistence;
+- last completed funnel: 12,977 raw → 9,923 review candidates → 1,615 broad → 609 shortlist/mailing; latest measurable ranking lookup contains 509 cards;
+- current shortlist invariant: every selected paid row is >=25% discount and <=4500 KZT, so those are safe necessary-condition gates under current collector semantics;
+- recommended design: keep the same GitHub owner, use explicit games/DLC/bundles partitions plus a live-verified KZ price bound and paid/free split, then apply the existing cheap necessary gates before review enrichment; do not use an arbitrary raw top-N;
+- a hard/near-hard ~100 final-site cap remains a separate user product decision because current policy explicitly has no artificial top-N;
+- no implementation, production-state mutation, scheduler/Scheduled Task change, new collector/queue/retry loop, ranking change, Fast/Dossier/Deep change, or Catalyst special case was performed;
+- report: `reviews/worker_reports/steam-discovery-maximal-scope-reduction-diagnostic-01.md`;
+- report commit: `b370991e4316be9ec775bb34463831ff8e88d225`;
+- next bounded action after approval: one implementation task on the existing GitHub discovery owner, starting with exact KZ bounded `maxprice=4500`/partition acceptance probes and contract alignment.
 
 ## COMPLETE — Mirror's Edge Catalyst post-refresh absence diagnostic 01
 Статус: `diagnosis_complete_root_cause_identified`.
