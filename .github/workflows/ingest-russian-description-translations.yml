@@ -41,6 +41,7 @@ jobs:
           python scripts/test_russian_description_translation_runtime.py
           python scripts/test_russian_description_manual_semantic_worker.py
           python scripts/test_russian_translation_publication_statistics.py
+          python scripts/test_russian_translation_partial_accept_diagnostics.py
           python -m py_compile \
             scripts/russian_description_translation_runtime.py \
             scripts/build_russian_description_translation_queue.py \
@@ -61,6 +62,7 @@ jobs:
           git config user.email "steam-kz-bot@users.noreply.github.com"
           git add \
             data/cache/russian_description_translations.json \
+            data/cache/russian_description_translation_diagnostics.json \
             data/production/pre_ai/chatgpt_ru_description_queue.jsonl \
             data/production/pre_ai/chatgpt_ru_description_status.json \
             data/production/pre_ai/chatgpt_payload.json \
