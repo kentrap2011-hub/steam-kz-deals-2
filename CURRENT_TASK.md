@@ -1346,12 +1346,16 @@
 - Report: `reviews/worker_reports/personal-taste-game-guess-diagnostic-01.md`.
 
 
-## Worker in progress — 2026-10-04
+## Worker ready for Director acceptance — 2026-10-04
 
 ### Russian translation partial accept + diagnostic quarantine fix 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_RUSSIAN_TRANSLATION_PARTIAL_ACCEPT_DIAGNOSTIC_QUARANTINE_FIX_01.md`;
 - branch: `fix/russian-translation-partial-accept-diagnostic-quarantine-01`;
-- scope: isolate exact-bound per-item Russian quality failures into GitHub-owned translation diagnostics while persisting valid sibling translations, excluding diagnostics from the normal translation queue, and exposing a producer-owned diagnostic count in Statistics;
-- pinned regression: ingest run `37138503097`, job `111247856419`, failed request `2aeac6b30b8bea9fcecd9be3269154b2bb4b84fefc3345986929ee9f4e23b76e` / AppID `1237980`;
-- no Scheduled Task, second recurring worker, Fast/Dossier/Deep/ranking/expiry change is authorized.
+- PR: `#145`;
+- report: `reviews/worker_reports/russian-translation-partial-accept-diagnostic-quarantine-fix-01.md`;
+- validated implementation head: `88add831215992387b9353666bf5014b75978d9a`;
+- pinned checkpoint regression: `20 total = 19 accepted + 1 diagnostic + 0 worker errors`; failed request `2aeac6b30b8bea9fcecd9be3269154b2bb4b84fefc3345986929ee9f4e23b76e` / AppID `1237980` is the diagnostic item;
+- checks: execution ownership `37194537301` success; Progressive PASS 2 core `37194537366` success; backlog dispositions `37194537674` success;
+- live canonical ingest not performed before merge; `main` currently contains two overlapping 20-result inbox submissions, so Director must explicitly reconcile transport choice after PR acceptance;
+- no Scheduled Task, second recurring worker, Fast/Dossier/Deep/ranking/expiry change was made.
