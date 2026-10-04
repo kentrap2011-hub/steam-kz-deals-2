@@ -21,6 +21,7 @@ on:
       - "scripts/test_russian_description_translation_runtime.py"
       - "scripts/test_russian_description_manual_semantic_worker.py"
       - "scripts/test_russian_translation_publication_statistics.py"
+      - "scripts/test_russian_translation_partial_accept_diagnostics.py"
       - "scripts/validate_russian_descriptions.py"
       - "scripts/test_workflow_run_production_authority.py"
       - ".github/workflows/build-mailing-feed.yml"
@@ -53,6 +54,7 @@ on:
       - "scripts/test_russian_description_translation_runtime.py"
       - "scripts/test_russian_description_manual_semantic_worker.py"
       - "scripts/test_russian_translation_publication_statistics.py"
+      - "scripts/test_russian_translation_partial_accept_diagnostics.py"
       - "scripts/validate_russian_descriptions.py"
       - "scripts/test_workflow_run_production_authority.py"
       - ".github/workflows/build-mailing-feed.yml"
@@ -102,7 +104,8 @@ jobs:
             scripts/validate_russian_descriptions.py \
             scripts/test_russian_description_translation_runtime.py \
             scripts/test_russian_description_manual_semantic_worker.py \
-            scripts/test_russian_translation_publication_statistics.py
+            scripts/test_russian_translation_publication_statistics.py \
+            scripts/test_russian_translation_partial_accept_diagnostics.py
 
       - name: Run Russian description regressions
         run: |
@@ -110,3 +113,4 @@ jobs:
           python scripts/test_russian_description_translation_runtime.py
           python scripts/test_russian_description_manual_semantic_worker.py
           python scripts/test_russian_translation_publication_statistics.py
+          python scripts/test_russian_translation_partial_accept_diagnostics.py
