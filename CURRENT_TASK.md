@@ -1344,3 +1344,14 @@
 - Possible later profile refinement: distinguish intrinsic continuous-movement flow from movement valued mainly for mastery/challenge.
 - Canonical Taste profile and production scoring/ranking were not modified.
 - Report: `reviews/worker_reports/personal-taste-game-guess-diagnostic-01.md`.
+
+
+## Worker in progress — 2026-10-04
+
+### Russian translation partial accept + diagnostic quarantine fix 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_RUSSIAN_TRANSLATION_PARTIAL_ACCEPT_DIAGNOSTIC_QUARANTINE_FIX_01.md`;
+- branch: `fix/russian-translation-partial-accept-diagnostic-quarantine-01`;
+- scope: isolate exact-bound per-item Russian quality failures into GitHub-owned translation diagnostics while persisting valid sibling translations, excluding diagnostics from the normal translation queue, and exposing a producer-owned diagnostic count in Statistics;
+- pinned regression: ingest run `37138503097`, job `111247856419`, failed request `2aeac6b30b8bea9fcecd9be3269154b2bb4b84fefc3345986929ee9f4e23b76e` / AppID `1237980`;
+- no Scheduled Task, second recurring worker, Fast/Dossier/Deep/ranking/expiry change is authorized.
