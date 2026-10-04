@@ -25,60 +25,50 @@ Treat old Board sections as historical unless this handoff explicitly points to 
 
 ## CURRENT PHYSICAL WORKER SLOTS
 
-### ЧАТ 1 — FREE
-
-The Mirror's Edge Catalyst diagnostic is complete.
+### ЧАТ 1 — ASSIGNED / NEW PHYSICAL CHAT
 
 Task:
-`WORKER_TASK_MIRRORS_EDGE_CATALYST_POST_REFRESH_ABSENCE_DIAGNOSTIC_01.md`
+`WORKER_TASK_STEAM_DISCOVERY_MAXIMAL_SCOPE_REDUCTION_DIAGNOSTIC_01.md`
 
-Report:
-`reviews/worker_reports/mirrors-edge-catalyst-post-refresh-absence-diagnostic-01.md`
+Mode:
+`READ-ONLY / RECON`
 
-Completion commits:
-- diagnostic report: `56b8387f56daa88b291f6638befd133e616b3906`;
-- closeout: `62cf27a2ef7fd4c3312fe9b4a629bc4f539434d8`.
+Goal:
+Globally diagnose how to shrink real Steam KZ discovery as much as safely possible while preserving the best deals and targeting roughly 100 final visible offers. The worker must produce several options/tradeoffs and ask the user directly if further reduction requires dropping deal classes. No implementation is authorized in this task.
 
-Do not redo this investigation.
-
-### ЧАТ 2 — FREE
-
-The Dossier frozen-invocation rollover-safety implementation is accepted.
+### ЧАТ 2 — ASSIGNED / NEW PHYSICAL CHAT
 
 Task:
-`WORKER_TASK_DOSSIER_FROZEN_INVOCATION_ROLLOVER_SAFETY_FIX_01.md`
+`WORKER_TASK_RUSSIAN_TRANSLATION_PARTIAL_ACCEPT_DIAGNOSTIC_QUARANTINE_FIX_01.md`
 
-PR:
-`#143`
+Mode:
+`IMPLEMENT / VALIDATE`
 
-Merge:
-`a354500fc83d20fff89d19c0752aa2810898861e`
-
-Report:
-`reviews/worker_reports/dossier-frozen-invocation-rollover-safety-fix-01.md`
+Goal:
+Make translation ingest isolate exact per-game semantic quality failures: accept valid siblings, route failing current items to GitHub-owned translation diagnostics instead of normal retranslation, expose diagnostic count in Statistics, and recover the already-submitted checkpoint through the corrected canonical path without retranslation. No Scheduled Task change is authorized.
 
 ## CURRENTLY WORKING / RECENT SEMANTIC CHATS
 
 These do **not** occupy physical ЧАТ 1/2 slots.
 
-### Russian-description manual semantic worker — ACTIVE
+### Russian-description manual semantic worker — STOPPED AFTER INGEST FAILURE
 
 Canonical prompt:
 `config/russian_description_manual_semantic_worker_prompt.md`
 
-A one-shot run was authorized and has already submitted checkpoint 1.
+A one-shot run was authorized and submitted checkpoint 1, but canonical ingest rejected the checkpoint. Do not retry or retranslate it in the semantic worker.
 
 Relevant commits:
 - authorization: `30f59b693cdef3eca520ddc78334850fdf850948`;
 - checkpoint 1 submission: `32caa3b35fb750cd31da7198f28e34855928edd6`.
 
-At the final handoff snapshot, canonical translation status had **not yet reflected acceptance**:
-- status: `translation_required`;
-- queue_count: 82;
-- untranslated_game_count: 82;
-- last canonical successful translation timestamp still 2026-10-01.
+Current confirmed result after checking ingest:
+- ingest run `37138503097` failed at `Validate and ingest current submissions`;
+- exact failing item observed: AppID `1237980`, request `2aeac6b...`, translated result failed the `good_ru` gate;
+- canonical cache/status did not persist checkpoint 1;
+- current queue remains 82 and the last successful translation timestamp remains 2026-10-01 at the Director check.
 
-Therefore the next Director must **not** tell the worker to redo checkpoint 1. First check whether GitHub ingest consumed it and reread the current queue/status. Continue only from fresh canonical translation state.
+Do **not** tell the semantic worker to redo checkpoint 1. ЧАТ 2 now owns the user-authorized implementation that will isolate bad items, accept valid siblings, create translation diagnostics, and reconcile the existing checkpoint without retranslation.
 
 No Scheduled Task action is authorized.
 
