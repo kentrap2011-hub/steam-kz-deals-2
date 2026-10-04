@@ -1,0 +1,246 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "92f3f78efe94706c8a4dfc92f728795c8e1b05cb",
+  "run_start_authority_commit": "b8b0c91cedd138a47992ce6817e37d31051fa574",
+  "run_started_at_utc": "2026-10-04T17:21:55+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+  "work_id": "2a656de6b6edb074db8b101705b24d652309a060e4a304a7233f5f028fe158ad",
+  "family_id": "game:1238880",
+  "taste_subject_key": "App_1238880",
+  "appid": "1238880",
+  "taste_fingerprint": "8a555233782f660b9dec2691d51774a8d0906fbc9d620463676231bf2a244832",
+  "candidate_context_sha256": "299aa598909398923f661ae9ad982aabb6ed7375d8e1fd1f963faf870a3c4213",
+  "dossier_content_sha256": "38c99c375b9cc8793c3bc8e30b472f770f3190a4ee28a4e3371a9c5ac4a7f098",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "2f7f7a864f3b5e83b684dc9cebe1eb484347c1eee917820619f2b201aed79730",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Быстрый пехотный бой и режимы Hotwire/Blood Money создают отличимый и более динамичный Battlefield-цикл.",
+    "Стелс и аресты в кампании периодически меняют тип действия вместо постоянной стрельбы.",
+    "Тематика полицейских и преступников даёт игре собственную идентичность и необычный для серии контекст."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 78,
+    "development_variety": 72,
+    "structure_pacing_direction": 73,
+    "identity_hooks": 84,
+    "breadth_of_match": 80
+  },
+  "score_findings": [
+    {
+      "finding_id": "fast-infantry-modes",
+      "text_ru": "Более быстрый пехотный бой и режимы Hotwire/Blood Money меняют привычный Battlefield-ритм и дают несколько разных способов использовать стрельбу, скорость и работу с целью.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Тебе нравится, когда активный бой вознаграждает освоение собственного исполнения."
+        },
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Разные режимы и боевые ситуации поддерживают важное для тебя разнообразие."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 78
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 72
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 80
+        }
+      ]
+    },
+    {
+      "finding_id": "police-campaign-structure",
+      "text_ru": "Кампания добавляет стелс и аресты вместо постоянной военной стрельбы, поэтому отдельные эпизоды меняют темп и дают альтернативный способ пройти столкновение.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Тебе особенно помогает смена формата задач по ходу игры."
+        },
+        {
+          "json_pointer": "/factor_importance/tемп/note",
+          "profile_value_sha256": "a79a54657031ce862cf6c6d317d9adbc854a447415cf166fe07efc3487e41761",
+          "match_text_ru": "Смена стрельбы, стелса и арестов даёт новые причины продолжать вместо одного неизменного темпа."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 73
+        }
+      ]
+    },
+    {
+      "finding_id": "cops-criminals-identity",
+      "text_ru": "Тематика полицейских и преступников заметно отличает Hardline от обычного военного Battlefield и создаёт собственный узнаваемый тон.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Узнаваемый стиль и подача способны заметно усилить твоё впечатление."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 84
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Кампания действительно отличается стелсом и арестами, но часть игроков считает её короткой и недостаточно развитой.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Тематика полицейских и преступников уникальна, но именно из-за неё игра для части аудитории ощущается менее похожей на классический Battlefield.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Мультиплеер в 2026 году работает, но обычное число активных серверов невелико и заметно меняется от времени, региона и событий сообщества.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Небольшая оставшаяся аудитория состоит во многом из ветеранов, поэтому старт в онлайне может быть жёстким для нового игрока.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "felt_technical_burden",
+        "text_ru": "Есть актуальные жалобы на циклы запуска через Battlelog/EA App и другие проблемы старта на современных системах; это практический технический барьер перед игрой.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Эпизодическая полицейская кампания может быть развлекательной, но при неприятии её подачи воспринимается как слишком короткая и ограниченная часть пакета.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
