@@ -1,5 +1,15 @@
 # CURRENT TASK
 
+## Worker in progress — 2026-10-04
+
+### Steam discovery maximal scope reduction diagnostic 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_STEAM_DISCOVERY_MAXIMAL_SCOPE_REDUCTION_DIAGNOSTIC_01.md`;
+- mode: `READ-ONLY / RECON`;
+- scope: bounded diagnostic of the existing GitHub-owned Steam KZ discovery path to reduce raw Steam scope while preserving the best offers;
+- no implementation, production-state mutation, scheduler/Scheduled Task change, new collector/queue/retry loop, or Catalyst special case is authorized;
+- required report: `reviews/worker_reports/steam-discovery-maximal-scope-reduction-diagnostic-01.md`.
+
 ## COMPLETE — Mirror's Edge Catalyst post-refresh absence diagnostic 01
 Статус: `diagnosis_complete_root_cause_identified`.
 - task: `WORKER_TASK_MIRRORS_EDGE_CATALYST_POST_REFRESH_ABSENCE_DIAGNOSTIC_01.md`;
