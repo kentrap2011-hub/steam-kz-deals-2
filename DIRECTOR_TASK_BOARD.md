@@ -23,6 +23,21 @@
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
 
 
+## QUEUED PRODUCT WORK — 2026-10-04
+
+Priority order:
+1. `WORKER_TASK_STEAM_DISCOVERY_HARD_50_SELECTION_IMPLEMENT_01.md` — implement the user-approved Steam scope reduction and **hard maximum 50 visible offers**. Bundles/packages are evaluated before the cap and may enter the 50 even when member standalone games are below 50. Temporary DLC rule: only DLC whose base game passes normal suitability/eligibility. Persist funnel rejection counts.
+2. `WORKER_TASK_STEAM_OWNED_LIBRARY_DLC_SUPPORT_01.md` — establish a safe canonical owned-Steam-library snapshot, then extend DLC admission to bases that are either suitable or owned. Ownership does not itself make DLC recommended.
+3. `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md` — add a Russian site page for active/queued/blocked current project tasks using a build-generated static payload from canonical repository task state; no browser GitHub API polling and no second independent manually maintained task list.
+
+User product decisions behind this queue:
+- visible site list is capped at **at most 50** strong current offers;
+- very obscure low-signal indie titles may be rejected early, with an exception path for exceptional quality/value;
+- bundles remain independently discoverable/value-scored before the final cap;
+- current temporary DLC discovery is limited to DLC for otherwise suitable base games;
+- a later owned-library task adds DLC for games actually owned by the user;
+- funnel counts must show how much each narrowing step removes.
+
 ## ACTIVE SEMANTIC — Russian description manual translation
 
 Mode:
