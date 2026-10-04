@@ -60,7 +60,10 @@
     "placeholder_or_technical_is_rejected": true,
     "non_ru_or_weak_ru_is_rejected": true,
     "worker_error_is_not_cacheable": true,
-    "stale_or_mismatched_result_is_not_cacheable": true
+    "stale_or_mismatched_result_is_not_cacheable": true,
+    "submission_level_corruption_action": "Reject the whole submission before persistence when container shape, duplicate identity, unknown/stale request identity, exact AppID/hash/source-version binding, status, or cross-field contract safety fails.",
+    "exact_bound_quality_failure_action": "Do not cache the failed record; GitHub routes that exact current request to translation diagnostics and continues validating/persisting safe valid siblings.",
+    "rejected_quality_meaning": "Rejected from translation cache/ready_ru acceptance; after exact identity validation the exact current request is quarantined for diagnosis rather than ordinary automatic retranslation."
   },
   "ownership": {
     "worker_only_produces_result_records": true,
@@ -71,6 +74,8 @@
       "existing scheduled ChatGPT translation data-plane",
       "explicitly user-launched one-shot worker bound to config/russian_description_manual_semantic_worker_prompt.md"
     ],
-    "zero_result_no_work_authority": "GitHub ingest only; worker may submit zero results but cannot decide that the queue is empty or stamp timestamps"
+    "zero_result_no_work_authority": "GitHub ingest only; worker may submit zero results but cannot decide that the queue is empty or stamp timestamps",
+    "github_classifies_diagnostic_state": true,
+    "worker_controls_diagnostic_state": false
   }
 }
