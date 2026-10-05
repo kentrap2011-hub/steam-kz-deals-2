@@ -213,15 +213,15 @@ It proves:
 
 ## 12. Regression result
 
-PR #146 initial deterministic validation:
-- `Steam KZ production shortlist` run `37317412821`;
-- job `regression` / `111787533863`: **success**;
-- `collect`: **skipped as intended on pull_request**;
+PR #146 deterministic validation on validated head `9883761f4efbcab3d318c53c531f1130bf0ad39d`:
+- `Steam KZ production shortlist` run `37317856886`: **success**;
+- job `regression` / `111789040709`: **success**;
+- `collect` / `111789042952`: **skipped as intended on pull_request**;
 - compile step: success;
-- fresh-discovery regression step, including the new bounded scope regression: success.
-- `Validate backlog dispositions` run `37317412963`: **success**.
+- fresh-discovery regression step, including the new bounded scope regression: success;
+- `Validate backlog dispositions` run `37317857053`: **success**.
 
-A later report/route-only commit may cause GitHub to attach a newer equivalent PR validation run; final PR head/check status must be read again before Director acceptance.
+The report-finalization commit after this validated head changes documentation only; the implementation/test/workflow content validated above is unchanged.
 
 ## 13. Before vs after measurable funnel
 
@@ -282,8 +282,9 @@ No timeout was increased and no rate-limit workaround was added; the task reduce
 PR: #146 — `Bound Steam KZ discovery scope`.
 
 At the time of this report:
-- implementation branch is open against `main`;
-- deterministic code validation is green on the initial implementation head;
+- implementation branch is open and mergeable against `main`;
+- validated implementation/task-finalization head: `9883761f4efbcab3d318c53c531f1130bf0ad39d`;
+- deterministic validation on that head is green;
 - no merge has been performed;
 - merge is intentionally left to Director authorization;
 - real live production acceptance remains post-merge as described in section 14.
