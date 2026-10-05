@@ -26,7 +26,7 @@
 ## QUEUED PRODUCT WORK — 2026-10-04
 
 Priority order:
-1. `WORKER_TASK_STEAM_DISCOVERY_50_PERCENT_DISCOUNT_TOP100_IMPLEMENT_01.md` — minimum current discount **50%**, existing price bound, early low-signal filtering, base-games first, then DLC only for admitted bases, bundles as an independent lane, and funnel counts. **Deep scope is never reduced to 100.** Site shows up to 100 immediately from current evidence and re-ranks as Deep results arrive. Deep order: sale urgency → purchase value → Steam positive rating → review count.
+1. `WORKER_TASK_STEAM_DISCOVERY_50_PERCENT_DISCOUNT_TOP100_IMPLEMENT_01.md` — minimum current discount **50%**, existing price bound, early low-signal filtering, base-games first, then DLC only for admitted bases, bundles as an independent lane, and funnel counts. **Deep scope is never reduced to 100.** Site shows up to 100 immediately from current evidence and re-ranks as Deep results arrive. Any positive Deep result outranks every not-yet-Deep-completed candidate. Deep order: purchase value → Steam positive rating → review count; sale expiry is ignored. Queue-order tuning must be done through a dedicated GitHub instruction/policy file, not by changing the Deep worker prompt.
    - трудоёмкость: **высокая** — границы выборки, момент поиска дополнений, оценка наборов, сортировка и проверка обычного запуска взаимосвязаны;
    - срочность: **высокая** — текущая выборка Steam может разрастаться примерно до 100 тысяч строк и не успевать сохраниться.
 2. `WORKER_TASK_STEAM_OWNED_LIBRARY_DLC_SUPPORT_01.md` — научиться безопасно получать список принадлежащих пользователю игр Steam и затем разрешать дополнения к подходящим **или принадлежащим** базовым играм.
