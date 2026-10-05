@@ -11,15 +11,20 @@ from bs4 import BeautifulSoup
 import steam_partial_publish_runner as runner
 
 
-def query(core, *, category1, start=0, count=100, extra=None):
+def query(core, *, category1, start=0, count=100, extra=None, term=None):
     params = core['search_params'](
         start,
         'Name_ASC',
-        category1=category1,
+        category1=category1 or '998',
         maxprice_kzt=core['PAID_MAX_PRICE_KZT'],
         hidef2p=True,
     )
     params['count'] = count
+    if category1 is None:
+        params.pop('category1', None)
+    if term is not None:
+        params['term'] = term
+        params.pop('query', None)
     if extra:
         params.update(extra)
     response = core['session'].get(core['URL'], params=params, timeout=40)
@@ -77,6 +82,7 @@ def query(core, *, category1, start=0, count=100, extra=None):
             })
     result.update({
         'category1': category1,
+        'term': term,
         'start': start,
         'requested_count': count,
         'total_count': core['to_int'](data.get('total_count')),
@@ -158,43 +164,42 @@ def pacing_sequence(core, *, delay_seconds, requests_count=35):
 
 def main():
     core = runner.load_core()
-    evidence = {
-        'type_controls': search_page_type_controls(core),
-        'shapes': {},
-    }
-    for name, category1, start in (
-        ('games_start0', '998', 0),
-        ('dlc_start0', '21', 0),
-        ('bundles_start0', '996', 0),
-        ('bundles_start10000', '996', 10000),
-        ('bundles_start50000', '996', 50000),
-        ('bundles_start100000', '996', 100000),
-        ('games_plus_bundles', '998,996', 0),
-        ('supported_combined', '998,21,996', 0),
+    evidence = {'shapes': {}}
+
+    for name, category1, start, term in (
+        ('no_category_start0', None, 0, None),
+        ('bundles_start0', '996', 0, None),
+        ('games_start0', '998', 0, None),
+        ('games_plus_bundles_start0', '998,996', 0, None),
+        ('games_plus_bundles_start10000', '998,996', 10000, None),
+        ('games_plus_bundles_start50000', '998,996', 50000, None),
+        ('dlc_start0', '21', 0, None),
+        ('dlc_plus_bundles_start0', '21,996', 0, None),
+        ('known_bundle_996', '996', 0, 'Daedalic - Gigantic Bundle'),
+        ('known_bundle_games', '998', 0, 'Daedalic - Gigantic Bundle'),
+        ('known_bundle_games_plus', '998,996', 0, 'Daedalic - Gigantic Bundle'),
+        ('known_bundle_dlc', '21', 0, 'Daedalic - Gigantic Bundle'),
+        ('known_bundle_dlc_plus', '21,996', 0, 'Daedalic - Gigantic Bundle'),
     ):
         evidence['shapes'][name] = query(
             core,
             category1=category1,
             start=start,
+            term=term,
         )
 
-    # Existing production logs already prove the 0.5s-like cadence repeatedly
-    # reaches a 429 burst. This short control re-confirms response headers, then
-    # a cooldown separates it from the conservative pacing trial.
-    evidence['pacing_current'] = pacing_sequence(
-        core,
-        delay_seconds=0.5,
-        requests_count=35,
-    )
+    # The first probe proved 2.2s eliminates 429s. Test a tighter conservative
+    # cadence after a clean cooldown so the production setting can be the
+    # smallest live-proven safe delay rather than an arbitrary slowdown.
     time.sleep(65)
-    evidence['pacing_conservative'] = pacing_sequence(
+    evidence['pacing_1_8s'] = pacing_sequence(
         core,
-        delay_seconds=2.2,
+        delay_seconds=1.8,
         requests_count=35,
     )
 
     print(
-        'STEAM_BUNDLE_RATE_LIMIT_BOUNDED_PROBE='
+        'STEAM_BUNDLE_RATE_LIMIT_BOUNDED_PROBE_V2='
         + json.dumps(evidence, ensure_ascii=False, sort_keys=True),
         flush=True,
     )
