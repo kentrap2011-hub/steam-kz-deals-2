@@ -859,30 +859,89 @@ def run():
     chunk_count = write_shortlist(selected, columns, core['SHORT_CHUNK'])
     logical_review_requests = len(review_appids) * 2
 
+    filtering_funnel = {
+        'source_reported_rows': reported_total,
+        'source_rows_seen': rows_seen,
+        'parsed_rows': parsed_rows,
+        'removed_non_paid_or_missing_price': int(
+            source_rejection_counts.get('non_paid_or_missing_price', 0)
+        ),
+        'removed_discount_below_50': int(
+            source_rejection_counts.get('discount_below_minimum', 0)
+        ),
+        'removed_price_above_4500': int(
+            source_rejection_counts.get('price_above_maximum', 0)
+        ),
+        'removed_obvious_extras': int(
+            source_rejection_counts.get('obvious_extra', 0)
+        ),
+        'removed_software_only': int(
+            source_rejection_counts.get('software_only', 0)
+        ),
+        'eligible_rows_before_partition_dedupe': eligible_rows_seen,
+        'unique_eligible_after_partition_dedupe': len(items),
+        'review_candidate_items': len(review_candidate_items),
+        'review_candidate_appids': len(review_appids),
+        'broad_shortlist_items': len(broad),
+        'paid_shortlist_items': len(selected),
+        'last_known_good_dropped_by_current_paid_gate': len(
+            dropped_preserved_due_current_paid_gate
+        ),
+    }
+
     manifest = {
-        'collector_version': 8,
+        'collector_version': 9,
         'source': 'Steam Store',
         'country_code': 'kz',
         'region': 'Kazakhstan',
+        'source_scope_contract': core['PAID_DISCOVERY_POLICY'][
+            'source_scope_contract'
+        ],
+        # Retained as a diagnostic union for older consumers. Production no
+        # longer sends the combined category string to Steam.
         'search_category1': core['SEARCH_CATEGORY1'],
         'search_category_types': core['SEARCH_CATEGORY_TYPES'],
+        'search_query_shape': 'explicit_partitions',
+        'search_combined_category_query_used': False,
+        'search_partitions': partition_stats,
         'search_specials_only': True,
+        'search_hidef2p_paid_partitions': True,
+        'search_maxprice_kzt': core['PAID_MAX_PRICE_KZT'],
+        'paid_minimum_discount_percent': core['PAID_MIN_DISCOUNT_PERCENT'],
+        'raw_source_top_n': None,
+        'source_price_bound_validation': source_price_bound_validation,
+        'free_or_giveaway_lane_separate': True,
+        'paid_filters_apply_to_free_or_giveaway_lane': False,
         'started_at_utc': started.isoformat(),
         'updated_at_utc': finished.isoformat(),
         'page_size': core['PAGE_SIZE'],
+        'partition_count': len(traversals),
         'steam_total_reported': reported_total,
+        'source_rows_seen': rows_seen,
+        'rows_seen': rows_seen,
+        'parsed_rows': parsed_rows,
+        'eligible_rows_before_partition_dedupe': eligible_rows_seen,
         'unique_items': len(items),
-        'rows_seen': traversal['rows_seen'],
-        'duplicate_rows_seen': traversal['duplicate_rows'],
-        'requests_made': traversal['requests_made'],
+        'cross_partition_duplicate_identities': cross_partition_duplicates,
+        'multi_partition_identity_count': multi_partition_identity_count,
+        'duplicate_rows_seen': (
+            sum(traversal['duplicate_rows'] for traversal in traversals)
+            + cross_partition_duplicates
+        ),
+        'requests_made': source_requests,
+        'source_validation_requests': source_price_bound_validation[
+            'logical_requests'
+        ],
+        'production_collection_requests': collection_requests,
         'recovery_pass_used': False,
-        'traversal_pass_count': 1,
+        'traversal_pass_count': len(traversals),
         'coverage_ratio': round(coverage, 6) if coverage is not None else None,
         'complete': source_coverage['source_complete'],
         'source_status': source_coverage['source_status'],
         'source_has_known_gaps': source_coverage['source_has_known_gaps'],
         'known_catalog_gap_count': source_coverage['known_gap_count'],
         'catalog_count_drift_informational': count_drift,
+        'filtering_funnel': filtering_funnel,
         'items_with_review_data': items_with_search_review_data,
         'review_coverage': round(search_review_coverage, 6),
         'items_with_search_review_data': items_with_search_review_data,
@@ -933,6 +992,9 @@ def run():
         ),
         'partial_publish_summary': summary,
         'last_known_good_games_preserved': len(preserved_keys),
+        'last_known_good_dropped_by_current_paid_gate': (
+            dropped_preserved_due_current_paid_gate
+        ),
     }
     OUT.mkdir(parents=True, exist_ok=True)
     MANIFEST_PATH.write_text(
@@ -941,10 +1003,28 @@ def run():
     )
 
     index = {
-        'version': 8,
+        'version': 9,
         'format': 'tsv',
         'columns': columns,
         'country_code': 'kz',
+        'source_scope_contract': core['PAID_DISCOVERY_POLICY'][
+            'source_scope_contract'
+        ],
+        'search_query_shape': 'explicit_partitions',
+        'source_partitions': [
+            {
+                'id': partition['id'],
+                'category1': partition['category1'],
+            }
+            for partition in core['SEARCH_PARTITIONS']
+        ],
+        'source_price_bound_validated': source_price_bound_validation[
+            'validated'
+        ],
+        'source_maxprice_kzt': core['PAID_MAX_PRICE_KZT'],
+        'minimum_discount_percent': core['PAID_MIN_DISCOUNT_PERCENT'],
+        'raw_source_top_n': None,
+        'filtering_funnel': filtering_funnel,
         'item_count': len(selected),
         'chunk_size': core['SHORT_CHUNK'],
         'chunk_count': chunk_count,
