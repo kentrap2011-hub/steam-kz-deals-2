@@ -37,9 +37,11 @@ For surviving base games:
 - use cheap current review/tag/release metadata before expensive semantic work;
 - build the internal eligible base-game pool.
 
-The site must not wait for full deep analysis of every surviving game. However, to compare new unknown games fairly, each candidate that may challenge the visible top 100 must receive at least the existing lightweight suitability path (or valid cached equivalent) before it can be treated as definitively below the cutoff.
+**Do not reduce this pool to 100 at this stage.** GitHub may remove only candidates that fail the approved deterministic eligibility gates.
 
-Do not cap the internal candidate pool at 100. Hidden candidates must remain able to be analyzed later and rise into the visible 100.
+Every candidate that survives those gates and can compete for publication must then receive the required **full detailed semantic analysis** under the existing Dossier/Deep architecture, reusing valid cached completed analysis where available.
+
+The final top 100 may be chosen only after detailed analysis is complete for the entire current eligible comparison pool.
 
 ### Stage 3 — DLC discovery
 Only after the eligible/suitable base-game set exists, discover DLC **for those base games**, rather than crawling all Steam DLC globally.
@@ -73,23 +75,22 @@ For a surviving bundle:
 
 A regression fixture must cover the case where five middling games are individually below the visible cutoff but their very cheap package becomes a top offer.
 
-### Stage 5 — Ranking and publication
+### Stage 5 — Detailed analysis, ranking and publication
 Keep the existing canonical final ranking authority unless a specific contract conflict is proven.
 
 Ranking inputs come from:
-- personal suitability evidence (existing profile/ratings/cached or current semantic assessment);
+- completed detailed personal-suitability analysis, reusing valid completed cached results where possible;
 - purchase value (current price, saving, price history, package value, and other canonical purchase factors).
 
-Do not wait for full deep semantic completion of every candidate before producing a current site snapshot. Reuse the existing progressive states/caches. Unfinished hidden candidates remain in the internal pool and can rise after further analysis.
+**No candidate may be excluded merely because it is currently below a provisional top-100 line before detailed analysis is complete.**
 
 The final visible cap is applied only after:
 1. base-game/DLC/bundle eligibility;
 2. package/family resolution;
-3. currently available canonical ranking.
+3. required detailed analysis of the complete current eligible comparison pool;
+4. canonical final ranking.
 
-Publish **at most 100** current offers. Never take the first 100 Steam rows.
-
-If current ranking-stage precedence can permanently suppress a clearly stronger but less-analyzed candidate solely because analysis is incomplete, treat that as a contract issue to resolve explicitly rather than hiding it with a second ranking formula.
+Only then publish **at most 100** best current offers. Never take the first 100 Steam rows and never use an intermediate GitHub score to shrink the semantic-analysis scope to 100.
 
 ### Stage 6 — Funnel visibility
 Persist at least:
@@ -115,8 +116,9 @@ Expose a useful subset in Statistics.
 The current policy text still says no artificial top-N. Update the relevant canonical policy/contract to the corrected decision:
 - complete evaluation of the approved reduced eligible universe;
 - minimum current discount 50%;
-- hard visible maximum 100 after eligibility/package/family resolution and canonical ranking;
-- no raw/source top-100 truncation.
+- no reduction to 100 during initial GitHub filtering or before required detailed semantic analysis is complete;
+- hard visible maximum 100 only after eligibility/package/family resolution, complete required detailed analysis, and canonical ranking;
+- no raw/source/intermediate top-100 truncation.
 
 GitHub remains owner of source scope, queues, completeness, ranking inputs and persistence.
 
@@ -128,7 +130,7 @@ GitHub remains owner of source scope, queues, completeness, ranking inputs and p
 - visible current offer count <=100;
 - bundle regression described above passes;
 - DLC unrelated to an admitted base is not globally crawled/processed;
-- hidden candidates remain able to challenge the visible 100 after later analysis;
+- no top-100 reduction occurs before required detailed analysis of the full eligible comparison pool;
 - funnel counts reconcile;
 - no ChatGPT Scheduled Task is created or changed.
 
