@@ -5,14 +5,23 @@ import json
 import steam_partial_publish_runner as runner
 
 
-def summarize(core, *, sort_by, extra_params):
+def summarize(
+    core,
+    *,
+    sort_by,
+    extra_params,
+    start=0,
+    count=None,
+):
     params = core['search_params'](
-        0,
+        start,
         sort_by,
         category1=core['SEARCH_CATEGORY_TYPES']['games'],
         maxprice_kzt=core['PAID_MAX_PRICE_KZT'],
         hidef2p=True,
     )
+    if count is not None:
+        params['count'] = int(count)
     params.update(extra_params)
     response = core['session'].get(
         core['URL'],
@@ -32,11 +41,18 @@ def summarize(core, *, sort_by, extra_params):
         for item in items
         if item.get('final_kzt') is not None
     ]
+    keys = [str(item['key']) for item in items]
     return {
         'sort_by': sort_by,
+        'start': start,
+        'requested_count': count or core['PAGE_SIZE'],
         'extra_params': extra_params,
         'total_count': core['to_int'](data.get('total_count')),
         'row_count': len(items),
+        'unique_key_count': len(set(keys)),
+        'first_key': keys[0] if keys else None,
+        'last_key': keys[-1] if keys else None,
+        'keys': keys,
         'min_discount_percent': min(discounts) if discounts else None,
         'max_discount_percent': max(discounts) if discounts else None,
         'distinct_discount_percent': sorted(set(discounts)),
@@ -66,6 +82,35 @@ def main():
             sort_by=sort_by,
             extra_params=extra_params,
         )
+
+    page_size_probes = {}
+    for count in (100, 200, 500):
+        page_size_probes[f'count_{count}_start_0'] = summarize(
+            core,
+            sort_by='Name_ASC',
+            extra_params={},
+            start=0,
+            count=count,
+        )
+
+    page_size_probes['count_200_start_200'] = summarize(
+        core,
+        sort_by='Name_ASC',
+        extra_params={},
+        start=200,
+        count=200,
+    )
+    first_200 = set(page_size_probes['count_200_start_0']['keys'])
+    second_200 = set(page_size_probes['count_200_start_200']['keys'])
+    page_size_probes['count_200_overlap'] = sorted(first_200 & second_200)
+
+    for summary in page_size_probes.values():
+        if isinstance(summary, dict):
+            summary.pop('keys', None)
+    for summary in evidence.values():
+        summary.pop('keys', None)
+
+    evidence['page_size_probes'] = page_size_probes
 
     print(
         'STEAM_DISCOUNT_FILTER_BOUNDED_PROBE='
