@@ -48,7 +48,7 @@
     "steamdb_for_discovery": false,
     "web_search_may_replace_failed_ingest": false,
     "read_all_chunks": true,
-    "source_scope_contract": "preservation_first_bounded_paid_v1",
+    "source_scope_contract": "preservation_first_bounded_paid_v2",
     "minimum_discount_percent": 50,
     "maximum_final_price_kzt": 4500,
     "raw_source_top_n": null,
@@ -60,10 +60,6 @@
       {
         "id": "dlc",
         "category1": "21"
-      },
-      {
-        "id": "bundles",
-        "category1": "996"
       }
     ],
     "paid_partition_filters": {
@@ -80,10 +76,18 @@
       "reject_obvious_extras": true,
       "reject_software_only_without_game_tags": true
     },
-    "merge_identity": "exact App_/Sub_ identity; deterministic partition order games,dlc,bundles",
-    "completeness_rule": "complete union of every explicit paid partition after the live-validated KZ price bound; never truncate to an arbitrary raw top-N",
+    "merge_identity": "exact App_/Sub_ identity; deterministic partition order games,dlc; Sub_ package identities are preserved when returned by games",
+    "completeness_rule": "complete union of games and DLC paid partitions after the live-validated KZ price bound, including Sub_ package identities returned by games; never traverse standalone category1=996 and never truncate to an arbitrary raw top-N",
     "free_or_giveaway_lane_is_separate": true,
-    "paid_filters_must_not_remove_free_or_giveaway_lane": true
+    "paid_filters_must_not_remove_free_or_giveaway_lane": true,
+    "bundle_package_discovery": {
+      "mode": "embedded_in_games_partition",
+      "representative_identity": "Sub_76471",
+      "representative_title": "Daedalic - Gigantic Bundle",
+      "representative_live_category1": "998",
+      "standalone_category1_996_traversal": false,
+      "live_semantics": "category1=996 behaves as broad include-bundles/untyped scope, not an exclusive bundle partition"
+    }
   },
   "ingest_qa": {
     "fail_closed": true,
