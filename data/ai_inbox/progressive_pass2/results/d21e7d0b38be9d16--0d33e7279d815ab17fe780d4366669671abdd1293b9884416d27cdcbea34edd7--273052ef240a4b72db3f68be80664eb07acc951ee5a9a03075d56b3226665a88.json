@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "efc9c0eb1697f7315f088c245421108865bb75a3",
+  "run_start_authority_commit": "8ad78645027b2895b7d20a4da9f7df8bdab26427",
+  "run_started_at_utc": "2026-10-05T05:09:01+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+  "work_id": "0d33e7279d815ab17fe780d4366669671abdd1293b9884416d27cdcbea34edd7",
+  "family_id": "game:1378040",
+  "taste_subject_key": "App_1378040",
+  "appid": "1378040",
+  "taste_fingerprint": "e234963b76c9fe40b2005f96507eeaf8cba041852d17edcffa53f57a21393f9e",
+  "candidate_context_sha256": "a611e6cb7fbf6e53af656683b3b949ad2848e1492cabc1c89c0e6e2d281d6590",
+  "dossier_content_sha256": "ab5d6df00020eda924fe5bed3e14cebd86c1aaaff3d13220e4772bb3e75968c7",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "273052ef240a4b72db3f68be80664eb07acc951ee5a9a03075d56b3226665a88",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Пошаговый бой оценивается как рабочий, но слишком простой и с меньшим количеством значимых решений, чем нужно для сильного тактического или mastery-крючка.",
+    "Развитие персонажей и кастомизация заметно урезаны, поэтому по ходу кампании мало пространства для билдовых экспериментов и ощущения раскрывающихся возможностей.",
+    "Кампания сравнительно короткая и небольшая по объёму, а повторяющиеся сцены, ограниченное разнообразие квестов и простой combat-loop успевают создавать ощущение повторяемости даже за это время.",
+    "Красивый character art и event CG остаются заметным плюсом, но не компенсируют одновременно слабое развитие, ограниченное разнообразие и неоднозначную историю."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Пошаговый бой достаточно простой и предлагает меньше значимых решений, поэтому тактическая часть может быстро перестать развиваться.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Урезанные развитие персонажей и кастомизация ограничивают возможность экспериментировать со сборками и заметно менять стиль игры по ходу кампании.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Кампания небольшая по объёму и числу персонажей; короткая длительность сама по себе не проблема, но здесь она сочетается с ограниченным развитием систем.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Повторяющиеся сцены, уменьшенное разнообразие заданий и ограниченный combat-loop создают именно тот тип повторения без достаточного нового развития, который у тебя часто снижает интерес.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "История и персонажи оцениваются неоднозначно: часть игроков вовлекается, но другие считают сюжет заметно проще и слабее, чем обещает визуальная подача.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  }
+}
