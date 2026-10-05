@@ -1,6 +1,6 @@
 # Steam discovery scope reduction implement 01
 
-Status: `implementation_complete_deterministic_green_live_acceptance_pending_after_merge`
+Status: `live_validation_corrected_pr147_green_main_acceptance_pending`
 
 Task: `WORKER_TASK_STEAM_DISCOVERY_SCOPE_REDUCTION_IMPLEMENT_01.md`  
 Worker slot: `ЧАТ 1`  
@@ -308,3 +308,101 @@ The current `delivery.fixed_top_n=null` remains unchanged; any downstream final 
 `implementation_complete_deterministic_green_live_acceptance_pending_after_merge`
 
 Recommended Director action: review PR #146; if accepted, authorize merge and then require the single normal main production acceptance described in section 14 before declaring the production defect fully fixed.
+
+
+## 19. Post-merge live acceptance failure and correction — 2026-10-05
+
+PR #146 was merged to `main` as `fb21b704ac36f56d40bdc6a00175864538dbcee7`.
+
+The first normal GitHub-owned production acceptance ran automatically:
+
+- workflow: `Steam KZ production shortlist`;
+- run: `37319401442`;
+- collect job: `111794299510`;
+- all deterministic regressions passed;
+- live collection failed before traversal/persistence with:
+  `Steam KZ source price-bound validation failed: Cannot validate KZ maxprice: Price_ASC is not monotonic at cutoff`.
+
+This established that the remaining blocker was the source-bound proof itself, not the deterministic 50%/4500 logic.
+
+### Bounded live evidence
+
+Follow-up PR: **#147 — `Fix Steam KZ live maxprice validation`**.
+
+A temporary bounded probe was executed only in PR validation and then removed from the final branch. It did not run the production collector or write canonical production state.
+
+The decisive probe was run `37334852442`, regression job `111846921732`.
+
+Observed games-partition evidence with `cc=kz`, `hidef2p=1`:
+
+- exact `maxprice=4500`:
+  - `Price_ASC total_count=63681`, sampled prices all `150 KZT`;
+  - `Price_DESC total_count=63681`, sampled maximum exactly `4500 KZT`;
+  - `Name_ASC total_count=63681`, sampled maximum `3200 KZT`;
+- arbitrary low values `maxprice=10/20/50/100/1000` behaved like an ignored/unbounded control:
+  - `total_count=65097`;
+  - sampled `Price_DESC` prices reached `74400 KZT`.
+
+Therefore the live evidence supports **case 1** from the continuation task:
+
+- the exact current Steam filter token `maxprice=4500` is materially active for the KZ query;
+- the previous validation was invalid because it assumed globally monotonic `Price_ASC`;
+- arbitrary numeric `maxprice` values must not be generalized as continuous KZT semantics.
+
+### Correction
+
+`scripts/steam_partial_publish_runner.py::validate_kz_source_price_bound` no longer uses a positional `Price_ASC` boundary or early-stop proof.
+
+The corrected fail-closed proof uses only bounded direct controls:
+
+1. for each supported paid partition (games/DLC/bundles), query capped `Price_DESC` with exact `maxprice=4500` and reject any sampled row above 4500 KZT;
+2. query games with the same cap under `Name_ASC` and require the same capped `total_count`;
+3. query an otherwise-identical **uncapped** games `Price_DESC` control and require:
+   - a larger source total than the capped query; and
+   - at least one sampled over-4500-KZT row.
+
+This directly proves that the exact 4500 filter is active in the current KZ response without treating Steam's sort order as a completeness authority.
+
+Local parsed-row `<=4500 KZT` validation remains authoritative on every production row, and the approved `discount >= 50%` gate is unchanged.
+
+### Regression matching the real failure
+
+`scripts/test_steam_discovery_scope_reduction.py` now explicitly proves:
+
+- the validator succeeds without making any `Price_ASC` request;
+- games/DLC/bundles capped samples are all checked;
+- sort-invariant capped total is required;
+- an uncapped larger/over-cap control is required;
+- an over-cap row leaking from any capped partition fails closed;
+- a non-material/ignored cap fails closed.
+
+Temporary live-probe code and workflow changes were removed after evidence collection.
+
+### PR #147 deterministic validation
+
+Final implementation code head before documentation-only commits:
+`c4930141ad5d604dfe681248fe6b6b283a58543c`.
+
+Checks:
+
+- `Steam KZ production shortlist` PR run `37335316576`: **success**;
+- regression job `111848645135`: **success**;
+- production `collect`: skipped as intended on pull_request;
+- `Validate backlog dispositions` run `37335316556`: **success**.
+
+No Scheduled Task, Dossier, Deep, Fast, ranking, site logic, source top-N, new scheduler/queue/retry owner, timeout, or Catalyst-specific rule was changed.
+
+### Remaining live acceptance
+
+After PR #147 is merged to `main`, one normal GitHub-owned production acceptance is still mandatory.
+
+It must prove:
+
+1. corrected live KZ source-bound validation passes;
+2. all three bounded partitions complete;
+3. collector completes inside the existing 60-minute timeout;
+4. a fresh canonical discovery universe is committed;
+5. actual partition/funnel/request/review counts are persisted;
+6. downstream handoff starts from that fresh universe.
+
+Until those checks pass, the overall production defect remains open even though the correction is deterministic-green.

@@ -149,9 +149,8 @@ def test_paid_gate_blocks_below_50_and_above_4500_before_reviews_and_shortlist()
     assert runner.row_meets_current_paid_gate(c, boundary) is True
 
 
-def test_kz_maxprice_must_match_uncapped_price_boundary_before_trust():
+def test_kz_maxprice_validation_does_not_require_monotonic_price_asc():
     c = dict(core())
-    c['PAGE_SIZE'] = 2
 
     def fake_get_page(
         start,
@@ -161,43 +160,66 @@ def test_kz_maxprice_must_match_uncapped_price_boundary_before_trust():
         maxprice_kzt=None,
         hidef2p=False,
     ):
-        assert category1 == '998'
+        assert start == 0
         assert hidef2p is True
-        if maxprice_kzt is not None:
-            assert maxprice_kzt == 4500
-            assert sort_by == 'Price_DESC'
-            assert start == 0
-            return page(3, [
-                result_row(1, 4500),
-                result_row(2, 4300),
+        if sort_by == 'Price_ASC':
+            raise AssertionError(
+                'validation must not rely on Steam Price_ASC monotonicity'
+            )
+
+        if category1 == '998' and maxprice_kzt == 4500:
+            if sort_by == 'Price_DESC':
+                return page(3, [
+                    result_row(1, 4500),
+                    # Real Steam Price_DESC can be locally out of order too;
+                    # only the cap, not monotonic ordering, is authoritative.
+                    result_row(2, 4300),
+                ])
+            if sort_by == 'Name_ASC':
+                return page(3, [
+                    result_row(3, 1000),
+                    result_row(4, 4400),
+                ])
+
+        if category1 == '21' and maxprice_kzt == 4500 and sort_by == 'Price_DESC':
+            return page(2, [
+                result_row(20, 4499),
+                result_row(21, 500),
             ])
-        assert sort_by == 'Price_ASC'
-        if start == 2:
+
+        if category1 == '996' and maxprice_kzt == 4500 and sort_by == 'Price_DESC':
+            return page(1, [
+                result_row(30, 3000, item_key='Sub_30'),
+            ])
+
+        if category1 == '998' and maxprice_kzt is None and sort_by == 'Price_DESC':
             return page(6, [
-                result_row(3, 4400),
-                result_row(4, 4600),
+                result_row(10, 6000),
+                result_row(11, 4400),
             ])
-        if start == 4:
-            return page(6, [
-                result_row(5, 5000),
-                result_row(6, 6000),
-            ])
-        raise AssertionError(f'unexpected probe start={start}')
+
+        raise AssertionError(
+            f'unexpected probe: category1={category1} '
+            f'sort={sort_by} maxprice={maxprice_kzt}'
+        )
 
     c['get_page'] = fake_get_page
     evidence = runner.validate_kz_source_price_bound(c)
     assert evidence['validated'] is True
     assert evidence['country_code'] == 'kz'
     assert evidence['maxprice_kzt'] == 4500
-    assert evidence['capped_total'] == 3
-    assert evidence['last_at_or_below_cap_kzt'] == 4400
-    assert evidence['first_over_cap_kzt'] == 4600
-    assert evidence['logical_requests'] == 3
+    assert evidence['price_asc_monotonicity_required'] is False
+    assert evidence['partition_price_desc_checks']['games']['max_price_kzt'] == 4500
+    assert evidence['partition_price_desc_checks']['dlc']['max_price_kzt'] == 4499
+    assert evidence['partition_price_desc_checks']['bundles']['max_price_kzt'] == 3000
+    assert evidence['games_sort_invariant_check']['total_count'] == 3
+    assert evidence['games_uncapped_control']['total_count'] == 6
+    assert evidence['games_uncapped_control']['max_price_kzt'] == 6000
+    assert evidence['logical_requests'] == 5
 
 
-def test_kz_maxprice_validation_fails_closed_on_count_boundary_mismatch():
+def test_kz_maxprice_validation_fails_closed_if_capped_partition_leaks_over_cap():
     c = dict(core())
-    c['PAGE_SIZE'] = 2
 
     def fake_get_page(
         start,
@@ -207,32 +229,56 @@ def test_kz_maxprice_validation_fails_closed_on_count_boundary_mismatch():
         maxprice_kzt=None,
         hidef2p=False,
     ):
-        assert category1 == '998'
+        assert start == 0
         assert hidef2p is True
-        if maxprice_kzt is not None:
-            return page(2, [
-                result_row(1, 4500),
-                result_row(2, 4300),
-            ])
-        if start == 0:
-            return page(6, [
-                result_row(10, 1000),
-                result_row(11, 2000),
-            ])
-        if start == 2:
-            return page(6, [
-                result_row(12, 4400),
-                result_row(13, 4600),
-            ])
-        raise AssertionError(f'unexpected probe start={start}')
+        if maxprice_kzt == 4500 and sort_by == 'Price_DESC':
+            if category1 == '998':
+                return page(3, [result_row(1, 4500)])
+            if category1 == '21':
+                return page(2, [result_row(20, 4499)])
+            if category1 == '996':
+                return page(1, [
+                    result_row(30, 4600, item_key='Sub_30'),
+                ])
+        raise AssertionError('validator should fail on bundle leak before controls')
 
     c['get_page'] = fake_get_page
     try:
         runner.validate_kz_source_price_bound(c)
     except RuntimeError as exc:
-        assert 'capped total does not equal' in str(exc)
+        assert 'bundles maxprice=4500 leaked 4600.0 KZT' in str(exc)
     else:
-        raise AssertionError('unsafe maxprice semantics must fail closed')
+        raise AssertionError('over-cap capped row must fail closed')
+
+
+def test_kz_maxprice_validation_fails_closed_if_filter_is_not_material():
+    c = dict(core())
+
+    def fake_get_page(
+        start,
+        sort_by,
+        *,
+        category1=None,
+        maxprice_kzt=None,
+        hidef2p=False,
+    ):
+        assert start == 0
+        assert hidef2p is True
+        if maxprice_kzt == 4500 and sort_by == 'Price_DESC':
+            return page(3, [result_row(1, 4500)])
+        if category1 == '998' and maxprice_kzt == 4500 and sort_by == 'Name_ASC':
+            return page(3, [result_row(2, 1000)])
+        if category1 == '998' and maxprice_kzt is None and sort_by == 'Price_DESC':
+            return page(3, [result_row(3, 4500)])
+        raise AssertionError('unexpected probe')
+
+    c['get_page'] = fake_get_page
+    try:
+        runner.validate_kz_source_price_bound(c)
+    except RuntimeError as exc:
+        assert 'uncapped games control does not have a larger source total' in str(exc)
+    else:
+        raise AssertionError('ignored/non-material maxprice must fail closed')
 
 
 def test_free_giveaway_lane_remains_separate_from_paid_filters():
@@ -283,8 +329,9 @@ def main():
         test_explicit_partitions_cover_supported_content_types_and_params,
         test_partition_merge_is_deterministic_and_preserves_representatives,
         test_paid_gate_blocks_below_50_and_above_4500_before_reviews_and_shortlist,
-        test_kz_maxprice_must_match_uncapped_price_boundary_before_trust,
-        test_kz_maxprice_validation_fails_closed_on_count_boundary_mismatch,
+        test_kz_maxprice_validation_does_not_require_monotonic_price_asc,
+        test_kz_maxprice_validation_fails_closed_if_capped_partition_leaks_over_cap,
+        test_kz_maxprice_validation_fails_closed_if_filter_is_not_material,
         test_free_giveaway_lane_remains_separate_from_paid_filters,
         test_discovery_scope_remains_github_owned_without_new_scheduler_or_top_n,
         test_mirrors_edge_catalyst_is_not_special_cased,

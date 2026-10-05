@@ -67,111 +67,144 @@ def parse_probe_items(core, data):
     return items
 
 
+def price_probe_summary(core, data):
+    items = parse_probe_items(core, data)
+    prices = [
+        float(item['final_kzt'])
+        for item in items
+        if item.get('final_kzt') is not None
+    ]
+    return {
+        'total_count': core['to_int'](data.get('total_count')),
+        'row_count': len(items),
+        'min_price_kzt': min(prices) if prices else None,
+        'max_price_kzt': max(prices) if prices else None,
+    }
+
+
 def validate_kz_source_price_bound(core):
     """
-    Prove that maxprice=4500 under cc=kz matches the actual KZT cutoff before
-    the production traversal is allowed to trust it.
+    Prove that the exact live KZ maxprice=4500 filter is active without relying
+    on Steam's Price_ASC ordering being globally monotonic.
 
-    The bounded proof compares Steam's capped total with the uncapped Price_ASC
-    boundary at the same paid/F2P-hidden game partition. If maxprice were
-    interpreted in another unit or currency, those counts would not meet at the
-    observed <=4500/>4500 transition and the run fails closed.
+    Steam Search can return locally non-monotonic price ordering, so ordering is
+    not a completeness authority. Instead:
+      * every supported paid partition is probed with maxprice=4500 +
+        Price_DESC and must return no over-cap row;
+      * the games partition is checked with a second capped sort and must report
+        the same capped total;
+      * an otherwise-identical uncapped Price_DESC control must currently expose
+        an over-cap row and a larger total, directly proving that maxprice=4500
+        materially applies to the KZ response rather than being ignored.
+
+    Production still applies the local <=4500 KZT gate to every parsed row.
     """
     cap = core['PAID_MAX_PRICE_KZT']
-    page_size = core['PAGE_SIZE']
-    partition = next(
-        p for p in core['SEARCH_PARTITIONS']
-        if p['id'] == 'games'
-    )
-    category1 = partition['category1']
+    partition_evidence = {}
+    logical_requests = 0
 
-    capped_desc = core['get_page'](
+    for partition in core['SEARCH_PARTITIONS']:
+        data = core['get_page'](
+            0,
+            'Price_DESC',
+            category1=partition['category1'],
+            maxprice_kzt=cap,
+            hidef2p=True,
+        )
+        logical_requests += 1
+        summary = price_probe_summary(core, data)
+        total = summary['total_count']
+        if total is None or total < 0:
+            raise RuntimeError(
+                'Cannot validate KZ maxprice: '
+                f"{partition['id']} capped total is unknown"
+            )
+        if (
+            summary['max_price_kzt'] is not None
+            and summary['max_price_kzt'] > cap
+        ):
+            raise RuntimeError(
+                'Cannot validate KZ maxprice: '
+                f"{partition['id']} maxprice={cap} leaked "
+                f"{summary['max_price_kzt']} KZT"
+            )
+        partition_evidence[partition['id']] = {
+            'category1': partition['category1'],
+            **summary,
+        }
+
+    games = next(
+        partition for partition in core['SEARCH_PARTITIONS']
+        if partition['id'] == 'games'
+    )
+    capped_games = partition_evidence['games']
+
+    capped_name = core['get_page'](
         0,
-        'Price_DESC',
-        category1=category1,
+        'Name_ASC',
+        category1=games['category1'],
         maxprice_kzt=cap,
         hidef2p=True,
     )
-    capped_total = core['to_int'](capped_desc.get('total_count'))
-    if capped_total is None or capped_total <= 0:
-        raise RuntimeError('Cannot validate KZ maxprice: capped games total is empty/unknown')
-
-    capped_items = parse_probe_items(core, capped_desc)
-    capped_prices = [float(item['final_kzt']) for item in capped_items]
-    if not capped_prices:
-        raise RuntimeError('Cannot validate KZ maxprice: capped page has no priced rows')
-    if any(price <= 0 or price > cap for price in capped_prices):
+    logical_requests += 1
+    capped_name_summary = price_probe_summary(core, capped_name)
+    if capped_name_summary['total_count'] != capped_games['total_count']:
         raise RuntimeError(
-            f'KZ maxprice={cap} leaked a non-paid or over-cap result'
+            'Cannot validate KZ maxprice: capped total changes with sort '
+            f"({capped_games['total_count']} != "
+            f"{capped_name_summary['total_count']})"
         )
-
-    boundary_start = max(0, ((capped_total - 1) // page_size) * page_size)
-    boundary = core['get_page'](
-        boundary_start,
-        'Price_ASC',
-        category1=category1,
-        hidef2p=True,
-    )
-    after = core['get_page'](
-        boundary_start + page_size,
-        'Price_ASC',
-        category1=category1,
-        hidef2p=True,
-    )
-    boundary_items = parse_probe_items(core, boundary) + parse_probe_items(core, after)
-    boundary_prices = [float(item['final_kzt']) for item in boundary_items]
-
-    if not boundary_prices:
-        raise RuntimeError('Cannot validate KZ maxprice: uncapped boundary is empty')
-    if any(price <= 0 for price in boundary_prices):
-        raise RuntimeError('Cannot validate KZ maxprice: paid boundary contains free/missing price')
-    if any(
-        boundary_prices[index] > boundary_prices[index + 1]
-        for index in range(len(boundary_prices) - 1)
+    if (
+        capped_name_summary['max_price_kzt'] is not None
+        and capped_name_summary['max_price_kzt'] > cap
     ):
-        raise RuntimeError('Cannot validate KZ maxprice: Price_ASC is not monotonic at cutoff')
+        raise RuntimeError(
+            'Cannot validate KZ maxprice: Name_ASC capped sample leaked '
+            f"{capped_name_summary['max_price_kzt']} KZT"
+        )
 
-    first_over_index = next(
-        (index for index, price in enumerate(boundary_prices) if price > cap),
-        None,
+    uncapped_games = core['get_page'](
+        0,
+        'Price_DESC',
+        category1=games['category1'],
+        hidef2p=True,
     )
-    if first_over_index is None:
+    logical_requests += 1
+    uncapped_summary = price_probe_summary(core, uncapped_games)
+    uncapped_total = uncapped_summary['total_count']
+    if uncapped_total is None or uncapped_total <= capped_games['total_count']:
         raise RuntimeError(
-            'Cannot validate KZ maxprice: bounded probe did not cross the 4500 KZT boundary'
+            'Cannot validate KZ maxprice: uncapped games control does not '
+            'have a larger source total than maxprice=4500'
         )
-    if any(price <= cap for price in boundary_prices[first_over_index:]):
+    if (
+        uncapped_summary['max_price_kzt'] is None
+        or uncapped_summary['max_price_kzt'] <= cap
+    ):
         raise RuntimeError(
-            'Cannot validate KZ maxprice: <=4500 KZT row appeared after the cutoff'
-        )
-
-    inferred_uncapped_count = boundary_start + first_over_index
-    if inferred_uncapped_count != capped_total:
-        raise RuntimeError(
-            'Cannot validate KZ maxprice: capped total does not equal the '
-            f'uncapped <= {cap} KZT boundary '
-            f'({capped_total} != {inferred_uncapped_count})'
+            'Cannot validate KZ maxprice: uncapped games control did not '
+            'expose an over-cap KZT row'
         )
 
     return {
         'validated': True,
         'country_code': 'kz',
-        'validation_partition': partition['id'],
-        'category1': category1,
         'maxprice_kzt': cap,
         'hidef2p': True,
-        'capped_total': capped_total,
-        'boundary_start': boundary_start,
-        'max_capped_price_kzt': max(capped_prices),
-        'last_at_or_below_cap_kzt': (
-            boundary_prices[first_over_index - 1]
-            if first_over_index
-            else None
+        'partition_price_desc_checks': partition_evidence,
+        'games_sort_invariant_check': {
+            'sort_by': 'Name_ASC',
+            **capped_name_summary,
+        },
+        'games_uncapped_control': uncapped_summary,
+        'logical_requests': logical_requests,
+        'proof': (
+            'all_capped_partition_price_desc_samples_at_or_below_kzt_cap;'
+            'games_capped_total_sort_invariant;'
+            'uncapped_games_control_has_larger_total_and_over_cap_row'
         ),
-        'first_over_cap_kzt': boundary_prices[first_over_index],
-        'logical_requests': 3,
-        'proof': 'capped_total_equals_uncapped_price_asc_kzt_boundary',
+        'price_asc_monotonicity_required': False,
     }
-
 
 def collect_partial(core, failures, previous_by_key, partition, sort_by='Name_ASC'):
     page_size = core['PAGE_SIZE']
