@@ -243,8 +243,12 @@ def test_11_canonical_search_is_bounded_to_supported_paid_content_types():
     assert params['start'] == 150
     assert params['sort_by'] == 'Name_ASC'
     categories = set(str(params['category1']).split(','))
-    assert categories == {'998', '21', '996'}
-    assert set(core['SEARCH_CATEGORY_TYPES']) == {'games', 'dlc', 'bundles'}
+    assert categories == {'998', '21'}
+    assert set(core['SEARCH_CATEGORY_TYPES']) == {'games', 'dlc'}
+    assert '996' not in categories
+    bundle_policy = core['PAID_DISCOVERY_POLICY']['bundle_package_discovery']
+    assert bundle_policy['mode'] == 'embedded_in_games_partition'
+    assert bundle_policy['standalone_category1_996_traversal'] is False
 
 
 def main():
