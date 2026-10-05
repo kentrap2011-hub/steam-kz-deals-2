@@ -1,0 +1,383 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "appid": "1608230",
+  "title": "Planet of Lana",
+  "generated_at_utc": "2026-10-05T16:08:17Z",
+  "expires_at_utc": "2026-10-25T16:08:17Z",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "Planet of Lana",
+    "release_year": 2023,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "1608230"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The core is a side-scrolling environmental puzzle adventure built around light platforming, stealth and directing companion Mui; the companion interactions are the main mechanical distinction.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-004",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Most puzzles are approachable and support a relaxed flow, while a few timing-heavy or action-oriented sections create sharper difficulty spikes than the surrounding experience.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Art direction, animation, music and the changing landscapes are the most consistently praised parts of the game and often carry the experience beyond its mechanical simplicity.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003",
+        "feedback-004",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "The mostly visual story and Lana-Mui bond can be emotionally effective, but reactions to narrative depth are mixed, with some players finding the plot predictable or thin beneath the presentation.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "The campaign is compact at roughly four to six hours for many players, which suits its low-complexity systems, although scenic traversal and repeated interaction patterns can make parts of the journey feel drawn out.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-004",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-005",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "Companion commands and puzzle patterns recur often enough that some players feel the mechanics stop evolving well before the end, making simplicity the main trade-off of the otherwise polished experience.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-005"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            5
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            4,
+            5
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            4
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            2,
+            3
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1608230/Planet_of_Lana/",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "identity",
+        "player_feedback": false,
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1608230/reviews/",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1608230",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/patientgamers/comments/1s1n1of/planet_of_lana_if_playdead_was_inspired_by/",
+        "publication_date": "2026-03-23",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "other_player_feedback",
+        "domain": "stopgame.ru",
+        "url": "https://stopgame.ru/game/planet_of_lana/review/39715",
+        "publication_date": "2026-10-05",
+        "language": "russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-005",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/patientgamers/comments/1kwqxfa/planet_of_lana_is_a_beautiful_visual_story/",
+        "publication_date": "2025-05-27",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "publication_date": "2026-09-14",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": "2023-09-16",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-003",
+        "url": "https://www.reddit.com/r/patientgamers/comments/1s1n1of/planet_of_lana_if_playdead_was_inspired_by/",
+        "publication_date": "2026-03-23",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-002",
+        "publication_date": "2023-05-24",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-005",
+        "url": "https://www.reddit.com/r/patientgamers/comments/1kwqxfa/planet_of_lana_is_a_beautiful_visual_story/",
+        "publication_date": "2025-05-27",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-004",
+        "url": "https://stopgame.ru/game/planet_of_lana/review/39715",
+        "publication_date": "2026-10-05",
+        "language": "russian",
+        "acquisition_mode": "stable_item"
+      }
+    ]
+  }
+}

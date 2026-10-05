@@ -1,0 +1,353 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "appid": "1593780",
+  "title": "Organs Please",
+  "generated_at_utc": "2026-10-05T16:08:17Z",
+  "expires_at_utc": "2026-10-25T16:08:17Z",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "Organs Please",
+    "release_year": 2023,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "1593780"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The game combines checkpoint-style sorting with factory, employee and resource management in real time, producing a dense multitasking loop rather than a pure document-inspection game.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "The main challenge is juggling many simultaneous systems and deadlines; players describe the loop as easy to understand in principle but increasingly tiring or confusing as obligations stack up.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Rooms, employee traits, production upgrades and faction systems broaden the factory, but later progression is criticized for adding complexity faster than it adds tools that reduce micromanagement.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Factions, production orders and story decisions create multiple competing priorities and support different outcomes, while some players feel the moral-choice layer is shallower than the premise implies.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "The early combination of systems is novel, but later play can become repetitive or tedious as the same screening and management tasks repeat under heavier workload.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-004",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Dark satire, dystopian setting and absurd human-recycling premise are recurring parts of the appeal, including in Russian-language player-created feedback.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-006"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            2
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            3,
+            4
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            3,
+            4
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            3
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            3,
+            5
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            5
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1593780/Organs_Please/",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "identity",
+        "player_feedback": false,
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1593780/reviews/?browsefilter=toprated&l=english",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1593780",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=2953389491",
+        "publication_date": "2023-03-27",
+        "language": "russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "publication_date": "2022-11-17",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": "2023-04-08",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-002",
+        "publication_date": "2024-09-21",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-002",
+        "publication_date": "2024-01-25",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-002",
+        "publication_date": "2025-05-21",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-003",
+        "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=2953389491",
+        "publication_date": "2023-03-27",
+        "language": "russian",
+        "acquisition_mode": "stable_item"
+      }
+    ]
+  }
+}
