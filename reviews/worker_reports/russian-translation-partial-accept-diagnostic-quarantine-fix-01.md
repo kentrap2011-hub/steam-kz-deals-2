@@ -173,3 +173,88 @@ Remaining Director acceptance steps:
 5. verify the normal visual rebuild/Pages path independently before claiming the live site is fresh.
 
 No Scheduled Task or automation was created, edited or removed.
+
+
+## Director continuation closeout — 2026-10-05
+
+### Reconciliation with current main
+
+PR #145 was reconciled with the then-current `main` by a merge commit preserving all completed implementation while taking fresh main as the second parent. A bounded overlap check showed that among PR implementation files, only `CURRENT_TASK.md` had moved on main; its fresh main content was preserved and only this worker's own continuation block was appended.
+
+After reconciliation and duplicate-transport resolution:
+- validated implementation/transport head: `f25cfadfcb09a56cc36a7ba6a8d393d7a0691829`;
+- PR #145: `mergeable=true`;
+- compare to current `main`: `behind_by=0`;
+- no implementation file from another active worker was overwritten.
+
+### Exact duplicate-transport resolution
+
+The two inbox files were inspected directly:
+- canonical pinned failed checkpoint: `data/ai_inbox/russian_descriptions/manual-one-shot-9b3f6d2c7a41.json`;
+- later overlapping submission: `data/ai_inbox/russian_descriptions/manual-one-shot-a41c7e5d920b.json`.
+
+Confirmed:
+- both contain exactly 20 result records;
+- both contain the same 20 `request_id` values in the same order;
+- all exact binding fields match for corresponding identities;
+- 17 of the 20 translated texts differ between the two submissions.
+
+The task itself identifies the first file as the checkpoint to recover. Therefore the resolution is intentionally transport-level, not semantic:
+- keep `manual-one-shot-9b3f6d2c7a41.json`;
+- remove the later overlapping `manual-one-shot-a41c7e5d920b.json` in PR #145;
+- do not weaken duplicate-request safety in ingest;
+- do not combine, choose per-item translations, regenerate translations, or change any request/AppID/hash/source binding.
+
+This prevents double acceptance and removes the prior submission-level duplicate ambiguity. When PR #145 is merged, the inbox-path deletion is itself part of the merge diff, so the existing canonical ingest workflow can process the remaining pinned checkpoint through the corrected implementation.
+
+### Fresh binding proof
+
+Immediately after reconciliation:
+- pinned checkpoint result count: **20**;
+- exact-current bindings still present in the current canonical queue: **20/20**;
+- stale/missing/mismatched pinned bindings: **0**;
+- normal queue before live acceptance: **82**;
+- `untranslated_game_count` before live acceptance: **82**;
+- later duplicate present on PR branch: **no**.
+
+No translation text was regenerated or modified.
+
+### Mixed-success proof remains valid
+
+The reconciled CI executed the focused pinned regression against the already-submitted checkpoint and emitted:
+
+`{"pinned_checkpoint_accepted_count": 19, "pinned_checkpoint_diagnostic_count": 1, "pinned_checkpoint_error_count": 0, "pinned_checkpoint_result_count": 20, "pinned_failed_request_in_diagnostics": true}`
+
+Therefore the intended result remains proven:
+- **19 accepted**;
+- **1 translation diagnostic**;
+- **0 worker error results**;
+- request `2aeac6b30b8bea9fcecd9be3269154b2bb4b84fefc3345986929ee9f4e23b76e` / AppID `1237980` is the diagnostic item.
+
+Live canonical cache/status are intentionally not pre-written by this worker. They will change only after Director acceptance/merge causes the canonical ingest path to run.
+
+### Reconciled check results
+
+On head `f25cfadfcb09a56cc36a7ba6a8d393d7a0691829`:
+- Validate execution ownership — run `37295407305` — **success**;
+- Validate Progressive PASS 2 core — run `37295407282` — **success**;
+- Validate backlog dispositions — run `37295407272` — **success**.
+
+Execution-ownership CI also reconfirmed:
+- `RUSSIAN_DESCRIPTION_TRANSLATION_CONTRACT_VALID`;
+- Russian nonblocking publication/statistics regression: **ok**;
+- Russian partial-accept/diagnostic regression: **ok**;
+- real pinned checkpoint classification: **19 accepted + 1 diagnostic**.
+
+### Remaining Director action
+
+PR #145 is ready for Director acceptance and is not merged by this worker.
+
+After merge, verify from fresh `main` that the existing canonical ingest workflow:
+1. consumes the remaining pinned checkpoint only once;
+2. persists 19 exact-bound `good_ru` translations;
+3. creates one current translation diagnostic for AppID `1237980`;
+4. rebuilds normal translation queue/status honestly;
+5. triggers the normal downstream visual rebuild path.
+
+No Scheduled Task was created or modified. No Dossier, Deep, Fast, ranking, expiry, or unrelated project logic was changed in this continuation.
