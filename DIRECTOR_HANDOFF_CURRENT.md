@@ -51,15 +51,14 @@ The user has now explicitly authorized a replacement architecture:
 
 - remove Fast semantic assessment from ranking/decision authority;
 - keep not-yet-Deep items only on deterministic provisional ordering;
-- Deep Stage 1 performs grounded independent analysis and outputs positives, negatives, risks, hooks, confidence and an approximate provisional 0–100 taste estimate;
-- Stage 1 does not determine final ranking;
-- Deep Stage 2 compares the Stage-1 result with GitHub-selected already-calibrated neighboring games;
-- Stage 2 may adjust the score/placement based on relative preference;
-- only the calibrated Stage-2 score/order is final ranking authority;
-- Stage 2 may not invent new facts or redo web research;
-- GitHub owns comparison windows, retries, persistence and expansion;
+- Deep Stage 1 performs grounded independent analysis and outputs positives, negatives, risks, hooks, confidence and an approximate **provisional quality score 0–60**;
+- Stage 1 does not determine final ranking authority;
+- Deep Stage 2 compares the Stage-1 result with GitHub-selected already-calibrated neighboring games and outputs the **calibrated quality/personal score 0–60**;
+- only the calibrated Stage-2 quality score is authoritative for the site's personal/game-quality component;
+- the site's current scoring split is preserved: **quality/personal max 60 + deterministic purchase/deal max 40 = combined total max 100**;
+- Stage 2 must not distort quality to compensate for price/discount;
+- site/card/Statistics must distinguish Stage 1 provisional vs Stage 2 calibrated and remove Fast as an equivalent current semantic stage;
 - current fixed additive five-factor formula must stop being final score authority;
-- Fast must not survive as a hidden fallback;
 - existing Deep evidence should be migrated/reused where safe rather than discarded;
 - no Scheduled Task changes are authorized in this implementation task.
 
