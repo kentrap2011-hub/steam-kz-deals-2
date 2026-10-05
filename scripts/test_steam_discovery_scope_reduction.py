@@ -51,6 +51,7 @@ def page(total, rows):
 
 def test_explicit_partitions_cover_supported_content_types_and_params():
     c = core()
+    assert c['PAGE_SIZE'] == 100
     assert tuple(c['SEARCH_CATEGORY_TYPES']) == ('games', 'dlc', 'bundles')
     assert c['SEARCH_CATEGORY_TYPES'] == {
         'games': '998',
@@ -66,6 +67,7 @@ def test_explicit_partitions_cover_supported_content_types_and_params():
             hidef2p=True,
         )
         assert params['cc'] == 'kz'
+        assert params['count'] == 100
         assert params['specials'] == 1
         assert params['category1'] == partition['category1']
         assert params['category1'] != c['SEARCH_CATEGORY1']
