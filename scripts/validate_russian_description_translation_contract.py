@@ -90,6 +90,8 @@ for marker in [
     "validate returned keys, hashes, statuses, and Russian text quality",
     "merge validated results into the canonical translation cache",
     "rebuild downstream visual artifacts and publish explicit Russian-description diagnostics/observability",
+    "classify exact-bound per-item translation quality failures into translation diagnostics",
+    "persist and resolve the canonical translation diagnostic state",
 ]:
     require(marker in github_owns, f"GitHub ownership marker missing: {marker}")
 worker_forbidden = set((owners.get("scheduled_chatgpt_data_plane") or {}).get("forbidden") or [])
@@ -98,6 +100,7 @@ for marker in [
     "manage retries or completeness",
     "write directly to the canonical translation cache",
     "create a separate recurring scheduler or daily quota",
+    "translate, retry, or resolve requests that GitHub has removed from the normal queue into translation diagnostics",
 ]:
     require(marker in worker_forbidden, f"scheduled worker prohibition missing: {marker}")
 require((owners.get("interactive_chat") or {}).get("production_catalog_translation_allowed") is False, "interactive chat must not translate the production catalog")
@@ -121,6 +124,7 @@ expected_artifacts = {
     "request_status_manifest": "data/production/pre_ai/chatgpt_ru_description_status.json",
     "runtime_submission_glob": "data/ai_inbox/russian_descriptions/*.json",
     "canonical_cache": "data/cache/russian_description_translations.json",
+    "translation_diagnostics": "data/cache/russian_description_translation_diagnostics.json",
 }
 for key, expected in expected_artifacts.items():
     require(artifacts.get(key) == expected, f"reserved artifact path mismatch for {key}")
@@ -153,7 +157,12 @@ require(validation.get("exact_current_request_match_required") is True, "exact c
 require(validation.get("translated_text_quality_function") == "scripts/russian_description_quality.py::classify_description", "result quality must use existing classifier")
 require(validation.get("accepted_translated_text_quality") == "good_ru", "only good_ru may be accepted")
 require(validation.get("fail_closed") is True, "translation validation must fail closed")
-require((result_contract.get("acceptance") or {}).get("placeholder_or_technical_is_rejected") is True, "placeholder/technical results must be rejected")
+result_acceptance = result_contract.get("acceptance") or {}
+require(result_acceptance.get("placeholder_or_technical_is_rejected") is True, "placeholder/technical results must be rejected")
+require("whole submission" in str(result_acceptance.get("submission_level_corruption_action") or ""), "submission-level corruption must remain atomic/fail-closed")
+require("translation diagnostics" in str(result_acceptance.get("exact_bound_quality_failure_action") or ""), "exact-bound quality failures must route to diagnostics")
+require((result_contract.get("ownership") or {}).get("github_classifies_diagnostic_state") is True, "GitHub must classify translation diagnostics")
+require((result_contract.get("ownership") or {}).get("worker_controls_diagnostic_state") is False, "worker must not control translation diagnostics")
 allowed_producers = set((result_contract.get("ownership") or {}).get("allowed_semantic_producers") or [])
 require("explicitly user-launched one-shot worker bound to config/russian_description_manual_semantic_worker_prompt.md" in allowed_producers, "manual worker is not bound to canonical result transport")
 require("GitHub ingest only" in str((result_contract.get("ownership") or {}).get("zero_result_no_work_authority") or ""), "zero-work authority must remain GitHub-owned")
@@ -183,10 +192,20 @@ observability = contract.get("observability") or {}
 require(observability.get("owner") == "github_control_plane", "translation observability must remain GitHub-owned")
 require(observability.get("current_status_manifest") == "data/production/pre_ai/chatgpt_ru_description_status.json", "translation observability status path mismatch")
 obs_fields = observability.get("fields") or {}
-for field in ["untranslated_game_count", "last_translation_attempt_at_utc", "last_successful_translation_at_utc"]:
+for field in ["untranslated_game_count", "translation_diagnostic_count", "last_translation_attempt_at_utc", "last_successful_translation_at_utc"]:
     require(field in obs_fields, f"translation observability field missing: {field}")
 require("queue_count=0" in str(observability.get("zero_work_rule") or ""), "zero-work success semantics are missing")
 require("not last_successful_translation_at_utc" in str(observability.get("failed_attempt_rule") or ""), "failed-attempt timestamp separation is missing")
+
+diagnostic = contract.get("diagnostic_quarantine") or {}
+require(diagnostic.get("owner") == "github_control_plane", "translation diagnostic state must be GitHub-owned")
+require(diagnostic.get("canonical_state") == "data/cache/russian_description_translation_diagnostics.json", "translation diagnostic canonical path mismatch")
+require(diagnostic.get("entry_key") == "request_id", "translation diagnostics must be exact request keyed")
+require(diagnostic.get("automatic_diagnostic_worker_allowed") is False, "automatic diagnostic worker must remain forbidden")
+require(diagnostic.get("separate_recurring_scheduler_allowed") is False, "separate diagnostic scheduler must remain forbidden")
+require("excluded from the normal translation semantic queue" in str(diagnostic.get("normal_queue_rule") or ""), "diagnostic requests must leave normal translation queue")
+require("new request_id" in str(diagnostic.get("source_change_rule") or ""), "source changes must not inherit stale diagnostic state")
+require("marks the exact diagnostic entry resolved" in str(diagnostic.get("explicit_resolution_rule") or ""), "explicit diagnostic resolution semantics missing")
 
 # Contract-level deterministic fixtures. These exercise identity, shape and quality semantics
 # without implementing or populating any production queue/cache.
