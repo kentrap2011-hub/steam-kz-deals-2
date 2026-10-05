@@ -38,7 +38,7 @@ Before translating anything:
 5. From that exact head, read:
    - `data/production/pre_ai/chatgpt_ru_description_status.json`;
    - `data/production/pre_ai/chatgpt_ru_description_queue.jsonl`.
-6. Do not rebuild, reorder, expand or reinterpret that queue.
+6. Do not rebuild, reorder, expand or reinterpret that queue. Active translation-diagnostic items are GitHub-owned and are intentionally absent from this normal queue; never reconstruct them as translation work.
 
 This semantic-worker invocation does **not** create a developer branch/PR, does not edit `CURRENT_TASK.md`, and does not change source/contracts/workflows. Its only permitted production write is the create-only translation result transport described below.
 
@@ -111,7 +111,9 @@ After every checkpoint:
 4. reread the fresh current queue/status from `main` before doing any more semantic work;
 5. continue only with requests that are still GitHub-authorized.
 
-If ingest rejects a checkpoint, stop. Do not patch the cache, bypass validation, change retry state or resubmit altered identities.
+A checkpoint may be partially accepted when an exact-bound translated result fails the canonical Russian-quality gate: GitHub may persist valid siblings and move only the exact failing current request into translation diagnostics. After such an ingest, trust only the fresh queue/status. Do not retranslate, resubmit, diagnose, or otherwise reconstruct an item that GitHub has removed from the normal queue into translation diagnostics.
+
+If ingest rejects a checkpoint at submission/container or identity-binding level, stop. Do not patch the cache, bypass validation, change retry state or resubmit altered identities.
 
 If an exact-bound `status=error` remains the first unresolved request after ingest, do not automatically retry it or skip around it in the same invocation unless fresh GitHub-owned state explicitly authorizes that continuation.
 
@@ -135,6 +137,7 @@ Never:
 - create a recurring schedule/automation;
 - choose or build another queue;
 - reorder requests;
+- read diagnostic state as a source of ordinary translation work, or retry/resolve a diagnostic item on your own;
 - invent retry eligibility, completion, source text or request identities;
 - write canonical cache/status directly;
 - modify Fast, Dossier, Deep, ranking, expiry, publication logic or UI;
@@ -150,6 +153,7 @@ Report to the user only from fresh canonical state:
 - translations canonically accepted/persisted;
 - exact-bound errors;
 - current remaining translation count/queue count;
+- current producer-owned translation diagnostic count when present in canonical status;
 - whether a successful no-work check occurred;
 - current GitHub-owned attempt/success timestamps when present;
 - exact submission / ingest commit or workflow references used.
