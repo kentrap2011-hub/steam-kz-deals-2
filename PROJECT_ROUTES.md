@@ -349,7 +349,7 @@ Currentness invariant after PPD-012:
 **Что ищем:** где задаётся и выполняется current paid Steam KZ discovery scope до Reviews API, как доказать KZ price bound и где смотреть funnel.
 
 **Последняя проверка:** 2026-10-05.  
-**Implementation refs:** PR #146 (base implementation) + PR #147 (live maxprice validation correction).
+**Implementation refs:** PR #146 (base implementation) + PR #147 (live maxprice validation correction) + PR #148 (runtime observability / 100-row pagination continuation).
 
 **Канонические правила:**
 1. `config/mailing_policy.json#paid_discovery` — explicit `games / dlc / bundles` partitions, `discount >= 50%`, `price <= 4500 KZT`, no raw top-N, separate free/giveaway lane.
@@ -368,6 +368,13 @@ Currentness invariant after PPD-012:
 - bounded PR #147 probe run `37334852442` showed exact `cc=kz&maxprice=4500` is active: games `total_count=63681` under `Price_ASC`, `Price_DESC` and `Name_ASC`; capped `Price_DESC` sampled maximum exactly `4500 KZT`.
 - the same bounded probe showed arbitrary low `maxprice` values are not safe substitutes: values 10/20/50/100/1000 behaved as ignored/unbounded controls (`total_count=65097`, sampled prices up to `74400 KZT`). Therefore production trusts only the exact current policy value after live control validation; it does not infer general numeric semantics.
 - the corrected proof does **not** use `Price_ASC` positional early stop. It checks every paid partition's capped `Price_DESC` sample for no over-cap row, requires the games capped total to be sort-invariant, and requires an otherwise-identical uncapped games control to have both a larger total and an over-cap KZT row.
+
+**Live runtime continuation after PR #147:**
+- normal main run `37335826933` completed games traversal at ~63,689 rows / 41,654 locally eligible rows, then reached only `13,700 / ~34,356` DLC rows before the existing 60-minute job timeout; bundles never started;
+- the same run logged 204 HTTP 429 responses, with repeated `3/6/12/24s` backoff; Search traversal, not Reviews enrichment, consumed the acceptance window;
+- bounded PR #148 probes proved tested minimum-discount query parameters are ignored, so the local `>=50%` gate remains authoritative;
+- bounded live pagination proved Steam returns complete non-overlapping 100-row pages for `start=0` and `start=100`, while larger requested counts are capped at 100; canonical `PAGE_SIZE=100` is therefore the largest live-proven semantics-preserving request reduction;
+- PR #148 adds unbuffered `[steam-progress]` heartbeats/stages plus Search/Reviews request, retry, 429, backoff and stage-timing metrics so the next main run is diagnosable while it is running.
 
 **Инварианты:**
 - production never trusts `maxprice=4500` only because the query string exists; the bounded capped-vs-uncapped KZ control must pass first;
