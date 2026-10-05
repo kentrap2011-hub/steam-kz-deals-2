@@ -20,8 +20,11 @@ on:
       - "scripts/test_discovery_freshness.py"
       - "scripts/test_fresh_deal_discovery_refresh.py"
       - "scripts/test_steam_review_fallback.py"
+      - "scripts/test_steam_discovery_scope_reduction.py"
       - "scripts/test_expired_offer_guard.py"
       - "scripts/test_commercial_refresh.py"
+      - "config/mailing_policy.json"
+      - "config/mailing_policy.md"
       - ".github/workflows/steam-test.yml"
 
   # Разработческие изменения collectors/production validation проверяем автоматически.
@@ -35,6 +38,7 @@ on:
       - "scripts/steam_partial_publish.py"
       - "scripts/steam_partial_publish_runner.py"
       - "scripts/test_steam_partial_publish.py"
+      - "scripts/test_steam_discovery_scope_reduction.py"
       - "scripts/discovery_freshness.py"
       - "scripts/test_discovery_freshness.py"
       - "scripts/test_fresh_deal_discovery_refresh.py"
@@ -52,6 +56,8 @@ on:
       - "scripts/giveaway_igdb_identity_probe.py"
       - "scripts/test_giveaway_igdb_identity_probe.py"
       - "config/cross_platform_giveaway_contract.json"
+      - "config/mailing_policy.json"
+      - "config/mailing_policy.md"
       - ".github/workflows/steam-test.yml"
 
   schedule:
@@ -91,6 +97,9 @@ jobs:
       - name: Compile touched Python modules
         run: |
           python -m py_compile \
+            scripts/steam_production.py \
+            scripts/steam_partial_publish_runner.py \
+            scripts/test_steam_discovery_scope_reduction.py \
             scripts/discovery_freshness.py \
             scripts/build_pre_ai_store_snapshot.py \
             scripts/build_pre_ai_taste_projection.py \
@@ -106,6 +115,7 @@ jobs:
           python scripts/test_discovery_freshness.py
           python scripts/test_fresh_deal_discovery_refresh.py
           python scripts/test_steam_review_fallback.py
+          python scripts/test_steam_discovery_scope_reduction.py
           python scripts/test_expired_offer_guard.py
           python scripts/test_commercial_refresh.py
           python scripts/test_steam_partial_publish.py
@@ -142,6 +152,9 @@ jobs:
 
       - name: Regression test Steam partial publish
         run: python scripts/test_steam_partial_publish.py
+
+      - name: Regression test bounded Steam discovery scope
+        run: python scripts/test_steam_discovery_scope_reduction.py
 
       - name: Regression test fresh deal discovery lifecycle
         run: |
