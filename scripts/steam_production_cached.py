@@ -14,11 +14,12 @@ CACHE_PATH = Path("data/cache/steam_review_http_cache.json")
 MANIFEST_PATH = Path("data/production/manifest.json")
 CACHE_SCHEMA_VERSION = 1
 
-# Steam Search is still fetched live on every run. We only shorten the
-# collector's fixed inter-page courtesy delay; 429/retry backoffs are left
-# untouched.
+# Steam Search is still fetched live on every run. The collector's fixed
+# inter-page delay is paced to stay below the live KZ Search rate-limit burst.
+# Bounded PR evidence showed 0.5s hit 429 while 1.8s completed 35/35 requests
+# without a 429. Explicit 429/retry backoffs remain owned by steam_production.
 ORIGINAL_SEARCH_DELAY_SECONDS = 0.9
-SEARCH_DELAY_SECONDS = 0.5
+SEARCH_DELAY_SECONDS = 1.8
 
 # Review summaries are coarse quality/recall guards, not deal data. Refresh
 # volatile low-count games daily, medium-count games every 3 days and mature
