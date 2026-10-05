@@ -1,22 +1,23 @@
 # CURRENT TASK
 
 ## COMPLETE — Steam discovery maximal scope reduction diagnostic 01
-Статус: `diagnostic_complete_product_choices_resolved`.
+Статус: `diagnostic_complete_product_choices_corrected`.
 - task: `WORKER_TASK_STEAM_DISCOVERY_MAXIMAL_SCOPE_REDUCTION_DIAGNOSTIC_01.md`;
-- confirmed bottleneck: current live KZ `specials=1` discovery expands to about 100,307 rows, while the combined `category1=998,21,996` request is not an effective live bound and the existing 60-minute collector times out before persistence;
+- confirmed bottleneck: current live KZ discovery can expand to about 100,307 rows and exceed the existing 60-minute collection window before persistence;
 - last completed funnel: 12,977 raw → 9,923 review candidates → 1,615 broad → 609 shortlist/mailing; latest measurable ranking lookup contains 509 cards;
-- product choices are now resolved by the user:
-  - hard visible cap: **at most 50** strong current offers;
-  - keep bundles/packages as independent opportunities and evaluate them before the cap;
-  - temporarily admit DLC only when the base game passes normal suitability/eligibility;
-  - later add owned Steam games and their DLC through a separate task;
-  - very obscure low-signal indie may be dropped early, with an exception path for exceptional quality/value;
-  - persist funnel counts so each rejection stage is visible;
-- current shortlist invariant remains: every selected paid row is >=25% discount and <=4500 KZT, so those remain safe necessary-condition gates unless bounded live validation proves a source representation unsafe;
-- no production implementation, scheduler/Scheduled Task change, Fast/Dossier/Deep semantic execution, or ranking mutation was performed in this diagnostic/chat;
+- corrected user product choices:
+  - **minimum current discount = 50%**; the earlier interpretation “50 visible offers” was wrong and was superseded before implementation;
+  - visible site cap remains **at most 100 best current offers**;
+  - price ceiling remains <=4500 KZT unless bounded validation proves an approved exception is needed;
+  - base games are narrowed first; DLC discovery occurs afterward only for suitable/eligible base games;
+  - a separate later task extends DLC discovery to games actually owned by the user;
+  - bundles/packages are a separate current-sale lane, evaluated before the final top-100 cap; their member games may be assessed even when not standalone-sale candidates;
+  - very obscure low-signal indie may be dropped early with an exceptional quality/value escape path;
+  - funnel counts must show every major reduction stage;
+- no production implementation, scheduler/Scheduled Task change, Fast/Dossier/Deep semantic execution, or ranking mutation was performed from the mistaken hard-50 interpretation;
 - report: `reviews/worker_reports/steam-discovery-maximal-scope-reduction-diagnostic-01.md`;
-- report commit: `b370991e4316be9ec775bb34463831ff8e88d225`;
-- queued implementation task: `WORKER_TASK_STEAM_DISCOVERY_HARD_50_SELECTION_IMPLEMENT_01.md`;
+- corrected queued implementation task: `WORKER_TASK_STEAM_DISCOVERY_50_PERCENT_DISCOUNT_TOP100_IMPLEMENT_01.md`;
+- superseded incorrect task: `WORKER_TASK_STEAM_DISCOVERY_HARD_50_SELECTION_IMPLEMENT_01.md`;
 - queued owned-library follow-up: `WORKER_TASK_STEAM_OWNED_LIBRARY_DLC_SUPPORT_01.md`;
 - queued site task page: `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`.
 
