@@ -15,14 +15,14 @@
     "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
     "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
-  "appid": "1238860",
-  "title": "Battlefield 4™",
-  "generated_at_utc": "2026-10-04T12:44:06Z",
-  "expires_at_utc": "2026-10-24T12:44:06Z",
+  "appid": "1231990",
+  "title": "Gestalt: Steam & Cinder",
+  "generated_at_utc": "2026-10-04T09:53:23Z",
+  "expires_at_utc": "2026-10-24T09:53:23Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Battlefield 4™",
-    "release_year": 2013,
+    "work_title": "Gestalt: Steam & Cinder",
+    "release_year": 2024,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "source-001"
@@ -30,7 +30,7 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1238860"
+        "value": "1231990"
       }
     ]
   },
@@ -38,7 +38,7 @@
   "observations": [
     {
       "category": "mechanics",
-      "statement": "Large-scale combined-arms gunplay, vehicles and broad maps remain central strengths, while weapon spread and vehicle dominance can add friction for some players.",
+      "statement": "Movement and melee/ranged combat receive praise for responsiveness, but players also criticize weak enemy hit reactions and combo strings that are difficult to use safely, producing a divided view of combat depth.",
       "sentiment": "mixed",
       "recurrence": "moderate",
       "mention_count": 3,
@@ -49,19 +49,19 @@
       "evidence_status": "durable",
       "source_ids": [
         "source-002",
-        "source-005",
-        "source-007"
+        "source-003",
+        "source-005"
       ],
       "player_feedback_ids": [
         "feedback-001",
-        "feedback-004",
+        "feedback-003",
         "feedback-006"
       ]
     },
     {
-      "category": "structure",
-      "statement": "Map scale, environmental destruction and varied combat spaces continue to support a strong sense of spectacle and match-to-match variety.",
-      "sentiment": "positive",
+      "category": "progression",
+      "statement": "Skill-tree upgrades, accessories and exploration abilities provide useful development choices, while some players find parts of the combo-focused skill progression less valuable than expected.",
+      "sentiment": "mixed",
       "recurrence": "limited",
       "mention_count": 2,
       "evidence_languages": [
@@ -70,16 +70,35 @@
       "evidence_status": "durable",
       "source_ids": [
         "source-002",
-        "source-007"
+        "source-003"
       ],
       "player_feedback_ids": [
         "feedback-001",
-        "feedback-006"
+        "feedback-003"
       ]
     },
     {
       "category": "difficulty",
-      "statement": "Current players describe a pronounced newcomer learning curve because the remaining population contains many experienced veterans; Russian feedback similarly notes highly skilled opponents and punishing vehicle play.",
+      "statement": "Several players describe bosses or the overall challenge as easy or becoming easier with upgrades, while combat criticism focuses more on hit reactions and enemy contact than on demanding mastery.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Exploration includes backtracking, collectibles and ability-gated returns, but players disagree on its depth, with some describing the world as comparatively linear and repeated traversal as less rewarding than stronger metroidvanias.",
       "sentiment": "mixed",
       "recurrence": "limited",
       "mention_count": 2,
@@ -87,84 +106,79 @@
         "russian",
         "non_russian"
       ],
-      "evidence_status": "current",
+      "evidence_status": "durable",
       "source_ids": [
         "source-003",
         "source-005"
       ],
       "player_feedback_ids": [
-        "feedback-002",
-        "feedback-004"
+        "feedback-003",
+        "feedback-005"
       ]
     },
     {
-      "category": "multiplayer",
-      "statement": "PC multiplayer remains playable in 2026, but the active population is much smaller and strongly dependent on region, time of day and a limited set of populated community servers.",
+      "category": "pacing",
+      "statement": "Multiple players report an approximately eight-hour campaign; some appreciate the compact length, while others feel the game ends before its systems and world are fully developed.",
       "sentiment": "mixed",
       "recurrence": "moderate",
-      "mention_count": 2,
+      "mention_count": 4,
       "evidence_languages": [
+        "russian",
         "non_russian"
       ],
-      "evidence_status": "current",
+      "evidence_status": "durable",
       "source_ids": [
+        "source-002",
         "source-003",
-        "source-008"
+        "source-005"
       ],
       "player_feedback_ids": [
+        "feedback-001",
         "feedback-002",
+        "feedback-003",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Story, lore and character presentation attract interest, but the ending is repeatedly described as abrupt or incomplete, leaving major setup unresolved and weakening the final payoff.",
+      "sentiment": "mixed",
+      "recurrence": "strong",
+      "mention_count": 5,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003",
+        "feedback-004",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "localization",
+      "statement": "A Russian-language player review from March 2025 reports that the story was not translated; because this evidence is older and no recent confirmation was found, the current localization state remains uncertain.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "uncertain",
+      "source_ids": [
+        "source-006"
+      ],
+      "player_feedback_ids": [
         "feedback-007"
-      ]
-    },
-    {
-      "category": "friction",
-      "statement": "A current PC setup issue is that fresh installations can be kicked until PunkBuster is manually updated, adding avoidable launch and server-entry friction.",
-      "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "non_russian"
-      ],
-      "evidence_status": "current",
-      "source_ids": [
-        "source-004"
-      ],
-      "player_feedback_ids": [
-        "feedback-003"
-      ]
-    },
-    {
-      "category": "structure",
-      "statement": "The single-player campaign is commonly treated as secondary to multiplayer and can feel tedious or forgettable, even though it remains tied to some weapon unlocks.",
-      "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-006"
-      ],
-      "player_feedback_ids": [
-        "feedback-005"
-      ]
-    },
-    {
-      "category": "progression",
-      "statement": "Some multiplayer equipment remains linked to campaign completion, so players focused on online play may need to spend time in a less-valued single-player mode to unlock it.",
-      "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-006"
-      ],
-      "player_feedback_ids": [
-        "feedback-005"
       ]
     }
   ],
@@ -175,7 +189,7 @@
     "source_mix_status": "multi_source",
     "single_source_reason": null,
     "russian_attempt": "found_and_used",
-    "overall_strength": "moderate",
+    "overall_strength": "strong",
     "stop_reason": "evidence_stable",
     "coverage": {
       "dimensions": [
@@ -197,14 +211,15 @@
           "dimension": "progression_development_unlocks",
           "state": "covered",
           "observation_indices": [
-            6
+            1
           ]
         },
         {
           "dimension": "variety_repetition_over_time",
           "state": "covered",
           "observation_indices": [
-            1
+            3,
+            4
           ]
         },
         {
@@ -218,7 +233,7 @@
           "dimension": "pacing_structure_direction",
           "state": "covered",
           "observation_indices": [
-            1,
+            4,
             5
           ]
         },
@@ -226,16 +241,13 @@
           "dimension": "exploration_mission_activity_structure",
           "state": "covered",
           "observation_indices": [
-            1,
-            5
+            3
           ]
         },
         {
           "dimension": "multiplayer_coop_dependence",
-          "state": "covered",
-          "observation_indices": [
-            3
-          ]
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
         },
         {
           "dimension": "story_characters_identity_hooks",
@@ -249,24 +261,26 @@
           "state": "covered",
           "observation_indices": [
             0,
-            1
+            1,
+            5
           ]
         },
         {
           "dimension": "recurring_complaints_tradeoffs",
           "state": "covered",
           "observation_indices": [
+            0,
             2,
+            3,
             4,
-            5,
-            6
+            5
           ]
         },
         {
           "dimension": "technical_performance_localization_regional",
           "state": "covered",
           "observation_indices": [
-            4
+            6
           ]
         }
       ],
@@ -281,7 +295,7 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1238860/Battlefield_4/",
+        "url": "https://store.steampowered.com/app/1231990/Gestalt_Steam__Cinder/",
         "publication_date": null,
         "language": "non_russian",
         "evidence_role": "identity",
@@ -290,149 +304,125 @@
       },
       {
         "source_id": "source-002",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/battlefield_4/comments/1t9c2r1/longtime_player_returning_to_bf4_for_the_first/",
-        "publication_date": "2026-05-10",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1231990/reviews/?browsefilter=toprated",
+        "publication_date": null,
         "language": "non_russian",
         "evidence_role": "durable_trait",
-        "player_feedback": true,
-        "freshness": "recent"
-      },
-      {
-        "source_id": "source-003",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/Battlefield/comments/1vsbmeh/do_people_still_play/",
-        "publication_date": "2026-08-19",
-        "language": "non_russian",
-        "evidence_role": "current_state",
-        "player_feedback": true,
-        "freshness": "recent"
-      },
-      {
-        "source_id": "source-004",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/battlefield_4/comments/1s4ki6f/punkbuster/",
-        "publication_date": "2026-03-26",
-        "language": "non_russian",
-        "evidence_role": "current_state",
-        "player_feedback": true,
-        "freshness": "recent"
-      },
-      {
-        "source_id": "source-005",
-        "source_type": "other_player_feedback",
-        "domain": "steamstat.io",
-        "url": "https://steamstat.io/ru/app/1238860",
-        "publication_date": null,
-        "language": "russian",
-        "evidence_role": "current_state",
         "player_feedback": true,
         "feedback_surface_mode": "concrete_item_collection",
         "exact_product_binding": {
           "basis": "source_appid",
-          "appid": "1238860",
+          "appid": "1231990",
           "title": null,
           "release_year": null
         },
         "freshness": "unknown"
       },
       {
-        "source_id": "source-006",
+        "source_id": "source-003",
         "source_type": "reddit",
         "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/battlefield_4/comments/1fxlb85/i_bought_battlefield_4_about_6_years_ago_and_ever/",
-        "publication_date": "2024-10-06",
+        "url": "https://www.reddit.com/r/metroidvania/comments/1e78p0e",
+        "publication_date": "2024-07-19",
         "language": "non_russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
         "freshness": "older"
       },
       {
-        "source_id": "source-007",
-        "source_type": "steam_reviews",
-        "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1238860/Battlefield_4/?curator_clanid=5932598",
-        "publication_date": null,
+        "source_id": "source-004",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1231990/discussions/0/4515505180235207313/",
+        "publication_date": "2024-07-18",
         "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-005",
+        "source_type": "other_player_feedback",
+        "domain": "stopgame.ru",
+        "url": "https://stopgame.ru/game/gestalt_steam_cinder",
+        "publication_date": null,
+        "language": "russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
         "feedback_surface_mode": "concrete_item_collection",
         "exact_product_binding": {
-          "basis": "source_appid",
-          "appid": "1238860",
-          "title": null,
-          "release_year": null
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "Gestalt: Steam & Cinder",
+          "release_year": 2024
         },
         "freshness": "unknown"
       },
       {
-        "source_id": "source-008",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/battlefield_4/comments/1rnntws/guys_bf4_is_dying_on_pc/",
-        "publication_date": "2026-03-07",
-        "language": "non_russian",
-        "evidence_role": "current_state",
+        "source_id": "source-006",
+        "source_type": "other_player_feedback",
+        "domain": "stopgame.ru",
+        "url": "https://stopgame.ru/game/gestalt_steam_cinder/review/22206",
+        "publication_date": "2025-03-10",
+        "language": "russian",
+        "evidence_role": "uncertain",
         "player_feedback": true,
-        "freshness": "recent"
+        "freshness": "older"
       }
     ],
     "player_feedback_records": [
       {
         "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "url": "https://www.reddit.com/r/battlefield_4/comments/1t9c2r1/longtime_player_returning_to_bf4_for_the_first/",
-        "publication_date": "2026-05-10",
+        "publication_date": "2024-07-16",
         "language": "non_russian",
-        "acquisition_mode": "stable_item"
+        "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-002",
-        "source_id": "source-003",
-        "url": "https://www.reddit.com/r/Battlefield/comments/1vsbmeh/do_people_still_play/",
-        "publication_date": "2026-08-19",
+        "source_id": "source-002",
+        "publication_date": "2024-11-29",
         "language": "non_russian",
-        "acquisition_mode": "stable_item"
+        "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-003",
-        "source_id": "source-004",
-        "url": "https://www.reddit.com/r/battlefield_4/comments/1s4ki6f/punkbuster/",
-        "publication_date": "2026-03-26",
+        "source_id": "source-003",
+        "url": "https://www.reddit.com/r/metroidvania/comments/1e78p0e",
+        "publication_date": "2024-07-19",
         "language": "non_russian",
         "acquisition_mode": "stable_item"
       },
       {
         "feedback_id": "feedback-004",
-        "source_id": "source-005",
-        "publication_date": "2026-09-01",
-        "language": "russian",
-        "acquisition_mode": "inspected_collection_item"
-      },
-      {
-        "feedback_id": "feedback-005",
-        "source_id": "source-006",
-        "url": "https://www.reddit.com/r/battlefield_4/comments/1fxlb85/i_bought_battlefield_4_about_6_years_ago_and_ever/",
-        "publication_date": "2024-10-06",
+        "source_id": "source-004",
+        "url": "https://steamcommunity.com/app/1231990/discussions/0/4515505180235207313/",
+        "publication_date": "2024-07-18",
         "language": "non_russian",
         "acquisition_mode": "stable_item"
       },
       {
+        "feedback_id": "feedback-005",
+        "source_id": "source-005",
+        "publication_date": "2024-08-04",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
         "feedback_id": "feedback-006",
-        "source_id": "source-007",
-        "publication_date": null,
-        "language": "non_russian",
+        "source_id": "source-005",
+        "publication_date": "2024-07-26",
+        "language": "russian",
         "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-007",
-        "source_id": "source-008",
-        "url": "https://www.reddit.com/r/battlefield_4/comments/1rnntws/guys_bf4_is_dying_on_pc/",
-        "publication_date": "2026-03-07",
-        "language": "non_russian",
+        "source_id": "source-006",
+        "url": "https://stopgame.ru/game/gestalt_steam_cinder/review/22206",
+        "publication_date": "2025-03-10",
+        "language": "russian",
         "acquisition_mode": "stable_item"
       }
     ]

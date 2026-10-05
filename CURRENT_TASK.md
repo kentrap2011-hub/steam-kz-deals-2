@@ -1,14 +1,28 @@
 # CURRENT TASK
 
-## Worker in progress — 2026-10-04
-
-### Steam discovery maximal scope reduction diagnostic 01
-Статус: `in_progress`.
+## COMPLETE — Steam discovery maximal scope reduction diagnostic 01
+Статус: `diagnostic_complete_product_choices_corrected`.
 - task: `WORKER_TASK_STEAM_DISCOVERY_MAXIMAL_SCOPE_REDUCTION_DIAGNOSTIC_01.md`;
-- mode: `READ-ONLY / RECON`;
-- scope: bounded diagnostic of the existing GitHub-owned Steam KZ discovery path to reduce raw Steam scope while preserving the best offers;
-- no implementation, production-state mutation, scheduler/Scheduled Task change, new collector/queue/retry loop, or Catalyst special case is authorized;
-- required report: `reviews/worker_reports/steam-discovery-maximal-scope-reduction-diagnostic-01.md`.
+- confirmed bottleneck: current live KZ discovery can expand to about 100,307 rows and exceed the existing 60-minute collection window before persistence;
+- last completed funnel: 12,977 raw → 9,923 review candidates → 1,615 broad → 609 shortlist/mailing; latest measurable ranking lookup contains 509 cards;
+- corrected user product choices:
+  - **minimum current discount = 50%**; the earlier interpretation “50 visible offers” was wrong and was superseded before implementation;
+  - visible site cap remains **at most 100 best current offers** and is shown immediately from the best currently available canonical evidence; the visible 100 is recalculated as Deep results arrive, while the full eligible unresolved pool remains in Deep scope regardless of current visible rank;
+  - GitHub-owned Deep processing order should prioritize purchase value, Steam positive rating and review count; sale expiry must not affect Deep processing order;
+  - any authoritative positive Deep result ranks above every candidate that has not completed Deep;
+  - Deep queue-order tuning must be controlled by a dedicated GitHub instruction/policy file; do not change the Deep worker prompt for future ordering tweaks;
+  - price ceiling remains <=4500 KZT unless bounded validation proves an approved exception is needed;
+  - base games are narrowed first; DLC discovery occurs afterward only for suitable/eligible base games;
+  - a separate later task extends DLC discovery to games actually owned by the user;
+  - bundles/packages are a separate current-sale lane, evaluated before the final top-100 cap; their member games may be assessed even when not standalone-sale candidates;
+  - very obscure low-signal indie may be dropped early with an exceptional quality/value escape path;
+  - funnel counts must show every major reduction stage;
+- no production implementation, scheduler/Scheduled Task change, Fast/Dossier/Deep semantic execution, or ranking mutation was performed from the mistaken hard-50 interpretation;
+- report: `reviews/worker_reports/steam-discovery-maximal-scope-reduction-diagnostic-01.md`;
+- corrected queued implementation task: `WORKER_TASK_STEAM_DISCOVERY_50_PERCENT_DISCOUNT_TOP100_IMPLEMENT_01.md`;
+- superseded incorrect task: `WORKER_TASK_STEAM_DISCOVERY_HARD_50_SELECTION_IMPLEMENT_01.md`;
+- queued owned-library follow-up: `WORKER_TASK_STEAM_OWNED_LIBRARY_DLC_SUPPORT_01.md`;
+- queued site task page: `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`.
 
 ## COMPLETE — Mirror's Edge Catalyst post-refresh absence diagnostic 01
 Статус: `diagnosis_complete_root_cause_identified`.
@@ -1346,16 +1360,11 @@
 - Report: `reviews/worker_reports/personal-taste-game-guess-diagnostic-01.md`.
 
 
-## Worker ready for Director acceptance — 2026-10-04
+## IN PROGRESS — Russian translation partial accept + diagnostic quarantine continuation 01
 
-### Russian translation partial accept + diagnostic quarantine fix 01
-Статус: `complete_ready_for_director_acceptance`.
-- task: `WORKER_TASK_RUSSIAN_TRANSLATION_PARTIAL_ACCEPT_DIAGNOSTIC_QUARANTINE_FIX_01.md`;
-- branch: `fix/russian-translation-partial-accept-diagnostic-quarantine-01`;
-- PR: `#145`;
-- report: `reviews/worker_reports/russian-translation-partial-accept-diagnostic-quarantine-fix-01.md`;
-- validated implementation head: `88add831215992387b9353666bf5014b75978d9a`;
-- pinned checkpoint regression: `20 total = 19 accepted + 1 diagnostic + 0 worker errors`; failed request `2aeac6b30b8bea9fcecd9be3269154b2bb4b84fefc3345986929ee9f4e23b76e` / AppID `1237980` is the diagnostic item;
-- checks: execution ownership `37194537301` success; Progressive PASS 2 core `37194537366` success; backlog dispositions `37194537674` success;
-- live canonical ingest not performed before merge; `main` currently contains two overlapping 20-result inbox submissions, so Director must explicitly reconcile transport choice after PR acceptance;
-- no Scheduled Task, second recurring worker, Fast/Dossier/Deep/ranking/expiry change was made.
+- Status: `reconciling_pr_145_with_current_main`.
+- Task: `WORKER_TASK_RUSSIAN_TRANSLATION_PARTIAL_ACCEPT_DIAGNOSTIC_QUARANTINE_FIX_01.md`.
+- Worker slot: `ЧАТ 2`.
+- PR: `#145`; implementation branch: `fix/russian-translation-partial-accept-diagnostic-quarantine-01`.
+- Continuation scope only: reconcile PR with fresh `main`, preserve pinned checkpoint `manual-one-shot-9b3f6d2c7a41.json`, remove later overlapping duplicate transport `manual-one-shot-a41c7e5d920b.json`, re-run required checks, and update the worker report.
+- No retranslation, request/AppID/hash rebinding, Scheduled Task change, Dossier/Deep/Fast/ranking/expiry change, or direct merge is authorized.

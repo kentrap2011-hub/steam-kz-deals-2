@@ -15,14 +15,14 @@
     "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
     "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
-  "appid": "1238860",
-  "title": "Battlefield 4™",
-  "generated_at_utc": "2026-10-04T12:44:06Z",
-  "expires_at_utc": "2026-10-24T12:44:06Z",
+  "appid": "1328350",
+  "title": "Turbo Overkill",
+  "generated_at_utc": "2026-10-04T17:38:37Z",
+  "expires_at_utc": "2026-10-24T17:38:37Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Battlefield 4™",
-    "release_year": 2013,
+    "work_title": "Turbo Overkill",
+    "release_year": 2023,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "source-001"
@@ -30,7 +30,7 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1238860"
+        "value": "1328350"
       }
     ]
   },
@@ -38,7 +38,48 @@
   "observations": [
     {
       "category": "mechanics",
-      "statement": "Large-scale combined-arms gunplay, vehicles and broad maps remain central strengths, while weapon spread and vehicle dominance can add friction for some players.",
+      "statement": "High-speed movement, chainsaw sliding, weapon swapping and aggressive mobility form the central combat loop and are repeatedly described as unusually energetic and satisfying.",
+      "sentiment": "positive",
+      "recurrence": "strong",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-004",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Weapon mods, augments and build combinations give the campaign meaningful room for experimentation rather than leaving the arsenal as a fixed sequence of upgrades.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Large, elaborate stages and memorable set pieces are recurring strengths, but some players find navigation unclear when arenas are large or progression depends on locating remaining enemies or the next route.",
       "sentiment": "mixed",
       "recurrence": "moderate",
       "mention_count": 3,
@@ -49,37 +90,38 @@
       "evidence_status": "durable",
       "source_ids": [
         "source-002",
-        "source-005",
-        "source-007"
+        "source-004",
+        "source-005"
       ],
       "player_feedback_ids": [
         "feedback-001",
-        "feedback-004",
-        "feedback-006"
+        "feedback-003",
+        "feedback-004"
       ]
     },
     {
-      "category": "structure",
-      "statement": "Map scale, environmental destruction and varied combat spaces continue to support a strong sense of spectacle and match-to-match variety.",
-      "sentiment": "positive",
-      "recurrence": "limited",
+      "category": "repetition",
+      "statement": "The later campaign can become exhausting because long stages and repeated enemy waves sustain maximum intensity for extended periods, making the final act feel padded to some players.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
       "mention_count": 2,
       "evidence_languages": [
+        "russian",
         "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "source-002",
-        "source-007"
+        "source-003",
+        "source-005"
       ],
       "player_feedback_ids": [
-        "feedback-001",
-        "feedback-006"
+        "feedback-002",
+        "feedback-005"
       ]
     },
     {
       "category": "difficulty",
-      "statement": "Current players describe a pronounced newcomer learning curve because the remaining population contains many experienced veterans; Russian feedback similarly notes highly skilled opponents and punishing vehicle play.",
+      "statement": "The game rewards mastery of movement and rapid weapon decisions, but higher difficulty and late-game encounter density can make the experience punishing and tiring rather than merely fast.",
       "sentiment": "mixed",
       "recurrence": "limited",
       "mention_count": 2,
@@ -87,7 +129,7 @@
         "russian",
         "non_russian"
       ],
-      "evidence_status": "current",
+      "evidence_status": "durable",
       "source_ids": [
         "source-003",
         "source-005"
@@ -98,28 +140,29 @@
       ]
     },
     {
-      "category": "multiplayer",
-      "statement": "PC multiplayer remains playable in 2026, but the active population is much smaller and strongly dependent on region, time of day and a limited set of populated community servers.",
-      "sentiment": "mixed",
-      "recurrence": "moderate",
+      "category": "other",
+      "statement": "Cyberpunk presentation, soundtrack, protagonist style and the exaggerated action tone reinforce a distinctive identity, while the narrative itself is generally secondary to combat spectacle.",
+      "sentiment": "positive",
+      "recurrence": "limited",
       "mention_count": 2,
       "evidence_languages": [
+        "russian",
         "non_russian"
       ],
-      "evidence_status": "current",
+      "evidence_status": "durable",
       "source_ids": [
-        "source-003",
-        "source-008"
+        "source-002",
+        "source-005"
       ],
       "player_feedback_ids": [
-        "feedback-002",
-        "feedback-007"
+        "feedback-001",
+        "feedback-006"
       ]
     },
     {
       "category": "friction",
-      "statement": "A current PC setup issue is that fresh installations can be kicked until PunkBuster is manually updated, adding avoidable launch and server-entry friction.",
-      "sentiment": "negative",
+      "statement": "A current PC compatibility issue can cause severe stuttering when using a high mouse polling rate; a 2026 player thread reports that reducing the polling rate resolved the problem for affected players.",
+      "sentiment": "mixed",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
@@ -127,44 +170,10 @@
       ],
       "evidence_status": "current",
       "source_ids": [
-        "source-004"
-      ],
-      "player_feedback_ids": [
-        "feedback-003"
-      ]
-    },
-    {
-      "category": "structure",
-      "statement": "The single-player campaign is commonly treated as secondary to multiplayer and can feel tedious or forgettable, even though it remains tied to some weapon unlocks.",
-      "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
         "source-006"
       ],
       "player_feedback_ids": [
-        "feedback-005"
-      ]
-    },
-    {
-      "category": "progression",
-      "statement": "Some multiplayer equipment remains linked to campaign completion, so players focused on online play may need to spend time in a less-valued single-player mode to unlock it.",
-      "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-006"
-      ],
-      "player_feedback_ids": [
-        "feedback-005"
+        "feedback-007"
       ]
     }
   ],
@@ -175,7 +184,7 @@
     "source_mix_status": "multi_source",
     "single_source_reason": null,
     "russian_attempt": "found_and_used",
-    "overall_strength": "moderate",
+    "overall_strength": "strong",
     "stop_reason": "evidence_stable",
     "coverage": {
       "dimensions": [
@@ -190,52 +199,51 @@
           "dimension": "controls_game_feel",
           "state": "covered",
           "observation_indices": [
-            0
+            0,
+            4
           ]
         },
         {
           "dimension": "progression_development_unlocks",
           "state": "covered",
           "observation_indices": [
-            6
+            1
           ]
         },
         {
           "dimension": "variety_repetition_over_time",
           "state": "covered",
           "observation_indices": [
-            1
+            2,
+            3
           ]
         },
         {
           "dimension": "difficulty_mastery_learning_friction",
           "state": "covered",
           "observation_indices": [
-            2
+            4
           ]
         },
         {
           "dimension": "pacing_structure_direction",
           "state": "covered",
           "observation_indices": [
-            1,
-            5
+            2,
+            3
           ]
         },
         {
           "dimension": "exploration_mission_activity_structure",
           "state": "covered",
           "observation_indices": [
-            1,
-            5
+            2
           ]
         },
         {
           "dimension": "multiplayer_coop_dependence",
-          "state": "covered",
-          "observation_indices": [
-            3
-          ]
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
         },
         {
           "dimension": "story_characters_identity_hooks",
@@ -249,7 +257,9 @@
           "state": "covered",
           "observation_indices": [
             0,
-            1
+            1,
+            2,
+            5
           ]
         },
         {
@@ -257,8 +267,8 @@
           "state": "covered",
           "observation_indices": [
             2,
+            3,
             4,
-            5,
             6
           ]
         },
@@ -266,7 +276,7 @@
           "dimension": "technical_performance_localization_regional",
           "state": "covered",
           "observation_indices": [
-            4
+            6
           ]
         }
       ],
@@ -281,7 +291,7 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1238860/Battlefield_4/",
+        "url": "https://store.steampowered.com/app/1328350/Turbo_Overkill/",
         "publication_date": null,
         "language": "non_russian",
         "evidence_role": "identity",
@@ -292,8 +302,8 @@
         "source_id": "source-002",
         "source_type": "reddit",
         "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/battlefield_4/comments/1t9c2r1/longtime_player_returning_to_bf4_for_the_first/",
-        "publication_date": "2026-05-10",
+        "url": "https://www.reddit.com/r/patientgamers/comments/1v5f3w3/turbo_overkill_review_a_shot_of_adrenaline_for/",
+        "publication_date": "2026-07-24",
         "language": "non_russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
@@ -303,10 +313,10 @@
         "source_id": "source-003",
         "source_type": "reddit",
         "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/Battlefield/comments/1vsbmeh/do_people_still_play/",
-        "publication_date": "2026-08-19",
+        "url": "https://www.reddit.com/r/patientgamers/comments/1rawzd4/turbo_overkill_is_awesome_but_drags_for_too_long/",
+        "publication_date": "2026-02-21",
         "language": "non_russian",
-        "evidence_role": "current_state",
+        "evidence_role": "durable_trait",
         "player_feedback": true,
         "freshness": "recent"
       },
@@ -314,26 +324,26 @@
         "source_id": "source-004",
         "source_type": "reddit",
         "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/battlefield_4/comments/1s4ki6f/punkbuster/",
-        "publication_date": "2026-03-26",
+        "url": "https://www.reddit.com/r/boomershooters/comments/1kviyv4",
+        "publication_date": "2025-05-26",
         "language": "non_russian",
-        "evidence_role": "current_state",
+        "evidence_role": "durable_trait",
         "player_feedback": true,
-        "freshness": "recent"
+        "freshness": "older"
       },
       {
         "source_id": "source-005",
-        "source_type": "other_player_feedback",
-        "domain": "steamstat.io",
-        "url": "https://steamstat.io/ru/app/1238860",
+        "source_type": "steam_reviews",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1328350/Turbo_Overkill/?curator_clanid=44776233&l=russian",
         "publication_date": null,
         "language": "russian",
-        "evidence_role": "current_state",
+        "evidence_role": "durable_trait",
         "player_feedback": true,
         "feedback_surface_mode": "concrete_item_collection",
         "exact_product_binding": {
           "basis": "source_appid",
-          "appid": "1238860",
+          "appid": "1328350",
           "title": null,
           "release_year": null
         },
@@ -341,39 +351,10 @@
       },
       {
         "source_id": "source-006",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/battlefield_4/comments/1fxlb85/i_bought_battlefield_4_about_6_years_ago_and_ever/",
-        "publication_date": "2024-10-06",
-        "language": "non_russian",
-        "evidence_role": "durable_trait",
-        "player_feedback": true,
-        "freshness": "older"
-      },
-      {
-        "source_id": "source-007",
-        "source_type": "steam_reviews",
-        "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1238860/Battlefield_4/?curator_clanid=5932598",
-        "publication_date": null,
-        "language": "non_russian",
-        "evidence_role": "durable_trait",
-        "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection",
-        "exact_product_binding": {
-          "basis": "source_appid",
-          "appid": "1238860",
-          "title": null,
-          "release_year": null
-        },
-        "freshness": "unknown"
-      },
-      {
-        "source_id": "source-008",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/battlefield_4/comments/1rnntws/guys_bf4_is_dying_on_pc/",
-        "publication_date": "2026-03-07",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1328350/discussions/2/581679312044886555/",
+        "publication_date": "2026-08-11",
         "language": "non_russian",
         "evidence_role": "current_state",
         "player_feedback": true,
@@ -384,54 +365,53 @@
       {
         "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "url": "https://www.reddit.com/r/battlefield_4/comments/1t9c2r1/longtime_player_returning_to_bf4_for_the_first/",
-        "publication_date": "2026-05-10",
+        "url": "https://www.reddit.com/r/patientgamers/comments/1v5f3w3/turbo_overkill_review_a_shot_of_adrenaline_for/",
+        "publication_date": "2026-07-24",
         "language": "non_russian",
         "acquisition_mode": "stable_item"
       },
       {
         "feedback_id": "feedback-002",
         "source_id": "source-003",
-        "url": "https://www.reddit.com/r/Battlefield/comments/1vsbmeh/do_people_still_play/",
-        "publication_date": "2026-08-19",
+        "url": "https://www.reddit.com/r/patientgamers/comments/1rawzd4/turbo_overkill_is_awesome_but_drags_for_too_long/",
+        "publication_date": "2026-02-21",
         "language": "non_russian",
         "acquisition_mode": "stable_item"
       },
       {
         "feedback_id": "feedback-003",
         "source_id": "source-004",
-        "url": "https://www.reddit.com/r/battlefield_4/comments/1s4ki6f/punkbuster/",
-        "publication_date": "2026-03-26",
+        "url": "https://www.reddit.com/r/boomershooters/comments/1kviyv4",
+        "publication_date": "2025-05-26",
         "language": "non_russian",
         "acquisition_mode": "stable_item"
       },
       {
         "feedback_id": "feedback-004",
         "source_id": "source-005",
-        "publication_date": "2026-09-01",
+        "publication_date": null,
         "language": "russian",
         "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-005",
-        "source_id": "source-006",
-        "url": "https://www.reddit.com/r/battlefield_4/comments/1fxlb85/i_bought_battlefield_4_about_6_years_ago_and_ever/",
-        "publication_date": "2024-10-06",
-        "language": "non_russian",
-        "acquisition_mode": "stable_item"
+        "source_id": "source-005",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-006",
-        "source_id": "source-007",
+        "source_id": "source-005",
         "publication_date": null,
-        "language": "non_russian",
+        "language": "russian",
         "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-007",
-        "source_id": "source-008",
-        "url": "https://www.reddit.com/r/battlefield_4/comments/1rnntws/guys_bf4_is_dying_on_pc/",
-        "publication_date": "2026-03-07",
+        "source_id": "source-006",
+        "url": "https://steamcommunity.com/app/1328350/discussions/2/581679312044886555/",
+        "publication_date": "2026-08-11",
         "language": "non_russian",
         "acquisition_mode": "stable_item"
       }
