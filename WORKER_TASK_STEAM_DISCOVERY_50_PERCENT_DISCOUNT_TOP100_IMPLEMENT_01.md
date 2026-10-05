@@ -85,13 +85,16 @@ Keep GitHub as the sole owner of Deep scope/order. Do not create a second queue.
 All eligible unresolved candidates remain in the existing Deep work scope. Reorder only the **operational processing sequence**, not eligibility or final site ranking.
 
 For normal first-pass Deep work, prioritize:
-1. sale-ending urgency when materially relevant, so a strong offer is not analyzed only after it expires;
-2. higher deterministic purchase value / deal attractiveness;
-3. higher current Steam positive-review percentage;
-4. larger current Steam review count;
-5. stable family id as deterministic tie-breaker.
+1. higher deterministic purchase value / deal attractiveness;
+2. higher current Steam positive-review percentage;
+3. larger current Steam review count;
+4. stable family id as deterministic tie-breaker.
+
+**Sale end / expiry urgency must not affect Deep queue order.**
 
 The exact deterministic formula/order must be made machine-readable and regression-tested. Rating/review count influence **analysis order only**; they must not become a new eligibility gate or hidden final-ranking bonus.
+
+Implement this through a dedicated GitHub-owned ordering-policy/instruction file consumed by the Deep work builder. **Do not change `config/progressive_pass2_worker_prompt.md` when tuning Deep ordering now or in future follow-ups.** The worker prompt should continue to execute the exact ordered GitHub-prepared work manifest; future ordering changes must be made by editing the GitHub ordering-policy file and rebuilding the manifest.
 
 This ordering may use the already available current review fields such as global positive percent and global review count; do not add expensive lookups merely to prioritize the queue.
 
@@ -109,6 +112,8 @@ The site should publish **up to 100 immediately** from the best canonical eviden
 2. package/family resolution;
 3. current effective semantic evidence (Deep when available; otherwise the existing permitted lower stage/cached evidence);
 4. canonical final ranking.
+
+A current authoritative **positive Deep result always ranks ahead of every candidate that has not yet completed Deep**, regardless of the latter candidate's provisional commercial score, Fast result, rating, or review count. Within the positive-Deep group, use the normal canonical score/order.
 
 Whenever a new authoritative Deep result is accepted, rebuild/re-rank through the existing GitHub publication path. The visible 100 may therefore change over time.
 
@@ -157,7 +162,9 @@ GitHub remains owner of source scope, queues, completeness, ranking inputs and p
 - bundle regression described above passes;
 - DLC unrelated to an admitted base is not globally crawled/processed;
 - Deep scope contains the full eligible unresolved pool, not only current visible top-100 candidates;
-- Deep work order prioritizes urgency, purchase value, Steam positive rating and review count without changing final ranking semantics;
+- Deep work order prioritizes purchase value, Steam positive rating and review count; sale expiry does not affect Deep order;
+- the Deep worker prompt is unchanged; future queue-order tuning is performed only through the GitHub-owned ordering-policy/instruction file;
+- authoritative positive Deep results rank ahead of every not-yet-Deep-completed candidate;
 - the site can publish up to 100 before global Deep completion and the set changes through normal rebuilds as Deep results arrive;
 - funnel counts reconcile;
 - no ChatGPT Scheduled Task is created or changed.
