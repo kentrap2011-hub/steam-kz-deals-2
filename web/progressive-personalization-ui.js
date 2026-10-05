@@ -203,6 +203,11 @@
         denominator:field(status,'untranslated_game_count'),
         rows:[
           {
+            label:'На диагностике перевода',
+            key:'translation_diagnostic_count',
+            value:field(status,'translation_diagnostic_count'),
+          },
+          {
             label:'Последний успешный перевод',
             key:'last_successful_translation_at_utc',
             value:formatLastWriteAt(status.last_successful_translation_at_utc??null),
@@ -213,7 +218,7 @@
             value:formatLastWriteAt(status.last_translation_attempt_at_utc??null),
           },
         ],
-        note:'Игры без перевода остаются видимыми и учитываются отдельно; отсутствие перевода не останавливает публикацию.',
+        note:'Игры на диагностике перевода не возвращаются автоматически в обычную очередь перевода. Игры без перевода остаются видимыми и учитываются отдельно; отсутствие перевода не останавливает публикацию.',
       },
     ];
   }
