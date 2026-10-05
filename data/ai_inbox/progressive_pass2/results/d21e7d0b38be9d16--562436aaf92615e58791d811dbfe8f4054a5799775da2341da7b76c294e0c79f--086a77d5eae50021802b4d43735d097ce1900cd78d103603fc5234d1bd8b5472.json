@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "56baeff7468ce1531778115c61bcb7c930e55ef6",
+  "run_start_authority_commit": "2f7aeb8276b5f8dc38f98df18c1d2651fe1ce850",
+  "run_started_at_utc": "2026-10-05T04:59:43+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+  "work_id": "562436aaf92615e58791d811dbfe8f4054a5799775da2341da7b76c294e0c79f",
+  "family_id": "game:1335790",
+  "taste_subject_key": "App_1335790",
+  "appid": "1335790",
+  "taste_fingerprint": "59a8820680d44dbb078349fbd07908ecaff7a1d7613c587b7eec9f7149fde0c3",
+  "candidate_context_sha256": "50b9e099d7c22c05cffee1dfd07739ee30119765c37b6055036ebb7a200d1730",
+  "dossier_content_sha256": "67dd517891190347bcbf68e7dfa62ef075a913606e0afdd125eb13addc9e70c9",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "086a77d5eae50021802b4d43735d097ce1900cd78d103603fc5234d1bd8b5472",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Асимметричные роли Agent/Hacker превращают общение и описание информации в саму игровую механику.",
+    "Короткая кампания использует разные интерфейсы и типы задач, поэтому кооперативные головоломки не успевают застыть в одной формуле.",
+    "Структура почти напрямую совпадает с подтверждённой любовью к кооперативу, где распределение ролей создаёт совместную тактику."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 84,
+    "development_variety": 82,
+    "structure_pacing_direction": 88,
+    "identity_hooks": 95,
+    "breadth_of_match": 94
+  },
+  "score_findings": [
+    {
+      "finding_id": "asymmetric-coop-communication",
+      "text_ru": "Agent и Hacker видят разную информацию и вынуждены объяснять её друг другу, поэтому сама коммуникация становится механикой, а простые задачи превращаются в совместное тактическое решение.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9/raises",
+          "profile_value_sha256": "36b637056006eec4d8f770215639f59d7ccbc3bd78413fc61dd852f0486dfea8",
+          "match_text_ru": "Тебе особенно нравится кооператив с распределением ролей, обсуждением решений и взаимной помощью."
+        },
+        {
+          "json_pointer": "/benchmarks/positive/6/for",
+          "profile_value_sha256": "6e1e78c39c2efd1440705d5d810b2368c6ee677ee1e52791f440223b3f5e36e1",
+          "match_text_ru": "В pinned-профиле отдельно закреплён положительный benchmark: простые механики, которые рождают совместную тактику."
+        },
+        {
+          "json_pointer": "/contextual_preferences/tactical_problem_solving/summary",
+          "profile_value_sha256": "d66110f8516a5c017644fb3fa523677af7a64ec44c74bde423b9b8e400b87dc5",
+          "match_text_ru": "Понимание условий и поиск конкретного решения — устойчиво положительный для тебя тип задачи."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 84
+        },
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 95
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 94
+        }
+      ]
+    },
+    {
+      "finding_id": "varied-short-missions",
+      "text_ru": "Короткая кампания регулярно меняет интерфейсы и типы асимметричных задач, поэтому puzzle-loop не остаётся одной и той же головоломкой на много часов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/вариативность/note",
+          "profile_value_sha256": "424572796cee1fb82e4378c25c240b56ef9c8dedd96cc1d5a44fc5462c32e97d",
+          "match_text_ru": "Тебе нравится разнообразие ситуаций без необходимости заранее исследовать огромную открытую песочницу."
+        },
+        {
+          "json_pointer": "/stopgame_cards/66/what_liked/0",
+          "profile_value_sha256": "e9e97a50b0cd1bff24174b7473c4764aac78dd5f1655849534db81af97eb14fd",
+          "match_text_ru": "Головоломки у тебя хорошо работают как приятный опыт на несколько часов."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 82
+        },
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 88
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Игра полностью зависит от второго участника: Friend Pass упрощает доступ, но качество прохождения сильно определяется тем, насколько удобно вам вместе объяснять и решать задачи.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Смена ролей показывает другую сторону миссий, но после первого прохождения решения уже известны, поэтому повторная новизна ограничена.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Главная сложность часто лежит именно в коммуникации: с подходящим партнёром это весело, но при недопонимании те же задачи могут раздражать.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "В актуальных русскоязычных отзывах отмечаются ошибки и неестественные формулировки локализации.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "felt_technical_burden",
+        "text_ru": "Есть свежий сигнал о рассинхронизации и зависаниях в Mission 5, вплоть до несовпадающих данных головоломки и блокировки прогресса у затронутой пары.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
