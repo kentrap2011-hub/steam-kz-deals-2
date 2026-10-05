@@ -48,7 +48,7 @@ Cache hit возможен только при совпадении:
 ### 3. Остальные правила сохранены
 
 - полный daily snapshot, не delta и не raw TOP-N;
-- платный Steam Kazakhstan discovery — полный детерминированный union явных `games` / `dlc` / `bundles` partitions только внутри текущего необходимого коммерческого scope: скидка >= 50%, цена <= 4500 KZT; KZ `maxprice` разрешено доверять только после bounded live boundary-validation;
+- платный Steam Kazakhstan discovery — полный детерминированный union явных `games` (`category1=998`) и `dlc` (`category1=21`) partitions только внутри текущего необходимого коммерческого scope: скидка >= 50%, цена <= 4500 KZT; KZ `maxprice` разрешено доверять только после bounded live boundary-validation; package/bundle `Sub_` identities сохраняются из games partition, а `category1=996` не используется как отдельный partition, потому что live-проверка показала, что это broad `Include Bundles`/untyped surface, а не bundle-only выборка;
 - source-side minimum-discount параметр не предполагается: 50% применяется к распарсенной строке до review enrichment;
 - free/giveaway остаётся отдельным lane и не удаляется paid-only фильтрами;
 - completed не является auto-exclude;
