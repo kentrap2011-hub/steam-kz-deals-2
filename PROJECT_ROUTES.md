@@ -349,7 +349,7 @@ Currentness invariant after PPD-012:
 **Что ищем:** где задаётся и выполняется current paid Steam KZ discovery scope до Reviews API, как доказать KZ price bound и где смотреть funnel.
 
 **Последняя проверка:** 2026-10-05.  
-**Implementation ref:** PR #146 / `fix/steam-discovery-scope-reduction-implement-01`.
+**Implementation refs:** PR #146 (base implementation) + PR #147 (live maxprice validation correction).
 
 **Канонические правила:**
 1. `config/mailing_policy.json#paid_discovery` — explicit `games / dlc / bundles` partitions, `discount >= 50%`, `price <= 4500 KZT`, no raw top-N, separate free/giveaway lane.
@@ -357,15 +357,22 @@ Currentness invariant after PPD-012:
 3. `config/daily_execution_contract.json` — discovery remains inside the existing GitHub-owned daily production cycle.
 
 **Быстрая точка входа:**
-1. `scripts/steam_partial_publish_runner.py` — production collector owner used by the workflow; performs bounded live KZ `maxprice` proof, traverses explicit partitions, deterministic App/Sub dedupe, early paid gate, review enrichment and funnel publication.
+1. `scripts/steam_partial_publish_runner.py` — production collector owner; validates the exact live KZ `maxprice=4500` filter with capped-vs-uncapped controls, traverses explicit partitions, deterministic App/Sub dedupe, early paid gate, review enrichment and funnel publication.
 2. `scripts/steam_production.py` — shared Steam Search parsing/rules and policy-derived paid gate.
-3. `.github/workflows/steam-test.yml` — PR runs deterministic regression only; normal main push/schedule runs the 60-minute production `collect`.
-4. `scripts/test_steam_discovery_scope_reduction.py` — deterministic regression for partitions, dedupe, 50%/4500, fail-closed price-bound semantics, giveaway separation, ownership and no Catalyst special case.
+3. `.github/workflows/steam-test.yml` — PR runs deterministic regression only; normal `main` push/schedule runs the 60-minute production `collect`.
+4. `scripts/test_steam_discovery_scope_reduction.py` — deterministic regression for partitions, dedupe, 50%/4500, non-monotonic Steam price ordering, fail-closed source-bound validation, giveaway separation, ownership and no Catalyst special case.
 5. `data/production/manifest.json` and `data/production/shortlist/index.json` — after a successful main production run, read `search_partitions`, `source_price_bound_validation`, `filtering_funnel`, request/review counts and source completeness.
 
+**Live evidence / correction:**
+- PR #146 merged as `fb21b704ac36f56d40bdc6a00175864538dbcee7`; first normal acceptance run `37319401442` failed only because the old proof required strict `Price_ASC` monotonicity.
+- bounded PR #147 probe run `37334852442` showed exact `cc=kz&maxprice=4500` is active: games `total_count=63681` under `Price_ASC`, `Price_DESC` and `Name_ASC`; capped `Price_DESC` sampled maximum exactly `4500 KZT`.
+- the same bounded probe showed arbitrary low `maxprice` values are not safe substitutes: values 10/20/50/100/1000 behaved as ignored/unbounded controls (`total_count=65097`, sampled prices up to `74400 KZT`). Therefore production trusts only the exact current policy value after live control validation; it does not infer general numeric semantics.
+- the corrected proof does **not** use `Price_ASC` positional early stop. It checks every paid partition's capped `Price_DESC` sample for no over-cap row, requires the games capped total to be sort-invariant, and requires an otherwise-identical uncapped games control to have both a larger total and an over-cap KZT row.
+
 **Инварианты:**
-- production никогда не доверяет `maxprice=4500` только по query string: bounded KZ `Price_ASC` boundary proof обязан пройти до traversal;
-- source-side minimum-discount parameter не предполагается; parsed-row gate `>=50%` остаётся authoritative до Reviews API;
-- paid partitions используют `hidef2p`, но free/giveaway остаётся отдельным existing lane;
-- никакого raw top-N, второго collector/scheduler, ChatGPT-owned loop или Catalyst special case;
-- post-merge live acceptance — обычный GitHub-owned `Steam KZ production shortlist` run на `main`; PR `collect` намеренно не имеет production authority.
+- production never trusts `maxprice=4500` only because the query string exists; the bounded capped-vs-uncapped KZ control must pass first;
+- `Price_ASC` global monotonicity is explicitly **not** required and is not a completeness authority;
+- source-side minimum-discount parameter is not assumed; parsed-row gate `>=50%` remains authoritative before Reviews API;
+- paid partitions use `hidef2p`, but free/giveaway remains a separate existing lane;
+- no raw top-N, second collector/scheduler, ChatGPT-owned loop or Catalyst special case;
+- live acceptance is an ordinary GitHub-owned `Steam KZ production shortlist` run on `main`; PR `collect` remains intentionally disabled.
