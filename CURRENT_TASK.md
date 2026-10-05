@@ -1,18 +1,17 @@
 # CURRENT TASK
 
-## COMPLETE — Dossier + Deep independent quality audit 01
-Статус: `audit_complete_systematic_quality_problems_found`.
-- task: `WORKER_TASK_DOSSIER_DEEP_INDEPENDENT_QUALITY_AUDIT_01.md`;
-- mode: read-only independent semantic-quality audit; no Dossier/Deep worker execution and no production/prompt/contract/queue/ranking/UI/Scheduled Task changes;
-- audited current canonical sample: 22 authoritative Deep results paired with 22 exact frozen accepted Dossiers; covered fit/not-fit, score bands, confidence, old/current, genres and review-volume extremes;
-- overall quality score: **82/100**;
-- main positive finding: Dossier facts/trade-offs and Deep fit/not-fit reasoning are generally well grounded; balanced negative assessment is working;
-- main systematic finding: numeric taste-score magnitude lacks sufficient calibration anchors and the fixed 18/12/8/8/4 additive taste aggregation conflicts with the pinned profile's explicit holistic/non-additive evaluation rule;
-- current explainability gap: 23/135 (17.0%) current authoritative fit results have no `score_findings`;
-- current-state evidence gap example: App_1467920 Dossier says `searched_no_existence_signal` for Russian feedback while current candidate context now reports 5 Russian reviews; treated as current staleness, not proof the original research was wrong;
-- trust verdict: rough ranking yes; exact close top-100 ordering no; confident purchase conditional on reading grounded reasons/cautions, not score alone;
-- report: `reviews/worker_reports/dossier-deep-independent-quality-audit-01.md`;
-- no implementation performed.
+## IN PROGRESS — Steam Reviews API and publication blocker fix 01
+Статус: `diagnosis_proven_implementation_in_progress`.
+- task: `WORKER_TASK_STEAM_REVIEWS_PUBLICATION_BLOCKER_FIX_01.md`;
+- branch: `fix/steam-reviews-publication-blocker-01`;
+- accepted upstream discovery: normal main run `37357943696` completed the full games + DLC traversal and canonical persistence; do not reopen the accepted discovery-scope work without direct regression evidence;
+- AppReviews root cause proven from run `37357943696`: eight concurrent workers, a cumulative four-429 circuit threshold, no inter-request pacing and `min(1, Retry-After)` open the circuit after four HTTP 429 responses; ten physical 429s are explained by already in-flight requests, while the remaining logical failures are circuit-skipped rather than physical HTTP failures;
+- StoreBrowse fallback root cause proven: 416 unpaced batch requests reached HTTP 429; the first exception discarded already accumulated fallback results and left the request metric at zero;
+- visual run `37362828015` failed independently because fresh discovery `2026-10-05T19:21:20Z` was paired with stale `data/cache/store_state.json` from `2026-09-23T23:12:47Z`; Steam workflow currently dispatches visual before the mailing workflow rebuilds Store state;
+- mailing run `37362840701` never executed a step: its single job ended cancelled with `runner_id=0`; this is not evidence of a mailing-script failure and requires fresh canonical acceptance after the bounded fixes;
+- architecture preflight passed: GitHub remains the only production control plane; this task changes only the existing collector/review/downstream orchestration path and adds no scheduler, queue, retry owner, semantic worker or Scheduled Task;
+- next bounded action: implement the minimum review-request/fallback correction plus current-cycle publication ordering guard, run deterministic regressions, then validate through the normal GitHub-owned path.
+
 
 ## COMPLETE — Dossier retryable transport reject fix 01
 Статус: `complete_fix_ready_semantic_retry_required`.
@@ -30,8 +29,8 @@
 - report: `reviews/worker_reports/dossier-retryable-transport-reject-fix-01.md`;
 - next bounded action: one fresh normal canonical Dossier semantic invocation resumes from sequence 20 without any Scheduled Task configuration change.
 
-## IN PROGRESS — Steam discovery scope reduction implement 01
-Статус: `pr151_merged_normal_main_acceptance_queued`.
+## COMPLETE — Steam discovery scope reduction implement 01
+Статус: `complete_normal_main_acceptance_passed`.
 - task: `WORKER_TASK_STEAM_DISCOVERY_SCOPE_REDUCTION_IMPLEMENT_01.md`;
 - PR #148 main acceptance `37345668260` timed out after games + DLC completed and standalone `category1=996` reached `48,000 / ~105,326`; 192 Search 429 events / 2160s backoff; Reviews had not started;
 - bounded PR #151 evidence proved standalone `category1=996` is broad Include-Bundles/untyped scope, not bundle-only, while representative package `Sub_76471` is returned under games `category1=998`;
@@ -40,10 +39,10 @@
 - permanent pacing correction: Search inter-page delay 0.5s -> 1.8s; existing retry/backoff owner and 60-minute timeout unchanged;
 - final PR #151 head `b9bcf76858d1e40ca22d0de5a295daf2ed5313a1` passed Steam regression `37357787031` and backlog validation `37357786984`;
 - PR #151 merged to main as `8ecf017b7428bad3494f7d8f1a82bd581bd3d355`;
-- required normal main acceptance is run `37357943696` (run #126), created from that exact merge commit and currently queued/starting;
+- required normal main acceptance run `37357943696` (run #126) succeeded, completed full games + DLC collection, persisted the fresh canonical production state and dispatched downstream handoff;
 - no competing production writer, raw top-N, timeout increase, second scheduler/queue/retry owner, Scheduled Task, Fast/Dossier/Deep/ranking/site semantic change or Catalyst special case;
 - report: `reviews/worker_reports/steam-discovery-scope-reduction-implement-01.md`; route: `PROJECT_ROUTES.md`;
-- task remains open until run `37357943696` finishes within 60 minutes, persists a fresh canonical universe, reports actual funnel/rate-limit/review metrics and starts downstream handoff, or yields the next exact bounded blocker.
+- discovery task is accepted complete; the subsequent Reviews API / publication failure is tracked separately by `WORKER_TASK_STEAM_REVIEWS_PUBLICATION_BLOCKER_FIX_01.md`.
 
 ## COMPLETE — Steam discovery maximal scope reduction diagnostic 01
 Статус: `diagnostic_complete_product_choices_corrected`.

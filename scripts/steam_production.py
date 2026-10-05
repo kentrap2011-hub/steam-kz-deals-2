@@ -70,7 +70,9 @@ if PAID_MIN_DISCOUNT_PERCENT != 50 or PAID_MAX_PRICE_KZT != 4500:
 
 # Запросы рейтингов делаем только для игр, которые
 # структурно могут пройти shortlist.
-REVIEW_WORKERS = 8
+# AppReviews is now the exact fallback after Search/StoreBrowse review reuse.
+# Keep fallback network access serial so one GitHub runner cannot create a burst.
+REVIEW_WORKERS = 1
 REVIEW_RETRIES = 5
 REVIEW_RATE_LIMIT_CIRCUIT_THRESHOLD = 4
 
@@ -252,6 +254,10 @@ network_stats = {
     "review_retry_events": 0,
     "review_429_events": 0,
     "review_backoff_seconds": 0.0,
+    "review_successful_components": 0,
+    "review_temporary_failures": 0,
+    "review_permanent_failures": 0,
+    "review_circuit_skipped_components": 0,
 }
 
 
@@ -445,8 +451,13 @@ def get_review_summary(appid, language):
 
     filter_offtopic_activity=1 -> Steam исключает
     периоды review bombing так же, как делает по умолчанию.
+
+    The circuit is deliberately based on consecutive HTTP 429 responses.
+    A successful/non-429 response resets the streak. Retry-After is honoured
+    when Steam provides it; otherwise bounded exponential backoff is used.
     """
     if review_rate_limit_event.is_set():
+        bump_network_stat("review_circuit_skipped_components")
         return rate_limited_review_result()
 
     params = {
@@ -473,20 +484,30 @@ def get_review_summary(appid, language):
             )
 
             if response.status_code == 429:
+                bump_network_stat("review_429_events")
+                bump_network_stat("review_temporary_failures")
                 with review_rate_limit_lock:
                     review_rate_limit_count += 1
-                    if review_rate_limit_count >= REVIEW_RATE_LIMIT_CIRCUIT_THRESHOLD:
+                    streak = review_rate_limit_count
+                    if streak >= REVIEW_RATE_LIMIT_CIRCUIT_THRESHOLD:
                         review_rate_limit_event.set()
 
-                bump_network_stat("review_429_events")
                 if review_rate_limit_event.is_set():
                     return rate_limited_review_result()
 
                 retry_after = to_int(response.headers.get("Retry-After"))
-                wait = min(1, retry_after or 1)
-                bump_network_stat("review_backoff_seconds", float(wait))
+                wait = (
+                    float(retry_after)
+                    if retry_after is not None and retry_after > 0
+                    else float(min(30, 2 ** attempt))
+                )
+                bump_network_stat("review_backoff_seconds", wait)
                 time.sleep(wait)
                 continue
+
+            # Only consecutive 429 responses may open the circuit.
+            with review_rate_limit_lock:
+                review_rate_limit_count = 0
 
             response.raise_for_status()
             data = response.json()
@@ -512,11 +533,14 @@ def get_review_summary(appid, language):
             if positive is None:
                 positive = 0
 
+            bump_network_stat("review_successful_components")
+
             if total <= 0:
                 return {
                     "ok": True,
                     "positive": None,
                     "count": 0,
+                    "rate_limited": False,
                 }
 
             percent = round(
@@ -534,12 +558,14 @@ def get_review_summary(appid, language):
         except Exception as exc:
             last_error = exc
             bump_network_stat("review_retry_events")
+            bump_network_stat("review_temporary_failures")
 
             if attempt + 1 < REVIEW_RETRIES:
-                wait = min(20, 2 ** attempt)
-                bump_network_stat("review_backoff_seconds", float(wait))
+                wait = float(min(20, 2 ** attempt))
+                bump_network_stat("review_backoff_seconds", wait)
                 time.sleep(wait)
 
+    bump_network_stat("review_permanent_failures")
     print(
         "[steam-network] review API failed:",
         "appid=", appid,

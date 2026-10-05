@@ -559,16 +559,57 @@ def write_shortlist(selected, columns, chunk_size):
 
 STORE_BROWSE_URL = 'https://api.steampowered.com/IStoreBrowseService/GetItems/v1/'
 REVIEW_FALLBACK_BATCH_SIZE = 100
+STORE_BROWSE_RETRIES = 5
+STORE_BROWSE_MIN_INTERVAL_SECONDS = 1.0
 
 
 def conservative_global_display_percent(value):
     if value is None:
         return None
-    # StoreBrowse exposes Steam's displayed whole percent. The canonical global
-    # rule normally compares the more precise AppReviews percentage. Subtract
-    # half a point so fallback can never turn an ambiguous rounded boundary
-    # into a new positive eligibility result.
+    # StoreBrowse/Search expose Steam's displayed whole percent. The canonical
+    # global rule may compare the more precise AppReviews percentage. Subtract
+    # half a point so rounded display data can never create a false positive.
     return max(0.0, float(value) - 0.5)
+
+
+def search_surface_review_pair(item, maximum_rating_threshold):
+    """
+    Reuse Search review data only when it is decisive for every current review
+    gate: either the global count is below the minimum 100-review gate, or the
+    conservative global display percentage already clears the highest current
+    rating threshold. All ambiguous rows continue to a richer review source.
+    """
+    count = item.get('search_review_count')
+    display = item.get('search_review_positive')
+    if count is None or display is None:
+        return None
+    count = int(count)
+    conservative = conservative_global_display_percent(display)
+    if count >= 100 and (
+        conservative is None
+        or conservative < float(maximum_rating_threshold)
+    ):
+        return None
+    return {
+        'global': {
+            'ok': True,
+            'positive': conservative,
+            'count': count,
+            'rate_limited': False,
+            'source': 'steam_search_conservative_display_decisive',
+        },
+        'russian': {
+            # Russian evidence is unnecessary in these two decisive cases:
+            # below 100 global reviews no current rule can pass its global-count
+            # baseline; at/above the maximum rating threshold global quality
+            # already satisfies every current rating gate that the count allows.
+            'ok': True,
+            'positive': None,
+            'count': 0,
+            'rate_limited': False,
+            'source': 'not_required_search_surface_decisive',
+        },
+    }
 
 
 def storebrowse_review_pair(store_item):
@@ -587,6 +628,9 @@ def storebrowse_review_pair(store_item):
         'global': {
             'ok': global_ok,
             'positive': conservative_global_display_percent(global_display),
+            'display_positive': (
+                float(global_display) if global_display is not None else None
+            ),
             'count': global_count,
             'rate_limited': False,
             'source': 'storebrowse_summary_filtered_conservative_display',
@@ -603,11 +647,38 @@ def storebrowse_review_pair(store_item):
     }
 
 
+def _retry_after_seconds(response):
+    try:
+        value = int(response.headers.get('Retry-After'))
+    except (AttributeError, TypeError, ValueError):
+        return None
+    return value if value > 0 else None
+
+
 def fetch_storebrowse_review_fallback(appids, reporter=None):
+    """
+    Fetch batched StoreBrowse review summaries without losing already-completed
+    batches when one request fails. This is intentionally sequential and paced;
+    a failed batch is retried in place and, after exhaustion, isolated so other
+    appids can still progress to AppReviews fallback.
+    """
     results = {}
-    request_count = 0
     ordered = [str(appid) for appid in appids if str(appid).isdigit()]
-    for start in range(0, len(ordered), REVIEW_FALLBACK_BATCH_SIZE):
+    stats = {
+        'physical_http_requests': 0,
+        'successful_batches': 0,
+        'failed_batches': 0,
+        'retry_events': 0,
+        'http_429_events': 0,
+        'backoff_seconds': 0.0,
+        'pacing_seconds': 0.0,
+    }
+    last_request_monotonic = None
+
+    for batch_number, start in enumerate(
+        range(0, len(ordered), REVIEW_FALLBACK_BATCH_SIZE),
+        start=1,
+    ):
         batch = ordered[start:start + REVIEW_FALLBACK_BATCH_SIZE]
         payload = {
             'ids': [{'appid': int(appid)} for appid in batch],
@@ -622,27 +693,89 @@ def fetch_storebrowse_review_fallback(appids, reporter=None):
                 'apply_user_filters': False,
             },
         }
-        response = requests.get(
-            STORE_BROWSE_URL,
-            params={'input_json': json.dumps(payload, separators=(',', ':'))},
-            headers={'User-Agent': 'steam-kz-deals/1.0', 'Accept': 'application/json'},
-            timeout=30,
-        )
-        response.raise_for_status()
-        request_count += 1
+
+        returned = None
+        last_error = None
+        for attempt in range(STORE_BROWSE_RETRIES):
+            if last_request_monotonic is not None:
+                elapsed = time.monotonic() - last_request_monotonic
+                pacing_wait = max(0.0, STORE_BROWSE_MIN_INTERVAL_SECONDS - elapsed)
+                if pacing_wait:
+                    stats['pacing_seconds'] += pacing_wait
+                    time.sleep(pacing_wait)
+
+            try:
+                stats['physical_http_requests'] += 1
+                response = requests.get(
+                    STORE_BROWSE_URL,
+                    params={'input_json': json.dumps(payload, separators=(',', ':'))},
+                    headers={
+                        'User-Agent': 'steam-kz-deals/1.0',
+                        'Accept': 'application/json',
+                    },
+                    timeout=30,
+                )
+                last_request_monotonic = time.monotonic()
+
+                if getattr(response, 'status_code', None) == 429:
+                    stats['http_429_events'] += 1
+                    stats['retry_events'] += 1
+                    wait = _retry_after_seconds(response)
+                    if wait is None:
+                        wait = float(min(30, 2 ** attempt))
+                    stats['backoff_seconds'] += float(wait)
+                    time.sleep(float(wait))
+                    last_error = RuntimeError('StoreBrowse HTTP 429')
+                    continue
+
+                response.raise_for_status()
+                returned = (
+                    (response.json().get('response') or {}).get('store_items')
+                    or []
+                )
+                break
+            except Exception as exc:
+                last_error = exc
+                stats['retry_events'] += 1
+                if attempt + 1 < STORE_BROWSE_RETRIES:
+                    wait = float(min(20, 2 ** attempt))
+                    stats['backoff_seconds'] += wait
+                    time.sleep(wait)
+
+        if returned is None:
+            stats['failed_batches'] += 1
+            print(
+                '[steam-network] StoreBrowse review batch failed:',
+                'batch=', batch_number,
+                'appids=', len(batch),
+                'error=', last_error,
+                flush=True,
+            )
+        else:
+            stats['successful_batches'] += 1
+            for store_item in returned:
+                appid = str(store_item.get('appid') or store_item.get('id') or '')
+                if appid in batch:
+                    results[appid] = storebrowse_review_pair(store_item)
+
         if reporter is not None:
             reporter.update(
-                fallback_batches_completed=request_count,
+                fallback_batches_completed=(
+                    stats['successful_batches'] + stats['failed_batches']
+                ),
+                fallback_http_requests=stats['physical_http_requests'],
+                fallback_429_events=stats['http_429_events'],
+                fallback_failed_batches=stats['failed_batches'],
                 fallback_appids_total=len(ordered),
                 fallback_appids_attempted=min(start + len(batch), len(ordered)),
-                emit=(request_count == 1 or request_count % 5 == 0),
+                emit=(
+                    batch_number == 1
+                    or batch_number % 5 == 0
+                    or start + len(batch) >= len(ordered)
+                ),
             )
-        returned = ((response.json().get('response') or {}).get('store_items') or [])
-        for store_item in returned:
-            appid = str(store_item.get('appid') or store_item.get('id') or '')
-            if appid in batch:
-                results[appid] = storebrowse_review_pair(store_item)
-    return results, request_count
+
+    return results, stats
 
 
 def run():
@@ -852,12 +985,13 @@ def run():
     )
 
     review_started = time.monotonic()
+    review_logical_components_required = len(review_appids) * 2
     reporter.set_stage(
         'review_enrichment',
         candidate_items=len(review_candidate_items),
         candidate_appids=len(review_appids),
         completed_appids=0,
-        logical_review_requests_total=len(review_appids) * 2,
+        logical_review_requests_total=review_logical_components_required,
         logical_review_requests_completed=0,
         workers=core['REVIEW_WORKERS'],
     )
@@ -865,96 +999,197 @@ def run():
     review_cache = {}
     review_api_failed_requests = 0
     review_failed_results = {}
+    review_search_surface_reused_appids = 0
+    review_exact_cache_reused_appids = 0
     review_storebrowse_fallback_appids = 0
-    review_storebrowse_fallback_requests = 0
+    review_appreviews_successful_appids = 0
+    review_appreviews_attempted_appids = set()
+    review_appreviews_logical_components_attempted = 0
+    review_storebrowse_stats = {
+        'physical_http_requests': 0,
+        'successful_batches': 0,
+        'failed_batches': 0,
+        'retry_events': 0,
+        'http_429_events': 0,
+        'backoff_seconds': 0.0,
+        'pacing_seconds': 0.0,
+    }
+
+    review_items_by_appid = {}
+    for item in review_candidate_items:
+        review_items_by_appid.setdefault(str(item.get('appid')), []).append(item)
+
     if review_appids:
-        with ThreadPoolExecutor(max_workers=core['REVIEW_WORKERS']) as executor:
-            futures = {
-                executor.submit(core['get_review_pair'], appid): appid
-                for appid in review_appids
+        maximum_rating_threshold = max(core['REVIEW_THRESHOLDS'].values())
+        storebrowse_needed = []
+
+        # Search review summaries are reused only in two mathematically decisive
+        # cases. A conflicting Search summary for the same appid is not trusted.
+        for appid in review_appids:
+            candidates = review_items_by_appid.get(appid, [])
+            signatures = {
+                (
+                    int(item['search_review_count']),
+                    int(item['search_review_positive']),
+                )
+                for item in candidates
+                if item.get('search_review_count') is not None
+                and item.get('search_review_positive') is not None
             }
-            completed_review_appids = 0
-            for future in as_completed(futures):
-                appid = futures[future]
-                try:
-                    result = future.result()
-                except Exception as exc:
-                    result = None
-                    error = exc
-                else:
-                    error = None
-
-                completed_review_appids += 1
-                reporter.update(
-                    completed_appids=completed_review_appids,
-                    logical_review_requests_completed=completed_review_appids * 2,
-                    progress_percent=round(
-                        completed_review_appids * 100.0 / len(review_appids),
-                        2,
-                    ),
-                    emit=(
-                        completed_review_appids == 1
-                        or completed_review_appids == len(review_appids)
-                        or completed_review_appids % REVIEW_PROGRESS_EVERY_APPIDS == 0
-                    ),
+            search_pair = None
+            if len(signatures) == 1:
+                count, positive = next(iter(signatures))
+                representative = dict(candidates[0])
+                representative['search_review_count'] = count
+                representative['search_review_positive'] = positive
+                search_pair = search_surface_review_pair(
+                    representative,
+                    maximum_rating_threshold,
                 )
 
-                global_ok = bool(result and result.get('global', {}).get('ok'))
-                russian_ok = bool(result and result.get('russian', {}).get('ok'))
-                if global_ok and russian_ok:
-                    review_cache[appid] = result
+            if search_pair is not None:
+                review_cache[appid] = search_pair
+                review_search_surface_reused_appids += 1
+                continue
+
+            # Exact AppReviews cache remains the next-cheapest source when both
+            # components are still fresh. Prechecking prevents cache misses from
+            # becoming bulk live AppReviews traffic.
+            if (
+                accelerator.valid_cached_entry(appid, 'all') is not None
+                and accelerator.valid_cached_entry(appid, 'russian') is not None
+            ):
+                cached_pair = core['get_review_pair'](appid)
+                if (
+                    cached_pair.get('global', {}).get('ok')
+                    and cached_pair.get('russian', {}).get('ok')
+                ):
+                    review_cache[appid] = cached_pair
+                    review_exact_cache_reused_appids += 1
                     continue
 
-                review_api_failed_requests += int(not global_ok) + int(not russian_ok)
-                review_failed_results[appid] = {
-                    'result': result,
-                    'error': error,
+            storebrowse_needed.append(appid)
+
+        fallback = {}
+        if storebrowse_needed:
+            fallback, review_storebrowse_stats = fetch_storebrowse_review_fallback(
+                storebrowse_needed,
+                reporter=reporter,
+            )
+
+        appreviews_needed = []
+        for appid in storebrowse_needed:
+            fallback_pair = fallback.get(appid) or {}
+            if (
+                fallback_pair.get('global', {}).get('ok')
+                and fallback_pair.get('russian', {}).get('ok')
+            ):
+                review_cache[appid] = fallback_pair
+                review_storebrowse_fallback_appids += 1
+            else:
+                appreviews_needed.append(appid)
+
+        # Live AppReviews is now a serial exact fallback only for appids that
+        # Search/cache/StoreBrowse could not resolve.
+        review_appreviews_attempted_appids = set(appreviews_needed)
+        review_appreviews_logical_components_attempted = len(appreviews_needed) * 2
+        if appreviews_needed:
+            with ThreadPoolExecutor(max_workers=core['REVIEW_WORKERS']) as executor:
+                futures = {
+                    executor.submit(core['get_review_pair'], appid): appid
+                    for appid in appreviews_needed
                 }
-
-        if review_failed_results:
-            try:
-                fallback, review_storebrowse_fallback_requests = (
-                    fetch_storebrowse_review_fallback(
-                        review_failed_results,
-                        reporter=reporter,
-                    )
-                )
-            except Exception as exc:
-                print('StoreBrowse review fallback failed:', exc, flush=True)
-                fallback = {}
-
-            for appid, failure in review_failed_results.items():
-                original = failure.get('result') or {}
-                fallback_pair = fallback.get(appid) or {}
-                merged = {}
-                for language in ('global', 'russian'):
-                    exact = original.get(language) or {}
-                    alternate = fallback_pair.get(language) or {}
-                    if exact.get('ok'):
-                        merged[language] = exact
-                    elif alternate.get('ok'):
-                        merged[language] = alternate
+                completed_appreviews = 0
+                for future in as_completed(futures):
+                    appid = futures[future]
+                    try:
+                        result = future.result()
+                    except Exception as exc:
+                        result = None
+                        error = exc
                     else:
-                        merged[language] = exact or alternate
+                        error = None
 
-                if merged.get('global', {}).get('ok') and merged.get('russian', {}).get('ok'):
-                    review_cache[appid] = merged
-                    review_storebrowse_fallback_appids += 1
-                    continue
+                    completed_appreviews += 1
+                    fallback_pair = fallback.get(appid) or {}
+                    merged = {}
+                    for language in ('global', 'russian'):
+                        exact = (result or {}).get(language) or {}
+                        alternate = fallback_pair.get(language) or {}
+                        if exact.get('ok'):
+                            merged[language] = exact
+                        elif alternate.get('ok'):
+                            merged[language] = alternate
+                        else:
+                            merged[language] = exact or alternate
 
-                for key in review_item_keys.get(appid, []):
-                    item = catalog.get(key) or {}
-                    failures.record_game(
-                        key,
-                        appid=appid,
-                        name=item.get('title'),
-                        stage='review_enrichment',
-                        error=failure.get('error') or RuntimeError(
-                            'Steam review sources did not return required summaries'
+                    global_ok = bool(merged.get('global', {}).get('ok'))
+                    russian_ok = bool(merged.get('russian', {}).get('ok'))
+                    if global_ok and russian_ok:
+                        review_cache[appid] = merged
+                        review_appreviews_successful_appids += 1
+                    else:
+                        review_api_failed_requests += (
+                            int(not global_ok) + int(not russian_ok)
+                        )
+                        review_failed_results[appid] = {
+                            'result': result,
+                            'error': error,
+                        }
+
+                    reporter.update(
+                        completed_appids=(
+                            len(review_cache) + len(review_failed_results)
                         ),
-                        prior_site_data_exists=key in previous_by_key,
+                        appreviews_fallback_appids_total=len(appreviews_needed),
+                        appreviews_fallback_appids_completed=completed_appreviews,
+                        logical_review_requests_completed=(
+                            min(
+                                review_logical_components_required,
+                                (
+                                    len(review_cache)
+                                    + len(review_failed_results)
+                                ) * 2,
+                            )
+                        ),
+                        emit=(
+                            completed_appreviews == 1
+                            or completed_appreviews == len(appreviews_needed)
+                            or completed_appreviews % REVIEW_PROGRESS_EVERY_APPIDS == 0
+                        ),
                     )
-                    failed_keys.add(key)
+
+        for appid in review_appids:
+            if appid in review_cache or appid in review_failed_results:
+                continue
+            review_failed_results[appid] = {
+                'result': fallback.get(appid),
+                'error': RuntimeError(
+                    'Steam review sources did not return required summaries'
+                ),
+            }
+
+        for appid, failure in review_failed_results.items():
+            for key in review_item_keys.get(appid, []):
+                item = catalog.get(key) or {}
+                failures.record_game(
+                    key,
+                    appid=appid,
+                    name=item.get('title'),
+                    stage='review_enrichment',
+                    error=failure.get('error') or RuntimeError(
+                        'Steam review sources did not return required summaries'
+                    ),
+                    prior_site_data_exists=key in previous_by_key,
+                )
+                failed_keys.add(key)
+
+    review_candidate_items_resolved_without_appreviews = sum(
+        1
+        for item in review_candidate_items
+        if str(item.get('appid')) in review_cache
+        and str(item.get('appid')) not in review_appreviews_attempted_appids
+    )
 
     stage_timings_seconds['review_enrichment'] = round(
         time.monotonic() - review_started,
@@ -963,10 +1198,15 @@ def run():
     reporter.update(
         review_enrichment_complete=True,
         completed_appids=len(review_appids),
-        logical_review_requests_completed=len(review_appids) * 2,
+        logical_review_requests_completed=review_logical_components_required,
         review_failed_appids=len(review_failed_results),
+        search_surface_reused_appids=review_search_surface_reused_appids,
+        exact_cache_reused_appids=review_exact_cache_reused_appids,
         storebrowse_fallback_appids=review_storebrowse_fallback_appids,
-        storebrowse_fallback_requests=review_storebrowse_fallback_requests,
+        storebrowse_fallback_requests=review_storebrowse_stats[
+            'physical_http_requests'
+        ],
+        appreviews_fallback_appids=len(review_appreviews_attempted_appids),
         review_elapsed_seconds=stage_timings_seconds['review_enrichment'],
         emit=True,
     )
@@ -1188,7 +1428,13 @@ def run():
         len(failures.failed_segment_ids_this_run)
     )
     chunk_count = write_shortlist(selected, columns, core['SHORT_CHUNK'])
-    logical_review_requests = len(review_appids) * 2
+    logical_review_requests = review_appreviews_logical_components_attempted
+    review_network_stats = core['network_stats_snapshot']()
+    shortlist_items_without_appreviews = sum(
+        1
+        for item in selected
+        if str(item.get('appid')) not in review_appreviews_attempted_appids
+    )
 
     filtering_funnel = {
         'source_reported_rows': reported_total,
@@ -1290,7 +1536,7 @@ def run():
                 for traversal in traversals
             },
         },
-        'network_stats': core['network_stats_snapshot'](),
+        'network_stats': review_network_stats,
         'filtering_funnel': filtering_funnel,
         'items_with_review_data': items_with_search_review_data,
         'review_coverage': round(search_review_coverage, 6),
@@ -1298,16 +1544,79 @@ def run():
         'search_review_coverage': round(search_review_coverage, 6),
         'review_candidate_items': len(review_candidate_items),
         'review_candidate_appids': len(review_appids),
-        'review_api_requests': logical_review_requests,
-        'review_api_failed_requests': review_api_failed_requests,
-        'review_rate_limit_circuit_open': core['review_rate_limit_event'].is_set(),
-        'review_storebrowse_fallback_appids': review_storebrowse_fallback_appids,
-        'review_storebrowse_fallback_requests': review_storebrowse_fallback_requests,
-        'review_storebrowse_fallback_policy': (
-            'only_for_missing_appreviews_components; '
-            'global_display_percent_is_half_point_conservative; '
-            'russian_uses_language_specific_display_percent'
+        'review_source_strategy': (
+            'decisive_search_then_fresh_exact_cache_then_paced_storebrowse_'
+            'then_serial_appreviews'
         ),
+        'review_logical_components_required': review_logical_components_required,
+        # Compatibility field now means AppReviews logical components actually
+        # attempted, rather than counting circuit-skipped/non-AppReviews work.
+        'review_api_requests': logical_review_requests,
+        'review_appreviews_logical_components_attempted': (
+            review_appreviews_logical_components_attempted
+        ),
+        'review_appreviews_physical_http_requests': review_network_stats.get(
+            'review_http_requests', 0
+        ),
+        'review_appreviews_successful_components': review_network_stats.get(
+            'review_successful_components', 0
+        ),
+        'review_appreviews_successful_appids': review_appreviews_successful_appids,
+        'review_api_failed_requests': review_api_failed_requests,
+        'review_appreviews_temporary_failures': review_network_stats.get(
+            'review_temporary_failures', 0
+        ),
+        'review_appreviews_permanent_failures': review_network_stats.get(
+            'review_permanent_failures', 0
+        ),
+        'review_appreviews_429_events': review_network_stats.get(
+            'review_429_events', 0
+        ),
+        'review_appreviews_backoff_seconds': review_network_stats.get(
+            'review_backoff_seconds', 0.0
+        ),
+        'review_rate_limit_circuit_open': core['review_rate_limit_event'].is_set(),
+        'review_rate_limit_circuit_reason': (
+            'consecutive_http_429'
+            if core['review_rate_limit_event'].is_set()
+            else None
+        ),
+        'review_rate_limit_circuit_threshold': core[
+            'REVIEW_RATE_LIMIT_CIRCUIT_THRESHOLD'
+        ],
+        'review_circuit_skipped_components': review_network_stats.get(
+            'review_circuit_skipped_components', 0
+        ),
+        'review_search_surface_reused_appids': review_search_surface_reused_appids,
+        'review_exact_cache_reused_appids': review_exact_cache_reused_appids,
+        'review_storebrowse_fallback_appids': review_storebrowse_fallback_appids,
+        'review_storebrowse_fallback_requests': review_storebrowse_stats[
+            'physical_http_requests'
+        ],
+        'review_storebrowse_successful_batches': review_storebrowse_stats[
+            'successful_batches'
+        ],
+        'review_storebrowse_failed_batches': review_storebrowse_stats[
+            'failed_batches'
+        ],
+        'review_storebrowse_retry_events': review_storebrowse_stats['retry_events'],
+        'review_storebrowse_429_events': review_storebrowse_stats['http_429_events'],
+        'review_storebrowse_backoff_seconds': round(
+            review_storebrowse_stats['backoff_seconds'], 3
+        ),
+        'review_storebrowse_pacing_seconds': round(
+            review_storebrowse_stats['pacing_seconds'], 3
+        ),
+        'review_storebrowse_fallback_policy': (
+            'paced_batched_review_source_after_decisive_search_or_exact_cache; '
+            'global_display_percent_is_half_point_conservative; '
+            'russian_uses_language_specific_display_percent; '
+            'failed_batches_preserve_prior_results_and_fall_through_to_appreviews'
+        ),
+        'review_candidate_items_resolved_without_appreviews': (
+            review_candidate_items_resolved_without_appreviews
+        ),
+        'shortlist_items_without_appreviews': shortlist_items_without_appreviews,
         'review_api_failure_rate': (
             round(review_api_failed_requests / logical_review_requests, 6)
             if logical_review_requests

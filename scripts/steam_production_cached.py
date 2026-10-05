@@ -32,12 +32,18 @@ MEDIUM_COUNT_TTL_HOURS = 72
 HIGH_COUNT_TTL_HOURS = 168
 CACHE_RETENTION_DAYS = 90
 
+# AppReviews is an exact fallback, not a bulk discovery surface. Even when the
+# cache misses, serialize live requests to at most one request per second.
+REVIEW_NETWORK_MIN_INTERVAL_SECONDS = 1.0
+
 REVIEW_URL_RE = re.compile(r"/appreviews/(\d+)")
 
 _real_session_get = requests.Session.get
 _real_sleep = time.sleep
 _cache_lock = threading.Lock()
 _stats_lock = threading.Lock()
+_review_network_lock = threading.Lock()
+_review_next_request_monotonic = 0.0
 _stats = {
     "review_cache_hits": 0,
     "review_network_requests": 0,
@@ -158,6 +164,18 @@ class CachedResponse:
         return None
 
 
+def wait_for_review_network_slot():
+    global _review_next_request_monotonic
+    with _review_network_lock:
+        now = time.monotonic()
+        wait = max(0.0, _review_next_request_monotonic - now)
+        if wait:
+            _real_sleep(wait)
+        _review_next_request_monotonic = (
+            time.monotonic() + REVIEW_NETWORK_MIN_INTERVAL_SECONDS
+        )
+
+
 def cached_session_get(session, url, *args, **kwargs):
     match = REVIEW_URL_RE.search(str(url))
     params = kwargs.get("params") or {}
@@ -174,6 +192,7 @@ def cached_session_get(session, url, *args, **kwargs):
         with _stats_lock:
             _stats["review_network_requests"] += 1
 
+        wait_for_review_network_slot()
         response = _real_session_get(session, url, *args, **kwargs)
         if response.status_code == 200:
             try:
@@ -262,6 +281,7 @@ def annotate_manifest():
             "10000_plus_reviews_hours": HIGH_COUNT_TTL_HOURS,
         },
         "steam_search_inter_page_delay_seconds": SEARCH_DELAY_SECONDS,
+        "review_network_min_interval_seconds": REVIEW_NETWORK_MIN_INTERVAL_SECONDS,
     })
     MANIFEST_PATH.write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2),
