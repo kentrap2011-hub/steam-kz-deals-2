@@ -269,6 +269,14 @@ Production validator проверяет:
 21. Profile semantic identity stability: `PROJECT_DECISIONS.md#PPD-012` separates content-based `profile_semantic_sha256` from exact immutable `PROGRESSIVE-PROFILE-PIN-V1` execution provenance. `scripts/progressive_pass1.py` derives global/item semantic identity from profile blob/content plus model/semantics/context, while `historical_semantic_equivalence()` may keep an immutable accepted Fast/Deep result current only after its exact `work_authority_commit` manifest proves identical profile content and semantic/item bindings. Exact worker transport still echoes the current prepared provenance pin; missing or inconsistent historical proof fails closed. `scripts/test_progressive_profile_semantic_identity_stability.py` covers commit-only churn, real invalidators, exact transport provenance, PPD-010 reconciliation and no re-emission.
 
 
+**Bundle / 429 continuation after PR #148:**
+- normal main run `37345668260` completed games (`63,645`, 637 pages, ~1573s) and DLC (`34,342`, 344 pages, ~822s), then timed out inside standalone `category1=996` at `48,000 / ~105,326` rows; Reviews had not started;
+- by timeout Search logged 192 HTTP 429 responses and 2160s accumulated backoff; the stable pattern was four 429s (`3/6/12/24s`) about every 30 successful 100-row pages;
+- bounded PR #151 evidence proved standalone `category1=996` is not bundle-only: it matched the no-category broad scope at ~105.3k rows and sampled overwhelmingly ordinary `App_` rows, including DLC/soundtracks/extras;
+- a representative purchasable package, `Sub_76471` / “Daedalic - Gigantic Bundle”, was returned under `category1=998` as well as `996`; therefore package opportunity semantics are preserved inside the games traversal and the redundant standalone 996 crawl is removed;
+- `category1=998,996` had the same total as games-only and `21,996` the same total as DLC-only in bounded controls, reinforcing that 996 is additive rather than an exclusive bundle class;
+- live pacing probe: 0.5s cadence produced 14×429 in 35 requests (first at request 22 in that shared rate window); after cooldown, 1.8s produced 35/35 HTTP 200 with no 429; `Retry-After` was absent. Production Search pacing is therefore 1.8s while the existing explicit retry ladder remains unchanged.
+
 **Инварианты:** Deep eligibility never requires prior Fast/PASS 1 attempt or Fast `analysis_incomplete`; the V2 marker contains no worker-chosen authority and its actual Git parent is the frozen invocation authority; the worker reads/fixes all PASS 2 work/profile/Dossier/recovery inputs only from that parent; a write before the marker is part of that view, while later parallel `main` movement belongs to the next invocation and does not invalidate the current one; no Deep result/terminal receipt may be published until GitHub durably confirms the same marker-parent authority and lineage; missing/rejected/mismatched confirmation consumes no attempt and publishes nothing; exact-compatible canonically accepted Dossier remains the evidence gate; completed authoritative Deep suppresses future Fast for the same current identity while Fast success never suppresses Deep; Deep incomplete/error does not erase a valid Fast provisional result; unresolved consumed Deep becomes recovery-owned and can return only through a fresh concrete GitHub-owned recovery authorization; normal Deep first-pass completeness and eventual all-authoritative completeness are separate; no blind retry loop or hidden recovery quota; Deep semantic execution remains forbidden while active flags are false.
 
 
@@ -349,10 +357,10 @@ Currentness invariant after PPD-012:
 **Что ищем:** где задаётся и выполняется current paid Steam KZ discovery scope до Reviews API, как доказать KZ price bound и где смотреть funnel.
 
 **Последняя проверка:** 2026-10-05.  
-**Implementation refs:** PR #146 (base implementation) + PR #147 (live maxprice validation correction) + PR #148 (runtime observability / 100-row pagination continuation).
+**Implementation refs:** PR #146 (base implementation) + PR #147 (live maxprice validation correction) + PR #148 (runtime observability / 100-row pagination continuation) + PR #151 (bundle-scope / rate-limit correction).
 
 **Канонические правила:**
-1. `config/mailing_policy.json#paid_discovery` — explicit `games / dlc / bundles` partitions, `discount >= 50%`, `price <= 4500 KZT`, no raw top-N, separate free/giveaway lane.
+1. `config/mailing_policy.json#paid_discovery` — explicit `games / dlc` traversals, `discount >= 50%`, `price <= 4500 KZT`, no raw top-N, separate free/giveaway lane. Purchasable package/bundle `Sub_` identities are preserved from the games partition; standalone `category1=996` traversal is forbidden because live Steam proves it is broad `Include Bundles`/untyped scope, not bundle-only.
 2. `config/execution_ownership_contract.json` — GitHub owns discovery scope, completeness, persistence and orchestration.
 3. `config/daily_execution_contract.json` — discovery remains inside the existing GitHub-owned daily production cycle.
 
@@ -380,6 +388,7 @@ Currentness invariant after PPD-012:
 - production never trusts `maxprice=4500` only because the query string exists; the bounded capped-vs-uncapped KZ control must pass first;
 - `Price_ASC` global monotonicity is explicitly **not** required and is not a completeness authority;
 - source-side minimum-discount parameter is not assumed; parsed-row gate `>=50%` remains authoritative before Reviews API;
-- paid partitions use `hidef2p`, but free/giveaway remains a separate existing lane;
+- paid traversals use `hidef2p`, but free/giveaway remains a separate existing lane;
+- standalone `category1=996` must not be reintroduced as a bundle partition unless new bounded live evidence proves exclusive bundle semantics;
 - no raw top-N, second collector/scheduler, ChatGPT-owned loop or Catalyst special case;
 - live acceptance is an ordinary GitHub-owned `Steam KZ production shortlist` run on `main`; PR `collect` remains intentionally disabled.
