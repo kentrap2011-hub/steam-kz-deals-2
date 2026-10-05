@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 130,
     "deep_completed_not_fit_count": 23,
     "deep_incomplete_or_recovery_count": 30,
-    "deep_waiting_for_dossier_count": 343,
-    "deep_ready_or_pending_count": 1,
+    "deep_waiting_for_dossier_count": 340,
+    "deep_ready_or_pending_count": 4,
     "deep_normal_first_pass_remaining_count": 344,
     "deep_remaining_until_all_authoritative_count": 374,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 19,
-    "dossier_waiting_count": 343,
+    "dossier_waiting_count": 340,
     "pass2_attempted_count": 183,
-    "pass2_eligible_count": 1,
-    "normal_pass2_eligible_count": 1,
+    "pass2_eligible_count": 4,
+    "normal_pass2_eligible_count": 4,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -108,6 +108,196 @@
     }
   },
   "items": [
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1587130",
+      "taste_subject_key": "App_1587130",
+      "appid": "1587130",
+      "taste_fingerprint": "35fbe03f7decdba4953127ec9e44786653d6c760b58c7c9e50a43d7ab651713f",
+      "candidate_context_sha256": "8996b50c2d29de9b9d813245fed1ae869405b3dacdd122aa95d868396e3b7926",
+      "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+      "work_id": "449b3d94bfaa30481935c4bbf9149a9ee0e9cbf0c233c954f5af49ffd2de8267",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Blood West",
+        "short_description": "Weird west legends meet eldritch horror in BLOOD WEST, an immersive stealth FPS. Become the Undead Gunslinger, doomed to roam the barren lands until he manages to purge their curse, freeing his soul. 3 varied scenarios, perk-based character progression, and 20+ hours of gameplay await you!",
+        "bundle_members": [],
+        "fit_tags": [
+          "Horror",
+          "Open World",
+          "RPG",
+          "Stealth",
+          "Western"
+        ],
+        "core_fit_count": 4,
+        "release_date": "5 Dec, 2023",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1587130"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1587130.json",
+      "dossier_content_sha256": "3a81f03ce7c5076e5a9b338cc5f058f682982c01f816eb60c31cfaeeba4d8951",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-25T15:36:35Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "3e4ad2ae96af8d1087a294dd2938d270fc056f2411dc486e87d719ee37fb5043",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--449b3d94bfaa30481935c4bbf9149a9ee0e9cbf0c233c954f5af49ffd2de8267--3e4ad2ae96af8d1087a294dd2938d270fc056f2411dc486e87d719ee37fb5043.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--449b3d94bfaa30481935c4bbf9149a9ee0e9cbf0c233c954f5af49ffd2de8267--3e4ad2ae96af8d1087a294dd2938d270fc056f2411dc486e87d719ee37fb5043.json",
+      "sequence": 1
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1585440",
+      "taste_subject_key": "App_1585440",
+      "appid": "1585440",
+      "taste_fingerprint": "d96b8ec72578b1dd6fa5a8ac8a5ca6ebae4b5c85e38cc5294e655746d7262b21",
+      "candidate_context_sha256": "f3705d702e5a4661e197b3a0fb9049c20e3affe6f99e19431bb8fec9f134a4b6",
+      "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+      "work_id": "96014a0f4fa5f97531355fd6e67851e7469f691a1b2a76fcc313e323a5cea444",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "They Always Run",
+        "short_description": "Become Aiden, a three-armed mutant who hunts the most dangerous bounties in the galaxy. Catch, slice, dice and destroy enemies in this exciting 2D platformer with a space-western setting.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Action-Adventure",
+          "Sci-fi"
+        ],
+        "core_fit_count": 2,
+        "release_date": "20 Oct, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1585440"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1585440.json",
+      "dossier_content_sha256": "bb5b61149c18a6fe0eb2293b8bd7e02ae5ba65b8da2be71ac79e6f48844a561a",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-25T15:36:35Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "e292f6cf3d396f2394e6e6250ab3d288107c6e362cbbeb13c296b3a517589779",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--96014a0f4fa5f97531355fd6e67851e7469f691a1b2a76fcc313e323a5cea444--e292f6cf3d396f2394e6e6250ab3d288107c6e362cbbeb13c296b3a517589779.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--96014a0f4fa5f97531355fd6e67851e7469f691a1b2a76fcc313e323a5cea444--e292f6cf3d396f2394e6e6250ab3d288107c6e362cbbeb13c296b3a517589779.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1586800",
+      "taste_subject_key": "App_1586800",
+      "appid": "1586800",
+      "taste_fingerprint": "847af66406ab24ecf44daa700a97cb6ffaba43a257e9864f159c78094c407ff3",
+      "candidate_context_sha256": "b158cf04dcb1d31004284980ae90a30e6adff9348dcdb53a63331bbd4fd74f91",
+      "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+      "work_id": "92a14e8844aee955ea121d0ebe08bf6e24082448c53478d9b4b89651b9d4c5f2",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Lil Gator Game",
+        "short_description": "Embark on an adorable adventure, discover new friends and uncover everything the island has to offer. Climb, Swim, Glide and slide your way into the hearts of the many different characters you meet on your travels!",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "14 Dec, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1586800"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1586800.json",
+      "dossier_content_sha256": "4b505a7cc776ae9e881acfddce3299a5982798254b120bebc6e19295e7b36f11",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-25T15:36:35Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "72206918613ef0a8be638462850b74b4275ca1c940dbf6b4f36953a698407878",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--92a14e8844aee955ea121d0ebe08bf6e24082448c53478d9b4b89651b9d4c5f2--72206918613ef0a8be638462850b74b4275ca1c940dbf6b4f36953a698407878.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--92a14e8844aee955ea121d0ebe08bf6e24082448c53478d9b4b89651b9d4c5f2--72206918613ef0a8be638462850b74b4275ca1c940dbf6b4f36953a698407878.json",
+      "sequence": 3
+    },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
@@ -169,7 +359,7 @@
       "authorization_id": "62c93f747bfe11ec10c482d35b82197f78ce33d836e312ec293df3781e25f700",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--9be23418fa42dd9a51e92ab60eb4d734496633076315d81f4c2816cdeddcb46c--62c93f747bfe11ec10c482d35b82197f78ce33d836e312ec293df3781e25f700.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--9be23418fa42dd9a51e92ab60eb4d734496633076315d81f4c2816cdeddcb46c--62c93f747bfe11ec10c482d35b82197f78ce33d836e312ec293df3781e25f700.json",
-      "sequence": 1
+      "sequence": 4
     }
   ]
 }
