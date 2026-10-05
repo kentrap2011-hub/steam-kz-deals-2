@@ -333,6 +333,10 @@ def test_core_network_stats_expose_retry_and_backoff_counters():
         'review_retry_events',
         'review_429_events',
         'review_backoff_seconds',
+        'review_successful_components',
+        'review_temporary_failures',
+        'review_permanent_failures',
+        'review_circuit_skipped_components',
     }
     assert set(initial) == expected_keys
     c['bump_network_stat']('search_http_requests', 2)
@@ -345,6 +349,12 @@ def test_core_network_stats_expose_retry_and_backoff_counters():
 def test_search_pacing_matches_live_proven_rate_limit_safe_delay():
     assert runner.accelerator.ORIGINAL_SEARCH_DELAY_SECONDS == 0.9
     assert runner.accelerator.SEARCH_DELAY_SECONDS == 1.8
+
+
+def test_live_appreviews_fallback_is_serial_and_paced():
+    c = core()
+    assert c['REVIEW_WORKERS'] == 1
+    assert runner.accelerator.REVIEW_NETWORK_MIN_INTERVAL_SECONDS >= 1.0
 
 
 def test_free_giveaway_lane_remains_separate_from_paid_filters():
@@ -401,6 +411,7 @@ def main():
         test_progress_reporter_exposes_stage_and_network_metrics,
         test_core_network_stats_expose_retry_and_backoff_counters,
         test_search_pacing_matches_live_proven_rate_limit_safe_delay,
+        test_live_appreviews_fallback_is_serial_and_paced,
         test_free_giveaway_lane_remains_separate_from_paid_filters,
         test_discovery_scope_remains_github_owned_without_new_scheduler_or_top_n,
         test_mirrors_edge_catalyst_is_not_special_cased,

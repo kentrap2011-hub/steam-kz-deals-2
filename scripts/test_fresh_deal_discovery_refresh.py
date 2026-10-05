@@ -251,6 +251,20 @@ def test_11_canonical_search_is_bounded_to_supported_paid_content_types():
     assert bundle_policy['standalone_category1_996_traversal'] is False
 
 
+
+def test_12_publication_waits_for_current_cycle_mailing_and_pre_ai_state():
+    steam_workflow = Path('.github/workflows/steam-test.yml').read_text(encoding='utf-8')
+    mailing_workflow = Path('.github/workflows/build-mailing-feed.yml').read_text(encoding='utf-8')
+    pre_ai_workflow = Path('.github/workflows/build-pre-ai-store-snapshot.yml').read_text(encoding='utf-8')
+    visual_workflow = Path('.github/workflows/build-daily-visual-payload.yml').read_text(encoding='utf-8')
+
+    # Steam discovery must not race visual publication before mailing has
+    # rebuilt data/cache/store_state.json for the same discovery timestamp.
+    assert 'gh workflow run build-daily-visual-payload.yml --ref main' not in steam_workflow
+    assert '- "Steam KZ production shortlist"' in mailing_workflow
+    assert '- "Build mailing-optimized feed"' in pre_ai_workflow
+    assert '- "Build pre-AI deterministic payload"' in visual_workflow
+
 def main():
     tests = [
         test_01_fresh_catalog_can_introduce_game_absent_from_old_universe,
@@ -264,6 +278,7 @@ def main():
         test_09_downstream_binding_uses_new_discovery_timestamp,
         test_10_probe_identity_is_not_special_cased_in_production_logic,
         test_11_canonical_search_is_bounded_to_supported_paid_content_types,
+        test_12_publication_waits_for_current_cycle_mailing_and_pre_ai_state,
     ]
     for test in tests:
         test()

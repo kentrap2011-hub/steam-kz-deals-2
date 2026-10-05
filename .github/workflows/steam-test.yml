@@ -270,8 +270,7 @@ jobs:
           echo "Push failed after 3 attempts."
           exit 1
 
-      - name: Dispatch visual refresh after production update
-        if: steps.publish.outputs.changed == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh workflow run build-daily-visual-payload.yml --ref main
+      # Do not dispatch visual publication here. The current-cycle Store state
+      # is produced by Build mailing-optimized feed, then consumed by the
+      # pre-AI workflow; Build daily visual payload is triggered only after that
+      # canonical chain has completed.
