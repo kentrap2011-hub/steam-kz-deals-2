@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "56baeff7468ce1531778115c61bcb7c930e55ef6",
+  "run_start_authority_commit": "2f7aeb8276b5f8dc38f98df18c1d2651fe1ce850",
+  "run_started_at_utc": "2026-10-05T04:59:43+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+  "work_id": "8ad31e795c041b1758cc0bb269a9c7891787471775a45aad8d879fca060c983c",
+  "family_id": "game:1328350",
+  "taste_subject_key": "App_1328350",
+  "appid": "1328350",
+  "taste_fingerprint": "06c95bf1b09a20c3236d98a35d4577d88cdb3d2a8c0d3fd895bfdc078b6db9bd",
+  "candidate_context_sha256": "b810875059c2c3c019a6f67307bee4fb490cfad477ae28a218523a1f7bfe7295",
+  "dossier_content_sha256": "9d38111f3d2575b53e3187f310d08ebdf28be15d95e6e58849bba53b32c016a9",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "c4dfa93170aa9af75bb62c913e261a40e90d783fc99d052731e02962acd1b377",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Очень быстрое выразительное перемещение, chainsaw-slide и постоянная смена оружия дают большой простор для личного мастерства.",
+    "Weapon mods и augments развивают боевой стиль и поддерживают эксперименты со сборкой по ходу кампании.",
+    "Киберпанковая стилистика, музыка и преувеличенная action-подача создают сильную самостоятельную идентичность."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 96,
+    "development_variety": 88,
+    "structure_pacing_direction": 78,
+    "identity_hooks": 90,
+    "breadth_of_match": 94
+  },
+  "score_findings": [
+    {
+      "finding_id": "movement-and-combat-mastery",
+      "text_ru": "Chainsaw-slide, высокая скорость, агрессивное перемещение и постоянное переключение оружия делают само движение частью боевого мастерства, а не просто способом добраться до следующей арены.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1/raises",
+          "profile_value_sha256": "c236ddc59b087a1720a7d5b39e0a1f821e95316c85515289f3877c8547face17",
+          "match_text_ru": "Быстрое и выразительное перемещение — один из прямых сильных сигналов твоего профиля."
+        },
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Комбо, тайминги и рост собственного навыка особенно хорошо совпадают с твоей любовью к мастерству."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 96
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 94
+        }
+      ]
+    },
+    {
+      "finding_id": "weapon-mod-build-growth",
+      "text_ru": "Моды оружия, augments и их сочетания позволяют менять боевой стиль по ходу кампании, поэтому арсенал развивается через новые варианты, а не только через линейное повышение урона.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/pattern",
+          "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+          "match_text_ru": "Тебе нравится прогрессия, когда понятны цель и практический эффект улучшения."
+        },
+        {
+          "json_pointer": "/factor_importance/развитие_и_разнообразие/note",
+          "profile_value_sha256": "0580f077432002933245e702ef32d0a5e3ac046bc717580f70c7ebcc99027b7d",
+          "match_text_ru": "Развитие и разнообразие — один из самых устойчивых мотивов твоего профиля."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 88
+        }
+      ]
+    },
+    {
+      "finding_id": "cyberpunk-action-identity",
+      "text_ru": "Киберпанковая подача, саундтрек, гипертрофированное оружие и общий стиль поддерживают легко узнаваемую идентичность поверх уже сильного FPS-цикла.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Выразительный визуальный язык, атмосфера и подача способны заметно усиливать твоё впечатление."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 90
+        }
+      ]
+    },
+    {
+      "finding_id": "large-stage-direction-friction",
+      "text_ru": "Крупные сложные уровни дают пространство для зрелищных сцен, но иногда требуют искать оставшегося врага или неочевидный путь, из-за чего темп может ломаться между интенсивными боями.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/evidence_log/77/evidence",
+          "profile_value_sha256": "bc6a92b0583ca89aa43b74e250e25c5590245e5ce1963b0b9f5b85ba9c17f053",
+          "match_text_ru": "Тебе комфортнее исследование, когда основная цель задаёт понятный маршрут, а не требует долго искать направление без причины."
+        },
+        {
+          "json_pointer": "/contextual_preferences/active_core_loop_vs_low_stimulation_filler/summary",
+          "profile_value_sha256": "b4a73bd07d3acb93744f9800c2ccc182334128a573b98d020cc696b40af3ff44",
+          "match_text_ru": "Тебя сильнее удерживает активный понятный цикл; длинные промежутки рутинного поиска между сильными эпизодами снижают вовлечённость."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 78
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "directionlessness",
+        "text_ru": "В крупных аренах иногда неясно, куда идти дальше или какой враг остался; для тебя такой поиск направления между сильными боевыми эпизодами — подтверждённый риск лишнего трения.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Поздняя кампания местами растягивает максимальную интенсивность длинными уровнями и повторными волнами врагов; для тебя это риск усталости от повторения без достаточной смены контекста.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Высокая сложность и плотность поздних столкновений требуют постоянного быстрого исполнения; при длинной игровой сессии это может утомлять даже при хорошем совпадении с love-of-mastery сигналом.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть актуальный единичный PC-сигнал о сильных статтерах при высокой частоте опроса мыши; снижение polling rate помогло затронутому игроку.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
