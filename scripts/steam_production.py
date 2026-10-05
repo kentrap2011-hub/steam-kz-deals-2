@@ -53,8 +53,18 @@ if PAID_DISCOVERY_POLICY.get("country_code") != "kz":
     raise RuntimeError("Steam paid discovery must remain bound to cc=kz")
 if PAID_DISCOVERY_POLICY.get("raw_source_top_n") is not None:
     raise RuntimeError("Raw Steam discovery top-N is forbidden")
-if tuple(SEARCH_CATEGORY_TYPES) != ("games", "dlc", "bundles"):
-    raise RuntimeError("Steam paid discovery partitions must remain games/dlc/bundles")
+if tuple(SEARCH_CATEGORY_TYPES) != ("games", "dlc"):
+    raise RuntimeError("Steam paid discovery partitions must remain games/dlc")
+if any(partition["category1"] == "996" for partition in SEARCH_PARTITIONS):
+    raise RuntimeError(
+        "Steam category1=996 is broad Include Bundles scope, not a standalone partition"
+    )
+bundle_policy = PAID_DISCOVERY_POLICY.get("bundle_package_discovery") or {}
+if (
+    bundle_policy.get("mode") != "embedded_in_games_partition"
+    or bundle_policy.get("standalone_category1_996_traversal") is not False
+):
+    raise RuntimeError("Steam package discovery policy is not bound to games partition")
 if PAID_MIN_DISCOUNT_PERCENT != 50 or PAID_MAX_PRICE_KZT != 4500:
     raise RuntimeError("Steam paid discovery policy does not match approved 50%/4500 KZT gate")
 
