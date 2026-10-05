@@ -19,7 +19,7 @@ REVIEW_URL = (
     "https://store.steampowered.com/appreviews/{appid}"
 )
 
-PAGE_SIZE = 50
+PAGE_SIZE = 100  # Live Steam Search maximum proven by bounded KZ pagination probe.
 REQUEST_DELAY = 0.9
 
 # Steam discovery scope is policy-owned. The runner loads these exact partitions
