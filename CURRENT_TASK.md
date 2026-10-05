@@ -1,16 +1,19 @@
 # CURRENT TASK
 
 ## IN PROGRESS — Steam discovery scope reduction implement 01
-Статус: `pr147_merged_live_run_in_progress_observability_fix_in_progress`.
+Статус: `pr148_deterministic_green_ready_for_merge_live_acceptance_pending`.
 - task: `WORKER_TASK_STEAM_DISCOVERY_SCOPE_REDUCTION_IMPLEMENT_01.md`;
 - PR #146 merged as `fb21b704ac36f56d40bdc6a00175864538dbcee7`; PR #147 merged as `3ca7e6c12214756a847a5f5170d497dffb044c85`;
-- first main acceptance `37319401442` failed only on invalid Price_ASC monotonicity proof; PR #147 replaced that proof with bounded capped-vs-uncapped controls;
-- current normal main acceptance run `37335826933`, collect job `111850233215`, is still in the single collector step after all pre-collection regressions passed;
-- live job logs are not retrievable through the current GitHub API while the job is in progress (404), so exact active partition/page/review stage is externally opaque;
-- existing bounded probe already shows games `maxprice=4500` scope is `63681` rows versus `65097` uncapped, so price filtering alone reduces the live games source only slightly and cannot yet be claimed materially sufficient;
-- continuation branch: `fix/steam-discovery-progress-observability-01`;
-- current subtask: add explicit GitHub-owned collector progress/timing/heartbeat observability without changing timeout, scheduler, queue/retry ownership, product thresholds, Fast/Dossier/Deep/ranking or starting a competing production writer;
-- after deterministic checks, continue bounded source-scope investigation immediately; do not wait for the current run to time out.
+- second main acceptance run `37335826933`, collect job `111850233215`, hit the existing ~60-minute timeout after completing games and only part of DLC; no canonical production commit occurred;
+- exact live progress: games `63,689` rows complete / `41,654` locally eligible, ~47.6 minutes; DLC last `13,700 / ~34,356`, `7,245` locally eligible; bundles not started; 204 HTTP 429 responses logged;
+- bounded PR probes proved tested source-side minimum-discount parameters are ignored, so the approved >=50% gate stays local;
+- bounded live pagination proved `count=100,start=0` and `count=100,start=100` return two complete non-overlapping 100-row pages with the same total; requests above 100 are capped at 100;
+- correction PR #148: `Expose Steam collector progress and probe discount source filter`;
+- permanent changes: canonical Steam page size 50 -> 100, unbuffered collector invocation, 30-second structured heartbeat, partition/page/review progress, Search/Reviews retry/429/backoff counters and stage timings;
+- temporary probe code/workflow steps removed before merge; no new writer, scheduler, queue/retry owner, raw top-N, timeout increase, Scheduled Task, Fast/Dossier/Deep/ranking/site semantic change or Catalyst special case;
+- deterministic validation on code head `37c149b6a6ad3a8678edf8814e90b1db89c2775d`: Steam PR run `37345208967` / regression job `111882026732` success; backlog run `37345209009` success;
+- report updated: `reviews/worker_reports/steam-discovery-scope-reduction-implement-01.md`;
+- remaining acceptance: merge clean PR #148 under continuation authorization, then require one normal `main` production run to show live progress, finish games/DLC/bundles within 60 minutes, persist fresh complete canonical discovery + funnel/timings/network counts, and start downstream from that universe.
 
 ## COMPLETE — Steam discovery maximal scope reduction diagnostic 01
 Статус: `diagnostic_complete_product_choices_corrected`.
