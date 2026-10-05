@@ -8,9 +8,12 @@ from russian_description_translation_runtime import (
     CACHE_CONTRACT_ID,
     REQUEST_CONTRACT_ID,
     RESULT_CONTRACT_ID,
+    active_translation_diagnostic,
     build_translation_request,
+    empty_diagnostics,
     fetch_russian_store_descriptions,
     load_translation_cache,
+    load_translation_diagnostics,
     resolve_description_for_appids,
 )
 
@@ -20,6 +23,7 @@ CHATGPT_PAYLOAD = Path('data/production/pre_ai/chatgpt_payload.json')
 QUEUE_OUT = Path('data/production/pre_ai/chatgpt_ru_description_queue.jsonl')
 STATUS_OUT = Path('data/production/pre_ai/chatgpt_ru_description_status.json')
 CACHE_PATH = Path('data/cache/russian_description_translations.json')
+DIAGNOSTICS_PATH = Path('data/cache/russian_description_translation_diagnostics.json')
 
 IDENTITY_BOUND_REQUEST_FIELDS = {
     'request_id',
@@ -148,13 +152,23 @@ def merge_same_identity_request(existing, incoming):
     return merged
 
 
-def build_scope(rows, metadata_by_appid, cache, media, source_mailing_updated_at_utc=None, generated_at_utc=None):
+def build_scope(
+    rows,
+    metadata_by_appid,
+    cache,
+    media,
+    source_mailing_updated_at_utc=None,
+    generated_at_utc=None,
+    diagnostics=None,
+):
     generated_at_utc = generated_at_utc or datetime.now(timezone.utc).isoformat()
     queue_by_id = {}
     blocker_by_key = {}
     resolved_direct = set()
     resolved_cache = set()
     scope_keys = set()
+    diagnostic_request_ids = set()
+    diagnostics = diagnostics if isinstance(diagnostics, dict) else empty_diagnostics()
     untranslated_game_count = 0
 
     for row in rows:
@@ -181,6 +195,9 @@ def build_scope(rows, metadata_by_appid, cache, media, source_mailing_updated_at
         request = build_translation_request(resolution, title)
         if request:
             request_id = request['request_id']
+            if active_translation_diagnostic(diagnostics, request):
+                diagnostic_request_ids.add(request_id)
+                continue
             queue_by_id[request_id] = merge_same_identity_request(queue_by_id.get(request_id), request)
             continue
 
@@ -195,6 +212,8 @@ def build_scope(rows, metadata_by_appid, cache, media, source_mailing_updated_at
     blocker_rows = [blocker_by_key[key] for key in sorted(blocker_by_key, key=str.casefold)]
     if queue:
         status_value = 'translation_required'
+    elif diagnostic_request_ids:
+        status_value = 'translation_diagnostic_required'
     elif blocker_rows:
         status_value = 'blocked_nontranslatable'
     else:
@@ -213,6 +232,9 @@ def build_scope(rows, metadata_by_appid, cache, media, source_mailing_updated_at
         'queue_count': len(queue),
         'queue_sha256': queue_sha256(queue),
         'queue_request_ids': [row['request_id'] for row in queue],
+        'translation_diagnostic_path': str(DIAGNOSTICS_PATH),
+        'translation_diagnostic_count': len(diagnostic_request_ids),
+        'translation_diagnostic_request_ids': sorted(diagnostic_request_ids),
         'resolved_direct_ru_source_keys': sorted(resolved_direct),
         'resolved_direct_ru_count': len(resolved_direct),
         'resolved_translation_cache_source_keys': sorted(resolved_cache),
@@ -241,7 +263,7 @@ def write_scope(queue, status, queue_path=QUEUE_OUT, status_path=STATUS_OUT):
     status_path.write_text(json.dumps(status, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
-def attach_to_chatgpt_payload(payload_path, queue_count):
+def attach_to_chatgpt_payload(payload_path, queue_count, diagnostic_count=0):
     payload_path = Path(payload_path)
     payload = load_json(payload_path)
     semantic_work = payload.get('semantic_work')
@@ -261,6 +283,8 @@ def attach_to_chatgpt_payload(payload_path, queue_count):
         'queue_path': str(QUEUE_OUT),
         'status_path': str(STATUS_OUT),
         'queue_count': int(queue_count),
+        'diagnostic_path': str(DIAGNOSTICS_PATH),
+        'diagnostic_count': int(diagnostic_count),
         'submission_glob': 'data/ai_inbox/russian_descriptions/*.json',
         'runtime_owner': 'scheduled_chatgpt_runtime_data_plane',
         'control_plane_owner': 'github_control_plane',
@@ -278,6 +302,7 @@ def build_repo_scope(fetcher=fetch_russian_store_descriptions, generated_at_utc=
     rows = load_jsonl(PURCHASE_CONTEXT)
     metadata = content_metadata_by_appid(load_json(CONTENT_METADATA))
     cache = load_translation_cache(CACHE_PATH)
+    diagnostics = load_translation_diagnostics(DIAGNOSTICS_PATH)
     appids = []
     for row in rows:
         appids.extend(base_appids_for_row(row))
@@ -290,6 +315,7 @@ def build_repo_scope(fetcher=fetch_russian_store_descriptions, generated_at_utc=
         media,
         source_mailing_updated_at_utc=payload.get('source_mailing_updated_at_utc'),
         generated_at_utc=generated_at_utc,
+        diagnostics=diagnostics,
     )
     status = translation_observability(
         status,
@@ -298,12 +324,17 @@ def build_repo_scope(fetcher=fetch_russian_store_descriptions, generated_at_utc=
         zero_work_check=zero_work_check,
     )
     write_scope(queue, status)
-    attach_to_chatgpt_payload(CHATGPT_PAYLOAD, len(queue))
+    attach_to_chatgpt_payload(
+        CHATGPT_PAYLOAD,
+        len(queue),
+        status.get('translation_diagnostic_count') or 0,
+    )
     print(json.dumps({
         'status': status['status'],
         'scope_record_count': status['scope_record_count'],
         'unique_base_app_key_count': status['unique_base_app_key_count'],
         'translation_queue_count': status['queue_count'],
+        'translation_diagnostic_count': status['translation_diagnostic_count'],
         'resolved_direct_ru_count': status['resolved_direct_ru_count'],
         'resolved_translation_cache_count': status['resolved_translation_cache_count'],
         'nontranslatable_blocker_count': status['nontranslatable_blocker_count'],
