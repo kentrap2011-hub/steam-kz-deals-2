@@ -25,15 +25,18 @@ Treat old Board sections as historical unless this handoff explicitly points to 
 
 ## CURRENT PHYSICAL WORKER SLOTS
 
-### ЧАТ 1 — ASSIGNED / NEW PHYSICAL CHAT
+### ЧАТ 1 — ASSIGNED / EXISTING PHYSICAL CHAT
 
 Task:
 `WORKER_TASK_STEAM_DISCOVERY_SCOPE_REDUCTION_IMPLEMENT_01.md`
 
 Mode:
-`IMPLEMENT / VALIDATE`
+`IMPLEMENT / VALIDATE / LIVE ACCEPTANCE CONTINUATION`
 
-The completed Steam reduction diagnostic must not be repeated. User-approved implementation decision: paid offers require at least 50% discount; preserve current 4500 KZT ceiling and current DLC/bundle/free semantics unless correctness requires otherwise; do not introduce an arbitrary raw top-N. Goal: materially bound the existing GitHub-owned collector and prove it can complete safely.
+PR #146 merged to main as `fb21b704ac36f56d40bdc6a00175864538dbcee7`. The first normal production acceptance run `37319401442` reached the new live KZ price-bound validation and failed immediately with:
+`Cannot validate KZ maxprice: Price_ASC is not monotonic at cutoff`.
+
+The task file now contains the authorized continuation. Do not repeat the global diagnostic and do not weaken the approved 50% discount / 4500 KZT policy. Fix only the exact live-bound proof/strategy, revalidate, and require one successful normal main production run before declaring the Steam discovery defect fixed.
 
 ### ЧАТ 2 — ASSIGNED / EXISTING PHYSICAL CHAT
 
