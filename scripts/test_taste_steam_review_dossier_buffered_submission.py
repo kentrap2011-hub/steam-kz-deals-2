@@ -26,7 +26,7 @@ from taste_steam_review_dossier_web import (
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_CONTRACT = load_contract(ROOT / "config/taste_steam_review_dossier_contract.json")
-NOW = datetime(2026, 9, 14, 12, 0, tzinfo=timezone.utc)
+NOW = datetime.now(timezone.utc).replace(microsecond=0)
 GROUP_SIZE = int(BASE_CONTRACT["checkpointing"]["checkpoint_size"])
 
 
