@@ -21,6 +21,7 @@ on:
       - "scripts/test_fresh_deal_discovery_refresh.py"
       - "scripts/test_steam_review_fallback.py"
       - "scripts/test_steam_discovery_scope_reduction.py"
+      - "scripts/steam_maxprice_live_probe.py"
       - "scripts/test_expired_offer_guard.py"
       - "scripts/test_commercial_refresh.py"
       - "config/mailing_policy.json"
@@ -94,11 +95,15 @@ jobs:
       - name: Install deterministic test dependencies
         run: pip install requests beautifulsoup4
 
+      - name: Bounded live Steam KZ maxprice probe
+        run: python scripts/steam_maxprice_live_probe.py
+
       - name: Compile touched Python modules
         run: |
           python -m py_compile \
             scripts/steam_production.py \
             scripts/steam_partial_publish_runner.py \
+            scripts/steam_maxprice_live_probe.py \
             scripts/test_steam_discovery_scope_reduction.py \
             scripts/discovery_freshness.py \
             scripts/build_pre_ai_store_snapshot.py \
