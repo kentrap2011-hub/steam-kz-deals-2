@@ -338,3 +338,94 @@ Update the existing report with:
 - the progress instrumentation added;
 - whether the live runtime is now materially reduced;
 - final production acceptance result.
+
+
+## Director continuation — bundles + 429 bottleneck after PR #148 live timeout
+
+The second normal `main` acceptance after PR #148 has now completed and timed out at the existing 60-minute owner limit.
+
+Canonical live evidence:
+
+- workflow run: `37345668260`;
+- collect job: `111883491529`;
+- result: cancelled at timeout;
+- games completed:
+  - reported total: **63,645**;
+  - 637 pages at page size 100;
+  - elapsed: **~1,573 s (~26.2 min)**;
+- DLC completed:
+  - reported total: **34,342**;
+  - 344 pages;
+  - elapsed: **~822 s (~13.7 min)**;
+- bundles started but did not complete:
+  - reported total: **~105,326**;
+  - last observed: **48,000 rows / ~45.6%**;
+- search 429 events by timeout: **192**;
+- accumulated search backoff: **2,160 s (~36 min)**;
+- review enrichment had not started yet;
+- no fresh canonical production commit/persistence occurred.
+
+This confirms the next blocker is no longer opaque:
+1. the bundle partition is unexpectedly enormous;
+2. Steam Search rate limiting/backoff dominates runtime.
+
+### Required continuation
+
+Do not re-open already solved items:
+- page size 100 is already live-proven;
+- progress observability is already implemented;
+- games and DLC partitioning are working;
+- 50% minimum discount and 4500 KZT maximum price remain fixed product requirements;
+- no raw top-N truncation is allowed;
+- do not increase the timeout as the primary fix.
+
+Investigate only the smallest semantics-preserving ways to reduce **bundle traversal** and/or **429 exposure**.
+
+### Bundle-specific validation
+
+First determine what Steam's `category1=996` partition actually contains in the live KZ search surface.
+
+Use bounded probes only and answer:
+- are the ~105k rows genuinely distinct purchasable packages/bundles relevant to this product, or is this partition semantically broader/noisier than expected?
+- what content types / purchase entities are returned?
+- how much overlap exists with game/DLC AppIDs or duplicate package identities?
+- are many rows software/soundtrack/video/demo/extras-like or otherwise outside the product's intended "valuable bundles/packages" class?
+- is there a more precise Steam-supported query/filter for purchasable bundles/packages that preserves the intended bundle opportunity class?
+
+Do not infer from parameter names alone; verify against bounded live samples.
+
+### 429 / request strategy
+
+Measure the current rate-limit pattern using bounded probes and existing logs.
+
+Evaluate only safe options such as:
+- request pacing that avoids the expensive repeated 3/6/12/24-second retry ladder;
+- a conservative inter-request delay if it reduces total wall-clock time by preventing bursts/429s;
+- use of Retry-After or other Steam response signals if actually present;
+- bounded concurrency only if it is demonstrably safe and does not worsen rate limiting or violate current ownership assumptions;
+- resuming/checkpointing within the existing GitHub-owned producer if canonical correctness can be preserved and the task architecture already permits it.
+
+Do not add an unrelated scheduler/background collector.
+
+### Preserve product intent
+
+Bundles/packages remain a distinct valuable opportunity class. Do not solve the timeout by silently dropping bundles entirely or by keeping only famous bundles.
+
+If the current `category1=996` source surface is proven to be far broader than the intended product concept, replace it only with a narrower source/query whose semantics are directly evidenced.
+
+If no source-side semantics-preserving narrowing exists, report the exact tradeoff and propose the smallest architecture change that preserves completeness across runs rather than inventing a lossy cutoff.
+
+### Acceptance
+
+The next correction must:
+1. be deterministic-green;
+2. avoid a competing production writer while another run is active;
+3. keep progress observability;
+4. preserve completeness for the approved games/DLC/bundle product scope;
+5. finish a normal `main` production collection within the existing 60-minute owner timeout, or provide exact evidence that a single-run 60-minute completion is impossible without a bounded architectural change;
+6. persist a fresh canonical universe and start downstream handoff before declaring the defect fixed.
+
+Update:
+`reviews/worker_reports/steam-discovery-scope-reduction-implement-01.md`
+
+with the bundle findings, 429 analysis, chosen correction, PR/checks, and final live acceptance evidence.
