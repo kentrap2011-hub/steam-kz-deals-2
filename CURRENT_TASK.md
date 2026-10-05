@@ -1,18 +1,18 @@
 # CURRENT TASK
 
 ## IN PROGRESS — Steam discovery scope reduction implement 01
-Статус: `pr148_merged_normal_main_acceptance_in_progress`.
+Статус: `bundles_429_blocker_bounded_fix_in_progress`.
 - task: `WORKER_TASK_STEAM_DISCOVERY_SCOPE_REDUCTION_IMPLEMENT_01.md`;
-- PR #146 merged as `fb21b704ac36f56d40bdc6a00175864538dbcee7`; PR #147 merged as `3ca7e6c12214756a847a5f5170d497dffb044c85`;
-- second main acceptance `37335826933` hit the existing ~60-minute timeout after games completed and DLC was partial: games `63,689` / `41,654` locally eligible, DLC last `13,700 / ~34,356` / `7,245` locally eligible, bundles not started, 204 HTTP 429 responses;
-- bounded probes proved tested source-side minimum-discount params are ignored and proved complete non-overlapping 100-row pages; canonical page size therefore changed 50 -> 100 without changing candidate scope;
-- PR #148 merged as `28a94de86ba18dce37e5f944a81ce7c944e07d8c`;
-- PR #148 permanent changes: `python -u`, 30-second structured heartbeat, partition/page/review progress, Search/Reviews request/retry/429/backoff counters, stage timings and page size 100;
-- deterministic final-head checks for PR #148 were green: Steam PR run `37345574092`, backlog validation `37345574170`;
-- required normal `main` acceptance is now run `37345668260`, collect job `111883491529`; pre-collection regressions passed and the collector step is currently `in_progress`;
-- no concurrent production writer was started; temporary diagnostic PR #149 was closed without merge and contains no canonical changes;
+- PR #148 merged as `28a94de86ba18dce37e5f944a81ce7c944e07d8c`; required main acceptance run `37345668260`, collect job `111883491529`, completed `cancelled` at the existing ~60-minute timeout;
+- live acceptance after page-size 100: games complete `63,645` rows / 637 pages / ~1573s; DLC complete `34,342` rows / 344 pages / ~822s; bundles reported ~`105,326`, reached `48,000` rows (~45.6%) and did not complete; Reviews enrichment never started;
+- by timeout Search had 192 HTTP 429 events and 2160s accumulated backoff;
+- live 429 pattern is periodic: after roughly every 30 successful 100-row pages, Steam returns four consecutive 429s under the current `3/6/12/24s` ladder, costing ~45s per burst;
+- previous bounded PR #149 evidence also disproved discount-order early-stop: tested `discountdesc` / `Discount_DESC` variants were not monotonic and included sub-50% rows immediately;
+- continuation branch: `fix/steam-bundle-rate-limit-01`;
+- current bounded subtask: determine what live `category1=996` actually returns, whether it is broader than intended bundle/package opportunity semantics, identify any live-proven narrower source shape, and measure the smallest safe pacing/rate-limit correction without changing product thresholds or adding a second producer/scheduler/retry owner;
+- no raw top-N, timeout increase, Scheduled Task, Fast/Dossier/Deep/ranking/site semantic change or Catalyst special case;
 - report: `reviews/worker_reports/steam-discovery-scope-reduction-implement-01.md`;
-- task remains open until run `37345668260` either persists a fresh complete canonical discovery universe and starts downstream within the existing 60-minute timeout, or yields new stage-level evidence requiring another bounded correction.
+- task remains open pending deterministic-green correction plus one normal main acceptance that completes/persists the fresh universe and starts downstream, or exact proof that a bounded architecture change is required.
 
 ## COMPLETE — Steam discovery maximal scope reduction diagnostic 01
 Статус: `diagnostic_complete_product_choices_corrected`.
