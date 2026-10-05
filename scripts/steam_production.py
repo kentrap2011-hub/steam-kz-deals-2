@@ -19,7 +19,7 @@ REVIEW_URL = (
     "https://store.steampowered.com/appreviews/{appid}"
 )
 
-PAGE_SIZE = 50
+PAGE_SIZE = 100  # Live Steam Search maximum proven by bounded KZ pagination probe.
 REQUEST_DELAY = 0.9
 
 # Steam discovery scope is policy-owned. The runner loads these exact partitions
@@ -232,6 +232,28 @@ review_rate_limit_lock = threading.Lock()
 review_rate_limit_count = 0
 review_rate_limit_event = threading.Event()
 
+network_stats_lock = threading.Lock()
+network_stats = {
+    "search_http_requests": 0,
+    "search_retry_events": 0,
+    "search_429_events": 0,
+    "search_backoff_seconds": 0.0,
+    "review_http_requests": 0,
+    "review_retry_events": 0,
+    "review_429_events": 0,
+    "review_backoff_seconds": 0.0,
+}
+
+
+def bump_network_stat(name, amount=1):
+    with network_stats_lock:
+        network_stats[name] = network_stats.get(name, 0) + amount
+
+
+def network_stats_snapshot():
+    with network_stats_lock:
+        return dict(network_stats)
+
 
 def rate_limited_review_result():
     return {
@@ -345,6 +367,7 @@ def get_page(
 
     for attempt in range(8):
         try:
+            bump_network_stat("search_http_requests")
             response = session.get(
                 URL,
                 params=params,
@@ -359,11 +382,16 @@ def get_page(
                     retry_after
                     or min(90, 3 * (2 ** attempt))
                 )
+                bump_network_stat("search_429_events")
+                bump_network_stat("search_backoff_seconds", float(wait))
                 print(
-                    "429",
+                    "[steam-network] search 429",
+                    "category1=", params.get("category1"),
                     "start=", start,
                     "sort=", sort_by,
+                    "attempt=", attempt + 1,
                     "wait=", wait,
+                    flush=True,
                 )
                 time.sleep(wait)
                 continue
@@ -374,12 +402,17 @@ def get_page(
         except Exception as exc:
             last_error = exc
             wait = min(90, 3 * (2 ** attempt))
+            bump_network_stat("search_retry_events")
+            bump_network_stat("search_backoff_seconds", float(wait))
             print(
-                "retry",
+                "[steam-network] search retry",
+                "category1=", params.get("category1"),
                 "start=", start,
                 "sort=", sort_by,
+                "attempt=", attempt + 1,
                 "error=", exc,
                 "wait=", wait,
+                flush=True,
             )
             time.sleep(wait)
 
@@ -422,6 +455,7 @@ def get_review_summary(appid, language):
 
     for attempt in range(REVIEW_RETRIES):
         try:
+            bump_network_stat("review_http_requests")
             response = get_review_session().get(
                 REVIEW_URL.format(appid=appid),
                 params=params,
@@ -434,11 +468,14 @@ def get_review_summary(appid, language):
                     if review_rate_limit_count >= REVIEW_RATE_LIMIT_CIRCUIT_THRESHOLD:
                         review_rate_limit_event.set()
 
+                bump_network_stat("review_429_events")
                 if review_rate_limit_event.is_set():
                     return rate_limited_review_result()
 
                 retry_after = to_int(response.headers.get("Retry-After"))
-                time.sleep(min(1, retry_after or 1))
+                wait = min(1, retry_after or 1)
+                bump_network_stat("review_backoff_seconds", float(wait))
+                time.sleep(wait)
                 continue
 
             response.raise_for_status()
@@ -486,17 +523,19 @@ def get_review_summary(appid, language):
 
         except Exception as exc:
             last_error = exc
+            bump_network_stat("review_retry_events")
 
             if attempt + 1 < REVIEW_RETRIES:
-                time.sleep(
-                    min(20, 2 ** attempt)
-                )
+                wait = min(20, 2 ** attempt)
+                bump_network_stat("review_backoff_seconds", float(wait))
+                time.sleep(wait)
 
     print(
-        "review API failed:",
+        "[steam-network] review API failed:",
         "appid=", appid,
         "language=", language,
         "error=", last_error,
+        flush=True,
     )
 
     return {

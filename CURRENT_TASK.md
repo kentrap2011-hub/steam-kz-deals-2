@@ -1,18 +1,19 @@
 # CURRENT TASK
 
 ## IN PROGRESS — Steam discovery scope reduction implement 01
-Статус: `pr147_deterministic_green_ready_for_merge_main_acceptance_pending`.
+Статус: `pr148_deterministic_green_ready_for_merge_live_acceptance_pending`.
 - task: `WORKER_TASK_STEAM_DISCOVERY_SCOPE_REDUCTION_IMPLEMENT_01.md`;
-- PR #146 merged to main as `fb21b704ac36f56d40bdc6a00175864538dbcee7`;
-- first normal production acceptance run `37319401442`, collect job `111794299510`: deterministic regressions passed, live validation failed because the old proof incorrectly required globally monotonic `Price_ASC`;
-- bounded live probe in PR #147 run `37334852442` proved exact `cc=kz&maxprice=4500` active: games capped `total_count=63681` under Price_ASC/Price_DESC/Name_ASC, sampled capped maximum 4500 KZT; arbitrary low maxprice values behaved as ignored/unbounded controls (`total_count=65097`, sampled up to 74400 KZT);
-- correction PR: `#147` — `Fix Steam KZ live maxprice validation`;
-- final code head before documentation-only commits: `c4930141ad5d604dfe681248fe6b6b283a58543c`;
-- deterministic validation: Steam run `37335316576` / regression job `111848645135` success; backlog run `37335316556` success;
-- corrected proof uses capped games/DLC/bundles Price_DESC samples + games capped sort-invariant total + uncapped larger/over-cap games control; Price_ASC monotonicity is not required;
-- temporary live-probe code removed; no Scheduled Task, Dossier, Deep, Fast, ranking, site, timeout, raw top-N, scheduler/queue/retry owner or Catalyst-specific change;
+- PR #146 merged as `fb21b704ac36f56d40bdc6a00175864538dbcee7`; PR #147 merged as `3ca7e6c12214756a847a5f5170d497dffb044c85`;
+- second main acceptance run `37335826933`, collect job `111850233215`, hit the existing ~60-minute timeout after completing games and only part of DLC; no canonical production commit occurred;
+- exact live progress: games `63,689` rows complete / `41,654` locally eligible, ~47.6 minutes; DLC last `13,700 / ~34,356`, `7,245` locally eligible; bundles not started; 204 HTTP 429 responses logged;
+- bounded PR probes proved tested source-side minimum-discount parameters are ignored, so the approved >=50% gate stays local;
+- bounded live pagination proved `count=100,start=0` and `count=100,start=100` return two complete non-overlapping 100-row pages with the same total; requests above 100 are capped at 100;
+- correction PR #148: `Expose Steam collector progress and probe discount source filter`;
+- permanent changes: canonical Steam page size 50 -> 100, unbuffered collector invocation, 30-second structured heartbeat, partition/page/review progress, Search/Reviews retry/429/backoff counters and stage timings;
+- temporary probe code/workflow steps removed before merge; no new writer, scheduler, queue/retry owner, raw top-N, timeout increase, Scheduled Task, Fast/Dossier/Deep/ranking/site semantic change or Catalyst special case;
+- deterministic validation on code head `37c149b6a6ad3a8678edf8814e90b1db89c2775d`: Steam PR run `37345208967` / regression job `111882026732` success; backlog run `37345209009` success;
 - report updated: `reviews/worker_reports/steam-discovery-scope-reduction-implement-01.md`;
-- remaining acceptance: merge PR #147 under current Director authorization, then require one normal `main` Steam KZ production run to complete within 60 minutes, persist fresh complete universe + actual funnel, and start downstream from that fresh universe.
+- remaining acceptance: merge clean PR #148 under continuation authorization, then require one normal `main` production run to show live progress, finish games/DLC/bundles within 60 minutes, persist fresh complete canonical discovery + funnel/timings/network counts, and start downstream from that universe.
 
 ## COMPLETE — Steam discovery maximal scope reduction diagnostic 01
 Статус: `diagnostic_complete_product_choices_corrected`.

@@ -174,7 +174,7 @@ jobs:
         run: python scripts/test_giveaway_igdb_identity_probe.py
 
       - name: Collect Steam KZ catalog with partial publish failure isolation
-        run: python scripts/steam_partial_publish_runner.py
+        run: python -u scripts/steam_partial_publish_runner.py
 
       - name: Verify Steam collector touched only owned production paths
         shell: bash
