@@ -50,26 +50,169 @@ def safe_row_identity(core, row):
     return key, raw_appid or None, title
 
 
-def collect_partial(core, failures, previous_by_key, sort_by='Name_ASC'):
+def parse_probe_items(core, data):
+    soup = core['BeautifulSoup'](data.get('results_html', ''), 'html.parser')
+    rows = soup.select('a.search_result_row')
+    items = []
+    for row in rows:
+        item = core['parse_row'](row)
+        if not item:
+            raise RuntimeError('Steam price-bound probe returned an unparseable result row')
+        price = item.get('final_kzt')
+        if price is None:
+            raise RuntimeError(
+                f"Steam price-bound probe returned row without final KZT price: {item.get('key')}"
+            )
+        items.append(item)
+    return items
+
+
+def validate_kz_source_price_bound(core):
+    """
+    Prove that maxprice=4500 under cc=kz matches the actual KZT cutoff before
+    the production traversal is allowed to trust it.
+
+    The bounded proof compares Steam's capped total with the uncapped Price_ASC
+    boundary at the same paid/F2P-hidden game partition. If maxprice were
+    interpreted in another unit or currency, those counts would not meet at the
+    observed <=4500/>4500 transition and the run fails closed.
+    """
+    cap = core['PAID_MAX_PRICE_KZT']
     page_size = core['PAGE_SIZE']
+    partition = next(
+        p for p in core['SEARCH_PARTITIONS']
+        if p['id'] == 'games'
+    )
+    category1 = partition['category1']
+
+    capped_desc = core['get_page'](
+        0,
+        'Price_DESC',
+        category1=category1,
+        maxprice_kzt=cap,
+        hidef2p=True,
+    )
+    capped_total = core['to_int'](capped_desc.get('total_count'))
+    if capped_total is None or capped_total <= 0:
+        raise RuntimeError('Cannot validate KZ maxprice: capped games total is empty/unknown')
+
+    capped_items = parse_probe_items(core, capped_desc)
+    capped_prices = [float(item['final_kzt']) for item in capped_items]
+    if not capped_prices:
+        raise RuntimeError('Cannot validate KZ maxprice: capped page has no priced rows')
+    if any(price <= 0 or price > cap for price in capped_prices):
+        raise RuntimeError(
+            f'KZ maxprice={cap} leaked a non-paid or over-cap result'
+        )
+
+    boundary_start = max(0, ((capped_total - 1) // page_size) * page_size)
+    boundary = core['get_page'](
+        boundary_start,
+        'Price_ASC',
+        category1=category1,
+        hidef2p=True,
+    )
+    after = core['get_page'](
+        boundary_start + page_size,
+        'Price_ASC',
+        category1=category1,
+        hidef2p=True,
+    )
+    boundary_items = parse_probe_items(core, boundary) + parse_probe_items(core, after)
+    boundary_prices = [float(item['final_kzt']) for item in boundary_items]
+
+    if not boundary_prices:
+        raise RuntimeError('Cannot validate KZ maxprice: uncapped boundary is empty')
+    if any(price <= 0 for price in boundary_prices):
+        raise RuntimeError('Cannot validate KZ maxprice: paid boundary contains free/missing price')
+    if any(
+        boundary_prices[index] > boundary_prices[index + 1]
+        for index in range(len(boundary_prices) - 1)
+    ):
+        raise RuntimeError('Cannot validate KZ maxprice: Price_ASC is not monotonic at cutoff')
+
+    first_over_index = next(
+        (index for index, price in enumerate(boundary_prices) if price > cap),
+        None,
+    )
+    if first_over_index is None:
+        raise RuntimeError(
+            'Cannot validate KZ maxprice: bounded probe did not cross the 4500 KZT boundary'
+        )
+    if any(price <= cap for price in boundary_prices[first_over_index:]):
+        raise RuntimeError(
+            'Cannot validate KZ maxprice: <=4500 KZT row appeared after the cutoff'
+        )
+
+    inferred_uncapped_count = boundary_start + first_over_index
+    if inferred_uncapped_count != capped_total:
+        raise RuntimeError(
+            'Cannot validate KZ maxprice: capped total does not equal the '
+            f'uncapped <= {cap} KZT boundary '
+            f'({capped_total} != {inferred_uncapped_count})'
+        )
+
+    return {
+        'validated': True,
+        'country_code': 'kz',
+        'validation_partition': partition['id'],
+        'category1': category1,
+        'maxprice_kzt': cap,
+        'hidef2p': True,
+        'capped_total': capped_total,
+        'boundary_start': boundary_start,
+        'max_capped_price_kzt': max(capped_prices),
+        'last_at_or_below_cap_kzt': (
+            boundary_prices[first_over_index - 1]
+            if first_over_index
+            else None
+        ),
+        'first_over_cap_kzt': boundary_prices[first_over_index],
+        'logical_requests': 3,
+        'proof': 'capped_total_equals_uncapped_price_asc_kzt_boundary',
+    }
+
+
+def collect_partial(core, failures, previous_by_key, partition, sort_by='Name_ASC'):
+    page_size = core['PAGE_SIZE']
+    cap = core['PAID_MAX_PRICE_KZT']
+    partition_id = partition['id']
+    category1 = partition['category1']
+    failure_scope = f'{partition_id}:{sort_by}'
     start = 0
     catalog = {}
-    rows_seen = duplicate_rows = requests_made = 0
+    rows_seen = parsed_rows = eligible_rows_seen = duplicate_rows = requests_made = 0
     total = None
     reached_end = False
     seen_pages = set()
     leading_failures = 0
+    rejection_counts = Counter()
 
     while True:
         try:
-            data = core['get_page'](start, sort_by)
+            data = core['get_page'](
+                start,
+                sort_by,
+                category1=category1,
+                maxprice_kzt=cap,
+                hidef2p=True,
+            )
             requests_made += 1
-            failures.resolve_segment(sort_by=sort_by, start=start, count=page_size)
+            failures.resolve_segment(
+                sort_by=failure_scope,
+                start=start,
+                count=page_size,
+            )
             leading_failures = 0
         except Exception as exc:
             requests_made += 1
-            failures.record_segment(sort_by=sort_by, start=start, count=page_size, error=exc)
-            print('catalog segment failed:', sort_by, start, exc)
+            failures.record_segment(
+                sort_by=failure_scope,
+                start=start,
+                count=page_size,
+                error=exc,
+            )
+            print('catalog segment failed:', partition_id, sort_by, start, exc)
             start += page_size
             if total is not None and start >= total:
                 reached_end = True
@@ -88,7 +231,10 @@ def collect_partial(core, failures, previous_by_key, sort_by='Name_ASC'):
         soup = core['BeautifulSoup'](data.get('results_html', ''), 'html.parser')
         rows = soup.select('a.search_result_row')
         rows_seen += len(rows)
-        print(f'{sort_by}: start={start} rows={len(rows)} total={total} unique={len(catalog)}')
+        print(
+            f'{partition_id}/{sort_by}: start={start} rows={len(rows)} '
+            f'total={total} unique_eligible={len(catalog)}'
+        )
 
         if not rows:
             reached_end = True
@@ -96,6 +242,9 @@ def collect_partial(core, failures, previous_by_key, sort_by='Name_ASC'):
 
         page_keys = []
         for row in rows:
+            raw_key, _, _ = safe_row_identity(core, row)
+            if raw_key:
+                page_keys.append(raw_key)
             try:
                 item = core['parse_row'](row)
             except Exception as exc:
@@ -108,12 +257,20 @@ def collect_partial(core, failures, previous_by_key, sort_by='Name_ASC'):
                     error=exc,
                     prior_site_data_exists=key in previous_by_key,
                 )
-                print('catalog row failed:', key or '<unknown>', exc)
+                print('catalog row failed:', partition_id, key or '<unknown>', exc)
                 continue
             if not item:
+                rejection_counts['unparseable_or_missing_title'] += 1
                 continue
+
+            parsed_rows += 1
+            rejection = core['paid_source_rejection_reason'](item)
+            if rejection:
+                rejection_counts[rejection] += 1
+                continue
+
+            eligible_rows_seen += 1
             key = item['key']
-            page_keys.append(key)
             if key in catalog:
                 duplicate_rows += 1
             catalog[key] = item
@@ -121,7 +278,7 @@ def collect_partial(core, failures, previous_by_key, sort_by='Name_ASC'):
         signature = tuple(page_keys)
         if signature in seen_pages:
             failures.record_segment(
-                sort_by=sort_by,
+                sort_by=failure_scope,
                 start=start,
                 count=page_size,
                 error=RuntimeError('Steam repeated the same page signature'),
@@ -144,14 +301,35 @@ def collect_partial(core, failures, previous_by_key, sort_by='Name_ASC'):
         time.sleep(core['REQUEST_DELAY'])
 
     return {
+        'partition_id': partition_id,
+        'category1': category1,
         'catalog': catalog,
         'rows_seen': rows_seen,
+        'parsed_rows': parsed_rows,
+        'eligible_rows_seen': eligible_rows_seen,
+        'rejection_counts': dict(rejection_counts),
         'duplicate_rows': duplicate_rows,
         'requests_made': requests_made,
         'total': total,
         'reached_end': reached_end,
     }
 
+
+def merge_partition_traversals(traversals):
+    catalog = {}
+    provenance = {}
+    cross_partition_duplicates = 0
+
+    for traversal in traversals:
+        partition_id = traversal['partition_id']
+        for key in sorted(traversal['catalog']):
+            provenance.setdefault(key, []).append(partition_id)
+            if key in catalog:
+                cross_partition_duplicates += 1
+                continue
+            catalog[key] = traversal['catalog'][key]
+
+    return catalog, provenance, cross_partition_duplicates
 
 def clean(value):
     if value is None:
