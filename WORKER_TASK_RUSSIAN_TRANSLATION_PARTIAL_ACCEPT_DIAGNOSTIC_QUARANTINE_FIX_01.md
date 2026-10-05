@@ -189,3 +189,45 @@ You may update only your own clearly delimited task entry. Re-read immediately b
 ## Done when
 
 One exact bad translation can no longer block unrelated valid translations, that item is removed from normal translation retry flow into a GitHub-owned diagnostic state, the site shows the diagnostic count, and the existing failed checkpoint can be reconciled through the canonical path without retranslation.
+
+
+## Director continuation — post-implementation closeout
+
+This section is the current Director-authorized continuation of the same task. Do not start a new task and do not redo completed implementation without need.
+
+Confirmed current state:
+- PR #145 exists: `Isolate Russian translation quality failures into diagnostics`;
+- implementation branch: `fix/russian-translation-partial-accept-diagnostic-quarantine-01`;
+- the implementation has already proven the real 20-result checkpoint classifies as 19 accepted + 1 translation diagnostic;
+- required checks were green on the validated implementation;
+- Statistics includes the producer-owned translation diagnostic count;
+- the 20 translations must not be regenerated.
+
+Remaining work only:
+
+1. Re-read current `CHAT_PROTOCOL.md` and fresh `main`; perform the required START gate.
+2. Reconcile PR #145 with current `main` so it is cleanly mergeable without losing the completed implementation.
+3. Resolve the current overlapping transport situation involving:
+   - `data/ai_inbox/russian_descriptions/manual-one-shot-9b3f6d2c7a41.json`
+   - `data/ai_inbox/russian_descriptions/manual-one-shot-a41c7e5d920b.json`
+   These contain the same 20 request identities.
+4. Preserve canonical safety:
+   - do not retranslate;
+   - do not manually change request_id/AppID/hash/source binding;
+   - do not allow double acceptance;
+   - preserve the intended 19 accepted + 1 diagnostic outcome when current bindings still match;
+   - if safe resolution requires a bounded change to the same translation transport/ingest design, keep it inside PR #145;
+   - if resolution requires a distinct architecture decision outside this task, stop and report the exact blocker to the Director rather than inventing a new design.
+5. Re-run all required checks after reconciliation.
+6. Update `reviews/worker_reports/russian-translation-partial-accept-diagnostic-quarantine-fix-01.md` with:
+   - current mergeability/rebase result;
+   - exact duplicate-transport resolution;
+   - whether 19 accepted + 1 diagnostic remains proven;
+   - check results;
+   - current PR #145 head;
+   - any remaining Director action.
+7. Do not merge unless current protocol explicitly authorizes the worker to merge.
+8. Do not create or modify Scheduled Tasks.
+9. Do not touch Dossier, Deep, Fast, ranking, expiry, or unrelated project areas.
+
+Done for this continuation when PR #145 is ready for Director acceptance with the overlapping checkpoint transport safely resolved or with one precisely documented architecture blocker requiring a Director decision.
