@@ -93,6 +93,54 @@ Do **not** implement a raw Steam top-100 or arbitrary source truncation.
 
 This task may expose/measure the resulting candidate counts, but any separate hard final-site top-N publication rule is outside scope unless it is already canonical.
 
+
+
+## Previously approved product and site rules
+
+These decisions are already approved by the user and must be treated as requirements, not reopened questions:
+
+### Final visible set
+- The site should show **at most about 100 best offers**.
+- Do **not** shrink the candidate universe to 100 before detailed/deep analysis.
+- The intended flow is: apply deterministic Steam/commercial filtering first, then allow detailed/deep analysis of the remaining candidates, and only after that keep the best ~100 for final presentation.
+- The site may show the current best ~100 while analysis is still progressing; that visible set is allowed to change as stronger Deep results arrive.
+
+### Deep priority
+- A game with a **positive completed Deep result always has priority over any game that has not yet completed Deep analysis**.
+- Do **not** boost an item merely because its discount is ending soon.
+- For items still awaiting Deep analysis, the analysis queue should prioritize the strongest commercial/reputation candidates first. The approved ordering intent is:
+  1. deal/value attractiveness;
+  2. higher positive-review rating;
+  3. larger review count.
+- Changes to Deep ordering must be made through the GitHub-owned instruction/config file that controls ordering. Do **not** rewrite the canonical Deep worker prompt merely to change queue priority.
+
+### DLC and Steam library
+- For now, keep discovering DLC broadly because Steam-library ownership is not yet available to this pipeline.
+- The intended future refinement is to prioritize/show DLC for games the user owns once Steam-library data is available.
+- Do not silently remove all DLC as a source-reduction shortcut.
+
+### Bundles/packages
+- Keep bundles/packages as a distinct opportunity class.
+- A strong bundle may deserve a place in the final ~100 even when its component games individually would not.
+- Do not reduce bundles to a simple by-product of already-selected games unless a later explicit user decision changes this rule.
+
+### Low-value obscure content
+- Extremely obscure / low-signal “indie among indie” content may be excluded when the existing quality/reputation evidence shows it is not competitive for the best-offer product.
+- Do not implement a popularity-only shortcut that could remove a genuinely strong niche offer without evidence.
+
+### Site / operational visibility
+The site must expose operational progress clearly enough that the user can see what the system is currently doing.
+
+Required direction:
+- keep the existing Statistics observability;
+- add/retain **filtering funnel statistics** so the user can see how many items were removed at the major deterministic stages;
+- provide a **separate current-tasks / analysis-queue view** on the site showing the active/current semantic-analysis backlog and stage state, rather than forcing the user to infer it from GitHub;
+- the queue view must be read-only presentation of GitHub-owned state; the browser must not own or reorder the queue;
+- include the Steam-library/DLC ownership acquisition work as an explicit visible future/current task when that task exists in canonical GitHub state.
+
+If these site changes are too large to implement safely inside the collector-scope PR without mixing unrelated concerns, do not drop them. Record them as a bounded follow-up implementation task in the report, with exact canonical producer fields needed. The Steam-scope implementation must preserve the data needed for those Statistics/queue views.
+
+
 ## Required validation
 
 Add deterministic regressions proving at least:
