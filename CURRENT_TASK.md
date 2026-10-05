@@ -1360,16 +1360,12 @@
 - Report: `reviews/worker_reports/personal-taste-game-guess-diagnostic-01.md`.
 
 
-## READY FOR DIRECTOR ACCEPTANCE — Russian translation partial accept + diagnostic quarantine continuation 01
+## IN PROGRESS — Russian translation partial accept + diagnostic quarantine final merge 01
 
-- Status: `complete_ready_for_director_acceptance`.
+- Status: `final_merge_authorized_reconciling_current_main`.
 - Task: `WORKER_TASK_RUSSIAN_TRANSLATION_PARTIAL_ACCEPT_DIAGNOSTIC_QUARANTINE_FIX_01.md`.
 - Worker slot: `ЧАТ 2`.
 - PR: `#145`; implementation branch: `fix/russian-translation-partial-accept-diagnostic-quarantine-01`.
-- Reconciled validated implementation/transport head: `f25cfadfcb09a56cc36a7ba6a8d393d7a0691829`; PR was `behind_by=0`, `mergeable=true`.
-- Duplicate transport resolution: keep pinned `manual-one-shot-9b3f6d2c7a41.json`; remove later overlapping `manual-one-shot-a41c7e5d920b.json`; duplicate safety in ingest remains fail-closed.
-- Fresh binding proof: pinned checkpoint `20/20` exact-current; CI proves `19 accepted + 1 diagnostic + 0 worker errors`.
-- Checks: execution ownership `37295407305` success; Progressive PASS 2 core `37295407282` success; backlog dispositions `37295407272` success.
-- Report updated: `reviews/worker_reports/russian-translation-partial-accept-diagnostic-quarantine-fix-01.md`.
-- Remaining action belongs to Director: review/merge PR #145, then verify canonical ingest and downstream rebuild from fresh `main`.
-- No retranslation, request/AppID/hash rebinding, Scheduled Task change, Dossier/Deep/Fast/ranking/expiry change, or worker merge was performed.
+- Director/user authorization: reconcile with fresh `main`, re-run required checks, merge PR #145 when green/mergeable, then verify canonical ingest and downstream rebuild.
+- Preserve approved transport resolution: keep `manual-one-shot-9b3f6d2c7a41.json`; remove later overlapping `manual-one-shot-a41c7e5d920b.json`.
+- No retranslation, record mixing, request/AppID/hash rebinding, duplicate-safety weakening, Scheduled Task change, or Dossier/Deep/Fast/ranking/expiry change is authorized.
