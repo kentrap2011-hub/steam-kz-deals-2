@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "8c87128f614635fabc289d3f4e4e852012efd43c",
+  "run_start_authority_commit": "e729f31cccdecf7910d82990ef426d4b67f8e687",
+  "run_started_at_utc": "2026-10-05T10:06:16+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+  "work_id": "698e96ffbd40b30b4d807fb353714da4336bb44f81db42faaa5d523ec8db4e7e",
+  "family_id": "game:1411020",
+  "taste_subject_key": "App_1411020",
+  "appid": "1411020",
+  "taste_fingerprint": "9ebd99e57f2c246840599c69bd17340fa8edc13db4829af17d4268adb0eabbab",
+  "candidate_context_sha256": "51698f2c0c48e216e21d2a76daff5a5021a8e94b180cca210848113ce38dc584",
+  "dossier_content_sha256": "9dd70e947e472536a3d694f50a8c55410ca0013f13987893af952dd0438e5320",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "c98a1ecc087a74290802c5ffd99a0f1b0a79d6d18ca61e771de1f9ffa779730c",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Боссы требуют учить паттерны, уклоняться и парировать, поэтому основной прогресс строится на личном мастерстве.",
+    "У каждого босса свои механики, а новые способности дают некоторое развитие между боями.",
+    "Живописная plant-horror стилистика и co-op создают дополнительные сильные крючки."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 94,
+    "development_variety": 70,
+    "structure_pacing_direction": 74,
+    "identity_hooks": 90,
+    "breadth_of_match": 86
+  },
+  "score_findings": [
+    {
+      "finding_id": "boss-pattern-mastery",
+      "text_ru": "Каждый босс строится вокруг собственных паттернов уклонения и парирования, поэтому прогресс ощущается прежде всего как освоение боя и рост собственного навыка.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Паттерны, тайминги и поиск подхода — один из самых сильных положительных сигналов твоего профиля."
+        },
+        {
+          "json_pointer": "/stopgame_cards/15/what_liked/1",
+          "profile_value_sha256": "392261520122c3b0ed1128fca6b3ee8d16990aa1f35f28998cccd95b3b487557",
+          "match_text_ru": "Ты отдельно отмечал, что тебе нравится искать подход к конкретному боссу или ситуации."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 94
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 70
+        }
+      ]
+    },
+    {
+      "finding_id": "plant-horror-identity",
+      "text_ru": "Ручная живописная стилистика, музыка и необычные растительные хоррор-боссы дают игре легко узнаваемую атмосферу даже для игроков, которым не нравится её модель сложности.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Сильный визуальный язык и атмосфера способны заметно усиливать твоё впечатление."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 90
+        }
+      ]
+    },
+    {
+      "finding_id": "coop-adds-role-value",
+      "text_ru": "Кооператив заметно меняет прохождение боссов и может добавлять взаимную помощь и распределение внимания, хотя итоговая сложность зависит от пары и масштабирования.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9/raises",
+          "profile_value_sha256": "36b637056006eec4d8f770215639f59d7ccbc3bd78413fc61dd852f0486dfea8",
+          "match_text_ru": "Совместная тактика и помощь друг другу — подтверждённый усилитель твоего интереса."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 86
+        }
+      ]
+    },
+    {
+      "finding_id": "boss-rush-with-travel-friction",
+      "text_ru": "Boss-rush даёт ясную центральную цель, а мир между боссами добавляет лор и небольшие активности, но длинные переходы иногда ломают темп, потому что исследование здесь вторично.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Тебе особенно помогает регулярная смена содержательных ситуаций; длинные переходы без нового действия этот плюс частично ослабляют."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 74
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "difficulty_punishment",
+        "text_ru": "One-hit-death делает каждую ошибку мгновенным рестартом, а длинные попытки и runback могут превращать освоение босса в слишком большую серию повторов; у тебя уже есть подтверждённая усталость от такого типа повторных попыток.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Между боссами есть лор и небольшие активности, но навигация и длинные пешие переходы иногда ощущаются громоздкими относительно основного boss-rush цикла.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Кооператив может быть очень приятным, но масштабирование боссов и разница в навыке партнёров способны сделать те же бои как проще, так и сложнее.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      }
+    ]
+  }
+}
