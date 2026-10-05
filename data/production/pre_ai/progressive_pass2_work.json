@@ -51,15 +51,15 @@
   },
   "scope": {
     "deep_total_current_coverage_target": 527,
-    "deep_first_pass_attempted_count": 187,
-    "deep_authoritative_completed_count": 156,
-    "deep_completed_fit_count": 133,
+    "deep_first_pass_attempted_count": 188,
+    "deep_authoritative_completed_count": 157,
+    "deep_completed_fit_count": 134,
     "deep_completed_not_fit_count": 23,
     "deep_incomplete_or_recovery_count": 31,
     "deep_waiting_for_dossier_count": 337,
-    "deep_ready_or_pending_count": 3,
-    "deep_normal_first_pass_remaining_count": 340,
-    "deep_remaining_until_all_authoritative_count": 371,
+    "deep_ready_or_pending_count": 2,
+    "deep_normal_first_pass_remaining_count": 339,
+    "deep_remaining_until_all_authoritative_count": 370,
     "deep_normal_first_pass_complete": false,
     "deep_all_current_authoritative_complete": false,
     "recovery_owned_count": 31,
@@ -67,9 +67,9 @@
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 19,
     "dossier_waiting_count": 337,
-    "pass2_attempted_count": 187,
-    "pass2_eligible_count": 3,
-    "normal_pass2_eligible_count": 3,
+    "pass2_attempted_count": 188,
+    "pass2_eligible_count": 2,
+    "normal_pass2_eligible_count": 2,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -108,69 +108,6 @@
     }
   },
   "items": [
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:1608230",
-      "taste_subject_key": "App_1608230",
-      "appid": "1608230",
-      "taste_fingerprint": "f0157cb571363c353e5a10360a54be279b57d69d031cbcbf402d8f04cd50cd7f",
-      "candidate_context_sha256": "1ce9708cf27e251a27680d680a88f01571901edb375688eb6dd8a953d0a2cfea",
-      "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
-      "work_id": "0ff3d52f10f4c4a7f7de33d06af936cfde83c2052104750df714be0f844bbc6a",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Planet of Lana",
-        "short_description": "In a world torn between nature’s grace and cold machine invasion, one girl and her companion must rely on their bond to survive and protect what they hold dear. Their story of hope, loss, and love will stay with you long after the journey ends.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Action",
-          "Singleplayer"
-        ],
-        "core_fit_count": 0,
-        "release_date": "23 May, 2023",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1608230"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1608230.json",
-      "dossier_content_sha256": "97e91c8148db5522f30e0ec558cbe3c3c912863176eed52f56e7a74a6a2324e8",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-25T16:08:17Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "ed84cf60a5d7d97a3d2bb05b8c36b55257098867b1a688cc21c5eb63f93c89fe",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--0ff3d52f10f4c4a7f7de33d06af936cfde83c2052104750df714be0f844bbc6a--ed84cf60a5d7d97a3d2bb05b8c36b55257098867b1a688cc21c5eb63f93c89fe.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--0ff3d52f10f4c4a7f7de33d06af936cfde83c2052104750df714be0f844bbc6a--ed84cf60a5d7d97a3d2bb05b8c36b55257098867b1a688cc21c5eb63f93c89fe.json",
-      "sequence": 1
-    },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
@@ -231,7 +168,7 @@
       "authorization_id": "7117bc722aae3241445b1206806aaa7da1f6b5e5f59512e47a1f01437507257f",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--10a7800411fbe80ff1f6fc9aa030f2b3f9f71f30c1f0437c2e268384f350a6ab--7117bc722aae3241445b1206806aaa7da1f6b5e5f59512e47a1f01437507257f.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--10a7800411fbe80ff1f6fc9aa030f2b3f9f71f30c1f0437c2e268384f350a6ab--7117bc722aae3241445b1206806aaa7da1f6b5e5f59512e47a1f01437507257f.json",
-      "sequence": 2
+      "sequence": 1
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -294,7 +231,7 @@
       "authorization_id": "d81512edc5ce3e4135ae2ce0a8f92d4280e05d893a4a00e5f67d2eae57ac406e",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--b54ddf4239ea5784aa0ee34deb254c192a65a7e1bcdc729bdeeb275ad81aba4f--d81512edc5ce3e4135ae2ce0a8f92d4280e05d893a4a00e5f67d2eae57ac406e.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--b54ddf4239ea5784aa0ee34deb254c192a65a7e1bcdc729bdeeb275ad81aba4f--d81512edc5ce3e4135ae2ce0a8f92d4280e05d893a4a00e5f67d2eae57ac406e.json",
-      "sequence": 3
+      "sequence": 2
     }
   ]
 }
