@@ -231,3 +231,39 @@ Remaining work only:
 9. Do not touch Dossier, Deep, Fast, ranking, expiry, or unrelated project areas.
 
 Done for this continuation when PR #145 is ready for Director acceptance with the overlapping checkpoint transport safely resolved or with one precisely documented architecture blocker requiring a Director decision.
+
+
+## Director authorization — final merge continuation
+
+The user has explicitly authorized completing this task now.
+
+Current Director observation before this continuation:
+- PR #145 is still open;
+- its previously validated implementation and duplicate-transport resolution are complete;
+- required checks were green on the previous current head;
+- `main` has advanced since that proof, so current mergeability may be false again solely because the PR is behind.
+
+Authorized remaining work:
+
+1. Re-read current `CHAT_PROTOCOL.md`, fresh `main`, and this exact task.
+2. Reconcile PR #145 with the current `main` again without changing the completed task semantics.
+3. Preserve the already approved duplicate-transport resolution:
+   - keep `manual-one-shot-9b3f6d2c7a41.json`;
+   - remove the later overlapping `manual-one-shot-a41c7e5d920b.json`;
+   - do not regenerate translations, mix records, rebind identities, or weaken duplicate safety.
+4. Re-run all required checks on the fresh reconciled head.
+5. Confirm the real checkpoint still proves 19 accepted + 1 diagnostic if bindings remain current.
+6. If the PR is clean/mergeable and all required checks are green, **merge PR #145 into main**. This continuation is explicit Director/user merge authorization for this task.
+7. After merge, verify the canonical ingest path processes the remaining checkpoint exactly once and report the fresh canonical translation state:
+   - accepted translations;
+   - diagnostic count;
+   - normal remaining queue count;
+   - attempt/success timestamps;
+   - downstream rebuild status.
+8. If merge cannot safely occur because of a real semantic conflict rather than simple main movement, stop and report the exact blocker instead of forcing the merge.
+9. Do not create or modify Scheduled Tasks.
+10. Do not modify Dossier, Deep, Fast, ranking, expiry, or unrelated project logic.
+
+Update the existing worker report with the final merge/ingest outcome and current main commit.
+
+Done when PR #145 is safely merged and post-merge canonical ingest is verified, or when one exact blocking contradiction requiring Director action is documented.
