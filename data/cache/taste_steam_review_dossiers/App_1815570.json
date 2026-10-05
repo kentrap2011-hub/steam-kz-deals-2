@@ -1,0 +1,379 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "appid": "1815570",
+  "title": "Aces & Adventures",
+  "generated_at_utc": "2026-10-05T19:19:00Z",
+  "expires_at_utc": "2026-10-25T19:19:00Z",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "Aces & Adventures",
+    "release_year": 2023,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "1815570"
+      },
+      {
+        "kind": "developer",
+        "value": "Triple.B.Titles"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The defining system combines poker hands with ability cards: ordinary cards attack or defend, while pairs, straights and other combinations interact with class skills and create a more tactical card-battle rhythm.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Five classes, ability decks and campaign or procedural modes create meaningful build variety, with stronger decks and class-specific synergies becoming more important on higher difficulties.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Difficulty is uneven: the basic rules are easy to learn, but higher settings and enemy card luck can create sharp swings that some players interpret as challenge and others as unfairness.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "The narrated campaigns are a recurring presentation strength, while longer procedural chains and repeated battles are more divisive and can feel grindy once the campaign content is exhausted.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Voice acting, card presentation, audiovisual polish and storybook framing receive repeated praise even from players who criticize balance or rule exceptions.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Some rule exceptions and real-time grading layered onto otherwise turn-based play are recurring friction points, particularly for players who expect poker rules to apply consistently or need a slower input pace.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "The poker foundation creates the main split: some players find it deeper and more dynamic than standard deckbuilders, while others dislike AI luck, special rule exceptions or balance differences between classes.",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003"
+      ]
+    }
+  ],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            5
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            3
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            5
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            3,
+            4
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1,
+            4
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1815570/Aces__Adventures/",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "identity",
+        "player_feedback": false,
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "forum",
+        "domain": "2ch.su",
+        "url": "https://2ch.su/vg/res/51023863.html",
+        "publication_date": null,
+        "language": "russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1815570/reviews/?browsefilter=toprated",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1815570",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1815570",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1815570",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "public_ref": "2ch-thread:51023863:post-780",
+        "publication_date": "2026-07-14",
+        "language": "russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-003",
+        "publication_date": "2024-12-13",
+        "language": "non_russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-003",
+        "publication_date": "2023-04-07",
+        "language": "non_russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-004",
+        "publication_date": "2026-09-15",
+        "language": "non_russian",
+        "acquisition_mode": "search_result_observation"
+      }
+    ]
+  }
+}

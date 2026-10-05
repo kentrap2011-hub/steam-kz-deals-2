@@ -1,0 +1,426 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "appid": "1684100",
+  "title": "Halluci-Sabbat of Koishi",
+  "generated_at_utc": "2026-10-05T21:21:58Z",
+  "expires_at_utc": "2026-10-25T21:21:58Z",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "Halluci-Sabbat of Koishi",
+    "release_year": 2024,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "1684100"
+      },
+      {
+        "kind": "developer",
+        "value": "ZRIGN 地霊研究院"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Player feedback consistently frames the core combat around learning timing for parries, dodges and counters; early control friction can give way to a more satisfying action loop once the systems are understood.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-006",
+        "feedback-009"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "The game is repeatedly described as deliberately hard, with bosses and counter timing punishing weak execution or repeated mistakes, while several players still regard the challenge as manageable or rewarding after acclimation.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 5,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003",
+        "feedback-004",
+        "feedback-005",
+        "feedback-009"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "At least one detailed player account says that unlocking additional moves and ranged or defensive options broadens the combat toolkit and addresses limitations felt during the opening stages.",
+      "sentiment": "positive",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Feedback depicts a compact stage-based experience with hidden or extra encounters and a comparatively short story or campaign; some players explicitly wish the overall experience were longer.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003",
+        "feedback-008"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Art, character animation, music and the Touhou-specific atmosphere recur as strengths, while some feedback also suggests that prior familiarity with Touhou makes the premise and character identity easier to appreciate.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-004",
+        "feedback-007"
+      ]
+    },
+    {
+      "category": "localization",
+      "statement": "One player report described rough translation or localization in places, and an older Russian-language review explicitly wanted Russian support; current Steam metadata lists Russian as unsupported, so this dossier does not generalize the old translation complaint into a current player-reported localization state.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "uncertain",
+      "source_ids": [
+        "source-001",
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-004"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "Difficulty is a recurring point of tension: players describe the timing-heavy combat as satisfying and fair once learned, while others emphasize how punishing the counters and boss encounters can feel.",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-005",
+        "feedback-006",
+        "feedback-009"
+      ]
+    }
+  ],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            2
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            3,
+            4
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            4
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1,
+            5
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "covered",
+          "observation_indices": [
+            5
+          ]
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1684100/___HalluciSabbat_of_Koishi/?l=russian",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "identity",
+        "player_feedback": false,
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1684100/reviews/?browsefilter=toprated",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1684100",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "store_user_reviews",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1684100/___HalluciSabbat_of_Koishi/?curator_clanid=40230650&l=russian",
+        "publication_date": null,
+        "language": "russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1684100",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1684100",
+        "publication_date": null,
+        "language": "mixed",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1684100",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "non_russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": "2025-05-15",
+        "language": "non_russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-002",
+        "publication_date": "2024-10-02",
+        "language": "non_russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-003",
+        "publication_date": "2022-01-08",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-003",
+        "publication_date": "2024-12-25",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-003",
+        "publication_date": "2025-05-02",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-007",
+        "source_id": "source-003",
+        "publication_date": "2024-12-16",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-008",
+        "source_id": "source-004",
+        "publication_date": null,
+        "language": "non_russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-009",
+        "source_id": "source-004",
+        "publication_date": null,
+        "language": "non_russian",
+        "acquisition_mode": "search_result_observation"
+      }
+    ]
+  }
+}
