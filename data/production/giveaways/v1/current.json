@@ -2,8 +2,8 @@
   "contract": "CROSS-PLATFORM-GIVEAWAY-V1",
   "schema_version": 1,
   "country_code": "KZ",
-  "generated_at_utc": "2026-09-23T23:12:47.796540Z",
-  "fresh_until_utc": "2026-09-25T05:12:47.796540Z",
+  "generated_at_utc": "2026-10-05T19:21:21.723608Z",
+  "fresh_until_utc": "2026-10-07T01:21:21.723608Z",
   "snapshot_status": "incomplete",
   "required_sources": [
     "steam",
@@ -15,21 +15,21 @@
       "required": true,
       "status": "failed",
       "complete": false,
-      "observed_at_utc": "2026-09-23T23:12:47.796540Z",
+      "observed_at_utc": "2026-10-05T19:21:21.723608Z",
       "endpoint": "existing KZ Steam catalog + targeted first-party validation",
       "candidate_count": 0,
       "accepted_count": 0,
       "rejected_count": 0,
       "unverified_count": 0,
       "error_code": "SOURCE_STALE",
-      "error": "Steam candidate snapshot is stale: 362.4h",
+      "error": "Steam candidate snapshot is stale: 646.6h",
       "details": {}
     },
     "epic": {
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-09-23T23:12:47.796540Z",
+      "observed_at_utc": "2026-10-05T19:21:21.723608Z",
       "endpoint": "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions",
       "candidate_count": 2,
       "accepted_count": 2,
@@ -49,7 +49,7 @@
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-09-23T23:12:47.796540Z",
+      "observed_at_utc": "2026-10-05T19:21:21.723608Z",
       "endpoint": "https://catalog.gog.com/v1/catalog",
       "candidate_count": 0,
       "accepted_count": 0,
@@ -73,27 +73,27 @@
   "unverified_offer_count": 0,
   "games": [
     {
-      "canonical_game_key": "meta-v1:45dbf633bdb236fa49321608",
+      "canonical_game_key": "meta-v1:e9fe01655a53dfcd1fbcfc32",
       "identity_confidence": "high",
       "identity_evidence": {
         "basis": "exact_normalized_title_and_publishers",
         "publishers": [
-          "plug in digital sas"
+          "line games corporation"
         ]
       },
-      "title": "Mindcop",
+      "title": "BURIED STARS",
       "offers": [
         {
           "source_id": "epic",
-          "source_offer_id": "epic:f20a4eda0f2d486ea73cab8af1224e31:8a20c6c8d5b5417e800c687e9d72013e:2026-09-24T15:00:00Z:2026-09-17T15:00:00Z",
-          "source_product_id": "f20a4eda0f2d486ea73cab8af1224e31:8a20c6c8d5b5417e800c687e9d72013e",
+          "source_offer_id": "epic:9bd512d68e3143909842932ac45a4182:af4c34934afe4db0870b8a1d82dceb94:2026-10-08T15:00:00Z:2026-10-01T15:00:00Z",
+          "source_product_id": "9bd512d68e3143909842932ac45a4182:af4c34934afe4db0870b8a1d82dceb94",
           "storefront": "epic",
-          "title": "Mindcop",
-          "claim_url": "https://store.epicgames.com/en-US/p/mindcop-78e6c1",
-          "promotion_start_utc": "2026-09-17T15:00:00Z",
-          "promotion_end_utc": "2026-09-24T15:00:00Z",
-          "observed_at_utc": "2026-09-23T23:12:47.796540Z",
-          "base_price": 370000,
+          "title": "BURIED STARS",
+          "claim_url": "https://store.epicgames.com/en-US/p/buried-stars-d7c88c",
+          "promotion_start_utc": "2026-10-01T15:00:00Z",
+          "promotion_end_utc": "2026-10-08T15:00:00Z",
+          "observed_at_utc": "2026-10-05T19:21:21.723608Z",
+          "base_price": 470000,
           "final_price": 0,
           "currency": "KZT",
           "discount_percent": 100,
@@ -111,27 +111,27 @@
       ]
     },
     {
-      "canonical_game_key": "meta-v1:7c06c8417b334b56c6be4667",
+      "canonical_game_key": "meta-v1:d6aba51ecfd74f33335a39f3",
       "identity_confidence": "high",
       "identity_evidence": {
         "basis": "exact_normalized_title_and_publishers",
         "publishers": [
-          "goblinz studio sas"
+          "atari"
         ]
       },
-      "title": "Shogun Showdown",
+      "title": "System Shock 2: 25th Anniversary Remaster",
       "offers": [
         {
           "source_id": "epic",
-          "source_offer_id": "epic:59ff4d481277487d8c073166ba7612d3:b9ff3f98367a45cdac289dff6683a2bc:2026-09-24T15:00:00Z:2026-09-17T15:00:00Z",
-          "source_product_id": "59ff4d481277487d8c073166ba7612d3:b9ff3f98367a45cdac289dff6683a2bc",
+          "source_offer_id": "epic:a90f2381d7aa48c09b4080515a9541cd:7ae00c3e89174012b175cc73b4737723:2026-10-08T15:00:00Z:2026-10-01T15:00:00Z",
+          "source_product_id": "a90f2381d7aa48c09b4080515a9541cd:7ae00c3e89174012b175cc73b4737723",
           "storefront": "epic",
-          "title": "Shogun Showdown",
-          "claim_url": "https://store.epicgames.com/en-US/p/shogun-showdown-61832d",
-          "promotion_start_utc": "2026-09-17T15:00:00Z",
-          "promotion_end_utc": "2026-09-24T15:00:00Z",
-          "observed_at_utc": "2026-09-23T23:12:47.796540Z",
-          "base_price": 278000,
+          "title": "System Shock 2: 25th Anniversary Remaster",
+          "claim_url": "https://store.epicgames.com/en-US/p/system-shock-2-25th-anniversary-remaster-cb94d9",
+          "promotion_start_utc": "2026-10-01T15:00:00Z",
+          "promotion_end_utc": "2026-10-08T15:00:00Z",
+          "observed_at_utc": "2026-10-05T19:21:21.723608Z",
+          "base_price": 555000,
           "final_price": 0,
           "currency": "KZT",
           "discount_percent": 100,
