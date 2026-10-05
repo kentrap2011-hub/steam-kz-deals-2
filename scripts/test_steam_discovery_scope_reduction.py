@@ -281,6 +281,65 @@ def test_kz_maxprice_validation_fails_closed_if_filter_is_not_material():
         raise AssertionError('ignored/non-material maxprice must fail closed')
 
 
+def test_progress_reporter_exposes_stage_and_network_metrics():
+    stats = {
+        'search_http_requests': 21,
+        'search_retry_events': 2,
+        'search_429_events': 1,
+        'search_backoff_seconds': 6.0,
+        'review_http_requests': 100,
+        'review_retry_events': 3,
+        'review_429_events': 4,
+        'review_backoff_seconds': 4.0,
+    }
+    reporter = runner.ProgressReporter(
+        stats_provider=lambda: stats,
+        heartbeat_seconds=999,
+    )
+    reporter.set_stage(
+        'search_traversal',
+        partition='games',
+        page_number=20,
+        rows_seen=1000,
+        reported_total=5000,
+        progress_percent=20.0,
+        eligible_rows_after_local_gate=123,
+        duplicate_rows=7,
+    )
+    snapshot = reporter.snapshot('test')
+    assert snapshot['event'] == 'test'
+    assert snapshot['stage'] == 'search_traversal'
+    assert snapshot['partition'] == 'games'
+    assert snapshot['page_number'] == 20
+    assert snapshot['rows_seen'] == 1000
+    assert snapshot['reported_total'] == 5000
+    assert snapshot['progress_percent'] == 20.0
+    assert snapshot['eligible_rows_after_local_gate'] == 123
+    assert snapshot['duplicate_rows'] == 7
+    assert snapshot['network'] == stats
+
+
+def test_core_network_stats_expose_retry_and_backoff_counters():
+    c = core()
+    initial = c['network_stats_snapshot']()
+    expected_keys = {
+        'search_http_requests',
+        'search_retry_events',
+        'search_429_events',
+        'search_backoff_seconds',
+        'review_http_requests',
+        'review_retry_events',
+        'review_429_events',
+        'review_backoff_seconds',
+    }
+    assert set(initial) == expected_keys
+    c['bump_network_stat']('search_http_requests', 2)
+    c['bump_network_stat']('review_backoff_seconds', 1.5)
+    updated = c['network_stats_snapshot']()
+    assert updated['search_http_requests'] == 2
+    assert updated['review_backoff_seconds'] == 1.5
+
+
 def test_free_giveaway_lane_remains_separate_from_paid_filters():
     policy = json.loads((ROOT / 'config/mailing_policy.json').read_text(encoding='utf-8'))
     paid = policy['paid_discovery']
@@ -332,6 +391,8 @@ def main():
         test_kz_maxprice_validation_does_not_require_monotonic_price_asc,
         test_kz_maxprice_validation_fails_closed_if_capped_partition_leaks_over_cap,
         test_kz_maxprice_validation_fails_closed_if_filter_is_not_material,
+        test_progress_reporter_exposes_stage_and_network_metrics,
+        test_core_network_stats_expose_retry_and_backoff_counters,
         test_free_giveaway_lane_remains_separate_from_paid_filters,
         test_discovery_scope_remains_github_owned_without_new_scheduler_or_top_n,
         test_mirrors_edge_catalyst_is_not_special_cased,
