@@ -1,6 +1,6 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.21",
+  "version": "1.22",
   "status": "canonical",
   "purpose": "Personalized daily Steam KZ deal data preparation with stable price-blind taste verdicts, taste-first eligibility, one nightly commercial snapshot, and resumable taste-cache checkpoints.",
   "policy_loading": {
@@ -47,7 +47,43 @@
     "production_feed_is_primary_discovery_source": true,
     "steamdb_for_discovery": false,
     "web_search_may_replace_failed_ingest": false,
-    "read_all_chunks": true
+    "read_all_chunks": true,
+    "source_scope_contract": "preservation_first_bounded_paid_v1",
+    "minimum_discount_percent": 50,
+    "maximum_final_price_kzt": 4500,
+    "raw_source_top_n": null,
+    "source_partitions": [
+      {
+        "id": "games",
+        "category1": "998"
+      },
+      {
+        "id": "dlc",
+        "category1": "21"
+      },
+      {
+        "id": "bundles",
+        "category1": "996"
+      }
+    ],
+    "paid_partition_filters": {
+      "specials_only": true,
+      "hide_free_to_play": true,
+      "preserve_country_code_kz": true,
+      "maxprice_kzt": 4500,
+      "maxprice_must_pass_bounded_live_kz_boundary_validation_before_trust": true,
+      "source_side_minimum_discount_is_not_assumed": true
+    },
+    "local_pre_review_gates": {
+      "minimum_discount_percent": 50,
+      "maximum_final_price_kzt": 4500,
+      "reject_obvious_extras": true,
+      "reject_software_only_without_game_tags": true
+    },
+    "merge_identity": "exact App_/Sub_ identity; deterministic partition order games,dlc,bundles",
+    "completeness_rule": "complete union of every explicit paid partition after the live-validated KZ price bound; never truncate to an arbitrary raw top-N",
+    "free_or_giveaway_lane_is_separate": true,
+    "paid_filters_must_not_remove_free_or_giveaway_lane": true
   },
   "ingest_qa": {
     "fail_closed": true,
