@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "768d5d11a4e8c8c3780d1ef07988756a67507e53",
+  "run_start_authority_commit": "e0dda46f1a14dd7f16ce8e2fe2a350e686141291",
+  "run_started_at_utc": "2026-10-05T12:14:07+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+  "work_id": "a879aec2f4fb8ee911e9eecb56268e47a50f58306b007d7eb63135deb2729864",
+  "family_id": "game:1432860",
+  "taste_subject_key": "App_1432860",
+  "appid": "1432860",
+  "taste_fingerprint": "8eb9ec08e0aa889f1ee66e8248c3150064796d3ec08d075601c60a7f8892fd3b",
+  "candidate_context_sha256": "e5a8b5db6c3aee0d5bc567bb228b6a92bb872ad8662f7280684ac3f1b511165b",
+  "dossier_content_sha256": "a95a86497f7d4a2be844fa572fc315311cbd69211b78c768d176875dee082232",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "aba392dee9180ff78b7e0e0efff3d84fa1053d7ad42e499acd194c12632b9f54",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Ферма, крафт, бои, шахты, рыбалка, магия и отношения дают очень широкий и постоянно меняющийся набор занятий.",
+    "Skill trees и постоянный рост характеристик создают заметную RPG-прогрессию.",
+    "Персонажные истории и co-op добавляют социальный и сюжетный слой к системной песочнице."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 68,
+    "development_variety": 90,
+    "structure_pacing_direction": 76,
+    "identity_hooks": 82,
+    "breadth_of_match": 90
+  },
+  "score_findings": [
+    {
+      "finding_id": "feature-rich-rpg-life-sim",
+      "text_ru": "Ферма, крафт, бои, шахты, рыбалка, магия и отношения создают необычно широкий набор занятий, поэтому игра регулярно меняет тип активности вместо одного повторяющегося цикла.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Регулярная смена механик и ситуаций — один из твоих устойчивых плюсов."
+        },
+        {
+          "json_pointer": "/factor_importance/развитие_и_разнообразие/note",
+          "profile_value_sha256": "0580f077432002933245e702ef32d0a5e3ac046bc717580f70c7ebcc99027b7d",
+          "match_text_ru": "Развитие и разнообразие — один из наиболее повторяющихся мотивов твоих оценок."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 90
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 90
+        }
+      ]
+    },
+    {
+      "finding_id": "skill-growth-and-magic",
+      "text_ru": "Skill trees, постоянный рост характеристик и магия дают понятное развитие персонажа и заметно расширяют возможности по ходу игры, хотя поздняя прогрессия становится менее насыщенной.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/raises",
+          "profile_value_sha256": "14b5578fa690e75089e182953960601edf5593fe7c4b57ccdc49878c88fa672a",
+          "match_text_ru": "Тебе нравится развитие героя и способностей, когда результат улучшения ощущается в игре."
+        },
+        {
+          "json_pointer": "/taste_profile/2/pattern",
+          "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+          "match_text_ru": "Понятная цель и эффект прогрессии особенно важны для тебя."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 68
+        }
+      ]
+    },
+    {
+      "finding_id": "many-activities-but-overload",
+      "text_ru": "Большое число локаций, NPC-задач и вариантов кастомизации поддерживает долгую смену целей, но из-за объёма контента структура иногда ощущается перегруженной и неравномерной.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Тебе полезна смена задач, но она должна оставаться понятной, а не превращаться в поток мелких обязательств."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 76
+        }
+      ]
+    },
+    {
+      "finding_id": "fantasy-relationships-and-coop",
+      "text_ru": "Фэнтезийные города, персонажные истории и отношения добавляют сюжетный слой к системной песочнице, а co-op позволяет делить часть фермерских, боевых и исследовательских занятий.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "Сюжет и персонажи для тебя усиливают игру, когда рядом достаточно геймплея."
+        },
+        {
+          "json_pointer": "/taste_profile/9/raises",
+          "profile_value_sha256": "36b637056006eec4d8f770215639f59d7ccbc3bd78413fc61dd852f0486dfea8",
+          "match_text_ru": "Совместные действия и помощь друг другу — подтверждённый положительный сигнал для co-op."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 82
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 90
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Поздняя прогрессия местами выравнивается: после сильного раннего роста некоторые высокоуровневые системы и регионы ощущаются менее насыщенными.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Огромное число занятий и задач поддерживает разнообразие, но одновременно может перегружать и создавать ощущение неравномерно развитого контента.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "В co-op ферма, бои и исследование работают совместно, но сюжетное и квестовое продвижение частично остаётся индивидуальным и не полностью синхронизируется между партнёрами.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "felt_technical_burden",
+        "text_ru": "Свежие отзывы 2026 года всё ещё сообщают о рассинхронизации, зависаниях, разрывах соединения и других багах, способных прерывать длинное прохождение, особенно в мультиплеере.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  }
+}
