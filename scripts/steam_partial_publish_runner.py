@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import shutil
+import threading
 import time
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -25,6 +26,9 @@ SHORT = OUT / 'shortlist'
 MANIFEST_PATH = OUT / 'manifest.json'
 CORE_MARKER = '\nstarted = datetime.now(timezone.utc)\n'
 MAX_LEADING_FAILED_SEGMENTS = 10
+PROGRESS_HEARTBEAT_SECONDS = 30
+SEARCH_PROGRESS_EVERY_PAGES = 20
+REVIEW_PROGRESS_EVERY_APPIDS = 50
 
 
 def load_core():
@@ -35,6 +39,85 @@ def load_core():
     namespace = {'__name__': 'steam_production_core', '__file__': str(SOURCE)}
     exec(compile(prefix, str(SOURCE), 'exec'), namespace)
     return namespace
+
+
+class ProgressReporter:
+    def __init__(
+        self,
+        *,
+        stats_provider=None,
+        heartbeat_seconds=PROGRESS_HEARTBEAT_SECONDS,
+    ):
+        self.stats_provider = stats_provider
+        self.heartbeat_seconds = float(heartbeat_seconds)
+        self.started_monotonic = time.monotonic()
+        self.stage_started_monotonic = self.started_monotonic
+        self._state = {'stage': 'initializing'}
+        self._lock = threading.Lock()
+        self._stop = threading.Event()
+        self._thread = None
+
+    def set_stage(self, stage, **fields):
+        with self._lock:
+            self.stage_started_monotonic = time.monotonic()
+            self._state = {'stage': str(stage), **fields}
+        self.emit('stage')
+
+    def update(self, *, emit=False, **fields):
+        with self._lock:
+            self._state.update(fields)
+        if emit:
+            self.emit('progress')
+
+    def snapshot(self, event='heartbeat'):
+        now = time.monotonic()
+        with self._lock:
+            state = dict(self._state)
+            stage_started = self.stage_started_monotonic
+        payload = {
+            'event': event,
+            'elapsed_seconds': round(now - self.started_monotonic, 1),
+            'stage_elapsed_seconds': round(now - stage_started, 1),
+            **state,
+        }
+        if self.stats_provider is not None:
+            try:
+                payload['network'] = dict(self.stats_provider())
+            except Exception as exc:
+                payload['network_stats_error'] = str(exc)
+        return payload
+
+    def emit(self, event='heartbeat'):
+        print(
+            '[steam-progress]',
+            json.dumps(
+                self.snapshot(event),
+                ensure_ascii=False,
+                sort_keys=True,
+            ),
+            flush=True,
+        )
+
+    def _heartbeat_loop(self):
+        while not self._stop.wait(self.heartbeat_seconds):
+            self.emit('heartbeat')
+
+    def start(self):
+        if self._thread is not None:
+            return
+        self._thread = threading.Thread(
+            target=self._heartbeat_loop,
+            name='steam-progress-heartbeat',
+            daemon=True,
+        )
+        self._thread.start()
+        self.emit('start')
+
+    def stop(self):
+        self._stop.set()
+        if self._thread is not None:
+            self._thread.join(timeout=1)
+        self.emit('stop')
 
 
 def safe_row_identity(core, row):
@@ -206,7 +289,7 @@ def validate_kz_source_price_bound(core):
         'price_asc_monotonicity_required': False,
     }
 
-def collect_partial(core, failures, previous_by_key, partition, sort_by='Name_ASC'):
+def collect_partial(core, failures, previous_by_key, partition, sort_by='Name_ASC', reporter=None):
     page_size = core['PAGE_SIZE']
     cap = core['PAID_MAX_PRICE_KZT']
     partition_id = partition['id']
@@ -220,6 +303,24 @@ def collect_partial(core, failures, previous_by_key, partition, sort_by='Name_AS
     seen_pages = set()
     leading_failures = 0
     rejection_counts = Counter()
+    partition_started = time.monotonic()
+
+    if reporter is not None:
+        reporter.set_stage(
+            'search_traversal',
+            partition=partition_id,
+            category1=category1,
+            sort_by=sort_by,
+            page_size=page_size,
+            source_maxprice_kzt=cap,
+            page_number=0,
+            logical_page_requests=0,
+            rows_seen=0,
+            reported_total=None,
+            progress_percent=None,
+            eligible_rows_after_local_gate=0,
+            duplicate_rows=0,
+        )
 
     while True:
         try:
@@ -245,7 +346,26 @@ def collect_partial(core, failures, previous_by_key, partition, sort_by='Name_AS
                 count=page_size,
                 error=exc,
             )
-            print('catalog segment failed:', partition_id, sort_by, start, exc)
+            if reporter is not None:
+                reporter.update(
+                    page_number=(start // page_size) + 1,
+                    logical_page_requests=requests_made,
+                    rows_seen=rows_seen,
+                    reported_total=total,
+                    eligible_rows_after_local_gate=eligible_rows_seen,
+                    duplicate_rows=duplicate_rows,
+                    last_event='catalog_segment_failed',
+                    last_error=str(exc),
+                    emit=True,
+                )
+            print(
+                'catalog segment failed:',
+                partition_id,
+                sort_by,
+                start,
+                exc,
+                flush=True,
+            )
             start += page_size
             if total is not None and start >= total:
                 reached_end = True
@@ -264,11 +384,6 @@ def collect_partial(core, failures, previous_by_key, partition, sort_by='Name_AS
         soup = core['BeautifulSoup'](data.get('results_html', ''), 'html.parser')
         rows = soup.select('a.search_result_row')
         rows_seen += len(rows)
-        print(
-            f'{partition_id}/{sort_by}: start={start} rows={len(rows)} '
-            f'total={total} unique_eligible={len(catalog)}'
-        )
-
         if not rows:
             reached_end = True
             break
@@ -308,6 +423,28 @@ def collect_partial(core, failures, previous_by_key, partition, sort_by='Name_AS
                 duplicate_rows += 1
             catalog[key] = item
 
+        page_number = (start // page_size) + 1
+        progress_percent = (
+            round(min(rows_seen, total) * 100.0 / total, 2)
+            if total
+            else None
+        )
+        if reporter is not None:
+            reporter.update(
+                page_number=page_number,
+                logical_page_requests=requests_made,
+                current_start=start,
+                rows_seen=rows_seen,
+                reported_total=total,
+                progress_percent=progress_percent,
+                eligible_rows_after_local_gate=eligible_rows_seen,
+                duplicate_rows=duplicate_rows,
+                emit=(
+                    page_number == 1
+                    or page_number % SEARCH_PROGRESS_EVERY_PAGES == 0
+                ),
+            )
+
         signature = tuple(page_keys)
         if signature in seen_pages:
             failures.record_segment(
@@ -333,6 +470,27 @@ def collect_partial(core, failures, previous_by_key, partition, sort_by='Name_AS
             break
         time.sleep(core['REQUEST_DELAY'])
 
+    partition_elapsed_seconds = round(
+        time.monotonic() - partition_started,
+        3,
+    )
+    if reporter is not None:
+        reporter.update(
+            partition_complete=True,
+            logical_page_requests=requests_made,
+            rows_seen=rows_seen,
+            reported_total=total,
+            progress_percent=(
+                round(min(rows_seen, total) * 100.0 / total, 2)
+                if total
+                else None
+            ),
+            eligible_rows_after_local_gate=eligible_rows_seen,
+            duplicate_rows=duplicate_rows,
+            partition_elapsed_seconds=partition_elapsed_seconds,
+            emit=True,
+        )
+
     return {
         'partition_id': partition_id,
         'category1': category1,
@@ -345,6 +503,7 @@ def collect_partial(core, failures, previous_by_key, partition, sort_by='Name_AS
         'requests_made': requests_made,
         'total': total,
         'reached_end': reached_end,
+        'elapsed_seconds': partition_elapsed_seconds,
     }
 
 
@@ -444,7 +603,7 @@ def storebrowse_review_pair(store_item):
     }
 
 
-def fetch_storebrowse_review_fallback(appids):
+def fetch_storebrowse_review_fallback(appids, reporter=None):
     results = {}
     request_count = 0
     ordered = [str(appid) for appid in appids if str(appid).isdigit()]
@@ -471,6 +630,13 @@ def fetch_storebrowse_review_fallback(appids):
         )
         response.raise_for_status()
         request_count += 1
+        if reporter is not None:
+            reporter.update(
+                fallback_batches_completed=request_count,
+                fallback_appids_total=len(ordered),
+                fallback_appids_attempted=min(start + len(batch), len(ordered)),
+                emit=(request_count == 1 or request_count % 5 == 0),
+            )
         returned = ((response.json().get('response') or {}).get('store_items') or [])
         for store_item in returned:
             appid = str(store_item.get('appid') or store_item.get('id') or '')
@@ -489,11 +655,42 @@ def run():
         previous_manifest = {}
 
     core = load_core()
+    reporter = ProgressReporter(
+        stats_provider=core.get('network_stats_snapshot'),
+    )
+    reporter.start()
+    stage_timings_seconds = {}
+
+    reporter.set_stage(
+        'source_validation',
+        source_maxprice_kzt=core['PAID_MAX_PRICE_KZT'],
+        partitions=[
+            partition['id']
+            for partition in core['SEARCH_PARTITIONS']
+        ],
+    )
+    source_validation_started = time.monotonic()
     try:
         source_price_bound_validation = validate_kz_source_price_bound(core)
     except Exception as exc:
+        reporter.set_stage(
+            'source_validation_failed',
+            error=str(exc),
+        )
+        reporter.stop()
         failures.write()
         raise SystemExit(f'Steam KZ source price-bound validation failed: {exc}')
+
+    stage_timings_seconds['source_validation'] = round(
+        time.monotonic() - source_validation_started,
+        3,
+    )
+    reporter.update(
+        validated=True,
+        validation_elapsed_seconds=stage_timings_seconds['source_validation'],
+        validation_requests=source_price_bound_validation['logical_requests'],
+        emit=True,
+    )
 
     traversals = []
     for partition in core['SEARCH_PARTITIONS']:
@@ -502,6 +699,7 @@ def run():
             failures,
             previous_by_key,
             partition,
+            reporter=reporter,
         )
         publishable = catalog_run_is_publishable(
             reached_end=traversal['reached_end'],
@@ -516,6 +714,15 @@ def run():
             )
         traversals.append(traversal)
 
+    local_filter_started = time.monotonic()
+    reporter.set_stage(
+        'local_merge_filter',
+        partition_count=len(traversals),
+        partition_rows_seen=sum(
+            traversal['rows_seen']
+            for traversal in traversals
+        ),
+    )
     catalog, partition_provenance, cross_partition_duplicates = (
         merge_partition_traversals(traversals)
     )
@@ -574,6 +781,7 @@ def run():
             'duplicate_rows_seen': traversal['duplicate_rows'],
             'requests_made': traversal['requests_made'],
             'reached_end': traversal['reached_end'],
+            'elapsed_seconds': traversal['elapsed_seconds'],
         }
         for traversal in traversals
     ]
@@ -623,6 +831,29 @@ def run():
     for item in review_candidate_items:
         review_item_keys.setdefault(str(item.get('appid')), []).append(item['key'])
 
+    stage_timings_seconds['local_merge_filter'] = round(
+        time.monotonic() - local_filter_started,
+        3,
+    )
+    reporter.update(
+        unique_eligible_after_partition_dedupe=len(items),
+        review_candidate_items=len(review_candidate_items),
+        review_candidate_appids=len(review_appids),
+        local_filter_elapsed_seconds=stage_timings_seconds['local_merge_filter'],
+        emit=True,
+    )
+
+    review_started = time.monotonic()
+    reporter.set_stage(
+        'review_enrichment',
+        candidate_items=len(review_candidate_items),
+        candidate_appids=len(review_appids),
+        completed_appids=0,
+        logical_review_requests_total=len(review_appids) * 2,
+        logical_review_requests_completed=0,
+        workers=core['REVIEW_WORKERS'],
+    )
+
     review_cache = {}
     review_api_failed_requests = 0
     review_failed_results = {}
@@ -634,6 +865,7 @@ def run():
                 executor.submit(core['get_review_pair'], appid): appid
                 for appid in review_appids
             }
+            completed_review_appids = 0
             for future in as_completed(futures):
                 appid = futures[future]
                 try:
@@ -643,6 +875,21 @@ def run():
                     error = exc
                 else:
                     error = None
+
+                completed_review_appids += 1
+                reporter.update(
+                    completed_appids=completed_review_appids,
+                    logical_review_requests_completed=completed_review_appids * 2,
+                    progress_percent=round(
+                        completed_review_appids * 100.0 / len(review_appids),
+                        2,
+                    ),
+                    emit=(
+                        completed_review_appids == 1
+                        or completed_review_appids == len(review_appids)
+                        or completed_review_appids % REVIEW_PROGRESS_EVERY_APPIDS == 0
+                    ),
+                )
 
                 global_ok = bool(result and result.get('global', {}).get('ok'))
                 russian_ok = bool(result and result.get('russian', {}).get('ok'))
@@ -659,7 +906,10 @@ def run():
         if review_failed_results:
             try:
                 fallback, review_storebrowse_fallback_requests = (
-                    fetch_storebrowse_review_fallback(review_failed_results)
+                    fetch_storebrowse_review_fallback(
+                        review_failed_results,
+                        reporter=reporter,
+                    )
                 )
             except Exception as exc:
                 print('StoreBrowse review fallback failed:', exc)
@@ -697,6 +947,28 @@ def run():
                         prior_site_data_exists=key in previous_by_key,
                     )
                     failed_keys.add(key)
+
+    stage_timings_seconds['review_enrichment'] = round(
+        time.monotonic() - review_started,
+        3,
+    )
+    reporter.update(
+        review_enrichment_complete=True,
+        completed_appids=len(review_appids),
+        logical_review_requests_completed=len(review_appids) * 2,
+        review_failed_appids=len(review_failed_results),
+        storebrowse_fallback_appids=review_storebrowse_fallback_appids,
+        storebrowse_fallback_requests=review_storebrowse_fallback_requests,
+        review_elapsed_seconds=stage_timings_seconds['review_enrichment'],
+        emit=True,
+    )
+
+    shortlist_started = time.monotonic()
+    reporter.set_stage(
+        'shortlist_selection',
+        eligible_items=len(items),
+        failed_keys=len(failed_keys),
+    )
 
     for item in items:
         if item['key'] in failed_keys:
@@ -846,6 +1118,24 @@ def run():
         failures.write()
         raise SystemExit('Production shortlist is empty')
 
+    stage_timings_seconds['shortlist_selection'] = round(
+        time.monotonic() - shortlist_started,
+        3,
+    )
+    reporter.update(
+        broad_shortlist_items=len(broad),
+        paid_shortlist_items=len(selected),
+        preserved_last_known_good=len(preserved_keys),
+        shortlist_elapsed_seconds=stage_timings_seconds['shortlist_selection'],
+        emit=True,
+    )
+
+    persistence_started = time.monotonic()
+    reporter.set_stage(
+        'persistence_preparation',
+        paid_shortlist_items=len(selected),
+    )
+
     columns = previous_columns or [
         'key',
         'appid',
@@ -974,6 +1264,14 @@ def run():
         'source_has_known_gaps': source_coverage['source_has_known_gaps'],
         'known_catalog_gap_count': source_coverage['known_gap_count'],
         'catalog_count_drift_informational': count_drift,
+        'stage_timings_seconds': {
+            **stage_timings_seconds,
+            'partitions': {
+                traversal['partition_id']: traversal['elapsed_seconds']
+                for traversal in traversals
+            },
+        },
+        'network_stats': core['network_stats_snapshot'](),
         'filtering_funnel': filtering_funnel,
         'items_with_review_data': items_with_search_review_data,
         'review_coverage': round(search_review_coverage, 6),
@@ -1088,7 +1386,21 @@ def run():
         json.dumps(index, ensure_ascii=False, indent=2),
         encoding='utf-8',
     )
-    print(json.dumps(manifest, ensure_ascii=False, indent=2))
+    stage_timings_seconds['persistence_preparation'] = round(
+        time.monotonic() - persistence_started,
+        3,
+    )
+    reporter.set_stage(
+        'complete',
+        paid_shortlist_items=len(selected),
+        manifest_updated_at_utc=finished.isoformat(),
+        persistence_elapsed_seconds=stage_timings_seconds[
+            'persistence_preparation'
+        ],
+        total_elapsed_seconds=round(time.monotonic() - reporter.started_monotonic, 3),
+    )
+    reporter.stop()
+    print(json.dumps(manifest, ensure_ascii=False, indent=2), flush=True)
 
 
 def main():
