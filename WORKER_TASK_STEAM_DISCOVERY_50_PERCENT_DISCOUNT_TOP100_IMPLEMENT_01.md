@@ -41,7 +41,9 @@ For surviving base games:
 
 Every candidate that survives those gates and can compete for publication must then receive the required **full detailed semantic analysis** under the existing Dossier/Deep architecture, reusing valid cached completed analysis where available.
 
-The final top 100 may be chosen only after detailed analysis is complete for the entire current eligible comparison pool.
+Do not use a provisional top-100 cutoff to define Deep scope. **Every surviving eligible candidate belongs to the Deep analysis scope until it has an authoritative compatible Deep result or is otherwise terminally resolved under the existing contract.**
+
+The site may still publish up to 100 offers immediately using the best currently available canonical evidence. That visible 100 is provisional and may change as Deep results arrive.
 
 ### Stage 3 — DLC discovery
 Only after the eligible/suitable base-game set exists, discover DLC **for those base games**, rather than crawling all Steam DLC globally.
@@ -75,22 +77,44 @@ For a surviving bundle:
 
 A regression fixture must cover the case where five middling games are individually below the visible cutoff but their very cheap package becomes a top offer.
 
-### Stage 5 — Detailed analysis, ranking and publication
+### Stage 5 — Deep queue, ranking and rolling publication
+
+#### Deep queue ordering
+Keep GitHub as the sole owner of Deep scope/order. Do not create a second queue.
+
+All eligible unresolved candidates remain in the existing Deep work scope. Reorder only the **operational processing sequence**, not eligibility or final site ranking.
+
+For normal first-pass Deep work, prioritize:
+1. sale-ending urgency when materially relevant, so a strong offer is not analyzed only after it expires;
+2. higher deterministic purchase value / deal attractiveness;
+3. higher current Steam positive-review percentage;
+4. larger current Steam review count;
+5. stable family id as deterministic tie-breaker.
+
+The exact deterministic formula/order must be made machine-readable and regression-tested. Rating/review count influence **analysis order only**; they must not become a new eligibility gate or hidden final-ranking bonus.
+
+This ordering may use the already available current review fields such as global positive percent and global review count; do not add expensive lookups merely to prioritize the queue.
+
+#### Rolling site publication
 Keep the existing canonical final ranking authority unless a specific contract conflict is proven.
 
 Ranking inputs come from:
 - completed detailed personal-suitability analysis, reusing valid completed cached results where possible;
 - purchase value (current price, saving, price history, package value, and other canonical purchase factors).
 
-**No candidate may be excluded merely because it is currently below a provisional top-100 line before detailed analysis is complete.**
+**No candidate may be excluded from Deep merely because it is currently below the visible top-100 line.**
 
-The final visible cap is applied only after:
+The site should publish **up to 100 immediately** from the best canonical evidence currently available:
 1. base-game/DLC/bundle eligibility;
 2. package/family resolution;
-3. required detailed analysis of the complete current eligible comparison pool;
+3. current effective semantic evidence (Deep when available; otherwise the existing permitted lower stage/cached evidence);
 4. canonical final ranking.
 
-Only then publish **at most 100** best current offers. Never take the first 100 Steam rows and never use an intermediate GitHub score to shrink the semantic-analysis scope to 100.
+Whenever a new authoritative Deep result is accepted, rebuild/re-rank through the existing GitHub publication path. The visible 100 may therefore change over time.
+
+The visible cap never reduces the Deep scope. Eventually, after all eligible candidates receive authoritative Deep resolution, the same ranking naturally becomes the fully analyzed top 100.
+
+Never take the first 100 Steam rows and never use an intermediate GitHub score to shrink the Deep-analysis scope to 100.
 
 ### Stage 6 — Funnel visibility
 Persist at least:
@@ -116,9 +140,11 @@ Expose a useful subset in Statistics.
 The current policy text still says no artificial top-N. Update the relevant canonical policy/contract to the corrected decision:
 - complete evaluation of the approved reduced eligible universe;
 - minimum current discount 50%;
-- no reduction to 100 during initial GitHub filtering or before required detailed semantic analysis is complete;
-- hard visible maximum 100 only after eligibility/package/family resolution, complete required detailed analysis, and canonical ranking;
-- no raw/source/intermediate top-100 truncation.
+- no reduction of Deep scope to 100 during initial GitHub filtering or later;
+- hard visible maximum 100 is a rolling publication view based on the best currently available canonical evidence;
+- every eligible unresolved candidate remains in Deep scope regardless of current visible rank;
+- accepted Deep results trigger normal re-ranking/republication so the visible 100 can change;
+- no raw/source/intermediate top-100 truncation of analysis scope.
 
 GitHub remains owner of source scope, queues, completeness, ranking inputs and persistence.
 
@@ -130,7 +156,9 @@ GitHub remains owner of source scope, queues, completeness, ranking inputs and p
 - visible current offer count <=100;
 - bundle regression described above passes;
 - DLC unrelated to an admitted base is not globally crawled/processed;
-- no top-100 reduction occurs before required detailed analysis of the full eligible comparison pool;
+- Deep scope contains the full eligible unresolved pool, not only current visible top-100 candidates;
+- Deep work order prioritizes urgency, purchase value, Steam positive rating and review count without changing final ranking semantics;
+- the site can publish up to 100 before global Deep completion and the set changes through normal rebuilds as Deep results arrive;
 - funnel counts reconcile;
 - no ChatGPT Scheduled Task is created or changed.
 
