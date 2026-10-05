@@ -589,3 +589,32 @@ It must prove all of the following:
 7. downstream handoff starts from that fresh universe.
 
 If the 100-row change still cannot complete inside the existing owner timeout, the next investigation must use the newly visible stage metrics rather than another opaque wait or a lossy source truncation.
+
+
+## 24. PR #148 merge and active main acceptance
+
+PR #148 was merged to `main` as:
+
+`28a94de86ba18dce37e5f944a81ce7c944e07d8c`.
+
+The required normal GitHub-owned acceptance started automatically:
+
+- workflow: `Steam KZ production shortlist`;
+- run: `37345668260`;
+- collect job: `111883491529`;
+- event: `push`;
+- source head: PR #148 merge commit above;
+- all pre-collection deterministic steps completed successfully;
+- `Collect Steam KZ catalog with partial publish failure isolation` is currently `in_progress`.
+
+No competing production writer was started.
+
+A later bounded diagnostic attempt, PR #149, was closed without merge because the existing `steam-kz-production` concurrency group correctly kept its PR validation pending behind the active production run. It contains no canonical changes and was not used as production evidence.
+
+Current status remains:
+
+`pr148_merged_normal_main_acceptance_in_progress`.
+
+Do not claim the production defect fixed until run `37345668260` either:
+- succeeds and persists the fresh complete universe + downstream handoff, or
+- terminates with stage-level heartbeat/network/timing evidence that identifies the next bounded correction.
