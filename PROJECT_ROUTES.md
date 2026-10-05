@@ -342,3 +342,30 @@ Currentness invariant after PPD-012:
 7. `scripts/test_workflow_run_production_authority.py` — каноническая regression/audit поверхность для mutating `workflow_run` jobs; вызывается из `validate-execution-ownership.yml`.
 
 **Инвариант:** имя upstream workflow и `conclusion == success` сами по себе не дают production authority. Для `workflow_run` job, способного записать canonical repository state, текущая минимальная authority — successful run с `head_branch == main`; direct `workflow_dispatch` / `push` / schedule поведение остаётся отдельным существующим entrypoint. PR-only run с feature head branch обязан skip mutating job.
+
+
+## Steam KZ discovery — bounded paid source scope
+
+**Что ищем:** где задаётся и выполняется current paid Steam KZ discovery scope до Reviews API, как доказать KZ price bound и где смотреть funnel.
+
+**Последняя проверка:** 2026-10-05.  
+**Implementation ref:** PR #146 / `fix/steam-discovery-scope-reduction-implement-01`.
+
+**Канонические правила:**
+1. `config/mailing_policy.json#paid_discovery` — explicit `games / dlc / bundles` partitions, `discount >= 50%`, `price <= 4500 KZT`, no raw top-N, separate free/giveaway lane.
+2. `config/execution_ownership_contract.json` — GitHub owns discovery scope, completeness, persistence and orchestration.
+3. `config/daily_execution_contract.json` — discovery remains inside the existing GitHub-owned daily production cycle.
+
+**Быстрая точка входа:**
+1. `scripts/steam_partial_publish_runner.py` — production collector owner used by the workflow; performs bounded live KZ `maxprice` proof, traverses explicit partitions, deterministic App/Sub dedupe, early paid gate, review enrichment and funnel publication.
+2. `scripts/steam_production.py` — shared Steam Search parsing/rules and policy-derived paid gate.
+3. `.github/workflows/steam-test.yml` — PR runs deterministic regression only; normal main push/schedule runs the 60-minute production `collect`.
+4. `scripts/test_steam_discovery_scope_reduction.py` — deterministic regression for partitions, dedupe, 50%/4500, fail-closed price-bound semantics, giveaway separation, ownership and no Catalyst special case.
+5. `data/production/manifest.json` and `data/production/shortlist/index.json` — after a successful main production run, read `search_partitions`, `source_price_bound_validation`, `filtering_funnel`, request/review counts and source completeness.
+
+**Инварианты:**
+- production никогда не доверяет `maxprice=4500` только по query string: bounded KZ `Price_ASC` boundary proof обязан пройти до traversal;
+- source-side minimum-discount parameter не предполагается; parsed-row gate `>=50%` остаётся authoritative до Reviews API;
+- paid partitions используют `hidef2p`, но free/giveaway остаётся отдельным existing lane;
+- никакого raw top-N, второго collector/scheduler, ChatGPT-owned loop или Catalyst special case;
+- post-merge live acceptance — обычный GitHub-owned `Steam KZ production shortlist` run на `main`; PR `collect` намеренно не имеет production authority.
