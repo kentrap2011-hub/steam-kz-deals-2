@@ -33,10 +33,7 @@ Task:
 Mode:
 `IMPLEMENT / VALIDATE / LIVE ACCEPTANCE CONTINUATION`
 
-PR #146 merged to main as `fb21b704ac36f56d40bdc6a00175864538dbcee7`. The first normal production acceptance run `37319401442` reached the new live KZ price-bound validation and failed immediately with:
-`Cannot validate KZ maxprice: Price_ASC is not monotonic at cutoff`.
-
-The task file now contains the authorized continuation. Do not repeat the global diagnostic and do not weaken the approved 50% discount / 4500 KZT policy. Fix only the exact live-bound proof/strategy, revalidate, and require one successful normal main production run before declaring the Steam discovery defect fixed.
+User explicitly does not want to wait for current run `37335826933` to hit timeout. Continue immediately: inspect the exact live stage, determine whether traversal is advancing and where time is spent, and add practical progress logging/heartbeat for partitions, pages/rows, filtering, review enrichment, retries/backoff and stage timings. Do not start a competing production writer while the current run is live. Final acceptance still requires one successful normal main production run.
 
 ### ЧАТ 2 — ASSIGNED / NEW PHYSICAL CHAT
 
