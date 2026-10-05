@@ -33,7 +33,7 @@ Task:
 Mode:
 `IMPLEMENT / VALIDATE / LIVE ACCEPTANCE CONTINUATION`
 
-User explicitly does not want to wait for current run `37335826933` to hit timeout. Continue immediately: inspect the exact live stage, determine whether traversal is advancing and where time is spent, and add practical progress logging/heartbeat for partitions, pages/rows, filtering, review enrichment, retries/backoff and stage timings. Do not start a competing production writer while the current run is live. Final acceptance still requires one successful normal main production run.
+Latest live acceptance after PR #148 timed out at 60 minutes. Games and DLC completed; bundles reported ~105k rows and only ~46% completed. Search rate limiting produced 192 HTTP 429s and ~36 minutes of accumulated backoff. The task now requires a bounded continuation focused only on bundle-source semantics and a safer/faster 429 strategy, without silently dropping bundles, adding raw top-N, or using a larger timeout as the primary fix.
 
 ### ЧАТ 2 — ASSIGNED / NEW PHYSICAL CHAT
 
