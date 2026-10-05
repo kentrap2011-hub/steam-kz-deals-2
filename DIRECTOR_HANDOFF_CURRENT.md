@@ -38,12 +38,21 @@ Latest live acceptance after PR #148 timed out at 60 minutes. Games and DLC comp
 ### ЧАТ 2 — ASSIGNED / NEW PHYSICAL CHAT
 
 Task:
-`WORKER_TASK_DOSSIER_DEEP_INDEPENDENT_QUALITY_AUDIT_01.md`
+`WORKER_TASK_DOSSIER_RETRYABLE_TRANSPORT_REJECT_FIX_01.md`
 
 Mode:
-`READ-ONLY / INDEPENDENT AUDIT`
+`DIAGNOSE / IMPLEMENT / VALIDATE`
 
-This chat is deliberately not a Dossier or Deep semantic worker. It audits actual accepted Dossier/Deep outputs, checks a stratified sample against evidence, scores completeness/correctness/calibration/transparency, and may conclude that the current canonical rules themselves are insufficient. No production state or implementation changes are authorized.
+The previous independent Dossier/Deep quality audit is paused because the live Dossier production path is now blocked.
+
+Current confirmed blocker:
+- canonical Dossier remains at sequence 20 / 19 accepted groups / 57 dossiers;
+- sequence 20 submission was quarantined as `retryable_transport_rejected`;
+- sequence 21 submission was also quarantined the same way;
+- both ingest workflows concluded green despite zero accepted progress;
+- exact rejection cause is not exposed in the current summary logs.
+
+This chat must diagnose the exact transport/authority failure, fix only the canonical Dossier ingest/recovery path if defective, preserve fail-closed authority rules, and restore forward progress without invoking the semantic worker or modifying Scheduled Tasks.
 
 ## CURRENTLY WORKING / RECENT SEMANTIC CHATS
 
