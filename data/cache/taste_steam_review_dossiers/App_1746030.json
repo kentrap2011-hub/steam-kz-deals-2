@@ -1,0 +1,369 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "appid": "1746030",
+  "title": "Murders on the Yangtze River",
+  "generated_at_utc": "2026-10-05T19:19:00Z",
+  "expires_at_utc": "2026-10-25T19:19:00Z",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "Murders on the Yangtze River",
+    "release_year": 2024,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "1746030"
+      },
+      {
+        "kind": "developer",
+        "value": "OMEGAMES STUDIO"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 5 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The core loop uses scene examination, evidence gathering, interrogation and logical contradiction selection; players generally describe the deduction chain as coherent rather than guess-dependent.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-004",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "The connected mystery and early-twentieth-century Chinese historical setting are recurring strengths, with historical and cultural context integrated into the cases.",
+      "sentiment": "positive",
+      "recurrence": "strong",
+      "mention_count": 4,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003",
+        "feedback-004",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "The experience is focused, but substantial reading and visual-novel-style stretches can slow the pace; some players find the earliest cases drier before the larger plot develops.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-004",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Deduction is generally regarded as fair and logical, though some later mysteries are complex; hint support reduces the chance of becoming permanently stuck.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "localization",
+      "statement": "Recent Russian player feedback identifies the absence of Russian localization as the main accessibility drawback, matching the current Steam language listing.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "source-001",
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "Case quality varies: the connected mystery is praised overall, while some players find the final case or some minor characters weaker than the middle cases.",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "source_ids": [
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-004",
+        "feedback-005"
+      ]
+    }
+  ],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "strong",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            2
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            2
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            4
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "covered",
+          "observation_indices": [
+            4
+          ]
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1746030/Murders_on_the_Yangtze_River/",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "identity",
+        "player_feedback": false,
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "steam_reviews",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1746030/Murders_on_the_Yangtze_River/?curator_clanid=37196866&l=russian",
+        "publication_date": null,
+        "language": "russian",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1746030",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/AceAttorney/comments/1apot47/has_anyone_tried_murders_on_the_yangtze_river_the/",
+        "publication_date": "2024-05-09",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "Murders on the Yangtze River",
+          "release_year": 2024
+        },
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/steamachievements/comments/1vds5eh/2_new_detective_games_completed_thoughts_in_the/",
+        "publication_date": "2026-08-02",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "Murders on the Yangtze River",
+          "release_year": 2024
+        },
+        "freshness": "recent"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "publication_date": "2026-05-03",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": "2025-10-27",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-003",
+        "publication_date": "2024-05-09",
+        "language": "non_russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-004",
+        "publication_date": "2026-08-02",
+        "language": "non_russian",
+        "acquisition_mode": "search_result_observation"
+      }
+    ]
+  }
+}
