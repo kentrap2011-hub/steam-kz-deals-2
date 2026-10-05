@@ -8,7 +8,9 @@
 - corrected user product choices:
   - **minimum current discount = 50%**; the earlier interpretation “50 visible offers” was wrong and was superseded before implementation;
   - visible site cap remains **at most 100 best current offers** and is shown immediately from the best currently available canonical evidence; the visible 100 is recalculated as Deep results arrive, while the full eligible unresolved pool remains in Deep scope regardless of current visible rank;
-  - GitHub-owned Deep processing order should prioritize sale urgency, purchase value, Steam positive rating and review count; these factors affect processing order only, not eligibility or final ranking;
+  - GitHub-owned Deep processing order should prioritize purchase value, Steam positive rating and review count; sale expiry must not affect Deep processing order;
+  - any authoritative positive Deep result ranks above every candidate that has not completed Deep;
+  - Deep queue-order tuning must be controlled by a dedicated GitHub instruction/policy file; do not change the Deep worker prompt for future ordering tweaks;
   - price ceiling remains <=4500 KZT unless bounded validation proves an approved exception is needed;
   - base games are narrowed first; DLC discovery occurs afterward only for suitable/eligible base games;
   - a separate later task extends DLC discovery to games actually owned by the user;
