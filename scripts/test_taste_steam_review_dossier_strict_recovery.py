@@ -410,6 +410,49 @@ class RecoveryLifecycleTests(unittest.TestCase):
             current = json.loads(manifest_path.read_text(encoding="utf-8"))
             self.assertEqual(current["group_progress"]["groups"][0]["state"], "pending")
 
+    def test_later_provenance_rejection_is_nonblocking_when_earlier_head_is_still_pending(self):
+        with tempfile.TemporaryDirectory() as td:
+            contract = contract_for(td)
+            store = Path(td) / "store"
+            work = build_daily_work_manifest(queue(range(505000, 505006)), contract, store, now=NOW)
+            work["web_evidence_contract_binding"] = current_worker_contract_binding()
+            manifest_path = Path(contract["paths"]["work_manifest"])
+            manifest_path.write_text(json.dumps(work), encoding="utf-8")
+            contract_path, _, _ = self._write_contracts(td, contract)
+
+            def invalid_inspected_parent(artifact):
+                dossier_doc = artifact["dossiers"][0]
+                record = dossier_doc["provenance"]["player_feedback_records"][3]
+                record.pop("url")
+                record["acquisition_mode"] = "inspected_collection_item"
+
+            write_group(work, contract, 2, invalid_inspected_parent)
+            result = drain_inbox_state(
+                manifest_path=manifest_path,
+                contract_path=contract_path,
+                store_dir=store,
+                buffer_dir=contract["paths"]["submission_inbox_dir"],
+                retryable_rejection_root=Path(td) / "retryable",
+                rejection_audit_path=Path(td) / "rejections.jsonl",
+                fail_on_blocked=False,
+            )
+
+            self.assertEqual(
+                result["status"],
+                "retryable_transport_rejected_nonblocking_zero_progress",
+            )
+            self.assertFalse(result["canonical_progress_made_this_run"])
+            self.assertFalse(result["head_retryable_transport_rejected_this_run"])
+            self.assertEqual(result["next_pending_sequence"], 1)
+            self.assertEqual(result["rejected_sequences"], [2])
+            self.assertIn(
+                "acquisition_mode requires concrete_item_collection parent provenance",
+                result["retryable_transport_rejections"][0]["validator_error"],
+            )
+            current = json.loads(manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(current["group_progress"]["groups"][0]["state"], "pending")
+            self.assertEqual(current["group_progress"]["groups"][1]["state"], "pending")
+
     def test_provenance_mismatch_remains_nonfatal_when_sibling_progress_is_persisted(self):
         with tempfile.TemporaryDirectory() as td:
             contract = contract_for(td)
@@ -551,6 +594,25 @@ class RecoveryLifecycleTests(unittest.TestCase):
                 json.loads(manifest_path.read_text())["group_progress"]["groups"][0]["state"],
                 "pending",
             )
+
+    def test_ingest_workflow_surfaces_head_block_only_after_canonical_persist_step(self):
+        workflow = (
+            ROOT / ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
+        ).read_text(encoding="utf-8")
+        capture = workflow.index("id: dossier_drain")
+        commit = workflow.index(
+            "Commit dossier recovery transport validation canonical progress and worker projection atomically"
+        )
+        fail = workflow.index(
+            "Fail closed when current head transport was rejected with zero progress"
+        )
+        self.assertLess(capture, commit)
+        self.assertLess(commit, fail)
+        self.assertIn(
+            "steps.dossier_drain.outputs.status == "
+            "'retryable_transport_rejected_head_blocked_zero_progress'",
+            workflow,
+        )
 
     def test_stale_cleanup_and_lost_wakeup_regressions(self):
         with tempfile.TemporaryDirectory() as td:
