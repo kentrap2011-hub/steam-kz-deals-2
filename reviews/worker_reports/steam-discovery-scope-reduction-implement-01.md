@@ -618,3 +618,152 @@ Current status remains:
 Do not claim the production defect fixed until run `37345668260` either:
 - succeeds and persists the fresh complete universe + downstream handoff, or
 - terminates with stage-level heartbeat/network/timing evidence that identifies the next bounded correction.
+
+
+## 25. PR #148 acceptance timeout: bundle / 429 blocker
+
+The normal `main` acceptance after PR #148 was:
+
+- workflow run: `37345668260`;
+- collect job: `111883491529`;
+- result: **cancelled** at the existing 60-minute owner timeout;
+- no fresh canonical production commit/persistence occurred.
+
+Progress instrumentation made the blocker exact:
+
+**games**
+- reported total: **63,645**;
+- page size: 100;
+- pages: **637**;
+- elapsed: about **1,573 s / 26.2 min**.
+
+**DLC**
+- reported total: **34,342**;
+- pages: **344**;
+- elapsed: about **822 s / 13.7 min**.
+
+**standalone `category1=996`**
+- reported total: about **105,326**;
+- last observed: **48,000 rows / 45.57%**;
+- locally eligible at that point: **27,650**;
+- review enrichment had not started.
+
+At timeout:
+- Search 429 events: **192**;
+- accumulated Search backoff: **2,160 s / 36 min**;
+- Reviews HTTP requests: **0**.
+
+The 429 pattern was stable in the completed log. During the standalone 996 traversal, rate-limit bursts occurred near starts `400, 3400, 6400, 9400, ...` — approximately every 30 successful 100-row pages. Each burst normally produced four consecutive 429s under the existing `3 / 6 / 12 / 24` second ladder, costing about 45 seconds.
+
+This establishes two narrow blockers only:
+1. `category1=996` is unexpectedly huge;
+2. Search pacing repeatedly drives Steam into a costly rate-limit burst.
+
+## 26. Bounded PR #151 bundle semantics evidence
+
+PR #151 used temporary read-only live probes in PR regression only. Production `collect` remained skipped on pull requests. The probe files/workflow steps were removed before the permanent PR diff.
+
+### Standalone 996 is not a bundle-only partition
+
+Bounded live samples of `category1=996` at offsets 0, 10,000, 50,000 and 100,000 showed:
+
+- live total around **105.3k**;
+- offset 0: 100/100 identities were `App_`;
+- offset 10,000: 99 `App_` + 1 `Sub_`;
+- offset 50,000: 100/100 `App_`; 57/100 sampled titles contained `DLC`;
+- offset 100,000: 100/100 `App_`;
+- samples included ordinary games, DLC, soundtracks, upgrades and other extras.
+
+A direct control with **no category1** returned the same broad first-page shape and the same ~105.3k total as standalone `category1=996`.
+
+Therefore current live Steam semantics do not support treating `996` as an exclusive package/bundle source. It behaves as broad `Include Bundles` / untyped scope.
+
+### Package/bundle opportunity is already present in games
+
+A representative exact package probe used:
+
+- identity: `Sub_76471`;
+- title: `Daedalic - Gigantic Bundle`.
+
+Live results:
+- `category1=996`: one result, `Sub_76471`;
+- `category1=998`: the same `Sub_76471`;
+- `category1=998,996`: the same `Sub_76471`;
+- `category1=21`: no result;
+- `category1=21,996`: no result.
+
+Additional bounded controls showed:
+- games-only `998`: ~63,655 rows;
+- `998,996`: the same ~63,655 rows;
+- DLC-only `21`: ~34,343 rows;
+- `21,996`: the same ~34,343 rows.
+
+The smallest semantics-preserving correction is therefore:
+
+- traverse only explicit `games / category1=998` and `dlc / category1=21`;
+- preserve exact `App_` and `Sub_` identities returned by games;
+- do **not** perform standalone `category1=996`;
+- keep packages/bundles as a distinct opportunity identity/class downstream; this correction changes only their discovery route, not their product value.
+
+Canonical policy moves to `preservation_first_bounded_paid_v2` and records `bundle_package_discovery.mode = embedded_in_games_partition`.
+
+This removes roughly 105k redundant broad rows without an arbitrary top-N and without dropping the live-proven representative package.
+
+## 27. Bounded PR #151 429 / pacing evidence
+
+The previous production accelerator used a **0.5 s** inter-page Search delay.
+
+Bounded same-run probe:
+- delay: `0.5s`;
+- requests: 35;
+- HTTP 200: 21;
+- HTTP 429: 14;
+- first 429 in that shared rate window: request 22;
+- elapsed: 23.157s;
+- `Retry-After`: absent.
+
+After a clean cooldown:
+- delay: `2.2s`;
+- 35/35 HTTP 200;
+- no 429.
+
+A tighter second bounded probe after cooldown tested **1.8 s**:
+- requests: 35;
+- 35/35 HTTP 200;
+- no 429;
+- elapsed: 69.536s;
+- `Retry-After`: absent.
+
+Permanent correction:
+- existing GitHub-owned Search request path remains unchanged;
+- explicit retry/backoff ownership remains in `steam_production.py`;
+- `steam_production_cached.py::SEARCH_DELAY_SECONDS` changes **0.5 -> 1.8**;
+- timeout is unchanged;
+- no concurrency, second collector, scheduler, queue or background retry owner is introduced.
+
+With standalone 996 removed, the complete source traversal is approximately the already measured games + DLC pages only: roughly **981 pages** rather than roughly 2,035 pages. At the live-proven 1.8s cadence, this is intended to trade a small fixed delay for removal of repeated 45-second 429 bursts and leave the existing 60-minute owner window available for review enrichment/persistence.
+
+## 28. PR #151 permanent correction
+
+Permanent implementation scope:
+- `config/mailing_policy.json`:
+  - source scope contract -> `preservation_first_bounded_paid_v2`;
+  - source partitions -> games + DLC only;
+  - package/bundle discovery explicitly embedded in games;
+  - standalone 996 traversal forbidden;
+- `config/mailing_policy.md`: same human-readable semantics;
+- `scripts/steam_production.py`: fail-fast invariant for exact games/DLC partitions and embedded package policy;
+- `scripts/steam_production_cached.py`: Search pacing 1.8 seconds;
+- `scripts/test_steam_discovery_scope_reduction.py`: guards for two-partition scope, package preservation inside games, absence of standalone 996, two-partition maxprice validation and pacing;
+- `PROJECT_ROUTES.md`, `CURRENT_TASK.md` and this report.
+
+Temporary live-probe script/workflow steps are absent from the permanent diff.
+
+The production defect remains open until:
+1. final PR #151 checks are green and the clean PR is merged under the existing Director authorization;
+2. one normal `main` production acceptance completes within the existing 60-minute timeout;
+3. a fresh canonical discovery universe is persisted;
+4. actual source/funnel/rate-limit/review metrics are recorded;
+5. downstream handoff starts from that fresh universe.
+
+If that main acceptance still exceeds 60 minutes, the next bounded investigation must use the new two-partition stage timings and review metrics. Do not reintroduce standalone 996 or mask the issue by increasing the timeout.
