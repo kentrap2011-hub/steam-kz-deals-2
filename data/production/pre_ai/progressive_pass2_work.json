@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 127,
     "deep_completed_not_fit_count": 23,
     "deep_incomplete_or_recovery_count": 30,
-    "deep_waiting_for_dossier_count": 346,
-    "deep_ready_or_pending_count": 1,
+    "deep_waiting_for_dossier_count": 343,
+    "deep_ready_or_pending_count": 4,
     "deep_normal_first_pass_remaining_count": 347,
     "deep_remaining_until_all_authoritative_count": 377,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 19,
-    "dossier_waiting_count": 346,
+    "dossier_waiting_count": 343,
     "pass2_attempted_count": 180,
-    "pass2_eligible_count": 1,
-    "normal_pass2_eligible_count": 1,
+    "pass2_eligible_count": 4,
+    "normal_pass2_eligible_count": 4,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -108,6 +108,66 @@
     }
   },
   "items": [
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1525700",
+      "taste_subject_key": "App_1525700",
+      "appid": "1525700",
+      "taste_fingerprint": "2737db38542c49067e6f26fb47ecc5962c3bae63e154a07c8805f3653523db74",
+      "candidate_context_sha256": "5d59e5191c58d60fd44e28a9fdca7ff13c14db129cbf6e9910774c2d25491f79",
+      "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+      "work_id": "66b4a524596f6696132b61030230757727737f48c5a65e4e2ea7f922cfe87779",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Tavern Master",
+        "short_description": "Tavern Master is all about managing your medieval tavern. You start with a very small room, couple of benches and tables and build your way up to a huge successful tavern with a kitchen, rooms for guests, group of loyal staff and much more!",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "16 Nov, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1525700"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1525700.json",
+      "dossier_content_sha256": "284dbec5b835aefb5cf0b284dabdac4cd2f8e8870455e3b424e5c52ab6489e96",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-25T13:42:22Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "1cdae36bad8f3a3f464539b3c241875c72cf3702b5013c82e72789993a14c9c0",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--66b4a524596f6696132b61030230757727737f48c5a65e4e2ea7f922cfe87779--1cdae36bad8f3a3f464539b3c241875c72cf3702b5013c82e72789993a14c9c0.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--66b4a524596f6696132b61030230757727737f48c5a65e4e2ea7f922cfe87779--1cdae36bad8f3a3f464539b3c241875c72cf3702b5013c82e72789993a14c9c0.json",
+      "sequence": 1
+    },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
@@ -169,7 +229,132 @@
       "authorization_id": "bfdc359616465b90380df0d95cd4450d2904504d6edc18b270e1cbbcb80436dc",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--649a3bdcad52d2b7fb483065e943d0654dfa279bc5c764f38850b8e9032d8292--bfdc359616465b90380df0d95cd4450d2904504d6edc18b270e1cbbcb80436dc.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--649a3bdcad52d2b7fb483065e943d0654dfa279bc5c764f38850b8e9032d8292--bfdc359616465b90380df0d95cd4450d2904504d6edc18b270e1cbbcb80436dc.json",
-      "sequence": 1
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1517850",
+      "taste_subject_key": "App_1517850",
+      "appid": "1517850",
+      "taste_fingerprint": "b8c818a56169667c749b19db306fa260f85804505d45ac962acfe82df4b2aeb0",
+      "candidate_context_sha256": "48cfdea3f61c0222bc0dda518acc105009dae46c54f0194dfaf680fafeb6738c",
+      "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+      "work_id": "519d3f81297c3b34ea68a72f5979c5c56c2b249018195840942bcd8b4ae7fefd",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Quickie: A Love Hotel Story",
+        "short_description": "Dive into the streets of Tokyo as a love hotel manager and embark on a thrilling journey of romance with stunning women in this casual and erotic dating-sim. Who will capture your heart in this Love Hotel Story?",
+        "bundle_members": [],
+        "fit_tags": [
+          "Story Rich"
+        ],
+        "core_fit_count": 1,
+        "release_date": "6 Jun, 2025",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1517850"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1517850.json",
+      "dossier_content_sha256": "6de545413f45a21793f309ea2aa6755e4ada880f806fbeab10eeefef97636319",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-25T13:42:22Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "bb1027bd791b40b9bb45ad941cb8754c85dc2237048f7bb4f47e2859d18079d7",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--519d3f81297c3b34ea68a72f5979c5c56c2b249018195840942bcd8b4ae7fefd--bb1027bd791b40b9bb45ad941cb8754c85dc2237048f7bb4f47e2859d18079d7.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--519d3f81297c3b34ea68a72f5979c5c56c2b249018195840942bcd8b4ae7fefd--bb1027bd791b40b9bb45ad941cb8754c85dc2237048f7bb4f47e2859d18079d7.json",
+      "sequence": 3
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1571440",
+      "taste_subject_key": "App_1571440",
+      "appid": "1571440",
+      "taste_fingerprint": "ef6a7446ba11b1c1dd06319be5c3c2bf02a2002a007ce2b1136cd766ee165fcb",
+      "candidate_context_sha256": "4e13805115cd311a9e078731d128605320fb8e0ff8c51b22eb84f2c49874da05",
+      "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+      "work_id": "9be23418fa42dd9a51e92ab60eb4d734496633076315d81f4c2816cdeddcb46c",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Lunch Lady",
+        "short_description": "Lunch Lady is a 1-4 player online co-op survival horror game. The school final exams are coming up and the best idea you and your friends had was to steal the test answers. Find all 10 pages and don't get caught by the murderous Lunch Lady!",
+        "bundle_members": [],
+        "fit_tags": [
+          "Horror",
+          "Survival Horror"
+        ],
+        "core_fit_count": 2,
+        "release_date": "15 Apr, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1571440"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1571440.json",
+      "dossier_content_sha256": "fe3f4353e7951ea6056a945d01265ecbcb58bfaa32b4af7f58f66e8e5d08ca81",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-25T13:42:22Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "62c93f747bfe11ec10c482d35b82197f78ce33d836e312ec293df3781e25f700",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--9be23418fa42dd9a51e92ab60eb4d734496633076315d81f4c2816cdeddcb46c--62c93f747bfe11ec10c482d35b82197f78ce33d836e312ec293df3781e25f700.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--9be23418fa42dd9a51e92ab60eb4d734496633076315d81f4c2816cdeddcb46c--62c93f747bfe11ec10c482d35b82197f78ce33d836e312ec293df3781e25f700.json",
+      "sequence": 4
     }
   ]
 }
