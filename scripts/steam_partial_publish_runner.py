@@ -50,26 +50,169 @@ def safe_row_identity(core, row):
     return key, raw_appid or None, title
 
 
-def collect_partial(core, failures, previous_by_key, sort_by='Name_ASC'):
+def parse_probe_items(core, data):
+    soup = core['BeautifulSoup'](data.get('results_html', ''), 'html.parser')
+    rows = soup.select('a.search_result_row')
+    items = []
+    for row in rows:
+        item = core['parse_row'](row)
+        if not item:
+            raise RuntimeError('Steam price-bound probe returned an unparseable result row')
+        price = item.get('final_kzt')
+        if price is None:
+            raise RuntimeError(
+                f"Steam price-bound probe returned row without final KZT price: {item.get('key')}"
+            )
+        items.append(item)
+    return items
+
+
+def validate_kz_source_price_bound(core):
+    """
+    Prove that maxprice=4500 under cc=kz matches the actual KZT cutoff before
+    the production traversal is allowed to trust it.
+
+    The bounded proof compares Steam's capped total with the uncapped Price_ASC
+    boundary at the same paid/F2P-hidden game partition. If maxprice were
+    interpreted in another unit or currency, those counts would not meet at the
+    observed <=4500/>4500 transition and the run fails closed.
+    """
+    cap = core['PAID_MAX_PRICE_KZT']
     page_size = core['PAGE_SIZE']
+    partition = next(
+        p for p in core['SEARCH_PARTITIONS']
+        if p['id'] == 'games'
+    )
+    category1 = partition['category1']
+
+    capped_desc = core['get_page'](
+        0,
+        'Price_DESC',
+        category1=category1,
+        maxprice_kzt=cap,
+        hidef2p=True,
+    )
+    capped_total = core['to_int'](capped_desc.get('total_count'))
+    if capped_total is None or capped_total <= 0:
+        raise RuntimeError('Cannot validate KZ maxprice: capped games total is empty/unknown')
+
+    capped_items = parse_probe_items(core, capped_desc)
+    capped_prices = [float(item['final_kzt']) for item in capped_items]
+    if not capped_prices:
+        raise RuntimeError('Cannot validate KZ maxprice: capped page has no priced rows')
+    if any(price <= 0 or price > cap for price in capped_prices):
+        raise RuntimeError(
+            f'KZ maxprice={cap} leaked a non-paid or over-cap result'
+        )
+
+    boundary_start = max(0, ((capped_total - 1) // page_size) * page_size)
+    boundary = core['get_page'](
+        boundary_start,
+        'Price_ASC',
+        category1=category1,
+        hidef2p=True,
+    )
+    after = core['get_page'](
+        boundary_start + page_size,
+        'Price_ASC',
+        category1=category1,
+        hidef2p=True,
+    )
+    boundary_items = parse_probe_items(core, boundary) + parse_probe_items(core, after)
+    boundary_prices = [float(item['final_kzt']) for item in boundary_items]
+
+    if not boundary_prices:
+        raise RuntimeError('Cannot validate KZ maxprice: uncapped boundary is empty')
+    if any(price <= 0 for price in boundary_prices):
+        raise RuntimeError('Cannot validate KZ maxprice: paid boundary contains free/missing price')
+    if any(
+        boundary_prices[index] > boundary_prices[index + 1]
+        for index in range(len(boundary_prices) - 1)
+    ):
+        raise RuntimeError('Cannot validate KZ maxprice: Price_ASC is not monotonic at cutoff')
+
+    first_over_index = next(
+        (index for index, price in enumerate(boundary_prices) if price > cap),
+        None,
+    )
+    if first_over_index is None:
+        raise RuntimeError(
+            'Cannot validate KZ maxprice: bounded probe did not cross the 4500 KZT boundary'
+        )
+    if any(price <= cap for price in boundary_prices[first_over_index:]):
+        raise RuntimeError(
+            'Cannot validate KZ maxprice: <=4500 KZT row appeared after the cutoff'
+        )
+
+    inferred_uncapped_count = boundary_start + first_over_index
+    if inferred_uncapped_count != capped_total:
+        raise RuntimeError(
+            'Cannot validate KZ maxprice: capped total does not equal the '
+            f'uncapped <= {cap} KZT boundary '
+            f'({capped_total} != {inferred_uncapped_count})'
+        )
+
+    return {
+        'validated': True,
+        'country_code': 'kz',
+        'validation_partition': partition['id'],
+        'category1': category1,
+        'maxprice_kzt': cap,
+        'hidef2p': True,
+        'capped_total': capped_total,
+        'boundary_start': boundary_start,
+        'max_capped_price_kzt': max(capped_prices),
+        'last_at_or_below_cap_kzt': (
+            boundary_prices[first_over_index - 1]
+            if first_over_index
+            else None
+        ),
+        'first_over_cap_kzt': boundary_prices[first_over_index],
+        'logical_requests': 3,
+        'proof': 'capped_total_equals_uncapped_price_asc_kzt_boundary',
+    }
+
+
+def collect_partial(core, failures, previous_by_key, partition, sort_by='Name_ASC'):
+    page_size = core['PAGE_SIZE']
+    cap = core['PAID_MAX_PRICE_KZT']
+    partition_id = partition['id']
+    category1 = partition['category1']
+    failure_scope = f'{partition_id}:{sort_by}'
     start = 0
     catalog = {}
-    rows_seen = duplicate_rows = requests_made = 0
+    rows_seen = parsed_rows = eligible_rows_seen = duplicate_rows = requests_made = 0
     total = None
     reached_end = False
     seen_pages = set()
     leading_failures = 0
+    rejection_counts = Counter()
 
     while True:
         try:
-            data = core['get_page'](start, sort_by)
+            data = core['get_page'](
+                start,
+                sort_by,
+                category1=category1,
+                maxprice_kzt=cap,
+                hidef2p=True,
+            )
             requests_made += 1
-            failures.resolve_segment(sort_by=sort_by, start=start, count=page_size)
+            failures.resolve_segment(
+                sort_by=failure_scope,
+                start=start,
+                count=page_size,
+            )
             leading_failures = 0
         except Exception as exc:
             requests_made += 1
-            failures.record_segment(sort_by=sort_by, start=start, count=page_size, error=exc)
-            print('catalog segment failed:', sort_by, start, exc)
+            failures.record_segment(
+                sort_by=failure_scope,
+                start=start,
+                count=page_size,
+                error=exc,
+            )
+            print('catalog segment failed:', partition_id, sort_by, start, exc)
             start += page_size
             if total is not None and start >= total:
                 reached_end = True
@@ -88,7 +231,10 @@ def collect_partial(core, failures, previous_by_key, sort_by='Name_ASC'):
         soup = core['BeautifulSoup'](data.get('results_html', ''), 'html.parser')
         rows = soup.select('a.search_result_row')
         rows_seen += len(rows)
-        print(f'{sort_by}: start={start} rows={len(rows)} total={total} unique={len(catalog)}')
+        print(
+            f'{partition_id}/{sort_by}: start={start} rows={len(rows)} '
+            f'total={total} unique_eligible={len(catalog)}'
+        )
 
         if not rows:
             reached_end = True
@@ -96,6 +242,9 @@ def collect_partial(core, failures, previous_by_key, sort_by='Name_ASC'):
 
         page_keys = []
         for row in rows:
+            raw_key, _, _ = safe_row_identity(core, row)
+            if raw_key:
+                page_keys.append(raw_key)
             try:
                 item = core['parse_row'](row)
             except Exception as exc:
@@ -108,12 +257,20 @@ def collect_partial(core, failures, previous_by_key, sort_by='Name_ASC'):
                     error=exc,
                     prior_site_data_exists=key in previous_by_key,
                 )
-                print('catalog row failed:', key or '<unknown>', exc)
+                print('catalog row failed:', partition_id, key or '<unknown>', exc)
                 continue
             if not item:
+                rejection_counts['unparseable_or_missing_title'] += 1
                 continue
+
+            parsed_rows += 1
+            rejection = core['paid_source_rejection_reason'](item)
+            if rejection:
+                rejection_counts[rejection] += 1
+                continue
+
+            eligible_rows_seen += 1
             key = item['key']
-            page_keys.append(key)
             if key in catalog:
                 duplicate_rows += 1
             catalog[key] = item
@@ -121,7 +278,7 @@ def collect_partial(core, failures, previous_by_key, sort_by='Name_ASC'):
         signature = tuple(page_keys)
         if signature in seen_pages:
             failures.record_segment(
-                sort_by=sort_by,
+                sort_by=failure_scope,
                 start=start,
                 count=page_size,
                 error=RuntimeError('Steam repeated the same page signature'),
@@ -144,13 +301,49 @@ def collect_partial(core, failures, previous_by_key, sort_by='Name_ASC'):
         time.sleep(core['REQUEST_DELAY'])
 
     return {
+        'partition_id': partition_id,
+        'category1': category1,
         'catalog': catalog,
         'rows_seen': rows_seen,
+        'parsed_rows': parsed_rows,
+        'eligible_rows_seen': eligible_rows_seen,
+        'rejection_counts': dict(rejection_counts),
         'duplicate_rows': duplicate_rows,
         'requests_made': requests_made,
         'total': total,
         'reached_end': reached_end,
     }
+
+
+def merge_partition_traversals(traversals):
+    catalog = {}
+    provenance = {}
+    cross_partition_duplicates = 0
+
+    for traversal in traversals:
+        partition_id = traversal['partition_id']
+        for key in sorted(traversal['catalog']):
+            provenance.setdefault(key, []).append(partition_id)
+            if key in catalog:
+                cross_partition_duplicates += 1
+                continue
+            catalog[key] = traversal['catalog'][key]
+
+    return catalog, provenance, cross_partition_duplicates
+
+
+def row_meets_current_paid_gate(core, row):
+    discount = core['to_int'](row.get('discount_percent'))
+    try:
+        price = float(row.get('final_kzt'))
+    except (TypeError, ValueError):
+        price = None
+    return bool(
+        discount is not None
+        and discount >= core['PAID_MIN_DISCOUNT_PERCENT']
+        and price is not None
+        and 0 < price <= core['PAID_MAX_PRICE_KZT']
+    )
 
 
 def clean(value):
@@ -263,23 +456,106 @@ def run():
         previous_manifest = {}
 
     core = load_core()
-    traversal = collect_partial(core, failures, previous_by_key)
-    catalog = traversal['catalog']
-    reported_total = traversal['total']
-    items = sorted(catalog.values(), key=lambda item: (item['title'].casefold(), item['key']))
-    publishable = catalog_run_is_publishable(
-        reached_end=traversal['reached_end'],
-        unique_count=len(items),
-        reported_total=reported_total,
-    )
-    if not publishable:
+    try:
+        source_price_bound_validation = validate_kz_source_price_bound(core)
+    except Exception as exc:
         failures.write()
-        raise SystemExit('Steam traversal could not establish the end of the catalog')
+        raise SystemExit(f'Steam KZ source price-bound validation failed: {exc}')
 
-    coverage = (len(items) / reported_total) if reported_total else None
-    count_drift = bool(reported_total is not None and len(items) != reported_total)
+    traversals = []
+    for partition in core['SEARCH_PARTITIONS']:
+        traversal = collect_partial(
+            core,
+            failures,
+            previous_by_key,
+            partition,
+        )
+        publishable = catalog_run_is_publishable(
+            reached_end=traversal['reached_end'],
+            unique_count=len(traversal['catalog']),
+            reported_total=traversal['total'],
+        )
+        if not publishable:
+            failures.write()
+            raise SystemExit(
+                'Steam traversal could not establish the end of partition '
+                f"{partition['id']}"
+            )
+        traversals.append(traversal)
+
+    catalog, partition_provenance, cross_partition_duplicates = (
+        merge_partition_traversals(traversals)
+    )
+    items = sorted(
+        catalog.values(),
+        key=lambda item: (item['title'].casefold(), item['key']),
+    )
+
+    reported_total = sum(
+        int(traversal['total'] or 0)
+        for traversal in traversals
+    )
+    rows_seen = sum(traversal['rows_seen'] for traversal in traversals)
+    parsed_rows = sum(traversal['parsed_rows'] for traversal in traversals)
+    eligible_rows_seen = sum(
+        traversal['eligible_rows_seen']
+        for traversal in traversals
+    )
+    source_rejection_counts = Counter()
+    for traversal in traversals:
+        source_rejection_counts.update(traversal['rejection_counts'])
+
+    coverage = (
+        min(1.0, rows_seen / reported_total)
+        if reported_total
+        else None
+    )
+    count_drift = any(
+        traversal['total'] is not None
+        and traversal['rows_seen'] != traversal['total']
+        for traversal in traversals
+    )
     if count_drift:
-        print(f'Steam total drift (informational): unique={len(items)} reported={reported_total}')
+        print(
+            'Steam partition total drift (informational):',
+            [
+                (
+                    traversal['partition_id'],
+                    traversal['rows_seen'],
+                    traversal['total'],
+                )
+                for traversal in traversals
+            ],
+        )
+
+    partition_stats = [
+        {
+            'id': traversal['partition_id'],
+            'category1': traversal['category1'],
+            'reported_total': traversal['total'],
+            'rows_seen': traversal['rows_seen'],
+            'parsed_rows': traversal['parsed_rows'],
+            'eligible_rows_after_local_gate': traversal['eligible_rows_seen'],
+            'unique_eligible_items': len(traversal['catalog']),
+            'rejection_counts': traversal['rejection_counts'],
+            'duplicate_rows_seen': traversal['duplicate_rows'],
+            'requests_made': traversal['requests_made'],
+            'reached_end': traversal['reached_end'],
+        }
+        for traversal in traversals
+    ]
+    collection_requests = sum(
+        traversal['requests_made']
+        for traversal in traversals
+    )
+    source_requests = (
+        collection_requests
+        + source_price_bound_validation['logical_requests']
+    )
+    multi_partition_identity_count = sum(
+        len(partitions) > 1
+        for partitions in partition_provenance.values()
+    )
 
     items_with_search_review_data = sum(item['search_review_count'] is not None for item in items)
     search_review_coverage = items_with_search_review_data / len(items) if items else 0
@@ -402,7 +678,8 @@ def run():
 
     broad = []
     broad_reason_counts = Counter()
-    excluded_extra = excluded_software = 0
+    excluded_extra = int(source_rejection_counts.get('obvious_extra', 0))
+    excluded_software = int(source_rejection_counts.get('software_only', 0))
     successful_keys = set()
     for item in items:
         key = item['key']
@@ -492,6 +769,22 @@ def run():
         previous_by_key,
         failed_keys,
     )
+    preserved_key_set = set(preserved_keys)
+    dropped_preserved_due_current_paid_gate = []
+    paid_gate_selected = []
+    for row in selected:
+        if row_meets_current_paid_gate(core, row):
+            paid_gate_selected.append(row)
+            continue
+        if str(row.get('key')) in preserved_key_set:
+            dropped_preserved_due_current_paid_gate.append(str(row.get('key')))
+    selected = paid_gate_selected
+    preserved_keys = [
+        key
+        for key in preserved_keys
+        if key not in dropped_preserved_due_current_paid_gate
+    ]
+
     for key in preserved_keys:
         entry = failures.state['unresolved_games'].get(key)
         if entry:
@@ -566,30 +859,89 @@ def run():
     chunk_count = write_shortlist(selected, columns, core['SHORT_CHUNK'])
     logical_review_requests = len(review_appids) * 2
 
+    filtering_funnel = {
+        'source_reported_rows': reported_total,
+        'source_rows_seen': rows_seen,
+        'parsed_rows': parsed_rows,
+        'removed_non_paid_or_missing_price': int(
+            source_rejection_counts.get('non_paid_or_missing_price', 0)
+        ),
+        'removed_discount_below_50': int(
+            source_rejection_counts.get('discount_below_minimum', 0)
+        ),
+        'removed_price_above_4500': int(
+            source_rejection_counts.get('price_above_maximum', 0)
+        ),
+        'removed_obvious_extras': int(
+            source_rejection_counts.get('obvious_extra', 0)
+        ),
+        'removed_software_only': int(
+            source_rejection_counts.get('software_only', 0)
+        ),
+        'eligible_rows_before_partition_dedupe': eligible_rows_seen,
+        'unique_eligible_after_partition_dedupe': len(items),
+        'review_candidate_items': len(review_candidate_items),
+        'review_candidate_appids': len(review_appids),
+        'broad_shortlist_items': len(broad),
+        'paid_shortlist_items': len(selected),
+        'last_known_good_dropped_by_current_paid_gate': len(
+            dropped_preserved_due_current_paid_gate
+        ),
+    }
+
     manifest = {
-        'collector_version': 8,
+        'collector_version': 9,
         'source': 'Steam Store',
         'country_code': 'kz',
         'region': 'Kazakhstan',
+        'source_scope_contract': core['PAID_DISCOVERY_POLICY'][
+            'source_scope_contract'
+        ],
+        # Retained as a diagnostic union for older consumers. Production no
+        # longer sends the combined category string to Steam.
         'search_category1': core['SEARCH_CATEGORY1'],
         'search_category_types': core['SEARCH_CATEGORY_TYPES'],
+        'search_query_shape': 'explicit_partitions',
+        'search_combined_category_query_used': False,
+        'search_partitions': partition_stats,
         'search_specials_only': True,
+        'search_hidef2p_paid_partitions': True,
+        'search_maxprice_kzt': core['PAID_MAX_PRICE_KZT'],
+        'paid_minimum_discount_percent': core['PAID_MIN_DISCOUNT_PERCENT'],
+        'raw_source_top_n': None,
+        'source_price_bound_validation': source_price_bound_validation,
+        'free_or_giveaway_lane_separate': True,
+        'paid_filters_apply_to_free_or_giveaway_lane': False,
         'started_at_utc': started.isoformat(),
         'updated_at_utc': finished.isoformat(),
         'page_size': core['PAGE_SIZE'],
+        'partition_count': len(traversals),
         'steam_total_reported': reported_total,
+        'source_rows_seen': rows_seen,
+        'rows_seen': rows_seen,
+        'parsed_rows': parsed_rows,
+        'eligible_rows_before_partition_dedupe': eligible_rows_seen,
         'unique_items': len(items),
-        'rows_seen': traversal['rows_seen'],
-        'duplicate_rows_seen': traversal['duplicate_rows'],
-        'requests_made': traversal['requests_made'],
+        'cross_partition_duplicate_identities': cross_partition_duplicates,
+        'multi_partition_identity_count': multi_partition_identity_count,
+        'duplicate_rows_seen': (
+            sum(traversal['duplicate_rows'] for traversal in traversals)
+            + cross_partition_duplicates
+        ),
+        'requests_made': source_requests,
+        'source_validation_requests': source_price_bound_validation[
+            'logical_requests'
+        ],
+        'production_collection_requests': collection_requests,
         'recovery_pass_used': False,
-        'traversal_pass_count': 1,
+        'traversal_pass_count': len(traversals),
         'coverage_ratio': round(coverage, 6) if coverage is not None else None,
         'complete': source_coverage['source_complete'],
         'source_status': source_coverage['source_status'],
         'source_has_known_gaps': source_coverage['source_has_known_gaps'],
         'known_catalog_gap_count': source_coverage['known_gap_count'],
         'catalog_count_drift_informational': count_drift,
+        'filtering_funnel': filtering_funnel,
         'items_with_review_data': items_with_search_review_data,
         'review_coverage': round(search_review_coverage, 6),
         'items_with_search_review_data': items_with_search_review_data,
@@ -640,6 +992,9 @@ def run():
         ),
         'partial_publish_summary': summary,
         'last_known_good_games_preserved': len(preserved_keys),
+        'last_known_good_dropped_by_current_paid_gate': (
+            dropped_preserved_due_current_paid_gate
+        ),
     }
     OUT.mkdir(parents=True, exist_ok=True)
     MANIFEST_PATH.write_text(
@@ -648,10 +1003,28 @@ def run():
     )
 
     index = {
-        'version': 8,
+        'version': 9,
         'format': 'tsv',
         'columns': columns,
         'country_code': 'kz',
+        'source_scope_contract': core['PAID_DISCOVERY_POLICY'][
+            'source_scope_contract'
+        ],
+        'search_query_shape': 'explicit_partitions',
+        'source_partitions': [
+            {
+                'id': partition['id'],
+                'category1': partition['category1'],
+            }
+            for partition in core['SEARCH_PARTITIONS']
+        ],
+        'source_price_bound_validated': source_price_bound_validation[
+            'validated'
+        ],
+        'source_maxprice_kzt': core['PAID_MAX_PRICE_KZT'],
+        'minimum_discount_percent': core['PAID_MIN_DISCOUNT_PERCENT'],
+        'raw_source_top_n': None,
+        'filtering_funnel': filtering_funnel,
         'item_count': len(selected),
         'chunk_size': core['SHORT_CHUNK'],
         'chunk_count': chunk_count,

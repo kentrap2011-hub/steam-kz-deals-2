@@ -1,4 +1,4 @@
-# GAME-DEALS-MAILING v1.9
+# GAME-DEALS-MAILING v1.22
 
 `config/mailing_policy.json` — канонический источник общих правил отбора и production. `config/final_ranking_policy.json` — специализированный канонический контракт финального `priority_rank` и имеет приоритет над историческими sorting-массивами общего policy. `config/daily_execution_contract.json` — канонический источник расписания и способа получения результата. Этот файл — только краткое человекочитаемое описание.
 
@@ -47,8 +47,10 @@ Cache hit возможен только при совпадении:
 
 ### 3. Остальные правила сохранены
 
-- полный daily snapshot, не delta и не TOP-N;
-- весь production-feed Steam Kazakhstan читается полностью;
+- полный daily snapshot, не delta и не raw TOP-N;
+- платный Steam Kazakhstan discovery — полный детерминированный union явных `games` / `dlc` / `bundles` partitions только внутри текущего необходимого коммерческого scope: скидка >= 50%, цена <= 4500 KZT; KZ `maxprice` разрешено доверять только после bounded live boundary-validation;
+- source-side minimum-discount параметр не предполагается: 50% применяется к распарсенной строке до review enrichment;
+- free/giveaway остаётся отдельным lane и не удаляется paid-only фильтрами;
 - completed не является auto-exclude;
 - wishlist не discovery, не taste proof и не ownership proof;
 - DLC/chapter не рекомендуется самостоятельно по умолчанию;

@@ -1,5 +1,17 @@
 # CURRENT TASK
 
+## COMPLETE — Steam discovery scope reduction implement 01
+Статус: `implementation_complete_deterministic_green_live_acceptance_pending_after_merge`.
+- task: `WORKER_TASK_STEAM_DISCOVERY_SCOPE_REDUCTION_IMPLEMENT_01.md`;
+- branch: `fix/steam-discovery-scope-reduction-implement-01`;
+- PR: `#146` — `Bound Steam KZ discovery scope`;
+- implementation-tested head: `b9275bdfcf1c943a3b7dac57ff3f36adcae1188d`;
+- deterministic validation: Steam KZ production shortlist run `37317412821` / regression job `111787533863` success; collect skipped on PR by production-authority design; backlog validation run `37317412963` success;
+- result: explicit games/DLC/bundles paid partitions, fail-closed live-shaped KZ maxprice proof, authoritative >=50% and <=4500 KZT pre-review gate, deterministic App/Sub dedupe, separate existing giveaway lane, filtering-funnel producer fields;
+- no raw top-N, new scheduler/queue/retry owner, Catalyst special case, Fast/Dossier/Deep/ranking mutation, or timeout increase;
+- report: `reviews/worker_reports/steam-discovery-scope-reduction-implement-01.md`;
+- remaining acceptance: after Director-authorized merge, require one normal `main` Steam KZ production run to complete within 60 minutes, persist fresh complete universe + live KZ price-bound evidence/funnel, and start downstream from that fresh universe.
+
 ## COMPLETE — Steam discovery maximal scope reduction diagnostic 01
 Статус: `diagnostic_complete_product_choices_corrected`.
 - task: `WORKER_TASK_STEAM_DISCOVERY_MAXIMAL_SCOPE_REDUCTION_DIAGNOSTIC_01.md`;

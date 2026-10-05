@@ -1,0 +1,299 @@
+import json
+from pathlib import Path
+
+import steam_partial_publish_runner as runner
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def core():
+    return runner.load_core()
+
+
+def paid_item(*, discount=50, price=4500, key='App_100', title='Representative Game'):
+    return {
+        'key': key,
+        'appid': key.split('_', 1)[1] if key.startswith('App_') else '100',
+        'title': title,
+        'discount_percent': discount,
+        'final_kzt': price,
+        'tag_ids': [19, 4182],
+        'release_date': '',
+        'global_review_positive': 99.0,
+        'global_review_count': 50000,
+        'russian_review_positive': 99.0,
+        'russian_review_count': 5000,
+    }
+
+
+def result_row(appid, price_kzt, *, discount=50, item_key=None, title=None):
+    item_key = item_key or f'App_{appid}'
+    title = title or f'Probe {appid}'
+    final_minor = int(round(float(price_kzt) * 100))
+    return (
+        f'<a class="search_result_row" data-ds-itemkey="{item_key}" '
+        f'data-ds-appid="{appid}" data-ds-tagids="[19,4182]" '
+        f'href="https://store.steampowered.com/app/{appid}/">'
+        f'<span class="title">{title}</span>'
+        f'<div class="discount_block" data-discount="{discount}" '
+        f'data-price-final="{final_minor}"></div>'
+        f'</a>'
+    )
+
+
+def page(total, rows):
+    return {
+        'total_count': total,
+        'results_html': ''.join(rows),
+    }
+
+
+def test_explicit_partitions_cover_supported_content_types_and_params():
+    c = core()
+    assert tuple(c['SEARCH_CATEGORY_TYPES']) == ('games', 'dlc', 'bundles')
+    assert c['SEARCH_CATEGORY_TYPES'] == {
+        'games': '998',
+        'dlc': '21',
+        'bundles': '996',
+    }
+    for partition in c['SEARCH_PARTITIONS']:
+        params = c['search_params'](
+            0,
+            'Name_ASC',
+            category1=partition['category1'],
+            maxprice_kzt=4500,
+            hidef2p=True,
+        )
+        assert params['cc'] == 'kz'
+        assert params['specials'] == 1
+        assert params['category1'] == partition['category1']
+        assert params['category1'] != c['SEARCH_CATEGORY1']
+        assert params['maxprice'] == 4500
+        assert params['hidef2p'] == 1
+        assert params['ignore_preferences'] == 1
+
+
+def test_partition_merge_is_deterministic_and_preserves_representatives():
+    game = paid_item(key='App_100', title='Game')
+    dlc = paid_item(key='App_200', title='DLC')
+    bundle = paid_item(key='Sub_300', title='Bundle')
+    duplicate = dict(game, title='Later duplicate must not replace game partition')
+
+    traversals = [
+        {
+            'partition_id': 'games',
+            'catalog': {'App_100': game},
+        },
+        {
+            'partition_id': 'dlc',
+            'catalog': {'App_200': dlc, 'App_100': duplicate},
+        },
+        {
+            'partition_id': 'bundles',
+            'catalog': {'Sub_300': bundle},
+        },
+    ]
+    merged, provenance, duplicate_count = runner.merge_partition_traversals(traversals)
+    assert list(merged) == ['App_100', 'App_200', 'Sub_300']
+    assert merged['App_100']['title'] == 'Game'
+    assert provenance['App_100'] == ['games', 'dlc']
+    assert duplicate_count == 1
+
+    reversed_insertion = [
+        traversals[0],
+        {
+            'partition_id': 'dlc',
+            'catalog': dict(reversed(list(traversals[1]['catalog'].items()))),
+        },
+        traversals[2],
+    ]
+    merged_again, provenance_again, duplicate_count_again = (
+        runner.merge_partition_traversals(reversed_insertion)
+    )
+    assert merged_again == merged
+    assert provenance_again == provenance
+    assert duplicate_count_again == duplicate_count
+
+
+def test_paid_gate_blocks_below_50_and_above_4500_before_reviews_and_shortlist():
+    c = core()
+    below_discount = paid_item(discount=49, price=1000)
+    above_price = paid_item(discount=90, price=4500.01)
+    boundary = paid_item(discount=50, price=4500)
+
+    assert c['paid_source_rejection_reason'](below_discount) == 'discount_below_minimum'
+    assert c['paid_source_rejection_reason'](above_price) == 'price_above_maximum'
+    assert c['paid_source_rejection_reason'](boundary) is None
+
+    assert c['needs_review_enrichment'](below_discount, __import__('datetime').date.today()) is False
+    assert c['needs_review_enrichment'](above_price, __import__('datetime').date.today()) is False
+    assert c['needs_review_enrichment'](boundary, __import__('datetime').date.today()) is True
+
+    below_broad, _ = c['broad_reasons'](below_discount, __import__('datetime').date.today())
+    above_broad, _ = c['broad_reasons'](above_price, __import__('datetime').date.today())
+    boundary_broad, fit_tags = c['broad_reasons'](boundary, __import__('datetime').date.today())
+    assert below_broad == []
+    assert above_broad == []
+    assert boundary_broad
+
+    below_refined = dict(below_discount, fit_tags=fit_tags, broad_reasons=boundary_broad)
+    above_refined = dict(above_price, fit_tags=fit_tags, broad_reasons=boundary_broad)
+    boundary_refined = dict(boundary, fit_tags=fit_tags, broad_reasons=boundary_broad)
+    assert c['refined_reasons'](below_refined)[0] == []
+    assert c['refined_reasons'](above_refined)[0] == []
+    assert c['refined_reasons'](boundary_refined)[0]
+
+    assert runner.row_meets_current_paid_gate(c, below_discount) is False
+    assert runner.row_meets_current_paid_gate(c, above_price) is False
+    assert runner.row_meets_current_paid_gate(c, boundary) is True
+
+
+def test_kz_maxprice_must_match_uncapped_price_boundary_before_trust():
+    c = dict(core())
+    c['PAGE_SIZE'] = 2
+
+    def fake_get_page(
+        start,
+        sort_by,
+        *,
+        category1=None,
+        maxprice_kzt=None,
+        hidef2p=False,
+    ):
+        assert category1 == '998'
+        assert hidef2p is True
+        if maxprice_kzt is not None:
+            assert maxprice_kzt == 4500
+            assert sort_by == 'Price_DESC'
+            assert start == 0
+            return page(3, [
+                result_row(1, 4500),
+                result_row(2, 4300),
+            ])
+        assert sort_by == 'Price_ASC'
+        if start == 2:
+            return page(6, [
+                result_row(3, 4400),
+                result_row(4, 4600),
+            ])
+        if start == 4:
+            return page(6, [
+                result_row(5, 5000),
+                result_row(6, 6000),
+            ])
+        raise AssertionError(f'unexpected probe start={start}')
+
+    c['get_page'] = fake_get_page
+    evidence = runner.validate_kz_source_price_bound(c)
+    assert evidence['validated'] is True
+    assert evidence['country_code'] == 'kz'
+    assert evidence['maxprice_kzt'] == 4500
+    assert evidence['capped_total'] == 3
+    assert evidence['last_at_or_below_cap_kzt'] == 4400
+    assert evidence['first_over_cap_kzt'] == 4600
+    assert evidence['logical_requests'] == 3
+
+
+def test_kz_maxprice_validation_fails_closed_on_count_boundary_mismatch():
+    c = dict(core())
+    c['PAGE_SIZE'] = 2
+
+    def fake_get_page(
+        start,
+        sort_by,
+        *,
+        category1=None,
+        maxprice_kzt=None,
+        hidef2p=False,
+    ):
+        assert category1 == '998'
+        assert hidef2p is True
+        if maxprice_kzt is not None:
+            return page(2, [
+                result_row(1, 4500),
+                result_row(2, 4300),
+            ])
+        if start == 0:
+            return page(6, [
+                result_row(10, 1000),
+                result_row(11, 2000),
+            ])
+        if start == 2:
+            return page(6, [
+                result_row(12, 4400),
+                result_row(13, 4600),
+            ])
+        raise AssertionError(f'unexpected probe start={start}')
+
+    c['get_page'] = fake_get_page
+    try:
+        runner.validate_kz_source_price_bound(c)
+    except RuntimeError as exc:
+        assert 'capped total does not equal' in str(exc)
+    else:
+        raise AssertionError('unsafe maxprice semantics must fail closed')
+
+
+def test_free_giveaway_lane_remains_separate_from_paid_filters():
+    policy = json.loads((ROOT / 'config/mailing_policy.json').read_text(encoding='utf-8'))
+    paid = policy['paid_discovery']
+    assert paid['free_or_giveaway_lane_is_separate'] is True
+    assert paid['paid_filters_must_not_remove_free_or_giveaway_lane'] is True
+    assert policy['freebies']['steam_feed_path'] == 'data/production/freebies.tsv'
+
+    workflow = (ROOT / '.github/workflows/steam-test.yml').read_text(encoding='utf-8')
+    paid_step = workflow.index('Collect Steam KZ catalog with partial publish failure isolation')
+    giveaway_step = workflow.index('Build canonical Steam Epic GOG KZ giveaways')
+    assert paid_step < giveaway_step
+    assert 'python scripts/giveaway_production.py' in workflow
+
+
+def test_discovery_scope_remains_github_owned_without_new_scheduler_or_top_n():
+    ownership = json.loads(
+        (ROOT / 'config/execution_ownership_contract.json').read_text(encoding='utf-8')
+    )
+    github = ownership['github_control_plane']
+    assert github['owner'] == 'GitHub repository and GitHub Actions'
+    assert 'decide the exact current production scope' in github['responsibilities']
+    assert 'scope selection' in github['must_not_delegate']
+
+    policy = json.loads((ROOT / 'config/mailing_policy.json').read_text(encoding='utf-8'))
+    assert policy['paid_discovery']['raw_source_top_n'] is None
+    assert policy['delivery']['fixed_top_n'] is None
+
+    workflow = (ROOT / '.github/workflows/steam-test.yml').read_text(encoding='utf-8')
+    assert workflow.count('\n  schedule:') == 1
+    assert 'timeout-minutes: 60' in workflow
+
+
+def test_mirrors_edge_catalyst_is_not_special_cased():
+    for relative in (
+        'scripts/steam_production.py',
+        'scripts/steam_partial_publish_runner.py',
+    ):
+        text = (ROOT / relative).read_text(encoding='utf-8').casefold()
+        assert '1233570' not in text
+        assert "mirror's edge catalyst" not in text
+        assert 'mirrors edge catalyst' not in text
+
+
+def main():
+    tests = [
+        test_explicit_partitions_cover_supported_content_types_and_params,
+        test_partition_merge_is_deterministic_and_preserves_representatives,
+        test_paid_gate_blocks_below_50_and_above_4500_before_reviews_and_shortlist,
+        test_kz_maxprice_must_match_uncapped_price_boundary_before_trust,
+        test_kz_maxprice_validation_fails_closed_on_count_boundary_mismatch,
+        test_free_giveaway_lane_remains_separate_from_paid_filters,
+        test_discovery_scope_remains_github_owned_without_new_scheduler_or_top_n,
+        test_mirrors_edge_catalyst_is_not_special_cased,
+    ]
+    for test in tests:
+        test()
+        print(f'{test.__name__}: PASS')
+    print(f'Steam discovery scope reduction regressions: {len(tests)}/{len(tests)} PASS')
+
+
+if __name__ == '__main__':
+    main()
