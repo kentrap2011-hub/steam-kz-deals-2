@@ -103,9 +103,10 @@ def test_partition_merge_is_deterministic_and_preserves_representatives():
         },
     ]
     merged, provenance, duplicate_count = runner.merge_partition_traversals(traversals)
-    assert list(merged) == ['App_100', 'App_200', 'Sub_300']
+    assert list(merged) == ['App_100', 'Sub_300', 'App_200']
     assert merged['App_100']['title'] == 'Game'
     assert provenance['App_100'] == ['games', 'dlc']
+    assert provenance['Sub_300'] == ['games']
     assert duplicate_count == 1
 
     reversed_insertion = [
