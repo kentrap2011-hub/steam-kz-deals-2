@@ -385,7 +385,7 @@ class TranslationRuntimeTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 ingest_paths(queue_path, cache_path, [submission])
 
-    def test_placeholder_and_non_russian_results_are_rejected(self):
+    def test_placeholder_and_non_russian_results_enter_diagnostics(self):
         request = build_translation_request({
             'description_status': 'needs_translation',
             'description_source_quality': 'non_ru',
@@ -410,8 +410,17 @@ class TranslationRuntimeTests(unittest.TestCase):
                     'schema_version': 1,
                     'results': [result_for(request, bad_text)],
                 }), encoding='utf-8')
-                with self.assertRaises(ValueError):
-                    ingest_paths(queue_path, cache_path, [submission])
+                stats = ingest_paths(queue_path, cache_path, [submission])
+                self.assertEqual(stats['accepted_count'], 0)
+                self.assertEqual(stats['diagnostic_quarantined_count'], 1)
+                cache = json.loads(cache_path.read_text(encoding='utf-8'))
+                self.assertNotIn(request['request_id'], cache['entries'])
+                diagnostics = json.loads(
+                    (root / 'russian_description_translation_diagnostics.json').read_text(
+                        encoding='utf-8'
+                    )
+                )
+                self.assertEqual(diagnostics['entries'][request['request_id']]['state'], 'active')
 
     def test_resolver_uses_exact_cache_and_misses_after_source_change(self):
         source = 'Explore the station and escape the creatures hunting you.'
