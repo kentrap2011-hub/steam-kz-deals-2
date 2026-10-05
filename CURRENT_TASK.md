@@ -1,16 +1,15 @@
 # CURRENT TASK
 
-## COMPLETE — Steam discovery scope reduction implement 01
-Статус: `implementation_complete_deterministic_green_live_acceptance_pending_after_merge`.
+## IN PROGRESS — Steam discovery scope reduction implement 01
+Статус: `live_acceptance_failure_bounded_followup_in_progress`.
 - task: `WORKER_TASK_STEAM_DISCOVERY_SCOPE_REDUCTION_IMPLEMENT_01.md`;
-- branch: `fix/steam-discovery-scope-reduction-implement-01`;
-- PR: `#146` — `Bound Steam KZ discovery scope`;
-- implementation-tested head: `b9275bdfcf1c943a3b7dac57ff3f36adcae1188d`;
-- deterministic validation: Steam KZ production shortlist run `37317412821` / regression job `111787533863` success; collect skipped on PR by production-authority design; backlog validation run `37317412963` success;
-- result: explicit games/DLC/bundles paid partitions, fail-closed live-shaped KZ maxprice proof, authoritative >=50% and <=4500 KZT pre-review gate, deterministic App/Sub dedupe, separate existing giveaway lane, filtering-funnel producer fields;
-- no raw top-N, new scheduler/queue/retry owner, Catalyst special case, Fast/Dossier/Deep/ranking mutation, or timeout increase;
-- report: `reviews/worker_reports/steam-discovery-scope-reduction-implement-01.md`;
-- remaining acceptance: after Director-authorized merge, require one normal `main` Steam KZ production run to complete within 60 minutes, persist fresh complete universe + live KZ price-bound evidence/funnel, and start downstream from that fresh universe.
+- PR #146 merged to main as `fb21b704ac36f56d40bdc6a00175864538dbcee7`;
+- first normal production acceptance run `37319401442`, collect job `111794299510`: deterministic regressions passed, live source-bound validation failed with `Price_ASC is not monotonic at cutoff`;
+- continuation branch: `fix/steam-discovery-scope-reduction-live-validation-01`;
+- scope: investigate only whether KZ `maxprice=4500` is reliable while the current monotonic Price_ASC proof is too strict; use bounded live probes only;
+- preserve explicit games/DLC/bundles partitions, >=50%, <=4500 KZT, free/giveaway separation and GitHub ownership;
+- no Scheduled Task, Dossier, Deep, Fast, ranking, unrelated site or Catalyst-specific changes;
+- report to update: `reviews/worker_reports/steam-discovery-scope-reduction-implement-01.md`.
 
 ## COMPLETE — Steam discovery maximal scope reduction diagnostic 01
 Статус: `diagnostic_complete_product_choices_corrected`.
