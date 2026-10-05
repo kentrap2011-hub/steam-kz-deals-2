@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "768d5d11a4e8c8c3780d1ef07988756a67507e53",
+  "run_start_authority_commit": "e0dda46f1a14dd7f16ce8e2fe2a350e686141291",
+  "run_started_at_utc": "2026-10-05T12:14:07+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+  "work_id": "d27cff54c2a81189eea9a93075e7ca3f528b9cd396ad89574af5ca596fb51484",
+  "family_id": "game:1435790",
+  "taste_subject_key": "App_1435790",
+  "appid": "1435790",
+  "taste_fingerprint": "1d3237f09a65822d8e2e339c5caf02b65854cdb6f1de5c240a2c2503e0c67b99",
+  "candidate_context_sha256": "4a12e2b7ef57dee10cb10997ec5032d9528fcc939387a8499e1cf219869e5a83",
+  "dossier_content_sha256": "5b0c4323cf53516297c0cd1c58a5c359b2796440f19006aaa10d34a4487420dd",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "580e6e4dd72650fb0fd6358d6b6dcefb96047bc21538e023959e92685e14f93a",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Тактильные escape-room головоломки дают разнообразные коды, замки и предметные задачи.",
+    "Co-op превращает обсуждение и совместный поиск улик в важную часть прохождения.",
+    "Workshop и компактные комнаты заметно расширяют разнообразие и хорошо подходят для коротких puzzle-сессий."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 78,
+    "development_variety": 86,
+    "structure_pacing_direction": 90,
+    "identity_hooks": 78,
+    "breadth_of_match": 90
+  },
+  "score_findings": [
+    {
+      "finding_id": "tactile-varied-escape-puzzles",
+      "text_ru": "Комнаты строятся вокруг осмотра предметов, кодов, замков и пространственных загадок, поэтому puzzle-loop остаётся конкретным и интерактивным, а не сводится к одному типу задач.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/stopgame_cards/66/what_liked/0",
+          "profile_value_sha256": "e9e97a50b0cd1bff24174b7473c4764aac78dd5f1655849534db81af97eb14fd",
+          "match_text_ru": "Тебе подтверждённо приятно несколько часов разгадывать головоломки, если сами задачи интересны."
+        },
+        {
+          "json_pointer": "/taste_profile/5/raises",
+          "profile_value_sha256": "f1997cf9d87235a0d984a3c5bceefb8aa566143fb2e8edddfb81312ba09aef35",
+          "match_text_ru": "Понятные загадки и поиск решения — положительный сигнал твоего профиля."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 78
+        },
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 78
+        }
+      ]
+    },
+    {
+      "finding_id": "coop-room-solving",
+      "text_ru": "В co-op поиск и интерпретация улик распределяются между игроками, поэтому совместное обсуждение решений становится частью самого прохождения, а не только способом находиться в одной комнате.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9/raises",
+          "profile_value_sha256": "36b637056006eec4d8f770215639f59d7ccbc3bd78413fc61dd852f0486dfea8",
+          "match_text_ru": "Совместное обсуждение решений и помощь друг другу — прямой положительный сигнал для твоего co-op опыта."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 90
+        }
+      ]
+    },
+    {
+      "finding_id": "workshop-variety",
+      "text_ru": "Большая библиотека пользовательских комнат заметно расширяет набор головоломок за пределы официальной кампании и даёт возможность выбирать новые темы и конструкции вместо повторения одного набора.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Регулярное появление новых форматов и ситуаций поддерживает твою потребность в разнообразии."
+        },
+        {
+          "json_pointer": "/factor_importance/развитие_и_разнообразие/note",
+          "profile_value_sha256": "0580f077432002933245e702ef32d0a5e3ac046bc717580f70c7ebcc99027b7d",
+          "match_text_ru": "Развитие и разнообразие — один из наиболее устойчивых мотивов твоих оценок."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 86
+        }
+      ]
+    },
+    {
+      "finding_id": "compact-session-structure",
+      "text_ru": "Официальные комнаты организованы как короткие самостоятельные puzzle-сессии, поэтому можно получать законченный опыт небольшими порциями вместо длинной кампании из одной и той же формулы.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/stopgame_cards/66/what_liked/0",
+          "profile_value_sha256": "e9e97a50b0cd1bff24174b7473c4764aac78dd5f1655849534db81af97eb14fd",
+          "match_text_ru": "Короткий формат особенно хорошо совпадает с тем, что головоломки у тебя лучше работают как опыт на несколько часов."
+        },
+        {
+          "json_pointer": "/stopgame_cards/66/what_disliked/1",
+          "profile_value_sha256": "01d32d35d1bb0e929a727b85c9e8c7aa1f2ffd372488386e1c1b154a7104a6f5",
+          "match_text_ru": "То, что одни головоломки надолго не удерживают, делает компактную комнатную структуру важным ограничителем риска."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 90
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Сложность комнат заметно различается: часть задач доступна сразу, а часть может резко стать труднее; в co-op ощущаемая сложность дополнительно зависит от того, как партнёры замечают и объясняют улики.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Русскоязычные игроки раньше жаловались на отсутствие локализации, но использованное evidence не подтверждает точное состояние русского языка именно в 2026 году.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  }
+}
