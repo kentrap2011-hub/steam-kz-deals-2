@@ -22,18 +22,41 @@ REVIEW_URL = (
 PAGE_SIZE = 50
 REQUEST_DELAY = 0.9
 
-# Steam search's untyped "specials" result set expanded from ~13k rows to
-# >100k rows in late September 2026, making the canonical nightly discovery
-# exceed its 60-minute owner timeout. The production policy only models paid
-# games, substantive DLC and purchase bundles. Keep the authoritative discovery
-# universe explicit so unrelated software/demos/soundtracks/playtests/hardware
-# cannot silently expand the catalog traversal again.
+# Steam discovery scope is policy-owned. The runner loads these exact partitions
+# and gates before expensive review enrichment; no raw top-N is allowed.
+POLICY_PATH = Path("config/mailing_policy.json")
+POLICY = json.loads(POLICY_PATH.read_text(encoding="utf-8"))
+PAID_DISCOVERY_POLICY = POLICY["paid_discovery"]
+PAID_MIN_DISCOUNT_PERCENT = int(
+    PAID_DISCOVERY_POLICY["minimum_discount_percent"]
+)
+PAID_MAX_PRICE_KZT = int(
+    PAID_DISCOVERY_POLICY["maximum_final_price_kzt"]
+)
+SEARCH_PARTITIONS = tuple(
+    {
+        "id": str(partition["id"]),
+        "category1": str(partition["category1"]),
+    }
+    for partition in PAID_DISCOVERY_POLICY["source_partitions"]
+)
 SEARCH_CATEGORY_TYPES = {
-    "games": "998",
-    "dlc": "21",
-    "bundles": "996",
+    partition["id"]: partition["category1"]
+    for partition in SEARCH_PARTITIONS
 }
-SEARCH_CATEGORY1 = ",".join(SEARCH_CATEGORY_TYPES.values())
+SEARCH_CATEGORY1 = ",".join(
+    partition["category1"]
+    for partition in SEARCH_PARTITIONS
+)
+
+if PAID_DISCOVERY_POLICY.get("country_code") != "kz":
+    raise RuntimeError("Steam paid discovery must remain bound to cc=kz")
+if PAID_DISCOVERY_POLICY.get("raw_source_top_n") is not None:
+    raise RuntimeError("Raw Steam discovery top-N is forbidden")
+if tuple(SEARCH_CATEGORY_TYPES) != ("games", "dlc", "bundles"):
+    raise RuntimeError("Steam paid discovery partitions must remain games/dlc/bundles")
+if PAID_MIN_DISCOUNT_PERCENT != 50 or PAID_MAX_PRICE_KZT != 4500:
+    raise RuntimeError("Steam paid discovery policy does not match approved 50%/4500 KZT gate")
 
 # Запросы рейтингов делаем только для игр, которые
 # структурно могут пройти shortlist.
@@ -275,23 +298,48 @@ def parse_release(text):
         return None
 
 
-def search_params(start, sort_by):
-    return {
+def search_params(
+    start,
+    sort_by,
+    *,
+    category1=None,
+    maxprice_kzt=None,
+    hidef2p=False,
+):
+    params = {
         "query": "",
         "start": start,
         "count": PAGE_SIZE,
         "specials": 1,
-        "category1": SEARCH_CATEGORY1,
+        "category1": category1 or SEARCH_CATEGORY1,
         "cc": "kz",
         "l": "english",
         "infinite": 1,
         "ignore_preferences": 1,
         "sort_by": sort_by,
     }
+    if maxprice_kzt is not None:
+        params["maxprice"] = int(maxprice_kzt)
+    if hidef2p:
+        params["hidef2p"] = 1
+    return params
 
 
-def get_page(start, sort_by):
-    params = search_params(start, sort_by)
+def get_page(
+    start,
+    sort_by,
+    *,
+    category1=None,
+    maxprice_kzt=None,
+    hidef2p=False,
+):
+    params = search_params(
+        start,
+        sort_by,
+        category1=category1,
+        maxprice_kzt=maxprice_kzt,
+        hidef2p=hidef2p,
+    )
 
     last_error = None
 
@@ -742,34 +790,45 @@ def collect(sort_by):
     }
 
 
-def base_item_info(item):
+def paid_source_rejection_reason(item):
     """
-    Общая проверка мусора + вычисление fit_tags.
-    Рейтинг здесь не участвует.
+    Deterministic current paid-offer gate applied before review enrichment.
+    Source-side maxprice/hidef2p are acceleration only; local checks remain
+    authoritative and fail closed if Steam ever leaks an out-of-scope row.
     """
-    discount = item["discount_percent"]
-    price = item["final_kzt"]
+    discount = item.get("discount_percent")
+    price = item.get("final_kzt")
 
-    if (
-        discount is None
-        or discount <= 0
-        or price is None
-        or price <= 0
-    ):
-        return None
+    if price is None or price <= 0:
+        return "non_paid_or_missing_price"
+    if discount is None or discount < PAID_MIN_DISCOUNT_PERCENT:
+        return "discount_below_minimum"
+    if price > PAID_MAX_PRICE_KZT:
+        return "price_above_maximum"
 
-    title = item["title"]
-    tags = set(item["tag_ids"])
+    title = item.get("title") or ""
+    tags = set(item.get("tag_ids") or [])
 
     if EXTRA_RE.search(title):
+        return "obvious_extra"
+    if tags & SOFTWARE_TAGS and not tags & GAME_TAGS:
+        return "software_only"
+
+    return None
+
+
+def paid_row_is_currently_eligible(item):
+    return paid_source_rejection_reason(item) is None
+
+
+def base_item_info(item):
+    """
+    Current paid gate + fit-tag derivation. Reviews do not participate here.
+    """
+    if paid_source_rejection_reason(item):
         return None
 
-    if (
-        tags & SOFTWARE_TAGS
-        and not tags & GAME_TAGS
-    ):
-        return None
-
+    tags = set(item["tag_ids"])
     fit_tags = [
         FIT_TAGS[tag]
         for tag in item["tag_ids"]
@@ -781,13 +840,10 @@ def base_item_info(item):
         "tags": tags,
     }
 
-
 def needs_review_enrichment(item, today):
     """
-    Проверяем только цену/скидку/теги/возраст.
-    Если при хорошем рейтинге игра теоретически
-    могла бы пройти broad shortlist, тогда и только
-    тогда запрашиваем мировой + русский рейтинг.
+    Only rows that still can satisfy the approved paid rules may reach the
+    expensive global + Russian review enrichment.
     """
     base = base_item_info(item)
 
@@ -808,45 +864,39 @@ def needs_review_enrichment(item, today):
 
     if (
         price <= 3500
-        and discount >= 40
+        and discount >= 50
     ):
         return True
 
     if (
         price <= 4500
-        and discount >= 30
+        and discount >= 50
         and fit_tags
     ):
         return True
 
     if (
-        price <= 5000
+        price <= 4500
         and discount >= 70
     ):
         return True
 
     if (
-        price <= 5000
-        and discount >= 35
-    ):
-        return True
-
-    if (
         price <= 4500
-        and discount >= 25
+        and discount >= 50
     ):
         return True
 
     if (
         price <= 2000
-        and discount >= 25
+        and discount >= 50
     ):
         return True
 
     if (
         fit_tags
         and price <= 2500
-        and discount >= 40
+        and discount >= 50
     ):
         return True
 
@@ -862,7 +912,7 @@ def needs_review_enrichment(item, today):
         if (
             0 <= age_days <= 730
             and price <= 4500
-            and discount >= 20
+            and discount >= 50
         ):
             return True
 
@@ -875,7 +925,6 @@ def needs_review_enrichment(item, today):
         return True
 
     return False
-
 
 def review_passes(
     item,
@@ -1007,43 +1056,43 @@ def broad_reasons(item, today):
 
     if (
         price <= 3500
-        and discount >= 40
+        and discount >= 50
         and review_passes(item, 3000, REVIEW_THRESHOLDS["affordable_quality"])
     ):
         reasons.append("affordable_quality")
 
     if (
         price <= 4500
-        and discount >= 30
+        and discount >= 50
         and fit_tags
         and review_passes(item, 1000, REVIEW_THRESHOLDS["genre_fit"])
     ):
         reasons.append("genre_fit")
 
     if (
-        price <= 5000
+        price <= 4500
         and discount >= 70
         and review_passes(item, 1000, REVIEW_THRESHOLDS["big_discount"])
     ):
         reasons.append("big_discount")
 
     if (
-        price <= 5000
-        and discount >= 35
+        price <= 4500
+        and discount >= 50
         and review_passes(item, 20000, REVIEW_THRESHOLDS["popular_quality"])
     ):
         reasons.append("popular_quality")
 
     if (
         price <= 4500
-        and discount >= 25
+        and discount >= 50
         and review_passes(item, 3000, REVIEW_THRESHOLDS["very_high_rating"])
     ):
         reasons.append("very_high_rating")
 
     if (
         price <= 2000
-        and discount >= 25
+        and discount >= 50
         and review_passes(item, 1000, REVIEW_THRESHOLDS["cheap_quality"])
     ):
         reasons.append("cheap_quality")
@@ -1051,7 +1100,7 @@ def broad_reasons(item, today):
     if (
         fit_tags
         and price <= 2500
-        and discount >= 40
+        and discount >= 50
         and review_passes(item, 100, REVIEW_THRESHOLDS["niche_fit"])
     ):
         reasons.append("niche_fit")
@@ -1068,7 +1117,7 @@ def broad_reasons(item, today):
         if (
             0 <= age_days <= 730
             and price <= 4500
-            and discount >= 20
+            and discount >= 50
             and review_passes(item, 500, REVIEW_THRESHOLDS["recent_quality"])
         ):
             reasons.append("recent_quality")
@@ -1083,10 +1132,15 @@ def broad_reasons(item, today):
 
     return reasons, fit_tags
 
-
 def refined_reasons(item):
     price = item["final_kzt"]
     discount = item["discount_percent"]
+
+    if (
+        discount < PAID_MIN_DISCOUNT_PERCENT
+        or price > PAID_MAX_PRICE_KZT
+    ):
+        return [], 0
 
     fit_tags = set(item["fit_tags"])
     core = fit_tags & CORE
@@ -1096,14 +1150,14 @@ def refined_reasons(item):
 
     if (
         price <= 4500
-        and discount >= 40
+        and discount >= 50
         and review_passes(item, 5000, REVIEW_THRESHOLDS["mainstream_quality"])
     ):
         reasons.append("mainstream_quality")
 
     if (
         price <= 4500
-        and discount >= 35
+        and discount >= 50
         and len(core) >= 1
         and review_passes(item, 1500, REVIEW_THRESHOLDS["strong_fit"])
     ):
@@ -1111,7 +1165,7 @@ def refined_reasons(item):
 
     if (
         price <= 2500
-        and discount >= 40
+        and discount >= 50
         and len(core) >= 2
         and review_passes(item, 300, REVIEW_THRESHOLDS["strong_niche_fit"])
     ):
@@ -1126,7 +1180,7 @@ def refined_reasons(item):
 
     if (
         price <= 4000
-        and discount >= 25
+        and discount >= 50
         and review_passes(item, 3000, REVIEW_THRESHOLDS["very_high_rating"])
     ):
         reasons.append("very_high_rating")
@@ -1135,7 +1189,7 @@ def refined_reasons(item):
         "recent_quality"
         in item["broad_reasons"]
         and price <= 4000
-        and discount >= 25
+        and discount >= 50
         and len(core) >= 1
         and review_passes(item, 750, REVIEW_THRESHOLDS["recent_fit"])
     ):
@@ -1165,7 +1219,6 @@ def refined_reasons(item):
         reasons.append("substantive_content")
 
     return reasons, len(core)
-
 
 started = datetime.now(timezone.utc)
 
