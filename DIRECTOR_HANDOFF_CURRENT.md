@@ -28,24 +28,22 @@ Treat old Board sections as historical unless this handoff explicitly points to 
 ### ЧАТ 1 — ASSIGNED / NEW PHYSICAL CHAT
 
 Task:
-`WORKER_TASK_STEAM_DISCOVERY_MAXIMAL_SCOPE_REDUCTION_DIAGNOSTIC_01.md`
+`WORKER_TASK_STEAM_DISCOVERY_SCOPE_REDUCTION_IMPLEMENT_01.md`
 
 Mode:
-`READ-ONLY / RECON`
+`IMPLEMENT / VALIDATE`
 
-Goal:
-Globally diagnose how to shrink real Steam KZ discovery as much as safely possible while preserving the best deals and targeting roughly 100 final visible offers. The worker must produce several options/tradeoffs and ask the user directly if further reduction requires dropping deal classes. No implementation is authorized in this task.
+The completed Steam reduction diagnostic must not be repeated. User-approved implementation decision: paid offers require at least 50% discount; preserve current 4500 KZT ceiling and current DLC/bundle/free semantics unless correctness requires otherwise; do not introduce an arbitrary raw top-N. Goal: materially bound the existing GitHub-owned collector and prove it can complete safely.
 
-### ЧАТ 2 — ASSIGNED / NEW PHYSICAL CHAT
+### ЧАТ 2 — ASSIGNED / EXISTING PHYSICAL CHAT
 
 Task:
 `WORKER_TASK_RUSSIAN_TRANSLATION_PARTIAL_ACCEPT_DIAGNOSTIC_QUARANTINE_FIX_01.md`
 
 Mode:
-`IMPLEMENT / VALIDATE`
+`IMPLEMENT / VALIDATE / FINAL MERGE CONTINUATION`
 
-Goal:
-Make translation ingest isolate exact per-game semantic quality failures: accept valid siblings, route failing current items to GitHub-owned translation diagnostics instead of normal retranslation, expose diagnostic count in Statistics, and recover the already-submitted checkpoint through the corrected canonical path without retranslation. No Scheduled Task change is authorized.
+PR #145 implementation is complete. User/Director explicitly authorized the existing ЧАТ 2 to reconcile again with fresh main, rerun required checks, merge when clean/green, then verify canonical ingest and fresh translation state. Preserve 19 accepted + 1 diagnostic semantics and the approved duplicate-transport resolution.
 
 ## CURRENTLY WORKING / RECENT SEMANTIC CHATS
 
