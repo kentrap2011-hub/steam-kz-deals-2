@@ -26,7 +26,7 @@
 ## QUEUED PRODUCT WORK — 2026-10-04
 
 Priority order:
-1. `WORKER_TASK_STEAM_DISCOVERY_50_PERCENT_DISCOUNT_TOP100_IMPLEMENT_01.md` — minimum current discount **50%**, existing price bound, early low-signal filtering, base-games first, then DLC only for admitted bases, bundles as an independent pre-top-100 lane, and funnel counts. Final site cap remains **at most 100 best current offers**.
+1. `WORKER_TASK_STEAM_DISCOVERY_50_PERCENT_DISCOUNT_TOP100_IMPLEMENT_01.md` — minimum current discount **50%**, existing price bound, early low-signal filtering, base-games first, then DLC only for admitted bases, bundles as an independent lane, and funnel counts. **Do not reduce to 100 during initial GitHub filtering:** all surviving candidates must receive the required detailed analysis first; only then select **at most 100 best current offers**.
    - трудоёмкость: **высокая** — границы выборки, момент поиска дополнений, оценка наборов, сортировка и проверка обычного запуска взаимосвязаны;
    - срочность: **высокая** — текущая выборка Steam может разрастаться примерно до 100 тысяч строк и не успевать сохраниться.
 2. `WORKER_TASK_STEAM_OWNED_LIBRARY_DLC_SUPPORT_01.md` — научиться безопасно получать список принадлежащих пользователю игр Steam и затем разрешать дополнения к подходящим **или принадлежащим** базовым играм.
