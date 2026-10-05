@@ -1,18 +1,16 @@
 # CURRENT TASK
 
 ## IN PROGRESS — Steam discovery scope reduction implement 01
-Статус: `pr147_deterministic_green_ready_for_merge_main_acceptance_pending`.
+Статус: `pr147_merged_live_run_in_progress_observability_fix_in_progress`.
 - task: `WORKER_TASK_STEAM_DISCOVERY_SCOPE_REDUCTION_IMPLEMENT_01.md`;
-- PR #146 merged to main as `fb21b704ac36f56d40bdc6a00175864538dbcee7`;
-- first normal production acceptance run `37319401442`, collect job `111794299510`: deterministic regressions passed, live validation failed because the old proof incorrectly required globally monotonic `Price_ASC`;
-- bounded live probe in PR #147 run `37334852442` proved exact `cc=kz&maxprice=4500` active: games capped `total_count=63681` under Price_ASC/Price_DESC/Name_ASC, sampled capped maximum 4500 KZT; arbitrary low maxprice values behaved as ignored/unbounded controls (`total_count=65097`, sampled up to 74400 KZT);
-- correction PR: `#147` — `Fix Steam KZ live maxprice validation`;
-- final code head before documentation-only commits: `c4930141ad5d604dfe681248fe6b6b283a58543c`;
-- deterministic validation: Steam run `37335316576` / regression job `111848645135` success; backlog run `37335316556` success;
-- corrected proof uses capped games/DLC/bundles Price_DESC samples + games capped sort-invariant total + uncapped larger/over-cap games control; Price_ASC monotonicity is not required;
-- temporary live-probe code removed; no Scheduled Task, Dossier, Deep, Fast, ranking, site, timeout, raw top-N, scheduler/queue/retry owner or Catalyst-specific change;
-- report updated: `reviews/worker_reports/steam-discovery-scope-reduction-implement-01.md`;
-- remaining acceptance: merge PR #147 under current Director authorization, then require one normal `main` Steam KZ production run to complete within 60 minutes, persist fresh complete universe + actual funnel, and start downstream from that fresh universe.
+- PR #146 merged as `fb21b704ac36f56d40bdc6a00175864538dbcee7`; PR #147 merged as `3ca7e6c12214756a847a5f5170d497dffb044c85`;
+- first main acceptance `37319401442` failed only on invalid Price_ASC monotonicity proof; PR #147 replaced that proof with bounded capped-vs-uncapped controls;
+- current normal main acceptance run `37335826933`, collect job `111850233215`, is still in the single collector step after all pre-collection regressions passed;
+- live job logs are not retrievable through the current GitHub API while the job is in progress (404), so exact active partition/page/review stage is externally opaque;
+- existing bounded probe already shows games `maxprice=4500` scope is `63681` rows versus `65097` uncapped, so price filtering alone reduces the live games source only slightly and cannot yet be claimed materially sufficient;
+- continuation branch: `fix/steam-discovery-progress-observability-01`;
+- current subtask: add explicit GitHub-owned collector progress/timing/heartbeat observability without changing timeout, scheduler, queue/retry ownership, product thresholds, Fast/Dossier/Deep/ranking or starting a competing production writer;
+- after deterministic checks, continue bounded source-scope investigation immediately; do not wait for the current run to time out.
 
 ## COMPLETE — Steam discovery maximal scope reduction diagnostic 01
 Статус: `diagnostic_complete_product_choices_corrected`.
