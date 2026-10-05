@@ -1,18 +1,21 @@
 # CURRENT TASK
 
 ## IN PROGRESS — Steam discovery scope reduction implement 01
-Статус: `pr148_merged_normal_main_acceptance_in_progress`.
+Статус: `pr151_permanent_fix_implemented_final_checks_pending`.
 - task: `WORKER_TASK_STEAM_DISCOVERY_SCOPE_REDUCTION_IMPLEMENT_01.md`;
-- PR #146 merged as `fb21b704ac36f56d40bdc6a00175864538dbcee7`; PR #147 merged as `3ca7e6c12214756a847a5f5170d497dffb044c85`;
-- second main acceptance `37335826933` hit the existing ~60-minute timeout after games completed and DLC was partial: games `63,689` / `41,654` locally eligible, DLC last `13,700 / ~34,356` / `7,245` locally eligible, bundles not started, 204 HTTP 429 responses;
-- bounded probes proved tested source-side minimum-discount params are ignored and proved complete non-overlapping 100-row pages; canonical page size therefore changed 50 -> 100 without changing candidate scope;
-- PR #148 merged as `28a94de86ba18dce37e5f944a81ce7c944e07d8c`;
-- PR #148 permanent changes: `python -u`, 30-second structured heartbeat, partition/page/review progress, Search/Reviews request/retry/429/backoff counters, stage timings and page size 100;
-- deterministic final-head checks for PR #148 were green: Steam PR run `37345574092`, backlog validation `37345574170`;
-- required normal `main` acceptance is now run `37345668260`, collect job `111883491529`; pre-collection regressions passed and the collector step is currently `in_progress`;
-- no concurrent production writer was started; temporary diagnostic PR #149 was closed without merge and contains no canonical changes;
-- report: `reviews/worker_reports/steam-discovery-scope-reduction-implement-01.md`;
-- task remains open until run `37345668260` either persists a fresh complete canonical discovery universe and starts downstream within the existing 60-minute timeout, or yields new stage-level evidence requiring another bounded correction.
+- PR #148 main acceptance `37345668260` timed out after games + DLC completed and standalone `category1=996` reached `48,000 / ~105,326`; 192 Search 429 events / 2160s backoff; Reviews had not started;
+- bounded PR #151 live evidence proved standalone `category1=996` is broad Include-Bundles/untyped scope, not bundle-only: ~105.3k rows, overwhelmingly ordinary `App_` rows, with a 50k sample containing 57/100 DLC-titled rows;
+- no-category and standalone 996 controls matched at ~105.3k;
+- representative package `Sub_76471` (`Daedalic - Gigantic Bundle`) is returned by `category1=998` as well as 996; `998,996` matched games-only total and `21,996` matched DLC-only total;
+- permanent source correction: canonical paid traversals are now games `998` + DLC `21`; exact `Sub_` package identities remain preserved from games; standalone 996 traversal is fail-fast forbidden; source contract -> `preservation_first_bounded_paid_v2`;
+- bounded pacing evidence: 0.5s produced 14×429 in 35 requests; after cooldown 2.2s produced 35/35 HTTP 200; tighter 1.8s produced 35/35 HTTP 200 with no 429; live responses exposed no `Retry-After`;
+- permanent pacing correction: production Search inter-page delay 0.5s -> 1.8s; existing retry/backoff owner remains unchanged; timeout unchanged;
+- temporary live-probe script/workflow steps removed from final PR diff;
+- PR #151: `Fix Steam bundle and rate-limit blocker`; branch `fix/steam-bundle-rate-limit-01`;
+- deterministic tests updated for games/DLC-only source, embedded package preservation, no standalone 996, two-partition maxprice proof and 1.8s pacing;
+- no raw top-N, second collector/scheduler/queue/retry owner, timeout increase, Scheduled Task, Fast/Dossier/Deep/ranking/site semantic change or Catalyst special case;
+- report updated: `reviews/worker_reports/steam-discovery-scope-reduction-implement-01.md`; route updated: `PROJECT_ROUTES.md`;
+- remaining acceptance: final PR #151 head must be clean/green, then merge under existing Director authorization and require one normal `main` production run to finish within 60 minutes, persist fresh canonical discovery, report actual funnel/rate-limit/review metrics and start downstream handoff.
 
 ## COMPLETE — Steam discovery maximal scope reduction diagnostic 01
 Статус: `diagnostic_complete_product_choices_corrected`.

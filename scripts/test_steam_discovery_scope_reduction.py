@@ -52,12 +52,20 @@ def page(total, rows):
 def test_explicit_partitions_cover_supported_content_types_and_params():
     c = core()
     assert c['PAGE_SIZE'] == 100
-    assert tuple(c['SEARCH_CATEGORY_TYPES']) == ('games', 'dlc', 'bundles')
+    assert tuple(c['SEARCH_CATEGORY_TYPES']) == ('games', 'dlc')
     assert c['SEARCH_CATEGORY_TYPES'] == {
         'games': '998',
         'dlc': '21',
-        'bundles': '996',
     }
+    assert '996' not in {
+        partition['category1']
+        for partition in c['SEARCH_PARTITIONS']
+    }
+    bundle_policy = c['PAID_DISCOVERY_POLICY']['bundle_package_discovery']
+    assert bundle_policy['mode'] == 'embedded_in_games_partition'
+    assert bundle_policy['representative_identity'] == 'Sub_76471'
+    assert bundle_policy['representative_live_category1'] == '998'
+    assert bundle_policy['standalone_category1_996_traversal'] is False
     for partition in c['SEARCH_PARTITIONS']:
         params = c['search_params'](
             0,
@@ -85,30 +93,31 @@ def test_partition_merge_is_deterministic_and_preserves_representatives():
     traversals = [
         {
             'partition_id': 'games',
-            'catalog': {'App_100': game},
+            # Live KZ evidence proves package Sub_ identities are returned by
+            # category1=998, so packages are preserved inside this partition.
+            'catalog': {'App_100': game, 'Sub_300': bundle},
         },
         {
             'partition_id': 'dlc',
             'catalog': {'App_200': dlc, 'App_100': duplicate},
         },
-        {
-            'partition_id': 'bundles',
-            'catalog': {'Sub_300': bundle},
-        },
     ]
     merged, provenance, duplicate_count = runner.merge_partition_traversals(traversals)
-    assert list(merged) == ['App_100', 'App_200', 'Sub_300']
+    assert list(merged) == ['App_100', 'Sub_300', 'App_200']
     assert merged['App_100']['title'] == 'Game'
     assert provenance['App_100'] == ['games', 'dlc']
+    assert provenance['Sub_300'] == ['games']
     assert duplicate_count == 1
 
     reversed_insertion = [
-        traversals[0],
+        {
+            'partition_id': 'games',
+            'catalog': dict(reversed(list(traversals[0]['catalog'].items()))),
+        },
         {
             'partition_id': 'dlc',
             'catalog': dict(reversed(list(traversals[1]['catalog'].items()))),
         },
-        traversals[2],
     ]
     merged_again, provenance_again, duplicate_count_again = (
         runner.merge_partition_traversals(reversed_insertion)
@@ -189,11 +198,6 @@ def test_kz_maxprice_validation_does_not_require_monotonic_price_asc():
                 result_row(21, 500),
             ])
 
-        if category1 == '996' and maxprice_kzt == 4500 and sort_by == 'Price_DESC':
-            return page(1, [
-                result_row(30, 3000, item_key='Sub_30'),
-            ])
-
         if category1 == '998' and maxprice_kzt is None and sort_by == 'Price_DESC':
             return page(6, [
                 result_row(10, 6000),
@@ -213,11 +217,11 @@ def test_kz_maxprice_validation_does_not_require_monotonic_price_asc():
     assert evidence['price_asc_monotonicity_required'] is False
     assert evidence['partition_price_desc_checks']['games']['max_price_kzt'] == 4500
     assert evidence['partition_price_desc_checks']['dlc']['max_price_kzt'] == 4499
-    assert evidence['partition_price_desc_checks']['bundles']['max_price_kzt'] == 3000
+    assert tuple(evidence['partition_price_desc_checks']) == ('games', 'dlc')
     assert evidence['games_sort_invariant_check']['total_count'] == 3
     assert evidence['games_uncapped_control']['total_count'] == 6
     assert evidence['games_uncapped_control']['max_price_kzt'] == 6000
-    assert evidence['logical_requests'] == 5
+    assert evidence['logical_requests'] == 4
 
 
 def test_kz_maxprice_validation_fails_closed_if_capped_partition_leaks_over_cap():
@@ -237,18 +241,14 @@ def test_kz_maxprice_validation_fails_closed_if_capped_partition_leaks_over_cap(
             if category1 == '998':
                 return page(3, [result_row(1, 4500)])
             if category1 == '21':
-                return page(2, [result_row(20, 4499)])
-            if category1 == '996':
-                return page(1, [
-                    result_row(30, 4600, item_key='Sub_30'),
-                ])
-        raise AssertionError('validator should fail on bundle leak before controls')
+                return page(2, [result_row(20, 4600)])
+        raise AssertionError('validator should fail on DLC leak before controls')
 
     c['get_page'] = fake_get_page
     try:
         runner.validate_kz_source_price_bound(c)
     except RuntimeError as exc:
-        assert 'bundles maxprice=4500 leaked 4600.0 KZT' in str(exc)
+        assert 'dlc maxprice=4500 leaked 4600.0 KZT' in str(exc)
     else:
         raise AssertionError('over-cap capped row must fail closed')
 
@@ -342,6 +342,11 @@ def test_core_network_stats_expose_retry_and_backoff_counters():
     assert updated['review_backoff_seconds'] == 1.5
 
 
+def test_search_pacing_matches_live_proven_rate_limit_safe_delay():
+    assert runner.accelerator.ORIGINAL_SEARCH_DELAY_SECONDS == 0.9
+    assert runner.accelerator.SEARCH_DELAY_SECONDS == 1.8
+
+
 def test_free_giveaway_lane_remains_separate_from_paid_filters():
     policy = json.loads((ROOT / 'config/mailing_policy.json').read_text(encoding='utf-8'))
     paid = policy['paid_discovery']
@@ -395,6 +400,7 @@ def main():
         test_kz_maxprice_validation_fails_closed_if_filter_is_not_material,
         test_progress_reporter_exposes_stage_and_network_metrics,
         test_core_network_stats_expose_retry_and_backoff_counters,
+        test_search_pacing_matches_live_proven_rate_limit_safe_delay,
         test_free_giveaway_lane_remains_separate_from_paid_filters,
         test_discovery_scope_remains_github_owned_without_new_scheduler_or_top_n,
         test_mirrors_edge_catalyst_is_not_special_cased,
