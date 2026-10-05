@@ -1,9 +1,6 @@
 {
-  "schema_version": 1,
-  "contract": "PROGRESSIVE-PASS2-EXECUTION-RECEIPT-V1",
-  "run_start_anchor_commit": "768d5d11a4e8c8c3780d1ef07988756a67507e53",
-  "run_start_authority_commit": "e0dda46f1a14dd7f16ce8e2fe2a350e686141291",
-  "run_started_at_utc": "2026-10-05T12:14:07+00:00",
+  "schema_version": 2,
+  "contract": "PROGRESSIVE-PASS2-CANONICAL-EXECUTION-RECEIPT-V2",
   "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
   "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
   "work_id": "93ca5e0867a0270bdff87bb3be9820e4a3e99fa3825f0e64a86fe0862d696931",
@@ -32,13 +29,19 @@
   "recovery_authorization_id": null,
   "recovery_reason": null,
   "recovery_condition_binding": null,
+  "migration_provenance": null,
+  "execution_status": "executed_no_accepted_result",
+  "execution_started_at_utc": "2026-10-05T12:14:07+00:00",
+  "execution_finished_at_utc": "2026-10-05T12:14:07+00:00",
+  "terminal_reason": "terminal_execution_failure",
+  "source_transport_sha256": "98f0b2d459e56ae9519bc77902a84a40c3cf2343c91d9539acc16967306337ec",
+  "accepted_at_utc": "2026-10-05T12:19:01+00:00",
+  "run_start_anchor_commit": "768d5d11a4e8c8c3780d1ef07988756a67507e53",
+  "run_start_authority_commit": "e0dda46f1a14dd7f16ce8e2fe2a350e686141291",
+  "run_started_at_utc": "2026-10-05T12:14:07+00:00",
   "score_evidence_contract": {
     "schema_version": 1,
     "contract": "DEEP-SCORE-EVIDENCE-V1",
     "required": true
-  },
-  "execution_status": "executed_no_accepted_result",
-  "execution_started_at_utc": "2026-10-05T12:14:07+00:00",
-  "execution_finished_at_utc": "2026-10-05T12:14:07+00:00",
-  "terminal_reason": "terminal_execution_failure"
+  }
 }
