@@ -342,3 +342,163 @@ Allowed final statuses:
 - `complete_production_cutover_validated`
 - `needs_director_decision`
 - `blocked`
+
+
+## Director correction — preserve site 60/40 scoring model
+
+This section supersedes any earlier wording in this task that described the Deep Stage-1 or Stage-2 score as the site's full 0–100 final score.
+
+### Existing site scoring model must be preserved
+
+Current canonical `config/final_ranking_policy.json` defines:
+
+- total displayed score: **0–100**;
+- personal / game-quality side: **maximum 60**;
+- purchase/deal side: **maximum 40**.
+
+The new two-stage Deep architecture must preserve that product/UI split.
+
+Therefore:
+
+`final_total_score_0_100 = calibrated_quality_score_0_60 + deterministic_purchase_score_0_40`
+
+Deep semantic calibration owns only the **0–60 quality/personal-fit component**.
+
+The deterministic purchase component remains GitHub-owned and must not be semantically adjusted by Stage 2 merely to move a game in the ranking.
+
+### Stage 1 corrected score semantics
+
+Stage 1 outputs:
+
+- grounded positives/negatives/hooks/risks;
+- fit/not-fit/confidence;
+- **provisional_quality_score_0_60**.
+
+This is an approximate holistic estimate of how strong the game is for this user.
+
+It is not a final site score and not final ranking authority.
+
+Example replacing the earlier 78/78 illustration:
+
+- Game A provisional quality: 47/60;
+- Game B provisional quality: 47/60.
+
+### Stage 2 corrected score semantics
+
+Stage 2 compares the target against already calibrated **quality anchors** and produces:
+
+- relative quality ordering;
+- **calibrated_quality_score_0_60**;
+- comparative explanation.
+
+Example:
+
+- A and B both start at 47/60;
+- comparative calibration determines A is clearly stronger than B;
+- after checking nearby anchors:
+  - A becomes 49/60;
+  - B remains 47/60 or is moved to 46/60 if the comparative evidence supports it.
+
+Only this calibrated **0–60 quality score** is authoritative for the personal/quality component.
+
+### Purchase/deal 0–40 stays separate
+
+The existing deterministic purchase/deal logic remains separate and transparent.
+
+Stage 2 must not:
+- raise quality because the discount is larger;
+- lower quality because the price is worse;
+- alter price/history/package value facts;
+- use the purchase component to fabricate a taste distinction.
+
+After calibration, GitHub combines:
+
+- calibrated quality 0–60;
+- deterministic purchase value 0–40;
+
+into the final site total 0–100.
+
+Therefore two games can have:
+- A: quality 50/60 + deal 20/40 = total 70/100;
+- B: quality 47/60 + deal 30/40 = total 77/100.
+
+B may appear higher in the **deal-ranking feed** even though A is the better personal game fit. This is correct and must remain explainable.
+
+The UI must not imply that Stage 2 semantically judged B to be the better game merely because B has the higher 100-point purchase-ranked total.
+
+### Existing 60-point subcomponents
+
+Current canonical 60-point personal side is internally composed from legacy fixed components (taste/wishlist/achievements/duration/risk).
+
+The worker must explicitly audit these consumers.
+
+Target architecture:
+- the **final 0–60 personal/game-quality result must be holistic and Stage-2 calibrated**;
+- the old fixed additive taste-factor arithmetic must not remain hidden final authority;
+- wishlist, achievements, duration, risks and similar personal context may remain evidence/context inputs where useful, but must not be double-counted after the calibrated 0–60 score is authoritative.
+
+If preserving any current deterministic subcomponent inside the 60-point side is necessary for product semantics, document exactly why and prove that it does not reintroduce a hidden additive formula conflicting with the user-authorized holistic calibration.
+
+### Required site/UI changes
+
+The implementation must inspect and update the actual site presentation, not only backend contracts.
+
+After cutover the site must clearly distinguish:
+
+1. **Stage 1 only / awaiting calibration**
+   - no Fast label or Fast score;
+   - may show `предварительная оценка X/60` if the product currently exposes an interim score;
+   - must not present it as final quality or final calibrated authority.
+
+2. **Stage 2 calibrated**
+   - show final personal/game-quality value as **X/60**;
+   - show deterministic purchase/deal value as **Y/40**;
+   - show final combined score as **Z/100** where the current site uses the combined score;
+   - explanation must make clear that X/60 comes from comparative Deep calibration and Y/40 from deal economics.
+
+3. **Not yet Deep-analyzed**
+   - no semantic quality score fabricated from Fast;
+   - deterministic provisional ordering only.
+
+4. **Authoritative not-fit**
+   - retain current visibility/exclusion semantics; do not create a fake calibrated positive score.
+
+### Site progress / Statistics
+
+Remove Fast as a current equivalent semantic stage from user-facing progress/statistics.
+
+Replace relevant progress concepts with at least:
+
+- Deep Stage 1 complete;
+- awaiting comparative calibration;
+- Deep Stage 2 calibrated;
+- not analyzed;
+- not-fit;
+- diagnostic/incomplete.
+
+If the current UI has stage icons/status badges/Statistics tied to Fast/Dossier/Deep, update them so the new two-stage Deep model is understandable.
+
+### Ranking interpretation
+
+Stage 2 calibrates **quality position**, not commercial deal value.
+
+The final site feed may still use the combined 100-point score after GitHub adds the 0–40 purchase component.
+
+The worker must make both orderings explicit enough that the system never confuses:
+
+- "better game for this user" = higher calibrated quality score /60;
+- "better offer right now" = higher final combined score /100, subject to the canonical ranking-stage rules.
+
+Do not force semantic quality numbers to compensate for price/discount merely to make final commercial ordering line up.
+
+### Regression additions
+
+Add tests proving:
+
+- Stage-2 semantic output cannot exceed 60 quality points;
+- purchase component remains capped at 40 and unchanged by Stage 2;
+- final displayed total is the transparent sum of calibrated quality + deterministic purchase;
+- no legacy Fast score fills the 60-point quality component;
+- provisional Stage-1 score is visually/contractually distinct from calibrated Stage-2 score;
+- site/card/Statistics labels no longer imply Fast is an equivalent analysis stage;
+- a game with higher quality but lower deal score can legitimately have a lower combined 100-point total without corrupting its quality score.
