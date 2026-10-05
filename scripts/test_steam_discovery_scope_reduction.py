@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 import steam_partial_publish_runner as runner
+import steam_maxprice_live_probe
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -293,6 +294,8 @@ def main():
         test()
         print(f'{test.__name__}: PASS')
     print(f'Steam discovery scope reduction regressions: {len(tests)}/{len(tests)} PASS')
+    print('Running bounded live KZ maxprice evidence probe...')
+    steam_maxprice_live_probe.main()
 
 
 if __name__ == '__main__':
