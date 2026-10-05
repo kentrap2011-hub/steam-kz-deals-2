@@ -32,7 +32,11 @@ BASE_CONTRACT = load_contract(ROOT / "config/taste_steam_review_dossier_contract
 BASE_RECOVERY = load_recovery_contract(ROOT / "config/taste_steam_review_dossier_recovery_contract.json")
 SCHEMA = load_worker_schema(ROOT / "config/taste_steam_review_dossier_schema.json")
 EVIDENCE_CONTRACT = load_web_evidence_contract(ROOT / "config/taste_steam_review_dossier_web_evidence_contract.json")
-NOW = datetime.now(timezone.utc).replace(microsecond=0)
+NOW = (
+    datetime.now(timezone(timedelta(hours=4)))
+    .replace(hour=0, minute=0, second=0, microsecond=0)
+    .astimezone(timezone.utc)
+)
 GROUP_SIZE = int(BASE_CONTRACT["checkpointing"]["checkpoint_size"])
 
 
