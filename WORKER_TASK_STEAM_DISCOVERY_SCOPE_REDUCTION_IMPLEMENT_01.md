@@ -191,3 +191,61 @@ You may update only your own clearly delimited task entry. Re-read immediately b
 ## Done when
 
 The existing GitHub-owned Steam discovery path is materially bounded using the approved 50%/4500-KZT/current-content semantics, no arbitrary raw top-N is introduced, required checks are green, and the result is ready for Director acceptance or safely merged if the protocol explicitly permits.
+
+
+## Director continuation — live KZ acceptance failure after PR #146 merge
+
+PR #146 has now been merged to `main` as:
+`fb21b704ac36f56d40bdc6a00175864538dbcee7`.
+
+The required first normal production acceptance ran automatically:
+
+- workflow: `Steam KZ production shortlist`;
+- run: `37319401442`;
+- job: `collect / 111794299510`;
+- deterministic regressions passed;
+- live collection then failed immediately inside the new source-bound validation;
+- exact error:
+  `Steam KZ source price-bound validation failed: Cannot validate KZ maxprice: Price_ASC is not monotonic at cutoff`.
+
+This is now the current task blocker.
+
+### Required continuation
+
+Do not repeat the global diagnostic and do not revert the approved 50% / 4500 KZT product policy.
+
+Investigate only this exact live acceptance failure and complete the existing implementation safely.
+
+Determine which is true:
+
+1. Steam's `maxprice=4500` source bound is actually reliable for KZ, but the current `Price_ASC` monotonic-boundary proof is invalid/too strict because Steam Search sorting is not strictly monotonic; or
+2. the source-side `maxprice` behavior itself cannot be trusted enough to serve as a canonical completeness boundary.
+
+Use bounded live probes only. Do not perform a broad 100k crawl.
+
+If case 1:
+- replace the faulty proof with the smallest robust live validation that directly demonstrates the required KZ price-bound semantics without depending on globally monotonic `Price_ASC`;
+- retain fail-closed behavior;
+- keep the explicit games/DLC/bundles partitions and 50% local gate;
+- add a regression matching the real non-monotonic behavior.
+
+If case 2:
+- do not weaken completeness or silently trust `maxprice`;
+- evaluate the smallest safe alternative within the existing GitHub-owned collector that can still materially reduce traversal without losing current approved candidates;
+- do not use the previously suggested Price_ASC early-stop fallback unless its correctness can now actually be proven;
+- if no semantics-preserving source bound is possible, stop with exact measured evidence and a bounded set of product tradeoff choices for the Director/user rather than inventing a lossy rule.
+
+After the fix:
+1. update the same implementation branch/PR follow-up path according to current protocol;
+2. run deterministic checks;
+3. merge only if current protocol and existing Director authorization allow the continuation;
+4. run one normal `main` production acceptance;
+5. require the collector to complete/persist a fresh canonical discovery universe within the existing 60-minute owner timeout;
+6. report actual partition/funnel counts and whether downstream publication unblocked.
+
+Do not change Scheduled Tasks, Dossier, Deep, Fast, ranking, or unrelated site logic.
+
+Update:
+`reviews/worker_reports/steam-discovery-scope-reduction-implement-01.md`
+
+with the live failure, root cause, correction, checks, new PR/commit references, and final live acceptance.
