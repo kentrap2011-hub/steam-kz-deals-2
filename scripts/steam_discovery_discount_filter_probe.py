@@ -93,12 +93,24 @@ def main():
             count=count,
         )
 
+    page_size_probes['count_100_start_100'] = summarize(
+        core,
+        sort_by='Name_ASC',
+        extra_params={},
+        start=100,
+        count=100,
+    )
     page_size_probes['count_200_start_200'] = summarize(
         core,
         sort_by='Name_ASC',
         extra_params={},
         start=200,
         count=200,
+    )
+    first_100 = set(page_size_probes['count_100_start_0']['keys'])
+    second_100 = set(page_size_probes['count_100_start_100']['keys'])
+    page_size_probes['count_100_contiguous_overlap'] = sorted(
+        first_100 & second_100
     )
     first_200 = set(page_size_probes['count_200_start_0']['keys'])
     second_200 = set(page_size_probes['count_200_start_200']['keys'])
