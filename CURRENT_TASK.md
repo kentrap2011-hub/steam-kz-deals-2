@@ -1356,3 +1356,13 @@
 - Possible later profile refinement: distinguish intrinsic continuous-movement flow from movement valued mainly for mastery/challenge.
 - Canonical Taste profile and production scoring/ranking were not modified.
 - Report: `reviews/worker_reports/personal-taste-game-guess-diagnostic-01.md`.
+
+
+## IN PROGRESS — Russian translation partial accept + diagnostic quarantine continuation 01
+
+- Status: `reconciling_pr_145_with_current_main`.
+- Task: `WORKER_TASK_RUSSIAN_TRANSLATION_PARTIAL_ACCEPT_DIAGNOSTIC_QUARANTINE_FIX_01.md`.
+- Worker slot: `ЧАТ 2`.
+- PR: `#145`; implementation branch: `fix/russian-translation-partial-accept-diagnostic-quarantine-01`.
+- Continuation scope only: reconcile PR with fresh `main`, preserve pinned checkpoint `manual-one-shot-9b3f6d2c7a41.json`, remove later overlapping duplicate transport `manual-one-shot-a41c7e5d920b.json`, re-run required checks, and update the worker report.
+- No retranslation, request/AppID/hash rebinding, Scheduled Task change, Dossier/Deep/Fast/ranking/expiry change, or direct merge is authorized.
