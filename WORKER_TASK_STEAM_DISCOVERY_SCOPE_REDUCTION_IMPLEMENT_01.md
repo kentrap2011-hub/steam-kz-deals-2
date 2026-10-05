@@ -249,3 +249,92 @@ Update:
 `reviews/worker_reports/steam-discovery-scope-reduction-implement-01.md`
 
 with the live failure, root cause, correction, checks, new PR/commit references, and final live acceptance.
+
+
+## Director continuation — do not wait for opaque long-running collection
+
+The user explicitly does **not** want to wait passively for the current long-running production collection to hit the timeout.
+
+Current observed live run:
+- workflow: `Steam KZ production shortlist`;
+- run: `37335826933`;
+- collect job: `111850233215`;
+- started from merged PR #147;
+- all pre-collection regressions passed;
+- for ~45+ minutes the workflow has remained on the single collection step with no useful external progress visibility;
+- GitHub exposes the job as `in_progress`, but there is no actionable per-partition/page progress visible to the Director.
+
+Treat this lack of observability as a task defect, not as an acceptable operating condition.
+
+### Continue now
+
+Do not wait for run `37335826933` to reach its 60-minute timeout before continuing investigation and implementation.
+
+Immediately inspect the exact current collector path and current run evidence needed to answer:
+- whether traversal is still advancing;
+- which partition it is in;
+- how many pages/rows have been processed;
+- whether it is spending time on Steam Search pagination, Reviews API enrichment, retry/backoff, or another bounded substage;
+- whether the new scope reduction is actually material in live execution.
+
+If the current run is still executing while this continuation is performed, do not modify its canonical outputs in place. It may be allowed to finish or time out independently. Do not create a second production writer competing with it.
+
+### Mandatory progress observability
+
+Add explicit progress output to the existing GitHub-owned collector so future long runs are not opaque.
+
+At minimum, logs must expose:
+
+1. **partition start/end**
+   - `games`
+   - `dlc`
+   - `bundles`
+
+2. **search traversal progress**
+   - current page/request number;
+   - rows seen so far;
+   - Steam-reported total for that partition when available;
+   - percentage or `seen / total` where meaningful;
+   - cumulative eligible rows after the local 50% / 4500 KZT / extras/software gate;
+   - duplicate count where meaningful.
+
+3. **review-enrichment progress**
+   - candidate AppID count;
+   - current completed / total candidate count;
+   - logical Reviews API request count;
+   - retry / 429 / backoff count;
+   - periodic progress at a useful cadence, not only at the end.
+
+4. **heartbeat**
+   - when one network operation/retry loop can take long enough to make the job appear stalled, emit a periodic heartbeat with current stage and elapsed progress;
+   - do not spam logs per single item if a coarser cadence such as every 10–20 pages or every bounded batch is sufficient.
+
+5. **stage timing**
+   - elapsed time for source validation;
+   - each partition traversal;
+   - local filtering/dedupe;
+   - review enrichment;
+   - shortlist/final persistence preparation.
+
+The exact cadence may be chosen by the worker, but a Director looking at a live Actions job must be able to distinguish:
+- progressing normally;
+- slowed by rate limiting;
+- stalled on one request;
+- stuck in a large review-enrichment phase.
+
+### Acceptance
+
+Add deterministic tests where practical for the progress/metrics plumbing, but do not over-engineer tests for literal log strings.
+
+The next normal `main` production acceptance must show enough live log/progress evidence to identify the active stage while it is running.
+
+Do not increase the timeout merely to hide slow traversal.
+
+Do not add another scheduler, collector, background worker, or competing production write path.
+
+Update the existing report with:
+- what the long run was actually doing;
+- the last observable progress before completion/failure;
+- the progress instrumentation added;
+- whether the live runtime is now materially reduced;
+- final production acceptance result.
