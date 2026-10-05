@@ -441,23 +441,106 @@ def run():
         previous_manifest = {}
 
     core = load_core()
-    traversal = collect_partial(core, failures, previous_by_key)
-    catalog = traversal['catalog']
-    reported_total = traversal['total']
-    items = sorted(catalog.values(), key=lambda item: (item['title'].casefold(), item['key']))
-    publishable = catalog_run_is_publishable(
-        reached_end=traversal['reached_end'],
-        unique_count=len(items),
-        reported_total=reported_total,
-    )
-    if not publishable:
+    try:
+        source_price_bound_validation = validate_kz_source_price_bound(core)
+    except Exception as exc:
         failures.write()
-        raise SystemExit('Steam traversal could not establish the end of the catalog')
+        raise SystemExit(f'Steam KZ source price-bound validation failed: {exc}')
 
-    coverage = (len(items) / reported_total) if reported_total else None
-    count_drift = bool(reported_total is not None and len(items) != reported_total)
+    traversals = []
+    for partition in core['SEARCH_PARTITIONS']:
+        traversal = collect_partial(
+            core,
+            failures,
+            previous_by_key,
+            partition,
+        )
+        publishable = catalog_run_is_publishable(
+            reached_end=traversal['reached_end'],
+            unique_count=len(traversal['catalog']),
+            reported_total=traversal['total'],
+        )
+        if not publishable:
+            failures.write()
+            raise SystemExit(
+                'Steam traversal could not establish the end of partition '
+                f"{partition['id']}"
+            )
+        traversals.append(traversal)
+
+    catalog, partition_provenance, cross_partition_duplicates = (
+        merge_partition_traversals(traversals)
+    )
+    items = sorted(
+        catalog.values(),
+        key=lambda item: (item['title'].casefold(), item['key']),
+    )
+
+    reported_total = sum(
+        int(traversal['total'] or 0)
+        for traversal in traversals
+    )
+    rows_seen = sum(traversal['rows_seen'] for traversal in traversals)
+    parsed_rows = sum(traversal['parsed_rows'] for traversal in traversals)
+    eligible_rows_seen = sum(
+        traversal['eligible_rows_seen']
+        for traversal in traversals
+    )
+    source_rejection_counts = Counter()
+    for traversal in traversals:
+        source_rejection_counts.update(traversal['rejection_counts'])
+
+    coverage = (
+        min(1.0, rows_seen / reported_total)
+        if reported_total
+        else None
+    )
+    count_drift = any(
+        traversal['total'] is not None
+        and traversal['rows_seen'] != traversal['total']
+        for traversal in traversals
+    )
     if count_drift:
-        print(f'Steam total drift (informational): unique={len(items)} reported={reported_total}')
+        print(
+            'Steam partition total drift (informational):',
+            [
+                (
+                    traversal['partition_id'],
+                    traversal['rows_seen'],
+                    traversal['total'],
+                )
+                for traversal in traversals
+            ],
+        )
+
+    partition_stats = [
+        {
+            'id': traversal['partition_id'],
+            'category1': traversal['category1'],
+            'reported_total': traversal['total'],
+            'rows_seen': traversal['rows_seen'],
+            'parsed_rows': traversal['parsed_rows'],
+            'eligible_rows_after_local_gate': traversal['eligible_rows_seen'],
+            'unique_eligible_items': len(traversal['catalog']),
+            'rejection_counts': traversal['rejection_counts'],
+            'duplicate_rows_seen': traversal['duplicate_rows'],
+            'requests_made': traversal['requests_made'],
+            'reached_end': traversal['reached_end'],
+        }
+        for traversal in traversals
+    ]
+    collection_requests = sum(
+        traversal['requests_made']
+        for traversal in traversals
+    )
+    source_requests = (
+        collection_requests
+        + source_price_bound_validation['logical_requests']
+    )
+    multi_partition_identity_count = sum(
+        len(partitions) > 1
+        for partitions in partition_provenance.values()
+    )
 
     items_with_search_review_data = sum(item['search_review_count'] is not None for item in items)
     search_review_coverage = items_with_search_review_data / len(items) if items else 0
