@@ -1,5 +1,19 @@
 # CURRENT TASK
 
+## COMPLETE — Dossier + Deep independent quality audit 01
+Статус: `audit_complete_systematic_quality_problems_found`.
+- task: `WORKER_TASK_DOSSIER_DEEP_INDEPENDENT_QUALITY_AUDIT_01.md`;
+- mode: read-only independent semantic-quality audit; no Dossier/Deep worker execution and no production/prompt/contract/queue/ranking/UI/Scheduled Task changes;
+- audited current canonical sample: 22 authoritative Deep results paired with 22 exact frozen accepted Dossiers; covered fit/not-fit, score bands, confidence, old/current, genres and review-volume extremes;
+- overall quality score: **82/100**;
+- main positive finding: Dossier facts/trade-offs and Deep fit/not-fit reasoning are generally well grounded; balanced negative assessment is working;
+- main systematic finding: numeric taste-score magnitude lacks sufficient calibration anchors and the fixed 18/12/8/8/4 additive taste aggregation conflicts with the pinned profile's explicit holistic/non-additive evaluation rule;
+- current explainability gap: 23/135 (17.0%) current authoritative fit results have no `score_findings`;
+- current-state evidence gap example: App_1467920 Dossier says `searched_no_existence_signal` for Russian feedback while current candidate context now reports 5 Russian reviews; treated as current staleness, not proof the original research was wrong;
+- trust verdict: rough ranking yes; exact close top-100 ordering no; confident purchase conditional on reading grounded reasons/cautions, not score alone;
+- report: `reviews/worker_reports/dossier-deep-independent-quality-audit-01.md`;
+- no implementation performed.
+
 ## COMPLETE — Dossier retryable transport reject fix 01
 Статус: `complete_fix_ready_semantic_retry_required`.
 - task: `WORKER_TASK_DOSSIER_RETRYABLE_TRANSPORT_REJECT_FIX_01.md`;
