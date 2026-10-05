@@ -51,15 +51,15 @@
   },
   "scope": {
     "deep_total_current_coverage_target": 527,
-    "deep_first_pass_attempted_count": 179,
-    "deep_authoritative_completed_count": 149,
+    "deep_first_pass_attempted_count": 180,
+    "deep_authoritative_completed_count": 150,
     "deep_completed_fit_count": 127,
-    "deep_completed_not_fit_count": 22,
+    "deep_completed_not_fit_count": 23,
     "deep_incomplete_or_recovery_count": 30,
     "deep_waiting_for_dossier_count": 346,
-    "deep_ready_or_pending_count": 2,
-    "deep_normal_first_pass_remaining_count": 348,
-    "deep_remaining_until_all_authoritative_count": 378,
+    "deep_ready_or_pending_count": 1,
+    "deep_normal_first_pass_remaining_count": 347,
+    "deep_remaining_until_all_authoritative_count": 377,
     "deep_normal_first_pass_complete": false,
     "deep_all_current_authoritative_complete": false,
     "recovery_owned_count": 30,
@@ -67,9 +67,9 @@
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 19,
     "dossier_waiting_count": 346,
-    "pass2_attempted_count": 179,
-    "pass2_eligible_count": 2,
-    "normal_pass2_eligible_count": 2,
+    "pass2_attempted_count": 180,
+    "pass2_eligible_count": 1,
+    "normal_pass2_eligible_count": 1,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -108,68 +108,6 @@
     }
   },
   "items": [
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:1504020",
-      "taste_subject_key": "App_1504020",
-      "appid": "1504020",
-      "taste_fingerprint": "2d1e021357140670f771ebac7ae82ba635f16576cdd0fd71e6fb84b501df4cb0",
-      "candidate_context_sha256": "4810246d84784228d8c1ec5ded1179b4f30be2f47d9bbce0a6afd5ef365f0c84",
-      "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
-      "work_id": "31bf5d158e815ad6ab3dfad46667d461cd6c609acd0531a918f8411a102e92db",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Mosaique Neko Waifus 4",
-        "short_description": "Hentai puzzle with elements of RPG and meaningful dialogue choices. Flirt with all the Neko girls!",
-        "bundle_members": [],
-        "fit_tags": [
-          "RPG"
-        ],
-        "core_fit_count": 0,
-        "release_date": "12 Feb, 2021",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1504020"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1504020.json",
-      "dossier_content_sha256": "f194f520d5a7a21cc356ac49a0816cc01918f0d3a784d784ef5928027fafa1fa",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-25T12:27:54Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "21d4b7b390e1a491ee07a02778c0049de71b943fcd4337def33c3465578de583",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--31bf5d158e815ad6ab3dfad46667d461cd6c609acd0531a918f8411a102e92db--21d4b7b390e1a491ee07a02778c0049de71b943fcd4337def33c3465578de583.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--31bf5d158e815ad6ab3dfad46667d461cd6c609acd0531a918f8411a102e92db--21d4b7b390e1a491ee07a02778c0049de71b943fcd4337def33c3465578de583.json",
-      "sequence": 1
-    },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
@@ -231,7 +169,7 @@
       "authorization_id": "bfdc359616465b90380df0d95cd4450d2904504d6edc18b270e1cbbcb80436dc",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--649a3bdcad52d2b7fb483065e943d0654dfa279bc5c764f38850b8e9032d8292--bfdc359616465b90380df0d95cd4450d2904504d6edc18b270e1cbbcb80436dc.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--649a3bdcad52d2b7fb483065e943d0654dfa279bc5c764f38850b8e9032d8292--bfdc359616465b90380df0d95cd4450d2904504d6edc18b270e1cbbcb80436dc.json",
-      "sequence": 2
+      "sequence": 1
     }
   ]
 }
