@@ -20,7 +20,9 @@ Show only current operationally useful task information:
 - status;
 - worker slot if assigned;
 - dependency/blocker if one exists;
-- last update time.
+- last update time;
+- **трудоёмкость**: низкая / средняя / высокая, with a short reason;
+- **срочность**: критическая / высокая / обычная / низкая, with a short reason.
 
 Do not dump historical completed-task archive onto this page. A small recently-completed section is optional only if it improves orientation.
 
@@ -42,6 +44,7 @@ Do not publish:
 ## Acceptance
 - navigation reaches the new page on mobile and desktop;
 - page clearly separates active / queued / blocked;
+- every displayed task shows трудоёмкость and срочность with plain-Russian rationale;
 - current queued Steam tasks appear after the queue entries are added;
 - stale task payload is detectable through a visible update timestamp;
 - existing discount cards/statistics remain unchanged except for navigation/task-page additions;
