@@ -258,3 +258,24 @@ After merge, verify from fresh `main` that the existing canonical ingest workflo
 5. triggers the normal downstream visual rebuild path.
 
 No Scheduled Task was created or modified. No Dossier, Deep, Fast, ranking, expiry, or unrelated project logic was changed in this continuation.
+
+
+## Final merge / ingest closeout — 2026-10-05
+
+- PR #145 merged: `39598c348ca92013980350e699e7d11e829c696e`.
+- Final validated pre-merge head: `fcc0038ff9b198bd072c4d3bfa7cdffb83d4b18e`; required checks all green.
+- Canonical ingest run `37312052832` / job `111769586478`: **success**.
+- Canonical ingest commit: `0383b32f0e033269a23620ba1830dab18ff1a64b`.
+- Pinned checkpoint outcome: **19 accepted + 1 diagnostic + 0 worker errors**.
+- Current producer state after ingest:
+  - normal translation queue: **62**;
+  - total unresolved descriptions: **63**;
+  - current translation diagnostics: **1**;
+  - resolved translation cache entries: **90**;
+  - last attempt/success: `2026-10-05T12:48:19.220279+00:00`.
+- Both overlapping inbox transports are absent after ingest, so the checkpoint was not left available for double acceptance.
+- Downstream visual rebuild run `37312092872` was triggered from the ingest commit but failed on an unrelated current-cycle freshness gate:
+  `Commercial publication requires a fresh current-cycle discovery universe`.
+  Translation ingest itself remained successful. Deploy was skipped, so no claim is made that the live site already contains the refreshed Statistics payload.
+- Per task boundaries, no commercial discovery/Steam scope, Dossier, Deep, Fast, ranking, expiry, or Scheduled Task logic was modified to bypass that external blocker.
+- Final task closeout was recorded on main after canonical state commit `0383b32f0e033269a23620ba1830dab18ff1a64b`.
