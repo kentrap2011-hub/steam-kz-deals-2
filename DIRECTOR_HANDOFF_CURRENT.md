@@ -38,15 +38,15 @@ PR #146 merged to main as `fb21b704ac36f56d40bdc6a00175864538dbcee7`. The first 
 
 The task file now contains the authorized continuation. Do not repeat the global diagnostic and do not weaken the approved 50% discount / 4500 KZT policy. Fix only the exact live-bound proof/strategy, revalidate, and require one successful normal main production run before declaring the Steam discovery defect fixed.
 
-### ЧАТ 2 — ASSIGNED / EXISTING PHYSICAL CHAT
+### ЧАТ 2 — ASSIGNED / NEW PHYSICAL CHAT
 
 Task:
-`WORKER_TASK_RUSSIAN_TRANSLATION_PARTIAL_ACCEPT_DIAGNOSTIC_QUARANTINE_FIX_01.md`
+`WORKER_TASK_DOSSIER_DEEP_INDEPENDENT_QUALITY_AUDIT_01.md`
 
 Mode:
-`IMPLEMENT / VALIDATE / FINAL MERGE CONTINUATION`
+`READ-ONLY / INDEPENDENT AUDIT`
 
-PR #145 implementation is complete. User/Director explicitly authorized the existing ЧАТ 2 to reconcile again with fresh main, rerun required checks, merge when clean/green, then verify canonical ingest and fresh translation state. Preserve 19 accepted + 1 diagnostic semantics and the approved duplicate-transport resolution.
+This chat is deliberately not a Dossier or Deep semantic worker. It audits actual accepted Dossier/Deep outputs, checks a stratified sample against evidence, scores completeness/correctness/calibration/transparency, and may conclude that the current canonical rules themselves are insufficient. No production state or implementation changes are authorized.
 
 ## CURRENTLY WORKING / RECENT SEMANTIC CHATS
 
