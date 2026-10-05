@@ -1,14 +1,20 @@
 # CURRENT TASK
 
-## IN PROGRESS — Dossier retryable transport reject fix 01
-Статус: `diagnosis_complete_implementation_validation_in_progress`.
+## COMPLETE — Dossier retryable transport reject fix 01
+Статус: `complete_fix_ready_semantic_retry_required`.
 - task: `WORKER_TASK_DOSSIER_RETRYABLE_TRANSPORT_REJECT_FIX_01.md`;
-- exact root causes are strict semantic-validation failures, not frozen-authority, marker-parent, binding, concurrency or replay defects;
-- sequence 20: `route-exhaustion closure basis requires at least one exhausted unavailable dimension`;
-- sequence 21: `provenance.player_feedback_records[3] acquisition_mode requires concrete_item_collection parent provenance`;
-- both rejected transports consumed zero semantic attempts and remain canonical pending work; no quarantined semantic JSON is being edited or force-accepted;
-- implementation scope: expose exact retryable rejection details, distinguish zero-progress current-head rejection from nonblocking sibling rejection, and make the ingest workflow fail only after canonical quarantine/audit persistence for the head-blocking case;
-- no Dossier/Deep semantic worker or Scheduled Task action is authorized or being performed.
+- PR: `#153` — `Surface head-blocking Dossier transport rejection`;
+- root cause is proven correct strict semantic rejection, not frozen-authority / marker-parent / binding / concurrency / replay failure;
+- g000020 exact error: `route-exhaustion closure basis requires at least one exhausted unavailable dimension`;
+- g000021 exact error: `provenance.player_feedback_records[3] acquisition_mode requires concrete_item_collection parent provenance`;
+- both rejected transports are quarantined, consume zero semantic attempts and remain pending; neither was edited, rebound or force-accepted;
+- ingest now exposes exact retryable rejection details and distinguishes mixed progress, non-head rejection, and zero-progress rejection of the current head;
+- the workflow persists quarantine/audit/projection first, then fails only the head-blocking zero-progress case; sibling nonblocking semantics remain intact;
+- final validation: Dossier runtime `37360603655`, backlog `37360603651`, PASS 2 `37360603716` — success; execution ownership passed inside the Dossier run;
+- production state remains intentionally at snapshot `a9a1390c…d8b19`, next sequence `20`, accepted/failed/pending groups `19/0/112`, accepted/pending dossiers `57/334`;
+- no Dossier/Deep semantic worker, Fast/ranking/translation/discovery/site semantic change, or Scheduled Task action occurred;
+- report: `reviews/worker_reports/dossier-retryable-transport-reject-fix-01.md`;
+- next bounded action: one fresh normal canonical Dossier semantic invocation resumes from sequence 20 without any Scheduled Task configuration change.
 
 ## IN PROGRESS — Steam discovery scope reduction implement 01
 Статус: `pr151_merged_normal_main_acceptance_queued`.
