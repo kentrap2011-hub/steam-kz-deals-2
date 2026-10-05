@@ -21,6 +21,7 @@ on:
       - "scripts/test_fresh_deal_discovery_refresh.py"
       - "scripts/test_steam_review_fallback.py"
       - "scripts/test_steam_discovery_scope_reduction.py"
+      - "scripts/steam_discount_order_live_probe.py"
       - "scripts/test_expired_offer_guard.py"
       - "scripts/test_commercial_refresh.py"
       - "config/mailing_policy.json"
@@ -93,6 +94,9 @@ jobs:
 
       - name: Install deterministic test dependencies
         run: pip install requests beautifulsoup4
+
+      - name: Bounded live Steam discount-order probe
+        run: python -u scripts/steam_discount_order_live_probe.py
 
       - name: Compile touched Python modules
         run: |
