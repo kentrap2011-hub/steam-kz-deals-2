@@ -7,7 +7,7 @@
 - last completed funnel: 12,977 raw → 9,923 review candidates → 1,615 broad → 609 shortlist/mailing; latest measurable ranking lookup contains 509 cards;
 - corrected user product choices:
   - **minimum current discount = 50%**; the earlier interpretation “50 visible offers” was wrong and was superseded before implementation;
-  - visible site cap remains **at most 100 best current offers**;
+  - visible site cap remains **at most 100 best current offers**, but the 100 are selected only after the full current eligible pool has received the required detailed analysis; initial GitHub filtering must not shrink the pool to 100;
   - price ceiling remains <=4500 KZT unless bounded validation proves an approved exception is needed;
   - base games are narrowed first; DLC discovery occurs afterward only for suitable/eligible base games;
   - a separate later task extends DLC discovery to games actually owned by the user;
