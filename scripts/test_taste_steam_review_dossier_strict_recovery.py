@@ -364,6 +364,96 @@ class RecoveryLifecycleTests(unittest.TestCase):
             self.assertEqual(drained["accepted_dossier_count"], GROUP_SIZE * 2)
             self.assertEqual(json.loads(manifest_path.read_text())["completed_required_count"], GROUP_SIZE * 2)
 
+    def test_route_exhaustion_mismatch_is_head_blocking_retryable_transport_with_exact_reason(self):
+        with tempfile.TemporaryDirectory() as td:
+            contract = contract_for(td)
+            store = Path(td) / "store"
+            work = build_daily_work_manifest(queue(range(500000, 500006)), contract, store, now=NOW)
+            work["web_evidence_contract_binding"] = current_worker_contract_binding()
+            manifest_path = Path(contract["paths"]["work_manifest"])
+            manifest_path.write_text(json.dumps(work), encoding="utf-8")
+            contract_path, _, _ = self._write_contracts(td, contract)
+
+            def invalid_route_exhaustion(artifact):
+                artifact["dossiers"][0]["evidence"]["coverage"]["closure_basis"] = (
+                    "sufficient_after_route_exhaustion"
+                )
+
+            write_group(work, contract, 1, invalid_route_exhaustion)
+            result = drain_inbox_state(
+                manifest_path=manifest_path,
+                contract_path=contract_path,
+                store_dir=store,
+                buffer_dir=contract["paths"]["submission_inbox_dir"],
+                retryable_rejection_root=Path(td) / "retryable",
+                rejection_audit_path=Path(td) / "rejections.jsonl",
+                fail_on_blocked=False,
+            )
+
+            self.assertEqual(
+                result["status"],
+                "retryable_transport_rejected_head_blocked_zero_progress",
+            )
+            self.assertFalse(result["canonical_progress_made_this_run"])
+            self.assertTrue(result["head_retryable_transport_rejected_this_run"])
+            self.assertEqual(result["rejected_sequences"], [1])
+            self.assertEqual(
+                result["retryable_transport_rejections"][0]["validator_error"],
+                "route-exhaustion closure basis requires at least one exhausted unavailable dimension",
+            )
+            self.assertFalse(
+                result["retryable_transport_rejections"][0]["normal_first_pass_attempt_consumed"]
+            )
+            self.assertTrue(
+                result["retryable_transport_rejections"][0]["group_state_remains_pending"]
+            )
+            current = json.loads(manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(current["group_progress"]["groups"][0]["state"], "pending")
+
+    def test_provenance_mismatch_remains_nonfatal_when_sibling_progress_is_persisted(self):
+        with tempfile.TemporaryDirectory() as td:
+            contract = contract_for(td)
+            store = Path(td) / "store"
+            work = build_daily_work_manifest(queue(range(510000, 510006)), contract, store, now=NOW)
+            work["web_evidence_contract_binding"] = current_worker_contract_binding()
+            manifest_path = Path(contract["paths"]["work_manifest"])
+            manifest_path.write_text(json.dumps(work), encoding="utf-8")
+            contract_path, _, _ = self._write_contracts(td, contract)
+
+            write_group(work, contract, 1)
+
+            def invalid_inspected_parent(artifact):
+                dossier_doc = artifact["dossiers"][0]
+                record = dossier_doc["provenance"]["player_feedback_records"][3]
+                record.pop("url")
+                record["acquisition_mode"] = "inspected_collection_item"
+
+            write_group(work, contract, 2, invalid_inspected_parent)
+            result = drain_inbox_state(
+                manifest_path=manifest_path,
+                contract_path=contract_path,
+                store_dir=store,
+                buffer_dir=contract["paths"]["submission_inbox_dir"],
+                retryable_rejection_root=Path(td) / "retryable",
+                rejection_audit_path=Path(td) / "rejections.jsonl",
+                fail_on_blocked=False,
+            )
+
+            self.assertEqual(
+                result["status"],
+                "group_state_advanced_with_retryable_transport_rejection",
+            )
+            self.assertTrue(result["canonical_progress_made_this_run"])
+            self.assertEqual(result["accepted_sequences"], [1])
+            self.assertEqual(result["rejected_sequences"], [2])
+            self.assertIn(
+                "acquisition_mode requires concrete_item_collection parent provenance",
+                result["retryable_transport_rejections"][0]["validator_error"],
+            )
+            current = json.loads(manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(current["group_progress"]["groups"][0]["state"], "accepted")
+            self.assertEqual(current["group_progress"]["groups"][1]["state"], "pending")
+
     def test_recovery_refuses_valid_expected_and_title_binding_still_holds(self):
         with tempfile.TemporaryDirectory() as td:
             contract = contract_for(td)
@@ -510,7 +600,10 @@ class RecoveryLifecycleTests(unittest.TestCase):
                 rejection_audit_path=Path(td) / "retryable-transport-audit.jsonl",
                 fail_on_blocked=False,
             )
-            self.assertEqual(classified["status"], "retryable_transport_rejected")
+            self.assertEqual(
+                classified["status"],
+                "retryable_transport_rejected_head_blocked_zero_progress",
+            )
             self.assertEqual(classified["failed_sequences"], [])
             self.assertEqual(classified["rejected_sequences"], [2])
             after = json.loads(manifest_path.read_text())
