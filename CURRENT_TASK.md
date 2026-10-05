@@ -1,5 +1,15 @@
 # CURRENT TASK
 
+## IN PROGRESS — Dossier retryable transport reject fix 01
+Статус: `diagnosis_complete_implementation_validation_in_progress`.
+- task: `WORKER_TASK_DOSSIER_RETRYABLE_TRANSPORT_REJECT_FIX_01.md`;
+- exact root causes are strict semantic-validation failures, not frozen-authority, marker-parent, binding, concurrency or replay defects;
+- sequence 20: `route-exhaustion closure basis requires at least one exhausted unavailable dimension`;
+- sequence 21: `provenance.player_feedback_records[3] acquisition_mode requires concrete_item_collection parent provenance`;
+- both rejected transports consumed zero semantic attempts and remain canonical pending work; no quarantined semantic JSON is being edited or force-accepted;
+- implementation scope: expose exact retryable rejection details, distinguish zero-progress current-head rejection from nonblocking sibling rejection, and make the ingest workflow fail only after canonical quarantine/audit persistence for the head-blocking case;
+- no Dossier/Deep semantic worker or Scheduled Task action is authorized or being performed.
+
 ## IN PROGRESS — Steam discovery scope reduction implement 01
 Статус: `pr151_merged_normal_main_acceptance_queued`.
 - task: `WORKER_TASK_STEAM_DISCOVERY_SCOPE_REDUCTION_IMPLEMENT_01.md`;
