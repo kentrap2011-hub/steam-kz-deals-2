@@ -707,6 +707,13 @@ def run():
             reported_total=traversal['total'],
         )
         if not publishable:
+            reporter.set_stage(
+                'search_traversal_failed',
+                partition=partition['id'],
+                rows_seen=traversal['rows_seen'],
+                reported_total=traversal['total'],
+            )
+            reporter.stop()
             failures.write()
             raise SystemExit(
                 'Steam traversal could not establish the end of partition '
@@ -766,6 +773,7 @@ def run():
                 )
                 for traversal in traversals
             ],
+            flush=True,
         )
 
     partition_stats = [
@@ -912,7 +920,7 @@ def run():
                     )
                 )
             except Exception as exc:
-                print('StoreBrowse review fallback failed:', exc)
+                print('StoreBrowse review fallback failed:', exc, flush=True)
                 fallback = {}
 
             for appid, failure in review_failed_results.items():
@@ -1212,6 +1220,17 @@ def run():
         ),
     }
 
+    stage_timings_seconds['persistence_preparation'] = round(
+        time.monotonic() - persistence_started,
+        3,
+    )
+    reporter.update(
+        persistence_preparation_elapsed_seconds=stage_timings_seconds[
+            'persistence_preparation'
+        ],
+        emit=True,
+    )
+
     manifest = {
         'collector_version': 9,
         'source': 'Steam Store',
@@ -1385,10 +1404,6 @@ def run():
     (SHORT / 'index.json').write_text(
         json.dumps(index, ensure_ascii=False, indent=2),
         encoding='utf-8',
-    )
-    stage_timings_seconds['persistence_preparation'] = round(
-        time.monotonic() - persistence_started,
-        3,
     )
     reporter.set_stage(
         'complete',
