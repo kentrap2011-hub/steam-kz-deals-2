@@ -1360,12 +1360,15 @@
 - Report: `reviews/worker_reports/personal-taste-game-guess-diagnostic-01.md`.
 
 
-## IN PROGRESS — Russian translation partial accept + diagnostic quarantine final merge 01
+## COMPLETE — Russian translation partial accept + diagnostic quarantine 01
 
-- Status: `final_merge_authorized_reconciling_current_main`.
+- Status: `complete_merged_and_ingest_verified`.
 - Task: `WORKER_TASK_RUSSIAN_TRANSLATION_PARTIAL_ACCEPT_DIAGNOSTIC_QUARANTINE_FIX_01.md`.
 - Worker slot: `ЧАТ 2`.
-- PR: `#145`; implementation branch: `fix/russian-translation-partial-accept-diagnostic-quarantine-01`.
-- Director/user authorization: reconcile with fresh `main`, re-run required checks, merge PR #145 when green/mergeable, then verify canonical ingest and downstream rebuild.
-- Preserve approved transport resolution: keep `manual-one-shot-9b3f6d2c7a41.json`; remove later overlapping `manual-one-shot-a41c7e5d920b.json`.
-- No retranslation, record mixing, request/AppID/hash rebinding, duplicate-safety weakening, Scheduled Task change, or Dossier/Deep/Fast/ranking/expiry change is authorized.
+- PR #145 merged as `39598c348ca92013980350e699e7d11e829c696e`.
+- Canonical ingest run `37312052832` succeeded; state commit `0383b32f0e033269a23620ba1830dab18ff1a64b`.
+- Result: 19 accepted, 1 diagnostic, normal queue 62, total unresolved 63, translation cache 90.
+- Attempt/success timestamps: `2026-10-05T12:48:19.220279+00:00`.
+- Both overlapping inbox transports are absent after ingest; no retranslation or rebinding occurred.
+- Downstream visual rebuild run `37312092872` failed on independent freshness gate: `Commercial publication requires a fresh current-cycle discovery universe`; no unrelated publication logic was changed.
+- No Scheduled Task, Dossier, Deep, Fast, ranking or expiry changes were made by this task.
