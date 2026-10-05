@@ -406,3 +406,186 @@ It must prove:
 6. downstream handoff starts from that fresh universe.
 
 Until those checks pass, the overall production defect remains open even though the correction is deterministic-green.
+
+
+## 19. PR #147 merge and second normal live acceptance
+
+PR #147 was merged to `main` as:
+
+`3ca7e6c12214756a847a5f5170d497dffb044c85`.
+
+The resulting normal GitHub-owned production acceptance was:
+
+- workflow run: `37335826933`;
+- collect job: `111850233215`;
+- all deterministic pre-collection regressions: **success**;
+- collector step started: `2026-10-05T15:48:57.8182056Z`;
+- job was cancelled at the existing ~60-minute owner timeout window:
+  `2026-10-05T16:49:04.6268716Z`;
+- no canonical production commit or downstream handoff occurred.
+
+This run proves that the corrected `maxprice=4500` validation can start normal production, but the resulting source scope is still too large under the old 50-row pagination.
+
+### Exact last live traversal progress
+
+The completed job logs became available after cancellation and showed:
+
+**games**
+- first page: `start=0 rows=50 total=63683` at `15:52:44Z`;
+- last page: `start=63650 rows=39 total=63689` at `16:40:20Z`;
+- all **63,689** reported game rows were traversed;
+- **41,654** rows had survived the local paid/discount/price/extras/software gate by the end of the partition;
+- 1,274 successful 50-row page responses were logged;
+- approximately **47.6 minutes** elapsed from the first games page to the final games page.
+
+**DLC**
+- began immediately after games at `16:40:20Z`;
+- live total was approximately **34,354–34,356**;
+- last observed page before timeout: `start=13700 rows=50`;
+- **7,245** rows had survived the local gate at that point;
+- only 275 successful DLC pages were reached before cancellation.
+
+**bundles**
+- did not start before the owner timeout.
+
+The run logged **204 individual HTTP 429 responses**:
+- 168 while in games traversal;
+- 36 while in DLC traversal.
+
+The repeated retry pattern was normally `3 + 6 + 12 + 24` seconds before a successful page, so the primary live bottleneck is confirmed as Steam Search pagination plus rate-limit backoff, not Reviews API enrichment.
+
+This is a bounded continuation of the implementation acceptance, not a repeat of the earlier global diagnostic.
+
+## 20. Mandatory live progress observability correction
+
+The old collector emitted a line for every successful page, but Python buffering made those lines appear in large delayed batches in Actions. While a job was running, GitHub's job-log download endpoint also returned 404, so the Director could see only that the single collector step was still `in_progress`.
+
+Follow-up PR **#148 — `Expose Steam collector progress and probe discount source filter`** adds permanent observability to the existing GitHub-owned collector only.
+
+### Permanent progress output
+
+`scripts/steam_partial_publish_runner.py` now emits flushed structured `[steam-progress]` JSON with:
+
+- a 30-second heartbeat;
+- explicit stage names:
+  - `source_validation`;
+  - `search_traversal`;
+  - `local_merge_filter`;
+  - `review_enrichment`;
+  - `shortlist_selection`;
+  - `persistence_preparation`;
+  - `complete`;
+- partition name / category;
+- current page number and logical page-request count;
+- current row offset;
+- rows seen;
+- Steam-reported partition total;
+- progress percentage when total is known;
+- cumulative eligible rows after the local gate;
+- duplicate count;
+- review candidate AppID total;
+- completed review AppIDs / logical review components;
+- fallback batch progress;
+- elapsed time for the current stage and whole collector.
+
+`scripts/steam_production.py` now exposes thread-safe live network counters for:
+
+- Search HTTP requests;
+- Search retry events;
+- Search 429 events;
+- Search backoff seconds;
+- Reviews HTTP requests;
+- Reviews retry events;
+- Reviews 429 events;
+- Reviews backoff seconds.
+
+The workflow invokes the production collector as `python -u` so progress is not hidden by Python stdout buffering.
+
+The successful manifest additionally carries:
+- `stage_timings_seconds`;
+- per-partition elapsed seconds;
+- `network_stats`.
+
+No timeout, scheduler, queue/retry owner, discovery ownership, product threshold, semantic stage or production writer was added or changed.
+
+## 21. Bounded source-reduction probes after the timed-out run
+
+The timed-out run demonstrated that exact KZ `maxprice=4500` is active but only reduces games from roughly 65k uncapped rows to roughly 63.7k capped rows. Therefore further semantics-preserving request reduction was investigated immediately with bounded read-only PR probes; no second production writer was started.
+
+### Source-side 50% discount parameters are not available through tested query shapes
+
+PR #148 bounded probe run `37344048116` showed that all tested candidate query parameters were ignored by the live Steam endpoint:
+
+- `discounts=50`;
+- `discounts=70`;
+- `discounts=90`;
+- `discount=50`;
+- `min_discount=50`;
+- `min_discount_pct=50`.
+
+Every variant returned the same games `total_count=63691` as the baseline and first-page samples still contained discounts from **10% through 49%**.
+
+Therefore no source-side minimum-discount filter was added. The authoritative `>=50%` parsed-row gate remains local and fail-closed.
+
+### Steam Search supports complete 100-row pages
+
+A second bounded PR probe, run `37344778557`, proved:
+
+- `count=100,start=0` returned 100 rows / 100 unique identities;
+- `count=100,start=100` returned the next 100 rows / 100 unique identities;
+- both reported the same live `total_count=63692`;
+- overlap between those two contiguous 100-row pages was **zero**;
+- requests with `count=200` and `count=500` were capped by Steam at 100 returned rows.
+
+This provides a semantics-preserving request reduction: the canonical collector page size is changed from **50 to 100**, the largest live-proven page size. Candidate completeness, source ordering and eligibility rules are unchanged.
+
+For the observed run shape, this halves the number of successful Search pages required for the same source universe:
+- games: roughly 1,274 -> roughly 637 pages;
+- DLC: roughly 687 -> roughly 344 pages at the observed ~34.35k total;
+- bundles remain separately complete.
+
+No raw top-N or early stop is introduced.
+
+## 22. PR #148 deterministic validation
+
+Permanent PR #148 final code excludes all temporary live-probe scripts/steps.
+
+Final implementation scope is limited to:
+- `scripts/steam_production.py` — 100-row page size + network metrics;
+- `scripts/steam_partial_publish_runner.py` — progress heartbeat/stage/timing/metrics;
+- `scripts/test_steam_discovery_scope_reduction.py` — deterministic guards;
+- `.github/workflows/steam-test.yml` — unbuffered collector invocation;
+- task/report/route documentation.
+
+Validated PR head before this report update:
+`37c149b6a6ad3a8678edf8814e90b1db89c2775d`.
+
+Checks:
+- `Steam KZ production shortlist` PR run `37345208967`: **success**;
+- regression job `111882026732`: **success**;
+- PR production `collect`: skipped as intended;
+- `Validate backlog dispositions` run `37345209009`: **success**.
+
+Regression coverage now also checks:
+- canonical page size is exactly 100;
+- search params use that page size;
+- progress snapshots carry stage/page/rows/total/eligible/duplicate/network fields;
+- network retry/backoff counters expose the required metrics.
+
+## 23. Current acceptance state after PR #148
+
+The production defect is **not yet declared fixed**.
+
+The next required action, after PR #148 is cleanly merged under the existing continuation authorization, is one normal `main` GitHub-owned production run.
+
+It must prove all of the following:
+
+1. live progress/heartbeat output is visible while the collector is running;
+2. games, DLC and bundles all finish;
+3. the same complete bounded discovery universe is preserved with 100-row pagination;
+4. the collector finishes inside the existing 60-minute timeout;
+5. a fresh canonical manifest/shortlist is persisted;
+6. actual funnel, partition timing and network/review counters are present;
+7. downstream handoff starts from that fresh universe.
+
+If the 100-row change still cannot complete inside the existing owner timeout, the next investigation must use the newly visible stage metrics rather than another opaque wait or a lossy source truncation.
