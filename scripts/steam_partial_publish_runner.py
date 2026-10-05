@@ -331,6 +331,21 @@ def merge_partition_traversals(traversals):
 
     return catalog, provenance, cross_partition_duplicates
 
+
+def row_meets_current_paid_gate(core, row):
+    discount = core['to_int'](row.get('discount_percent'))
+    try:
+        price = float(row.get('final_kzt'))
+    except (TypeError, ValueError):
+        price = None
+    return bool(
+        discount is not None
+        and discount >= core['PAID_MIN_DISCOUNT_PERCENT']
+        and price is not None
+        and 0 < price <= core['PAID_MAX_PRICE_KZT']
+    )
+
+
 def clean(value):
     if value is None:
         return ''
@@ -663,7 +678,8 @@ def run():
 
     broad = []
     broad_reason_counts = Counter()
-    excluded_extra = excluded_software = 0
+    excluded_extra = int(source_rejection_counts.get('obvious_extra', 0))
+    excluded_software = int(source_rejection_counts.get('software_only', 0))
     successful_keys = set()
     for item in items:
         key = item['key']
@@ -753,6 +769,22 @@ def run():
         previous_by_key,
         failed_keys,
     )
+    preserved_key_set = set(preserved_keys)
+    dropped_preserved_due_current_paid_gate = []
+    paid_gate_selected = []
+    for row in selected:
+        if row_meets_current_paid_gate(core, row):
+            paid_gate_selected.append(row)
+            continue
+        if str(row.get('key')) in preserved_key_set:
+            dropped_preserved_due_current_paid_gate.append(str(row.get('key')))
+    selected = paid_gate_selected
+    preserved_keys = [
+        key
+        for key in preserved_keys
+        if key not in dropped_preserved_due_current_paid_gate
+    ]
+
     for key in preserved_keys:
         entry = failures.state['unresolved_games'].get(key)
         if entry:
