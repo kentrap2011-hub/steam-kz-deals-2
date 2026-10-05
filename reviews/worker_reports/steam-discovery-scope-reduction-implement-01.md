@@ -767,3 +767,37 @@ The production defect remains open until:
 5. downstream handoff starts from that fresh universe.
 
 If that main acceptance still exceeds 60 minutes, the next bounded investigation must use the new two-partition stage timings and review metrics. Do not reintroduce standalone 996 or mask the issue by increasing the timeout.
+
+
+## 29. PR #151 merge and normal main acceptance
+
+Final permanent implementation head:
+
+`b9bcf76858d1e40ca22d0de5a295daf2ed5313a1`.
+
+Required checks:
+- `Steam KZ production shortlist` PR run `37357787031`: **success**;
+- `Validate backlog dispositions` run `37357786984`: **success**;
+- PR production `collect`: skipped as intended.
+
+PR #151 was merged to `main` as:
+
+`8ecf017b7428bad3494f7d8f1a82bd581bd3d355`.
+
+The required normal GitHub-owned production acceptance was created automatically:
+
+- workflow: `Steam KZ production shortlist`;
+- run: `37357943696`;
+- run number: 126;
+- event: `push`;
+- head: exact PR #151 merge commit above.
+
+Current status:
+
+`pr151_merged_normal_main_acceptance_queued`.
+
+Do not declare the defect fixed until run `37357943696` proves the two-partition + 1.8s pacing collector can:
+1. finish inside the existing 60-minute timeout;
+2. persist a fresh complete canonical discovery universe;
+3. publish actual games/DLC funnel and network/review metrics;
+4. start downstream handoff.
