@@ -38,11 +38,16 @@ jobs:
           python scripts/taste_steam_review_dossier_recovery.py
 
       - name: Classify and drain pending dossier groups independently
+        id: dossier_drain
         run: |
           set -euo pipefail
-          # Group-level semantic invalidity becomes canonical failed/incomplete
-          # state for that exact group and never blocks unrelated pending groups.
-          python scripts/ingest_taste_steam_review_dossier_inbox.py --reconcile-nonfatal
+          # Retryable transport invalidity stays pending with zero semantic-attempt
+          # consumption. Capture the structured result so a head-blocking zero-progress
+          # rejection can be surfaced only after quarantine/audit are durably committed.
+          result="$(python scripts/ingest_taste_steam_review_dossier_inbox.py --reconcile-nonfatal)"
+          printf '%s\n' "$result"
+          status="$(printf '%s\n' "$result" | python -c 'import json, sys; print(json.load(sys.stdin)["status"])')"
+          echo "status=$status" >> "$GITHUB_OUTPUT"
 
       - name: Record strict validation status for all current-snapshot candidate groups
         run: |
@@ -84,3 +89,10 @@ jobs:
             fi
             sleep $((attempt * 3))
           done
+
+      - name: Fail closed when current head transport was rejected with zero progress
+        if: steps.dossier_drain.outputs.status == 'retryable_transport_rejected_head_blocked_zero_progress'
+        run: |
+          echo "Current Dossier head transport was quarantined after strict rejection and canonical progress remained unchanged."
+          echo "Quarantine/audit and the pending worker projection were already committed; a fresh valid semantic retry is required."
+          exit 1
