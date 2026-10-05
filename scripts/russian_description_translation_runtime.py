@@ -11,6 +11,7 @@ from russian_description_quality import classify_description, normalize_descript
 REQUEST_CONTRACT_ID = 'RUSSIAN-DESCRIPTION-TRANSLATION-V1'
 RESULT_CONTRACT_ID = 'RUSSIAN-DESCRIPTION-TRANSLATION-RESULT-V1'
 CACHE_CONTRACT_ID = 'RUSSIAN-DESCRIPTION-TRANSLATION-CACHE-ENTRY-V1'
+DIAGNOSTIC_CONTRACT_ID = 'RUSSIAN-DESCRIPTION-TRANSLATION-DIAGNOSTICS-V1'
 
 TRANSLATABLE_STATUSES = {'needs_translation', 'needs_ru_rewrite'}
 TRANSLATABLE_QUALITIES = {'non_ru', 'weak_ru'}
@@ -54,6 +55,64 @@ def validate_cache_container(cache):
     if not isinstance(entries, dict):
         return empty_cache()
     return cache
+
+
+def empty_diagnostics():
+    return {
+        'schema_version': 1,
+        'contract': DIAGNOSTIC_CONTRACT_ID,
+        'updated_at_utc': None,
+        'entries': {},
+    }
+
+
+def validate_diagnostic_container(diagnostics):
+    if not isinstance(diagnostics, dict):
+        return empty_diagnostics()
+    if diagnostics.get('schema_version') != 1 or diagnostics.get('contract') != DIAGNOSTIC_CONTRACT_ID:
+        return empty_diagnostics()
+    entries = diagnostics.get('entries')
+    if not isinstance(entries, dict):
+        return empty_diagnostics()
+    return diagnostics
+
+
+def load_translation_diagnostics(path):
+    path = Path(path)
+    if not path.exists():
+        return empty_diagnostics()
+    try:
+        return validate_diagnostic_container(json.loads(path.read_text(encoding='utf-8')))
+    except Exception:
+        return empty_diagnostics()
+
+
+def active_translation_diagnostic(diagnostics, request):
+    if not isinstance(request, dict):
+        return None
+    request_id = str(request.get('request_id') or '')
+    entry = (validate_diagnostic_container(diagnostics).get('entries') or {}).get(request_id)
+    if not isinstance(entry, dict) or entry.get('state') != 'active':
+        return None
+    exact_fields = ['request_id', 'source_key', 'source_appid', 'source_text_sha256', 'source_version']
+    if any(entry.get(field) != request.get(field) for field in exact_fields):
+        return None
+    return entry
+
+
+def resolve_translation_diagnostic(diagnostics, request_id, resolved_at_utc, resolution):
+    diagnostics = json.loads(json.dumps(validate_diagnostic_container(diagnostics)))
+    entries = diagnostics['entries']
+    entry = entries.get(str(request_id))
+    if not isinstance(entry, dict) or entry.get('state') != 'active':
+        return diagnostics
+    updated = dict(entry)
+    updated['state'] = 'resolved'
+    updated['resolved_at_utc'] = str(resolved_at_utc)
+    updated['resolution'] = str(resolution)
+    entries[str(request_id)] = updated
+    diagnostics['updated_at_utc'] = str(resolved_at_utc)
+    return diagnostics
 
 
 def load_translation_cache(path):

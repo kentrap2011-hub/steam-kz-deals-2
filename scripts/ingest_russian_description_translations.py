@@ -15,13 +15,18 @@ from build_russian_description_translation_queue import (
 from russian_description_quality import classify_description, normalize_description
 from russian_description_translation_runtime import (
     CACHE_CONTRACT_ID,
+    DIAGNOSTIC_CONTRACT_ID,
     RESULT_CONTRACT_ID,
     empty_cache,
+    empty_diagnostics,
     load_translation_cache,
+    load_translation_diagnostics,
+    validate_diagnostic_container,
 )
 
 QUEUE_PATH = Path('data/production/pre_ai/chatgpt_ru_description_queue.jsonl')
 CACHE_PATH = Path('data/cache/russian_description_translations.json')
+DIAGNOSTICS_PATH = Path('data/cache/russian_description_translation_diagnostics.json')
 INBOX_GLOB = 'data/ai_inbox/russian_descriptions/*.json'
 
 SUBMISSION_KEYS = {'contract', 'schema_version', 'results'}
@@ -64,6 +69,7 @@ def validate_submissions(queue, submission_docs):
     seen = set()
     accepted = []
     errors = []
+    diagnostics = []
     for source_name, doc in submission_docs:
         local_seen = set()
         for index, result in enumerate(doc['results']):
@@ -91,10 +97,17 @@ def validate_submissions(queue, submission_docs):
                 if 'error_code' in result:
                     fail(f'{source_name}: translated result {request_id} forbids error_code')
                 translated = normalize_description(result.get('translated_text_ru'))
-                if not translated:
-                    fail(f'{source_name}: translated result {request_id} requires translated_text_ru')
-                if classify_description(translated) != 'good_ru':
-                    fail(f'{source_name}: translated result {request_id} failed good_ru quality gate')
+                observed_quality = classify_description(translated)
+                if observed_quality != 'good_ru':
+                    diagnostics.append({
+                        'request': request,
+                        'source_submission': source_name,
+                        'submitted_translated_text_ru': translated or None,
+                        'quality_note': str(result.get('quality_note') or '').strip() or None,
+                        'observed_quality': observed_quality,
+                        'diagnostic_reason': 'translated_text_quality_not_good_ru',
+                    })
+                    continue
                 accepted.append((request, translated))
             elif status == 'error':
                 if 'translated_text_ru' in result:
@@ -105,7 +118,7 @@ def validate_submissions(queue, submission_docs):
                 errors.append({'request_id': request_id, 'error_code': error_code})
             else:
                 fail(f'{source_name}: invalid status for {request_id}: {status!r}')
-    return accepted, errors
+    return accepted, errors, diagnostics
 
 
 def merge_validated_results(cache, accepted, ingested_at_utc):
@@ -132,6 +145,49 @@ def merge_validated_results(cache, accepted, ingested_at_utc):
     return cache
 
 
+def merge_translation_diagnostics(diagnostics, diagnostic_events, quarantined_at_utc):
+    diagnostics = json.loads(json.dumps(validate_diagnostic_container(
+        diagnostics if isinstance(diagnostics, dict) else empty_diagnostics()
+    )))
+    entries = diagnostics['entries']
+    for event in diagnostic_events:
+        request = event['request']
+        request_id = request['request_id']
+        existing = entries.get(request_id)
+        first_quarantined_at = quarantined_at_utc
+        if isinstance(existing, dict) and existing.get('state') == 'active':
+            exact_fields = ['request_id', 'source_key', 'source_appid', 'source_text_sha256', 'source_version']
+            if all(existing.get(field) == request.get(field) for field in exact_fields):
+                first_quarantined_at = existing.get('quarantined_at_utc') or quarantined_at_utc
+        entries[request_id] = {
+            'request_id': request_id,
+            'source_key': request['source_key'],
+            'source_appid': request['source_appid'],
+            'title': request.get('title'),
+            'work_type': request.get('work_type'),
+            'source_text': request.get('source_text'),
+            'source_text_sha256': request['source_text_sha256'],
+            'source_version': request['source_version'],
+            'source_locale_state': request.get('source_locale_state'),
+            'source_quality': request.get('source_quality'),
+            'source_path': request.get('source_path'),
+            'target_locale': request.get('target_locale'),
+            'state': 'active',
+            'diagnostic_reason': event['diagnostic_reason'],
+            'observed_quality': event['observed_quality'],
+            'submitted_translated_text_ru': event.get('submitted_translated_text_ru'),
+            'quality_note': event.get('quality_note'),
+            'source_submission': event.get('source_submission'),
+            'quarantined_at_utc': first_quarantined_at,
+            'resolved_at_utc': None,
+            'resolution': None,
+        }
+    if diagnostic_events:
+        diagnostics['updated_at_utc'] = quarantined_at_utc
+    diagnostics['entries'] = dict(sorted(entries.items()))
+    return diagnostics
+
+
 def ingest_paths(
     queue_path,
     cache_path,
@@ -140,23 +196,35 @@ def ingest_paths(
     delete_processed=False,
     rebuild_repo_scope=False,
     status_path=None,
+    diagnostics_path=None,
 ):
     queue = load_jsonl(queue_path)
     docs = [(str(path), load_submission(path)) for path in submission_paths]
-    accepted, errors = validate_submissions(queue, docs)
+    accepted, errors, diagnostic_events = validate_submissions(queue, docs)
     result_count = sum(len(doc.get('results') or []) for _, doc in docs)
     successful_no_work = bool(docs) and not queue and result_count == 0
     attempted_current_work = result_count > 0 or successful_no_work
     now_utc = now_utc or datetime.now(timezone.utc).isoformat()
     cache = load_translation_cache(cache_path)
     merged = merge_validated_results(cache, accepted, now_utc)
+    diagnostics_path = Path(diagnostics_path) if diagnostics_path is not None else Path(cache_path).with_name(
+        'russian_description_translation_diagnostics.json'
+    )
+    diagnostics = load_translation_diagnostics(diagnostics_path)
+    merged_diagnostics = merge_translation_diagnostics(diagnostics, diagnostic_events, now_utc)
 
     cache_path = Path(cache_path)
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     cache_path.write_text(json.dumps(merged, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    diagnostics_path.parent.mkdir(parents=True, exist_ok=True)
+    diagnostics_path.write_text(
+        json.dumps(merged_diagnostics, ensure_ascii=False, indent=2) + '\n',
+        encoding='utf-8',
+    )
 
+    rebuilt_status = None
     if rebuild_repo_scope:
-        build_repo_scope(generated_at_utc=now_utc, zero_work_check=False)
+        _, rebuilt_status = build_repo_scope(generated_at_utc=now_utc, zero_work_check=False)
         if attempted_current_work:
             record_translation_attempt(
                 status_path or STATUS_OUT,
@@ -179,6 +247,16 @@ def ingest_paths(
         'submission_count': len(submission_paths),
         'accepted_count': len(accepted),
         'error_count': len(errors),
+        'diagnostic_quarantined_count': len(diagnostic_events),
+        'current_diagnostic_count': (
+            int((rebuilt_status or {}).get('translation_diagnostic_count') or 0)
+            if rebuilt_status is not None
+            else sum(
+                1
+                for entry in (merged_diagnostics.get('entries') or {}).values()
+                if isinstance(entry, dict) and entry.get('state') == 'active'
+            )
+        ),
         'cache_entry_count': len(merged.get('entries') or {}),
         'attempted_current_work': attempted_current_work,
         'successful_no_work': successful_no_work,
@@ -190,7 +268,14 @@ def emit_github_output(stats, path):
     if not path:
         return
     with open(path, 'a', encoding='utf-8') as handle:
-        for key in ['submission_count', 'accepted_count', 'error_count', 'cache_entry_count']:
+        for key in [
+            'submission_count',
+            'accepted_count',
+            'error_count',
+            'diagnostic_quarantined_count',
+            'current_diagnostic_count',
+            'cache_entry_count',
+        ]:
             handle.write(f'{key}={stats[key]}\n')
 
 
@@ -205,7 +290,20 @@ def main():
     paths = [Path(p) for p in sorted(glob.glob(args.inbox_glob))]
     if not paths:
         print(json.dumps({'status': 'no_submissions', 'submission_count': 0}, indent=2))
-        emit_github_output({'submission_count': 0, 'accepted_count': 0, 'error_count': 0, 'cache_entry_count': len(load_translation_cache(args.cache).get('entries') or {})}, args.github_output)
+        diagnostics_path = Path(args.cache).with_name('russian_description_translation_diagnostics.json')
+        diagnostics = load_translation_diagnostics(diagnostics_path)
+        emit_github_output({
+            'submission_count': 0,
+            'accepted_count': 0,
+            'error_count': 0,
+            'diagnostic_quarantined_count': 0,
+            'current_diagnostic_count': sum(
+                1
+                for entry in (diagnostics.get('entries') or {}).values()
+                if isinstance(entry, dict) and entry.get('state') == 'active'
+            ),
+            'cache_entry_count': len(load_translation_cache(args.cache).get('entries') or {}),
+        }, args.github_output)
         return
 
     try:

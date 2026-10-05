@@ -156,6 +156,7 @@ const stats=ui.statisticsSections({
   deep_waiting_for_dossier_count:470,deep_ready_or_pending_count:27,deep_normal_first_pass_remaining_count:497,
   deep_remaining_until_all_authoritative_count:498,deep_normal_first_pass_complete:false,deep_all_current_authoritative_complete:false,
   untranslated_game_count:71,
+  translation_diagnostic_count:4,
   last_successful_translation_at_utc:stageTimes.translationSuccess,
   last_translation_attempt_at_utc:stageTimes.translationAttempt,
 });
@@ -206,17 +207,20 @@ const translationSection=stats[3];
 assert.strictEqual(translationSection.title,'Переводы описаний');
 assert.strictEqual(translationSection.showLastWrite,false);
 assert.deepStrictEqual(translationSection.rows.map(row=>row.key),[
-  'last_successful_translation_at_utc','last_translation_attempt_at_utc'
+  'translation_diagnostic_count','last_successful_translation_at_utc','last_translation_attempt_at_utc'
 ]);
 assert.deepStrictEqual(translationSection.rows.map(row=>row.label),[
-  'Последний успешный перевод','Последняя попытка перевода'
+  'На диагностике перевода','Последний успешный перевод','Последняя попытка перевода'
 ]);
-assert.strictEqual(translationSection.rows[0].value,ui.formatLastWriteAt(stageTimes.translationSuccess));
-assert.strictEqual(translationSection.rows[1].value,ui.formatLastWriteAt(stageTimes.translationAttempt));
+assert.strictEqual(translationSection.rows[0].value,4);
+assert.strictEqual(translationSection.rows[1].value,ui.formatLastWriteAt(stageTimes.translationSuccess));
+assert.strictEqual(translationSection.rows[2].value,ui.formatLastWriteAt(stageTimes.translationAttempt));
+assert(translationSection.note.includes('не возвращаются автоматически'));
 assert(translationSection.note.includes('не останавливает публикацию'));
-const noTranslationHistory=ui.statisticsSections({untranslated_game_count:5})[3];
-assert.strictEqual(noTranslationHistory.rows[0].value,'ещё не было записей');
+const noTranslationHistory=ui.statisticsSections({untranslated_game_count:5,translation_diagnostic_count:0})[3];
+assert.strictEqual(noTranslationHistory.rows[0].value,0);
 assert.strictEqual(noTranslationHistory.rows[1].value,'ещё не было записей');
+assert.strictEqual(noTranslationHistory.rows[2].value,'ещё не было записей');
 assert(!ui.statisticsSections.toString().includes('Date.now'),'Statistics must not invent translation timestamps');
 
 const userFacingStats=stats.flatMap(section=>[section.scopeLabel,section.note||'',...section.rows.map(row=>row.label)]).join(' ');

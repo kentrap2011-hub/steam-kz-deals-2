@@ -715,9 +715,13 @@ def _translation_processing_metrics():
             untranslated = scope_count - resolved_direct - resolved_cache
             if untranslated < 0:
                 raise ValueError('Russian translation scope arithmetic underflow')
+        diagnostic_count = int(doc.get('translation_diagnostic_count') or 0)
+        if diagnostic_count < 0 or diagnostic_count > untranslated:
+            raise ValueError('Russian translation diagnostic count outside untranslated scope')
         return {
             'translation_observability': 'available',
             'untranslated_game_count': untranslated,
+            'translation_diagnostic_count': diagnostic_count,
             'last_translation_attempt_at_utc': _normalize_utc_timestamp(
                 doc.get('last_translation_attempt_at_utc')
             ),
@@ -729,6 +733,7 @@ def _translation_processing_metrics():
         return {
             'translation_observability': f'unavailable:{type(exc).__name__}',
             'untranslated_game_count': None,
+            'translation_diagnostic_count': None,
             'last_translation_attempt_at_utc': None,
             'last_successful_translation_at_utc': None,
         }
@@ -1067,7 +1072,8 @@ def validate_processing_status(status):
         'deep_remaining_until_all_authoritative_count',
         'deep_normal_first_pass_complete', 'deep_all_current_authoritative_complete',
         'fast_last_write_at_utc', 'dossier_last_write_at_utc', 'deep_last_write_at_utc',
-        'untranslated_game_count', 'last_translation_attempt_at_utc',
+        'untranslated_game_count', 'translation_diagnostic_count',
+        'last_translation_attempt_at_utc',
         'last_successful_translation_at_utc', 'deep_legacy_full_reanalysis',
     }
     if not required.issubset(status):
