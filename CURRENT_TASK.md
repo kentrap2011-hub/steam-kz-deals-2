@@ -1,5 +1,15 @@
 # CURRENT TASK
 
+## IN PROGRESS — Steam discovery scope reduction implement 01
+Статус: `implementation_in_progress`.
+- task: `WORKER_TASK_STEAM_DISCOVERY_SCOPE_REDUCTION_IMPLEMENT_01.md`;
+- branch: `fix/steam-discovery-scope-reduction-implement-01`;
+- scope: existing GitHub-owned Steam KZ collector only; explicit game/DLC/bundle paid partitions, approved paid gate >=50%, <=4500 KZT, paid/free separation, early deterministic rejection before review enrichment;
+- no raw top-N, no new scheduler/queue/retry owner, no Catalyst special case, no Fast/Dossier/Deep/ranking changes;
+- live source-price semantics must be fail-closed until bounded KZ evidence is accepted;
+- required report: `reviews/worker_reports/steam-discovery-scope-reduction-implement-01.md`.
+
+
 ## COMPLETE — Steam discovery maximal scope reduction diagnostic 01
 Статус: `diagnostic_complete_product_choices_corrected`.
 - task: `WORKER_TASK_STEAM_DISCOVERY_MAXIMAL_SCOPE_REDUCTION_DIAGNOSTIC_01.md`;
