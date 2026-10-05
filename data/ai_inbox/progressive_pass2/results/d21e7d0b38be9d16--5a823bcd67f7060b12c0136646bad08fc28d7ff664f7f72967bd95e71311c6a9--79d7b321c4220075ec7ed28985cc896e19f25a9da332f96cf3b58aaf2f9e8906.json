@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "ba5ac533f165e35d90cc8d5b23c7af383d9be3c8",
+  "run_start_authority_commit": "3e38cba20a88870e945850b22b3f55e11b58de99",
+  "run_started_at_utc": "2026-10-05T12:26:46+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc",
+  "work_id": "5a823bcd67f7060b12c0136646bad08fc28d7ff664f7f72967bd95e71311c6a9",
+  "family_id": "game:1449320",
+  "taste_subject_key": "App_1449320",
+  "appid": "1449320",
+  "taste_fingerprint": "873fa0010affd7423aa7a5876cf646bece716fa395ce8857a7c19267ef0bb1fb",
+  "candidate_context_sha256": "e0e64b998b0ec9b28571faa414ee6cbb3c3d7537d1660a542154e626756363a6",
+  "dossier_content_sha256": "aacff1f402b2a17590d3afb836d16e71b02adeadd0b8e80928cd74731b5ac767",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "79d7b321c4220075ec7ed28985cc896e19f25a9da332f96cf3b58aaf2f9e8906",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Психологическая тайна, расследовательская подача, музыка и атмосфера дают заметный сюжетный крючок.",
+    "Но игра очень медленная и диалоговая, а интерактивность в основном ограничена лёгким исследованием и QTE; для формата с небольшим количеством активного геймплея этого недостаточно без исключительно сильной истории.",
+    "Реакции на финальную развязку разделились, поэтому именно сюжет — который должен компенсировать низкую плотность геймплея — не даёт достаточно надёжной опоры для fit.",
+    "Выборы в основном меняют детали и тон, а не создают существенно разные сюжетные маршруты.",
+    "QTE дополнительно прерывают длинные разговорные сцены и усиливают уже медленный темп."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Психологическая тайна и поздние раскрытия многим нравятся, но реакция на финальное объяснение заметно расходится, поэтому сюжетный крючок не одинаково силён до самого конца.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Длинные диалоговые сцены, медленная первая половина и сравнительно лёгкая интерактивность создают низкую плотность активного геймплея; для тебя такой формат требует особенно сильного сюжета, а здесь его качество оценивается неоднозначно.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "QTE регулярно прерывают длинные диалоговые эпизоды и могут превращать намеренно медленный ритм в дополнительное механическое трение.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Атмосфера и музыка хвалятся, но качество анимации и общей постановки оценивается смешанно и местами выглядит бюджетно.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Выборы в основном меняют небольшие детали или тон, а главный сюжет остаётся авторским и линейным, поэтому ожидаемая вариативность ограничена.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  }
+}
