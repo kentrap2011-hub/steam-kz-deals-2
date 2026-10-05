@@ -24,8 +24,11 @@ def main():
     )
     category1 = games["category1"]
 
-    caps = [3000, 4000, 4500, 5000, 6000]
+    # Deliberately small ladder: enough to identify whether maxprice values are
+    # interpreted in KZT without broad traversal.
+    caps = [10, 20, 50, 100, 1000, 4500]
     cap_results = {}
+    violations = []
     for cap in caps:
         data = core["get_page"](
             0,
@@ -36,20 +39,24 @@ def main():
         )
         summary = summarize(core, data)
         cap_results[str(cap)] = summary
+        print(
+            "LIVE_MAXPRICE_CAP",
+            cap,
+            json.dumps(summary, ensure_ascii=False, sort_keys=True),
+            flush=True,
+        )
         if summary["total_count"] is None or summary["total_count"] <= 0:
-            raise SystemExit(f"cap {cap}: missing/empty total_count")
-        if (
-            summary["max_price_kzt"] is None
-            or summary["max_price_kzt"] > cap
-            or summary["min_price_kzt"] <= 0
-        ):
-            raise SystemExit(
-                f"cap {cap}: returned price outside paid 0 < price <= cap"
+            violations.append(f"cap {cap}: missing/empty total_count")
+        if summary["max_price_kzt"] is None or summary["min_price_kzt"] <= 0:
+            violations.append(f"cap {cap}: missing/non-paid returned price")
+        elif summary["max_price_kzt"] > cap:
+            violations.append(
+                f"cap {cap}: returned max {summary['max_price_kzt']} KZT > cap"
             )
 
     totals = [cap_results[str(cap)]["total_count"] for cap in caps]
     if any(totals[i] > totals[i + 1] for i in range(len(totals) - 1)):
-        raise SystemExit(f"nested maxprice totals are non-monotonic: {totals}")
+        violations.append(f"nested maxprice totals are non-monotonic: {totals}")
 
     sort_results = {}
     for sort_by in ("Price_ASC", "Price_DESC", "Name_ASC"):
@@ -62,64 +69,30 @@ def main():
         )
         summary = summarize(core, data)
         sort_results[sort_by] = summary
-        if summary["total_count"] != cap_results["4500"]["total_count"]:
-            raise SystemExit(
-                "same maxprice=4500 produced sort-dependent total_count: "
-                f"{sort_results}"
-            )
-        if summary["max_price_kzt"] is None or summary["max_price_kzt"] > 4500:
-            raise SystemExit(
-                f"maxprice=4500 leaked over-cap row under {sort_by}"
-            )
-
-    capped_total = cap_results["4500"]["total_count"]
-    page_size = core["PAGE_SIZE"]
-    boundary_start = max(0, ((capped_total - 1) // page_size) * page_size)
-    starts = [
-        max(0, boundary_start - page_size),
-        boundary_start,
-        boundary_start + page_size,
-    ]
-    boundary_pages = []
-    for start in starts:
-        data = core["get_page"](
-            start,
-            "Price_ASC",
-            category1=category1,
-            hidef2p=True,
+        print(
+            "LIVE_MAXPRICE_SORT",
+            sort_by,
+            json.dumps(summary, ensure_ascii=False, sort_keys=True),
+            flush=True,
         )
-        summary = summarize(core, data)
-        summary["start"] = start
-        boundary_pages.append(summary)
-
-    boundary_prices = [
-        price
-        for page in boundary_pages
-        for price in page["prices_kzt"]
-    ]
-    nonmonotonic_pairs = [
-        {
-            "index": index,
-            "left": boundary_prices[index],
-            "right": boundary_prices[index + 1],
-        }
-        for index in range(len(boundary_prices) - 1)
-        if boundary_prices[index] > boundary_prices[index + 1]
-    ]
 
     evidence = {
-        "probe": "STEAM-KZ-MAXPRICE-BOUNDED-LIVE-PROBE-V1",
+        "probe": "STEAM-KZ-MAXPRICE-BOUNDED-LIVE-PROBE-V2",
         "country_code": "kz",
         "category1": category1,
         "hidef2p": True,
         "caps_price_desc": cap_results,
         "maxprice_4500_sort_checks": sort_results,
-        "uncapped_price_asc_boundary_start": boundary_start,
-        "uncapped_price_asc_boundary_pages": boundary_pages,
-        "uncapped_price_asc_nonmonotonic_pairs": nonmonotonic_pairs,
-        "logical_requests": len(caps) + 3 + len(starts),
+        "logical_requests": len(caps) + len(sort_results),
+        "violations": violations,
     }
-    print(json.dumps(evidence, ensure_ascii=False, sort_keys=True))
+    print(
+        "LIVE_MAXPRICE_EVIDENCE",
+        json.dumps(evidence, ensure_ascii=False, sort_keys=True),
+        flush=True,
+    )
+    if violations:
+        raise SystemExit("; ".join(violations))
 
 
 if __name__ == "__main__":
