@@ -37,17 +37,31 @@ Previous Steam discovery task is accepted. Normal main run `37357943696` complet
 
 New exact blocker begins after discovery: AppReviews enrichment opened its circuit after ~310 physical review requests, only 147 AppIDs completed both global/Russian review calls, logical failure rate reached ~99.75%, and immediate mailing/visual downstream runs failed. The new task must diagnose the exact review/circuit cause and the exact downstream failure chain, then apply the smallest correction without reopening accepted discovery scope.
 
-### ЧАТ 2 — ASSIGNED / AUDIT RESUMED
+### ЧАТ 2 — ASSIGNED / NEW PHYSICAL CHAT
 
 Task:
-`WORKER_TASK_DOSSIER_DEEP_INDEPENDENT_QUALITY_AUDIT_01.md`
+`WORKER_TASK_DEEP_TWO_STAGE_COMPARATIVE_CALIBRATION_IMPLEMENT_01.md`
 
 Mode:
-`READ-ONLY / INDEPENDENT AUDIT`
+`ARCHITECT / IMPLEMENT / VALIDATE / MIGRATION-PREP`
 
-The temporary Dossier transport blocker is resolved via merged PR #153 and its worker task is complete. Resume the previously paused independent Dossier/Deep quality audit from fresh current `main`.
+The independent Dossier/Deep audit is complete and accepted via merged PR #154. Its key finding is that the factual semantic core is generally strong, but the current numeric taste score is more precise/additive than the evidence justifies.
 
-Do not redo the transport investigation. The audit remains independent of Dossier/Deep worker conclusions, may criticize canonical rules themselves, and must not modify production state, prompts, queues, ranking, site, or Scheduled Tasks.
+The user has now explicitly authorized a replacement architecture:
+
+- remove Fast semantic assessment from ranking/decision authority;
+- keep not-yet-Deep items only on deterministic provisional ordering;
+- Deep Stage 1 performs grounded independent analysis and outputs positives, negatives, risks, hooks, confidence and an approximate provisional 0–100 taste estimate;
+- Stage 1 does not determine final ranking;
+- Deep Stage 2 compares the Stage-1 result with GitHub-selected already-calibrated neighboring games;
+- Stage 2 may adjust the score/placement based on relative preference;
+- only the calibrated Stage-2 score/order is final ranking authority;
+- Stage 2 may not invent new facts or redo web research;
+- GitHub owns comparison windows, retries, persistence and expansion;
+- current fixed additive five-factor formula must stop being final score authority;
+- Fast must not survive as a hidden fallback;
+- existing Deep evidence should be migrated/reused where safe rather than discarded;
+- no Scheduled Task changes are authorized in this implementation task.
 
 ## CURRENTLY WORKING / RECENT SEMANTIC CHATS
 
