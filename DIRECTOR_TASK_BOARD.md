@@ -26,15 +26,22 @@
 ## QUEUED PRODUCT WORK — 2026-10-04
 
 Priority order:
-1. `WORKER_TASK_STEAM_DISCOVERY_HARD_50_SELECTION_IMPLEMENT_01.md` — implement the user-approved Steam scope reduction and **hard maximum 50 visible offers**. Bundles/packages are evaluated before the cap and may enter the 50 even when member standalone games are below 50. Temporary DLC rule: only DLC whose base game passes normal suitability/eligibility. Persist funnel rejection counts.
-2. `WORKER_TASK_STEAM_OWNED_LIBRARY_DLC_SUPPORT_01.md` — establish a safe canonical owned-Steam-library snapshot, then extend DLC admission to bases that are either suitable or owned. Ownership does not itself make DLC recommended.
-3. `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md` — add a Russian site page for active/queued/blocked current project tasks using a build-generated static payload from canonical repository task state; no browser GitHub API polling and no second independent manually maintained task list.
+1. `WORKER_TASK_STEAM_DISCOVERY_50_PERCENT_DISCOUNT_TOP100_IMPLEMENT_01.md` — minimum current discount **50%**, existing price bound, early low-signal filtering, base-games first, then DLC only for admitted bases, bundles as an independent pre-top-100 lane, and funnel counts. Final site cap remains **at most 100 best current offers**.
+   - трудоёмкость: **высокая** — границы выборки, момент поиска дополнений, оценка наборов, сортировка и проверка обычного запуска взаимосвязаны;
+   - срочность: **высокая** — текущая выборка Steam может разрастаться примерно до 100 тысяч строк и не успевать сохраниться.
+2. `WORKER_TASK_STEAM_OWNED_LIBRARY_DLC_SUPPORT_01.md` — научиться безопасно получать список принадлежащих пользователю игр Steam и затем разрешать дополнения к подходящим **или принадлежащим** базовым играм.
+   - трудоёмкость: **средняя** — нужны безопасное получение библиотеки, свежесть данных и связь дополнения с базовой игрой;
+   - срочность: **обычная** — полезно для полноты дополнений, но временно можно работать по правилу подходящей базовой игры.
+3. `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md` — добавить русскую страницу активных/очередных/заблокированных задач, включая **трудоёмкость** и **срочность** с коротким объяснением.
+   - трудоёмкость: **средняя** — нужен единый источник состояния задач плюс страница и навигация;
+   - срочность: **обычная** — улучшает контроль проекта, но сама не разблокирует сбор скидок Steam.
 
-User product decisions behind this queue:
-- visible site list is capped at **at most 50** strong current offers;
+Corrected user product decisions behind this queue:
+- “50” means **minimum discount 50%**, not 50 offers;
+- visible site list remains capped at **at most 100** strong current offers;
 - very obscure low-signal indie titles may be rejected early, with an exception path for exceptional quality/value;
-- bundles remain independently discoverable/value-scored before the final cap;
-- current temporary DLC discovery is limited to DLC for otherwise suitable base games;
+- base games are narrowed first; only then are DLC discovered for admitted base games;
+- bundles remain independently discoverable/value-scored before the final top-100 cap and may receive member-game assessment even when members are not standalone sale candidates;
 - a later owned-library task adds DLC for games actually owned by the user;
 - funnel counts must show how much each narrowing step removes.
 
