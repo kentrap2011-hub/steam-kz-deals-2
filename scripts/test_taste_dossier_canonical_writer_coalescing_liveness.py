@@ -6,6 +6,7 @@ import hashlib
 import json
 import tempfile
 import unittest
+from datetime import timedelta
 from pathlib import Path
 
 import progressive_pass2
@@ -148,7 +149,7 @@ class CanonicalWriterCoalescingLivenessTests(unittest.TestCase):
                 pass2_state_doc=deep_core.empty_pass2_state(),
                 current_binding=env["work"]["web_evidence_contract_binding"],
                 dossier_loader=lambda _appid: None,
-                now=deep_core.NOW,
+                now=fixture.NOW + timedelta(hours=1),
             )
             self.assertEqual(pre_deep["items"], [])
 
@@ -180,7 +181,7 @@ class CanonicalWriterCoalescingLivenessTests(unittest.TestCase):
                 pass2_state_doc=deep_core.empty_pass2_state(),
                 current_binding=env["work"]["web_evidence_contract_binding"],
                 dossier_loader=_canonical_dossier_loader(env["store"]),
-                now=deep_core.NOW,
+                now=fixture.NOW + timedelta(hours=1),
             )
             self.assertEqual(
                 {item["family_id"] for item in post_deep["items"]},

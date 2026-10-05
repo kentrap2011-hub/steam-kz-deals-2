@@ -1093,6 +1093,16 @@ def drain_buffered_groups(
         "accepted_sequences": [entry["descriptor"]["sequence"] for entry in plan["accepted"]],
         "failed_sequences": [entry["descriptor"]["sequence"] for entry in plan["failed"]],
         "rejected_sequences": [entry["descriptor"]["sequence"] for entry in plan["rejected"]],
+        "retryable_transport_rejections": [
+            {
+                "sequence": entry["descriptor"]["sequence"],
+                "transport_kind": entry["rejection"]["transport_kind"],
+                "validator_error": entry["rejection"]["validator_error"],
+                "normal_first_pass_attempt_consumed": entry["rejection"]["normal_first_pass_attempt_consumed"],
+                "group_state_remains_pending": entry["rejection"]["group_state_remains_pending"],
+            }
+            for entry in plan["rejected"]
+        ],
         "cache_reused_sequences": list(plan.get("cache_reused_sequences", [])),
         "frozen_authority_accepted_sequences": [
             entry["descriptor"]["sequence"] for entry in plan.get("frozen_accepted", [])

@@ -129,20 +129,37 @@ def drain_inbox_state(
         if changed or transport_reconciled:
             write_worker_projection(current, contract)
         result["mode"] = "buffered_nonblocking_group_drain"
+        retryable_rejection_count = int(result.get("retryable_transport_rejection_count_this_run") or 0)
+        rejected_sequences = {
+            int(sequence) for sequence in result.get("rejected_sequences", [])
+        }
+        next_pending = result.get("next_pending_sequence")
+        head_retryable_rejected = bool(
+            retryable_rejection_count
+            and next_pending is not None
+            and int(next_pending) in rejected_sequences
+        )
+        result["head_retryable_transport_rejected_this_run"] = head_retryable_rejected
+        result["canonical_progress_made_this_run"] = changed
+
         if result["all_groups_accepted"]:
             result["status"] = "all_groups_accepted"
         elif result["normal_first_pass_complete"]:
             result["status"] = "normal_first_pass_complete_with_failures"
+        elif changed and retryable_rejection_count:
+            result["status"] = "group_state_advanced_with_retryable_transport_rejection"
         elif changed:
             result["status"] = "group_state_advanced"
+        elif head_retryable_rejected:
+            result["status"] = "retryable_transport_rejected_head_blocked_zero_progress"
         elif result.get("frozen_authority_accepted_count_this_run"):
             result["status"] = "frozen_authority_dossier_persisted"
         elif result.get("frozen_authority_terminal_count_this_run"):
             result["status"] = "frozen_authority_terminal_recorded"
         elif result.get("frozen_authority_rejected_count_this_run"):
             result["status"] = "frozen_authority_transport_rejected"
-        elif result.get("retryable_transport_rejection_count_this_run"):
-            result["status"] = "retryable_transport_rejected"
+        elif retryable_rejection_count:
+            result["status"] = "retryable_transport_rejected_nonblocking_zero_progress"
         elif result.get("frozen_authority_replay_cleanup_count_this_run"):
             result["status"] = "frozen_authority_replay_cleaned"
         elif result.get("terminal_replay_cleanup_count_this_run"):
