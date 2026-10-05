@@ -25,34 +25,29 @@ Treat old Board sections as historical unless this handoff explicitly points to 
 
 ## CURRENT PHYSICAL WORKER SLOTS
 
-### ЧАТ 1 — ASSIGNED / EXISTING PHYSICAL CHAT
+### ЧАТ 1 — ASSIGNED / NEW PHYSICAL CHAT
 
 Task:
-`WORKER_TASK_STEAM_DISCOVERY_SCOPE_REDUCTION_IMPLEMENT_01.md`
+`WORKER_TASK_STEAM_REVIEWS_PUBLICATION_BLOCKER_FIX_01.md`
 
 Mode:
-`IMPLEMENT / VALIDATE / LIVE ACCEPTANCE CONTINUATION`
+`DIAGNOSE / IMPLEMENT / VALIDATE / LIVE ACCEPTANCE`
 
-Latest live acceptance after PR #148 timed out at 60 minutes. Games and DLC completed; bundles reported ~105k rows and only ~46% completed. Search rate limiting produced 192 HTTP 429s and ~36 minutes of accumulated backoff. The task now requires a bounded continuation focused only on bundle-source semantics and a safer/faster 429 strategy, without silently dropping bundles, adding raw top-N, or using a larger timeout as the primary fix.
+Previous Steam discovery task is accepted. Normal main run `37357943696` completed successfully in ~39 minutes with complete games+DLC discovery (97,998 rows), Search 429 reduced to 1, canonical persistence successful and downstream refresh dispatched.
 
-### ЧАТ 2 — ASSIGNED / NEW PHYSICAL CHAT
+New exact blocker begins after discovery: AppReviews enrichment opened its circuit after ~310 physical review requests, only 147 AppIDs completed both global/Russian review calls, logical failure rate reached ~99.75%, and immediate mailing/visual downstream runs failed. The new task must diagnose the exact review/circuit cause and the exact downstream failure chain, then apply the smallest correction without reopening accepted discovery scope.
+
+### ЧАТ 2 — ASSIGNED / AUDIT RESUMED
 
 Task:
-`WORKER_TASK_DOSSIER_RETRYABLE_TRANSPORT_REJECT_FIX_01.md`
+`WORKER_TASK_DOSSIER_DEEP_INDEPENDENT_QUALITY_AUDIT_01.md`
 
 Mode:
-`DIAGNOSE / IMPLEMENT / VALIDATE`
+`READ-ONLY / INDEPENDENT AUDIT`
 
-The previous independent Dossier/Deep quality audit is paused because the live Dossier production path is now blocked.
+The temporary Dossier transport blocker is resolved via merged PR #153 and its worker task is complete. Resume the previously paused independent Dossier/Deep quality audit from fresh current `main`.
 
-Current confirmed blocker:
-- canonical Dossier remains at sequence 20 / 19 accepted groups / 57 dossiers;
-- sequence 20 submission was quarantined as `retryable_transport_rejected`;
-- sequence 21 submission was also quarantined the same way;
-- both ingest workflows concluded green despite zero accepted progress;
-- exact rejection cause is not exposed in the current summary logs.
-
-This chat must diagnose the exact transport/authority failure, fix only the canonical Dossier ingest/recovery path if defective, preserve fail-closed authority rules, and restore forward progress without invoking the semantic worker or modifying Scheduled Tasks.
+Do not redo the transport investigation. The audit remains independent of Dossier/Deep worker conclusions, may criticize canonical rules themselves, and must not modify production state, prompts, queues, ranking, site, or Scheduled Tasks.
 
 ## CURRENTLY WORKING / RECENT SEMANTIC CHATS
 
