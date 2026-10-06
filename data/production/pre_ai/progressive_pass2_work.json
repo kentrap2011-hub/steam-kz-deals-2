@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 112,
     "deep_completed_not_fit_count": 13,
     "deep_incomplete_or_recovery_count": 18,
-    "deep_waiting_for_dossier_count": 2145,
-    "deep_ready_or_pending_count": 13,
+    "deep_waiting_for_dossier_count": 2143,
+    "deep_ready_or_pending_count": 15,
     "deep_normal_first_pass_remaining_count": 2158,
     "deep_remaining_until_all_authoritative_count": 2176,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 15,
-    "dossier_waiting_count": 2145,
+    "dossier_waiting_count": 2143,
     "pass2_attempted_count": 143,
-    "pass2_eligible_count": 13,
-    "normal_pass2_eligible_count": 13,
+    "pass2_eligible_count": 15,
+    "normal_pass2_eligible_count": 15,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -688,6 +688,134 @@
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:212680",
+      "taste_subject_key": "App_212680",
+      "appid": "212680",
+      "taste_fingerprint": "9d057e6a18e541233e175d2c616ac25a1bddd240a5d5f2e6ea8de7ce25b1a808",
+      "candidate_context_sha256": "29466f78b6606d6592b690f7f58202978fdd41a50d9225545946dfbbf0ceedf2",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "70aa6e97d14d25f0d821d2def92ceda100c1d56b4b86d3af65660b8cb429897d",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "FTL: Faster Than Light",
+        "short_description": "This \"spaceship simulation roguelike-like\" allows you to take your ship and crew on an adventure through a randomly generated galaxy filled with glory and bitter defeat.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Sci-fi",
+          "Singleplayer"
+        ],
+        "core_fit_count": 1,
+        "release_date": "14 Sep, 2012",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "212680"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_212680.json",
+      "dossier_content_sha256": "331f7a7e209062c6b44e704c4068d0ecfe82c49edc2bdde3d54c4c1d87773678",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-25T21:21:58Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "f882dbbf290d3c1c77354b6bcb013329d4f595d99f61ca021771dc151efb04a7",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--70aa6e97d14d25f0d821d2def92ceda100c1d56b4b86d3af65660b8cb429897d--f882dbbf290d3c1c77354b6bcb013329d4f595d99f61ca021771dc151efb04a7.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--70aa6e97d14d25f0d821d2def92ceda100c1d56b4b86d3af65660b8cb429897d--f882dbbf290d3c1c77354b6bcb013329d4f595d99f61ca021771dc151efb04a7.json",
+      "sequence": 10
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:2110510",
+      "taste_subject_key": "App_2110510",
+      "appid": "2110510",
+      "taste_fingerprint": "18d4699b64bcd5e04ebd2ced6296e814d3904daab6e10f14acbf6036e6b688c1",
+      "candidate_context_sha256": "7ac8b067ad5400729e5046dba284dd332717c0ef498da2d5f858381b529107df",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "6bc057f7019eafd1117ba12494abd3bcc1c1b47460aa85c818540d30e4642b49",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "DREAM LOGIC",
+        "short_description": "DREAM LOGIC is a story driven first-person atmospheric horror game which takes place in liminal spaces. Explore various nostalgic, dreamlike, uncanny environments. But don't feel too safe, there's a sneaky creature watching your every move.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Exploration",
+          "Horror",
+          "Mystery"
+        ],
+        "core_fit_count": 2,
+        "release_date": "6 Sep, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "2110510"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2110510.json",
+      "dossier_content_sha256": "42aee4a830dc2ac5a9f6c8cae3fdb6101abdbe5589055fc84a9ad60d332474ec",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-25T21:21:58Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "0009b31cc9b4ecf5bdfcf43c371993345713c3a4f5ae31b9b0cd6d257441394b",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--6bc057f7019eafd1117ba12494abd3bcc1c1b47460aa85c818540d30e4642b49--0009b31cc9b4ecf5bdfcf43c371993345713c3a4f5ae31b9b0cd6d257441394b.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--6bc057f7019eafd1117ba12494abd3bcc1c1b47460aa85c818540d30e4642b49--0009b31cc9b4ecf5bdfcf43c371993345713c3a4f5ae31b9b0cd6d257441394b.json",
+      "sequence": 11
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "family_id": "game:1684100",
       "taste_subject_key": "App_1684100",
       "appid": "1684100",
@@ -746,7 +874,7 @@
       "authorization_id": "6213ba1c8206d71c3253232229eed451a3df5ec90fdede92cd3893e74263598b",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--bfecbd931c4f3348131018c37e0c0aa986632eea9f40f96c9f57e8886b1683f8--6213ba1c8206d71c3253232229eed451a3df5ec90fdede92cd3893e74263598b.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--bfecbd931c4f3348131018c37e0c0aa986632eea9f40f96c9f57e8886b1683f8--6213ba1c8206d71c3253232229eed451a3df5ec90fdede92cd3893e74263598b.json",
-      "sequence": 10
+      "sequence": 12
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -809,7 +937,7 @@
       "authorization_id": "520097f0ed30d7f93aa08fd9988941c827560f972d8c13685462d7b8870717d7",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ba5ba15169fc7c17d61709b8221358c19ad3b0af104ece150c654d95551531d9--520097f0ed30d7f93aa08fd9988941c827560f972d8c13685462d7b8870717d7.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ba5ba15169fc7c17d61709b8221358c19ad3b0af104ece150c654d95551531d9--520097f0ed30d7f93aa08fd9988941c827560f972d8c13685462d7b8870717d7.json",
-      "sequence": 11
+      "sequence": 13
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -875,7 +1003,7 @@
       "authorization_id": "f0ca04bfc6c0016ce96e64caba81c4136ccb019258e1f670b5e613b065eb4036",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--f904050af68be8073e0f3cef5a2361339101f9c8a0bd6d2fc1294589b1dd59ef--f0ca04bfc6c0016ce96e64caba81c4136ccb019258e1f670b5e613b065eb4036.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--f904050af68be8073e0f3cef5a2361339101f9c8a0bd6d2fc1294589b1dd59ef--f0ca04bfc6c0016ce96e64caba81c4136ccb019258e1f670b5e613b065eb4036.json",
-      "sequence": 12
+      "sequence": 14
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -938,7 +1066,7 @@
       "authorization_id": "a937380130be87647e9af9a9c21256f6afa8ee6e37129a5529d3984fbbe37ba4",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--83e302ca295b0a0897cc92f90e95be93b97f33021cbd05bcd393c01614334aad--a937380130be87647e9af9a9c21256f6afa8ee6e37129a5529d3984fbbe37ba4.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--83e302ca295b0a0897cc92f90e95be93b97f33021cbd05bcd393c01614334aad--a937380130be87647e9af9a9c21256f6afa8ee6e37129a5529d3984fbbe37ba4.json",
-      "sequence": 13
+      "sequence": 15
     }
   ]
 }
