@@ -1,13 +1,21 @@
 # CURRENT TASK
 
-## IN PROGRESS — Deep two-stage architecture freeze 01
-Статус: `architecture_preflight_passed_interfaces_being_frozen`.
+## COMPLETE — Deep two-stage architecture freeze 01
+Статус: `complete_interfaces_frozen`.
 - task: `WORKER_TASK_DEEP_TWO_STAGE_ARCHITECTURE_FREEZE_01.md`;
-- source requirements: `WORKER_TASK_DEEP_TWO_STAGE_COMPARATIVE_CALIBRATION_IMPLEMENT_01.md`;
-- scope: contracts/schemas/ownership/interfaces/dependency map only; no production cutover, semantic execution or Scheduled Task change;
+- PR: `#156` — `Freeze two-stage Deep architecture interfaces`;
 - frozen target pipeline: Dossier -> Deep Stage 1 -> Deep Stage 2 -> ranking/publication;
-- target score split: Deep fit 0–56 + deterministic Wishlist 0/+4 = personal 0–60; deterministic purchase remains 0–40; combined offer 0–100;
-- current active FAST-DOSSIER-DEEP-V1 / PASS 2 remains production authority until the separate integration cutover task.
+- separate Stage-1/Stage-2 worker identities, prompt/work/result/state paths and write boundaries are canonical and non-active;
+- score split frozen: calibrated Deep fit 0–56 + deterministic Wishlist 0/+4 = personal 0–60; deterministic purchase remains 0–40; combined offer 0–100;
+- Stage-2 canonical placement is GitHub-owned, strict monotonic/unique, two-decimal; integer-only calibrated scoring is forbidden;
+- migration freezes reusable-as-Stage1 vs requires-reanalysis classification and forbids mixed legacy/new authority;
+- card/detail/Statistics mirror fields and ordered detail sections are frozen;
+- four downstream implementation tasks may proceed in parallel from `config/deep_two_stage_dependency_map.json`; integration/cutover waits for all four;
+- validation: PASS 2 core `37451342289` and backlog dispositions `37451342295` — success;
+- current active `FAST-DOSSIER-DEEP-V1` / PASS 2 / ranking remain production authority; no production cutover or semantic execution occurred;
+- no Scheduled Task action occurred;
+- decision: `PROJECT_DECISIONS.md#PPD-013`;
+- report: `reviews/worker_reports/deep-two-stage-architecture-freeze-01.md`.
 
 ## IN PROGRESS — Steam Reviews API and publication blocker fix 01
 Статус: `diagnosis_proven_implementation_in_progress`.
