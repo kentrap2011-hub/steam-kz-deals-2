@@ -1,5 +1,15 @@
 # CURRENT TASK
 
+## IN PROGRESS — Deep Stage 2 comparative calibration worker implementation 01
+Статус: `implementation_in_progress`.
+- task: `WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`;
+- branch: `implement/deep-stage2-calibration-worker-01`;
+- frozen interfaces: `config/deep_two_stage_architecture_contract.json`, `config/deep_stage2_contract.json`, `config/deep_stage2_result_schema.json`, `config/deep_two_stage_dependency_map.json`;
+- scope: Stage-2 manual semantic worker, GitHub-owned work/window builder, strict ingest/validation, deterministic unique monotonic placement, progress/state/diagnostics, tests and worker report;
+- architecture boundary: GitHub owns scope/anchors/order/window expansion/placement/persistence/retry; semantic worker owns only exact prepared relative judgment and may not perform web research or rewrite Stage-1 facts;
+- forbidden in this task: Stage 1 implementation, Fast removal, ranking migration, site/UI, production cutover and Scheduled Task changes;
+- next bounded action: inspect the minimal existing manual-worker/ingest patterns and implement Stage 2 against the frozen interfaces.
+
 ## COMPLETE — Steam shortlist scope reduction diagnostic 02
 Статус: `diagnostic_complete_recommendation_ready`.
 - task: `WORKER_TASK_STEAM_SHORTLIST_SCOPE_REDUCTION_DIAGNOSTIC_02.md`;
