@@ -1,6 +1,6 @@
 # Steam shortlist scope reduction diagnostic 02
 
-Status: `diagnostic_complete_user_choice_required`
+Status: `diagnostic_complete_recommendation_ready`
 
 Task: `WORKER_TASK_STEAM_SHORTLIST_SCOPE_REDUCTION_DIAGNOSTIC_02.md`
 
@@ -8,58 +8,71 @@ Mode: `READ-ONLY / DIAGNOSTIC / OFFLINE SIMULATION`
 
 ## 1. Executive conclusion
 
-The fresh current funnel is healthy and materially larger because Steam review coverage was restored rather than because the paid source universe suddenly grew:
+The Reviews/publication repair exposed the real shortlist; it did not make review thresholds looser.
 
-- 98,023 source rows;
-- 60,632 unique paid-eligible items after the existing 50% / 4500 KZT gates;
-- 7,972 broad-shortlist items;
-- 2,522 paid-shortlist rows;
-- 2,385 purchase families after family construction, of which 2,301 are in the current semantic context / Deep coverage target;
-- current Dossier snapshot prepares 2,134 required dossiers;
-- current Deep state contains 112 authoritative current `analyzed_fit`, 13 authoritative current `analyzed_not_fit`, and the rest is unresolved/current work.
+The clean same-source comparison around the Reviews fix is:
 
-The old small state must not be restored. Immediately before PR #155 fixed Reviews, a fresh source run already had 60,624 eligible items but only 147 AppIDs had usable global+Russian review resolution. Its 504-row shortlist was mostly preservation fallback: 497 last-known-good rows were carried forward while 60,481 games were marked problematic. After the Reviews fix, the same-size source universe had 60,484 review-resolved AppIDs, broad shortlist jumped 28 -> 7,972 and paid shortlist 504 -> 2,522. Source eligibility changed by only +7. The expansion is therefore primarily recovery of missing review evidence, not discovery-scope inflation.
+| Metric | Broken Reviews | Healthy Reviews |
+|---|---:|---:|
+| Source rows | 97,998 | 98,015 |
+| Unique paid eligible | 60,624 | 60,631 |
+| Global review AppIDs OK | 147 | 60,484 |
+| Russian review AppIDs OK | 147 | 60,484 |
+| Broad shortlist | 28 | 7,972 |
+| Paid shortlist | 504 | 2,522 |
+| Review circuit open | yes | no |
 
-The main current shortlist inflation is caused by permissive recall rules that were useful when the pool was smaller:
+The source universe changed by only +7 eligible identities, while the paid shortlist grew by +2,018. The pre/post shortlist indexes use the same `personal-calibrated-v1` review profile and the exact same threshold map. Therefore the growth is restored review evidence, not weakened review standards.
 
-- `strong_fit`: 1,323 / 2,522 rows;
-- `mainstream_quality`: 1,059;
-- `exceptional_discount`: 973;
-- `strong_niche_fit`: 955;
-- `very_high_rating`: 779.
+The historical ~609 state is not an apples-to-apples target. The older completed funnel was about:
 
-These counts overlap. More diagnostic are the exclusive routes: **1,054 / 2,522 (41.8%) have exactly one refined reason**. Of these, 414 are only `strong_niche_fit`, 307 only `strong_fit`, 142 only `exceptional_discount`, 62 only `mainstream_quality`, 61 only `very_high_rating`, 36 only `substantive_content`, and 32 only `recent_fit`.
+`12,977 raw -> 9,923 review candidates -> 1,615 broad -> 609 shortlist/mailing`.
 
-Also, **685 / 2,522 (27.2%) are admitted only by commercial/general-quality reasons** (`mainstream_quality`, `exceptional_discount`, `very_high_rating`, `high_confidence_adjacent`) with no stronger taste-oriented recall route, and **654 / 2,522 have core_fit_count = 0**.
+Current discovery is about 98k raw / 60.6k paid-eligible. Returning to ~609 by making Reviews unavailable again would recreate the defect.
 
-The best offline balance is a **semantic pool around 450-500**, not ~100 and not a blind top-N. The tested balanced gate yielded **468 families** while retaining all 39 current Wishlist families, all 112 authoritative current Deep-fit families, all 25 exact direct-user-rated/reference title matches, all 33 package/bundle-value families, all 10 current DLC/addon semantic families, and all 181 families whose moderate deal scenario says `БРАТЬ СЕЙЧАС`.
+The current expensive semantic scope is already smaller than 2,522:
 
-The tradeoff is real: current `strong_niche_fit` is itself a broad deterministic recall flag, not semantic Taste proof. The balanced simulation keeps 217 / 905 current semantic families carrying that flag, including 105 / 648 low-volume (<5k global reviews) strong-niche families. This is the key recall risk and is why implementation requires explicit user/Director approval plus a shadow false-negative audit before cutover.
+`2,522 shortlist offers -> 2,469 after mechanical exclusions -> 2,385 purchase families -> 2,301 current semantic families`.
 
-## 2. Architecture / ownership boundary
+The 84 deterministic pre-AI exclusions are:
+- 66 `deal_excludes_even_if_strong`;
+- 18 `package_member_taste_pending`.
 
-Confirmed owner remains GitHub. `config/execution_ownership_contract.json` assigns candidate scope, deterministic transformations, queues and completeness to the GitHub control plane.
+Current Deep target is 2,301. Canonical Deep state reports:
+- 112 authoritative fit;
+- 13 authoritative not-fit;
+- 18 incomplete/recovery;
+- 2,141 waiting for Dossier;
+- 17 ready/pending.
 
-Relevant canonical selection authority is `config/mailing_policy.json` plus the current Steam producer in `scripts/steam_production.py`.
+The fresh Dossier snapshot prepares 2,134 required dossiers.
 
-No recommendation here creates:
-- a ChatGPT-owned queue;
-- a second scheduler;
-- a new recurring stage;
-- a semantic-worker retry owner;
-- a raw top-N discovery cutoff;
-- a Reviews failure shortcut.
+### Main finding
 
-Any future change to these deterministic admission thresholds is a product-policy change and must update the canonical contract before/with implementation.
+A permanent deterministic cut from 2,301 to 300–600 is **not low-risk**.
 
-## 3. Exact current funnel
+The current pool contains many genuine Deep-fit games whose Steam-side deterministic features are weak. To test future false-negative risk, the simulated gates were reapplied to the 112 current Deep-fit games **without** allowing “already known Deep-fit” to protect them:
 
-Current canonical manifest (2026-10-06 snapshot):
+- conservative ~1,000 first-wave gate: 33 / 112 naturally pass (29.5%);
+- balanced ~581 first-wave gate: 23 / 112 naturally pass (20.5%);
+- aggressive ~240 gate: 10 / 112 naturally pass (8.9%).
+
+So the correct recommendation is **not** to turn ~581 into permanent eligibility.
+
+Recommended architecture:
+
+1. preserve the full canonical paid shortlist/family universe;
+2. activate roughly **500–600 candidates as the first semantic wave** using transparent deterministic gates and protected lanes;
+3. keep the remaining candidates as **deferred reserve**, not excluded/not-fit;
+4. after the frozen 60/40 two-stage Deep architecture is actually production-active, let GitHub stop promoting reserve candidates only when a mathematically valid maximum possible total score proves they cannot beat the current top-100 cutoff.
+
+This gives the largest immediate workload reduction with the smallest principled risk of losing a future top-100 offer.
+
+## 2. Current canonical funnel
 
 | Stage | Count |
 |---|---:|
-| Steam source reported / seen | 98,023 |
-| Parsed | 98,023 |
+| Steam source rows seen | 98,023 |
 | Removed non-paid/missing price | 51 |
 | Removed discount below 50% | 33,976 |
 | Removed price above 4500 KZT | 0 |
@@ -71,36 +84,55 @@ Current canonical manifest (2026-10-06 snapshot):
 | Global review AppIDs OK | 60,485 |
 | Russian review AppIDs OK | 60,485 |
 | Broad shortlist | 7,972 |
-| Paid shortlist | 2,522 |
+| Paid shortlist offers | 2,522 |
 | Family candidates after mechanical exclusions | 2,469 |
-| Purchase families | 2,385 |
+| Purchase families / taste subjects | 2,385 |
+| Deterministically excluded before AI | 84 |
 | Current semantic / Deep coverage target | 2,301 |
-| Current Dossier prepared required | 2,134 |
+| Current Dossier required | 2,134 |
 
-The current Reviews circuit is closed and the current 2,522 shortlist rows are publishable without AppReviews fallback. This task does not use missing Reviews as a reduction mechanism.
+Offer-level content metadata for the 2,522 shortlist:
+- game: 2,407;
+- package: 55;
+- DLC: 60.
 
-## 4. Why ~609 / 504 became 2,522
+Family graph before the final pre-AI exclusions:
+- base_game: 2,354;
+- edition_family: 2;
+- external_base_addon: 9;
+- franchise_bundle: 19;
+- package_without_candidate_base: 1.
 
-The historical ~609 value is not a valid same-input A/B baseline because it came from an earlier snapshot. The cleanest causal comparison is the fresh run immediately before the Reviews fix versus the first healthy run after it:
+Package preservation must not be inferred only from family type. In the 2,301 semantic contexts, **33 families contain a package/Sub purchase-value lane or package-family identity**.
 
-| Metric | Pre-fix fresh run | Post-fix healthy run | Change |
-|---|---:|---:|---:|
-| Source rows | 97,998 | 98,015 | +17 |
-| Unique paid eligible | 60,624 | 60,631 | +7 |
-| Global+Russian review OK AppIDs | 147 | 60,484 | +60,337 |
-| Broad shortlist | 28 | 7,972 | +7,944 |
-| Paid shortlist | 504 | 2,522 | +2,018 |
-| Last-known-good preserved | 497 | 0 | fallback no longer needed |
+Current semantic contexts contain **10 DLC/base-support families**. DLC is therefore not a material source of the 2.3k explosion.
 
-Therefore the small pre-fix shortlist was primarily an artifact of review unavailability plus preservation fallback. Returning to it by requiring unavailable Reviews would recreate the bug.
+## 3. Why the pool expanded
 
-## 5. Current admission-rule contribution
+### 3.1 Review completeness was the direct trigger
 
-### Marginal refined reason counts
+Fresh pre-fix state:
+- 60,624 unique paid eligible;
+- only 147 global+Russian review-resolved AppIDs;
+- 28 broad shortlist;
+- 504 paid shortlist;
+- 497 last-known-good rows preserved;
+- review circuit open.
 
-These overlap and therefore must not be summed:
+Fresh post-fix state:
+- 60,631 unique paid eligible;
+- 60,484 review-resolved AppIDs;
+- 7,972 broad shortlist;
+- 2,522 paid shortlist;
+- no review failure/circuit problem.
 
-| Refined reason | Current shortlist rows |
+This is the strongest causal evidence. Reviews repaired selection coverage rather than changing eligibility rules.
+
+### 3.2 Current refined routes are individually broad
+
+Offer-level marginal counts (overlap allowed):
+
+| Refined reason | Shortlist offers |
 |---|---:|
 | strong_fit | 1,323 |
 | mainstream_quality | 1,059 |
@@ -111,117 +143,96 @@ These overlap and therefore must not be summed:
 | recent_fit | 108 |
 | substantive_content | 54 |
 
-### Exclusive single-reason admissions
+At offer level, 1,054 / 2,522 have exactly one refined reason. The biggest single-reason groups are:
+- strong_niche_fit only: 414;
+- strong_fit only: 307;
+- exceptional_discount only: 142;
+- mainstream_quality only: 62;
+- very_high_rating only: 61;
+- substantive_content only: 36;
+- recent_fit only: 32.
 
-| Only refined reason | Rows |
+At semantic-family level (2,301), the corresponding single-reason total is 947:
+- strong_niche_fit only: 396;
+- strong_fit only: 260;
+- exceptional_discount only: 128;
+- mainstream_quality only: 54;
+- very_high_rating only: 58;
+- substantive_content only: 22;
+- recent_fit only: 29.
+
+Also at family level:
+- 638 / 2,301 (27.7%) are admitted only through the generic quality/commercial set `mainstream_quality / exceptional_discount / very_high_rating / high_confidence_adjacent`;
+- 1,663 / 2,301 have at least one fit-recall route (`strong_fit / strong_niche_fit / recent_fit / substantive_content`).
+
+There is no single threshold whose correction would safely return the pool to ~600.
+
+## 4. Current signal distributions
+
+### Review count — semantic families
+
+| Global reviews | Families |
 |---|---:|
-| strong_niche_fit only | 414 |
-| strong_fit only | 307 |
-| exceptional_discount only | 142 |
-| mainstream_quality only | 62 |
-| very_high_rating only | 61 |
-| substantive_content only | 36 |
-| recent_fit only | 32 |
-| high_confidence_adjacent only | 0 |
-| **Total single-reason** | **1,054** |
+| <300 | 10 |
+| 300–999 | 348 |
+| 1,000–2,999 | 508 |
+| 3,000–4,999 | 395 |
+| 5,000–9,999 | 420 |
+| 10,000–19,999 | 287 |
+| 20,000+ | 333 |
 
-This is the most useful explanation of the explosion. The two biggest exclusive admission paths are not mainstream/popularity rules; they are the broad deterministic `strong_niche_fit` and `strong_fit` recall routes.
+A universal 5k floor would destroy a large part of the niche lane.
 
-Current definitions are permissive for a 2.5k pool:
-- `strong_fit`: one core tag, >=1,500 global reviews, rating >=78% (global or bounded Russian rescue);
-- `strong_niche_fit`: two core tags, price <=2500 KZT, >=300 global reviews, rating >=78%;
-- `mainstream_quality`: no taste tag requirement, >=5,000 reviews, >=80%;
-- `exceptional_discount`: no taste tag requirement, discount >=75%, >=3,000 reviews, >=75%;
-- `very_high_rating`: no taste tag requirement, >=3,000 reviews, >=90%.
+### Global rating — semantic families
 
-Canonical policy already states that these feed flags are recall/audit context rather than semantic Taste evidence. Tightening them before expensive semantic work is therefore conceptually valid, but changes recall and needs explicit approval.
-
-### Structure/type
-
-At shortlist-row level:
-- games: 2,407;
-- packages: 55;
-- DLC: 60.
-
-After family construction/current semantic projection:
-- current semantic families: 2,301;
-- base-game families: 2,289;
-- edition families: 2;
-- external-base-addon families: 9;
-- package-without-candidate-base family: 1;
-- 33 semantic families contain a package/`Sub_` purchase-value lane;
-- 10 current semantic families require DLC/addon base-support handling.
-
-Packages are therefore a small, cheap lane to preserve explicitly rather than discard.
-
-## 6. Distribution of current 2,522 shortlist rows
-
-### Global review-count bands
-
-| Reviews | Rows |
+| Rating | Families |
 |---|---:|
-| <300 | 14 |
-| 300-999 | 376 |
-| 1,000-2,999 | 555 |
-| 3,000-4,999 | 431 |
-| 5,000-9,999 | 450 |
-| 10,000-19,999 | 317 |
-| 20,000+ | 379 |
+| <78% | 116 |
+| 78–79.9% | 138 |
+| 80–84.9% | 477 |
+| 85–89.9% | 613 |
+| 90%+ | 957 |
 
-A flat popularity floor such as 5k would remove 1,376 rows but would also destroy a large share of the niche lane. It is not recommended.
+The <78 group can still qualify through the canonical global-count + global-or-Russian rating rule. A global-only cutoff would silently break the Russian-rating rescue path.
 
-### Global rating bands
+### Price — semantic family primary offer
 
-| Positive rating | Rows |
+| Current price | Families |
 |---|---:|
-| <78% | 130 |
-| 78-79.9% | 158 |
-| 80-84.9% | 519 |
-| 85-89.9% | 686 |
-| 90%+ | 1,029 |
+| <=100 RUB | 506 |
+| 101–250 RUB | 1,011 |
+| 251–500 RUB | 651 |
+| 501–650 RUB | 119 |
+| 651–750 RUB | 14 |
 
-A rating-only cutoff is also insufficient: 1,029 rows already sit at 90%+.
+2,168 / 2,301 are already <=500 RUB. Price is not a useful primary discriminator after the current commercial gate.
 
-### Price bands, KZT
+### Discount — semantic families
 
-| Price | Rows |
+| Discount | Families |
 |---|---:|
-| <=500 | 455 |
-| 501-1000 | 741 |
-| 1001-2000 | 843 |
-| 2001-3000 | 329 |
-| 3001-3500 | 74 |
-| 3501-4000 | 60 |
-| 4001-4500 | 20 |
+| 50–59% | 449 |
+| 60–69% | 384 |
+| 70–74% | 205 |
+| 75–79% | 448 |
+| 80–89% | 572 |
+| 90%+ | 243 |
 
-Most of the pool is cheap. Lowering price alone would preferentially keep low-cost noise rather than future top-100 quality.
+1,263 / 2,301 are already >=75%. Discount alone cannot safely narrow to the desired band.
 
-### Discount bands
+### Core-fit tags — semantic families
 
-| Discount | Rows |
+| core_fit_count | Families |
 |---|---:|
-| 50-59% | 517 |
-| 60-69% | 414 |
-| 70-74% | 224 |
-| 75-79% | 485 |
-| 80-89% | 618 |
-| 90%+ | 264 |
+| 0 | 611 |
+| 1 | 704 |
+| 2 | 693 |
+| 3 | 227 |
+| 4+ | 66 |
 
-Again, discount alone cannot safely produce the target pool.
+1,315 / 2,301 (57.1%) have <=1 core tag. Core count is a strong cost-control signal, but the Deep-fit backtest proves it is not safe as universal final eligibility.
 
-### Core fit count
-
-| core_fit_count | Rows |
-|---|---:|
-| 0 | 654 |
-| 1 | 788 |
-| 2 | 755 |
-| 3 | 253 |
-| 4+ | 72 |
-
-This is the strongest deterministic lever. 1,442 / 2,522 rows have at most one current core tag. But core tags are still recall metadata, not semantic proof, so they should be combined with rating/review/value lanes rather than used as a universal exclusion.
-
-## 7. Protected evidence / current semantic reference set
+## 5. Protected/current reference set
 
 Within the 2,301 current semantic families:
 
@@ -229,191 +240,326 @@ Within the 2,301 current semantic families:
 - authoritative current Deep-fit: 112;
 - authoritative current Deep-not-fit: 13;
 - exact direct-user-rated/reference title matches: 25;
-- package/bundle-value lane: 33 families;
-- DLC/addon semantic lane: 10 families;
-- moderate-deal `БРАТЬ СЕЙЧАС`: 181;
-- strong-deal `БРАТЬ СЕЙЧАС`: 189.
+- package/bundle lane: 33;
+- DLC/base-support lane: 10;
+- `deal_if_moderate.purchase_decision == БРАТЬ СЕЙЧАС`: 181;
+- `deal_if_strong.purchase_decision == БРАТЬ СЕЙЧАС`: 189.
 
-The offline strategies below protect current Deep-fit, Wishlist, direct-rated/reference and package/bundle lanes by construction. Conservative and balanced also protect all current DLC and all 181 moderate `БРАТЬ СЕЙЧАС` opportunities.
+The strict “strong commercial opportunity” metric used for retention below is the **moderate-scenario `БРАТЬ СЕЙЧАС`** set of 181. If even moderate fit still produces `БРАТЬ СЕЙЧАС`, it is a strong deterministic purchase opportunity.
 
-This is deliberately stricter than simply asking whether the new rules would reproduce the current shortlist count.
+Wishlist protection means only: an already discovered/paid-shortlist candidate is not pre-semantic-deferred because of weak generic signals. It does not make Wishlist a discovery source, taste evidence, ownership proof, or final include.
 
-## 8. Offline reduction strategies
+Direct-rated/reference protection is an offline guardrail. It must not automatically convert a known negative user reference into a positive recommendation.
 
-These are diagnostic predicates over current canonical fields. They are **not** proposed as final numeric contract text and were not written to production.
+## 6. Offline simulation method
 
-### Strategy C — conservative: ~781 semantic families
+The simulations were run read-only over current canonical:
+- `data/production/pre_ai/progressive_candidate_context.jsonl`;
+- `data/production/pre_ai/chatgpt_taste_queue.jsonl`;
+- `data/production/pre_ai/family_graph.json`;
+- `data/cache/progressive_pass2_state.json`;
+- current canonical taste-profile titles for direct-reference matching.
 
-Target band: 700-1000.
+No production file, queue, result, ranking, worker, or Scheduled Task was changed.
 
-Protected unconditionally:
-- all Wishlist;
-- all current authoritative Deep-fit;
-- all exact direct-user-rated/reference matches;
-- all package/bundle-value families;
-- all current DLC/addon semantic families;
-- all moderate-scenario `БРАТЬ СЕЙЧАС`.
+Review gates preserve current review semantics:
+- minimum count remains global review count;
+- the rating condition remains global OR bounded Russian rating;
+- no missing score is invented.
 
-Remaining candidates need substantially stronger combinations than current rules, approximately:
-- `strong_niche_fit`: core >=3 with >=500 reviews / >=82%, or core >=2 with >=2,000 / >=86%;
-- `strong_fit`: core >=3 with >=2,500 / >=86%, or core >=2 with >=7,000 / >=88%;
-- `recent_fit`: core >=3 and >=1,500 / >=84%;
-- `substantive_content`: core >=2 and >=750 / >=84%;
-- `exceptional_discount`: >=90% discount plus >=20k / >=90%.
+The strategy counts are observed outputs of transparent gates on the current snapshot. They are not quotas.
 
-Result:
-- **781** families;
-- unresolved semantic work: about **667**;
-- Wishlist: **39/39 retained**;
-- Deep-fit: **112/112 retained**;
-- direct-rated/reference: **25/25 retained**;
-- package lane: **33/33 retained**;
-- DLC: **10/10 retained**;
-- moderate `БРАТЬ СЕЙЧАС`: **181/181 retained**;
-- current `strong_niche_fit`: **457/905 retained**;
-- low-volume (<5k reviews) `strong_niche_fit`: **235/648 retained**.
+## 7. Strategy C — conservative first wave (~1,000)
 
-Risk: moderate. It halves semantic cost versus 2,301 while keeping a broad niche escape path.
-
-### Strategy B — balanced: ~468 semantic families
-
-Target band: 300-600.
-
-Uses the same protected lanes as Strategy C, but the non-protected escape paths are stricter:
-- `strong_niche_fit`: primarily core >=3 with stronger review/rating proof;
-- `strong_fit`: core >=3 with materially higher review/rating proof;
-- pure commercial/general-quality routes do not survive unless they are exceptional enough to compete with protected value lanes.
-
-Result:
-- **468** families;
-- unresolved semantic work: about **356**;
-- Wishlist: **39/39 retained**;
-- Deep-fit: **112/112 retained**;
-- direct-rated/reference: **25/25 retained**;
-- package lane: **33/33 retained**;
-- DLC: **10/10 retained**;
-- moderate `БРАТЬ СЕЙЧАС`: **181/181 retained**;
-- current `strong_niche_fit`: **217/905 retained**;
-- low-volume (<5k reviews) `strong_niche_fit`: **105/648 retained**.
-
-Risk: meaningful but bounded and explainable. The dropped `strong_niche_fit` rows are not proven bad games; they are candidates that currently receive a broad deterministic recall flag but lack enough deterministic evidence to justify expensive semantics under the tighter budget.
-
-### Strategy A — aggressive stress test: ~276 semantic families
-
-Target band: 150-300.
-
-Unconditional protection is reduced to:
+Protected:
 - Wishlist;
-- authoritative Deep-fit;
-- direct-user-rated/reference matches;
-- package/bundle-value lane;
-- current DLC lane (added as a protected lane because it is only 10 families and ownership support is not yet available).
+- existing authoritative Deep-fit;
+- exact direct-rated/reference matches;
+- package/bundle lane;
+- all current DLC/base-support families;
+- all 181 moderate `БРАТЬ СЕЙЧАС`.
 
-The remaining pool requires very strong deterministic combinations such as:
-- `strong_niche_fit` with core >=3, >=2k reviews and >=90%;
-- `strong_fit` with core >=3, >=10k and >=92%;
-- moderate `БРАТЬ СЕЙЧАС` only with core >=2 plus >=10k / >=90%;
-- `exceptional_discount` only at >=90% discount plus >=30k / >=94%.
+Unprotected escape paths:
+- strong_niche_fit: core>=2 + >=750 reviews + >=84%;
+- strong_fit: core>=2 + >=3k + >=86%, or core>=1 + >=10k + >=88%;
+- recent_fit: core>=2 + >=1k + >=84%;
+- substantive_content: core>=2 + >=500 + >=82%;
+- exceptional_discount: >=85% discount + >=10k + >=88%;
+- very_high_rating: >=10k + >=92%;
+- mainstream_quality: >=20k + >=90%;
+- high_confidence_adjacent: >=20k + >=92%.
 
-Result:
-- **~276** families;
-- Wishlist: **39/39 retained**;
-- Deep-fit: **112/112 retained**;
-- direct-rated/reference: **25/25 retained**;
-- packages: **33/33 retained**;
-- DLC: **10/10 retained**;
-- moderate `БРАТЬ СЕЙЧАС`: only **26/181** retained before the DLC-protection adjustment (DLC protection does not materially repair this loss);
-- current `strong_niche_fit`: about **134/905** retained;
-- low-volume strong-niche: about **43/648** retained.
+Observed result:
+- **1,000** families;
+- reduction: 56.5%;
+- Wishlist: 39 / 39;
+- current Deep-fit: 112 / 112;
+- direct-rated/reference: 25 / 25;
+- moderate `БРАТЬ СЕЙЧАС`: 181 / 181;
+- package/bundle lane: 33 / 33;
+- DLC: 10 / 10;
+- strong_niche_fit: 550 / 905;
+- low-volume (<5k reviews) strong_niche: 321 / 648;
+- unresolved semantic work retained: ~885.
 
-Risk: high. This range can be reached without hard top-N, but only by discarding many currently strong commercial and niche recall candidates. It is not recommended as the production default.
+### Future-fit proxy
 
-## 9. Why generic commercial routes should be tightened first
+Remove “existing Deep-fit” from the protection rule and ask whether the same deterministic features would have admitted the current 112 Deep-fit games as if they were new:
 
-A strong reduction should not begin by raising a global popularity floor, because that disproportionately kills niche titles. It should first require stronger evidence when the admission is taste-agnostic.
+- 33 / 112 retained = **29.5%**;
+- Deep-not-fit retained: 3 / 13.
 
-Recommended order of tightening:
+Conclusion: acceptable as a first wave, not safe as permanent eligibility.
 
-1. remove ordinary `mainstream_quality` as a standalone semantic-admission route unless it clears a much higher quality/popularity bar;
-2. require `exceptional_discount` without taste-oriented evidence to be genuinely exceptional (for example 90%+ plus strong quality), rather than 75% discount + 75% rating;
-3. make `very_high_rating` / `high_confidence_adjacent` standalone admission rarer;
-4. tighten `strong_fit` from one core tag to a stronger core+quality combination;
-5. keep a dedicated niche escape path that allows lower review counts when core evidence is strong;
-6. protect Wishlist / known Deep-fit / direct references / package-value lanes explicitly;
-7. treat DLC separately until owned-library support exists; do not assume ownership.
+## 8. Strategy B — balanced first wave (~581) — recommended
 
-This attacks the 685 commercial/general-quality-only rows and the 654 zero-core rows before relying on a popularity floor.
+Protected:
+- Wishlist;
+- existing authoritative Deep-fit;
+- exact direct-rated/reference matches;
+- package/bundle lane;
+- all 181 moderate `БРАТЬ СЕЙЧАС`;
+- all 10 current DLC/base-support families.
 
-## 10. Recommendation
+Unprotected escape paths:
+- strong_niche_fit:
+  - core>=3 + >=300 reviews + >=86%; OR
+  - core>=2 + >=5k + >=91%;
+- strong_fit:
+  - core>=3 + >=7k + >=92%;
+- recent_fit:
+  - core>=3 + >=1.5k + >=89%;
+- substantive_content:
+  - core>=2 + >=1k + >=87%;
+- exceptional_discount:
+  - >=90% discount + >=30k + >=94%.
 
-**Recommend the balanced ~450-500 semantic-pool design, with a temporary shadow-audit phase.**
+No standalone `mainstream_quality`, `very_high_rating`, or `high_confidence_adjacent` escape remains. Those generic routes survive only through a protected lane or overlap with a stronger fit/niche route.
 
-Why this is the best balance for a final visible target around 100:
-- 2,301 semantic families is about 23x the visible target and creates unnecessary Dossier/Deep cost;
-- ~276 is achievable but loses too many current niche and `БРАТЬ СЕЙЧАС` candidates;
-- ~781 is safe but still leaves roughly 6-8x the final visible target;
-- ~468 preserves every currently identifiable high-confidence protected lane while still leaving roughly 4.7 candidates per final visible slot, enough room for Deep to reject or rerank.
+Observed result:
+- **581** families;
+- reduction: 74.8%;
+- Wishlist: 39 / 39;
+- current Deep-fit: 112 / 112;
+- direct-rated/reference: 25 / 25;
+- moderate `БРАТЬ СЕЙЧАС`: 181 / 181;
+- package/bundle lane: 33 / 33;
+- DLC: 10 / 10;
+- strong_niche_fit: 335 / 905;
+- low-volume strong-niche: 165 / 648;
+- unresolved semantic work retained: ~468.
 
-The production rule should **not** be “take 468”. The 468 number is an observed result of transparent deterministic gates on the current snapshot. The canonical rule should be the gates + protected lanes, with funnel observability. No fixed candidate count and no arbitrary ordering cutoff are required.
+### Future-fit proxy
 
-Before cutover, run the new gate in shadow mode against at least the current snapshot and one later normal snapshot. Record what it would exclude, and fail acceptance if it excludes any current authoritative Deep-fit, Wishlist, protected package/bundle lane or direct reference. For the niche lane, sample/examine the dropped high-core/low-volume cases rather than treating review count alone as proof of irrelevance.
+Without the historical Deep-fit protection:
+- 23 / 112 current Deep-fit naturally pass = **20.5%**;
+- Deep-not-fit naturally pass: 1 / 13.
 
-## 11. Exact product tradeoffs requiring user/Director choice
+Conclusion: **good first-wave size, unsafe permanent cutoff**.
 
-1. **Approve or reject tightening `strong_niche_fit` as a pre-semantic admission rule.**  
-   Balanced keeps 217/905 current strong-niche families, including 105/648 low-volume strong-niche. This flag is not semantic Taste proof, but narrowing it is the largest recall-sensitive decision.
+The low-volume niche escape is intentional: core>=3 candidates can survive from only 300 reviews if rating quality is strong. This avoids turning popularity into the primary taste proxy.
 
-2. **Approve or reject protecting all moderate-scenario `БРАТЬ СЕЙЧАС` offers.**  
-   Balanced/conservative protect all 181 and still reach 468/781. Aggressive cannot reach its band safely while doing so.
+## 9. Strategy A — aggressive stress test (~240)
 
-3. **Confirm package/bundle lane remains explicitly protected.**  
-   Recommended answer: yes. It costs only 33 semantic families and avoids a known product regression.
+Protected:
+- Wishlist;
+- existing authoritative Deep-fit;
+- direct-rated/reference;
+- package/bundle lane.
 
-4. **Keep current DLC lane protected until owned-library support exists.**  
-   Recommended answer: yes for now. It costs only 10 families. After owned-library DLC support lands, the lane can be narrowed by relevant/owned base-game context rather than popularity.
+Unprotected:
+- `БРАТЬ СЕЙЧАС`: only core>=3 + >=3k + >=90%;
+- DLC: only core>=3 + >=1.5k + >=90%;
+- strong_niche_fit: core>=4 + >=1k + >=90%, or core>=3 + >=5k + >=92%;
+- strong_fit: core>=4 + >=5k + >=92%;
+- recent_fit: core>=4 + >=2.5k + >=90%;
+- exceptional_discount: >=90% + >=30k + >=94%.
 
-No choice is required about Wishlist or current authoritative Deep-fit: both should remain protected.
+Observed result:
+- **240** families;
+- reduction: 89.6%;
+- Wishlist: 39 / 39;
+- current Deep-fit: 112 / 112;
+- direct-rated/reference: 25 / 25;
+- package lane: 33 / 33;
+- moderate `БРАТЬ СЕЙЧАС`: 19 / 181;
+- DLC: 1 / 10;
+- strong_niche_fit: 109 / 905;
+- low-volume strong-niche: 29 / 648.
 
-## 12. Smallest follow-up implementation task after approval
+Future-fit proxy without historical Deep-fit protection:
+- 10 / 112 = **8.9%**;
+- Deep-not-fit: 0 / 13.
 
-One bounded implementation task in the existing GitHub shortlist/discovery owner:
+Conclusion: high recall loss. Reject as default.
 
-**STEAM_SHORTLIST_BALANCED_PRESEMANTIC_GATE_IMPLEMENT_01**
+## 10. What contributes most to the explosion
+
+The dominant pattern is not “too many DLC” or “too many bundles”:
+- only 10 semantic DLC/base-support families;
+- only 33 semantic package/bundle-value families.
+
+The main drivers are:
+1. broad `strong_fit` and `strong_niche_fit` recall routes;
+2. generic quality/commercial standalone routes;
+3. low core-tag requirements;
+4. restored review coverage that now allows those routes to evaluate correctly.
+
+The pool also cannot be reduced safely by ordinary commercial tightening alone:
+- 94.2% of semantic families are already <=500 RUB;
+- 54.9% already have >=75% discount;
+- 41.6% already have >=90% global rating.
+
+This means the next reduction must change **semantic work admission**, not merely price/discount or Reviews.
+
+## 11. Why permanent deterministic 300–600 is rejected
+
+Canonical policy already says reviews, popularity, discount, generic tags, and shortlist flags are recall/quality signals rather than personal Taste evidence.
+
+The Deep-fit proxy confirms that boundary empirically.
+
+A permanent balanced 581 gate would preserve all **known** Deep-fit only because existing Deep-fit is explicitly protected. For a new future game with no prior Deep result, the deterministic rule naturally recalls only ~20.5% of the current Deep-fit reference set.
+
+That is too weak to claim “minimal risk of losing future top 100.”
+
+Therefore the first-wave/reserve distinction is essential.
+
+## 12. Recommended design
+
+### 12.1 Preserve full canonical source truth
+
+Keep:
+- the complete current paid shortlist;
+- family resolution;
+- current Reviews health;
+- package identities;
+- all reserve candidates.
+
+Do not rewrite the Steam collector into a hard 581 source shortlist.
+
+### 12.2 Build an active first semantic wave
+
+Use the balanced gate to mark roughly 500–600 current families as `active_first_wave`.
+
+The rest become `deferred_reserve`, not excluded.
+
+Every row gets deterministic admission/defer reason codes.
+
+### 12.3 Preserve protected lanes
+
+The first wave must not crowd out:
+- Wishlist already inside current paid candidates;
+- current compatible authoritative Deep-fit;
+- package/bundle lane;
+- direct reference guardrails;
+- strict `БРАТЬ СЕЙЧАС`;
+- current tiny DLC/base-support lane.
+
+Protected-lane membership never becomes taste proof.
+
+### 12.4 Promote reserve rather than delete it
+
+Reserve remains owned by GitHub.
+
+No ChatGPT worker chooses the next candidate and no new independent scheduler/retry manager is introduced.
+
+A later contract must define how the existing GitHub producer promotes reserve candidates.
+
+### 12.5 Safe stopping after the two-stage 60/40 cutover
+
+The frozen target architecture defines:
+- Deep calibrated fit: 0–56;
+- Wishlist: deterministic 0/+4;
+- personal: 0–60;
+- purchase: 0–40;
+- total: 0–100.
+
+Only after that model and its final-ranking authority are production-active can GitHub use a mathematically valid upper bound.
+
+For an unprocessed reserve candidate:
+- non-Wishlist maximum total = current deterministic purchase score + 56;
+- Wishlist maximum total = purchase score + 60 (Wishlist should already be first-wave protected).
+
+After there are at least 100 fully calibrated eligible candidates, a reserve candidate can be safely left unprocessed only when its maximum possible total cannot beat the current #100 cutoff under the active ranking contract.
+
+This is not arbitrary top-N. It is branch-and-bound using the score ceiling.
+
+If an item can still mathematically beat #100, it must remain promotable for semantic analysis.
+
+### Activation boundary
+
+Do not use this score-bound stopping against current legacy `FAST-DOSSIER-DEEP-V1` merely because the new architecture is frozen. Current production authority remains unchanged until the separate integration/cutover task activates the new model.
+
+## 13. Product/Director choices
+
+The diagnostic itself is complete. Before implementation, Director/user should explicitly accept:
+
+1. **First-wave + reserve semantics** rather than permanent pre-semantic exclusion.  
+   Recommended: yes.
+
+2. **All 181 current moderate-scenario `БРАТЬ СЕЙЧАС` opportunities protected in the first wave.**  
+   Recommended: yes. The aggressive alternative drops 162 / 181.
+
+3. **All package/bundle lanes protected.**  
+   Recommended: yes. Only 33 semantic families; not a meaningful cost driver.
+
+4. **Current DLC lane retained until owned-library/base-game support is available.**  
+   Recommended: yes. Only 10 semantic families; pruning them does not solve the scale problem.
+
+5. **Low-volume niche escape retained.**  
+   Recommended: yes. Do not impose a global 5k/10k popularity floor.
+
+6. **Score-bound permanent stopping activated only after two-stage 60/40 cutover.**  
+   Recommended: yes.
+
+No product choice should restore the old small pool by damaging review coverage.
+
+## 14. Smallest follow-up implementation task
+
+After acceptance, create one bounded contract-first implementation task:
+
+`WORKER_TASK_STEAM_SEMANTIC_FIRST_WAVE_AND_RESERVE_IMPLEMENT_01.md`
 
 Scope:
-1. add a canonical deterministic pre-semantic admission contract/policy section;
-2. implement the approved balanced gates in the existing GitHub producer path before Dossier/Deep scope construction;
-3. preserve explicit lanes for Wishlist, current compatible authoritative Deep-fit, direct-user references, packages/bundles, and current DLC policy;
-4. add per-rule funnel/rejection counters and reason codes;
-5. run in shadow comparison first;
-6. regression-test current protected identities;
-7. prove Reviews remains healthy and no review failure is used as filtering;
-8. only after acceptance make the gate authoritative.
+1. define `active_first_wave` and `deferred_reserve` in a canonical GitHub-owned semantic-scope contract;
+2. keep the full 2,522 paid shortlist/family graph as source/audit truth;
+3. implement the balanced first-wave predicate with explicit admission/defer reason codes;
+4. preserve protected-lane invariants;
+5. do not mark reserve as not-fit;
+6. add funnel counters for full semantic universe / active first wave / reserve and per-rule reasons;
+7. run shadow-mode comparison before authoritative cutover;
+8. add a regression that evaluates the gate both with and without existing-Deep protection so future-fit proxy recall remains visible;
+9. do not activate score-bound stopping until the two-stage integration/cutover has made the 60/40 score/ranking authority active.
 
 Architecture preflight:
-- owner: GitHub control plane;
-- authority: current mailing/selection policy + execution ownership contract, with the new gate first made canonical;
-- no control-plane transfer to ChatGPT;
-- no new scheduler, queue, retry owner or recurring stage.
+- owner remains GitHub control plane;
+- scope/order remain GitHub responsibilities;
+- no ChatGPT-owned queue;
+- no new scheduler/retry owner;
+- canonical contract must be updated before the new active/reserve semantics become authoritative.
 
-Do not combine this with the separate Deep two-stage implementation owned by ЧАТ 2.
+Do not combine this implementation with ЧАТ 2’s Deep-logic implementation.
 
-## 13. What was not changed
+## 15. What was not changed
 
-This task did not:
-- change production code or thresholds;
-- write a new shortlist;
-- mutate Dossier/Deep queues or state;
-- run semantic workers;
+This diagnostic did not:
+- change Steam discovery;
+- change review thresholds;
+- change shortlist data;
+- change Dossier/Deep queues or results;
 - change ranking;
+- run semantic workers;
 - change Scheduled Tasks;
-- introduce hard top-N;
-- weaken or break Reviews.
+- implement hard top-N;
+- remove packages/bundles;
+- restore broken Reviews behavior.
 
-Only this diagnostic report and bounded task-status documentation are written.
+## 16. Final status
 
-## 14. Final status
+`diagnostic_complete_recommendation_ready`
 
-`diagnostic_complete_user_choice_required`
+Concrete recommendation:
 
-Concrete recommendation: **use the balanced deterministic gate targeting roughly the observed 450-500 semantic-family range, preserve explicit protected lanes, and validate it in shadow mode before cutover.** The unresolved choice is the acceptable recall loss inside the current broad `strong_niche_fit` lane.
+**Use ~581 only as the first semantic wave, not permanent eligibility. Keep the remaining ~1,720 families as reserve. After the new 60/40 Deep model is truly active, promote reserve candidates until a mathematical maximum-score bound proves they cannot enter the current top 100.**
+
+This reduces immediate semantic work by about 75% while preserving every currently identifiable Wishlist, authoritative Deep-fit, strict strong-commercial, package/bundle, direct-reference, and current DLC lane—and avoids pretending Steam metadata can safely replace semantic taste analysis.
