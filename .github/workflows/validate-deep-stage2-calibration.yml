@@ -1,0 +1,47 @@
+name: Validate Deep Stage 2 calibration
+
+on:
+  push:
+    paths:
+      - 'config/deep_stage2_manual_worker_prompt.md'
+      - 'config/deep_stage2_contract.json'
+      - 'config/deep_stage2_result_schema.json'
+      - 'config/deep_two_stage_architecture_contract.json'
+      - 'scripts/deep_stage2.py'
+      - 'scripts/build_deep_stage2_work.py'
+      - 'scripts/ingest_deep_stage2.py'
+      - 'scripts/test_deep_stage2_calibration.py'
+      - 'data/production/pre_ai/deep_stage2_work.json'
+      - 'data/cache/deep_stage2_state.json'
+      - '.github/workflows/validate-deep-stage2-calibration.yml'
+  pull_request:
+    paths:
+      - 'config/deep_stage2_manual_worker_prompt.md'
+      - 'config/deep_stage2_contract.json'
+      - 'config/deep_stage2_result_schema.json'
+      - 'config/deep_two_stage_architecture_contract.json'
+      - 'scripts/deep_stage2.py'
+      - 'scripts/build_deep_stage2_work.py'
+      - 'scripts/ingest_deep_stage2.py'
+      - 'scripts/test_deep_stage2_calibration.py'
+      - 'data/production/pre_ai/deep_stage2_work.json'
+      - 'data/cache/deep_stage2_state.json'
+      - '.github/workflows/validate-deep-stage2-calibration.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile Stage 2 runtime
+        run: python -m py_compile scripts/deep_stage2.py scripts/build_deep_stage2_work.py scripts/ingest_deep_stage2.py scripts/test_deep_stage2_calibration.py
+      - name: Frozen architecture regression
+        run: python scripts/test_deep_two_stage_architecture_freeze.py
+      - name: Stage 2 comparative calibration regression
+        run: python scripts/test_deep_stage2_calibration.py
