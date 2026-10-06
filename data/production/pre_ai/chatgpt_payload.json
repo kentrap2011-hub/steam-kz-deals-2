@@ -2,12 +2,12 @@
   "schema_version": 5,
   "purpose": "chatgpt_consumer_bundle_with_context_bound_price_blind_taste_fit_evidence_state_and_grounded_negative_readiness",
   "status": "degraded",
-  "source_mailing_updated_at_utc": "2026-10-05T22:19:12.654878+00:00",
+  "source_mailing_updated_at_utc": "2026-10-06T02:00:50.723442+00:00",
   "profile_binding": {
     "canonical_profile_blob_sha": "9b9926031889dbd98ba6585c57836d52c739a0bb",
     "taste_model_version": "taste-v3",
     "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-    "content_metadata_blob_sha": "24544d0e2d75d92b7aae3b63e96b340e0f8b0f4c"
+    "content_metadata_blob_sha": "31b7b55dd67706c64c5bc36f85592a57265d6dc0"
   },
   "wishlist_binding": {
     "blob_sha": "00c679c004de4890a697ce1f6f0cc8b343fb99f2",
@@ -15,8 +15,8 @@
     "is_context_only_not_taste_proof": true
   },
   "fx_binding": {
-    "kzt_per_rub": 5.344542,
-    "provider_updated_at_utc": "2026-10-05T00:02:31+00:00"
+    "kzt_per_rub": 5.357827,
+    "provider_updated_at_utc": "2026-10-06T00:02:31+00:00"
   },
   "contract": {
     "minimum_taste_fit": "moderate",
@@ -84,13 +84,13 @@
   "candidate_description_known_count": 2384,
   "candidate_description_missing_count": 1,
   "candidate_description_coverage": 0.999581,
-  "ai_queue_count": 2300,
+  "ai_queue_count": 2301,
   "ready_without_ai_count": 0,
-  "purchase_context_line_count": 2300,
-  "progressive_candidate_count": 2300,
-  "deterministically_excluded_without_ai_count": 85,
+  "purchase_context_line_count": 2301,
+  "progressive_candidate_count": 2301,
+  "deterministically_excluded_without_ai_count": 84,
   "deterministic_exclusion_counts": {
-    "deal_excludes_even_if_strong": 67,
+    "deal_excludes_even_if_strong": 66,
     "package_member_taste_pending": 18
   },
   "commercial_eligibility_bridge_counts": {},
@@ -109,7 +109,7 @@
   "negative_analysis": {
     "work_code": "resolve_grounded_negative_analysis",
     "negative_backfill_queue_count": 0,
-    "negative_full_evaluation_queue_count": 2300,
+    "negative_full_evaluation_queue_count": 2301,
     "negative_ready_without_ai_count": 0,
     "evidence_backfill_queue_count": 0,
     "normal_ready_requires_confirmed_negative": true
@@ -117,7 +117,7 @@
   "sale_end_coverage": 1.0,
   "sale_end_missing_count": 0,
   "sale_end_missing_primary_keys": [],
-  "source_pre_ai_artifact_bytes": 9136456,
+  "source_pre_ai_artifact_bytes": 9136303,
   "deterministically_excluded_primary_keys": [
     "Sub_12357",
     "Sub_1529",
@@ -182,7 +182,6 @@
     "App_2356560",
     "App_2438680",
     "App_253230",
-    "App_255710",
     "App_2703850",
     "App_2897700",
     "App_2903950",
@@ -205,17 +204,17 @@
     "App_802880",
     "App_909660"
   ],
-  "elapsed_seconds": 0.409,
+  "elapsed_seconds": 0.408,
   "semantic_completeness": {
     "status": "degraded",
     "scope_partition_complete": true,
     "sufficiently_complete_for_publication": false,
-    "unresolved_semantic_count": 2300,
+    "unresolved_semantic_count": 2301,
     "resolved_semantic_count": 0,
-    "total_relevant_semantic_scope": 2300,
+    "total_relevant_semantic_scope": 2301,
     "source_family_count": 2385,
-    "unresolved_scope_source_mailing_updated_at_utc": "2026-10-05T22:19:12.654878+00:00",
-    "unresolved_scope_age_seconds": 99,
+    "unresolved_scope_source_mailing_updated_at_utc": "2026-10-06T02:00:50.723442+00:00",
+    "unresolved_scope_age_seconds": 109,
     "unresolved_age_basis": "source_mailing_updated_at_utc"
   },
   "semantic_runtime_observability": {
@@ -229,7 +228,7 @@
     "last_successful_semantic_execution_at_utc": "2026-09-12T11:51:43+00:00",
     "last_accepted_semantic_progress_at_utc": "2026-09-12T11:51:43+00:00",
     "last_accepted_source_mailing_updated_at_utc": "2026-09-11T22:45:29.586278+00:00",
-    "current_scope_source_mailing_updated_at_utc": "2026-10-05T22:19:12.654878+00:00",
+    "current_scope_source_mailing_updated_at_utc": "2026-10-06T02:00:50.723442+00:00",
     "current_scope_progress_observed": false,
     "last_queue_before_count": 609,
     "last_queue_after_count": 608,
@@ -240,7 +239,7 @@
     "taste": {
       "work_type": "taste",
       "queue_path": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
-      "queue_count": 2300,
+      "queue_count": 2301,
       "result_contract": "config/taste_result_contract.json"
     },
     "russian_description_translation": {
