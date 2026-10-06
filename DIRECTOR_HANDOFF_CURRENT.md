@@ -37,41 +37,41 @@ Previous Steam discovery task is accepted. Normal main run `37357943696` complet
 
 New exact blocker begins after discovery: AppReviews enrichment opened its circuit after ~310 physical review requests, only 147 AppIDs completed both global/Russian review calls, logical failure rate reached ~99.75%, and immediate mailing/visual downstream runs failed. The new task must diagnose the exact review/circuit cause and the exact downstream failure chain, then apply the smallest correction without reopening accepted discovery scope.
 
-### ЧАТ 2 — ASSIGNED / NEW PHYSICAL CHAT
+### ЧАТ 2 — ASSIGNED / ARCHITECTURE FREEZE
 
 Task:
-`WORKER_TASK_DEEP_TWO_STAGE_COMPARATIVE_CALIBRATION_IMPLEMENT_01.md`
+`WORKER_TASK_DEEP_TWO_STAGE_ARCHITECTURE_FREEZE_01.md`
 
 Mode:
-`ARCHITECT / IMPLEMENT / VALIDATE / MIGRATION-PREP`
+`ARCHITECT / CONTRACT-FREEZE / NO PRODUCTION CUTOVER`
 
-The independent Dossier/Deep audit is complete and accepted via merged PR #154. Its key finding is that the factual semantic core is generally strong, but the current numeric taste score is more precise/additive than the evidence justifies.
+The former monolithic `WORKER_TASK_DEEP_TWO_STAGE_COMPARATIVE_CALIBRATION_IMPLEMENT_01.md` is now an umbrella requirements source only. Do not implement the whole redesign in one chat.
 
-The user has now explicitly authorized a replacement architecture:
+Freeze the Stage-1, Stage-2, score, migration and site interfaces first. After acceptance, implementation is intentionally distributed across separate new physical chats:
 
-- remove Fast semantic assessment from ranking/decision authority;
-- keep not-yet-Deep items only on deterministic provisional ordering;
-- Deep Stage 1 performs grounded independent analysis and outputs positives, negatives, risks, hooks, confidence and an approximate **provisional quality score 0–60**;
-- Stage 1 does not determine final ranking authority;
-- Deep Stage 2 compares the Stage-1 result with GitHub-selected already-calibrated neighboring games and outputs the **calibrated quality/personal score 0–60**;
-- only the calibrated Stage-2 quality score is authoritative for the site's personal/game-quality component;
-- the site's current scoring split is preserved: **personal/quality max 60 + deterministic purchase/deal max 40 = total 100**;
-- preferred personal split is now **calibrated Deep fit 0–56 + deterministic wishlist bonus +4**;
-- wishlist is explicit user intent and must positively raise the candidate; do not bury it inside free-form semantic scoring;
-- Stage 2 must establish a strict comparative order and the displayed calibrated personal scores must be unique/monotonic for distinct ranked fit candidates; integer-only 0–60 is forbidden;
-- use the smallest human-readable decimal precision that prevents displayed ties in the active calibrated set;
-- current legacy duration (+3), achievements/context (+3/-6) and risk (-12) arithmetic must be audited and preferably folded into holistic Deep semantics to avoid double-counting;
-- direct user ratings remain strong calibration anchors;
-- Stage 2 must not distort personal quality to compensate for price/discount;
-- site/card/Statistics must distinguish Stage 1 provisional vs Stage 2 calibrated and remove Fast as an equivalent current semantic stage;
-- Stage 1 and Stage 2 must be **two different semantic worker chats** with separate prompts, manifests, schemas, queues, validation and responsibilities; the user must be able to run them manually and independently;
-- Statistics must show Stage 1 and Stage 2 as separate visible blocks;
-- compact game card shows only the authoritative post-Stage-2 score; before Stage 2 it shows only the awaiting-calibration state, never a fake/fallback final score;
-- game detail view mirrors the pipeline: summary -> positives -> negatives -> other/nuances -> Stage-2 score change -> why above/below neighbors;
-- details show both Stage-1 provisional and Stage-2 calibrated scores plus their delta;
-- Stage 1 persists a transparent game-specific point breakdown (for example visuals, music, combat, progression, story, personal hooks, risks), numerically reconciling to its provisional score; this is dynamic, not the old rigid five-factor formula;
-- Stage 2 persists a separate comparative adjustment and neighbor-based explanation rather than rewriting Stage-1 facts/breakdown;
-- no Scheduled Task changes are authorized in this implementation task.
+Wave 2, parallel when both slots are free:
+- `WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md`
+- `WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`
+
+Wave 3, parallel:
+- `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`
+- `WORKER_TASK_DEEP_SITE_MIRROR_UI_STATISTICS_IMPLEMENT_01.md`
+
+Wave 4:
+- `WORKER_TASK_DEEP_TWO_STAGE_INTEGRATION_CUTOVER_01.md`
+
+Current approved product semantics remain:
+- two separate semantic worker chats for Stage 1 and Stage 2;
+- Stage-1 dynamic point explanation + provisional score;
+- Stage-2 neighbor comparison + final calibrated score;
+- calibrated Deep 0–56 + deterministic Wishlist +4 = personal /60;
+- purchase/deal /40; total /100;
+- distinct calibrated positions need distinct displayed decimal personal scores;
+- compact card shows only final Stage-2 authority;
+- details expose both scores, delta, positives, negatives, nuances and why above/below;
+- Statistics shows Stage 1 and Stage 2 as separate blocks;
+- Fast removed from current semantic authority;
+- no Scheduled Task changes without separate user authorization.
 
 ## CURRENTLY WORKING / RECENT SEMANTIC CHATS
 
