@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "contract": "DEEP-TWO-STAGE-DEPENDENCY-MAP-V1",
+  "revision": "architecture-freeze-2026-10-06",
+  "architecture_freeze_task": "WORKER_TASK_DEEP_TWO_STAGE_ARCHITECTURE_FREEZE_01.md",
+  "frozen_interfaces": [
+    "config/deep_two_stage_architecture_contract.json",
+    "config/deep_stage1_contract.json",
+    "config/deep_stage1_result_schema.json",
+    "config/deep_stage2_contract.json",
+    "config/deep_stage2_result_schema.json",
+    "config/deep_two_stage_site_projection_contract.json",
+    "config/deep_two_stage_migration_contract.json"
+  ],
+  "parallelizable_after_freeze": [
+    {
+      "task": "WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md",
+      "owns": [
+        "Stage-1 runtime/manual prompt/work builder/ingest/validation/state"
+      ],
+      "may_not_redefine": [
+        "Stage-1 result field names",
+        "0-56 semantics",
+        "wishlist separation",
+        "Stage-2 interfaces",
+        "cutover"
+      ]
+    },
+    {
+      "task": "WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md",
+      "owns": [
+        "Stage-2 runtime/manual prompt/window builder/ingest/validation/state/placement mechanics"
+      ],
+      "may_not_redefine": [
+        "Stage-1 evidence shape",
+        "0-56 semantics",
+        "GitHub window ownership",
+        "2-decimal unique-score invariant",
+        "cutover"
+      ]
+    },
+    {
+      "task": "WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md",
+      "owns": [
+        "Fast consumer removal preparation",
+        "ranking composition migration",
+        "legacy deterministic component retirement/double-count guards"
+      ],
+      "may_not_redefine": [
+        "semantic worker outputs",
+        "wishlist +4",
+        "purchase 0-40",
+        "site layout",
+        "cutover"
+      ]
+    },
+    {
+      "task": "WORKER_TASK_DEEP_SITE_MIRROR_UI_STATISTICS_IMPLEMENT_01.md",
+      "owns": [
+        "producer projection fields",
+        "Statistics blocks",
+        "card/detail rendering"
+      ],
+      "may_not_redefine": [
+        "semantic scoring",
+        "ranking arithmetic",
+        "worker ownership",
+        "cutover"
+      ]
+    }
+  ],
+  "integration_gate": {
+    "task": "WORKER_TASK_DEEP_TWO_STAGE_INTEGRATION_CUTOVER_01.md",
+    "requires_all_accepted": [
+      "WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md",
+      "WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md",
+      "WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md",
+      "WORKER_TASK_DEEP_SITE_MIRROR_UI_STATISTICS_IMPLEMENT_01.md"
+    ],
+    "exclusive_cutover_ownership": [
+      "legacy Deep classification execution",
+      "migration/calibration queue activation",
+      "production authority switch",
+      "mixed-authority prevention proof",
+      "end-to-end acceptance"
+    ]
+  },
+  "shared_files_policy": {
+    "rule": "Later workers should prefer their owned implementation files and must not redefine frozen config/deep_* contracts. Changes to frozen interfaces require a new explicit architecture amendment task.",
+    "expected_parallel_collision_hotspots": [
+      "config/execution_ownership_contract.json",
+      "config/progressive_personalization_contract.json",
+      "config/final_ranking_policy.json",
+      "scripts/build_final_visual_payload.py"
+    ],
+    "coordination": "Only the task explicitly owning a hotspot in this map should edit it before integration; other workers consume the frozen interface."
+  }
+}
