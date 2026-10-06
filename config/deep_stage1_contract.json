@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "contract": "DEEP-STAGE1-ANALYSIS-V1",
+  "revision": "architecture-freeze-2026-10-06",
+  "status": "frozen_not_active",
+  "architecture_contract": "config/deep_two_stage_architecture_contract.json",
+  "role": "independent_game_analysis",
+  "semantic_worker_identity": "deep_stage1_analysis_worker",
+  "manual_prompt_path": "config/deep_stage1_manual_worker_prompt.md",
+  "work_manifest": {
+    "path": "data/production/pre_ai/deep_stage1_work.json",
+    "contract": "DEEP-STAGE1-WORK-V1",
+    "github_owned": true,
+    "required_item_fields": [
+      "sequence",
+      "semantic_generation_id",
+      "work_id",
+      "family_id",
+      "taste_subject_key",
+      "appid",
+      "candidate_context_sha256",
+      "profile_pin",
+      "profile_semantic_sha256",
+      "dossier_path",
+      "dossier_content_sha256",
+      "dossier_compatibility_binding",
+      "semantic_input",
+      "result_submission_path"
+    ],
+    "deterministic_order_owner": "github_control_plane",
+    "worker_scope_selection_forbidden": true
+  },
+  "result": {
+    "schema": "config/deep_stage1_result_schema.json",
+    "inbox_root": "data/ai_inbox/deep_stage1/results",
+    "create_only": true,
+    "accepted_state_path": "data/cache/deep_stage1_state.json",
+    "contract": "DEEP-STAGE1-RESULT-V1"
+  },
+  "inputs": {
+    "exact_accepted_dossier_required": true,
+    "pinned_user_profile_required": true,
+    "wishlist_is_semantic_input": false,
+    "purchase_or_price_is_semantic_input": false,
+    "ranking_neighbors_forbidden": true
+  },
+  "outcomes": {
+    "analyzed_fit": {
+      "provisional_score_required": true,
+      "point_breakdown_required": true
+    },
+    "analyzed_not_fit": {
+      "provisional_score_must_be_null": true,
+      "rule": "Do not force authoritative not-fit onto the positive comparative ladder."
+    },
+    "analysis_incomplete": {
+      "provisional_score_must_be_null": true
+    }
+  },
+  "structured_output_order": [
+    "summary_ru",
+    "positives",
+    "negatives",
+    "nuances",
+    "outcome_and_confidence",
+    "provisional_deep_fit_score_0_56",
+    "point_breakdown"
+  ],
+  "scoring": {
+    "scale_min": 0,
+    "scale_max": 56,
+    "holistic_non_additive_judgment_is_authority": true,
+    "fixed_factor_weights_forbidden": true,
+    "mandatory_category_set_forbidden": true,
+    "point_breakdown_role": "transparent explanation projection of the holistic provisional score",
+    "point_breakdown_arithmetic": "sum(points) must equal provisional_deep_fit_score_0_56 exactly at declared precision",
+    "point_breakdown_labels_are_game_specific": true,
+    "wishlist_excluded": true
+  },
+  "findings": {
+    "must_be_game_specific": true,
+    "generic_filler_forbidden": true,
+    "factual_claims_must_bind_to_exact_dossier_evidence": true,
+    "personalized_effects_must_bind_to_pinned_profile_evidence": true,
+    "all_material_positive_negative_and_nuance_findings_should_be_serialized": true
+  },
+  "direct_user_rating": {
+    "use": "strong personal evidence/anchor context when exact and current",
+    "arithmetic_bonus_forbidden": true
+  },
+  "ownership": {
+    "github_owns": [
+      "scope",
+      "order",
+      "bindings",
+      "validation",
+      "persistence",
+      "attempt/retry/completeness"
+    ],
+    "worker_owns": [
+      "semantic_analysis_of_exact_item_only"
+    ],
+    "worker_cannot_write_stage2": true
+  },
+  "progress_interface": {
+    "counters": [
+      "total_eligible",
+      "completed_fit",
+      "completed_not_fit",
+      "pending",
+      "diagnostic_incomplete"
+    ],
+    "timestamps": [
+      "last_attempt_at_utc",
+      "last_successful_result_at_utc"
+    ]
+  }
+}
