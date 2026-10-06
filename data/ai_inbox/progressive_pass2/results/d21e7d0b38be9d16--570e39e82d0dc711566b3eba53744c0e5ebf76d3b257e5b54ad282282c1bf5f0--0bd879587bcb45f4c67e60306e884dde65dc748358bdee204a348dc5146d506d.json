@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "c4ed3ea3403c66c65a5f383788d40d4adcbafdca",
+  "run_start_authority_commit": "b21f857b68ba8d6fbbdd751e25f1f7224fb96533",
+  "run_started_at_utc": "2026-10-06T17:50:27+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "570e39e82d0dc711566b3eba53744c0e5ebf76d3b257e5b54ad282282c1bf5f0",
+  "family_id": "game:1649010",
+  "taste_subject_key": "App_1649010",
+  "appid": "1649010",
+  "taste_fingerprint": "2b9e5bf345fbe6384a50cdab4244c157e92cf61ec92aae034c74af2b5c763a97",
+  "candidate_context_sha256": "b5270cd3f92f4e3d596351c3ee1b563a1e54abf9a42d67c8ce6220b978c64fd7",
+  "dossier_content_sha256": "4780eebe65a98392e335b52abdc2f2e0d64b27ba293e33180c382c092574567c",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "0bd879587bcb45f4c67e60306e884dde65dc748358bdee204a348dc5146d506d",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Связка exploration → stealth setup → turn-based combat даёт сильный tactical problem-solving loop.",
+    "Навыки, miasma powers, оружейные моды и роли группы заметно расширяют варианты игры.",
+    "Постапокалиптическая атмосфера и исследование мира добавляют сильный самостоятельный крючок."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 92,
+    "development_variety": 88,
+    "structure_pacing_direction": 78,
+    "identity_hooks": 84,
+    "breadth_of_match": 92
+  },
+  "score_findings": [
+    {
+      "finding_id": "stealth-to-tactics-loop",
+      "text_ru": "Свободное исследование и скрытая подготовка переходят в пошаговый бой, где можно заранее убрать опасные цели и менять план под состав противников; это делает каждую схватку задачей на подготовку и исполнение.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/tactical_problem_solving/summary",
+          "profile_value_sha256": "d66110f8516a5c017644fb3fa523677af7a64ec44c74bde423b9b8e400b87dc5",
+          "match_text_ru": "Тебе особенно нравятся компактные задачи, где нужно понять условия, подобрать тактику и проверить её на практике."
+        },
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Поиск подхода и освоение паттернов — сильный положительный сигнал твоего профиля."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 92
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 92
+        }
+      ]
+    },
+    {
+      "finding_id": "build-and-party-growth",
+      "text_ru": "Навыки персонажей, miasma powers, моды оружия и роли группы постепенно расширяют тактические варианты, хотя level cap, cooldowns и экономика ресурсов местами тормозят развитие.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/pattern",
+          "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+          "match_text_ru": "Прогрессия особенно хорошо работает для тебя, когда новые улучшения дают понятный практический эффект."
+        },
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Новые способности и роли поддерживают ощущение развития и разнообразия."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 88
+        }
+      ]
+    },
+    {
+      "finding_id": "exploration-with-purpose",
+      "text_ru": "Исследование мира регулярно связано с подготовкой к боям и поиском ресурсов, поэтому открытые участки дают практическую ценность, хотя side-content иногда возвращает в уже очищенные зоны.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/4/raises",
+          "profile_value_sha256": "b32f2dff273125d646ee0e7b0132adb9d4502978580aaebe8546b284fda86ea7",
+          "match_text_ru": "Исследование и побочные занятия — отдельный положительный сигнал, когда они дают содержательную награду."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 78
+        }
+      ]
+    },
+    {
+      "finding_id": "post-apocalypse-identity",
+      "text_ru": "Визуальная атмосфера и world-building постапокалипсиса стабильно работают сильнее спорных диалогов и создают игре собственную идентичность.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Выразительная атмосфера и визуальный язык заметно усиливают твоё впечатление."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 84
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Level cap, длинные cooldowns и экономика ресурсов местами ограничивают свободу развития сильнее, чем хотелось бы от богатого набора навыков.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "difficulty_punishment",
+        "text_ru": "Резкие ambush/boss spikes, дефицит припасов и hit-chance frustration иногда делают соседние бои несопоставимыми по требовательности; такая скачкообразная наказующая сложность хуже совпадает с твоим предпочтением понятного освоения.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Побочные задания могут возвращать через уже очищенные локации, а point-of-no-return делает незавершённый optional content неудобным.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "World-building и атмосфера хвалятся заметно стабильнее, чем сюжет, диалоги и персонажное письмо.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Stealth setup для тихого удаления врагов — сильная тактика, но часть игроков считает её слишком обязательной и повторяющейся; если один и тот же prep становится стандартом перед каждым боем, это совпадает с твоим риском неизменного повторения.",
+        "evidence_refs": [
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      }
+    ]
+  }
+}
