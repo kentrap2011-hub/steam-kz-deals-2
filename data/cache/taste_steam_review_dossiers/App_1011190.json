@@ -15,14 +15,14 @@
     "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
     "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
-  "appid": "1003890",
-  "title": "Blacksad: Under the Skin",
+  "appid": "1011190",
+  "title": "SIMULACRA 2",
   "generated_at_utc": "2026-10-06T14:22:00Z",
   "expires_at_utc": "2026-10-26T14:22:00Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Blacksad: Under the Skin",
-    "release_year": 2019,
+    "work_title": "SIMULACRA 2",
+    "release_year": 2020,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "source-001"
@@ -30,19 +30,19 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1003890"
+        "value": "1011190"
       },
       {
         "kind": "developer",
-        "value": "Pendulo Studios, YS Interactive"
+        "value": "Kaigan Games"
       }
     ]
   },
-  "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 7 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "other",
-      "statement": "The detective story, noir atmosphere, characters, jazz-heavy presentation and comic-book setting are the most consistently praised parts of the experience.",
+      "category": "mechanics",
+      "statement": "The entire investigation is framed through a dead influencer's phone, with messages, videos, social-media posts and other apps acting as both narrative material and the interface for finding clues.",
       "sentiment": "positive",
       "recurrence": "strong",
       "mention_count": 4,
@@ -53,18 +53,64 @@
       "evidence_status": "durable",
       "source_ids": [
         "source-002",
-        "source-003"
+        "source-003",
+        "source-005"
       ],
       "player_feedback_ids": [
         "feedback-001",
-        "feedback-002",
         "feedback-003",
-        "feedback-005"
+        "feedback-005",
+        "feedback-008"
       ]
     },
     {
-      "category": "mechanics",
-      "statement": "Play is closer to an interactive detective adventure than a traditional action game: players spend substantial time in dialogue, searching small locations for clues, using sensory or deduction systems and handling occasional QTEs.",
+      "category": "structure",
+      "statement": "Dialogue and evidence choices lead to multiple endings, and getting the best outcome depends on how the player handles suspects rather than simply collecting every clue.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-005",
+        "feedback-007"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Puzzle difficulty is uneven: several players describe most riddles as light or approachable, while some key information and good-ending conditions can be unintuitive or easy to miss.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-005",
+        "feedback-006",
+        "feedback-007"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "Multiple endings encourage replay, but repeating phone conversations and investigation steps can become time-consuming even with faster replay options.",
       "sentiment": "mixed",
       "recurrence": "moderate",
       "mention_count": 3,
@@ -78,16 +124,59 @@
         "source-003"
       ],
       "player_feedback_ids": [
-        "feedback-001",
         "feedback-003",
+        "feedback-004",
         "feedback-005"
       ]
     },
     {
-      "category": "friction",
-      "statement": "Slow character movement, awkward camera framing and imprecise environmental interaction repeatedly make investigation and collectible hunting feel heavier than the underlying detective systems require.",
+      "category": "other",
+      "statement": "The social-media detective premise and tense mystery atmosphere are recurring strengths, while acting, supernatural escalation and some character writing are more divisive.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-004",
+        "feedback-006",
+        "feedback-008"
+      ]
+    },
+    {
+      "category": "localization",
+      "statement": "Russian is officially supported, but multiple Russian player reviews report grammatical errors, incorrect gender or name translations and wording that can obscure clues; because these reports are older, current translation quality is treated as uncertain.",
       "sentiment": "negative",
-      "recurrence": "strong",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "uncertain",
+      "source_ids": [
+        "source-001",
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "A single run is comparatively compact and can sustain tension well, but players differ on whether the short length and repeated-play structure feel efficient or too slight for another immediate playthrough.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
       "mention_count": 4,
       "evidence_languages": [
         "russian",
@@ -100,92 +189,38 @@
       ],
       "player_feedback_ids": [
         "feedback-001",
-        "feedback-002",
-        "feedback-004",
-        "feedback-005"
-      ]
-    },
-    {
-      "category": "friction",
-      "statement": "Player reports across multiple years describe optimization problems, animation or dialogue glitches and occasional progress-affecting bugs; because the evidence spans different builds and dates, the present technical state is treated as uncertain rather than projected forward.",
-      "sentiment": "negative",
-      "recurrence": "strong",
-      "mention_count": 5,
-      "evidence_languages": [
-        "russian",
-        "non_russian"
-      ],
-      "evidence_status": "uncertain",
-      "source_ids": [
-        "source-002",
-        "source-003",
-        "source-004"
-      ],
-      "player_feedback_ids": [
-        "feedback-001",
-        "feedback-002",
-        "feedback-004",
-        "feedback-005",
-        "feedback-006"
-      ]
-    },
-    {
-      "category": "structure",
-      "statement": "Choices can alter scenes, relationships and some outcomes, but player feedback also notes that not every moral or dialogue choice produces a visibly meaningful branch.",
-      "sentiment": "mixed",
-      "recurrence": "moderate",
-      "mention_count": 2,
-      "evidence_languages": [
-        "russian",
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-002",
-        "source-003"
-      ],
-      "player_feedback_ids": [
-        "feedback-001",
-        "feedback-005"
-      ]
-    },
-    {
-      "category": "pacing",
-      "statement": "The investigation can move briskly when clues connect, but slow traversal, loading, unskippable dialogue and occasional unclear interaction points can interrupt the otherwise compact detective pacing.",
-      "sentiment": "mixed",
-      "recurrence": "moderate",
-      "mention_count": 3,
-      "evidence_languages": [
-        "russian",
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-002",
-        "source-003"
-      ],
-      "player_feedback_ids": [
-        "feedback-001",
         "feedback-003",
+        "feedback-004",
         "feedback-005"
       ]
     }
   ],
   "conflicts": [
     {
-      "statement": "A strong story and atmosphere coexist with a much rougher interaction layer, so players who enjoy the detective narrative often tolerate controls and technical friction that other players find immersion-breaking.",
-      "recurrence": "strong",
-      "mention_count": 4,
+      "statement": "Replayability is a tradeoff: branching endings and different dialogue outcomes create reasons to return, but repeated phone content makes completion runs less appealing to some players.",
+      "recurrence": "moderate",
+      "mention_count": 3,
       "source_ids": [
         "source-002",
-        "source-003",
-        "source-004"
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-004",
+        "feedback-005"
+      ]
+    },
+    {
+      "statement": "The Russian localization is useful enough for some players to finish the game, while others say translation errors directly interfere with understanding dialogue or puzzle clues.",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "source_ids": [
+        "source-002"
       ],
       "player_feedback_ids": [
         "feedback-001",
         "feedback-002",
-        "feedback-005",
-        "feedback-006"
+        "feedback-003"
       ]
     }
   ],
@@ -203,52 +238,50 @@
           "dimension": "core_play_mechanics",
           "state": "covered",
           "observation_indices": [
-            1
+            0
           ]
         },
         {
           "dimension": "controls_game_feel",
           "state": "covered",
           "observation_indices": [
-            1,
-            2
+            0
           ]
         },
         {
           "dimension": "progression_development_unlocks",
           "state": "covered",
           "observation_indices": [
-            4
+            1
           ]
         },
         {
           "dimension": "variety_repetition_over_time",
           "state": "covered",
           "observation_indices": [
-            4
+            3
           ]
         },
         {
           "dimension": "difficulty_mastery_learning_friction",
           "state": "covered",
           "observation_indices": [
-            2,
-            5
+            2
           ]
         },
         {
           "dimension": "pacing_structure_direction",
           "state": "covered",
           "observation_indices": [
-            4,
-            5
+            1,
+            6
           ]
         },
         {
           "dimension": "exploration_mission_activity_structure",
           "state": "covered",
           "observation_indices": [
-            1,
+            0,
             2
           ]
         },
@@ -270,7 +303,8 @@
           "state": "covered",
           "observation_indices": [
             0,
-            1
+            1,
+            4
           ]
         },
         {
@@ -279,14 +313,16 @@
           "observation_indices": [
             2,
             3,
-            5
+            4,
+            5,
+            6
           ]
         },
         {
           "dimension": "technical_performance_localization_regional",
           "state": "covered",
           "observation_indices": [
-            3
+            5
           ]
         }
       ],
@@ -301,7 +337,7 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1003890/Blacksad_Under_the_Skin/",
+        "url": "https://store.steampowered.com/app/1011190/SIMULACRA_2/",
         "publication_date": null,
         "language": "non_russian",
         "evidence_role": "identity",
@@ -310,49 +346,74 @@
       },
       {
         "source_id": "source-002",
-        "source_type": "other_player_feedback",
-        "domain": "stopgame.ru",
-        "url": "https://stopgame.ru/game/blacksad_under_the_skin/reviews",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1011190/reviews/?browsefilter=toprated&l=russian",
         "publication_date": null,
         "language": "russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
         "feedback_surface_mode": "concrete_item_collection",
         "exact_product_binding": {
-          "basis": "source_title_release",
-          "appid": null,
-          "title": "Blacksad: Under the Skin",
-          "release_year": 2019
+          "basis": "source_appid",
+          "appid": "1011190",
+          "title": null,
+          "release_year": null
         },
         "freshness": "unknown"
       },
       {
         "source_id": "source-003",
-        "source_type": "steam_community",
+        "source_type": "steam_reviews",
         "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1003890/discussions/0/3368153731099552345/",
-        "publication_date": "2022-09-16",
+        "url": "https://steamcommunity.com/app/1011190/reviews/?browsefilter=toprated&l=english",
+        "publication_date": null,
         "language": "non_russian",
-        "evidence_role": "uncertain",
+        "evidence_role": "durable_trait",
         "player_feedback": true,
         "feedback_surface_mode": "concrete_item_collection",
         "exact_product_binding": {
           "basis": "source_appid",
-          "appid": "1003890",
+          "appid": "1011190",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1011190/discussions/0/2141966124565544932/",
+        "publication_date": "2020-04-01",
+        "language": "mixed",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1011190",
           "title": null,
           "release_year": null
         },
         "freshness": "older"
       },
       {
-        "source_id": "source-004",
+        "source_id": "source-005",
         "source_type": "reddit",
         "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/Gaming4Gamers/comments/g7n4z6",
-        "publication_date": "2020-04-25",
+        "url": "https://www.reddit.com/r/GameTheorists/comments/13npf85",
+        "publication_date": "2023-05-21",
         "language": "non_russian",
-        "evidence_role": "historical",
+        "evidence_role": "durable_trait",
         "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "SIMULACRA 2",
+          "release_year": 2020
+        },
         "freshness": "older"
       }
     ],
@@ -360,45 +421,58 @@
       {
         "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "publication_date": "2025-11-10",
+        "publication_date": "2020-04-06",
         "language": "russian",
         "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-002",
         "source_id": "source-002",
-        "publication_date": "2025-09-27",
+        "publication_date": "2020-04-01",
         "language": "russian",
         "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-003",
         "source_id": "source-002",
-        "publication_date": "2025-06-26",
+        "publication_date": "2022-08-01",
         "language": "russian",
         "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-004",
         "source_id": "source-002",
-        "publication_date": "2024-02-08",
+        "publication_date": "2022-01-30",
         "language": "russian",
         "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-005",
         "source_id": "source-003",
-        "publication_date": "2023-02-06",
+        "publication_date": "2021-09-11",
         "language": "non_russian",
         "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-006",
-        "source_id": "source-004",
-        "publication_date": "2020-04-25",
+        "source_id": "source-003",
+        "publication_date": "2020-11-28",
         "language": "non_russian",
-        "acquisition_mode": "stable_item",
-        "url": "https://www.reddit.com/r/Gaming4Gamers/comments/g7n4z6"
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-007",
+        "source_id": "source-004",
+        "publication_date": "2020-04-03",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-008",
+        "source_id": "source-005",
+        "publication_date": "2023-06-09",
+        "language": "non_russian",
+        "acquisition_mode": "search_result_observation"
       }
     ]
   }
