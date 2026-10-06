@@ -4,8 +4,8 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` previous Reviews/publication task is ACCEPTED via merged PR #155 and successful production/mail/visual runs. Slot is reassigned as a NEW physical worker chat to `WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md` (IMPLEMENT / VALIDATE), consuming the frozen two-stage interfaces from merged PR #156.
-- `ЧАТ 2` architecture freeze is ACCEPTED via merged PR #156 (`complete_interfaces_frozen`). Slot is reassigned as a NEW physical worker chat to `WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md` (IMPLEMENT / VALIDATE), consuming the frozen two-stage interfaces without redefining them.
+- `ЧАТ 1` is reassigned as a NEW physical worker chat to `WORKER_TASK_STEAM_SHORTLIST_SCOPE_REDUCTION_DIAGNOSTIC_02.md` (READ-ONLY / DIAGNOSTIC / OFFLINE SIMULATION). It must analyze how to reduce the current 2,522 paid shortlist / ~2.3k semantic target much further without reintroducing review failures or using a blind raw top-N.
+- `ЧАТ 2` remains the sole physical worker owner for the new Deep LOGIC stream. Continue current `WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`, then sequentially use the same physical chat for `WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md` and `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md` after each prior task is cleanly closed/accepted. ЧАТ 1 must not implement Deep logic while this assignment stands.
 - Manual Russian-description semantic worker is STOPPED after checkpoint 1 submission `32caa3b35fb750cd31da7198f28e34855928edd6` failed canonical ingest run `37138503097`: exact AppID 1237980 result failed the `good_ru` quality gate and the checkpoint was not persisted. Do not retry/retranslate checkpoint 1 in the semantic chat. Recovery is assigned to ЧАТ 2 through the partial-acceptance/diagnostic-state implementation. No Scheduled Task action is authorized.
 - Progressive Deep semantic worker is ACTIVE/RECENT: run start `0b47a0fe3830dfbcec37fa5a2395d6be08169067`, results already submitted for AppID 1577120 (`7005c0f...`) and AppID 1237980 (`0622b864...`). Do not rebuild/reorder/restart its scope. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
@@ -25,15 +25,16 @@
 
 ## TWO-STAGE DEEP IMPLEMENTATION WAVES — 2026-10-06
 
-- Wave 1 (now): ЧАТ 2 -> `WORKER_TASK_DEEP_TWO_STAGE_ARCHITECTURE_FREEZE_01.md`. ЧАТ 1 remains on Reviews/publication blocker. Freeze interfaces only.
-- Wave 2 (after architecture freeze and once both physical slots are available): run in parallel:
-  - one NEW physical chat -> `WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md`;
-  - another NEW physical chat -> `WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`.
-- Wave 3 (after frozen worker schemas exist): run in parallel:
-  - one NEW physical chat -> `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`;
-  - another NEW physical chat -> `WORKER_TASK_DEEP_SITE_MIRROR_UI_STATISTICS_IMPLEMENT_01.md`.
-- Wave 4: one integration chat -> `WORKER_TASK_DEEP_TWO_STAGE_INTEGRATION_CUTOVER_01.md` after all prior tasks are accepted.
-- Do not let Wave 2/3 chats redefine frozen contracts. Conflicts go back to Director instead of silent schema drift.
+User revised worker allocation:
+- Deep logic is intentionally serialized through **ЧАТ 2 only** to reduce cross-chat logic conflicts.
+- ЧАТ 2 sequence:
+  1. `WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`
+  2. `WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md`
+  3. `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`
+- Keep separate task boundaries/reports/PRs even though the same physical chat owns the sequence.
+- ЧАТ 1 is diverted to independent shortlist-scope reduction analysis: `WORKER_TASK_STEAM_SHORTLIST_SCOPE_REDUCTION_DIAGNOSTIC_02.md`.
+- Site/UI implementation remains a later independent task after logic contracts/results are sufficiently stable.
+- Final integration/cutover remains `WORKER_TASK_DEEP_TWO_STAGE_INTEGRATION_CUTOVER_01.md`.
 
 ## QUEUED PRODUCT WORK — 2026-10-04
 
