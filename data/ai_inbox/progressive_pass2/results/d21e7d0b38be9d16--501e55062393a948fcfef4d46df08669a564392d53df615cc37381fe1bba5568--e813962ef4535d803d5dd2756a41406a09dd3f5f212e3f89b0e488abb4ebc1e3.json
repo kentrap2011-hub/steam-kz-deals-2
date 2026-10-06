@@ -1,0 +1,261 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "ebcd431ca0108e9de6161636ab1c1e72c96651b4",
+  "run_start_authority_commit": "a7853cde4d921c360a3a3a1c5d0ef53083458aa5",
+  "run_started_at_utc": "2026-10-06T17:49:58+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "501e55062393a948fcfef4d46df08669a564392d53df615cc37381fe1bba5568",
+  "family_id": "game:1623940",
+  "taste_subject_key": "App_1623940",
+  "appid": "1623940",
+  "taste_fingerprint": "f8396b427d07af1f1ff2bb331001486de258764839e5730b2fd428167300314d",
+  "candidate_context_sha256": "3eb92467908086e4b5d940f3a0ebf4a717a7090523ae9befbda8e4b29ef4dc9f",
+  "dossier_content_sha256": "4b7a63c3892735eb08c07aaeadb2ee7e0365b712cc8018afcdbf803a9bbe7c44",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "e813962ef4535d803d5dd2756a41406a09dd3f5f212e3f89b0e488abb4ebc1e3",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Мрачная северная сказка, музыка и визуальная подача создают очень сильную атмосферную идентичность.",
+    "Боссы добавляют отдельные механические пики поверх доступных загадок и линейного исследования.",
+    "Короткая кампания регулярно меняет сцены и не растягивает основной adventure-loop."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 68,
+    "development_variety": 66,
+    "structure_pacing_direction": 74,
+    "identity_hooks": 94,
+    "breadth_of_match": 80
+  },
+  "score_findings": [
+    {
+      "finding_id": "folklore-atmosphere-hook",
+      "text_ru": "Мрачный скандинавский фольклор, сказочная визуальная подача, музыка и эмоциональный тон — главный сильный крючок игры и заметно усиливают даже простые игровые участки.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Узнаваемый визуальный язык и атмосфера — устойчивый плюс твоего профиля."
+        },
+        {
+          "json_pointer": "/taste_profile/13/raises",
+          "profile_value_sha256": "fd0e5a051cdf972884f0bfccd7dfd2c3cd50ec876ee4cd2ee491d416f2707058",
+          "match_text_ru": "Яркая атмосфера может сама быть достаточным крючком, чтобы удерживать приключение."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 94
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 80
+        }
+      ]
+    },
+    {
+      "finding_id": "bosses-create-mechanical-peaks",
+      "text_ru": "Основное путешествие состоит из доступных загадок и линейного исследования, но боссы добавляют отдельные механические пики с чтением атак и более требовательным исполнением.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Тебе нравятся испытания, где нужно освоить паттерны и тайминги."
+        },
+        {
+          "json_pointer": "/taste_profile/5/raises",
+          "profile_value_sha256": "f1997cf9d87235a0d984a3c5bceefb8aa566143fb2e8edddfb81312ba09aef35",
+          "match_text_ru": "Понятные загадки поддерживают интерес, даже если сами по себе они не очень сложные."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 68
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 66
+        }
+      ]
+    },
+    {
+      "finding_id": "compact-cinematic-structure",
+      "text_ru": "Несколько часов линейного приключения хорошо сочетают новые фольклорные сцены, загадки и боссов, поэтому игра не требует длинной кампании для раскрытия основной идеи.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Регулярная смена ситуаций и сюжетных крючков помогает поддерживать темп."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 74
+        }
+      ]
+    },
+    {
+      "finding_id": "camera-and-retry-friction",
+      "text_ru": "Фиксированная камера, слабое ощущение глубины и one-hit эпизоды иногда превращают простое движение или босса в менее читаемую серию повторов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8/lowers",
+          "profile_value_sha256": "0190267bc95b26d6a6c3d6c7ec4a3e9c3dc45950de5ac94ebaff3b97b434b73b",
+          "match_text_ru": "Повторяемость без нового развития для тебя быстро снижает ценность игрового эпизода."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 68
+        },
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 74
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Основные загадки и traversal сравнительно простые; механическая глубина сосредоточена главным образом в отдельных boss-сценах.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "felt_technical_burden",
+        "text_ru": "Фиксированная камера, ощущение глубины и несколько свежих сообщений о вылетах или stuck-state могут создавать трение, не связанное с содержательным освоением игры.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Короткая продолжительность подходит компактному формату, но повторные попытки в отдельных боях могут локально ломать плавный темп.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "difficulty_punishment",
+        "text_ru": "Отдельные боссы становятся раздражающими, когда чтению атак мешают камера, управление или повторные one-hit ошибки; это хуже совпадает с твоей любовью к сложности, которая обучает понятным паттернам.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      }
+    ]
+  }
+}
