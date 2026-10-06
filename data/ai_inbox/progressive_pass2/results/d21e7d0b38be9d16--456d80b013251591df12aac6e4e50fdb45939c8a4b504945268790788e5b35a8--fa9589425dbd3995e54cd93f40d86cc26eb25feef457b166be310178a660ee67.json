@@ -1,0 +1,276 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "48057aa7df3f995ae103cf3a79abfe651eae4e83",
+  "run_start_authority_commit": "26fcbd52977a42327418795cab34f19d2d5bd62b",
+  "run_started_at_utc": "2026-10-06T17:49:28+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "456d80b013251591df12aac6e4e50fdb45939c8a4b504945268790788e5b35a8",
+  "family_id": "game:1000360",
+  "taste_subject_key": "App_1000360",
+  "appid": "1000360",
+  "taste_fingerprint": "ab8c68920b6839efed0c876e3866d67fcfbee97e34519eac4f3f84a5059a6e12",
+  "candidate_context_sha256": "f2dd045e11de888ce131117499a806f00704699390fbad40ae7361162c65ec66",
+  "dossier_content_sha256": "946f90e63fdde5a3a20e3c4ca612b1ce60dca4262710b7f218b4c76063d77afa",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "fa9589425dbd3995e54cd93f40d86cc26eb25feef457b166be310178a660ee67",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Physics-driven fencing makes spacing, timing and exact execution matter directly.",
+    "Historical weapons and realistic duel structure create a rare mechanical identity.",
+    "High lethality keeps individual exchanges tense and consequential."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 94,
+    "development_variety": 60,
+    "structure_pacing_direction": 68,
+    "identity_hooks": 90,
+    "breadth_of_match": 82
+  },
+  "score_findings": [
+    {
+      "finding_id": "physics-fencing-mastery",
+      "text_ru": "Стойка, дистанция, тайминг и высокая летальность делают дуэль зависимой от чтения противника и точного исполнения, а физическая модель отличает бой от обычных health-bar файтингов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Тебе особенно нравятся игры, где тайминги, паттерны и собственное исполнение напрямую определяют результат."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 94
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 82
+        }
+      ]
+    },
+    {
+      "finding_id": "historical-fencing-identity",
+      "text_ru": "Реалистичная физическая фехтовка и историческое оружие формируют очень редкую механическую идентичность, способную быть главным крючком сама по себе.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/13/raises",
+          "profile_value_sha256": "fd0e5a051cdf972884f0bfccd7dfd2c3cd50ec876ee4cd2ee491d416f2707058",
+          "match_text_ru": "Уникальная механика может быть для тебя достаточным ярким крючком."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 90
+        }
+      ]
+    },
+    {
+      "finding_id": "one-hit-duel-pressure",
+      "text_ru": "Высокая летальность делает каждый обмен коротким и напряжённым, но AI и double-hit ситуации иногда превращают повторные попытки в фрустрацию вместо чистого освоения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/lowers",
+          "profile_value_sha256": "cd384e545ba8a4b40e6a568839cc31cf19316124f1a729986528ca27a0fea787",
+          "match_text_ru": "Тебе мешают не сложные бои сами по себе, а попытки, где результат становится непрозрачным или плохо связанным с освоением."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 68
+        }
+      ]
+    },
+    {
+      "finding_id": "narrow-reliable-moves",
+      "text_ru": "Практический выбор со временем может сужаться к небольшому набору надёжных атак, поэтому механически богатая premise не всегда превращается в такое же богатое развитие на длинной дистанции.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8/lowers",
+          "profile_value_sha256": "0190267bc95b26d6a6c3d6c7ec4a3e9c3dc45950de5ac94ebaff3b97b434b73b",
+          "match_text_ru": "Повторяемость особенно снижает интерес, когда идёт вместе с недостатком дальнейшего развития."
+        },
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Для высокого совпадения тебе полезна регулярная эволюция игровых ситуаций и возможностей."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "lowers",
+          "normalized_value": 60
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "felt_technical_burden",
+        "text_ru": "Jank, неожиданные траектории клинка, неровное движение и меняющееся поведение симуляции могут делать исход менее контролируемым; это подтверждённый риск технического трения для тебя.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "One/few-hit летальность усиливает значение тайминга, но AI и double-hit outcomes иногда превращают повторные попытки в фрустрацию.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Долгий Early Access и продолжающееся изменение контента делают общий пакет менее завершённым, чем сильная duel-концепция.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Если практический выбор сводится к нескольким надёжным атакам, повторные story/AI encounters начинают раскрывать слабость системы; для тебя это подтверждённый риск повторения без развития.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Нативный online PvP не является сильной стороной: официально акцент остаётся на local two-player и Remote Play Together.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть сигнал о фактическом отсутствии русского перевода, но dossier сохраняет его как uncertain, поэтому это нельзя считать жёстким текущим фактом.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
