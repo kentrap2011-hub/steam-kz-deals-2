@@ -4,21 +4,21 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
-    "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
-    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
-    "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
   "appid": "1003590",
   "title": "Tetris® Effect: Connected",
-  "generated_at_utc": "2026-09-21T04:30:00Z",
-  "expires_at_utc": "2026-10-11T04:30:00Z",
+  "generated_at_utc": "2026-10-06T14:20:28Z",
+  "expires_at_utc": "2026-10-26T14:20:28Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Tetris® Effect: Connected",
@@ -38,35 +38,306 @@
       }
     ]
   },
-  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 8 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
+      "category": "mechanics",
+      "statement": "The game keeps classic Tetris at its core while adding the Zone mechanic and mode-specific twists; players describe the result as familiar, highly responsive puzzle play with meaningful new tactical options.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Music, evolving backgrounds, visual effects and tactile feedback are among the most consistent strengths, creating a strong audiovisual flow that distinguishes the game from more utilitarian Tetris versions.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Journey and high-speed play can become much harder than the relaxed presentation suggests, but players also describe substantial improvement through repeated practice and eventual success on Expert.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-005",
+        "source-008"
+      ],
+      "player_feedback_ids": [
+        "feedback-004",
+        "feedback-010"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Journey, Effect modes and classic-style variants give players multiple ways to alternate between campaign-like progression, score chasing and more relaxed sessions rather than relying on a single ruleset.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "Long-term appeal is split between players who keep returning for score improvement and multiplayer modes and players who feel less motivation once their preferred Journey or unlock goals are complete.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-004",
+        "source-007"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-008",
+        "feedback-009"
+      ]
+    },
+    {
+      "category": "multiplayer",
+      "statement": "Zone Battle, Score Attack and Connected co-op are repeatedly described as worthwhile extensions of the base puzzle game, although mode popularity and matchmaking speed can differ between playlists.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-007"
+      ],
+      "player_feedback_ids": [
+        "feedback-008",
+        "feedback-009"
+      ]
+    },
+    {
       "category": "localization",
-      "statement": "Recent Russian player feedback reports that the game still lacks a Russian interface translation and that this can make navigation harder for players with limited English.",
+      "statement": "Russian-speaking players in late 2025 and early 2026 repeatedly report the lack of Russian interface text, and current Steam metadata also lists Russian as unsupported; the dossier classifies this conservatively as uncertain because the discussion parent predates the current-state recency window.",
       "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "recurrence": "moderate",
+      "mention_count": 3,
       "evidence_languages": [
         "russian"
       ],
-      "evidence_status": "current",
+      "evidence_status": "uncertain",
       "source_ids": [
-        "source-002"
+        "source-001",
+        "source-006"
       ],
       "player_feedback_ids": [
-        "fallback-001"
+        "feedback-005",
+        "feedback-006",
+        "feedback-007"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "The audiovisual intensity that many players enjoy can occasionally reduce readability, especially as speed rises, and high-speed control demands can make the experience feel more hectic than its meditative presentation implies.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-004",
+        "source-008"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-010"
       ]
     }
   ],
-  "conflicts": [],
+  "conflicts": [
+    {
+      "statement": "The sensory presentation is both a signature strength and a readability tradeoff: synchronized effects deepen immersion for many players but can distract from the board when speed and visual activity increase.",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "source_ids": [
+        "source-004",
+        "source-008"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-010"
+      ]
+    },
+    {
+      "statement": "Difficulty is experienced very differently: some players find Journey unexpectedly punishing, while others report that sustained practice can carry a relative newcomer through Expert.",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "source_ids": [
+        "source-005",
+        "source-008"
+      ],
+      "player_feedback_ids": [
+        "feedback-004",
+        "feedback-010"
+      ]
+    }
+  ],
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "source_mix_status": "single_source_only",
-    "single_source_reason": "Bounded research found a current exact-product Steam discussion with concrete Russian player feedback used for the localization finding.",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
     "russian_attempt": "found_and_used",
-    "overall_strength": "limited",
-    "stop_reason": "evidence_stable"
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            2,
+            7
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            3,
+            4
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            3,
+            4
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            7
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "covered",
+          "observation_indices": [
+            5
+          ]
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1,
+            3,
+            5
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            4,
+            6,
+            7
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "covered",
+          "observation_indices": [
+            6,
+            7
+          ]
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
   },
   "provenance": {
     "sources": [
@@ -74,33 +345,180 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1003590/",
+        "url": "https://store.steampowered.com/app/1003590/Tetris_Effect_Connected/",
         "publication_date": "2021-08-17",
         "language": "non_russian",
-        "freshness": "older",
         "evidence_role": "identity",
-        "player_feedback": false
+        "player_feedback": false,
+        "freshness": "older"
       },
       {
         "source_id": "source-002",
+        "source_type": "other_player_feedback",
+        "domain": "stopgame.ru",
+        "url": "https://stopgame.ru/game/tetris_effect_connected/review/87",
+        "publication_date": "2022-11-13",
+        "language": "russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "other_player_feedback",
+        "domain": "stopgame.ru",
+        "url": "https://stopgame.ru/game/tetris_effect_connected/review/4884",
+        "publication_date": "2023-03-24",
+        "language": "russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/patientgamers/comments/1muld3p/tetris_effect_connected_is_a_game_ill_likely/",
+        "publication_date": "2025-08-19",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-005",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/Tetris/comments/1s6hdij/finally_beat_tetris_effect/",
+        "publication_date": "2026-03-29",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-006",
         "source_type": "steam_community",
         "domain": "steamcommunity.com",
         "url": "https://steamcommunity.com/app/1003590/discussions/0/603016087419883875/",
-        "publication_date": null,
+        "publication_date": "2024-12-10",
         "language": "mixed",
-        "freshness": "recent",
-        "evidence_role": "current_state",
+        "evidence_role": "uncertain",
         "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection"
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1003590",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-007",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1003590/discussions/0/3819655068774005041/",
+        "publication_date": "2023-03-22",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1003590",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-008",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1003590/discussions/0/594027376316355396/",
+        "publication_date": "2025-07-01",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "fallback-001",
+        "feedback_id": "feedback-001",
         "source_id": "source-002",
+        "url": "https://stopgame.ru/game/tetris_effect_connected/review/87",
+        "publication_date": "2022-11-13",
+        "language": "russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-003",
+        "url": "https://stopgame.ru/game/tetris_effect_connected/review/4884",
+        "publication_date": "2023-03-24",
+        "language": "russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-004",
+        "url": "https://www.reddit.com/r/patientgamers/comments/1muld3p/tetris_effect_connected_is_a_game_ill_likely/",
+        "publication_date": "2025-08-19",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-005",
+        "url": "https://www.reddit.com/r/Tetris/comments/1s6hdij/finally_beat_tetris_effect/",
+        "publication_date": "2026-03-29",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-006",
+        "publication_date": "2025-11-26",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-006",
+        "publication_date": "2025-12-02",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-007",
+        "source_id": "source-006",
         "publication_date": "2026-02-03",
         "language": "russian",
-        "identity_mode": "transient_author_deduped"
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-008",
+        "source_id": "source-007",
+        "publication_date": "2023-03-22",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-009",
+        "source_id": "source-007",
+        "publication_date": "2023-03-23",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-010",
+        "source_id": "source-008",
+        "url": "https://steamcommunity.com/app/1003590/discussions/0/594027376316355396/",
+        "publication_date": "2025-07-01",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
       }
     ]
   }

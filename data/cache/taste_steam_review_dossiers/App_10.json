@@ -1,0 +1,374 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "appid": "10",
+  "title": "Counter-Strike",
+  "generated_at_utc": "2026-10-06T14:20:28Z",
+  "expires_at_utc": "2026-10-26T14:20:28Z",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "Counter-Strike",
+    "release_year": 2000,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "10"
+      },
+      {
+        "kind": "developer",
+        "value": "Valve"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The core remains a fast round-based team shooter where positioning, recoil control, short bursts and low time-to-kill make small execution mistakes immediately costly.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Player feedback describes a high mastery barrier around shooting feel, recoil, hit registration expectations and map knowledge, so experienced players can overwhelm newcomers despite the simple objective rules.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "The buy-fight-round cycle is repeatedly valued for minimal downtime and quick access to the next engagement rather than lengthy traversal or progression setup.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "multiplayer",
+      "statement": "A September 2026 player thread reports that Counter-Strike 1.6 still has active community-server play; this is a current but anecdotal player signal rather than a comprehensive population measurement.",
+      "sentiment": "positive",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "The compact classic rules and map rotation can feel intentionally minimal, while community servers, surf and other custom modes substantially broaden the ways players reuse the same underlying shooter.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "The game's age is a genuine tradeoff: some players see its presentation and conventions as dated, while others prefer its stripped-down movement, recoil and old-school feel to newer Counter-Strike versions.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "Its old-school minimalism is interpreted either as dated design or as the reason the movement, shooting and rapid round loop remain appealing.",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003"
+      ]
+    }
+  ],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            4,
+            5
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            2
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            2,
+            4
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            5
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/10/CounterStrike/",
+        "publication_date": "2000-11-01",
+        "language": "non_russian",
+        "evidence_role": "identity",
+        "player_feedback": false,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "other_player_feedback",
+        "domain": "stopgame.ru",
+        "url": "https://stopgame.ru/game/counter_strike/review/23714",
+        "publication_date": "2025-04-30",
+        "language": "russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/counterstrike/comments/1ixmz9w",
+        "publication_date": "2025-02-25",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/counterstrike/comments/1qh4d45/in_your_opinion_whats_the_best_counter_strike_game/",
+        "publication_date": "2026-01-19",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-005",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/counterstrike/comments/1wlr7om/like_home/",
+        "publication_date": "2026-09-20",
+        "language": "non_russian",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "freshness": "recent"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "url": "https://stopgame.ru/game/counter_strike/review/23714",
+        "publication_date": "2025-04-30",
+        "language": "russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-003",
+        "url": "https://www.reddit.com/r/counterstrike/comments/1ixmz9w",
+        "publication_date": "2025-02-25",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-004",
+        "url": "https://www.reddit.com/r/counterstrike/comments/1qh4d45/in_your_opinion_whats_the_best_counter_strike_game/",
+        "publication_date": "2026-01-19",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-005",
+        "url": "https://www.reddit.com/r/counterstrike/comments/1wlr7om/like_home/",
+        "publication_date": "2026-09-20",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      }
+    ]
+  }
+}
