@@ -28,50 +28,28 @@ Treat old Board sections as historical unless this handoff explicitly points to 
 ### ЧАТ 1 — ASSIGNED / NEW PHYSICAL CHAT
 
 Task:
-`WORKER_TASK_STEAM_REVIEWS_PUBLICATION_BLOCKER_FIX_01.md`
+`WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md`
 
 Mode:
-`DIAGNOSE / IMPLEMENT / VALIDATE / LIVE ACCEPTANCE`
+`IMPLEMENT / VALIDATE`
 
-Previous Steam discovery task is accepted. Normal main run `37357943696` completed successfully in ~39 minutes with complete games+DLC discovery (97,998 rows), Search 429 reduced to 1, canonical persistence successful and downstream refresh dispatched.
+Previous Reviews/publication blocker is accepted through PR #155. Normal Steam production, mailing, visual build and deploy are healthy.
 
-New exact blocker begins after discovery: AppReviews enrichment opened its circuit after ~310 physical review requests, only 147 AppIDs completed both global/Russian review calls, logical failure rate reached ~99.75%, and immediate mailing/visual downstream runs failed. The new task must diagnose the exact review/circuit cause and the exact downstream failure chain, then apply the smallest correction without reopening accepted discovery scope.
+Two-stage architecture freeze is accepted through PR #156. ЧАТ 1 now owns only the Stage-1 semantic worker/control-plane implementation against the frozen interfaces. It must not redefine Stage-2, ranking, migration, UI or site contracts.
 
-### ЧАТ 2 — ASSIGNED / ARCHITECTURE FREEZE
+### ЧАТ 2 — ASSIGNED / NEW PHYSICAL CHAT
 
 Task:
-`WORKER_TASK_DEEP_TWO_STAGE_ARCHITECTURE_FREEZE_01.md`
+`WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`
 
 Mode:
-`ARCHITECT / CONTRACT-FREEZE / NO PRODUCTION CUTOVER`
+`IMPLEMENT / VALIDATE`
 
-The former monolithic `WORKER_TASK_DEEP_TWO_STAGE_COMPARATIVE_CALIBRATION_IMPLEMENT_01.md` is now an umbrella requirements source only. Do not implement the whole redesign in one chat.
+Architecture freeze is accepted through PR #156 with status `complete_interfaces_frozen`.
 
-Freeze the Stage-1, Stage-2, score, migration and site interfaces first. After acceptance, implementation is intentionally distributed across separate new physical chats:
+ЧАТ 2 now owns only the Stage-2 comparative calibration worker/control-plane implementation against the frozen interfaces. It must not redefine Stage-1, ranking, migration, UI or site contracts.
 
-Wave 2, parallel when both slots are free:
-- `WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md`
-- `WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`
-
-Wave 3, parallel:
-- `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`
-- `WORKER_TASK_DEEP_SITE_MIRROR_UI_STATISTICS_IMPLEMENT_01.md`
-
-Wave 4:
-- `WORKER_TASK_DEEP_TWO_STAGE_INTEGRATION_CUTOVER_01.md`
-
-Current approved product semantics remain:
-- two separate semantic worker chats for Stage 1 and Stage 2;
-- Stage-1 dynamic point explanation + provisional score;
-- Stage-2 neighbor comparison + final calibrated score;
-- calibrated Deep 0–56 + deterministic Wishlist +4 = personal /60;
-- purchase/deal /40; total /100;
-- distinct calibrated positions need distinct displayed decimal personal scores;
-- compact card shows only final Stage-2 authority;
-- details expose both scores, delta, positives, negatives, nuances and why above/below;
-- Statistics shows Stage 1 and Stage 2 as separate blocks;
-- Fast removed from current semantic authority;
-- no Scheduled Task changes without separate user authorization.
+Both Stage 1 and Stage 2 implementation chats may proceed in parallel. Production authority remains unchanged until later integration/cutover.
 
 ## CURRENTLY WORKING / RECENT SEMANTIC CHATS
 
