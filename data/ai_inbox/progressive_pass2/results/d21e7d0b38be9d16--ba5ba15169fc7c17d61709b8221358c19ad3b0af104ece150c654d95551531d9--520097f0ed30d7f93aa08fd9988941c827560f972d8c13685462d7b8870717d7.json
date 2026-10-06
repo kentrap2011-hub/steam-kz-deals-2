@@ -1,0 +1,299 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "c4ed3ea3403c66c65a5f383788d40d4adcbafdca",
+  "run_start_authority_commit": "b21f857b68ba8d6fbbdd751e25f1f7224fb96533",
+  "run_started_at_utc": "2026-10-06T17:50:27+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "ba5ba15169fc7c17d61709b8221358c19ad3b0af104ece150c654d95551531d9",
+  "family_id": "game:1716310",
+  "taste_subject_key": "App_1716310",
+  "appid": "1716310",
+  "taste_fingerprint": "f82fb2c510424152011ed275f7feba4e8254d42f2b6eab7f4d5bb2185d22fe55",
+  "candidate_context_sha256": "a393bbc95583f3eee9b890ddd1b1c533d1297df44fba97afcd92c071520c5005",
+  "dossier_content_sha256": "983ea6a86ac51c98b89ccdffc16effea10b4cafc3334190cbb6942919774a808",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "520097f0ed30d7f93aa08fd9988941c827560f972d8c13685462d7b8870717d7",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Parries, dodges, weapon switching и combo chains дают высокий mastery ceiling.",
+    "Skill trees, upgrades и оружие расширяют build/execution options.",
+    "Exploration и traversal добавляют содержательный слой между боями."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 90,
+    "development_variety": 84,
+    "structure_pacing_direction": 76,
+    "identity_hooks": 84,
+    "breadth_of_match": 88
+  },
+  "score_findings": [
+    {
+      "finding_id": "combo-parry-mastery",
+      "text_ru": "Weapon switching, parries, dodges и aerial-ground combo chains дают быстрый action-loop с большим пространством для исполнения, даже если плотность команд сначала может перегружать.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Комбо, тайминги и рост собственного мастерства — сильный положительный сигнал твоего профиля."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 90
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 88
+        }
+      ]
+    },
+    {
+      "finding_id": "build-and-skill-options",
+      "text_ru": "Weapons, skill trees, upgrades и combo options создают заметный выбор сборки и способов исполнения, хотя часть secondary mechanics объяснена хуже, чем нужно.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/pattern",
+          "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+          "match_text_ru": "Прогрессия особенно ценна для тебя, когда улучшения дают понятный практический эффект."
+        },
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Новые механики и варианты поддерживают развитие опыта."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 84
+        }
+      ]
+    },
+    {
+      "finding_id": "exploration-traversal-layer",
+      "text_ru": "Exploration, collectibles и traversal-platforming добавляют отдельный слой между боями, но качество навигации воспринимается неоднозначно.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "conflict",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/4/raises",
+          "profile_value_sha256": "b32f2dff273125d646ee0e7b0132adb9d4502978580aaebe8546b284fda86ea7",
+          "match_text_ru": "Исследование и побочные занятия — отдельный положительный сигнал, когда маршрут остаётся читаемым."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 76
+        }
+      ]
+    },
+    {
+      "finding_id": "stylish-action-hook",
+      "text_ru": "Сочетание 2.5D metroidvania-структуры и выразительной fast-action боёвки создаёт узнаваемый механический крючок, даже если story/localization слой менее стабилен.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/13/raises",
+          "profile_value_sha256": "fd0e5a051cdf972884f0bfccd7dfd2c3cd50ec876ee4cd2ee491d416f2707058",
+          "match_text_ru": "Яркая механика или стиль способны быть самостоятельным крючком."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 84
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      },
+      {
+        "kind": "conflict",
+        "index": 1
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Боевая система может сначала ощущаться clunky или перегруженной по числу действий, хотя для других игроков тот же набор механик раскрывается как быстрый и fluid.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "difficulty_punishment",
+        "text_ru": "Boss design неровный: damage-spongy фазы, inconsistent parry timing, stun pressure и поздняя difficulty wall способны превращать освоение в наказующий повтор.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Exploration и collectibles работают как плюс, но map readability оценивается противоречиво, поэтому навигация может местами мешать темпу.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "conflict",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Ограниченная enemy variety и тенденция сводить бой к нескольким эффективным combos могут уменьшать развитие формулы на длинной дистанции.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "English translation/story presentation часто критикуются, тогда как Russian dub отдельно хвалят; evidence неоднородно и не даёт единого localization verdict.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Build-системы содержательны, но button-heavy combos и слабое объяснение secondary mechanics делают часть прогрессии менее читаемой.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть единичный unresolved report о возможном progression block при переходе между ending A и B; дата и актуальность не подтверждены.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
