@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "contract": "DEEP-STAGE2-CALIBRATION-V1",
+  "revision": "architecture-freeze-2026-10-06",
+  "status": "frozen_not_active",
+  "architecture_contract": "config/deep_two_stage_architecture_contract.json",
+  "role": "comparative_calibration",
+  "semantic_worker_identity": "deep_stage2_calibration_worker",
+  "manual_prompt_path": "config/deep_stage2_manual_worker_prompt.md",
+  "work_manifest": {
+    "path": "data/production/pre_ai/deep_stage2_work.json",
+    "contract": "DEEP-STAGE2-WORK-V1",
+    "github_owned": true,
+    "required_item_fields": [
+      "sequence",
+      "calibration_work_id",
+      "target_family_id",
+      "target_appid",
+      "profile_pin",
+      "profile_semantic_sha256",
+      "stage1_result_path",
+      "stage1_result_sha256",
+      "stage1_work_id",
+      "anchor_window_id",
+      "anchor_window_revision",
+      "anchor_set_sha256",
+      "lower_anchors",
+      "upper_anchors",
+      "result_submission_path"
+    ],
+    "anchor_descriptor_required_fields": [
+      "anchor_id",
+      "family_id",
+      "appid",
+      "stage1_result_path",
+      "stage1_result_sha256",
+      "canonical_stage2_result_path",
+      "canonical_stage2_result_sha256",
+      "calibrated_deep_fit_score_0_56"
+    ],
+    "window_selection_owner": "github_control_plane",
+    "window_expansion_owner": "github_control_plane",
+    "worker_self_selected_anchors_forbidden": true
+  },
+  "result": {
+    "schema": "config/deep_stage2_result_schema.json",
+    "inbox_root": "data/ai_inbox/deep_stage2/results",
+    "create_only": true,
+    "accepted_state_path": "data/cache/deep_stage2_state.json",
+    "contract": "DEEP-STAGE2-RESULT-V1"
+  },
+  "evidence_boundary": {
+    "allowed": [
+      "exact accepted target Stage-1 result",
+      "exact accepted Stage-1 results of GitHub-selected anchors",
+      "exact accepted calibrated Stage-2 states of anchors",
+      "pinned user taste profile",
+      "exact GitHub comparison window metadata"
+    ],
+    "web_research_forbidden": true,
+    "new_game_facts_forbidden": true,
+    "rewrite_stage1_findings_forbidden": true,
+    "missing_evidence_as_evidence_forbidden": true,
+    "contradiction_rule": "emit stage1_contradiction diagnostic; do not silently repair Stage 1"
+  },
+  "outcomes": {
+    "calibrated_fit": "target bracketed with strict relative placement",
+    "calibration_incomplete": "window/evidence does not support trustworthy strict placement; GitHub may expand or retry",
+    "stage1_contradiction": "Stage-1 evidence is internally inconsistent and requires Stage-1 reanalysis"
+  },
+  "comparison_relations": [
+    "target_above",
+    "target_below",
+    "near_tie_target_above",
+    "near_tie_target_below"
+  ],
+  "exact_tie_rule": "No accepted calibrated fit may remain an exact displayed tie. If the semantic worker cannot justify strict direction, return calibration_incomplete.",
+  "scoring": {
+    "scale_min": 0,
+    "scale_max": 56,
+    "semantic_result_field": "semantic_calibrated_deep_fit_target_0_56",
+    "semantic_adjustment_field": "comparative_adjustment_from_stage1",
+    "canonical_state_field": "calibrated_deep_fit_score_0_56",
+    "semantic_worker_assigns_final_unique_numeric_coordinate": false,
+    "github_assigns_final_unique_numeric_coordinate": true,
+    "canonical_precision_decimal_places": 2,
+    "display_precision_decimal_places": 2,
+    "unique_active_fit_scores_required": true,
+    "distant_unrelated_renumbering_forbidden": true,
+    "local_respace_rule": "Use the smallest local deterministic re-spacing consistent with the accepted strict order and broad semantic bands."
+  },
+  "ownership": {
+    "github_owns": [
+      "eligible target selection",
+      "anchor selection",
+      "window identity",
+      "window expansion",
+      "strict insertion order",
+      "unique numeric placement",
+      "validation",
+      "persistence",
+      "retry/completeness"
+    ],
+    "worker_owns": [
+      "relative semantic judgment on exact prepared window only"
+    ],
+    "worker_cannot_write_stage1": true
+  },
+  "progress_interface": {
+    "counters": [
+      "stage1_fit_eligible",
+      "calibrated",
+      "awaiting_calibration",
+      "diagnostic_incomplete"
+    ],
+    "timestamps": [
+      "last_attempt_at_utc",
+      "last_successful_calibration_at_utc"
+    ]
+  }
+}
