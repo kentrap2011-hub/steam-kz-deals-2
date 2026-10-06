@@ -25,11 +25,39 @@
   "normal_first_pass_complete": false,
   "all_groups_accepted": false,
   "full_backlog_complete": false,
-  "candidate_count": 0,
-  "valid_candidate_count": 0,
+  "candidate_count": 1,
+  "valid_candidate_count": 1,
   "invalid_candidate_count": 0,
   "failed_groups_pending_recovery": [],
-  "candidate_groups": [],
+  "candidate_groups": [
+    {
+      "snapshot_id": "619036c810f9f3eda9a6d0e573fad375cb32416869d2857dc30ab6d0024fbd06",
+      "sequence": 2,
+      "group_sha256": "9879f7e5b03a4126c154cd8027ede0c1db9979531e77fa5e7763a5d380691639",
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "canonical_group_state": "accepted",
+      "validation": "valid",
+      "normal_first_pass_position": "accepted",
+      "artifact_paths": [
+        "data/ai_inbox/taste_steam_review_dossiers/619036c810f9f3eda9a6d0e573fad375cb32416869d2857dc30ab6d0024fbd06--g000002--9879f7e5b03a4126c154cd8027ede0c1db9979531e77fa5e7763a5d380691639.json"
+      ],
+      "artifact_sha256": "7a4ac550d5b7704d28bea120e985c06fd71413700378bde649d9e36955870a6a",
+      "validator_error": null
+    }
+  ],
   "malformed_current_snapshot_artifacts": [],
   "canonical_progress_authority": false,
   "recovery_projection_authority": false
