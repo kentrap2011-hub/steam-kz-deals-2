@@ -5,7 +5,7 @@
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
 - `ЧАТ 1` is ASSIGNED as a NEW physical worker chat to `WORKER_TASK_STEAM_REVIEWS_PUBLICATION_BLOCKER_FIX_01.md` (DIAGNOSE / IMPLEMENT / VALIDATE / LIVE ACCEPTANCE). Previous Steam discovery scope task is accepted by successful main run `37357943696`: 97,998 rows complete, Search 429 reduced to 1, canonical persistence + downstream dispatch succeeded. New blocker is AppReviews/circuit + downstream publication.
-- `ЧАТ 2` audit is ACCEPTED via merged PR #154. Slot is reassigned as a NEW physical worker chat to `WORKER_TASK_DEEP_TWO_STAGE_COMPARATIVE_CALIBRATION_IMPLEMENT_01.md`. Latest correction: preserve site 60/40 model; preferred personal-score split is calibrated Deep fit 0–56 + deterministic wishlist +4; Stage-2 calibrated active fit candidates must have unique displayed decimal personal scores matching strict comparative order; legacy duration/risk/achievement arithmetic must be audited for folding into Deep to avoid double-counting.
+- `ЧАТ 2` is reassigned to the bounded architecture-first task `WORKER_TASK_DEEP_TWO_STAGE_ARCHITECTURE_FREEZE_01.md`. The previous monolithic `WORKER_TASK_DEEP_TWO_STAGE_COMPARATIVE_CALIBRATION_IMPLEMENT_01.md` is now an umbrella requirements source and must NOT be implemented end-to-end by one chat. After architecture freeze, implementation is split into separate Stage1, Stage2, Fast/ranking, site/UI, and final integration tasks.
 - Manual Russian-description semantic worker is STOPPED after checkpoint 1 submission `32caa3b35fb750cd31da7198f28e34855928edd6` failed canonical ingest run `37138503097`: exact AppID 1237980 result failed the `good_ru` quality gate and the checkpoint was not persisted. Do not retry/retranslate checkpoint 1 in the semantic chat. Recovery is assigned to ЧАТ 2 through the partial-acceptance/diagnostic-state implementation. No Scheduled Task action is authorized.
 - Progressive Deep semantic worker is ACTIVE/RECENT: run start `0b47a0fe3830dfbcec37fa5a2395d6be08169067`, results already submitted for AppID 1577120 (`7005c0f...`) and AppID 1237980 (`0622b864...`). Do not rebuild/reorder/restart its scope. Do not create or modify Scheduled Tasks.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
@@ -22,6 +22,18 @@
 - Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
 
+
+## TWO-STAGE DEEP IMPLEMENTATION WAVES — 2026-10-06
+
+- Wave 1 (now): ЧАТ 2 -> `WORKER_TASK_DEEP_TWO_STAGE_ARCHITECTURE_FREEZE_01.md`. ЧАТ 1 remains on Reviews/publication blocker. Freeze interfaces only.
+- Wave 2 (after architecture freeze and once both physical slots are available): run in parallel:
+  - one NEW physical chat -> `WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md`;
+  - another NEW physical chat -> `WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`.
+- Wave 3 (after frozen worker schemas exist): run in parallel:
+  - one NEW physical chat -> `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`;
+  - another NEW physical chat -> `WORKER_TASK_DEEP_SITE_MIRROR_UI_STATISTICS_IMPLEMENT_01.md`.
+- Wave 4: one integration chat -> `WORKER_TASK_DEEP_TWO_STAGE_INTEGRATION_CUTOVER_01.md` after all prior tasks are accepted.
+- Do not let Wave 2/3 chats redefine frozen contracts. Conflicts go back to Director instead of silent schema drift.
 
 ## QUEUED PRODUCT WORK — 2026-10-04
 
