@@ -28,28 +28,30 @@ Treat old Board sections as historical unless this handoff explicitly points to 
 ### ЧАТ 1 — ASSIGNED / NEW PHYSICAL CHAT
 
 Task:
-`WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md`
+`WORKER_TASK_STEAM_SHORTLIST_SCOPE_REDUCTION_DIAGNOSTIC_02.md`
 
 Mode:
-`IMPLEMENT / VALIDATE`
+`READ-ONLY / DIAGNOSTIC / OFFLINE SIMULATION`
 
-Previous Reviews/publication blocker is accepted through PR #155. Normal Steam production, mailing, visual build and deploy are healthy.
+Current fresh funnel is roughly 60,632 paid eligible -> 7,972 broad -> 2,522 paid shortlist -> ~2.3k Dossier/Deep semantic target. The user wants ЧАТ 1 to analyze how to reduce this much further without restoring the old accidental shrinkage caused by broken review enrichment.
 
-Two-stage architecture freeze is accepted through PR #156. ЧАТ 1 now owns only the Stage-1 semantic worker/control-plane implementation against the frozen interfaces. It must not redefine Stage-2, ranking, migration, UI or site contracts.
+The task must quantify which admission rules create the current explosion, simulate safer stronger gates, protect Wishlist/packages/known-good candidates, and compare conservative/balanced/aggressive semantic-pool sizes. No implementation.
 
-### ЧАТ 2 — ASSIGNED / NEW PHYSICAL CHAT
+### ЧАТ 2 — ASSIGNED / SOLE DEEP LOGIC OWNER
 
-Task:
+Current task:
 `WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`
 
-Mode:
-`IMPLEMENT / VALIDATE`
+The user explicitly wants one physical worker chat to carry the Deep logic changes forward to avoid split logic ownership.
 
-Architecture freeze is accepted through PR #156 with status `complete_interfaces_frozen`.
+Sequence in this same physical chat, with separate task boundaries/reports/PRs:
+1. finish `WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`;
+2. then implement `WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md`;
+3. then implement `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`.
 
-ЧАТ 2 now owns only the Stage-2 comparative calibration worker/control-plane implementation against the frozen interfaces. It must not redefine Stage-1, ranking, migration, UI or site contracts.
+Do not merge these into one uncontrolled PR. Close/validate each task cleanly before the next.
 
-Both Stage 1 and Stage 2 implementation chats may proceed in parallel. Production authority remains unchanged until later integration/cutover.
+ЧАТ 1 must not touch Deep logic while this assignment stands. Site/UI remains a later separate implementation task. Production authority remains unchanged until final integration/cutover.
 
 ## CURRENTLY WORKING / RECENT SEMANTIC CHATS
 
