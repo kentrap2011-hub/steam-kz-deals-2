@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "48057aa7df3f995ae103cf3a79abfe651eae4e83",
+  "run_start_authority_commit": "26fcbd52977a42327418795cab34f19d2d5bd62b",
+  "run_started_at_utc": "2026-10-06T17:49:28+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "c6589e1dab8d5e50023f570fa44fef950f25700c1114e801301abd135aa72978",
+  "family_id": "game:21780",
+  "taste_subject_key": "App_21780",
+  "appid": "21780",
+  "taste_fingerprint": "f084622589f7a2cc511c0a2dda3ec38237ee784fe8f725fd349d449280158019",
+  "candidate_context_sha256": "61d237d83de2c11d018355f30d0c431f71fc7ba851e4721fe26d0535f6e4ac27",
+  "dossier_content_sha256": "41d0bd4107594e49d5b27e702f4fda3161e9c1a6f50a1d7f2ac67762177d366a",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "1bcb9ddf65a2c009dce4ffcab2ce1a27d5e029141293d88d389dd329fb79ad7d",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Driving и погони формируют активное ядро, где освоение управления имеет значение.",
+    "Две эпохи Нью-Йорка заметно меняют атмосферу, автомобили и presentation.",
+    "Кампания после более рутинного начала получает выраженный midpoint shift и становится динамичнее."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 78,
+    "development_variety": 72,
+    "structure_pacing_direction": 76,
+    "identity_hooks": 86,
+    "breadth_of_match": 80
+  },
+  "score_findings": [
+    {
+      "finding_id": "driving-as-active-core",
+      "text_ru": "Погони и terrain-sensitive управление остаются главным активным ядром; когда физика считывается, машина даёт пространство для точного контроля, хотя часть игроков воспринимает её как слишком скользкую.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Тебе нравится игровой процесс, где результат зависит от освоения управления и собственного исполнения."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 78
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 80
+        }
+      ]
+    },
+    {
+      "finding_id": "two-era-city-shift",
+      "text_ru": "Переход между 1970-ми и более поздней эпохой меняет атмосферу, машины и облик Нью-Йорка, создавая заметный midpoint-shift внутри одной кампании.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Заметная смена игровых ситуаций и подачи по ходу кампании поддерживает твою потребность в развитии опыта."
+        },
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Различимая атмосфера и визуальная подача эпох усиливают для тебя идентичность игры."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 72
+        },
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 86
+        }
+      ]
+    },
+    {
+      "finding_id": "revenge-campaign-escalation",
+      "text_ru": "Простой revenge-сюжет становится динамичнее после ранних рутинных миссий, а смена эпохи и police-heavy эпизоды дают кампании более заметное направление во второй половине.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "Сюжет и персонажи для тебя полезны, когда поддерживают активный геймплей, а не заменяют его."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 76
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Управление машинами — прямой split: часть игроков ценит выразительную физику, часть считает её скользкой и трудной для понимания.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Revenge-сюжет для части игроков слишком простой, хотя смена эпохи, персонажи и cinematic presentation делают кампанию более запоминающейся.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Стрельба пешком заметно слабее driving-части: aiming, переключение управления и shooting missions ощущаются менее отполированными.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Ранние миссии могут ощущаться рутинными до того, как revenge-сюжет и более насыщенные полицией эпизоды ускоряют темп.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      }
+    ]
+  }
+}
