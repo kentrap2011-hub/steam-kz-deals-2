@@ -658,3 +658,270 @@ Prove:
 - calibrated order and displayed quality-score order are monotonic;
 - insertion of a new item does not arbitrarily renumber distant unrelated items;
 - local re-spacing preserves existing order and broad semantic score bands.
+
+
+## Director correction — two separate semantic chats and mirrored site UX
+
+This section is authoritative and supersedes any earlier wording that allowed Stage 1 and Stage 2 to be two modes of the same semantic chat.
+
+### Two distinct semantic workers / chats
+
+The two stages must be implemented as **two separate semantic worker chats with separate responsibilities**.
+
+#### Deep Stage 1 chat — analysis worker
+
+Owns only independent game analysis.
+
+Inputs:
+- exact GitHub-prepared game binding;
+- accepted Dossier;
+- pinned user taste profile;
+- exact current non-commercial context allowed by the contract.
+
+Outputs:
+- structured short conclusion;
+- structured positives;
+- structured negatives;
+- structured nuances / caveats / uncertainty;
+- fit / not-fit;
+- confidence;
+- provisional Deep-fit score on the current semantic scale;
+- explicit explanatory score breakdown.
+
+This worker must NOT:
+- compare against ranking neighbors;
+- assign final ranking position;
+- alter Stage-2 calibrated results;
+- choose its own comparison games.
+
+#### Deep Stage 2 chat — comparative calibration worker
+
+Owns only relative calibration after Stage 1 exists.
+
+Inputs:
+- immutable accepted Stage-1 result for target game;
+- GitHub-selected calibrated neighbors / anchors;
+- pinned user taste profile;
+- exact comparison window.
+
+Outputs:
+- target relative to lower/upper neighbors;
+- explicit reasons it belongs above/below each relevant anchor;
+- calibrated Deep-fit score;
+- calibration delta from Stage 1;
+- final comparative explanation;
+- diagnostic instead of silent repair if Stage-1 evidence is inconsistent.
+
+This worker must NOT:
+- redo web research;
+- rewrite Stage-1 positives/negatives;
+- invent new game facts;
+- select or expand its own anchor set.
+
+GitHub remains owner of work preparation, order, exact bindings, comparison windows, persistence, retries, expansion and completion.
+
+### Manual-operation requirement
+
+The user wants the two workers to be easy to run manually and understand separately.
+
+Provide:
+- one canonical manual invocation prompt/runtime path for Stage 1;
+- one different canonical manual invocation prompt/runtime path for Stage 2;
+- separate queue/work manifests;
+- separate result schemas;
+- separate ingest/validation state;
+- clear independent progress counts.
+
+Do not require the user to run one chat in two modes.
+
+No Scheduled Task configuration changes are authorized by this developer task.
+
+### Statistics — separate visible blocks
+
+The site Statistics page must show Stage 1 and Stage 2 as **separate top-level analysis blocks**.
+
+At minimum:
+
+#### Deep Stage 1 — Анализ игры
+- total eligible;
+- completed;
+- pending;
+- not-fit;
+- diagnostic/incomplete;
+- last successful result;
+- last attempt;
+- progress percent.
+
+#### Deep Stage 2 — Сравнительная калибровка
+- Stage-1-fit items eligible for calibration;
+- calibrated;
+- awaiting calibration;
+- diagnostic/incomplete;
+- last successful calibration;
+- last attempt;
+- progress percent.
+
+Fast must no longer appear as an equivalent active semantic-analysis block after cutover.
+
+Dossier remains its own separate block.
+
+The site should make the pipeline visually obvious:
+`Dossier -> Deep Stage 1 -> Deep Stage 2 -> final ranking`.
+
+### Main game card
+
+The normal compact card must show only the **final post-Stage-2 score** as the authoritative semantic score.
+
+Do not show Stage-1 provisional score on the compact card as if it were final.
+
+If Stage 2 is not complete:
+- show a clear state such as `Ожидает сравнительной калибровки`;
+- do not fabricate a final score;
+- do not fall back to Fast.
+
+After Stage 2:
+- display final calibrated personal score and combined offer score according to the canonical 60/40 model.
+
+### Game details — mirrored audit view
+
+The detail view must expose both semantic stages so the user can see exactly how the score changed.
+
+Required top-to-bottom structure:
+
+1. **Краткий итог**
+   - final verdict;
+   - Stage-1 provisional score;
+   - Stage-2 calibrated score;
+   - calibration delta;
+   - wishlist bonus;
+   - personal total /60;
+   - purchase value /40;
+   - final combined score /100;
+   - current rank / placement where available.
+
+2. **Плюсы**
+   - all material positive findings;
+   - structured, specific, non-generic;
+   - source/provenance linkage where already supported.
+
+3. **Минусы**
+   - all material negative findings;
+   - risks / deal-breakers / likely irritation points;
+   - structured and specific.
+
+4. **Прочее / нюансы**
+   - uncertainty;
+   - context-dependent factors;
+   - multiplayer/social considerations;
+   - duration;
+   - technical caveats;
+   - accessibility / control / repetition / progression nuance;
+   - any meaningful item that is neither a clean plus nor minus.
+
+5. **Почему оценка изменилась на Stage 2**
+   - exact Stage-1 score;
+   - exact Stage-2 score;
+   - exact delta;
+   - what comparison changed the placement.
+
+6. **Почему выше / ниже соседних игр**
+   - named/identified lower anchors it beats and why;
+   - named/identified upper anchors it loses to and why;
+   - if near-tied, say so explicitly;
+   - explain local ranking position, not generic prose.
+
+The detail page should be the maximum-transparency surface. The user should be able to understand what happened without opening GitHub.
+
+### Score breakdown — explicit points by reason
+
+The user explicitly wants more than a single "taste score".
+
+Stage 1 must persist an **explanatory point breakdown**.
+
+Example categories may include:
+- visuals / art direction;
+- music / sound;
+- combat / controls;
+- progression / build variety;
+- story / characters;
+- structure / pacing;
+- replayability;
+- social / co-op value;
+- personal hooks;
+- repetition / grind;
+- technical risk;
+- other game-specific dimensions.
+
+Important:
+- this is not a return to the old rigid fixed five-factor formula;
+- the set of categories may be game-specific;
+- irrelevant categories may be absent;
+- category labels must be human-readable;
+- positive and negative point contributions must be explicit;
+- the persisted breakdown must reconcile numerically with the Stage-1 provisional Deep-fit score.
+
+A valid conceptual example:
+
+- Combat and controls: +11.5
+- Visual style: +8.0
+- Music: +3.0
+- Progression/builds: +9.5
+- Personal hooks: +10.0
+- Repetition risk: -4.0
+- Weak story motivation: -2.0
+- Other/context adjustment: +1.0
+- Stage-1 provisional Deep fit: 37.0 / semantic max
+
+Exact scale/allocation is implementation-owned, but the arithmetic must be transparent and validated.
+
+Stage 2 must NOT silently rewrite this Stage-1 breakdown.
+
+Instead Stage 2 adds a separate explicit **comparative calibration adjustment**:
+- e.g. `Stage 1 = 44.8`;
+- `comparative adjustment = +1.3`;
+- `Stage 2 calibrated Deep fit = 46.1`.
+
+The Stage-2 adjustment must itself be explained by neighbor comparisons.
+
+This gives the user both:
+- "how the game earned its initial score";
+- "why comparison moved it to its final score".
+
+### Wishlist remains separate
+
+Wishlist remains the deterministic explicit user-interest bonus already approved.
+
+Do not bury wishlist inside the Stage-1 semantic point breakdown.
+
+The detail view should show it separately:
+`Wishlist: +4` when present.
+
+### Mirrored state requirement
+
+The site should mirror repository state as directly as practical.
+
+For each game, it should be possible to tell:
+- Dossier ready or not;
+- Stage 1 ready or not;
+- Stage 2 ready or not;
+- which score is provisional;
+- which score is final;
+- what changed between them;
+- why the game is above/below nearby games.
+
+Avoid hidden stage names, ambiguous badges, or score fields whose meaning differs between backend and UI.
+
+### Additional regressions
+
+Prove at minimum:
+- Stage 1 and Stage 2 use different canonical worker prompts and work manifests;
+- Stage-1 worker cannot write Stage-2 artifacts;
+- Stage-2 worker cannot write Stage-1 artifacts;
+- Statistics reports both stages independently;
+- compact card never shows provisional Stage-1 score as final;
+- detail view exposes both scores and delta;
+- detail view contains ordered sections: summary, positives, negatives, other/nuance, comparative explanation;
+- Stage-1 explanatory point contributions reconcile to its provisional semantic score;
+- Stage-2 calibration adjustment reconciles Stage-1 score to Stage-2 score;
+- wishlist is shown separately and positively affects the personal score;
+- no Fast semantic fallback appears in card, detail, ranking, or Statistics after cutover.
