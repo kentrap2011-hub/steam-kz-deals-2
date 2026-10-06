@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "contract": "DEEP-TWO-STAGE-ARCHITECTURE-V1",
+  "revision": "architecture-freeze-2026-10-06",
+  "status": "frozen_not_active",
+  "production_cutover_authorized": false,
+  "source_requirements": "WORKER_TASK_DEEP_TWO_STAGE_COMPARATIVE_CALIBRATION_IMPLEMENT_01.md",
+  "pipeline": [
+    "taste_steam_review_dossier",
+    "deep_stage1_analysis",
+    "deep_stage2_comparative_calibration",
+    "ranking_and_publication"
+  ],
+  "active_production_until_cutover": {
+    "stage_model": "FAST-DOSSIER-DEEP-V1",
+    "deep_contract": "config/progressive_pass2_contract.json",
+    "ranking_contract": "config/final_ranking_policy.json",
+    "rule": "These remain authoritative until WORKER_TASK_DEEP_TWO_STAGE_INTEGRATION_CUTOVER_01.md atomically activates the new model."
+  },
+  "score_model": {
+    "stage1_provisional_deep_fit": {
+      "minimum": 0,
+      "maximum": 56,
+      "ranking_authority": false,
+      "semantic_owner": "deep_stage1_worker",
+      "precision": "one_decimal_allowed",
+      "equality_allowed": true,
+      "rule": "Holistic approximate fit first; dynamic point breakdown is an explanation projection, not a fixed-factor formula."
+    },
+    "stage2_calibrated_deep_fit": {
+      "minimum": 0,
+      "maximum": 56,
+      "ranking_authority_after_cutover": true,
+      "semantic_owner": "deep_stage2_worker_for_relative_judgment",
+      "numeric_placement_owner": "github_control_plane",
+      "canonical_storage_precision_decimal_places": 2,
+      "canonical_display_precision_decimal_places": 2,
+      "integer_only_forbidden": true,
+      "active_ranked_fit_scores_must_be_unique": true,
+      "monotonic_rule": "If A is canonically placed above B, A.calibrated_deep_fit_score_0_56 must be numerically greater than B.calibrated_deep_fit_score_0_56.",
+      "precision_rationale": "0.01 creates 5601 positions and at least 101 positions inside any one-point interval, enough to maintain a strict local order for roughly 100 active candidates without large artificial gaps.",
+      "semantic_interpretation": "The final number is a human-readable coordinate of the comparative order, not measurement precision."
+    },
+    "wishlist": {
+      "owner": "github_control_plane",
+      "values": [
+        0,
+        4
+      ],
+      "source": "current exact Steam wishlist state",
+      "semantic_workers_may_change": false
+    },
+    "personal_quality": {
+      "formula": "calibrated_deep_fit_score_0_56 + wishlist_bonus_0_or_4",
+      "minimum": 0,
+      "maximum": 60,
+      "owner": "github_control_plane"
+    },
+    "purchase": {
+      "minimum": 0,
+      "maximum": 40,
+      "owner": "github_control_plane",
+      "source_contract_during_freeze": "config/final_ranking_policy.json",
+      "semantic_workers_may_change": false
+    },
+    "combined_offer": {
+      "formula": "personal_quality_score_0_60 + purchase_score_0_40",
+      "minimum": 0,
+      "maximum": 100,
+      "owner": "github_control_plane"
+    },
+    "retired_after_cutover_as_independent_personal_arithmetic": [
+      "achievements",
+      "duration",
+      "risk"
+    ],
+    "folded_into_stage1_semantic_context": [
+      "gameplay_and_mastery",
+      "development_and_variety",
+      "structure_pacing_direction",
+      "personal_hooks",
+      "breadth_of_match",
+      "duration_preference",
+      "technical_and_personal_risks",
+      "achievement_related_preference_when_relevant",
+      "prior_direct_user_evidence",
+      "interactions_between_these_factors"
+    ],
+    "direct_user_rating_rule": "Exact direct user ratings remain strong calibration anchors/constraints and are not converted into a hidden additive bonus."
+  },
+  "stage1": {
+    "contract": "config/deep_stage1_contract.json",
+    "result_schema": "config/deep_stage1_result_schema.json",
+    "manual_prompt_path": "config/deep_stage1_manual_worker_prompt.md",
+    "work_manifest_path": "data/production/pre_ai/deep_stage1_work.json",
+    "state_path": "data/cache/deep_stage1_state.json",
+    "role": "independent game analysis only",
+    "comparison_neighbors_forbidden": true
+  },
+  "stage2": {
+    "contract": "config/deep_stage2_contract.json",
+    "result_schema": "config/deep_stage2_result_schema.json",
+    "manual_prompt_path": "config/deep_stage2_manual_worker_prompt.md",
+    "work_manifest_path": "data/production/pre_ai/deep_stage2_work.json",
+    "state_path": "data/cache/deep_stage2_state.json",
+    "role": "comparative calibration only",
+    "web_research_forbidden": true,
+    "anchor_selection_owner": "github_control_plane"
+  },
+  "site_projection": {
+    "contract": "config/deep_two_stage_site_projection_contract.json"
+  },
+  "migration": {
+    "contract": "config/deep_two_stage_migration_contract.json"
+  },
+  "dependency_map": "config/deep_two_stage_dependency_map.json",
+  "ownership": {
+    "github_control_plane": [
+      "scope",
+      "work_manifests",
+      "ordering",
+      "exact bindings",
+      "Stage-1 and Stage-2 validation",
+      "ingest state and persistence",
+      "Stage-2 anchor/window selection and expansion",
+      "retry/recovery/completeness",
+      "strict comparative insertion order",
+      "deterministic unique numeric placement/re-spacing",
+      "wishlist bonus",
+      "purchase score",
+      "personal/combined arithmetic",
+      "publication",
+      "migration classification and cutover"
+    ],
+    "deep_stage1_semantic_worker": [
+      "only exact GitHub-prepared independent per-game semantic analysis",
+      "structured findings",
+      "fit/not-fit/confidence",
+      "provisional Deep fit and transparent dynamic point breakdown"
+    ],
+    "deep_stage2_semantic_worker": [
+      "only exact GitHub-prepared relative comparison against supplied anchors",
+      "comparative judgments and reasons",
+      "semantic target coordinate/adjustment",
+      "diagnostic on inconsistent Stage-1 evidence"
+    ],
+    "browser": [
+      "read-only rendering of producer-owned state",
+      "local UI state only"
+    ],
+    "scheduler_configuration_owner": "external_user_operator",
+    "scheduled_task_changes_authorized_by_this_contract": false
+  },
+  "cutover_gates": [
+    "Stage-1 implementation accepted",
+    "Stage-2 implementation accepted",
+    "Fast/ranking migration accepted",
+    "site mirror/statistics implementation accepted",
+    "legacy Deep migration classification prepared",
+    "no mixed legacy/new score authority",
+    "no Fast semantic fallback in proposed production path",
+    "unique monotonic calibrated fit score invariant validated",
+    "wishlist 4 + purchase 40 composition validated",
+    "bounded end-to-end integration acceptance passed"
+  ]
+}

@@ -6,6 +6,12 @@ Source of truth: `main`
 Dependency: `WORKER_TASK_DEEP_TWO_STAGE_ARCHITECTURE_FREEZE_01.md` must be accepted first.
 Mode: `IMPLEMENT / VALIDATE`
 
+Frozen interfaces (do not redefine):
+- `config/deep_two_stage_architecture_contract.json`
+- `config/deep_stage2_contract.json`
+- `config/deep_stage2_result_schema.json`
+- `config/deep_two_stage_dependency_map.json`
+
 Implement only the Stage-2 semantic-worker/control-plane path from the frozen contracts.
 
 Stage 2 consumes:

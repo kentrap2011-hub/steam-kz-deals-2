@@ -945,3 +945,29 @@ A canonical Dossier/profile/work/repository write that lands **before** the mark
 - `WORKER_TASK_STEAM_DISCOVERY_50_PERCENT_DISCOUNT_TOP100_IMPLEMENT_01.md`;
 - `WORKER_TASK_STEAM_OWNED_LIBRARY_DLC_SUPPORT_01.md`;
 - `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`.
+
+## PPD-013 — Deep splits into independent analysis and comparative-calibration stages before production cutover
+
+**Дата:** 2026-10-06  
+**Статус:** frozen interfaces; not production-active until the dedicated integration/cutover task.
+
+**Решение:** the target personalized pipeline is `Dossier -> Deep Stage 1 -> Deep Stage 2 -> ranking/publication`. Stage 1 and Stage 2 are separate semantic workers/chats with different prompts, work manifests, result schemas, inbox/state paths and responsibilities. GitHub remains the sole control plane for scope, ordering, exact bindings, validation, persistence, retries/completeness, Stage-2 anchor selection/window expansion and final numeric placement. No worker may write the other stage's artifacts or select its own cross-game scope.
+
+**Stage 1:** independently analyzes one exact game from accepted Dossier + pinned taste profile. It serializes a short summary, positives, negatives, nuances, fit/not-fit/confidence and, only for a fit outcome, an approximate `provisional_deep_fit_score_0_56`. The game-specific signed point breakdown must reconcile arithmetically to the provisional score, but is an explanation of a holistic semantic judgment rather than a fixed category formula. No mandatory factor set, factor ceilings, fixed additive weights, Wishlist, deal economics or ranking-neighbor comparison is allowed.
+
+**Stage 2:** consumes only the immutable accepted Stage-1 result, the pinned profile, and a bounded GitHub-selected window of already calibrated anchors. It does no web research, adds no game facts and never rewrites Stage-1 positives/negatives/nuances. It returns strict relative above/below judgments, reasons, a semantic calibration target and the comparative adjustment. A genuine contradiction returns a diagnostic; inability to justify a strict direction returns calibration-incomplete instead of a fake tie.
+
+**Canonical numeric placement:** Stage 2 supplies semantic relative placement; GitHub owns strict insertion and deterministic local re-spacing. Accepted active fit candidates must have monotonic unique displayed calibrated fit scores. Integer-only scoring is forbidden. Canonical Stage-2 fit coordinates use two decimal places on 0–56: 0.01 provides 5601 positions and 101 positions inside a single one-point interval, enough for roughly 100 active candidates without large artificial gaps. The number is explicitly an interpretable coordinate of comparative order, not physical measurement precision. Distant unrelated games must not be arbitrarily renumbered.
+
+**Score composition:** `personal_quality_0_60 = calibrated_deep_fit_0_56 + wishlist_bonus_0_or_4`. Wishlist remains an explicit GitHub-owned deterministic +4 signal. `total_score_0_100 = personal_quality_0_60 + deterministic_purchase_score_0_40`. Stage 2 cannot compensate for price/discount. The old independent achievements/duration/risk arithmetic is retired after cutover and its relevant meaning moves into Stage-1 semantic evidence/context to prevent double counting. Exact direct user ratings remain strong calibration anchors/constraints rather than a hidden additive bonus.
+
+**Not-fit:** authoritative not-fit does not receive a fabricated positive-ladder score and is not a Stage-2 calibration candidate.
+
+**Migration:** accepted exact-compatible Dossier evidence is preserved. Legacy Deep is classified by GitHub as `reusable_as_stage1` only when every mandatory new Stage-1 field can be mapped without semantic invention and without resurrecting the fixed five-factor score authority; otherwise it `requires_stage1_reanalysis`, while valid legacy factual findings remain preserved migration/audit evidence. Before cutover the current `FAST-DOSSIER-DEEP-V1` path remains authoritative; after cutover legacy Deep/Fast numeric scores are history only. Partial mixed authority is forbidden.
+
+**Site mirror:** Statistics has separate Dossier, Stage 1 and Stage 2 blocks. A compact card never presents Stage-1 provisional or Fast score as final; pending Stage 2 is explicitly awaiting calibration. Detail order is fixed: short summary -> positives -> negatives -> other/nuances -> Stage-2 score change -> why above/below neighbors. It exposes Stage-1 score/breakdown, Stage-2 calibrated score/delta, Wishlist, personal /60, purchase /40 and combined /100.
+
+**Activation boundary:** this decision freezes interfaces only. Existing `config/progressive_pass2_contract.json`, `FAST-DOSSIER-DEEP-V1`, current ranking and publication remain production authority until `WORKER_TASK_DEEP_TWO_STAGE_INTEGRATION_CUTOVER_01.md` passes all prerequisites and performs one coherent cutover. No semantic migration and no Scheduled Task configuration change is authorized by the freeze.
+
+**Канонические файлы:** `config/deep_two_stage_architecture_contract.json`, `config/deep_stage1_contract.json`, `config/deep_stage1_result_schema.json`, `config/deep_stage2_contract.json`, `config/deep_stage2_result_schema.json`, `config/deep_two_stage_site_projection_contract.json`, `config/deep_two_stage_migration_contract.json`, `config/deep_two_stage_dependency_map.json`.
+

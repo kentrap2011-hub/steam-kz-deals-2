@@ -1,0 +1,271 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Deep Stage 2 comparative calibration result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract",
+    "calibration_work_id",
+    "target_family_id",
+    "target_appid",
+    "profile_pin_sha256",
+    "profile_semantic_sha256",
+    "stage1_result_sha256",
+    "anchor_window_id",
+    "anchor_window_revision",
+    "anchor_set_sha256",
+    "outcome",
+    "comparisons",
+    "semantic_calibrated_deep_fit_target_0_56",
+    "comparative_adjustment_from_stage1",
+    "why_stage2_changed_ru",
+    "why_above_ru",
+    "why_below_ru",
+    "diagnostic_code"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract": {
+      "const": "DEEP-STAGE2-RESULT-V1"
+    },
+    "calibration_work_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "target_family_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_appid": {
+      "type": "string",
+      "pattern": "^[0-9]+$"
+    },
+    "profile_pin_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "profile_semantic_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "stage1_result_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "anchor_window_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "anchor_window_revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "anchor_set_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "outcome": {
+      "enum": [
+        "calibrated_fit",
+        "calibration_incomplete",
+        "stage1_contradiction"
+      ]
+    },
+    "comparisons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "anchor_id",
+          "relation",
+          "reasons_ru",
+          "target_stage1_finding_refs",
+          "anchor_stage1_finding_refs"
+        ],
+        "properties": {
+          "anchor_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "relation": {
+            "enum": [
+              "target_above",
+              "target_below",
+              "near_tie_target_above",
+              "near_tie_target_below"
+            ]
+          },
+          "reasons_ru": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "target_stage1_finding_refs": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "anchor_stage1_finding_refs": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "semantic_calibrated_deep_fit_target_0_56": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 56,
+          "multipleOf": 0.01
+        }
+      ]
+    },
+    "comparative_adjustment_from_stage1": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "number",
+          "minimum": -56,
+          "maximum": 56,
+          "multipleOf": 0.01
+        }
+      ]
+    },
+    "why_stage2_changed_ru": {
+      "type": "string"
+    },
+    "why_above_ru": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "why_below_ru": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "diagnostic_code": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "enum": [
+            "window_not_bracketed",
+            "strict_direction_not_supported",
+            "stage1_evidence_contradiction",
+            "stage2_worker_failure",
+            "stale_anchor_window"
+          ]
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "calibrated_fit"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "comparisons": {
+            "minItems": 1
+          },
+          "semantic_calibrated_deep_fit_target_0_56": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 56,
+            "multipleOf": 0.01
+          },
+          "comparative_adjustment_from_stage1": {
+            "type": "number",
+            "minimum": -56,
+            "maximum": 56,
+            "multipleOf": 0.01
+          },
+          "why_stage2_changed_ru": {
+            "type": "string",
+            "minLength": 1
+          },
+          "diagnostic_code": {
+            "const": null
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "enum": [
+              "calibration_incomplete",
+              "stage1_contradiction"
+            ]
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "semantic_calibrated_deep_fit_target_0_56": {
+            "const": null
+          },
+          "comparative_adjustment_from_stage1": {
+            "const": null
+          },
+          "diagnostic_code": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  ],
+  "x_semantic_invariants": [
+    "comparative_adjustment_from_stage1 equals semantic target minus accepted Stage-1 provisional score",
+    "every comparison anchor must belong to the exact GitHub-provided anchor set",
+    "Stage 2 may cite only accepted Stage-1 finding ids for target and anchors",
+    "Stage 2 never adds or rewrites game facts and never performs web research",
+    "semantic target is not canonical numeric ranking authority until GitHub accepts insertion and assigns calibrated_deep_fit_score_0_56",
+    "an accepted canonical calibrated fit must have strict direction and a unique displayed 2-decimal score"
+  ]
+}

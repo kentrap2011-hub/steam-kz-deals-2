@@ -6,6 +6,11 @@ Source of truth: `main`
 Dependency: accepted `WORKER_TASK_DEEP_TWO_STAGE_ARCHITECTURE_FREEZE_01.md`.
 Mode: `IMPLEMENT / VALIDATE / NO PARTIAL CUTOVER`
 
+Frozen interfaces (do not redefine):
+- `config/deep_two_stage_architecture_contract.json`
+- `config/deep_two_stage_migration_contract.json`
+- `config/deep_two_stage_dependency_map.json`
+
 Trace and remove Fast semantic output from all current ranking/decision authority:
 - ranking;
 - fallback score;

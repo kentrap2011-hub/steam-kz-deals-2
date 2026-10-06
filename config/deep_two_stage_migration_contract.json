@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "contract": "DEEP-TWO-STAGE-MIGRATION-V1",
+  "revision": "architecture-freeze-2026-10-06",
+  "status": "frozen_not_active",
+  "architecture_contract": "config/deep_two_stage_architecture_contract.json",
+  "owner": "github_control_plane",
+  "legacy_sources": [
+    "data/cache/taste_steam_review_dossiers",
+    "data/cache/progressive_pass2_state.json",
+    "data/cache/progressive_pass1_state.json"
+  ],
+  "dossier_rule": "Preserve exact-compatible accepted Dossier evidence; do not re-research merely because the Deep architecture changes.",
+  "legacy_deep_classification": {
+    "categories": [
+      "reusable_as_stage1",
+      "requires_stage1_reanalysis"
+    ],
+    "reusable_as_stage1_requires": [
+      "current exact product/work identity",
+      "current compatible accepted Dossier binding",
+      "authoritative completed legacy Deep outcome",
+      "all mandatory new Stage-1 structured fields can be mapped without semantic invention",
+      "all material positives/negatives/nuances have exact evidence grounding adequate for the new Stage-1 contract",
+      "a game-specific transparent point breakdown exists or can be deterministically mapped without resurrecting the forbidden fixed five-factor formula",
+      "provisional 0-56 score semantics are compatible with the holistic Stage-1 contract rather than copied from legacy fixed arithmetic"
+    ],
+    "requires_stage1_reanalysis_if_any": [
+      "mandatory Stage-1 structured evidence is missing",
+      "dynamic point explanation would need semantic invention",
+      "legacy score depends on fixed five-factor authority",
+      "identity/Dossier/profile grounding is stale or insufficient",
+      "legacy result is incomplete/diagnostic"
+    ],
+    "preserved_evidence_rule": "A row may require Stage-1 reanalysis while still preserving valid legacy findings as immutable migration/audit evidence. Requires reanalysis does not mean discard facts."
+  },
+  "stage2_migration_rule": "Only accepted Stage-1-compatible fit items become Stage-2 calibration candidates.",
+  "known_missing_score_findings_rule": "Legacy fit results lacking score findings cannot become Stage-1-complete merely from their old numeric score; preserve factual evidence and classify under the same deterministic rules.",
+  "no_mixed_authority": {
+    "before_cutover": "Current FAST-DOSSIER-DEEP-V1 remains the only production ranking authority; new Stage-1/Stage-2 artifacts are non-authoritative.",
+    "after_cutover": "Only accepted Stage-2 calibrated fit + deterministic Wishlist + deterministic purchase may provide new positive semantic score authority. Legacy Deep/Fast numeric scores are audit history only.",
+    "partial_cutover_forbidden": true
+  },
+  "direct_user_rating": {
+    "preserve": true,
+    "role": "strong calibration anchor/constraint",
+    "hidden_additive_bonus_forbidden": true
+  },
+  "old_personal_components": {
+    "wishlist": {
+      "disposition": "preserve_as_deterministic_plus_4"
+    },
+    "achievements": {
+      "disposition": "retire_as_independent_arithmetic_after_cutover_and_feed_relevant_evidence_into_Stage1"
+    },
+    "duration": {
+      "disposition": "retire_as_independent_arithmetic_after_cutover_and_feed_preference_context_into_Stage1"
+    },
+    "risk": {
+      "disposition": "retire_as_independent_arithmetic_after_cutover_and_feed_grounded_risk_context_into_Stage1"
+    },
+    "double_counting_forbidden": true
+  },
+  "semantic_execution_authorized_by_this_contract": false,
+  "mass_migration_authorized": false
+}

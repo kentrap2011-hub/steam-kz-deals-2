@@ -1,0 +1,453 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Deep Stage 1 independent analysis result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract",
+    "semantic_generation_id",
+    "work_id",
+    "family_id",
+    "taste_subject_key",
+    "appid",
+    "candidate_context_sha256",
+    "profile_pin_sha256",
+    "profile_semantic_sha256",
+    "dossier_content_sha256",
+    "outcome",
+    "confidence",
+    "summary_ru",
+    "positives",
+    "negatives",
+    "nuances",
+    "provisional_deep_fit_score_0_56",
+    "point_breakdown",
+    "analysis_issue_code"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract": {
+      "const": "DEEP-STAGE1-RESULT-V1"
+    },
+    "semantic_generation_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "work_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "family_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "taste_subject_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "appid": {
+      "type": "string",
+      "pattern": "^[0-9]+$"
+    },
+    "candidate_context_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "profile_pin_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "profile_semantic_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "dossier_content_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "outcome": {
+      "enum": [
+        "analyzed_fit",
+        "analyzed_not_fit",
+        "analysis_incomplete"
+      ]
+    },
+    "confidence": {
+      "enum": [
+        "medium",
+        "high"
+      ]
+    },
+    "summary_ru": {
+      "type": "string",
+      "minLength": 1
+    },
+    "positives": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/personalFinding"
+      }
+    },
+    "negatives": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/personalFinding"
+      }
+    },
+    "nuances": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/nuanceFinding"
+      }
+    },
+    "provisional_deep_fit_score_0_56": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 56,
+          "multipleOf": 0.1
+        }
+      ]
+    },
+    "point_breakdown": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "breakdown_id",
+          "label_ru",
+          "direction",
+          "points",
+          "finding_refs"
+        ],
+        "properties": {
+          "breakdown_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label_ru": {
+            "type": "string",
+            "minLength": 1
+          },
+          "direction": {
+            "enum": [
+              "positive",
+              "negative",
+              "neutral"
+            ]
+          },
+          "points": {
+            "type": "number",
+            "minimum": -56,
+            "maximum": 56,
+            "multipleOf": 0.1
+          },
+          "finding_refs": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "direction": {
+                  "const": "positive"
+                }
+              },
+              "required": [
+                "direction"
+              ]
+            },
+            "then": {
+              "properties": {
+                "points": {
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "direction": {
+                  "const": "negative"
+                }
+              },
+              "required": [
+                "direction"
+              ]
+            },
+            "then": {
+              "properties": {
+                "points": {
+                  "exclusiveMaximum": 0
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "direction": {
+                  "const": "neutral"
+                }
+              },
+              "required": [
+                "direction"
+              ]
+            },
+            "then": {
+              "properties": {
+                "points": {
+                  "const": 0
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "analysis_issue_code": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "enum": [
+            "insufficient_evidence",
+            "evidence_unavailable",
+            "stage1_worker_failure",
+            "profile_binding_unresolved",
+            "dossier_binding_unresolved"
+          ]
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "analyzed_fit"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "provisional_deep_fit_score_0_56": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 56,
+            "multipleOf": 0.1
+          },
+          "point_breakdown": {
+            "minItems": 1
+          },
+          "analysis_issue_code": {
+            "const": null
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "enum": [
+              "analyzed_not_fit",
+              "analysis_incomplete"
+            ]
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "provisional_deep_fit_score_0_56": {
+            "const": null
+          },
+          "point_breakdown": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "analysis_incomplete"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "analysis_issue_code": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "personalFinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "finding_id",
+        "text_ru",
+        "candidate_evidence_refs",
+        "profile_evidence_refs"
+      ],
+      "properties": {
+        "finding_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text_ru": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate_evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "index"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "observation",
+                  "conflict"
+                ]
+              },
+              "index": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "profile_evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "nuanceFinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "finding_id",
+        "text_ru",
+        "candidate_evidence_refs",
+        "profile_evidence_refs"
+      ],
+      "properties": {
+        "finding_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text_ru": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate_evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "index"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "observation",
+                  "conflict"
+                ]
+              },
+              "index": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "profile_evidence_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x_semantic_invariants": [
+    "sum(point_breakdown[].points) equals provisional_deep_fit_score_0_56 exactly for analyzed_fit",
+    "point_breakdown labels/categories are game-specific and have no canonical fixed weights or ceilings",
+    "every point_breakdown finding_ref resolves to a finding_id in positives/negatives/nuances",
+    "wishlist, purchase price, discount and ranking neighbors are absent from Stage-1 score arithmetic",
+    "summary/positives/negatives/nuances remain immutable inputs to Stage 2 once accepted"
+  ]
+}

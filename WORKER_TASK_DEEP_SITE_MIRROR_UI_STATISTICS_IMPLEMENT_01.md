@@ -6,6 +6,11 @@ Source of truth: `main`
 Dependency: accepted `WORKER_TASK_DEEP_TWO_STAGE_ARCHITECTURE_FREEZE_01.md`.
 Mode: `IMPLEMENT / VALIDATE`
 
+Frozen interfaces (do not redefine):
+- `config/deep_two_stage_architecture_contract.json`
+- `config/deep_two_stage_site_projection_contract.json`
+- `config/deep_two_stage_dependency_map.json`
+
 Implement only the frozen website presentation/state model.
 
 ## Statistics

@@ -392,3 +392,31 @@ Currentness invariant after PPD-012:
 - standalone `category1=996` must not be reintroduced as a bundle partition unless new bounded live evidence proves exclusive bundle semantics;
 - no raw top-N, second collector/scheduler, ChatGPT-owned loop or Catalyst special case;
 - live acceptance is an ordinary GitHub-owned `Steam KZ production shortlist` run on `main`; PR `collect` remains intentionally disabled.
+
+## Deep two-stage frozen architecture: Stage 1 -> Stage 2 -> ranking
+
+**Что ищем:** target architecture and exact parallel implementation interfaces for replacing Fast/current monolithic Deep with independent Deep analysis and comparative calibration.
+
+**Последняя проверка:** 2026-10-06.  
+**Проверенный ref:** branch `feature/deep-two-stage-architecture-freeze-01` before production cutover.
+
+**Быстрая точка входа:**
+1. `config/deep_two_stage_architecture_contract.json` — pipeline, 56+4+40 scoring split, ownership, precision and activation gates.
+2. `config/deep_stage1_contract.json` + `config/deep_stage1_result_schema.json` — independent per-game analysis interface and dynamic point-breakdown semantics.
+3. `config/deep_stage2_contract.json` + `config/deep_stage2_result_schema.json` — GitHub-selected anchor-window comparative calibration interface and strict-order output.
+4. `config/deep_two_stage_site_projection_contract.json` — compact card/detail/Statistics producer fields and section order.
+5. `config/deep_two_stage_migration_contract.json` — legacy Dossier/Deep reuse classification, old arithmetic retirement and no-mixed-authority boundary.
+6. `config/deep_two_stage_dependency_map.json` — which four implementation tasks may proceed in parallel and which shared files they may not redefine.
+7. `PROJECT_DECISIONS.md#PPD-013` — rationale and activation boundary.
+8. `scripts/test_deep_two_stage_architecture_freeze.py` — bounded invariant regression proving the frozen target is non-active and current production remains unchanged.
+
+**Критические инварианты:**
+- Stage 1 and Stage 2 are different semantic workers with different manifests/results/state.
+- Stage 1 never sees ranking neighbors; Stage 2 never researches or invents facts.
+- Stage-2 semantic comparison is not itself canonical numeric placement; GitHub inserts/re-spaces locally.
+- active calibrated fit scores are strictly monotonic/unique and displayed to two decimals.
+- Wishlist remains deterministic +4; purchase remains deterministic /40.
+- old achievements/duration/risk arithmetic cannot survive as independent post-Deep adjustments after cutover.
+- current `FAST-DOSSIER-DEEP-V1` remains production authority until the integration task performs coherent cutover.
+- no Scheduled Task change is part of the freeze.
+

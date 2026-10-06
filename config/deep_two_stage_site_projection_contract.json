@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "contract": "DEEP-TWO-STAGE-SITE-PROJECTION-V1",
+  "revision": "architecture-freeze-2026-10-06",
+  "status": "frozen_not_active",
+  "architecture_contract": "config/deep_two_stage_architecture_contract.json",
+  "producer_owner": "github_control_plane",
+  "browser_role": "read_only_rendering",
+  "pipeline_label_ru": "Досье → Deep Stage 1 — Анализ игры → Deep Stage 2 — Сравнительная калибровка → Итоговый рейтинг",
+  "per_game_fields": {
+    "dossier_status": {
+      "enum": [
+        "ready",
+        "pending",
+        "failed_or_recovery",
+        "not_required"
+      ]
+    },
+    "stage1_status": {
+      "enum": [
+        "not_ready",
+        "pending",
+        "completed_fit",
+        "completed_not_fit",
+        "diagnostic_incomplete"
+      ]
+    },
+    "stage2_status": {
+      "enum": [
+        "not_eligible",
+        "awaiting_calibration",
+        "calibrated",
+        "diagnostic_incomplete"
+      ]
+    },
+    "stage1_provisional_deep_fit_score_0_56": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "visibility": "detail_only",
+      "authority": "provisional_only"
+    },
+    "stage2_calibrated_deep_fit_score_0_56": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "visibility": "compact_and_detail_when_calibrated",
+      "authority": "final_semantic_after_cutover"
+    },
+    "stage2_calibration_delta": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "visibility": "detail"
+    },
+    "wishlist_bonus_0_or_4": {
+      "type": "number",
+      "allowed": [
+        0,
+        4
+      ]
+    },
+    "personal_quality_score_0_60": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "purchase_score_0_40": {
+      "type": "number"
+    },
+    "total_score_0_100": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "priority_rank": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "stage1_point_breakdown": {
+      "type": "array",
+      "visibility": "detail"
+    },
+    "stage2_neighbor_comparisons": {
+      "type": "array",
+      "visibility": "detail"
+    },
+    "stage2_why_changed_ru": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "visibility": "detail"
+    }
+  },
+  "arithmetic": {
+    "personal_quality_score_0_60": "stage2_calibrated_deep_fit_score_0_56 + wishlist_bonus_0_or_4",
+    "total_score_0_100": "personal_quality_score_0_60 + purchase_score_0_40",
+    "stage2_calibration_delta": "stage2_calibrated_deep_fit_score_0_56 - stage1_provisional_deep_fit_score_0_56",
+    "stage1_score_may_not_substitute_for_missing_stage2": true,
+    "fast_score_may_not_substitute_for_missing_stage2": true
+  },
+  "compact_card": {
+    "calibrated_rule": "show only final post-Stage-2 semantic/personal score as authoritative, plus combined offer score where the current card exposes it",
+    "pending_stage2_label_ru": "Ожидает сравнительной калибровки",
+    "pending_stage2_semantic_score": null,
+    "fast_label_or_score_forbidden": true,
+    "stage1_provisional_score_as_final_forbidden": true
+  },
+  "detail_view": {
+    "ordered_sections": [
+      "short_summary",
+      "positives",
+      "negatives",
+      "other_nuances",
+      "stage2_score_change",
+      "why_above_below_neighbors"
+    ],
+    "short_summary_fields": [
+      "final_verdict",
+      "stage1_provisional_deep_fit_score_0_56",
+      "stage2_calibrated_deep_fit_score_0_56",
+      "stage2_calibration_delta",
+      "wishlist_bonus_0_or_4",
+      "personal_quality_score_0_60",
+      "purchase_score_0_40",
+      "total_score_0_100",
+      "priority_rank"
+    ],
+    "positives_source": "accepted Stage-1 positives",
+    "negatives_source": "accepted Stage-1 negatives",
+    "nuances_source": "accepted Stage-1 nuances",
+    "stage2_change_source": "accepted Stage-2 comparison plus GitHub canonical numeric placement",
+    "neighbor_section_requires": [
+      "identified_lower_anchors_and_reasons",
+      "identified_upper_anchors_and_reasons_when_present",
+      "near_tie_wording_when_applicable"
+    ]
+  },
+  "statistics": {
+    "top_level_blocks": [
+      {
+        "id": "dossier",
+        "label_ru": "Досье",
+        "source": "existing canonical Dossier state"
+      },
+      {
+        "id": "deep_stage1",
+        "label_ru": "Deep Stage 1 — Анализ игры",
+        "fields": [
+          "total_eligible",
+          "completed",
+          "pending",
+          "not_fit",
+          "diagnostic_incomplete",
+          "last_successful_result_at_utc",
+          "last_attempt_at_utc",
+          "progress_percent"
+        ]
+      },
+      {
+        "id": "deep_stage2",
+        "label_ru": "Deep Stage 2 — Сравнительная калибровка",
+        "fields": [
+          "stage1_fit_eligible",
+          "calibrated",
+          "awaiting_calibration",
+          "diagnostic_incomplete",
+          "last_successful_calibration_at_utc",
+          "last_attempt_at_utc",
+          "progress_percent"
+        ]
+      }
+    ],
+    "fast_equivalent_analysis_block_after_cutover_forbidden": true
+  },
+  "forbidden_browser_logic": [
+    "semantic scoring",
+    "wishlist arithmetic authority",
+    "purchase-score recomputation",
+    "Stage-2 neighbor selection",
+    "fallback from Stage 2 to Stage 1 or Fast",
+    "deriving Statistics from card count or page-load time"
+  ]
+}
