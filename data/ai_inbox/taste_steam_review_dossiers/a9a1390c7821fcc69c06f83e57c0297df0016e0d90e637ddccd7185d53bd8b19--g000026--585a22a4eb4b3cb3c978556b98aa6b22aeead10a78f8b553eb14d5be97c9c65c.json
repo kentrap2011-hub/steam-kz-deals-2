@@ -1,0 +1,1247 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "a9a1390c7821fcc69c06f83e57c0297df0016e0d90e637ddccd7185d53bd8b19",
+  "prepared_required_sha256": "734115089fb720a991413599a723a090ee22ef7b482fb4dc27f1b383f31bb48c",
+  "group_plan_sha256": "47e5ed9e5e3e63190ce3d57ed526af8cc3001db076cf93e26fcf4b303444ff76",
+  "group_count": 131,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 26,
+  "start_index": 75,
+  "end_index_exclusive": 78,
+  "appids": [
+    "1823930",
+    "1824220",
+    "1835240"
+  ],
+  "items_sha256": "5aaa7820cf35ed79b13b182612c44d7d7dfc6db6b1d18616447e68f25fce48b2",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "098500b2454e7f473c0f4030e32a5668fd521d67bbb53a898541fb39c385f974",
+  "items": [
+    {
+      "key": "App_1823930",
+      "appid": "1823930",
+      "title": "Wavetale",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1823930.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1824220",
+      "appid": "1824220",
+      "title": "Chivalry 2",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1824220.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1835240",
+      "appid": "1835240",
+      "title": "Spiritfall",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1835240.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "585a22a4eb4b3cb3c978556b98aa6b22aeead10a78f8b553eb14d5be97c9c65c",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1823930",
+      "title": "Wavetale",
+      "generated_at_utc": "2026-10-05T21:21:58Z",
+      "expires_at_utc": "2026-10-25T21:21:58Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Wavetale",
+        "release_year": 2022,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1823930"
+          },
+          {
+            "kind": "developer",
+            "value": "Thunderful Development"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Surfing across water, aerial movement and grappling are the most consistent gameplay strengths in player feedback; movement is repeatedly described as smooth or satisfying even by players who criticize other systems.",
+          "sentiment": "positive",
+          "recurrence": "strong",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Combat and environmental puzzles are generally simple and forgiving, which supports a relaxed pace but leaves some players wanting more mechanical challenge or depth.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "The main loop can become repetitive through recurring switch, platforming and enemy sequences, similar-looking locations and fetch-oriented side tasks; the comparatively short campaign limits how long this repetition persists.",
+          "sentiment": "negative",
+          "recurrence": "strong",
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004",
+            "feedback-005",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "The adventure is compact and largely linear, with optional side objectives and collectible-focused detours; feedback is split between appreciating the concise length and finding backtracking or side tasks thin.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "Progression is relatively light after the core traversal abilities are established, and at least one detailed player report considers much of the collectible currency insufficiently meaningful because rewards are primarily cosmetic.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Art direction, atmosphere, music and the emotional tone of the story receive recurring praise, while the narrative and environments are also described as simple or predictable by some players.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004",
+            "feedback-005",
+            "feedback-006"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "The game's simplicity is itself divisive: some players value a short, relaxing traversal-focused experience, while others find the same combat, puzzles and repeated tasks too shallow.",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-006"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "strong",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                3
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                5
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1823930/Wavetale/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1823930/reviews/?browsefilter=toprated&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1823930",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/CozyGamers/comments/1oz5fmp/",
+            "publication_date": "2025-11-14",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2025-07-15",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2025-09-12",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2025-07-27",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-002",
+            "publication_date": "2025-08-01",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-002",
+            "publication_date": "2022-12-12",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-003",
+            "publication_date": "2025-11-14",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/CozyGamers/comments/1oz5fmp/"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1824220",
+      "title": "Chivalry 2",
+      "generated_at_utc": "2026-10-05T21:21:58Z",
+      "expires_at_utc": "2026-10-25T21:21:58Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Chivalry 2",
+        "release_year": 2022,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1824220"
+          },
+          {
+            "kind": "developer",
+            "value": "Torn Banner Studios"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "The directional melee system is repeatedly praised for being immediately entertaining while still supporting a high mastery ceiling through timing, counters, footwork and weapon-specific matchups.",
+          "sentiment": "positive",
+          "recurrence": "strong",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "New players can enter matches quickly but often die repeatedly while learning spacing, counters and objective awareness; tutorial or training play and weapon familiarity are recurring parts of the learning curve.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "multiplayer",
+          "statement": "Large objective battles, crowded melee and duel-style encounters create most of the game's appeal; recent community feedback still describes active matches, although match quality varies with team balance and player behavior.",
+          "sentiment": "mixed",
+          "recurrence": "strong",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Weapons, classes and objective maps provide variety, but longer-term players also report limited map freshness or a desire for more new content once the core combat has been mastered.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Community and combat friction recur around toxic chat, cheating reports, hit-registration or blocking inconsistencies and chaotic body-blocking in large fights, without displacing the broader positive response to the melee system.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "regional",
+          "statement": "A dated September 2026 Russian-language player report describes repeated host-connection failures severe enough to prevent reliable consecutive matches; this is current regional or connectivity evidence but remains anecdotal rather than a universal server-state claim.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-006"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "The same chaotic 64-player battles that generate memorable large-scale fights can also produce frustration from crowding, friendly interference and less controlled engagements.",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-005"
+          ]
+        },
+        {
+          "statement": "The skill curve is accessible at entry but deep in practice: some players emphasize easy drop-in fun while others stress that consistent success requires substantial timing and matchup mastery.",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "source_ids": [
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-004"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "strong",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                4
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1824220/Chivalry_2/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "store_user_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1824220/Chivalry_2/?curator_clanid=32668148&l=russian",
+            "publication_date": null,
+            "language": "mixed",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1824220",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/Chivalry2/comments/1iku5lz/is_worth_playing_in_2025/",
+            "publication_date": "2025-02-08",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/Chivalry2/comments/1tn337i/new_player_concern/",
+            "publication_date": "2026-05-25",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "other_player_feedback",
+            "domain": "steamstat.io",
+            "url": "https://steamstat.io/app/1824220/reviews",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1824220",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-003",
+            "publication_date": "2025-02-08",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/Chivalry2/comments/1iku5lz/is_worth_playing_in_2025/"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-004",
+            "publication_date": "2026-05-25",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/Chivalry2/comments/1tn337i/new_player_concern/"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-004",
+            "publication_date": "2026-05-25",
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
+            "publication_date": "2025-02-08",
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-005",
+            "publication_date": "2026-09-05",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1835240",
+      "title": "Spiritfall",
+      "generated_at_utc": "2026-10-05T21:21:58Z",
+      "expires_at_utc": "2026-10-25T21:21:58Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Spiritfall",
+        "release_year": 2024,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1835240"
+          },
+          {
+            "kind": "developer",
+            "value": "Gentle Giant"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Fast platform-fighter combat built around juggling enemies, aerial movement, wall interactions and responsive attacks is the most consistent strength in player feedback.",
+          "sentiment": "positive",
+          "recurrence": "strong",
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-005",
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "Weapons, blessings and meta upgrades create substantial build variation across runs, and different weapons are repeatedly described as having distinct move sets worth learning.",
+          "sentiment": "positive",
+          "recurrence": "strong",
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-004",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Early runs can feel hard or underpowered, but player feedback says mastery, permanent upgrades and stronger synergies make later attempts more manageable; challenge therefore shifts materially with experience and unlocks.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-004",
+            "feedback-005",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Run variety benefits from weapon and blessing combinations, yet the central loop remains a compact action-roguelite structure and some players consider the overall experience derivative of familiar genre influences.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-004",
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Art and overall presentation are commonly regarded as appealing, while narrative and dialogue are comparatively light and not the main source of motivation.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Control feel is not unanimous: several players praise smooth, sensitive inputs, while others dislike the dash cadence, initially sluggish feel or the combat itself.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-005",
+            "feedback-007",
+            "feedback-008"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "Combat feel ranges from highly responsive and rewarding to initially sluggish or unsatisfying, with weapon choice and familiarity affecting how quickly the system clicks.",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-005",
+            "feedback-007",
+            "feedback-008"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "strong",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                5
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                3
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                5
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1,
+                4
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3,
+                5
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1835240/Spiritfall/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "store_user_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1835240/Spiritfall/?curator_clanid=38563966&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1835240",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "other_player_feedback",
+            "domain": "stopgame.ru",
+            "url": "https://stopgame.ru/game/spiritfall",
+            "publication_date": "2024-04-29",
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Spiritfall",
+              "release_year": 2024
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2025-12-22",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2024-04-07",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2025-05-15",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-002",
+            "publication_date": "2025-04-22",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-002",
+            "publication_date": "2025-02-28",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-002",
+            "publication_date": "2025-06-06",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-003",
+            "publication_date": "2024-04-29",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-003",
+            "publication_date": "2024-04-29",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    }
+  ],
+  "run_start_authority": {
+    "schema": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-REFERENCE-V1",
+    "schema_version": 1,
+    "run_start_anchor_commit": "877933d7f4a3e9c9402dafcbc438697a7e971f6b",
+    "run_start_nonce": "ff2df9cc79e3bba394a9433d3c67d879"
+  }
+}
