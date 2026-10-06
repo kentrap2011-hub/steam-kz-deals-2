@@ -1,0 +1,397 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "appid": "2181720",
+  "title": "Scarlet Tower",
+  "generated_at_utc": "2026-10-05T21:21:58Z",
+  "expires_at_utc": "2026-10-25T21:21:58Z",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "Scarlet Tower",
+    "release_year": 2024,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "2181720"
+      },
+      {
+        "kind": "developer",
+        "value": "Pyxeralia LLC"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The bullet-heaven loop uses auto-aim or auto-fire options, movement and a dash while the player navigates large enemy waves; feedback generally finds the basic action enjoyable even when comparing it closely with Vampire Survivors.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Classes, talent trees, weapon fusions and many upgrade systems create deep meta-progression, but several players find the number of systems confusing or grind-heavy enough to become a chore.",
+      "sentiment": "mixed",
+      "recurrence": "strong",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Difficulty and balance are uneven across later maps and corruption levels, with feedback ranging from satisfying escalation to ordinary enemies or bosses feeling disproportionately punishing.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "Multiple classes, maps and build systems provide variety, yet player feedback also criticizes the game for layering familiar survivor-like systems without always adding equivalent mechanical depth.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-005",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Pixel-art presentation and animation are recurring positives in Russian feedback, including reviews that are otherwise critical of balance or systems.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Reports describe unclear mechanics, hitbox or upgrade bugs and Steam Deck performance drops; because these reports are outside the current freshness window, they remain uncertain durability concerns rather than a current technical-state verdict.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "uncertain",
+      "source_ids": [
+        "source-002",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-004",
+        "feedback-007"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "Deep meta-progression is either a major reason to keep playing or a grindy collection of overlapping systems whose effects are not always clearly explained.",
+      "recurrence": "strong",
+      "mention_count": 3,
+      "source_ids": [
+        "source-002",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-006"
+      ]
+    }
+  ],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "strong",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            5
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1,
+            4
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "covered",
+          "observation_indices": [
+            5
+          ]
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/2181720/Scarlet_Tower/",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "identity",
+        "player_feedback": false,
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/2181720/reviews/?browsefilter=toprated&l=russian",
+        "publication_date": null,
+        "language": "russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "2181720",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/survivorslikes/comments/17t6gyg/steam_bullet_heaven_fest_reviews_scarlet_tower_is/",
+        "publication_date": "2023-11-11",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/pcgaming/comments/1bnq00v",
+        "publication_date": "2024-03-25",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "2181720",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "older"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "publication_date": "2023-11-26",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": "2025-08-02",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-002",
+        "publication_date": "2024-04-14",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-002",
+        "publication_date": "2025-06-13",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-003",
+        "publication_date": "2023-11-11",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item",
+        "url": "https://www.reddit.com/r/survivorslikes/comments/17t6gyg/steam_bullet_heaven_fest_reviews_scarlet_tower_is/"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-004",
+        "publication_date": "2024-03-26",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-007",
+        "source_id": "source-004",
+        "publication_date": "2024-04-01",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      }
+    ]
+  }
+}
