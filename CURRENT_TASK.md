@@ -1,18 +1,17 @@
 # CURRENT TASK
 
 ## COMPLETE — Steam shortlist scope reduction diagnostic 02
-Статус: `diagnostic_complete_user_choice_required`.
+Статус: `diagnostic_complete_recommendation_ready`.
 - task: `WORKER_TASK_STEAM_SHORTLIST_SCOPE_REDUCTION_DIAGNOSTIC_02.md`;
-- healthy funnel: 98,023 source rows -> 60,632 paid eligible -> 7,972 broad -> 2,522 paid shortlist -> 2,301 current semantic/Deep coverage target;
-- immediate pre/post Reviews comparison proves the small pre-fix shortlist was artificial: eligible 60,624 -> 60,631 while review-resolved AppIDs 147 -> 60,484 and shortlist 504 -> 2,522; the 504 state preserved 497 last-known-good rows;
-- 1,054 current rows have only one refined reason; largest exclusive routes: strong_niche_fit 414 and strong_fit 307; 685 rows are admitted only by general-quality/commercial reasons and 654 have core_fit_count=0;
-- offline simulations: conservative 781, balanced 468, aggressive ~276; no hard top-N and no review-data failure used;
-- balanced 468 retains 39/39 Wishlist, 112/112 current authoritative Deep-fit, 25/25 direct-rated/reference matches, 33/33 package/bundle-value families, 10/10 current DLC/addon semantic families and 181/181 moderate-scenario БРАТЬ СЕЙЧАС;
-- main tradeoff: balanced keeps 217/905 strong_niche_fit families, including 105/648 low-volume (<5k reviews); approval + shadow false-negative validation required;
-- recommendation: balanced deterministic pre-semantic gate around observed 450-500 families, expressed as transparent gates + protected lanes rather than fixed count;
-- no production code/threshold/shortlist/Dossier/Deep/ranking/Scheduled Task change occurred;
-- report: `reviews/worker_reports/steam-shortlist-scope-reduction-diagnostic-02.md`;
-- next bounded action after approval: separate `STEAM_SHORTLIST_BALANCED_PRESEMANTIC_GATE_IMPLEMENT_01`, contract-first and shadow-validated in the existing GitHub owner.
+- exact current funnel: 98,023 source rows -> 60,632 paid eligible -> 7,972 broad -> 2,522 paid shortlist -> 2,385 families -> 2,301 semantic target; current Dossier required 2,134;
+- same-source Reviews A/B: 60,624 eligible / 147 review-resolved / 504 shortlist before repair versus 60,631 / 60,484 / 2,522 after; review profile and threshold map were unchanged, so the old small state was primarily missing evidence, not stricter valid selection;
+- current semantic-pool drivers: broad strong_fit/strong_niche recall plus generic commercial-quality routes; at family level 947/2,301 have one refined reason, 638/2,301 are generic-quality/commercial-only, and 1,315/2,301 have <=1 core-fit tag;
+- offline first-wave bands: conservative 1,000, balanced 581, aggressive 240; balanced preserves 39/39 Wishlist, 112/112 current authoritative Deep-fit, 25/25 direct references, 181/181 moderate-scenario БРАТЬ СЕЙЧАС, 33/33 package/bundle lanes and 10/10 current DLC/base-support families;
+- critical future-fit proxy: without historical Deep-fit protection the same gates naturally retain only 33/112, 23/112 and 10/112 current Deep-fit respectively; therefore permanent deterministic 300–600 eligibility is rejected as high false-negative risk;
+- recommendation: balanced ~581 is only a GitHub-owned first semantic wave; remaining ~1,720 families stay deferred reserve, not excluded/not-fit; after the frozen 60/40 model is actually production-active, reserve may stop only under a mathematically valid maximum-score bound against the current top-100 cutoff;
+- no production threshold/code, shortlist, Dossier/Deep state, ranking, semantic-worker or Scheduled Task change occurred;
+- report: `reviews/worker_reports/steam-shortlist-scope-reduction-diagnostic-02.md`; corrected report commit `9f3c87981c1c2dd2b7e7419bec1eeeb44e5a5073`;
+- next bounded action after Director/user acceptance: contract-first `WORKER_TASK_STEAM_SEMANTIC_FIRST_WAVE_AND_RESERVE_IMPLEMENT_01.md`, separate from ЧАТ 2 Deep-logic work.
 
 ## COMPLETE — Deep two-stage architecture freeze 01
 Статус: `complete_interfaces_frozen`.
