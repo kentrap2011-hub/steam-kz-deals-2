@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "c4ed3ea3403c66c65a5f383788d40d4adcbafdca",
+  "run_start_authority_commit": "b21f857b68ba8d6fbbdd751e25f1f7224fb96533",
+  "run_started_at_utc": "2026-10-06T17:50:27+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "3492653c02de5b6de6f026852692ed10076a836f1699aa454a686a7b606d4308",
+  "family_id": "game:10",
+  "taste_subject_key": "App_10",
+  "appid": "10",
+  "taste_fingerprint": "b960d9a9127fda4e6cbf55b925c46b1e2a139da937fa558689c7093cd58c1163",
+  "candidate_context_sha256": "33b9dfb514e3bb9714e87f2121935b2f0da0674e78ac6d55467e1f8340901e2e",
+  "dossier_content_sha256": "c89e25dee686acee8aeb2897819c6c69ad5ef0fd318da2fdbe5e17f32c2210bf",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "0a126c8bf6c5c67cf3c12fcf5884134d9e1317fd3d2cefa2e960c7d9c414b021",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Recoil, positioning и map knowledge создают очень высокий mastery ceiling.",
+    "Быстрый round-loop почти без downtime постоянно возвращает к содержательному действию.",
+    "Community servers и custom modes расширяют минималистичную классическую формулу."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 98,
+    "development_variety": 72,
+    "structure_pacing_direction": 94,
+    "identity_hooks": 84,
+    "breadth_of_match": 90
+  },
+  "score_findings": [
+    {
+      "finding_id": "precision-round-mastery",
+      "text_ru": "Позиционирование, recoil control, короткие очереди, map knowledge и низкий time-to-kill делают даже простой objective-loop глубоко зависящим от точности и опыта.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Рост навыка, тайминги и результат, зависящий от собственного мастерства, — один из самых сильных сигналов твоего профиля."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 98
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 90
+        }
+      ]
+    },
+    {
+      "finding_id": "rapid-round-pacing",
+      "text_ru": "Buy-fight-round цикл быстро возвращает к следующему содержательному столкновению и почти не тратит время на длинное перемещение или подготовительную рутину.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/active_core_loop_vs_low_stimulation_filler/summary",
+          "profile_value_sha256": "b4a73bd07d3acb93744f9800c2ccc182334128a573b98d020cc696b40af3ff44",
+          "match_text_ru": "Плотный активный core loop с частой обратной связью хорошо совпадает с тем, что удерживает твоё внимание."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 94
+        }
+      ]
+    },
+    {
+      "finding_id": "community-modes-expand-formula",
+      "text_ru": "Классические правила и карты намеренно минималистичны, но community servers, surf и другие custom modes заметно меняют способы использовать ту же основу и уменьшают риск чистого однообразия.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/repetition_and_revisiting/summary",
+          "profile_value_sha256": "901465f98796f76ad70fb5b3f75bee97d6bf0f46783634d16b81abf21561c52d",
+          "match_text_ru": "Повтор не является минусом для тебя, если условия и игровой контекст действительно меняются."
+        },
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Новые форматы и ситуации поддерживают развитие игрового опыта."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 72
+        }
+      ]
+    },
+    {
+      "finding_id": "old-school-shooter-identity",
+      "text_ru": "Старая presentation и conventions объективно заметны, но именно stripped-down movement, recoil и быстрый темп остаются для части игроков причиной предпочитать эту версию более новым Counter-Strike.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/13/raises",
+          "profile_value_sha256": "fd0e5a051cdf972884f0bfccd7dfd2c3cd50ec876ee4cd2ee491d416f2707058",
+          "match_text_ru": "Яркий механический крючок способен поддерживать интерес даже при старой визуальной оболочке."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 84
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Высокий mastery barrier означает, что опытные игроки могут очень быстро подавлять новичка; это требовательный вход, хотя сама глубина навыка совпадает с твоими предпочтениями.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Классические правила и map rotation намеренно минималистичны; без community/custom modes разнообразие в основном рождается из мастерства игроков, а не новых систем.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Возраст игры заметен в presentation и conventions, хотя часть игроков считает именно этот stripped-down old-school feel преимуществом.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      }
+    ]
+  }
+}
