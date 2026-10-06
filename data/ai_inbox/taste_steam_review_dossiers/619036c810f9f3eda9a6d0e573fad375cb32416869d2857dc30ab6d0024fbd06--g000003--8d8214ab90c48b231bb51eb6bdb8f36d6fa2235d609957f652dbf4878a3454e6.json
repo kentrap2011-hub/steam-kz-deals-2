@@ -1,0 +1,1373 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "619036c810f9f3eda9a6d0e573fad375cb32416869d2857dc30ab6d0024fbd06",
+  "prepared_required_sha256": "66a1890b24d3b23f623aa361734f04c23f3d17b209697e4895e7e361f545ee74",
+  "group_plan_sha256": "8e3e80400e5ea77151993efa02d770641137e708c20a77e4583a90ccd9d98671",
+  "group_count": 712,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 3,
+  "start_index": 6,
+  "end_index_exclusive": 9,
+  "appids": [
+    "1012880",
+    "10150",
+    "1016800"
+  ],
+  "items_sha256": "688dd5525ef729566d249371cddb9deab5881a7eb223c53623e9fad9c5e57a2c",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "c7484ab14aadc6ccd7bf1ecec065d4363a77dbdd8243a0b007d7b0949764d27a",
+  "items": [
+    {
+      "key": "App_1012880",
+      "appid": "1012880",
+      "title": "60 Seconds! Reatomized",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1012880.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_10150",
+      "appid": "10150",
+      "title": "Prototype™",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_10150.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1016800",
+      "appid": "1016800",
+      "title": "Chernobylite Complete Edition",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1016800.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "8d8214ab90c48b231bb51eb6bdb8f36d6fa2235d609957f652dbf4878a3454e6",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1012880",
+      "title": "60 Seconds! Reatomized",
+      "generated_at_utc": "2026-10-06T14:22:00Z",
+      "expires_at_utc": "2026-10-26T14:22:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "60 Seconds! Reatomized",
+        "release_year": 2019,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1012880"
+          },
+          {
+            "kind": "developer",
+            "value": "Robot Gentleman"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "The experience has two sharply different phases: a frantic sixty-second scavenging run through the house followed by slower shelter management built around rationing supplies and making text-driven survival decisions.",
+          "sentiment": "positive",
+          "recurrence": "strong",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Reatomized expands the older formula with additional events, endings, challenge content and presentation improvements, giving repeated shelters more possible branches and outcomes.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Random events and multiple endings create replay value, but the shelter phase can become repetitive or shallow across repeated runs because many decisions are variations on familiar resource and risk tradeoffs.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-004",
+            "source-005",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-005",
+            "feedback-006",
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Randomized events, resource scarcity and expedition outcomes can heavily influence whether a run survives, producing tension but also frustration when a long run collapses from unfavorable event chains.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-005",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "The initial scavenging phase is consistently fast and hectic, while shelter play is deliberately slower and more text-heavy; players differ on whether that contrast creates welcome tension or a pacing drop.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Russian mobile-version feedback identifies camera movement and item pickup during the timed scavenging phase as control friction; this is platform-specific evidence and is not generalized to the Steam control state.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "The random-event structure is both the main replay engine and a source of frustration because it makes each shelter run different while reducing how fully outcomes can be controlled through planning alone.",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "source_ids": [
+            "source-005",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-007"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "strong",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                5
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                5
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                4
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1012880/60_Seconds_Reatomized/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "other_player_feedback",
+            "domain": "play.google.com",
+            "url": "https://play.google.com/store/apps/details?hl=ru&id=com.RobotGentleman.game60SecondsReatomized",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "60 Seconds! Reatomized",
+              "release_year": 2019
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "other_player_feedback",
+            "domain": "appvisor.ru",
+            "url": "https://appvisor.ru/app/ios/60-seconds-reatomized-210804/",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "60 Seconds! Reatomized",
+              "release_year": 2019
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/60secondsgame/comments/1qhqzhc/60_seconds_or_60seconds_reatomized/",
+            "publication_date": "2026-01-20",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/MobileGameReviewers/comments/1fipnrc/60_seconds_reatomized/",
+            "publication_date": "2024-09-17",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-006",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1012880/discussions/0/1643170903493997826/",
+            "publication_date": "2019-07-27",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1012880",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2021-05-29",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2021-06-10",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-003",
+            "publication_date": "2026-04-13",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": "2026-04-11",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-004",
+            "publication_date": "2026-01-20",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/60secondsgame/comments/1qhqzhc/60_seconds_or_60seconds_reatomized/"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-005",
+            "publication_date": "2024-09-17",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/MobileGameReviewers/comments/1fipnrc/60_seconds_reatomized/"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-006",
+            "publication_date": "2019-07-27",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "10150",
+      "title": "Prototype™",
+      "generated_at_utc": "2026-10-06T14:22:00Z",
+      "expires_at_utc": "2026-10-26T14:22:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Prototype™",
+        "release_year": 2009,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "10150"
+          },
+          {
+            "kind": "developer",
+            "value": "Radical Entertainment"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "The defining appeal is a high-mobility power fantasy built around wall-running, huge jumps, gliding, shapeshifting weapons, consuming enemies and rapidly switching between direct combat and disguise-based infiltration.",
+          "sentiment": "positive",
+          "recurrence": "strong",
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-005",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "A broad upgrade tree expands movement, combat, stealth and military-equipment abilities, and player feedback repeatedly describes the growing toolkit as a strong source of momentum across the campaign.",
+          "sentiment": "positive",
+          "recurrence": "strong",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "The open world supports flexible approaches to many objectives and side challenges, but side activities and mission templates can become repetitive despite the freedom of the underlying movement and combat systems.",
+          "sentiment": "mixed",
+          "recurrence": "strong",
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004",
+            "feedback-005",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Crowded battles and later missions can become punishing because military and infected enemies attack in large numbers, and some players find control complexity or enemy pressure frustrating once the campaign escalates.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "The Blacklight outbreak, Web of Intrigue memory system and violent antihero premise give the world a distinctive identity, but character depth and conventional story writing are more divisive than the gameplay fantasy.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "The 2009 presentation, repetitive optional content and some awkward control behavior are recurring age-related tradeoffs even in feedback that still strongly praises traversal and destructive freedom.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-005"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "Prototype's open-world freedom and movement remain major strengths, while mission and side-activity repetition can make the campaign feel much less varied than its large ability set initially suggests.",
+          "recurrence": "strong",
+          "mention_count": 5,
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004",
+            "feedback-005",
+            "feedback-006"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "strong",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                5
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                5
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1,
+                4
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3,
+                5
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/10150/Prototype/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "other_player_feedback",
+            "domain": "stopgame.ru",
+            "url": "https://stopgame.ru/game/prototype_2008/reviews",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Prototype™",
+              "release_year": 2009
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/patientgamers/comments/16dfagx",
+            "publication_date": "2023-09-08",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/patientgamers/comments/152el5i/i_had_to_give_up_on_prototype/",
+            "publication_date": "2023-07-17",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/PrototypeGame/comments/1jypu6g/my_review_prototype/",
+            "publication_date": "2025-04-14",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2024-08-20",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2025-03-26",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-003",
+            "publication_date": "2023-09-08",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/patientgamers/comments/16dfagx"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": "2023-09-10",
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-004",
+            "publication_date": "2023-07-17",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/patientgamers/comments/152el5i/i_had_to_give_up_on_prototype/"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-005",
+            "publication_date": "2025-04-14",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/PrototypeGame/comments/1jypu6g/my_review_prototype/"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1016800",
+      "title": "Chernobylite Complete Edition",
+      "generated_at_utc": "2026-10-06T14:22:00Z",
+      "expires_at_utc": "2026-10-26T14:22:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Chernobylite Complete Edition",
+        "release_year": 2021,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1016800"
+          },
+          {
+            "kind": "developer",
+            "value": "The Farm 51"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 7 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "The central loop combines first-person exploration and scavenging with stealth, shooting, crafting and resource decisions in recreated Chernobyl-zone locations; atmosphere and environmental exploration are more consistently praised than the gunplay.",
+          "sentiment": "mixed",
+          "recurrence": "strong",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "Players return to a base where resources support construction, gear crafting and upgrades, while companions can unlock additional skills; these systems add continuity but are often described as shallower than their initial breadth suggests.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004",
+            "source-005",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-005",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "The game repeatedly sends the player from a hub into bounded mission areas, with companion assignments and resource collection creating a day-to-day expedition structure rather than one seamless open world.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "The expedition-resource-base loop can become repetitive or grindy after several hours, especially once crafting and base-building goals settle into routine resource collection.",
+          "sentiment": "negative",
+          "recurrence": "strong",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004",
+            "source-005",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-005",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "The scanned environments, oppressive atmosphere, sound and sense of place are recurring strengths across Russian and non-Russian player feedback.",
+          "sentiment": "positive",
+          "recurrence": "strong",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "The nonlinear story uses choices, companion relationships and time-manipulation ideas, but players split on whether that produces an engaging mystery or a confusing and uneven narrative.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-004",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Companion morale and base-resource systems create meaningful management tradeoffs for some players, while others find them intrusive or underdeveloped compared with exploration and atmosphere.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-004",
+            "source-005",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-004",
+            "feedback-005",
+            "feedback-006"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "Base building and management are a major design split: some players enjoy the additional survival-management layer, while others see it as shallow busywork that interrupts the stronger exploration and atmosphere.",
+          "recurrence": "strong",
+          "mention_count": 4,
+          "source_ids": [
+            "source-002",
+            "source-004",
+            "source-005",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-005",
+            "feedback-006"
+          ]
+        },
+        {
+          "statement": "Story choices and time-manipulation ideas create a distinctive identity, but the same structure can feel confusing or emotionally overbearing to players less engaged by the cast.",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "source_ids": [
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-004",
+            "feedback-005"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "strong",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                6
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                4,
+                5
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                3,
+                5,
+                6
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1016800/Chernobylite_Complete_Edition/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "store_user_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1016800/Chernobylite_Complete_Edition/?curator_clanid=32668243&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1016800",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "other_player_feedback",
+            "domain": "stopgame.ru",
+            "url": "https://stopgame.ru/game/chernobylite/reviews",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Chernobylite Complete Edition",
+              "release_year": 2021
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/stalker/comments/1npo554/what_do_you_guys_think_of_chernobylite/",
+            "publication_date": "2025-09-24",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/patientgamers/comments/1ovui2o/chernobylite_a_lite_good_bad_ugly_with_no_real/",
+            "publication_date": "2025-11-13",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-006",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/pcgaming/comments/s8dxy5/chernobylite_team_is_looking_for_feedback/",
+            "publication_date": "2022-01-20",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-003",
+            "publication_date": "2025-08-01",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-004",
+            "publication_date": "2025-09-24",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/stalker/comments/1npo554/what_do_you_guys_think_of_chernobylite/"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-005",
+            "publication_date": "2025-11-13",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/patientgamers/comments/1ovui2o/chernobylite_a_lite_good_bad_ugly_with_no_real/"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-006",
+            "publication_date": "2022-01-20",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/pcgaming/comments/s8dxy5/chernobylite_team_is_looking_for_feedback/"
+          }
+        ]
+      }
+    }
+  ],
+  "run_start_authority": {
+    "schema": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-REFERENCE-V1",
+    "schema_version": 1,
+    "run_start_anchor_commit": "3965c77ae40ebd2e6d0495ea808bac8634fb43ec",
+    "run_start_nonce": "16ae197831de6825080cb13758347634"
+  }
+}
