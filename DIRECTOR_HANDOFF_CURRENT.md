@@ -55,11 +55,15 @@ The user has now explicitly authorized a replacement architecture:
 - Stage 1 does not determine final ranking authority;
 - Deep Stage 2 compares the Stage-1 result with GitHub-selected already-calibrated neighboring games and outputs the **calibrated quality/personal score 0–60**;
 - only the calibrated Stage-2 quality score is authoritative for the site's personal/game-quality component;
-- the site's current scoring split is preserved: **quality/personal max 60 + deterministic purchase/deal max 40 = combined total max 100**;
-- Stage 2 must not distort quality to compensate for price/discount;
+- the site's current scoring split is preserved: **personal/quality max 60 + deterministic purchase/deal max 40 = total 100**;
+- preferred personal split is now **calibrated Deep fit 0–56 + deterministic wishlist bonus +4**;
+- wishlist is explicit user intent and must positively raise the candidate; do not bury it inside free-form semantic scoring;
+- Stage 2 must establish a strict comparative order and the displayed calibrated personal scores must be unique/monotonic for distinct ranked fit candidates; integer-only 0–60 is forbidden;
+- use the smallest human-readable decimal precision that prevents displayed ties in the active calibrated set;
+- current legacy duration (+3), achievements/context (+3/-6) and risk (-12) arithmetic must be audited and preferably folded into holistic Deep semantics to avoid double-counting;
+- direct user ratings remain strong calibration anchors;
+- Stage 2 must not distort personal quality to compensate for price/discount;
 - site/card/Statistics must distinguish Stage 1 provisional vs Stage 2 calibrated and remove Fast as an equivalent current semantic stage;
-- current fixed additive five-factor formula must stop being final score authority;
-- existing Deep evidence should be migrated/reused where safe rather than discarded;
 - no Scheduled Task changes are authorized in this implementation task.
 
 ## CURRENTLY WORKING / RECENT SEMANTIC CHATS
