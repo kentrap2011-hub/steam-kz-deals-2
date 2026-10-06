@@ -1,0 +1,1305 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "619036c810f9f3eda9a6d0e573fad375cb32416869d2857dc30ab6d0024fbd06",
+  "prepared_required_sha256": "66a1890b24d3b23f623aa361734f04c23f3d17b209697e4895e7e361f545ee74",
+  "group_plan_sha256": "8e3e80400e5ea77151993efa02d770641137e708c20a77e4583a90ccd9d98671",
+  "group_count": 712,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 1,
+  "start_index": 0,
+  "end_index_exclusive": 3,
+  "appids": [
+    "10",
+    "1000360",
+    "1003590"
+  ],
+  "items_sha256": "a6d8818f117f1d2c1cd19876ff0cd4ae1ab5e972084e878db5189a66a5b07600",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "c7484ab14aadc6ccd7bf1ecec065d4363a77dbdd8243a0b007d7b0949764d27a",
+  "items": [
+    {
+      "key": "App_10",
+      "appid": "10",
+      "title": "Counter-Strike",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_10.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1000360",
+      "appid": "1000360",
+      "title": "Hellish Quart",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1000360.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1003590",
+      "appid": "1003590",
+      "title": "Tetris® Effect: Connected",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1003590.json",
+      "reason": "refresh_required"
+    }
+  ],
+  "group_sha256": "3b68d56adf342f448bd4a6ce83a638bdb67056c0aad8adb313e9416a4d7772ae",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "10",
+      "title": "Counter-Strike",
+      "generated_at_utc": "2026-10-06T14:22:00Z",
+      "expires_at_utc": "2026-10-26T14:22:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Counter-Strike",
+        "release_year": 2000,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "10"
+          },
+          {
+            "kind": "developer",
+            "value": "Valve"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Fast, lethal round-based firefights reward cautious positioning, short controlled bursts, map knowledge and quick reactions rather than sustained run-and-gun damage trading.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "The old-school shooting model and rapid deaths can be difficult to read for players coming from more forgiving arcade shooters, while experienced players still praise the precision of the movement and recoil model.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "multiplayer",
+          "statement": "Team objectives, fast buy-fight-round cycles and community-hosted servers define the long-term structure; player feedback repeatedly treats the minimal setup and immediate return to combat as central strengths.",
+          "sentiment": "positive",
+          "recurrence": "strong",
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-004",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "A fixed core of maps, weapons and repeated round objectives is offset by tactical depth, community server variants and the ability to approach familiar maps differently across teams and skill levels.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "multiplayer",
+          "statement": "A September 2026 community discussion still describes active Counter-Strike 1.6 play and established community servers, but this is an anecdotal current activity signal rather than a global population measurement.",
+          "sentiment": "positive",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Age is a practical tradeoff: Russian feedback praises the stripped-down classic design while also describing the presentation and shooting model as harsh or outdated for some modern players.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "The same minimalism and old-school shooting model that longtime players value can feel dated, opaque or punishing to players accustomed to newer shooters.",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "strong",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                5
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                4
+              ]
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                5
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/10/CounterStrike/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "other_player_feedback",
+            "domain": "stopgame.ru",
+            "url": "https://stopgame.ru/game/counter_strike/reviews",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Counter-Strike",
+              "release_year": 2000
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/counterstrike/comments/1qh4d45/in_your_opinion_whats_the_best_counter_strike_game/",
+            "publication_date": "2026-01-19",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Counter-Strike",
+              "release_year": 2000
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/counterstrike/comments/1wlr7om/like_home/",
+            "publication_date": "2026-09-20",
+            "language": "non_russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Counter-Strike",
+              "release_year": 2000
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2025-04-30",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2024-08-30",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2023-10-13",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": "2026-01-19",
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-004",
+            "publication_date": "2026-09-20",
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1000360",
+      "title": "Hellish Quart",
+      "generated_at_utc": "2026-10-06T14:22:00Z",
+      "expires_at_utc": "2026-10-26T14:22:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Hellish Quart",
+        "release_year": 2021,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1000360"
+          },
+          {
+            "kind": "developer",
+            "value": "Kubold"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Physics-driven sword contact, motion-captured attacks and automatic defensive interactions make distance, timing and weapon geometry central to each duel; clean hits can end exchanges very quickly.",
+          "sentiment": "positive",
+          "recurrence": "strong",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "The system is easy to approach as a spectacle but has a high mastery ceiling because deliberate play depends on spacing, timing, guards and understanding why attacks are deflected or traded.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Different historical fighters, weapons and fencing styles materially change reach, tempo and attack patterns, giving duel variety beyond a single universal move set.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "multiplayer",
+          "statement": "Local two-player duels are a major attraction, while player feedback repeatedly flags the absence of native online netcode and reliance on streaming workarounds such as Remote Play or Parsec, where latency can be a meaningful disadvantage.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Single-player modes can showcase the combat system, but long-form solo play is less consistently praised than sparring with another player and can feel repetitive once the immediate novelty of the duels wears off.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Because physical weapon contact and body positioning matter, outcomes can be less immediately readable than in conventional fighting games; players specifically describe uncertainty around blocks, trades and punish windows while learning the system.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-005"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "The physics-based combat is both the game's defining appeal and its learning friction: players praise the realism and feel, while also reporting difficulty understanding blocks, trades and spacing without deeper practice.",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "source_ids": [
+            "source-002",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-005"
+          ]
+        },
+        {
+          "statement": "Multiplayer is most satisfying locally for some players, while online streaming workarounds are considered usable by some and too latency-sensitive by others.",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "strong",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                5
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                4
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                5
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1000360/Hellish_Quart/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "other_player_feedback",
+            "domain": "pikabu.ru",
+            "url": "https://pikabu.ru/story/samaya_realistichnaya_igra_pro_fekhtovanie_9866120",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1000360/reviews/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1000360",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1000360/discussions/0/3757726983066513682/",
+            "publication_date": "2023-02-10",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1000360",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/HellishQuart/comments/r7b2yd/how_do_you_actually_play_hq/",
+            "publication_date": "2021-12-02",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://pikabu.ru/story/samaya_realistichnaya_igra_pro_fekhtovanie_9866120"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-003",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-003",
+            "publication_date": "2025-12-20",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-004",
+            "publication_date": "2023-02-10",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-005",
+            "publication_date": "2021-12-02",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/HellishQuart/comments/r7b2yd/how_do_you_actually_play_hq/"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1003590",
+      "title": "Tetris® Effect: Connected",
+      "generated_at_utc": "2026-10-06T14:22:00Z",
+      "expires_at_utc": "2026-10-26T14:22:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Tetris® Effect: Connected",
+        "release_year": 2021,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1003590"
+          },
+          {
+            "kind": "developer",
+            "value": "Monstars Inc., Resonair, Stage Games"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 7 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "The game keeps modern Tetris at its core while layering systems such as Zone and score-focused variants that change how players manage pressure and recover from difficult boards.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-007"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Music, reactive visuals, animation and tactile or audio feedback are central to the experience and repeatedly create a strong sense of flow or emotional immersion, although the spectacle can also distract from reading the board.",
+          "sentiment": "mixed",
+          "recurrence": "strong",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Journey mode and a broad set of Effect or score-attack variants give players several ways to engage with the same Tetris rules, from relaxed sessions to score chasing and more traditional modes.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-007"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "multiplayer",
+          "statement": "Connected adds local and online competitive modes plus cooperative boss play; recent player recommendations still identify it as a strong local multiplayer option, while its formats are more structured than a simple unrestricted four-player versus mode.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-006",
+            "source-007"
+          ],
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Journey and faster modes can become demanding enough to create repeated failure or fatigue, so the audiovisual presentation does not remove the underlying speed and execution demands of Tetris.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Mode variety can prolong replay value, but players who burn out on the underlying Tetris loop can still experience repetition even when presentation and rulesets vary.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "localization",
+          "statement": "Russian-speaking players repeatedly report that the interface lacks Russian text and that limited English can make mechanics or navigation harder to understand; official product metadata also does not list Russian support, so the present localization picture is treated as uncertain rather than inferred solely from the old thread start date.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "uncertain",
+          "source_ids": [
+            "source-001",
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "The audiovisual density is a major strength for players seeking an immersive Tetris experience but can become distracting or overwhelming for players who need a visually quieter board.",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "source_ids": [
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-004"
+          ]
+        },
+        {
+          "statement": "The many modes reduce repetition for some players, while others still reach Tetris fatigue because every mode ultimately returns to the same core placement loop.",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "source_ids": [
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-005"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "strong",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1,
+                4
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                5
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                4
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                4,
+                5,
+                6
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                6
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1003590/Tetris_Effect_Connected/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1003590/discussions/0/603016087419883875/",
+            "publication_date": "2024-12-10",
+            "language": "mixed",
+            "evidence_role": "uncertain",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1003590",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/patientgamers/comments/1muld3p/tetris_effect_connected_is_a_game_ill_likely/",
+            "publication_date": "2025-08-19",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/TetrisEffect/comments/vjoj8x",
+            "publication_date": "2022-06-24",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/TetrisEffect/comments/1m8u38k",
+            "publication_date": "2025-07-25",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-006",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/Tetris/comments/1wwpvcd/best_way_to_play_multiplayer_tetris_with_the/",
+            "publication_date": "2026-10-03",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Tetris® Effect: Connected",
+              "release_year": 2021
+            }
+          },
+          {
+            "source_id": "source-007",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1003590/discussions/0/3414307257843025751/",
+            "publication_date": "2022-06-30",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1003590",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2025-12-02",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2026-02-03",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-003",
+            "publication_date": "2025-08-19",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/patientgamers/comments/1muld3p/tetris_effect_connected_is_a_game_ill_likely/"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-004",
+            "publication_date": "2022-06-24",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/TetrisEffect/comments/vjoj8x"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-005",
+            "publication_date": "2025-07-25",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/TetrisEffect/comments/1m8u38k"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-006",
+            "publication_date": "2026-10-03",
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-007",
+            "publication_date": "2022-06-30",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    }
+  ],
+  "run_start_authority": {
+    "schema": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-REFERENCE-V1",
+    "schema_version": 1,
+    "run_start_anchor_commit": "3965c77ae40ebd2e6d0495ea808bac8634fb43ec",
+    "run_start_nonce": "16ae197831de6825080cb13758347634"
+  }
+}
