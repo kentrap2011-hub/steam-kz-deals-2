@@ -1,0 +1,265 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "c4ed3ea3403c66c65a5f383788d40d4adcbafdca",
+  "run_start_authority_commit": "b21f857b68ba8d6fbbdd751e25f1f7224fb96533",
+  "run_started_at_utc": "2026-10-06T17:50:27+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "503712a6c8f1ca060c28b943d8394e8e285ed4eaea0494c0f385a4da7d97c85e",
+  "family_id": "game:1003890",
+  "taste_subject_key": "App_1003890",
+  "appid": "1003890",
+  "taste_fingerprint": "1ef33f23a1329095695c3fe0f62ad1888ec5e13dd13a7541c652f0bcc3a174da",
+  "candidate_context_sha256": "b4480b258f3b8d005eb06fcdaa56d1edc2ac4f7fce7f6e0ad35a78be37669446",
+  "dossier_content_sha256": "b2a645c4e4b7cebd1a522ecfbff422aff5b2cd46ee6ae80261912e06095f0bfa",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "2b0ea3aee3624d060e82b00fe5f12aade4df1162c52cefa2a70b831b0b61403c",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Noir-детектив, персонажи, джаз и комиксная стилистика создают сильную атмосферную идентичность.",
+    "Поиск улик, сенсорные наблюдения и deduction-системы дают самостоятельный mystery-loop.",
+    "Выборы могут менять отдельные сцены, отношения и исходы, добавляя некоторую вариативность расследованию."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 58,
+    "development_variety": 68,
+    "structure_pacing_direction": 68,
+    "identity_hooks": 94,
+    "breadth_of_match": 80
+  },
+  "score_findings": [
+    {
+      "finding_id": "noir-detective-identity",
+      "text_ru": "Детективная история, noir-атмосфера, персонажи, джаз и комиксная стилистика создают очень сильный самостоятельный крючок поверх механики расследования.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Узнаваемая атмосфера, стиль и подача — устойчивый положительный сигнал твоего профиля."
+        },
+        {
+          "json_pointer": "/taste_profile/13/raises",
+          "profile_value_sha256": "fd0e5a051cdf972884f0bfccd7dfd2c3cd50ec876ee4cd2ee491d416f2707058",
+          "match_text_ru": "Яркий герой, история и стиль могут быть достаточным крючком, чтобы удерживать интерес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 94
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 80
+        }
+      ]
+    },
+    {
+      "finding_id": "clue-deduction-loop",
+      "text_ru": "Поиск улик, сенсорные наблюдения и deduction-системы регулярно требуют связывать найденные факты, поэтому расследование даёт отдельный игровой слой, а не только диалоги.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/raises",
+          "profile_value_sha256": "f1997cf9d87235a0d984a3c5bceefb8aa566143fb2e8edddfb81312ba09aef35",
+          "match_text_ru": "Тайна, поиск улик и понятные загадки — прямой положительный сигнал твоего профиля."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 58
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 68
+        }
+      ]
+    },
+    {
+      "finding_id": "choices-with-limited-branching",
+      "text_ru": "Решения меняют отдельные сцены, отношения и исходы, но не каждый моральный или диалоговый выбор получает заметное последствие, поэтому вариативность есть, но она ограничена.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Новые сюжетные ситуации и развилки поддерживают твою потребность в развитии опыта, но здесь не все решения дают новый контекст."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 68
+        }
+      ]
+    },
+    {
+      "finding_id": "investigation-pacing-friction",
+      "text_ru": "Когда улики связываются, расследование движется бодро, но медленное перемещение, загрузки, непропускаемые диалоги и неясные точки взаимодействия регулярно нарушают этот ритм.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/active_core_loop_vs_low_stimulation_filler/summary",
+          "profile_value_sha256": "b4a73bd07d3acb93744f9800c2ccc182334128a573b98d020cc696b40af3ff44",
+          "match_text_ru": "Длинные промежутки низкой стимуляции и мелкой рутины между сильными эпизодами способны резко снижать твою вовлечённость."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 68
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Значительная часть времени проходит в диалогах и медленном обследовании небольших локаций; при слабом темпе такой story-first формат может заметно уступать более активным расследованиям.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "felt_technical_burden",
+        "text_ru": "Медленная ходьба, неудобная камера и неточные взаимодействия с окружением регулярно делают поиск улик тяжелее, чем требует сама детективная задача.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть многолетние сообщения об оптимизации, анимационных и диалоговых сбоях и отдельных progress-affecting bugs, но frozen evidence не позволяет уверенно переносить их тяжесть на текущий билд.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Не каждый моральный или диалоговый выбор даёт заметную развилку, поэтому обещание последствий реализовано неравномерно.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Загрузки, непропускаемые диалоги и иногда неясные точки взаимодействия могут сбивать хороший темп, когда расследование уже начало складываться.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Сильная история и атмосфера сосуществуют с заметно более грубым interaction-layer: насколько он будет мешать, зависит от готовности терпеть техническое и управляющее трение ради детектива.",
+        "evidence_refs": [
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      }
+    ]
+  }
+}
