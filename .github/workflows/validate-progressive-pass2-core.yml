@@ -8,6 +8,24 @@ on:
       - "config/progressive_pass1_contract.json"
       - "config/progressive_pass1_worker_prompt.md"
       - "config/progressive_pass2_contract.json"
+      - "config/deep_two_stage_architecture_contract.json"
+      - "config/deep_stage1_contract.json"
+      - "config/deep_stage1_result_schema.json"
+      - "config/deep_stage2_contract.json"
+      - "config/deep_stage2_result_schema.json"
+      - "config/deep_two_stage_site_projection_contract.json"
+      - "config/deep_two_stage_migration_contract.json"
+      - "config/deep_two_stage_dependency_map.json"
+      - "scripts/test_deep_two_stage_architecture_freeze.py"
+      - "config/deep_two_stage_architecture_contract.json"
+      - "config/deep_stage1_contract.json"
+      - "config/deep_stage1_result_schema.json"
+      - "config/deep_stage2_contract.json"
+      - "config/deep_stage2_result_schema.json"
+      - "config/deep_two_stage_site_projection_contract.json"
+      - "config/deep_two_stage_migration_contract.json"
+      - "config/deep_two_stage_dependency_map.json"
+      - "scripts/test_deep_two_stage_architecture_freeze.py"
       - "config/dossier_deep_identity_compatibility_contract.json"
       - "config/daily_execution_contract.json"
       - "config/progressive_pass2_result_schema.json"
@@ -161,6 +179,7 @@ jobs:
             scripts/test_deep_legacy_full_reanalysis.py \
             scripts/test_deep_score_evidence_explainability.py \
             scripts/test_deep_invalid_not_fit_contract_loop.py \
+            scripts/test_deep_two_stage_architecture_freeze.py \
             scripts/test_dossier_deep_release_year_identity_compatibility.py \
             scripts/refine_visual_ranking.py \
             scripts/card_explanation_policy.py \
@@ -213,6 +232,8 @@ jobs:
         run: python scripts/test_deep_score_evidence_explainability.py
       - name: Deep invalid not-fit contract loop regression
         run: python scripts/test_deep_invalid_not_fit_contract_loop.py
+      - name: Deep two-stage architecture freeze regression
+        run: python scripts/test_deep_two_stage_architecture_freeze.py
       - name: PASS 2 canonical-writer staging regression
         run: |
           bash -n scripts/stage_progressive_pass2_canonical_writer.sh
