@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "c4ed3ea3403c66c65a5f383788d40d4adcbafdca",
+  "run_start_authority_commit": "b21f857b68ba8d6fbbdd751e25f1f7224fb96533",
+  "run_started_at_utc": "2026-10-06T17:50:27+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "1b7216ca499b9f5328cf5e08c2e35cc3b98bee9b6462c646725aa8b6201308d0",
+  "family_id": "game:1003590",
+  "taste_subject_key": "App_1003590",
+  "appid": "1003590",
+  "taste_fingerprint": "5f13db9d6f3778ecf2f9663e47000d23231f51ebf700eadb54872360b3545e70",
+  "candidate_context_sha256": "b163766a5f515965e723660e410c505a6b67375144e93019a9c0b57283e0013a",
+  "dossier_content_sha256": "b1175dcb2825afbf91273f344bf8b9ab3cdf998bb2e0dce260bc07eaff7c683b",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "425a988b4fecf4657817ab5754bb4021da4f4ce2e8b4b416c2a493e4e8bc3caf",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Классический Tetris и Zone дают очень глубокий mastery-loop.",
+    "Journey, Effect и multiplayer режимы существенно расширяют формулу.",
+    "Музыка и визуальные эффекты создают уникальный аудиовизуальный поток."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 98,
+    "development_variety": 88,
+    "structure_pacing_direction": 90,
+    "identity_hooks": 96,
+    "breadth_of_match": 90
+  },
+  "score_findings": [
+    {
+      "finding_id": "tetris-mastery-zone",
+      "text_ru": "Классический Tetris остаётся в центре, а Zone и mode-specific twists добавляют новые тактические решения без потери точного, отзывчивого mastery-loop.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Видимый рост навыка, тайминги и результат, зависящий от мастерства, — очень сильный сигнал твоего профиля."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 98
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 90
+        }
+      ]
+    },
+    {
+      "finding_id": "many-mode-structure",
+      "text_ru": "Journey, Effect modes, score chasing и classic-style варианты позволяют менять ритм между прогрессией, тренировкой и расслабленными сессиями, а не жить в одном ruleset.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Смена форматов и игровых ситуаций поддерживает твою потребность в развитии и разнообразии."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 88
+        },
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 90
+        }
+      ]
+    },
+    {
+      "finding_id": "audiovisual-flow-identity",
+      "text_ru": "Музыка, меняющиеся фоны, эффекты и tactile feedback синхронизируются с игрой и превращают знакомую механику в отдельный сенсорный опыт.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Узнаваемая визуальная и атмосферная подача — устойчивый положительный сигнал."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 96
+        }
+      ]
+    },
+    {
+      "finding_id": "return-value-varies",
+      "text_ru": "После Journey долгосрочная ценность зависит от желания улучшать score или играть multiplayer; для одних это почти бесконечный mastery-loop, для других цели заканчиваются заметно раньше.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/repetition_and_revisiting/summary",
+          "profile_value_sha256": "901465f98796f76ad70fb5b3f75bee97d6bf0f46783634d16b81abf21561c52d",
+          "match_text_ru": "Повтор подходит тебе, когда он даёт новый игровой контекст или рост, а не только повторяет уже раскрытую формулу."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 88
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      },
+      {
+        "kind": "conflict",
+        "index": 1
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Journey и high-speed режимы могут оказаться заметно сложнее расслабленной презентации, хотя frozen evidence одновременно показывает сильный рост через практику.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "conflict",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "После завершения предпочитаемых Journey/unlock целей мотивация зависит от любви к score improvement и multiplayer; не всем этого хватает для долгого возврата.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Connected/competitive modes расширяют игру, но популярность плейлистов и скорость matchmaking различаются.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Russian interface по frozen evidence не поддерживается; сообщения позднего 2025–начала 2026 согласуются с текущей Steam metadata, хотя dossier формально сохраняет статус uncertain.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Интенсивные эффекты, являющиеся главным стилистическим плюсом, на высокой скорости иногда ухудшают читаемость поля и делают опыт более hectic.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      }
+    ]
+  }
+}
