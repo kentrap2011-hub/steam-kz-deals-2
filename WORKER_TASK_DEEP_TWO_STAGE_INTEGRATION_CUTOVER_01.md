@@ -6,6 +6,16 @@ Source of truth: `main`
 Dependencies: the architecture-freeze, Stage-1 worker, Stage-2 worker, Fast/ranking migration, and site-mirror tasks must all be accepted first.
 Mode: `INTEGRATE / MIGRATE / VALIDATE / CUTOVER`
 
+Frozen interfaces (integration may activate but must not silently redefine):
+- `config/deep_two_stage_architecture_contract.json`
+- `config/deep_stage1_contract.json`
+- `config/deep_stage1_result_schema.json`
+- `config/deep_stage2_contract.json`
+- `config/deep_stage2_result_schema.json`
+- `config/deep_two_stage_site_projection_contract.json`
+- `config/deep_two_stage_migration_contract.json`
+- `config/deep_two_stage_dependency_map.json`
+
 Integrate the independently implemented pieces.
 
 Required:
