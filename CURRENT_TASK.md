@@ -1,5 +1,17 @@
 # CURRENT TASK
 
+## COMPLETE — Steam shortlist scope reduction diagnostic 02
+Статус: `diagnostic_complete_recommendation_ready`.
+- task: `WORKER_TASK_STEAM_SHORTLIST_SCOPE_REDUCTION_DIAGNOSTIC_02.md`;
+- current funnel: 98,023 source rows -> 60,632 unique paid eligible -> 7,972 broad -> 2,522 paid shortlist -> 2,301 current Deep coverage target;
+- historical 609-row state is not an apples-to-apples Reviews-failure baseline: 2026-09-23 had only 12,977 source rows and healthy review coverage; the actual current-source Reviews failure produced 504 rows before PR #155 and 2,522 after repair;
+- offline target-band simulations: conservative 784, balanced 463, aggressive 242;
+- recommendation: conservative protected-lane + evidence-strength gate; preserves 112/112 current Deep-fit, 39/39 Wishlist, 25/25 directly rated exact-title matches, 181/181 moderate-fit `БРАТЬ СЕЙЧАС`, 33/33 package/bundle lanes and 10/10 current semantic DLC families;
+- no production code, shortlist, Dossier/Deep queue, ranking, semantic worker, workflow schedule or Scheduled Task changed;
+- report: `reviews/worker_reports/steam-shortlist-scope-reduction-diagnostic-02.md`;
+- PR: `#157`;
+- next bounded action: only after Director/user acceptance, define one canonical GitHub-owned pre-semantic admission contract and implement the conservative gate in the existing GitHub scope producer without a hard top-N.
+
 ## COMPLETE — Deep two-stage architecture freeze 01
 Статус: `complete_interfaces_frozen`.
 - task: `WORKER_TASK_DEEP_TWO_STAGE_ARCHITECTURE_FREEZE_01.md`;
