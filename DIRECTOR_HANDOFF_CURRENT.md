@@ -64,6 +64,13 @@ The user has now explicitly authorized a replacement architecture:
 - direct user ratings remain strong calibration anchors;
 - Stage 2 must not distort personal quality to compensate for price/discount;
 - site/card/Statistics must distinguish Stage 1 provisional vs Stage 2 calibrated and remove Fast as an equivalent current semantic stage;
+- Stage 1 and Stage 2 must be **two different semantic worker chats** with separate prompts, manifests, schemas, queues, validation and responsibilities; the user must be able to run them manually and independently;
+- Statistics must show Stage 1 and Stage 2 as separate visible blocks;
+- compact game card shows only the authoritative post-Stage-2 score; before Stage 2 it shows only the awaiting-calibration state, never a fake/fallback final score;
+- game detail view mirrors the pipeline: summary -> positives -> negatives -> other/nuances -> Stage-2 score change -> why above/below neighbors;
+- details show both Stage-1 provisional and Stage-2 calibrated scores plus their delta;
+- Stage 1 persists a transparent game-specific point breakdown (for example visuals, music, combat, progression, story, personal hooks, risks), numerically reconciling to its provisional score; this is dynamic, not the old rigid five-factor formula;
+- Stage 2 persists a separate comparative adjustment and neighbor-based explanation rather than rewriting Stage-1 facts/breakdown;
 - no Scheduled Task changes are authorized in this implementation task.
 
 ## CURRENTLY WORKING / RECENT SEMANTIC CHATS
