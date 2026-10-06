@@ -1,5 +1,14 @@
 # CURRENT TASK
 
+## IN PROGRESS — Deep two-stage architecture freeze 01
+Статус: `architecture_preflight_passed_interfaces_being_frozen`.
+- task: `WORKER_TASK_DEEP_TWO_STAGE_ARCHITECTURE_FREEZE_01.md`;
+- source requirements: `WORKER_TASK_DEEP_TWO_STAGE_COMPARATIVE_CALIBRATION_IMPLEMENT_01.md`;
+- scope: contracts/schemas/ownership/interfaces/dependency map only; no production cutover, semantic execution or Scheduled Task change;
+- frozen target pipeline: Dossier -> Deep Stage 1 -> Deep Stage 2 -> ranking/publication;
+- target score split: Deep fit 0–56 + deterministic Wishlist 0/+4 = personal 0–60; deterministic purchase remains 0–40; combined offer 0–100;
+- current active FAST-DOSSIER-DEEP-V1 / PASS 2 remains production authority until the separate integration cutover task.
+
 ## IN PROGRESS — Steam Reviews API and publication blocker fix 01
 Статус: `diagnosis_proven_implementation_in_progress`.
 - task: `WORKER_TASK_STEAM_REVIEWS_PUBLICATION_BLOCKER_FIX_01.md`;
