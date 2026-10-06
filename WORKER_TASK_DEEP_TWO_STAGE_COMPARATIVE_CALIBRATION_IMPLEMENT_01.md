@@ -502,3 +502,159 @@ Add tests proving:
 - provisional Stage-1 score is visually/contractually distinct from calibrated Stage-2 score;
 - site/card/Statistics labels no longer imply Fast is an equivalent analysis stage;
 - a game with higher quality but lower deal score can legitimately have a lower combined 100-point total without corrupting its quality score.
+
+
+## Director correction — unique calibrated ordering and explicit personal-score pieces
+
+This section further refines the approved architecture and supersedes any looser wording above.
+
+### Current canonical personal 60-point model — exact existing pieces
+
+The current `config/final_ranking_policy.json` personal side is not a single 60-point semantic score. It currently consists of:
+
+1. `taste` — max **50**
+   - currently driven by direct rating / normalized fixed taste factors / legacy coarse fit;
+2. `wishlist` — max **+4**
+   - Steam wishlist present = +4;
+3. `achievements` — currently max **+3**, min **-6**
+   - this legacy component is context-sensitive and also mixes prior-play / rating evidence; it is not merely "does the game have achievements";
+4. `duration` — max **+3**;
+5. `risk` — penalty up to **-12**, strongest-only.
+
+Then purchase/deal contributes a separate max **40**.
+
+The worker must trace the actual producer/UI use of each piece before changing it.
+
+### User correction: wishlist MUST raise the candidate
+
+Wishlist is explicit user interest and must remain a positive deterministic signal.
+
+Do not bury wishlist inside free-form semantic calibration where the model could ignore it.
+
+Preserve the current **+4 wishlist effect** unless fresh architecture evidence proves the exact existing +4 causes a contradiction requiring Director review.
+
+### Revised target for the personal / quality 60
+
+Preferred target architecture:
+
+`personal_quality_0_60 = calibrated_deep_fit_0_56 + wishlist_bonus_0_or_4`
+
+where:
+
+- `calibrated_deep_fit_0_56` is the holistic Stage-2 comparative result;
+- `wishlist_bonus` is deterministic GitHub-owned +4 when currently wishlisted, otherwise 0;
+- the sum is capped at 60.
+
+The Deep 0–56 component must holistically incorporate the semantic meaning currently scattered across:
+- gameplay / mastery;
+- development / variety;
+- structure / pacing / direction;
+- personal hooks;
+- breadth of match;
+- duration preference;
+- technical / personal risks;
+- achievement-related preference where it genuinely affects enjoyment;
+- prior direct-user evidence where valid;
+- interactions between these factors.
+
+Do **not** double-count duration/risk/achievement context after it has already influenced calibrated Deep fit.
+
+Therefore the worker must specifically evaluate and, unless a hard compatibility reason prevents it, retire the old separate:
+- duration +3;
+- risk -12;
+- achievements +3/-6
+
+as independent arithmetic adjustments to the new calibrated Deep score.
+
+If any of those must remain deterministic outside Deep, stop and document the exact reason and resulting double-count prevention.
+
+### Direct user ratings
+
+An exact direct user rating for a game is stronger evidence than model inference.
+
+Do not discard it.
+
+Design the migration so a direct user rating remains an authoritative personal anchor / calibration constraint rather than merely one more weighted factor.
+
+A previously directly rated game should be usable as a strong Stage-2 anchor.
+
+### No equal calibrated quality scores in the active ranked set
+
+The user explicitly rejects duplicate quality scores for distinct ordered candidates.
+
+There are roughly 100 visible/ranked candidates while the quality scale is only 0–60 if restricted to integers.
+
+Therefore integer-only calibrated quality is forbidden.
+
+Use sufficient decimal precision and a score-placement invariant so the calibrated active ranking can be strict.
+
+Requirements:
+
+- Stage 1 may remain approximate and may produce equal provisional estimates.
+- Stage 2 must establish a strict comparative order for distinct ranked fit candidates.
+- If A is placed above B, then A's final displayed calibrated personal/quality score must be numerically greater than B's.
+- Distinct ranked fit candidates in the active calibrated set must not display the same final quality score.
+- The system may use decimal values within 0–60 / 0–56.
+- The worker must choose the smallest human-readable precision that can safely maintain this invariant for the active ranked population.
+- Do not create fake large gaps merely to make numbers unique.
+- Preserve broad semantic bands; use minimal spacing / local re-spacing when necessary.
+- GitHub owns any deterministic re-spacing/interpolation, not the semantic worker.
+- Stage 2 supplies relative ordering and justified placement; GitHub converts that placement into a monotonic unique numeric score consistent with nearby anchors.
+
+The worker must explicitly assess whether one decimal place is sufficient for the expected active set. If not, use the smallest higher precision needed. The UI must display enough precision that two differently ranked candidates do not appear tied.
+
+### Comparative insertion model
+
+Preferred behavior:
+
+1. Stage 1 says approximately where the target belongs.
+2. GitHub selects nearby calibrated anchors.
+3. Stage 2 returns comparisons such as:
+   - target > anchor A;
+   - target < anchor B;
+   - target materially > anchor C;
+   - target nearly tied with anchor D but still above/below.
+4. GitHub inserts the target into the strict calibrated order.
+5. The numeric score is assigned/re-spaced so it matches that order.
+
+This means the final score is partly an interpretable coordinate of the comparative order, not a fake independent physical measurement.
+
+### Purchase 0–40 remains separate
+
+After personal quality is determined:
+
+`total_score_0_100 = personal_quality_0_60 + purchase_score_0_40`
+
+The purchase score remains deterministic.
+
+A wishlist bonus raises the personal candidate score before the purchase component is added.
+
+Stage 2 must not adjust its Deep fit merely because a game has a better discount.
+
+### Site requirements
+
+The site must show the pieces transparently after cutover:
+
+- Deep calibrated fit: `X/56` (if exposing the internal split is useful);
+- Wishlist: `+4` when present;
+- Personal / game quality total: `Y/60`;
+- Purchase value: `Z/40`;
+- Combined offer score: `T/100`.
+
+At minimum, if the UI remains compact, it must still make clear that wishlist contributed positively and that the 60-point personal score is not identical to the 40-point deal score.
+
+Do not show obsolete separate duration/risk/achievement arithmetic if those pieces are folded into Deep.
+
+### Regression additions
+
+Prove:
+
+- two Stage-1 games may both provisionally score the same;
+- after Stage-2 comparative placement, two distinct ordered fit candidates receive distinct displayed calibrated personal scores;
+- wishlist raises an otherwise identical candidate by +4 personal points, subject only to the 60 cap;
+- wishlist does not alter Dossier facts or purchase 0–40;
+- duration/risk/achievement evidence cannot be double-counted;
+- direct user rating remains a strong calibration anchor;
+- calibrated order and displayed quality-score order are monotonic;
+- insertion of a new item does not arbitrarily renumber distant unrelated items;
+- local re-spacing preserves existing order and broad semantic score bands.
