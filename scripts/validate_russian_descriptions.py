@@ -52,6 +52,7 @@ def validate(path, allow_untranslated=False):
                 'needs_ru_rewrite',
                 'technical_source',
                 'missing_source',
+                'publication_quarantined',
             }
         )
         if pass1_pending_translation:
@@ -73,6 +74,7 @@ def validate(path, allow_untranslated=False):
                     'needs_ru_rewrite',
                     'technical_source',
                     'missing_source',
+                    'publication_quarantined',
                 }
                 and category != 'good_ru'
             )
