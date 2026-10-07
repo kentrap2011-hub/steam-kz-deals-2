@@ -1,5 +1,33 @@
 # CURRENT TASK
 
+## IN PROGRESS — Deep Stage 2 comparative calibration worker implementation 01
+Статус: `implementation_in_progress`.
+- task: `WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`;
+- branch: `implement/deep-stage2-calibration-worker-01`;
+- frozen interfaces remain unchanged: `config/deep_two_stage_architecture_contract.json`, `config/deep_stage2_contract.json`, `config/deep_stage2_result_schema.json`, `config/deep_two_stage_dependency_map.json`;
+- implemented scope: bounded manual Stage-2 prompt, GitHub-owned anchor-window/work builder, strict result validation/ingest, non-active state/progress/diagnostics, unique 0.01 canonical placement with smallest local deterministic re-spacing, regression workflow;
+- architecture boundary preserved: GitHub owns scope/anchors/order/retry/persistence/final numeric placement; semantic worker owns only exact prepared comparative judgment and cannot research new facts or rewrite Stage 1;
+- production cutover, Stage 1, Fast removal, ranking migration, UI and Scheduled Tasks remain untouched;
+- current checkpoint: implementation prepared on fresh main; validation pending on branch head after commit.
+
+## COMPLETE — Steam semantic queue priority implementation 01
+Статус: `implementation_complete_ready_for_director_acceptance`.
+- task: `WORKER_TASK_STEAM_SEMANTIC_QUEUE_PRIORITY_IMPLEMENT_01.md`;
+- PR: `#158` — `Prioritize never-analyzed semantic queue work`;
+- branch: `implement/steam-semantic-queue-priority-01`;
+- GitHub remains the sole semantic/Deep scope-and-order owner; existing eligibility is unchanged and no hard top-N / first-wave / `deferred_reserve` gate was introduced;
+- new order: no authoritative Deep history first, then transparent operational Steam rating + log review confidence + current-price + discount score, then stable family ID; sale expiry is not an ordering factor;
+- “never Deep analyzed” for this priority means no authoritative accepted `analyzed_fit` / `analyzed_not_fit` in current canonical PASS 2 root state or retained `revision_history[].state`; incomplete/recovery/failed transport alone do not count, legacy authoritative history does;
+- deterministic regression covers unchanged candidate/work-ID set, no defer/exclude, cohort priority, rating/review/price/discount monotonicity, deterministic ties, Wishlist/package/DLC preservation, read-only authoritative state and no Stage 1/Stage 2 contract/prompt touch;
+- validated implementation/config head `e17743d5e099cd4fcb1ff736d1901b90f9cd6608`: `Validate Progressive PASS 2 core` run `37600971315` success;
+- current production Deep work has 2301 coverage targets but 0 ready/pending items (2135 waiting for Dossier), so no artificial top-20/top-30 semantic execution was performed;
+- active ЧАТ 2 branch `implement/deep-stage2-calibration-worker-01` has no implementation-file overlap with this queue-order change; frozen PR #156 interfaces remain untouched;
+- report: `reviews/worker_reports/steam-semantic-queue-priority-implement-01.md`;
+- this user-approved ordering direction supersedes the earlier first-wave/deferred-reserve production recommendation in the completed shortlist diagnostic; that diagnostic remains historical evidence only;
+- no semantic worker or Scheduled Task was executed or modified;
+- next bounded action: Director reviews PR #158 + this compact report and decides whether to merge; do not start another project task from this worker.
+
+
 ## COMPLETE — Steam shortlist scope reduction diagnostic 02
 Статус: `diagnostic_complete_recommendation_ready`.
 - task: `WORKER_TASK_STEAM_SHORTLIST_SCOPE_REDUCTION_DIAGNOSTIC_02.md`;
