@@ -1,4 +1,5 @@
 import json
+import math
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -14,18 +15,136 @@ def parse_utc(value):
     return progressive_pass2.parse_utc(value)
 
 
-def purchase_score(context):
+def clamp01(value):
+    try:
+        numeric = float(value)
+    except (TypeError, ValueError):
+        return 0.0
+    return max(0.0, min(1.0, numeric))
+
+
+def review_confidence(review_count, cap):
+    try:
+        count = max(0.0, float(review_count))
+        cap = float(cap)
+    except (TypeError, ValueError):
+        return 0.0
+    if cap <= 0:
+        raise ValueError('semantic queue review-confidence cap must be positive')
+    return min(1.0, math.log1p(count) / math.log1p(cap))
+
+
+def current_price_priority(context):
     purchase = context.get('purchase') or {}
-    history = context.get('history') or {}
     game = {
         'current_price_rub': purchase.get('current_price_rub_display'),
-        'original_price_rub': purchase.get('original_price_rub_display'),
-        'discount_percent': purchase.get('discount_percent'),
-        'historical_minimum_rub': history.get('minimum_rub_display'),
-        'history_quality': history.get('quality') or 'unverified',
-        'wishlist': bool((context.get('context_only') or {}).get('wishlist')),
     }
-    return float(priority_ranking.build_purchase_breakdown(game).get('purchase_score') or 0)
+    breakdown = priority_ranking.build_purchase_breakdown(game)
+    component = next(
+        (
+            row for row in (breakdown.get('standalone_purchase_components') or [])
+            if row.get('id') == 'price'
+        ),
+        None,
+    )
+    if not isinstance(component, dict):
+        raise ValueError('canonical current-price purchase component is missing')
+    maximum = float(component.get('max_points') or 0)
+    if maximum <= 0:
+        raise ValueError('canonical current-price purchase component maximum is invalid')
+    return clamp01(float(component.get('points') or 0) / maximum)
+
+
+def semantic_queue_priority(context, ordering):
+    policy = ordering.get('priority_score') or {}
+    weights = policy.get('weights') or {}
+    expected = {
+        'steam_positive_rating',
+        'steam_review_confidence',
+        'current_price',
+        'current_discount',
+    }
+    if set(weights) != expected:
+        raise ValueError('semantic queue priority weights do not match canonical factors')
+    if abs(sum(float(weights[key]) for key in expected) - float(policy.get('scale') or 0)) > 1e-9:
+        raise ValueError('semantic queue priority weights must sum to the canonical scale')
+
+    context_only = context.get('context_only') or {}
+    reviews = context_only.get('reviews') or {}
+    purchase = context.get('purchase') or {}
+    cap = ((policy.get('steam_review_confidence') or {}).get('cap'))
+    components = {
+        'steam_positive_rating': clamp01(
+            (float(reviews.get('global_positive_percent')) / 100.0)
+            if reviews.get('global_positive_percent') is not None else 0.0
+        ),
+        'steam_review_confidence': review_confidence(reviews.get('global_count'), cap),
+        'current_price': current_price_priority(context),
+        'current_discount': clamp01(
+            (float(purchase.get('discount_percent')) / 100.0)
+            if purchase.get('discount_percent') is not None else 0.0
+        ),
+    }
+    score = sum(float(weights[key]) * components[key] for key in expected)
+    return {
+        'score': round(score, 6),
+        'components': components,
+    }
+
+
+def entry_has_authoritative_deep_completion(entry):
+    return (
+        isinstance(entry, dict)
+        and entry.get('authoritative_completed') is True
+        and entry.get('outcome') in progressive_pass2.AUTHORITATIVE_OUTCOMES
+    )
+
+
+def has_authoritative_deep_history(state_doc, family_id):
+    entry = ((state_doc.get('entries') or {}).get(str(family_id))) if isinstance(state_doc, dict) else None
+    if entry_has_authoritative_deep_completion(entry):
+        return True
+    if not isinstance(entry, dict):
+        return False
+    for revision in entry.get('revision_history') or []:
+        if isinstance(revision, dict) and entry_has_authoritative_deep_completion(revision.get('state')):
+            return True
+    return False
+
+
+def order_normal_items(items, context_by_family, pass2_state, contract):
+    ordering = contract.get('ordering') or {}
+    if ordering.get('owner') != 'github' or ordering.get('policy_id') != 'semantic_queue_priority_v1':
+        raise ValueError('canonical semantic queue ordering policy is missing')
+    if ordering.get('changes_eligibility_or_scope') is not False:
+        raise ValueError('semantic queue ordering must not change eligibility or scope')
+    if ordering.get('hard_top_n') is not False:
+        raise ValueError('semantic queue ordering must not introduce hard top-N')
+    if ordering.get('sale_expiry_used_for_priority') is not False:
+        raise ValueError('sale expiry must not be a semantic queue priority factor')
+
+    ordered = []
+    for source_item in items:
+        item = dict(source_item)
+        family_id = str(item.get('family_id') or '')
+        context = context_by_family.get(family_id) or {}
+        priority = semantic_queue_priority(context, ordering)
+        item['_authoritative_deep_history_sort'] = (
+            1 if has_authoritative_deep_history(pass2_state, family_id) else 0
+        )
+        item['_semantic_queue_priority_score'] = float(priority['score'])
+        ordered.append(item)
+
+    ordered.sort(key=lambda row: (
+        int(row['_authoritative_deep_history_sort']),
+        -float(row['_semantic_queue_priority_score']),
+        str(row.get('family_id') or ''),
+    ))
+    for sequence, item in enumerate(ordered, 1):
+        item['sequence'] = sequence
+        item.pop('_authoritative_deep_history_sort', None)
+        item.pop('_semantic_queue_priority_score', None)
+    return ordered
 
 
 def build_work_document(now=None):
@@ -49,24 +168,12 @@ def build_work_document(now=None):
     )
     context_by_family = {str(row.get('family_id') or ''): row for row in contexts}
 
-    normal_items = []
-    for item in recomputed['items']:
-        context = context_by_family.get(item['family_id']) or {}
-        sale_end = parse_utc((context.get('purchase') or {}).get('sale_end_utc'))
-        item = dict(item)
-        item['_sale_end_sort'] = sale_end.isoformat() if sale_end else '9999-12-31T23:59:59+00:00'
-        item['_purchase_score'] = purchase_score(context)
-        normal_items.append(item)
-
-    normal_items.sort(key=lambda row: (
-        row['_sale_end_sort'],
-        -float(row['_purchase_score']),
-        row['family_id'],
-    ))
-    for sequence, item in enumerate(normal_items, 1):
-        item['sequence'] = sequence
-        item.pop('_sale_end_sort', None)
-        item.pop('_purchase_score', None)
+    normal_items = order_normal_items(
+        recomputed['items'],
+        context_by_family,
+        pass2_state,
+        contract,
+    )
 
     migration_manifest = progressive_pass2.load_legacy_reanalysis_manifest()
     migration_items, migration_metrics = progressive_pass2.legacy_reanalysis_work_and_metrics(

@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PASS2-V1",
-  "version": 13,
+  "version": 14,
   "status": "production_active",
   "phase": "phase_c_pass2",
   "purpose": "GitHub-owned eventual authoritative Deep analysis for every current eligible Progressive game after an exact-compatible canonically accepted Dossier is ready, with one normal first pass and separately authorized recovery; completed Deep results include a separately grounded balanced negative assessment, and Fast/PASS 1 is never an eligibility prerequisite.",
@@ -61,11 +61,58 @@
   },
   "ordering": {
     "owner": "github",
+    "policy_id": "semantic_queue_priority_v1",
     "precedence": [
-      "known_sale_end_asc",
-      "deterministic_purchase_value_desc",
+      "no_authoritative_deep_history_first",
+      "semantic_queue_priority_score_desc",
       "stable_family_id_asc"
     ],
+    "never_deep_analyzed_definition": {
+      "source": "data/cache/progressive_pass2_state.json",
+      "rule": "The family's current canonical Deep state contains no root entry or revision_history[].state with authoritative_completed=true and outcome analyzed_fit/analyzed_not_fit.",
+      "authoritative_outcomes": [
+        "analyzed_fit",
+        "analyzed_not_fit"
+      ],
+      "revision_history_counts": true,
+      "incomplete_or_recovery_counts_as_authoritative_history": false,
+      "failed_transport_counts_as_authoritative_history": false,
+      "legacy_authoritative_state_counts": true
+    },
+    "priority_score": {
+      "scale": 100,
+      "weights": {
+        "steam_positive_rating": 40,
+        "steam_review_confidence": 20,
+        "current_price": 20,
+        "current_discount": 20
+      },
+      "steam_positive_rating": {
+        "source": "progressive_candidate_context.jsonl#context_only.reviews.global_positive_percent",
+        "normalization": "clamp(percent / 100, 0, 1)"
+      },
+      "steam_review_confidence": {
+        "source": "progressive_candidate_context.jsonl#context_only.reviews.global_count",
+        "normalization": "min(1, log1p(count) / log1p(cap))",
+        "cap": 100000,
+        "rationale": "Log confidence rewards additional review evidence without allowing raw popularity to dominate niche games."
+      },
+      "current_price": {
+        "source": "progressive_candidate_context.jsonl#purchase.current_price_rub_display",
+        "normalization": "reuse config/final_ranking_policy.json current-price band points through priority_ranking.build_purchase_breakdown, then points / max_points",
+        "reuses_existing_canonical_purchase_primitive": true
+      },
+      "current_discount": {
+        "source": "progressive_candidate_context.jsonl#purchase.discount_percent",
+        "normalization": "clamp(percent / 100, 0, 1)"
+      },
+      "missing_numeric_signal_normalized_value": 0,
+      "personal_taste_signal_used": false
+    },
+    "tie_breaker": "family_id_asc",
+    "sale_expiry_used_for_priority": false,
+    "hard_top_n": false,
+    "changes_eligibility_or_scope": false,
     "operational_only": true,
     "changes_site_ranking": false,
     "invalid_or_failed_item_blocks_siblings": false
