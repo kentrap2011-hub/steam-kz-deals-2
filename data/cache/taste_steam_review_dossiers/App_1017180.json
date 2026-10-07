@@ -1,0 +1,585 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "appid": "1017180",
+  "title": "The Long Drive",
+  "generated_at_utc": "2026-10-07T09:34:00Z",
+  "expires_at_utc": "2026-10-27T09:34:00Z",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "The Long Drive",
+    "release_year": 2019,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "1017180"
+      },
+      {
+        "kind": "developer",
+        "value": "Genesz"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 7 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Players value the open-ended road-trip sandbox built around driving, scavenging fuel and parts, maintaining or rebuilding cars and improvising with whatever the procedural desert provides.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-007"
+      ],
+      "player_feedback_ids": [
+        "feedback-005",
+        "feedback-006",
+        "feedback-007",
+        "feedback-015"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "The strongest appeal is emergent road-trip atmosphere: quiet driving, radio, odd discoveries and absurd physics incidents create memorable stories even for players who openly acknowledge the rough presentation.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-007"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-005",
+        "feedback-006",
+        "feedback-015"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "The same freedom can become aimless or repetitive after the car is stabilized; players ask what the intended goal is and request more locations, content and an end-state.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-006",
+        "source-007",
+        "source-008"
+      ],
+      "player_feedback_ids": [
+        "feedback-013",
+        "feedback-014",
+        "feedback-015"
+      ]
+    },
+    {
+      "category": "multiplayer",
+      "statement": "Playing with friends is repeatedly described as one of the funniest ways to experience the game, but multiplayer also amplifies technical problems such as lag, unstable physics and vehicle-state issues.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 5,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "source-002",
+        "source-005",
+        "source-006"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003",
+        "feedback-011",
+        "feedback-012",
+        "feedback-013"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Physics jank is both a source of comedy and a recurring frustration: cars and loose objects can behave unpredictably, and current player reports still describe bugs serious enough to disrupt driving or multiplayer.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 5,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-004",
+        "feedback-006",
+        "feedback-009",
+        "feedback-011"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "The development state remains contentious in 2026: some players call the game abandoned after long gaps between updates, while others report that a ground-up engine rewrite is still being developed.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "source-002",
+        "source-004",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-010",
+        "feedback-011",
+        "feedback-012"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Survival and vehicle maintenance are deliberately light once a run is established; players who want stronger progression or challenge frequently ask for resource scarcity, wear systems and more meaningful goals.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-007",
+        "source-008"
+      ],
+      "player_feedback_ids": [
+        "feedback-014",
+        "feedback-015"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "Players disagree on whether the unstable physics and bugs are part of the game's comic charm or evidence that the Early Access build remains too unfinished.",
+      "recurrence": "moderate",
+      "mention_count": 5,
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-004",
+        "feedback-006",
+        "feedback-009",
+        "feedback-011"
+      ]
+    },
+    {
+      "statement": "Current discussions conflict on development status: some describe the project as abandoned, while others cite ongoing work on a rebuilt version intended to improve multiplayer and development.",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "source_ids": [
+        "source-002",
+        "source-004",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-010",
+        "feedback-011",
+        "feedback-012"
+      ]
+    }
+  ],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            4
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            4,
+            6
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            6
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1,
+            3
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "covered",
+          "observation_indices": [
+            3,
+            4,
+            5
+          ]
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1017180/The_Long_Drive/",
+        "publication_date": "2019-09-25",
+        "language": "non_russian",
+        "evidence_role": "identity",
+        "player_feedback": false,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "store_user_reviews",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1017180/The_Long_Drive/?l=russian",
+        "publication_date": null,
+        "language": "russian",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1017180",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1017180/reviews/?browsefilter=toprated",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1017180",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1017180/discussions/0/561407384588718510/",
+        "publication_date": "2026-06-09",
+        "language": "non_russian",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-005",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/Thelongdrive/comments/1uno68v/only_586_days_since_last_update/",
+        "publication_date": "2026-07-05",
+        "language": "non_russian",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "The Long Drive",
+          "release_year": 2019
+        },
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-006",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/Thelongdrive/comments/1i2hz60/comparison_with_drive_beyond_horizons/",
+        "publication_date": "2025-01-16",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "The Long Drive",
+          "release_year": 2019
+        },
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-007",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/Thelongdrive/comments/1fbkv9w/sick_of_this_game/",
+        "publication_date": "2024-09-08",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "The Long Drive",
+          "release_year": 2019
+        },
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-008",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/Thelongdrive/comments/1inxc8z/i_am_new_to_the_game_and_i_have_a_few_questions/",
+        "publication_date": "2025-02-12",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "The Long Drive",
+          "release_year": 2019
+        },
+        "freshness": "older"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "publication_date": "2026-03-20",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": "2026-03-07",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-002",
+        "publication_date": "2026-03-22",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-002",
+        "publication_date": "2026-03-04",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-003",
+        "publication_date": "2024-06-06",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-003",
+        "publication_date": "2021-12-14",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-007",
+        "source_id": "source-003",
+        "publication_date": "2022-12-30",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-008",
+        "source_id": "source-003",
+        "publication_date": "2024-01-10",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-009",
+        "source_id": "source-003",
+        "publication_date": "2024-05-04",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-010",
+        "source_id": "source-004",
+        "url": "https://steamcommunity.com/app/1017180/discussions/0/561407384588718510/",
+        "publication_date": "2026-06-09",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-011",
+        "source_id": "source-005",
+        "publication_date": "2026-07-05",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-012",
+        "source_id": "source-005",
+        "publication_date": "2026-07-05",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-013",
+        "source_id": "source-006",
+        "publication_date": "2025-01-16",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-014",
+        "source_id": "source-008",
+        "publication_date": "2025-02-12",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-015",
+        "source_id": "source-007",
+        "publication_date": "2024-09-08",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      }
+    ]
+  }
+}

@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 133,
     "deep_completed_not_fit_count": 14,
     "deep_incomplete_or_recovery_count": 19,
-    "deep_waiting_for_dossier_count": 2132,
-    "deep_ready_or_pending_count": 3,
+    "deep_waiting_for_dossier_count": 2129,
+    "deep_ready_or_pending_count": 6,
     "deep_normal_first_pass_remaining_count": 2135,
     "deep_remaining_until_all_authoritative_count": 2154,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 15,
-    "dossier_waiting_count": 2132,
+    "dossier_waiting_count": 2129,
     "pass2_attempted_count": 166,
-    "pass2_eligible_count": 3,
-    "normal_pass2_eligible_count": 3,
+    "pass2_eligible_count": 6,
+    "normal_pass2_eligible_count": 6,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -108,6 +108,129 @@
     }
   },
   "items": [
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1016920",
+      "taste_subject_key": "App_1016920",
+      "appid": "1016920",
+      "taste_fingerprint": "725ef10ec9c94aa0ef83e5543dbeb19c327499f95961726ded2e2568a6c2d311",
+      "candidate_context_sha256": "5eddb6f5dd6fec14e9899e136f92536cf3e18bb4c28774201ea884888903f972",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "33fe45ce85342a982b6d2acb0aae260788fd8c21218d2fda6d51d94a32f9c38f",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Unrailed!",
+        "short_description": "Unrailed! is a co-op multiplayer game where you have to work together with your friends to build a train track across endless procedurally generated worlds. Master random encounters with its inhabitants, upgrade your train and keep it from derailing!",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "23 Sep, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1016920"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1016920.json",
+      "dossier_content_sha256": "305847fcc1f1a6d197da3e78dcc0c2e15c818e2755b09730ace370776296f01a",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-27T09:34:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "0a5882f20682f69b07d10bbe5613a4a458e2e2e6a1f8912dc0158a5fa1909144",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--33fe45ce85342a982b6d2acb0aae260788fd8c21218d2fda6d51d94a32f9c38f--0a5882f20682f69b07d10bbe5613a4a458e2e2e6a1f8912dc0158a5fa1909144.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--33fe45ce85342a982b6d2acb0aae260788fd8c21218d2fda6d51d94a32f9c38f--0a5882f20682f69b07d10bbe5613a4a458e2e2e6a1f8912dc0158a5fa1909144.json",
+      "sequence": 1
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1017180",
+      "taste_subject_key": "App_1017180",
+      "appid": "1017180",
+      "taste_fingerprint": "5c1b9b8f5c026408dbce6e5ce1f249952e3fc0f796643cca9d9000a9e14d5d30",
+      "candidate_context_sha256": "89cd5f6354343ddc46b3b6b59d4425c445b1772a09f0befc903366cead15ce76",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "2787119303a9f8cda30328cb7ee7906fe36d53c29d0f526b6141a824df3dcde4",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "The Long Drive",
+        "short_description": "Random generated open world semi-post apocalyptic survival car driving game.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Exploration",
+          "Open World"
+        ],
+        "core_fit_count": 1,
+        "release_date": "25 Sep, 2019",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1017180"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1017180.json",
+      "dossier_content_sha256": "227feb1f18eedeeb5d61bce32c3cca6c6f56e79ce83f3a82e2650aac3d3ecdc7",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-27T09:34:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "81ab462b576cc1234969c41797a8344ad9e8f0b2c06d5d901114303d601720f8",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--2787119303a9f8cda30328cb7ee7906fe36d53c29d0f526b6141a824df3dcde4--81ab462b576cc1234969c41797a8344ad9e8f0b2c06d5d901114303d601720f8.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--2787119303a9f8cda30328cb7ee7906fe36d53c29d0f526b6141a824df3dcde4--81ab462b576cc1234969c41797a8344ad9e8f0b2c06d5d901114303d601720f8.json",
+      "sequence": 2
+    },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
@@ -171,7 +294,71 @@
       "authorization_id": "d37a76982b023dd81a3f040f84ddeac231285b6380d0e0d310469dd0e2f28135",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--cbc8bc75ff245470821ee6112d04e3f44004b89a53e406ebb63caf3e7d0b3af8--d37a76982b023dd81a3f040f84ddeac231285b6380d0e0d310469dd0e2f28135.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--cbc8bc75ff245470821ee6112d04e3f44004b89a53e406ebb63caf3e7d0b3af8--d37a76982b023dd81a3f040f84ddeac231285b6380d0e0d310469dd0e2f28135.json",
-      "sequence": 1
+      "sequence": 3
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1016930",
+      "taste_subject_key": "App_1016930",
+      "appid": "1016930",
+      "taste_fingerprint": "c63acfa31843d29309d05790a103cabd2d1d938e0c2fe3d5959addce1247ae99",
+      "candidate_context_sha256": "d3ade2f84f7fbd250d6c8ec049828153af5d8e13f1a1ffa38db260af5b6c9c69",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "8d187696e4c0e55eaf5f0a3637aebefb99188efec5e6a69c7f82e2e66239a946",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "The Great Perhaps",
+        "short_description": "The Great Perhaps is a time travel puzzle game about an astronaut returning to Earth destroyed by natural cataclysms. There, among the ruins he finds an unusual artifact — an old lantern, in the light of which you can see glimpses of another time and travel to the past.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Horror",
+          "Sci-fi"
+        ],
+        "core_fit_count": 2,
+        "release_date": "14 Aug, 2019",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1016930"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1016930.json",
+      "dossier_content_sha256": "4e0c254e5c5b0de8979e8964e594dcee2dba6e49a2633e9ece7ed4b5006f1647",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-27T09:34:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "a3737e82ad321ee04249ada1a1691a8aab9a455be0b658f4ac7ea9ef5c6cdc37",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--8d187696e4c0e55eaf5f0a3637aebefb99188efec5e6a69c7f82e2e66239a946--a3737e82ad321ee04249ada1a1691a8aab9a455be0b658f4ac7ea9ef5c6cdc37.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--8d187696e4c0e55eaf5f0a3637aebefb99188efec5e6a69c7f82e2e66239a946--a3737e82ad321ee04249ada1a1691a8aab9a455be0b658f4ac7ea9ef5c6cdc37.json",
+      "sequence": 4
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -233,7 +420,7 @@
       "authorization_id": "27a62ae312aeb4cfe4af1cfe0bb95d91a262b91e56aee632c85ac4448f82c540",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--2f871711b5362e621b44ed82514da329a06e5bf506734ceaa15a16f10f33f939--27a62ae312aeb4cfe4af1cfe0bb95d91a262b91e56aee632c85ac4448f82c540.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--2f871711b5362e621b44ed82514da329a06e5bf506734ceaa15a16f10f33f939--27a62ae312aeb4cfe4af1cfe0bb95d91a262b91e56aee632c85ac4448f82c540.json",
-      "sequence": 2
+      "sequence": 5
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -300,7 +487,7 @@
       "authorization_id": "bce77bc22ab47d33dbb09b6d836d8eff4614d8f1ffe0c3c8eacb6cd6d34ac469",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--a58436fdb733ccd9f97a8e263816bb9b808aed79406ddee3a1ebc79045cdacb1--bce77bc22ab47d33dbb09b6d836d8eff4614d8f1ffe0c3c8eacb6cd6d34ac469.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--a58436fdb733ccd9f97a8e263816bb9b808aed79406ddee3a1ebc79045cdacb1--bce77bc22ab47d33dbb09b6d836d8eff4614d8f1ffe0c3c8eacb6cd6d34ac469.json",
-      "sequence": 3
+      "sequence": 6
     }
   ]
 }
