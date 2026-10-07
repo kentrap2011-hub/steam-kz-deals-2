@@ -159,24 +159,27 @@ const stats=ui.statisticsSections({
   translation_diagnostic_count:4,
   last_successful_translation_at_utc:stageTimes.translationSuccess,
   last_translation_attempt_at_utc:stageTimes.translationAttempt,
+  site_quarantine_pending_count:3,
+  site_quarantine_category_counts:{card_explanation:2,description:1},
+  site_status_generated_at_utc:'2026-10-07T10:45:00+00:00',
 });
-assert.deepStrictEqual(stats.map(x=>x.key),['fast','dossier','deep','translation']);
+assert.deepStrictEqual(stats.map(x=>x.key),['fast','dossier','deep','translation','publication']);
 assert.deepStrictEqual(stats.map(x=>x.lastWriteAtUtc),[
-  stageTimes.fast,stageTimes.dossier,stageTimes.deep,null
+  stageTimes.fast,stageTimes.dossier,stageTimes.deep,null,'2026-10-07T10:45:00+00:00'
 ]);
 const noWriteStats=ui.statisticsSections({});
-assert.deepStrictEqual(noWriteStats.map(x=>x.lastWriteAtUtc),[null,null,null,null]);
+assert.deepStrictEqual(noWriteStats.map(x=>x.lastWriteAtUtc),[null,null,null,null,null]);
 assert.strictEqual(ui.formatLastWriteAt(null),'ещё не было записей');
 assert.strictEqual(ui.formatLastWriteAt(''),'ещё не было записей');
 assert.strictEqual(ui.formatLastWriteAt('not-a-date'),'ещё не было записей');
 assert.notStrictEqual(ui.formatLastWriteAt(stageTimes.fast),'ещё не было записей');
 assert(!ui.formatLastWriteAt.toString().includes('Date.now'),'timestamp formatter must not infer a heartbeat');
-assert.deepStrictEqual(stats.map(x=>x.denominator),[511,187,499,71]);
+assert.deepStrictEqual(stats.map(x=>x.denominator),[511,187,499,71,3]);
 assert.deepStrictEqual(stats.map(x=>x.scopeLabel),[
-  'Всего игр для быстрого разбора','Всего игр для подготовки досье','Всего игр для глубокого разбора','Игр без перевода:'
+  'Всего игр для быстрого разбора','Всего игр для подготовки досье','Всего игр для глубокого разбора','Игр без перевода:','Ожидает исправления или диагностики'
 ]);
 assert.deepStrictEqual(stats.map(x=>x.denominatorKey),[
-  'fast_total_current_scope','dossier_total_current_scope','deep_total_current_coverage_target','untranslated_game_count'
+  'fast_total_current_scope','dossier_total_current_scope','deep_total_current_coverage_target','untranslated_game_count','site_quarantine_pending_count'
 ]);
 
 const fastRows=Object.fromEntries(stats[0].rows.map(row=>[row.key,row.label]));
@@ -223,6 +226,15 @@ assert.strictEqual(noTranslationHistory.rows[1].value,'ещё не было за
 assert.strictEqual(noTranslationHistory.rows[2].value,'ещё не было записей');
 assert(!ui.statisticsSections.toString().includes('Date.now'),'Statistics must not invent translation timestamps');
 
+const publicationSection=stats[4];
+assert.strictEqual(publicationSection.title,'Диагностика публикации');
+assert.strictEqual(publicationSection.denominator,3);
+assert.deepStrictEqual(publicationSection.rows.map(row=>row.label),[
+  'Текст персонального объяснения','Описание игры'
+]);
+assert.deepStrictEqual(publicationSection.rows.map(row=>row.value),[2,1]);
+assert(publicationSection.note.includes('не должна останавливать'));
+
 const userFacingStats=stats.flatMap(section=>[section.scopeLabel,section.note||'',...section.rows.map(row=>row.label)]).join(' ');
 for(const jargon of ['authoritative','Fast-scope','Dossier-scope','Deep-покрытие']){
   assert(!userFacingStats.includes(jargon),`user-facing statistics jargon remains: ${jargon}`);
@@ -246,7 +258,9 @@ assert(app.includes("function searchRender(){\n  buildQueue();"));
 assert(app.includes("progressiveUi().cursorForVisibleIds(oldIds,oldCursor,ids)"));
 assert(app.includes("if(Number.isNaN(d.getTime()))return 'Срок скидки неизвестен';"));
 assert(app.indexOf("items=progressiveUi().filterActiveSaleItems(payloadItems(),nowMs);")<app.indexOf("const activeIds=new Set(items.map(x=>x.id));"),'expiry filtering must happen before queue/manual-end reconciliation');
-assert(app.includes("data.processing_status||{}"));
+assert(app.includes("const STATUS_URL='data/status.json';"));
+assert(app.includes("(siteStatus&&siteStatus.processing_status)||data.processing_status||{}"));
+assert(app.includes("fetch(STATUS_URL,{cache:'no-store'})"));
 assert(app.includes("progressiveUi().statisticsSections"));
 assert(app.includes("progressiveUi().formatLastWriteAt(section.lastWriteAtUtc)"));
 assert(app.includes("section.showLastWrite===false"));
