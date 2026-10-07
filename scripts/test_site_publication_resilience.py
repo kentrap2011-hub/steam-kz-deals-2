@@ -143,6 +143,14 @@ class SitePublicationResilienceTests(unittest.TestCase):
             self.assertEqual(card['description_status'], 'publication_quarantined')
             self.assertEqual(resilience.active_summary(qdoc)['category_counts'], {'description': 1})
 
+    def test_status_workflow_has_independent_pages_wakeup(self):
+        deploy = Path('.github/workflows/deploy-visual.yml').read_text(encoding='utf-8')
+        self.assertIn('- "Build site current status"', deploy)
+        self.assertIn("github.event.workflow_run.name == 'Build daily visual payload'", deploy)
+        self.assertIn("TRIGGER_WORKFLOW: ${{ github.event.workflow_run.name }}", deploy)
+        self.assertIn("Build site current status", deploy)
+        self.assertIn("VISUAL_DEPLOY_SCOPE=status_only trigger=site_current_status", deploy)
+
     def test_missing_stable_visual_identity_is_global_fail_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
             visual = {'production_contract': {}, 'items': [{'title': 'No identity'}]}
