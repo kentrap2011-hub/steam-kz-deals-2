@@ -6,7 +6,7 @@
 
 - **Context discipline:** new Director must stay shallow. Use `DIRECTOR_HANDOFF_CURRENT.md` + this top section only; do not broadly inspect code/history. Deep implementation analysis belongs in worker chats.
 - **Mandatory first response in new Director chat:** answer the user's three pending questions about (1) concrete deferred-game examples and why reserve is not deletion, (2) why PR #157 exists/diverged, and (3) why the previous Chat 2 continuation message was too long.
-- **ЧАТ 1:** semantic queue priority implementation accepted and merged via PR #158, merge `9c9d79194fba3ff22ad491d80257277a87fdcfaf`. Full eligible semantic pool is preserved; GitHub-owned ordering now prioritizes never-Deep-analyzed work first, then transparent Steam rating + logarithmic review confidence + current price + discount priority. No first-wave/deferred-reserve gating, no hard top-N, no Stage 1/Stage 2 scoring changes. Physical ЧАТ 1 is free for a new task.
+- **ЧАТ 1:** NEW physical chat assigned to `WORKER_TASK_SITE_STALE_STATISTICS_DIAGNOSTIC_01.md` (READ-ONLY / DIAGNOSTIC). Goal: trace stale Statistics-page Deep and translation values to the first causal stale stage and propose the smallest fix. No implementation in this task. Previous semantic queue priority PR #158 is accepted/merged.
 - **ЧАТ 2:** Stage 2 implementation active on `implement/deep-stage2-calibration-worker-01`. Validation run `37509068199` failed because `scripts/deep_stage2.py` was missing. No final Stage 2 PR/report at last check.
 - PR #156 architecture freeze remains accepted and must not be re-audited without direct contradiction.
 - No Scheduled Task changes are authorized.
