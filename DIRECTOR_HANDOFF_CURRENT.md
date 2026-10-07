@@ -45,7 +45,7 @@ Current approved and implemented direction:
 - PR #158 accepted and merged as `9c9d79194fba3ff22ad491d80257277a87fdcfaf`;
 - validations on PR head were green;
 - no Stage 1/Stage 2 scoring logic changed;
-- ЧАТ 1 stale-statistics diagnostic is complete: first stale stage is card-explanation validation blocking fresh visual persistence; translation values are currently canonical. SAME physical ЧАТ 1 continues with `WORKER_TASK_SITE_STALE_STATISTICS_FIX_01.md`;
+- ЧАТ 1 stale-statistics diagnostic is complete. User explicitly superseded the narrow Tetris/card fix with `WORKER_TASK_SITE_NONBLOCKING_FRESHNESS_AND_QUARANTINE_01.md`: all publication-relevant local item/content blockers must become nonblocking quarantine entries, Statistics must have an independent fresh current-status source with quarantine observability, while true global-integrity/authority failures remain fail-closed. SAME physical ЧАТ 1 continues this broader task;
 - PR #157 remains closed without merge as superseded.
 
 The older ~581 + ~1,720 reserve analysis below remains historical diagnostic evidence only and must not be turned into production gating unless the user explicitly reopens that decision.
