@@ -420,3 +420,14 @@ Currentness invariant after PPD-012:
 - current `FAST-DOSSIER-DEEP-V1` remains production authority until the integration task performs coherent cutover.
 - no Scheduled Task change is part of the freeze.
 
+**Stage-2 implementation path (non-active, 2026-10-07):**
+- `scripts/deep_stage2.py` — frozen Stage-1/Stage-2 binding validation, exact neighbor-comparison validation, GitHub-owned unique two-decimal placement and smallest local one-cent re-spacing;
+- `scripts/build_deep_stage2_work.py` — consumes only explicit accepted Stage-1 result references/profile pins and current calibrated Stage-2 state; never infers acceptance from inbox artifacts and never auto-retries diagnostics;
+- `scripts/ingest_deep_stage2.py` — strict exact-path ingest, create-only accepted-result/receipt persistence and idempotent replay;
+- `config/deep_stage2_manual_worker_prompt.md` — manual semantic data-plane prompt; implementation presence is not launch authority;
+- `data/production/pre_ai/deep_stage2_work.json` + `data/cache/deep_stage2_state.json` — non-active manifest/state surfaces;
+- `.github/workflows/validate-deep-stage2-calibration.yml` + `scripts/test_deep_stage2_calibration.py` — bounded compile/frozen-interface/runtime regression.
+- Stage-2 bootstrap anchors are intentionally not invented: the frozen contract requires already-calibrated anchors, so seed/migration activation remains an integration/cutover responsibility.
+- No mutating production ingest workflow is activated by this implementation task; the ingest script exists for later canonical integration wiring.
+
+
