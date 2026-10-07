@@ -45,7 +45,7 @@ Current approved and implemented direction:
 - PR #158 accepted and merged as `9c9d79194fba3ff22ad491d80257277a87fdcfaf`;
 - validations on PR head were green;
 - no Stage 1/Stage 2 scoring logic changed;
-- physical ЧАТ 1 is now assigned to a NEW physical chat for `WORKER_TASK_SITE_STALE_STATISTICS_DIAGNOSTIC_01.md` (read-only diagnostic of stale Statistics-page Deep/translation data);
+- ЧАТ 1 stale-statistics diagnostic is complete: first stale stage is card-explanation validation blocking fresh visual persistence; translation values are currently canonical. SAME physical ЧАТ 1 continues with `WORKER_TASK_SITE_STALE_STATISTICS_FIX_01.md`;
 - PR #157 remains closed without merge as superseded.
 
 The older ~581 + ~1,720 reserve analysis below remains historical diagnostic evidence only and must not be turned into production gating unless the user explicitly reopens that decision.
@@ -131,10 +131,16 @@ PR #157 remains open but conflicts with main and contains an older report varian
 
 ЧАТ 1 physical slot is available after the Director resolves/records the PR #157 disposition.
 
-### ЧАТ 2 — ACTIVE / STAGE 2 IMPLEMENTATION INCOMPLETE
+### ЧАТ 2 — STAGE 2 ACCEPTED / CONTINUE STAGE 1
 
-Task:
+Accepted task:
 `WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`
+
+Accepted PR:
+`#159` merged as `06aeeda19bf550899fd690f08f413e58d6f33b1d`
+
+Next task in the same physical Chat 2:
+`WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md`
 
 Branch:
 `implement/deep-stage2-calibration-worker-01`
