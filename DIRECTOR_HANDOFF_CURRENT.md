@@ -45,7 +45,7 @@ Current approved and implemented direction:
 - PR #158 accepted and merged as `9c9d79194fba3ff22ad491d80257277a87fdcfaf`;
 - validations on PR head were green;
 - no Stage 1/Stage 2 scoring logic changed;
-- physical ЧАТ 1 is free for a new task;
+- physical ЧАТ 1 is now assigned to a NEW physical chat for `WORKER_TASK_SITE_STALE_STATISTICS_DIAGNOSTIC_01.md` (read-only diagnostic of stale Statistics-page Deep/translation data);
 - PR #157 remains closed without merge as superseded.
 
 The older ~581 + ~1,720 reserve analysis below remains historical diagnostic evidence only and must not be turned into production gating unless the user explicitly reopens that decision.
