@@ -134,7 +134,15 @@ def reconcile_quarantine(defects, *, observed_at_utc=None, source_binding=None, 
     normalized_by_id = {}
     for defect in defects or []:
         current = _normalize_defect(defect, observed_at, source_binding or {})
-        normalized_by_id[current['defect_id']] = current
+        defect_id = current['defect_id']
+        existing = normalized_by_id.get(defect_id)
+        if existing is None:
+            normalized_by_id[defect_id] = current
+            continue
+        existing['reason_codes'] = sorted(set(existing['reason_codes']) | set(current['reason_codes']))
+        existing['source_binding'].update(current.get('source_binding') or {})
+        if current.get('label'):
+            existing['label'] = current['label']
 
     for defect_id, current in sorted(normalized_by_id.items()):
         old = previous_by_id.pop(defect_id, None)
