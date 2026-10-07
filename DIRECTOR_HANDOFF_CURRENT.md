@@ -5,6 +5,154 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## MANDATORY FIRST RESPONSE IN THE NEW DIRECTOR CHAT
+
+The user's first expected response is **NOT** a new repository audit.
+
+Before doing anything else, answer the user's three unresolved questions from the previous Director chat:
+
+1. Give concrete examples of games that the shortlist-reduction diagnostic would move out of the first semantic wave, and explain the exact reason for each. Be precise that these games are **deferred to reserve, not permanently deleted/excluded**. Use current known examples/signals already summarized below; do not start a broad code/data investigation just to answer.
+2. Explain why PR #157 was created at all, and why PR #157 now differs/conflicts with `main`.
+3. Explain why the previous Chat 2 continuation message was unnecessarily long, and provide a shorter normal worker continuation message style going forward.
+
+Only after answering those three questions should the new Director continue project management.
+
+## CONTEXT-BUDGET / DEPTH RULE — VERY IMPORTANT
+
+The Director must stay shallow and conserve context.
+
+- Do **not** broadly inspect code, scripts, old PRs, workflows, historical reports, or repository trees just to "understand the project".
+- Start from this handoff and only the **top/current** Board state.
+- For a concrete question, inspect only the exact artifact needed.
+- If answering correctly would require deep implementation/code analysis, **do not perform that analysis in the Director chat**. Create/assign a bounded worker task instead.
+- Do not duplicate analysis already completed by a worker report.
+- Do not re-open accepted PR #156 architecture freeze unless there is direct contradictory evidence.
+- Keep Director responses concise and decision-oriented.
+
+## THREE-QUESTION FACTS ALREADY ESTABLISHED
+
+### A. Shortlist reduction: what happens to the ~1,700
+
+Current corrected main report:
+`reviews/worker_reports/steam-shortlist-scope-reduction-diagnostic-02.md`
+
+Current funnel:
+`2,522 shortlist offers -> 2,385 purchase families -> 2,301 semantic families`.
+
+Corrected recommendation currently in `main`:
+- first semantic wave: about **581** families;
+- roughly **1,720** remain as `deferred_reserve`;
+- reserve is **not** `not_fit`, not deleted, and not removed from canonical source truth;
+- after the new 60/40 Deep model is production-active, GitHub may keep promoting reserve items that can still mathematically beat the current top-100 boundary.
+
+Why reserve rather than permanent exclusion:
+- when the same deterministic gates are tested on 112 current known Deep-fit games *without* protecting them because they are already known fit, only **23/112 (20.5%)** naturally pass the balanced ~581 gate;
+- therefore Steam metadata/reviews/tags are too weak to safely make permanent taste decisions.
+
+Concrete current examples of the type of rows likely to be deferred unless another protected lane applies:
+- **Superliminal** — current discovery reasons are generic quality only (`mainstream_quality`, `very_high_rating`, `high_confidence_adjacent`), 92.5% / ~14.5k reviews, 60% discount; moderate purchase scenario says `ЛУЧШЕ ЖДАТЬ`. Under the balanced first-wave design, standalone generic routes do not qualify.
+- **Seen** — `mainstream_quality` + `very_high_rating`, 90.5% / ~9.3k reviews, 50% discount; moderate scenario `ЛУЧШЕ ЖДАТЬ`. No stronger personal-fit route is visible in the current deterministic reasons.
+- **Russian Life Simulator** — `mainstream_quality` only, 88.5% / ~7.1k reviews, 50% discount; moderate scenario `ЛУЧШЕ ЖДАТЬ`.
+- **Sayonara Wild Hearts** — `very_high_rating` only, 94.5% / ~3.7k reviews, 50% discount; moderate scenario `ЛУЧШЕ ЖДАТЬ`.
+
+Use these as examples of **why an item is deferred from the first wave**, not proof it can never be good. If a protected lane (Wishlist, already authoritative Deep-fit, direct user reference, package/bundle lane, current DLC lane, or protected strong-commercial lane) applies, that protection overrides ordinary defer logic.
+
+### B. PR #157: why it exists and why it diverged
+
+PR #157:
+`Steam shortlist scope reduction diagnostic 02`
+
+Exact chronology:
+- PR branch `diagnostic-steam-shortlist-scope-reduction-02` contains two commits:
+  - `c9aa423...` — add diagnostic report;
+  - `3abeb5e...` — record diagnostic completion.
+- That PR's report is the **older recommendation**, around **784** families in a conservative first wave.
+- After the PR was created, the worker performed a stronger Deep-fit recall backtest and wrote corrected report commits into **main**:
+  - `6b79acb...` — report;
+  - `9f3c879...` — corrected recommendation with Deep-fit recall backtest.
+- The corrected `main` report recommends ~**581 first-wave + reserve**, not the older 784 permanent-style recommendation.
+- `CURRENT_TASK.md` also moved independently in main.
+- Therefore PR #157 is now `dirty`/conflicting: its branch contains an older version of files that were later changed directly in main.
+
+Why PR #157 was created: the worker used a normal task branch/PR path for the report and CURRENT_TASK update. The later corrections were not applied back to that branch; they landed in main. Do not merge PR #157 blindly. First decide whether it contains any unique useful content not already superseded by main; likely outcome is close it as superseded after a bounded comparison.
+
+### C. Why the previous Chat 2 message was too long
+
+The Director over-packed the continuation prompt with state the worker can read from GitHub. Going forward, continuation prompts should contain only:
+- repo/source of truth;
+- exact task filename;
+- one or two critical known blockers/state facts;
+- explicit "continue, do not restart";
+- explicit boundaries if necessary.
+
+Do not restate the entire task specification in the chat message when the canonical task file already contains it.
+
+## CURRENT PHYSICAL WORKER SLOTS
+
+### ЧАТ 1 — DIAGNOSTIC COMPLETE
+
+Task:
+`WORKER_TASK_STEAM_SHORTLIST_SCOPE_REDUCTION_DIAGNOSTIC_02.md`
+
+Status:
+`diagnostic_complete_recommendation_ready`
+
+Authoritative corrected report is already in `main`:
+`reviews/worker_reports/steam-shortlist-scope-reduction-diagnostic-02.md`
+
+Recommendation:
+- ~581 first semantic wave;
+- ~1,720 deferred reserve;
+- do not permanently exclude reserve;
+- do not implement until Director/user accepts semantics;
+- future bounded implementation task proposed by report:
+  `WORKER_TASK_STEAM_SEMANTIC_FIRST_WAVE_AND_RESERVE_IMPLEMENT_01.md`.
+
+PR #157 remains open but conflicts with main and contains an older report variant. Do not merge it blindly.
+
+ЧАТ 1 physical slot is available after the Director resolves/records the PR #157 disposition.
+
+### ЧАТ 2 — ACTIVE / STAGE 2 IMPLEMENTATION INCOMPLETE
+
+Task:
+`WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`
+
+Branch:
+`implement/deep-stage2-calibration-worker-01`
+
+Known work already present on branch:
+- Stage 2 manual worker prompt;
+- Stage 2 work manifest;
+- state file;
+- validation workflow;
+- partial implementation start.
+
+Latest known branch head:
+`8e674ea33ecc2710acc2bb1946ab741a0971e06d`
+
+Known failed validation:
+`Validate Deep Stage 2 calibration` run `37509068199`
+
+Immediate failure:
+workflow compile step references missing `scripts/deep_stage2.py`.
+
+No Stage 2 PR or final worker report existed at the last Director check.
+
+Correct continuation style for ЧАТ 2 should be short, e.g.:
+
+```
+Продолжай текущую задачу:
+WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md
+
+Рабочая ветка уже есть:
+implement/deep-stage2-calibration-worker-01
+
+Не начинай заново. Последняя проверка 37509068199 упала на отсутствующем scripts/deep_stage2.py.
+Продолжи реализацию, добей проверки, создай PR и worker report.
+
+Не переходи к следующей задаче.
+```
+
 ## CRITICAL START RULE FOR THE NEXT DIRECTOR
 
 Do **not** reconstruct the project by roaming through the entire repository.
