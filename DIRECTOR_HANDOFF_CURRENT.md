@@ -31,6 +31,23 @@ The Director must stay shallow and conserve context.
 
 ## THREE-QUESTION FACTS ALREADY ESTABLISHED
 
+### CURRENT USER DECISION — SUPERSEDES FIRST-WAVE/RESERVE IMPLEMENTATION
+
+The user rejected semantic first-wave/deferred-reserve gating as the production direction.
+
+Current approved direction:
+- keep the full canonically eligible semantic pool;
+- do not defer ordinary eligible candidates merely to shrink semantic work;
+- change only GitHub-owned processing order;
+- first priority: games/taste subjects that have never had Deep analysis;
+- within that cohort, use a transparent deterministic priority based on Steam positive rating, review-count confidence, current price, and current discount;
+- no hard top-N and no eligibility reduction;
+- exact implementation task: `WORKER_TASK_STEAM_SEMANTIC_QUEUE_PRIORITY_IMPLEMENT_01.md`;
+- assigned to a NEW physical ЧАТ 1;
+- PR #157 was closed without merge as superseded.
+
+The older ~581 + ~1,720 reserve analysis below remains historical diagnostic evidence only and must not be turned into production gating unless the user explicitly reopens that decision.
+
 ### A. Shortlist reduction: what happens to the ~1,700
 
 Current corrected main report:
