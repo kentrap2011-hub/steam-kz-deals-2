@@ -1491,3 +1491,15 @@
 - User-observed Deep values were confirmed in Pages artifact `11432311542`; current Pages artifact `11472514317` is newer but still behind canonical Deep.
 - Translation block is currently not stale: its published values and provenance match canonical `chatgpt_ru_description_status.json`.
 - No production state, source/workflow/UI, semantic worker, scheduler, ranking, queue, or translation/Deep/Dossier data was changed.
+
+
+## Worker in progress — 2026-10-07
+
+### SITE-NONBLOCKING-FRESHNESS-AND-QUARANTINE-01
+Статус: `implementing`.
+- Worker slot: `ЧАТ 1`.
+- Task: `WORKER_TASK_SITE_NONBLOCKING_FRESHNESS_AND_QUARANTINE_01.md`.
+- Branch: `fix/site-nonblocking-freshness-quarantine-01`.
+- Scope: GitHub-owned current site-status artifact, local publication quarantine/isolation, Statistics status source, and publication-chain local/global blocker split.
+- Global source/schema/material authority remains fail-closed; no semantic worker, ranking, queue ordering, Stage 1/2 scoring, or Scheduled Task change.
+- Required report: `reviews/worker_reports/site-nonblocking-freshness-and-quarantine-01.md`.
