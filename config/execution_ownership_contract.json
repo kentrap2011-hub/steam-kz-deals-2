@@ -310,5 +310,22 @@
         "creating a recurring scheduler, second queue, retry loop or backlog manager"
       ]
     }
+  },
+  "site_publication_resilience": {
+    "contract": "config/site_publication_resilience_contract.json",
+    "owner": "github_control_plane",
+    "github_owns": [
+      "current site-status projection from canonical production state",
+      "local publication defect classification and quarantine reconciliation",
+      "deterministic per-item presentation omission/fallback",
+      "quarantine persistence and resolution accounting",
+      "status and visual publication"
+    ],
+    "browser_role": "read_only_presentation",
+    "local_item_failure_blocks_unrelated_publication": false,
+    "global_integrity_failure_remains_fail_closed": true,
+    "new_scheduler_created": false,
+    "new_semantic_queue_or_retry_loop_created": false,
+    "scheduled_chatgpt_change": false
   }
 }
