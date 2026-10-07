@@ -29,6 +29,18 @@ def validate_item(game):
     errors = []
     title = str(game.get('title') or game.get('id') or '<unknown>')
 
+    presentation_state = game.get('publication_presentation_state') or {}
+    if presentation_state.get('explanations') == 'quarantined':
+        visible_fields = (
+            'why_fit', 'why_fit_status', 'why_fit_provenance',
+            'risks', 'risk_codes', 'risk_status', 'risk_provenance',
+            'cautions', 'caution_provenance',
+        )
+        leaked = [field for field in visible_fields if game.get(field)]
+        if leaked:
+            errors.append(f'{title}: quarantined explanation fields remain visible: {",".join(leaked)}')
+        return errors
+
     reasons = [str(x).strip() for x in game.get('why_fit') or [] if str(x).strip()]
     fit_status = game.get('why_fit_status') or {}
     fit_provenance = game.get('why_fit_provenance') or []
