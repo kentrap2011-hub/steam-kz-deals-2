@@ -1464,3 +1464,14 @@
 - Both overlapping inbox transports are absent after ingest; no retranslation or rebinding occurred.
 - Downstream visual rebuild run `37312092872` failed on independent freshness gate: `Commercial publication requires a fresh current-cycle discovery universe`; no unrelated publication logic was changed.
 - No Scheduled Task, Dossier, Deep, Fast, ranking or expiry changes were made by this task.
+
+
+## COMPLETE — SITE-STALE-STATISTICS-DIAGNOSTIC-01
+
+- Status: `diagnosed_needs_fix`.
+- Worker slot: `ЧАТ 1`.
+- Report: `reviews/worker_reports/site-stale-statistics-diagnostic-01.md`.
+- First causal Deep stale stage: fresh full-visual candidate generation succeeds, then `Validate generated card explanations` fails before canonical visual persistence; latest proven violation is `Tetris® Effect: Connected: positive contains commercial/ranking-only language`.
+- User-observed Deep values were confirmed in Pages artifact `11432311542`; current Pages artifact `11472514317` is newer but still behind canonical Deep.
+- Translation block is currently not stale: its published values and provenance match canonical `chatgpt_ru_description_status.json`.
+- No production state, source/workflow/UI, semantic worker, scheduler, ranking, queue, or translation/Deep/Dossier data was changed.
