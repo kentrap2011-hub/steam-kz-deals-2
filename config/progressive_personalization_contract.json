@@ -131,7 +131,11 @@
     "browser_must_not_recalculate_semantics_or_external_facts": true,
     "last_known_good_on_source_failure": "preserve_existing_behavior",
     "pass1_remaining_may_be_nonzero": true,
-    "phase_a_fallback_remains_valid": true
+    "phase_a_fallback_remains_valid": true,
+    "site_status_source": "data/production/site/current_status.json",
+    "local_presentation_defects_are_nonblocking": true,
+    "local_presentation_defects_must_be_quarantined": true,
+    "global_integrity_failures_remain_fail_closed": true
   },
   "phase_b_execution": {
     "pass1_active": true,
@@ -460,6 +464,17 @@
         "last_translation_attempt_at_utc"
       ],
       "browser_rule": "Render producer-owned count/timestamps only; do not derive them from cards, commits, payload age or page-load time."
+    },
+    "source_artifact": "data/production/site/current_status.json",
+    "browser_fallback_source": "data/production/visual/current.json.processing_status",
+    "publication_quarantine": {
+      "fields": [
+        "site_quarantine_pending_count",
+        "site_quarantine_category_counts",
+        "site_quarantine_last_change_at_utc",
+        "site_status_generated_at_utc"
+      ],
+      "browser_rule": "Render producer-owned quarantine count/categories and status timestamp only; do not inspect internal quarantine entries in the browser."
     }
   },
   "deep_revision_model": {
@@ -514,5 +529,11 @@
     },
     "timestamp_display_rule": "Browser may only format producer-provided UTC timestamps in viewer local time; null means no recorded history.",
     "publication_rule": "Untranslated count may be nonzero while the visual remains publishable; invalid text is never promoted to ready_ru."
+  },
+  "site_publication_resilience": {
+    "contract": "config/site_publication_resilience_contract.json",
+    "status_projection_independent_from_visual_card_success": true,
+    "local_card_or_description_failure_blocks_unrelated_games": false,
+    "browser_is_read_only": true
   }
 }
