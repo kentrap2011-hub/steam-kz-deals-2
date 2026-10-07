@@ -971,3 +971,21 @@ A canonical Dossier/profile/work/repository write that lands **before** the mark
 
 **Канонические файлы:** `config/deep_two_stage_architecture_contract.json`, `config/deep_stage1_contract.json`, `config/deep_stage1_result_schema.json`, `config/deep_stage2_contract.json`, `config/deep_stage2_result_schema.json`, `config/deep_two_stage_site_projection_contract.json`, `config/deep_two_stage_migration_contract.json`, `config/deep_two_stage_dependency_map.json`.
 
+
+
+---
+
+## VISUAL-002 — Local publication defects are quarantined; global authority remains fail-closed
+
+**Дата:** 2026-10-07  
+**Статус:** implementation governed by `WORKER_TASK_SITE_NONBLOCKING_FRESHNESS_AND_QUARANTINE_01.md`.
+
+**Решение:** ошибка одного точно идентифицированного presentation-объекта/поля не является основанием оставлять весь сайт на старом snapshot. GitHub изолирует такой объект или только его неподходящий presentation fragment, записывает стабильный defect в `data/production/site/publication_quarantine.json` и продолжает публикацию независимых свежих данных. Если безопасный exact-compatible last-known-good fragment не доказан, проблемное поле скрывается нейтрально; semantic truth, Deep score/provenance и ranking не переписываются.
+
+**Statistics:** текущие Fast/Dossier/Deep/translation counters вынесены в отдельный GitHub-owned `data/production/site/current_status.json` с exact source bindings. Pages публикует его как `web/data/status.json`; browser только отображает producer-owned поля и при отсутствии нового status artifact может временно использовать legacy `visual.processing_status`. Локальный card/content defect не должен удерживать Statistics на старом visual snapshot.
+
+**Global fail-closed boundary:** отсутствие/нечитаемость canonical source, противоречие scope/accounting, неверная whole-payload schema/authority, невозможность доказать exact material binding или другой глобальный corruption по-прежнему останавливают небезопасную соответствующую публикацию. Локальная quarantine не используется как способ обхода global integrity.
+
+**Ownership:** status projection, defect classification/reconciliation, fallback/omission, persistence и publication принадлежат GitHub/GitHub Actions. Новый scheduler, semantic queue, retry daemon или ChatGPT-owned backlog не создаются; Scheduled Tasks не меняются.
+
+**Основные места:** `config/site_publication_resilience_contract.json`, `config/execution_ownership_contract.json`, `scripts/site_publication_resilience.py`, `scripts/isolate_site_publication_defects.py`, `scripts/build_site_status.py`, `data/production/site/publication_quarantine.json`, `.github/workflows/build-site-current-status.yml`, `.github/workflows/build-daily-visual-payload.yml`, `.github/workflows/deploy-visual.yml`, `web/app.js`, `web/progressive-personalization-ui.js`.
