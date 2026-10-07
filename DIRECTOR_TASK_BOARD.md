@@ -6,7 +6,7 @@
 
 - **Context discipline:** new Director must stay shallow. Use `DIRECTOR_HANDOFF_CURRENT.md` + this top section only; do not broadly inspect code/history. Deep implementation analysis belongs in worker chats.
 - **Mandatory first response in new Director chat:** answer the user's three pending questions about (1) concrete deferred-game examples and why reserve is not deletion, (2) why PR #157 exists/diverged, and (3) why the previous Chat 2 continuation message was too long.
-- **ЧАТ 1:** shortlist-scope diagnostic complete. Corrected main report recommends ~581 first semantic wave + ~1,720 deferred reserve. PR #157 is open/dirty and contains an older report variant; do not merge blindly.
+- **ЧАТ 1:** previous shortlist-scope diagnostic is complete. User rejected first-wave/deferred-reserve gating as the production direction. PR #157 was closed without merge as superseded. New task assigned to a NEW physical ЧАТ 1: `WORKER_TASK_STEAM_SEMANTIC_QUEUE_PRIORITY_IMPLEMENT_01.md` — keep the full eligible semantic pool and change only GitHub-owned processing order: never-Deep-analyzed first, then transparent priority from Steam rating + review confidence + current price + discount.
 - **ЧАТ 2:** Stage 2 implementation active on `implement/deep-stage2-calibration-worker-01`. Validation run `37509068199` failed because `scripts/deep_stage2.py` was missing. No final Stage 2 PR/report at last check.
 - PR #156 architecture freeze remains accepted and must not be re-audited without direct contradiction.
 - No Scheduled Task changes are authorized.
