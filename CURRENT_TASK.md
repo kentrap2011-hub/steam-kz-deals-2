@@ -1,15 +1,20 @@
 # CURRENT TASK
 
-## IN PROGRESS — Deep Stage 2 comparative calibration worker implementation 01
-Статус: `implementation_validated_report_pr_pending`.
+## COMPLETE — Deep Stage 2 comparative calibration worker implementation 01
+Статус: `implementation_complete_ready_for_review`.
 - task: `WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`;
+- PR: `#159` — `Implement Deep Stage 2 comparative calibration worker`;
 - branch: `implement/deep-stage2-calibration-worker-01`;
-- frozen interfaces remain unchanged: `config/deep_two_stage_architecture_contract.json`, `config/deep_stage2_contract.json`, `config/deep_stage2_result_schema.json`, `config/deep_two_stage_dependency_map.json`;
-- implemented scope: bounded manual Stage-2 prompt, GitHub-owned anchor-window/work builder, strict result validation/ingest, non-active state/progress/diagnostics, unique 0.01 canonical placement with smallest local deterministic re-spacing, focused validation workflow/tests;
-- architecture boundary preserved: GitHub owns scope/anchors/order/retry/persistence/final numeric placement; semantic worker owns only exact prepared comparative judgment and cannot research new facts or rewrite Stage 1;
-- implementation head `932ae483f688893af682cc017dcb699aed6e3551` passed Stage-2 validation `37602257722` and existing PASS 2 core `37602257408`;
-- production cutover, Stage 1, Fast removal, ranking migration, UI and Scheduled Tasks remain untouched;
-- next bounded action in this same task: reconcile fresh main, create PR and durable worker report, then stop.
+- frozen PR #156 interfaces were consumed unchanged; no architecture redefinition or cutover occurred;
+- implemented: canonical manual Stage-2 prompt, GitHub-owned exact work/anchor-window builder, strict semantic-result validation and ingest, non-active progress/state/diagnostics, canonical unique monotonic 0.01 placement with smallest deterministic local re-spacing, focused regression workflow/tests;
+- Stage 2 semantic input remains only accepted Stage 1 + pinned profile + GitHub-selected calibrated anchors; web research/new facts/Stage-1 rewrites/Wishlist/price/discount quality adjustments remain forbidden;
+- no calibrated-anchor bootstrap/seed rule was invented: the frozen contract requires already-calibrated anchors, so initial seed/migration activation remains outside this task and belongs to later integration/cutover;
+- previous run `37509068199` failed before validation because the workflow referenced missing `scripts/deep_stage2.py`; this is corrected and recorded durably as PITFALL-008;
+- validated implementation code head `932ae483f688893af682cc017dcb699aed6e3551`: Stage-2 run `37602257722` success; PASS 2 core `37602257408` success;
+- fresh-main reconciled head `feaa87e65c9f4f20f17be257387288cc9ffec70f`: PASS 2 core `37602537959` success; PR #159 is mergeable;
+- report: `reviews/worker_reports/deep-stage2-calibration-worker-implement-01.md`;
+- no semantic worker execution, Fast removal, ranking migration, site/UI, production cutover or Scheduled Task action occurred;
+- stop boundary: this worker does not proceed to Stage 1, integration/cutover, ranking migration or any next task.
 
 ## COMPLETE — Steam semantic queue priority implementation 01
 Статус: `implementation_complete_ready_for_director_acceptance`.
