@@ -30,6 +30,11 @@ on:
       - "scripts/card_explanation_policy.py"
       - "scripts/test_card_explanation_policy.py"
       - "scripts/validate_card_explanations.py"
+      - "scripts/site_publication_resilience.py"
+      - "scripts/isolate_site_publication_defects.py"
+      - "scripts/build_site_status.py"
+      - "scripts/test_site_publication_resilience.py"
+      - "config/site_publication_resilience_contract.json"
       - "scripts/giveaway_visual_handoff.py"
       - "scripts/test_giveaway_visual_handoff.py"
       - "scripts/validate_giveaway_visual_payload.py"
@@ -794,6 +799,7 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/test_card_explanation_policy.py
+          python scripts/test_site_publication_resilience.py
 
       - name: Validate giveaway visual handoff
         shell: bash
@@ -929,6 +935,15 @@ jobs:
             echo "built=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Isolate local publication defects and build current site status
+        if: steps.build.outputs.built == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/isolate_site_publication_defects.py data/production/visual/current.json
+          python scripts/build_site_status.py
+          python scripts/build_site_status.py --validate-current data/production/site/current_status.json
+
       - name: Validate generated card explanations
         if: steps.build.outputs.built == 'true'
         shell: bash
@@ -993,7 +1008,9 @@ jobs:
               data/cache/duration_estimates.json \
               data/production/visual/current.json \
               data/production/visual/ranking_review.jsonl \
-              data/production/visual/ranking_lookup
+              data/production/visual/ranking_lookup \
+              data/production/site/publication_quarantine.json \
+              data/production/site/current_status.json
             git diff --cached --check
           }
 
@@ -1024,6 +1041,9 @@ jobs:
             export FORCE_VISUAL_BUILD=1
             python scripts/build_final_visual_payload.py | tee /tmp/visual-build-rebuild.log
             python scripts/normalize_visual_media_urls.py | tee /tmp/media-refresh-rebuild.log
+            python scripts/isolate_site_publication_defects.py data/production/visual/current.json
+            python scripts/build_site_status.py
+            python scripts/build_site_status.py --validate-current data/production/site/current_status.json
             python scripts/validate_card_explanations.py data/production/visual/current.json 30
             python scripts/validate_giveaway_visual_payload.py data/production/visual/current.json
             python scripts/validate_russian_descriptions.py data/production/visual/current.json --allow-untranslated
