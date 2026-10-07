@@ -6,8 +6,8 @@
 
 - **Context discipline:** new Director must stay shallow. Use `DIRECTOR_HANDOFF_CURRENT.md` + this top section only; do not broadly inspect code/history. Deep implementation analysis belongs in worker chats.
 - **Mandatory first response in new Director chat:** answer the user's three pending questions about (1) concrete deferred-game examples and why reserve is not deletion, (2) why PR #157 exists/diverged, and (3) why the previous Chat 2 continuation message was too long.
-- **ЧАТ 1:** NEW physical chat assigned to `WORKER_TASK_SITE_STALE_STATISTICS_DIAGNOSTIC_01.md` (READ-ONLY / DIAGNOSTIC). Goal: trace stale Statistics-page Deep and translation values to the first causal stale stage and propose the smallest fix. No implementation in this task. Previous semantic queue priority PR #158 is accepted/merged.
-- **ЧАТ 2:** Stage 2 implementation active on `implement/deep-stage2-calibration-worker-01`. Validation run `37509068199` failed because `scripts/deep_stage2.py` was missing. No final Stage 2 PR/report at last check.
+- **ЧАТ 1:** stale Statistics diagnostic complete; report proves fresh Deep visual candidates are blocked before canonical persistence by card-explanation validation (current Tetris commercial/ranking wording case). Translation block is currently canonical, not a separate stale defect. SAME physical ЧАТ 1 continues with `WORKER_TASK_SITE_STALE_STATISTICS_FIX_01.md` to implement and validate the bounded producer/validator parity fix through fresh visual persistence + deploy.
+- **ЧАТ 2:** Deep Stage 2 implementation accepted and merged via PR #159, merge `06aeeda19bf550899fd690f08f413e58d6f33b1d`; final checks green. SAME physical ЧАТ 2 now continues the pre-approved serialized Deep sequence with `WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md`.
 - PR #156 architecture freeze remains accepted and must not be re-audited without direct contradiction.
 - No Scheduled Task changes are authorized.
 
