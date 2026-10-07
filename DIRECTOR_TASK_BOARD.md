@@ -2,26 +2,14 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## CURRENT DIRECTOR STATE — 2026-09-29
+## CURRENT DIRECTOR STATE — 2026-10-07
 
-- `ЧАТ 1` is reassigned as a NEW physical worker chat to `WORKER_TASK_STEAM_SHORTLIST_SCOPE_REDUCTION_DIAGNOSTIC_02.md` (READ-ONLY / DIAGNOSTIC / OFFLINE SIMULATION). It must analyze how to reduce the current 2,522 paid shortlist / ~2.3k semantic target much further without reintroducing review failures or using a blind raw top-N.
-- `ЧАТ 2` remains the sole physical worker owner for the new Deep LOGIC stream. Continue current `WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`, then sequentially use the same physical chat for `WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md` and `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md` after each prior task is cleanly closed/accepted. ЧАТ 1 must not implement Deep logic while this assignment stands.
-- Manual Russian-description semantic worker is STOPPED after checkpoint 1 submission `32caa3b35fb750cd31da7198f28e34855928edd6` failed canonical ingest run `37138503097`: exact AppID 1237980 result failed the `good_ru` quality gate and the checkpoint was not persisted. Do not retry/retranslate checkpoint 1 in the semantic chat. Recovery is assigned to ЧАТ 2 through the partial-acceptance/diagnostic-state implementation. No Scheduled Task action is authorized.
-- Progressive Deep semantic worker is ACTIVE/RECENT: run start `0b47a0fe3830dfbcec37fa5a2395d6be08169067`, results already submitted for AppID 1577120 (`7005c0f...`) and AppID 1237980 (`0622b864...`). Do not rebuild/reorder/restart its scope. Do not create or modify Scheduled Tasks.
-- Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
-- PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
-- Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
-- Current Dossier snapshot remains `81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`; latest accepted worker verification showed 6 accepted dossiers, 412 pending, 0 failed/recovery. Production may advance beyond these counts independently.
-- The old failed production experiment used snapshot `b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5`. Do not automatically recover/rerun that old g000001: first verify whether any reconciliation is still required now that the canonical binding/snapshot has rolled forward.
-- No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
-- Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
-- Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
-- Current user-visible blocker: after the recent merges, the live site still shows expired-sale cards and stale Statistics. Treat actual Pages publication as unresolved.
-- Do not reopen PR #121 expiry logic, RANK-013, or the game:1143810 regression merely because the live site is unchanged; first verify what code/payload Pages actually deployed.
-- User-authorized current recovery direction: process current translations in ЧАТ 1 while ЧАТ 2 makes translation absence nonblocking and adds translation observability to Statistics. The earlier browser-asset decoupling proposal is not the current task; reassess it only if publication still lags after these authorized changes.
-- Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
-- Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
-
+- **Context discipline:** new Director must stay shallow. Use `DIRECTOR_HANDOFF_CURRENT.md` + this top section only; do not broadly inspect code/history. Deep implementation analysis belongs in worker chats.
+- **Mandatory first response in new Director chat:** answer the user's three pending questions about (1) concrete deferred-game examples and why reserve is not deletion, (2) why PR #157 exists/diverged, and (3) why the previous Chat 2 continuation message was too long.
+- **ЧАТ 1:** shortlist-scope diagnostic complete. Corrected main report recommends ~581 first semantic wave + ~1,720 deferred reserve. PR #157 is open/dirty and contains an older report variant; do not merge blindly.
+- **ЧАТ 2:** Stage 2 implementation active on `implement/deep-stage2-calibration-worker-01`. Validation run `37509068199` failed because `scripts/deep_stage2.py` was missing. No final Stage 2 PR/report at last check.
+- PR #156 architecture freeze remains accepted and must not be re-audited without direct contradiction.
+- No Scheduled Task changes are authorized.
 
 ## TWO-STAGE DEEP IMPLEMENTATION WAVES — 2026-10-06
 
