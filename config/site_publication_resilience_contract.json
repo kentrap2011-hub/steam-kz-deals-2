@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "contract": "SITE-PUBLICATION-RESILIENCE-V1",
+  "status": "canonical",
+  "owner": "github_control_plane",
+  "purpose": "Keep independent current site data publishable when one identifiable presentation item is invalid, while preserving fail-closed global authority and integrity guarantees.",
+  "authority": {
+    "github_owns": [
+      "status projection",
+      "local defect classification",
+      "quarantine reconciliation",
+      "fallback/omission",
+      "persistence",
+      "publication"
+    ],
+    "browser_role": "read_only_presentation",
+    "scheduled_chatgpt_change": false,
+    "new_scheduler": false,
+    "new_semantic_queue": false,
+    "new_retry_loop": false
+  },
+  "artifacts": {
+    "current_status": "data/production/site/current_status.json",
+    "publication_quarantine": "data/production/site/publication_quarantine.json",
+    "deployed_status": "web/data/status.json"
+  },
+  "classification": {
+    "local_isolatable": {
+      "rule": "A defect is local only when the exact object/field identity is known and the remainder of the payload remains independently attributable to current canonical sources.",
+      "handling": "quarantine_and_continue",
+      "examples": [
+        "one paid-card player-facing explanation fails presentation validation",
+        "one paid-card description claims a publishable state but its text is invalid",
+        "one paid-card optional grounded-negative presentation cannot be safely finalized",
+        "one giveaway game/offer has invalid presentation fields while the giveaway snapshot remains globally trusted"
+      ]
+    },
+    "global_integrity": {
+      "rule": "A defect is global when canonical source identity, whole-payload schema/authority, material binding, or current production scope cannot be established safely.",
+      "handling": "fail_closed",
+      "examples": [
+        "missing or unreadable canonical source required to compute current status",
+        "unsupported whole-payload schema/contract",
+        "candidate-scope arithmetic or source-binding contradiction",
+        "material/source drift that prevents proving which snapshot a full visual represents",
+        "missing mandatory global profile/model/authority binding"
+      ]
+    }
+  },
+  "local_fallback": {
+    "preferred": "reuse last-known-good presentation fragment only with exact same-item identity and compatibility proof",
+    "otherwise": "omit only the invalid presentation field or hide only the invalid item",
+    "semantic_truth_must_not_change": true,
+    "ranking_must_not_change": true,
+    "accepted_deep_score_and_provenance_must_not_change": true,
+    "validators_must_not_be_blanket_disabled": true
+  },
+  "quarantine": {
+    "identity_fields": [
+      "category",
+      "object_type",
+      "object_id",
+      "field"
+    ],
+    "required_fields": [
+      "defect_id",
+      "category",
+      "object_type",
+      "object_id",
+      "field",
+      "reason_codes",
+      "status",
+      "first_seen_at_utc",
+      "last_seen_at_utc",
+      "source_binding"
+    ],
+    "active_status": "pending",
+    "terminal_statuses": [
+      "resolved",
+      "superseded"
+    ],
+    "reconciliation_owner": "github",
+    "duplicate_rule": "same stable defect_id is updated in place; repeated observation must not append duplicates",
+    "resolution_rule": "a previously pending defect absent from the complete current local-defect observation is marked resolved",
+    "raw_private_reasoning_forbidden": true
+  },
+  "status_projection": {
+    "independent_from_card_render_success": true,
+    "required_sections": [
+      "fast",
+      "dossier",
+      "deep",
+      "translation",
+      "publication_quarantine"
+    ],
+    "source_rule": "derive from current canonical GitHub production state, never by counting rendered cards in the browser",
+    "required_observability": [
+      "generated_at_utc",
+      "source_bindings",
+      "publication_quarantine_pending_count",
+      "publication_quarantine_category_counts",
+      "publication_quarantine_last_change_at_utc"
+    ],
+    "exact_binding_required": true,
+    "browser_may_fallback_to_legacy_visual_processing_status_only_when_status_artifact_unavailable": true
+  },
+  "publication": {
+    "local_defect_blocks_current_status": false,
+    "local_defect_blocks_unrelated_visual_items": false,
+    "status_only_publication_may_reuse_last_canonical_visual": true,
+    "status_only_publication_must_validate_exact_status_bindings": true,
+    "global_integrity_failure_may_block_unsafe_visual_publish": true,
+    "global_status_integrity_failure_blocks_status_publish": true
+  },
+  "known_regression": {
+    "title": "Tetris® Effect: Connected",
+    "rule": "commercial/ranking-only Deep finding wording must not be exposed as positive player-facing why_fit",
+    "allowed_handling": [
+      "omit invalid positive explanation",
+      "reuse exact compatible last-known-good explanation"
+    ],
+    "deep_semantic_result_must_remain_unchanged": true,
+    "defect_must_be_observable_without_global_publication_stop": true
+  }
+}
