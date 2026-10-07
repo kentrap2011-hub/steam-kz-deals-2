@@ -131,7 +131,8 @@ def main():
 
     # Deep visual authoritative binding regression:
     # current authoritative PASS 2 is valid even when reusable Taste projection
-    # remains ai_required; stale/non-current Deep must still fail closed.
+    # remains ai_required; stale/non-current Deep must be isolated locally and
+    # must never be treated as current personalized truth.
     deep_fit = deep_bound_game('deep-fit', 'fit')
     assert grounded_negative_visual.has_current_personalized_binding(
         deep_fit, projection('App_201', 'ai_required')
@@ -181,17 +182,33 @@ def main():
     assert not grounded_negative_visual.has_current_personalized_binding(
         stale_deep, projection('App_203', 'ai_required')
     )
+    original_package_apply = grounded_negative_visual.package_options.apply_current_artifacts_to_visual
+    original_order = grounded_negative_visual.progressive_personalization.apply_progressive_order
+    original_stamp = grounded_negative_visual.progressive_personalization.stamp_processing_status
     try:
-        grounded_negative_visual.apply_to_document(
-            {'items': [stale_deep]},
+        grounded_negative_visual.package_options.apply_current_artifacts_to_visual = lambda ready: None
+        grounded_negative_visual.progressive_personalization.apply_progressive_order = (
+            lambda items: (list(items), [])
+        )
+        grounded_negative_visual.progressive_personalization.stamp_processing_status = lambda ready: None
+        stale_ready = {'items': [stale_deep]}
+        stale_stats = grounded_negative_visual.apply_to_document(
+            stale_ready,
             contexts={'deep-fit': {'taste_subject_key': 'App_203'}},
             taste_entries={'App_203': {'verdict': 'INCLUDE'}},
             projections={'App_203': projection('App_203', 'ai_required')},
         )
-    except RuntimeError as exc:
-        assert 'personalized card binding is not current/INCLUDE' in str(exc)
-    else:
-        raise AssertionError('stale/non-current Deep must not bypass personalized binding guard')
+        assert stale_ready['items'] == []
+        assert stale_stats['isolated_binding_count'] == 1
+        defects = stale_ready.get('_publication_local_defects') or []
+        assert len(defects) == 1
+        assert defects[0]['category'] == 'card_binding'
+        assert defects[0]['object_id'] == 'deep-fit'
+        assert defects[0]['reason_codes'] == ['personalized_binding_not_current']
+    finally:
+        grounded_negative_visual.package_options.apply_current_artifacts_to_visual = original_package_apply
+        grounded_negative_visual.progressive_personalization.apply_progressive_order = original_order
+        grounded_negative_visual.progressive_personalization.stamp_processing_status = original_stamp
 
     assert grounded_negative_visual.has_current_personalized_binding(
         {'analysis_semantic_source': 'progressive_pass1'},
