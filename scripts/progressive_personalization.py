@@ -862,8 +862,11 @@ def build_processing_status(state_index, visible_items, business_excluded_family
     total = sum(counts.values())
     analyzed_success = counts['analyzed_fit'] + counts['analyzed_not_fit']
     normal_visible = counts['analyzed_fit'] + counts['analysis_incomplete'] + counts['not_analyzed']
-    actual_visible = len(visible_items)
-    if actual_visible != normal_visible:
+    # A standalone current-status projection has no rendered-card list by design.
+    # In that mode the canonical state itself is the denominator. Visual builders
+    # still pass a concrete list and keep the existing strict visible-count check.
+    actual_visible = normal_visible if visible_items is None else len(visible_items)
+    if visible_items is not None and actual_visible != normal_visible:
         raise ValueError(
             f'progressive visible count mismatch: projected={normal_visible} actual={actual_visible}'
         )
