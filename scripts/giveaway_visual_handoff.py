@@ -117,53 +117,71 @@ def _presentation_offer(raw_offer, now):
     }
 
 
-def derive_giveaways(snapshot, now=None):
+def _offer_defect(game_key, title, reason):
+    return {
+        'category': 'giveaway_offer',
+        'object_type': 'giveaway_game',
+        'object_id': game_key,
+        'field': 'offers',
+        'reason_codes': [reason],
+        'label': title,
+    }
+
+
+def derive_giveaways_with_diagnostics(snapshot, now=None):
     now = now or datetime.now(timezone.utc)
     if now.tzinfo is None:
         now = now.replace(tzinfo=timezone.utc)
     now = now.astimezone(timezone.utc)
 
+    # Snapshot/source trust is a giveaway-wide authority boundary. A bad global
+    # snapshot is never reinterpreted as item-level quarantine.
     if not snapshot_is_trusted(snapshot, now):
-        return unavailable(snapshot, now)
+        return unavailable(snapshot, now), []
 
     games = snapshot.get('games')
     if not isinstance(games, list):
-        return unavailable(snapshot, now)
+        return unavailable(snapshot, now), []
 
     derived_games = []
-    try:
-        for raw_game in games:
-            if not isinstance(raw_game, dict):
-                raise ValueError('game_not_object')
-            game_key = raw_game.get('canonical_game_key')
-            title = raw_game.get('title')
-            offers = raw_game.get('offers')
-            if not isinstance(game_key, str) or not game_key or not isinstance(title, str) or not title.strip():
-                raise ValueError('invalid_game_identity')
-            if not isinstance(offers, list):
-                raise ValueError('offers_not_list')
+    defects = []
+    for raw_game in games:
+        if not isinstance(raw_game, dict):
+            # No stable object identity means this cannot be safely isolated.
+            return unavailable(snapshot, now), []
+        game_key = raw_game.get('canonical_game_key')
+        title = raw_game.get('title')
+        offers = raw_game.get('offers')
+        if not isinstance(game_key, str) or not game_key or not isinstance(title, str) or not title.strip():
+            # Missing stable game identity is a sibling-global integrity failure.
+            return unavailable(snapshot, now), []
+        if not isinstance(offers, list):
+            defects.append(_offer_defect(game_key, title.strip(), 'offers_not_list'))
+            continue
 
-            active_offers = []
-            for raw_offer in offers:
+        active_offers = []
+        for raw_offer in offers:
+            try:
                 offer = _presentation_offer(raw_offer, now)
-                if offer is not None:
-                    active_offers.append(offer)
+            except ValueError as exc:
+                defects.append(_offer_defect(game_key, title.strip(), str(exc)))
+                continue
+            if offer is not None:
+                active_offers.append(offer)
 
-            active_offers.sort(
-                key=lambda offer: (
-                    offer['promotion_end_utc'],
-                    offer['storefront'],
-                    offer['source_offer_id'],
-                )
+        active_offers.sort(
+            key=lambda offer: (
+                offer['promotion_end_utc'],
+                offer['storefront'],
+                offer['source_offer_id'],
             )
-            if active_offers:
-                derived_games.append({
-                    'game_key': game_key,
-                    'title': title.strip(),
-                    'offers': active_offers,
-                })
-    except ValueError:
-        return unavailable(snapshot, now)
+        )
+        if active_offers:
+            derived_games.append({
+                'game_key': game_key,
+                'title': title.strip(),
+                'offers': active_offers,
+            })
 
     derived_games.sort(
         key=lambda game: (
@@ -183,12 +201,22 @@ def derive_giveaways(snapshot, now=None):
         'derived_at_utc': utc_iso(now),
         'accepted_offer_count_at_build': active_offer_count,
         'games': derived_games,
-    }
+    }, defects
 
 
-def derive_from_path(path=DEFAULT_SNAPSHOT, now=None):
+def derive_giveaways(snapshot, now=None):
+    payload, _defects = derive_giveaways_with_diagnostics(snapshot, now=now)
+    return payload
+
+
+def derive_from_path_with_diagnostics(path=DEFAULT_SNAPSHOT, now=None):
     try:
         snapshot = json.loads(Path(path).read_text(encoding='utf-8'))
     except (OSError, json.JSONDecodeError, TypeError, ValueError):
-        return unavailable({}, now or datetime.now(timezone.utc))
-    return derive_giveaways(snapshot, now=now)
+        return unavailable({}, now or datetime.now(timezone.utc)), []
+    return derive_giveaways_with_diagnostics(snapshot, now=now)
+
+
+def derive_from_path(path=DEFAULT_SNAPSHOT, now=None):
+    payload, _defects = derive_from_path_with_diagnostics(path=path, now=now)
+    return payload

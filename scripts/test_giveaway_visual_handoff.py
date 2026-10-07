@@ -115,11 +115,31 @@ class GiveawayVisualHandoffTests(unittest.TestCase):
         result = handoff.derive_giveaways(raw, NOW)
         self.assertEqual([g['title'] for g in result['games']], ['Alpha', 'Bravo', 'Zulu'])
 
-    def test_malformed_accepted_surface_fails_closed(self):
+    def test_malformed_offer_isolated_while_valid_sibling_survives(self):
+        raw = snapshot([
+            {
+                'canonical_game_key': 'g:bad',
+                'title': 'Bad',
+                'offers': [dict(offer('epic', 'epic:bad'), claim_url='http://example.invalid/')],
+            },
+            {
+                'canonical_game_key': 'g:good',
+                'title': 'Good',
+                'offers': [offer('gog', 'gog:good')],
+            },
+        ])
+        result, defects = handoff.derive_giveaways_with_diagnostics(raw, NOW)
+        self.assertEqual(result['state'], 'active')
+        self.assertEqual([game['game_key'] for game in result['games']], ['g:good'])
+        self.assertEqual(len(defects), 1)
+        self.assertEqual(defects[0]['object_id'], 'g:bad')
+        self.assertEqual(defects[0]['reason_codes'], ['invalid_claim_url'])
+
+    def test_missing_stable_game_identity_remains_fail_closed(self):
         raw = snapshot([{
-            'canonical_game_key': 'g:bad',
+            'canonical_game_key': '',
             'title': 'Bad',
-            'offers': [dict(offer('epic', 'epic:bad'), claim_url='http://example.invalid/')],
+            'offers': [offer('epic', 'epic:bad')],
         }])
         self.assertEqual(handoff.derive_giveaways(raw, NOW)['state'], 'unavailable')
 

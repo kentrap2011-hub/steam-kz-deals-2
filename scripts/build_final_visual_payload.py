@@ -762,6 +762,7 @@ def main():
         'source_russian_description_status_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_ru_description_status.json'),
         'russian_description_translation_contract_blob_sha': base_builder.git_sha('config/russian_description_translation_contract.json'),
         'progressive_personalization_contract_blob_sha': base_builder.git_sha('config/progressive_personalization_contract.json'),
+        'site_publication_resilience_contract_blob_sha': base_builder.git_sha('config/site_publication_resilience_contract.json'),
         'progressive_pass1_contract_blob_sha': base_builder.git_sha('config/progressive_pass1_contract.json'),
         'progressive_pass1_state_blob_sha': base_builder.git_sha('data/cache/progressive_pass1_state.json'),
         'progressive_pass2_contract_blob_sha': base_builder.git_sha('config/progressive_pass2_contract.json'),

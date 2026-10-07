@@ -1,7 +1,9 @@
 const DATA_URL='data/current.json';
+const STATUS_URL='data/status.json';
 const STORAGE_KEY='steam-deals-visual-state-v1';
 const QUEUE_VERSION=6;
 let data={items:[],source_mailing_updated_at_utc:null};
+let siteStatus=null;
 let items=[];
 let byId=new Map();
 let state=loadState();
@@ -155,7 +157,8 @@ function stageIndicatorsHtml(g){
 }
 function renderStatisticsView(){
   const root=$('stageStatistics');if(!root)return;
-  const sections=progressiveUi().statisticsSections(data.processing_status||{});
+  const status=(siteStatus&&siteStatus.processing_status)||data.processing_status||{};
+  const sections=progressiveUi().statisticsSections(status);
   root.innerHTML=sections.map(section=>`<section class="statistics-stage statistics-stage-${escapeHtml(section.key)}"><div class="statistics-stage-head"><h3>${escapeHtml(section.title)}</h3><div class="statistics-scope"><span>${escapeHtml(section.scopeLabel)}</span><b>${escapeHtml(statisticsValue(section.denominator))}</b></div></div>${section.showLastWrite===false?'':`<div class="statistics-last-write">Последняя запись: <b>${escapeHtml(progressiveUi().formatLastWriteAt(section.lastWriteAtUtc))}</b></div>`}<div class="statistics-metrics">${section.rows.map(row=>`<div class="statistics-metric" data-stat-field="${escapeHtml(row.key)}"><span>${escapeHtml(row.label)}</span><b>${escapeHtml(statisticsValue(row.value))}</b></div>`).join('')}</div>${section.note?`<p class="statistics-note">${escapeHtml(section.note)}</p>`:''}</section>`).join('');
 }
 function renderRisk(g){
@@ -341,9 +344,13 @@ function searchRender(){
 }
 
 async function init(){
+  const statusPromise=fetch(STATUS_URL,{cache:'no-store'})
+    .then(res=>res.ok?res.json():null)
+    .catch(()=>null);
   try{
     const res=await fetch(DATA_URL,{cache:'no-store'});if(!res.ok)throw new Error('data');
     data=await res.json();
+    siteStatus=await statusPromise;
     if(window.GiveawayUI)window.GiveawayUI.render(data.giveaways,$('giveawayBlock'));
     render();
   }

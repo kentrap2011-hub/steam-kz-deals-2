@@ -1,0 +1,88 @@
+name: Build site current status
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "data/production/pre_ai/progressive_candidate_context.jsonl"
+      - "data/production/pre_ai/progressive_pass1_work.json"
+      - "data/cache/progressive_pass1_state.json"
+      - "data/production/pre_ai/progressive_pass2_work.json"
+      - "data/cache/progressive_pass2_state.json"
+      - "data/production/pre_ai/taste_steam_review_dossier_work.json"
+      - "data/production/pre_ai/chatgpt_ru_description_status.json"
+      - "data/production/site/publication_quarantine.json"
+      - "config/progressive_personalization_contract.json"
+      - "config/progressive_pass1_contract.json"
+      - "config/progressive_pass2_contract.json"
+      - "config/site_publication_resilience_contract.json"
+      - "scripts/progressive_personalization.py"
+      - "scripts/site_publication_resilience.py"
+      - "scripts/build_site_status.py"
+      - "scripts/test_site_publication_resilience.py"
+      - ".github/workflows/build-site-current-status.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: site-current-status
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate status and quarantine contracts
+        run: |
+          set -euo pipefail
+          python -m py_compile             scripts/site_publication_resilience.py             scripts/isolate_site_publication_defects.py             scripts/build_site_status.py
+          python scripts/test_site_publication_resilience.py
+          python scripts/test_progressive_personalization.py
+
+      - name: Build and persist exact current status
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+
+          for attempt in 1 2 3; do
+            python scripts/build_site_status.py
+            python scripts/build_site_status.py --validate-current data/production/site/current_status.json
+            git add data/production/site/current_status.json
+            git diff --cached --check
+
+            if git diff --cached --quiet; then
+              echo "SITE_STATUS_PERSISTED=current_no_change"
+              exit 0
+            fi
+
+            git commit -m "Refresh site current status"
+            if git push origin HEAD:main; then
+              python scripts/build_site_status.py --validate-current data/production/site/current_status.json
+              echo "SITE_STATUS_PERSISTED=updated"
+              exit 0
+            fi
+
+            git fetch origin main:refs/remotes/origin/main
+            git reset --hard origin/main
+            git clean -ffd
+            sleep $((attempt * 2))
+          done
+
+          echo "SITE_STATUS_PERSISTED=failed"
+          exit 1

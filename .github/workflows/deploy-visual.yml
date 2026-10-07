@@ -12,6 +12,10 @@ on:
     paths:
       - 'web/**'
       - 'data/production/visual/current.json'
+      - 'data/production/site/current_status.json'
+      - 'config/site_publication_resilience_contract.json'
+      - 'scripts/site_publication_resilience.py'
+      - 'scripts/build_site_status.py'
       - 'scripts/russian_description_quality.py'
       - 'scripts/validate_russian_descriptions.py'
       - 'scripts/validate_giveaway_visual_payload.py'
@@ -69,17 +73,32 @@ jobs:
         id: visual_scope
         env:
           EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.sha }}
         shell: bash
         run: |
           set -euo pipefail
           echo "giveaway_only=false" >> "$GITHUB_OUTPUT"
           echo "commercial_only=false" >> "$GITHUB_OUTPUT"
+          echo "status_only=false" >> "$GITHUB_OUTPUT"
           python - <<'PY' | tee /tmp/visual-scope.txt
           import copy
           import json
           import os
           import subprocess
           from pathlib import Path
+
+          if os.environ.get('EVENT_NAME') == 'push':
+              before_sha = os.environ.get('BEFORE_SHA') or ''
+              after_sha = os.environ.get('AFTER_SHA') or 'HEAD'
+              if before_sha and set(before_sha) != {'0'}:
+                  changed = subprocess.check_output(
+                      ['git', 'diff', '--name-only', before_sha, after_sha],
+                      text=True,
+                  ).splitlines()
+                  if changed and set(changed).issubset({'data/production/site/current_status.json'}):
+                      print('VISUAL_DEPLOY_SCOPE=status_only current_status_only=true')
+                      raise SystemExit(0)
 
           path = 'data/production/visual/current.json'
           visual_commit = subprocess.check_output(
@@ -205,6 +224,9 @@ jobs:
               )
           PY
 
+          if grep -q 'VISUAL_DEPLOY_SCOPE=status_only' /tmp/visual-scope.txt; then
+            echo "status_only=true" >> "$GITHUB_OUTPUT"
+          fi
           if grep -q 'VISUAL_DEPLOY_SCOPE=giveaway_only' /tmp/visual-scope.txt; then
             echo "giveaway_only=true" >> "$GITHUB_OUTPUT"
           fi
@@ -214,6 +236,7 @@ jobs:
 
       - name: Record Russian description diagnostic for general visual changes
         if: >
+          steps.visual_scope.outputs.status_only != 'true' &&
           steps.visual_scope.outputs.giveaway_only != 'true' &&
           steps.visual_scope.outputs.commercial_only != 'true'
         shell: bash
@@ -236,10 +259,24 @@ jobs:
           echo 'COMMERCIAL_VISUAL_ACCEPTANCE=bounded_paid_refresh semantic_and_description_fields_unchanged=true giveaway_unchanged=true'
 
       - name: Validate giveaway visual payload
+        if: steps.visual_scope.outputs.status_only != 'true'
         shell: bash
         run: |
           set -euo pipefail
           python scripts/validate_giveaway_visual_payload.py data/production/visual/current.json
+
+      - name: Validate independent current site status
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -s data/production/site/current_status.json ]; then
+            python scripts/build_site_status.py --validate-current data/production/site/current_status.json
+          elif [ "${{ steps.visual_scope.outputs.status_only }}" = "true" ]; then
+            echo "status-only deploy requires current_status.json"
+            exit 1
+          else
+            echo "SITE_STATUS=legacy_missing status_artifact_not_yet_persisted"
+          fi
 
       - name: Run UI regressions
         shell: bash
@@ -261,16 +298,23 @@ jobs:
           grep -q '"mode":"daily_precomputed_read_only_for_ui"' data/production/visual/current.json
           mkdir -p web/data
           cp data/production/visual/current.json web/data/current.json
+          if [ -s data/production/site/current_status.json ]; then
+            cp data/production/site/current_status.json web/data/status.json
+          fi
 
       - name: Bind staged publication to triggering build freshness receipt
         id: freshness
         env:
           EVENT_NAME: ${{ github.event_name }}
           TRIGGER_RUN_ID: ${{ github.event.workflow_run.id }}
+          STATUS_ONLY: ${{ steps.visual_scope.outputs.status_only }}
         shell: bash
         run: |
           set -euo pipefail
-          if [ "$EVENT_NAME" = "workflow_run" ]; then
+          if [ "$STATUS_ONLY" = "true" ]; then
+            classification='status_only/current_status'
+            echo "VISUAL_FRESHNESS=$classification event=$EVENT_NAME"
+          elif [ "$EVENT_NAME" = "workflow_run" ]; then
             RECEIPT=/tmp/visual-freshness-artifact/visual-freshness-receipt.json
             test -s "$RECEIPT"
             python scripts/visual_freshness_receipt.py verify-receipt \
@@ -302,6 +346,8 @@ jobs:
               echo '- publication is explicitly degraded and is not a fresh-cycle success.'
             elif [ "$CLASSIFICATION" = 'unbound/non_workflow_run' ]; then
               echo '- publication was not triggered by a build receipt and is not classified as a fresh-cycle success.'
+            elif [ "$CLASSIFICATION" = 'status_only/current_status' ]; then
+              echo '- current Statistics/status was independently refreshed while the existing visual payload was preserved.'
             else
               echo '- staged payload is exactly bound to the triggering fresh build receipt.'
             fi

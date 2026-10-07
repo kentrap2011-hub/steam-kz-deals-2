@@ -141,6 +141,27 @@
     if(Number.isNaN(date.getTime()))return 'ещё не было записей';
     return date.toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'});
   }
+  function quarantineCategoryLabel(key){
+    const labels={
+      card_explanation:'Текст персонального объяснения',
+      description:'Описание игры',
+      grounded_negative:'Отображение персональных рисков',
+      card_binding:'Карточка с неподтверждённой привязкой',
+      giveaway_offer:'Предложение бесплатной раздачи',
+    };
+    return labels[String(key||'')]||'Другая локальная проблема';
+  }
+  function quarantineRows(status){
+    const counts=(status&&status.site_quarantine_category_counts)||{};
+    return Object.entries(counts)
+      .filter(([,value])=>Number(value)>0)
+      .sort(([a],[b])=>String(a).localeCompare(String(b),'ru'))
+      .map(([key,value])=>({
+        label:quarantineCategoryLabel(key),
+        key:`site_quarantine_category_${key}`,
+        value:Number(value),
+      }));
+  }
   function statisticsSections(status){
     status=status||{};
     return [
@@ -220,8 +241,18 @@
         ],
         note:'Игры на диагностике перевода не возвращаются автоматически в обычную очередь перевода. Игры без перевода остаются видимыми и учитываются отдельно; отсутствие перевода не останавливает публикацию.',
       },
+      {
+        key:'publication',
+        title:'Диагностика публикации',
+        lastWriteAtUtc:status.site_status_generated_at_utc??null,
+        scopeLabel:'Ожидает исправления или диагностики',
+        denominatorKey:'site_quarantine_pending_count',
+        denominator:field(status,'site_quarantine_pending_count'),
+        rows:quarantineRows(status),
+        note:'Локальная проблема одной карточки или текста изолируется и не должна останавливать обновление остальных актуальных данных сайта.',
+      },
     ];
   }
 
-  return {tierOf,rankingStageOf,rankingStageRank,urgencyOf,stageScore,compareGames,sortItems,saleEndTimeMs,hasKnownExpiredSale,filterActiveSaleItems,cursorForVisibleIds,stageIndicators,formatLastWriteAt,statisticsSections};
+  return {tierOf,rankingStageOf,rankingStageRank,urgencyOf,stageScore,compareGames,sortItems,saleEndTimeMs,hasKnownExpiredSale,filterActiveSaleItems,cursorForVisibleIds,stageIndicators,formatLastWriteAt,quarantineRows,statisticsSections};
 });

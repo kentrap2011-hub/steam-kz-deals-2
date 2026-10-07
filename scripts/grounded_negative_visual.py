@@ -32,6 +32,19 @@ def load_jsonl(path):
     ]
 
 
+def record_local_defect(ready, *, category, family_id, field, reason_code, label=None):
+    defect = {
+        'category': category,
+        'object_type': 'paid_game',
+        'object_id': str(family_id),
+        'field': field,
+        'reason_codes': [reason_code],
+    }
+    if label:
+        defect['label'] = str(label)
+    ready.setdefault('_publication_local_defects', []).append(defect)
+
+
 def merge_risk(risks, row):
     code = str(row.get('code') or '')
     text = str(row.get('text') or '').strip()
@@ -190,6 +203,20 @@ def apply_to_document(ready, *, contexts, taste_entries, projections):
                 'verdict': verdict,
                 **readiness,
             })
+            record_local_defect(
+                ready,
+                category='card_binding',
+                family_id=family_id,
+                field='card',
+                reason_code=(
+                    'personalized_binding_not_current'
+                    if not current_bound else 'personalized_verdict_not_include'
+                ),
+                label=game.get('title'),
+            )
+            # Exact object identity is known but its personalized presentation
+            # authority is not. Hide only this card instead of freezing unrelated
+            # current cards/status.
             continue
         if not readiness['negative_analysis_ready']:
             # Progressive Phase A allows a trustworthy fit card before richer
@@ -201,7 +228,21 @@ def apply_to_document(ready, *, contexts, taste_entries, projections):
             continue
 
         risks = all_risk_candidates(taste_entry, projection, game.get('practical') or {})
-        visible = visible_grounded_payload(risks)
+        try:
+            visible = visible_grounded_payload(risks)
+        except ValueError:
+            for field in ('risks', 'risk_codes', 'risk_status', 'risk_provenance'):
+                game.pop(field, None)
+            record_local_defect(
+                ready,
+                category='grounded_negative',
+                family_id=family_id,
+                field='risks',
+                reason_code='missing_grounded_taste_negative_candidate',
+                label=game.get('title'),
+            )
+            corrected.append(game)
+            continue
         structured = taste_grounded_risks(taste_entry)
         mapped_count += len(structured)
         neutral_other_count += int('other_grounded_taste_risk' in structured)
@@ -223,13 +264,6 @@ def apply_to_document(ready, *, contexts, taste_entries, projections):
             removed_after_structured_fit += 1
             continue
         corrected.append(game)
-
-    if unresolved:
-        sample = unresolved[:10]
-        raise RuntimeError(
-            'personalized card binding is not current/INCLUDE: '
-            + json.dumps(sample, ensure_ascii=False, separators=(',', ':'))
-        )
 
     ready['items'] = corrected
     ready['item_count'] = len(corrected)
@@ -259,6 +293,7 @@ def apply_to_document(ready, *, contexts, taste_entries, projections):
         'fit_change_count': fit_change_count,
         'removed_after_structured_fit_count': removed_after_structured_fit,
         'negative_pending_count': negative_pending_count,
+        'isolated_binding_count': len(unresolved),
     }
 
 
