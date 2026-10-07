@@ -144,3 +144,16 @@
 **Правило исправления:** каждый `workflow_run` job, который может писать canonical repository state, должен fail closed для не-production source и как минимум требовать одновременно `conclusion == 'success'` и `head_branch == 'main'`. Не отключать PR validation и не заменять эту границу вторым scheduler/chain.
 
 **Проверка:** `scripts/test_workflow_run_production_authority.py` должен перечислять весь текущий mutating workflow-run audit и доказывать main-success / PR-branch / failed-cancelled / direct-trigger cases. При добавлении нового mutating `workflow_run` edge тест обязан заставить его явно классифицировать.
+
+
+---
+
+## PITFALL-008 — Validation workflow references implementation files that have not landed
+
+**Trigger / symptom:** a new validation workflow is committed and immediately runs a compile/test command for source files that are planned but not yet present in the same branch head. CI fails at the first file lookup/compile step and provides no semantic validation of the implementation.
+
+**Do not repeat:** do not land or trigger a task-specific validation workflow before every file named by its compile/test steps exists on that same commit.
+
+**Correct move:** create the runtime, builder/ingest and focused regression first (or in the same atomic tree/commit as the workflow), run bounded compile/regression where available, then let CI validate that complete head. A workflow-only red run is not implementation evidence.
+
+**Evidence refs:** Deep Stage-2 continuation, failed run `37509068199` at `Compile Stage 2 runtime` because `scripts/deep_stage2.py` had not landed yet.
