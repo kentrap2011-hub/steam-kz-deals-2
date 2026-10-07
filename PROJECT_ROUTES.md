@@ -431,3 +431,25 @@ Currentness invariant after PPD-012:
 - No mutating production ingest workflow is activated by this implementation task; the ingest script exists for later canonical integration wiring.
 
 
+
+
+---
+
+## Site publication resilience / current Statistics / local quarantine
+
+**Что ищем:** почему один presentation-дефект больше не должен удерживать свежие Statistics/остальной сайт и где проходит global fail-closed boundary.
+
+**Последняя проверка:** 2026-10-07, branch `fix/site-nonblocking-freshness-quarantine-01`.
+
+**Быстрая точка входа:**
+1. `config/site_publication_resilience_contract.json` — canonical local-vs-global classification, quarantine/status/publication rules.
+2. `scripts/isolate_site_publication_defects.py` — per-item isolation for card explanations/descriptions plus giveaway diagnostics; semantic score/ranking is not rewritten.
+3. `scripts/site_publication_resilience.py` + `data/production/site/publication_quarantine.json` — stable defect identity, pending/resolved reconciliation and category counts.
+4. `scripts/build_site_status.py` — independent current Fast/Dossier/Deep/translation + quarantine projection with exact source bindings.
+5. `.github/workflows/build-site-current-status.yml` — GitHub-owned status persistence independent of full visual card success.
+6. `.github/workflows/build-daily-visual-payload.yml` — full visual build → local isolation → strict post-isolation validators → exact material binding/persistence.
+7. `.github/workflows/deploy-visual.yml` — stage visual plus optional `web/data/status.json`; status-only publication preserves existing visual and validates exact status bindings.
+8. `web/app.js` + `web/progressive-personalization-ui.js` — Statistics prefers `data/status.json`, fallback is legacy `data.current.processing_status`; browser never reconstructs canonical state.
+9. `scripts/test_site_publication_resilience.py` + `web/progressive-personalization-ui.test.js` — Tetris/local-defect, quarantine dedupe/resolution, global identity guard, status/UI regressions.
+
+**Global guards that remain intentionally blocking:** canonical source/schema/authority contradictions, Progressive scope/accounting invariants, full visual exact material binding, persistent material drift, missing mandatory global identity. Do not route those through local quarantine.
