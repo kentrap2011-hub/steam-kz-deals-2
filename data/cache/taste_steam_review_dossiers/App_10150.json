@@ -1,30 +1,67 @@
 {
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
   "appid": "10150",
   "title": "Prototype™",
-  "generated_at_utc": "2026-09-16T13:33:00Z",
-  "expires_at_utc": "2026-10-06T13:33:00Z",
+  "generated_at_utc": "2026-10-07T09:34:00Z",
+  "expires_at_utc": "2026-10-27T09:34:00Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Prototype™",
     "release_year": 2009,
     "resolution_status": "resolved",
     "identity_source_ids": [
-      "identity"
+      "source-001"
     ],
     "corroborators": [
       {
         "kind": "appid",
         "value": "10150"
+      },
+      {
+        "kind": "developer",
+        "value": "Radical Entertainment"
       }
     ]
   },
-  "summary": "Players commonly highlight fast traversal, shape-shifting powers and destructive open-world movement as the durable core appeal. Russian-language Steam feedback is strongly positive; the Steam listing itself does not provide Russian localization support.",
+  "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
       "category": "mechanics",
-      "statement": "Players commonly highlight fast traversal, shape-shifting powers and destructive open-world movement as the durable core appeal.",
+      "statement": "Traversal and the power-fantasy sandbox remain the central strength: wall-running, high-speed leaps and gliding combine with varied mutation powers to make open-world movement unusually expressive.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Players still value the first game's upgrade depth and Web of Intrigue as a way to expand abilities while uncovering more of Alex Mercer's background.",
       "sentiment": "positive",
       "recurrence": "anecdotal",
       "mention_count": 1,
@@ -33,25 +70,116 @@
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "community"
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-003"
       ]
     },
     {
-      "category": "localization",
-      "statement": "Russian-language Steam feedback is strongly positive; the Steam listing itself does not provide Russian localization support.",
-      "sentiment": "positive",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "category": "friction",
+      "statement": "Movement is praised more consistently than combat feel; community comparisons describe Prototype 1 combat as slower and more hit-and-run, with limited defensive options and animation or knockdown friction.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
       "evidence_languages": [
-        "russian"
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Boss encounters are a recurring pain point, with players citing add-heavy fights, large health pools, stun-locking and the need to disengage rather than maintain a fluid one-on-one fight.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-005",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Current PC compatibility is inconsistent: some 2026 players report smooth modern-system play after imposing a 60 fps cap, while other recent reports describe launch failures, save-loading crashes, poor camera or control behavior and a generally rough legacy port.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 6,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
       ],
       "evidence_status": "current",
       "source_ids": [
-        "steam_ru"
+        "source-006",
+        "source-007",
+        "source-008"
+      ],
+      "player_feedback_ids": [
+        "feedback-007",
+        "feedback-008",
+        "feedback-009",
+        "feedback-010",
+        "feedback-011",
+        "feedback-012"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Alex Mercer's identity mystery and the Web of Intrigue remain memorable hooks, but current fan discussions frequently pair that praise with requests for deeper story treatment in any remake.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-004",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-004"
       ]
     }
   ],
-  "conflicts": [],
+  "conflicts": [
+    {
+      "statement": "Recent PC reports conflict sharply on compatibility: one modern Windows 11 setup is described as working after a frame-rate cap, while other current players report launch or save-loading failures and severe port friction.",
+      "recurrence": "moderate",
+      "mention_count": 6,
+      "source_ids": [
+        "source-006",
+        "source-007",
+        "source-008"
+      ],
+      "player_feedback_ids": [
+        "feedback-007",
+        "feedback-008",
+        "feedback-009",
+        "feedback-010",
+        "feedback-011",
+        "feedback-012"
+      ]
+    }
+  ],
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
@@ -59,42 +187,326 @@
     "single_source_reason": null,
     "russian_attempt": "found_and_used",
     "overall_strength": "moderate",
-    "stop_reason": "evidence_stable"
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            2,
+            4
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            3,
+            4
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            5
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            5
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            3,
+            4
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "covered",
+          "observation_indices": [
+            4
+          ]
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
   },
   "provenance": {
     "sources": [
       {
-        "source_id": "identity",
+        "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/10150/Prototype",
-        "publication_date": null,
+        "url": "https://store.steampowered.com/app/10150/Prototype/",
+        "publication_date": "2009-06-10",
         "language": "non_russian",
-        "freshness": "recent",
         "evidence_role": "identity",
-        "player_feedback": false
+        "player_feedback": false,
+        "freshness": "older"
       },
       {
-        "source_id": "steam_ru",
-        "source_type": "steam_reviews",
-        "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/10150/Prototype/get?l=russian",
-        "publication_date": null,
-        "language": "russian",
-        "freshness": "recent",
-        "evidence_role": "current_state",
-        "player_feedback": true
-      },
-      {
-        "source_id": "community",
+        "source_id": "source-002",
         "source_type": "reddit",
         "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/patientgamers/comments/16dfagx",
+        "url": "https://www.reddit.com/r/patientgamers/comments/16dfagx/prototype_is_an_amazing_open_world_game/",
+        "publication_date": "2023-09-08",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "Prototype™",
+          "release_year": 2009
+        },
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/PrototypeGame/comments/1w16xe0/mechanics/",
+        "publication_date": "2026-08-28",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "Prototype™",
+          "release_year": 2009
+        },
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/PrototypeGame/comments/1r0hy7f/what_happened/",
+        "publication_date": "2026-02-09",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "Prototype™",
+          "release_year": 2009
+        },
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-005",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/PrototypeGame/comments/1rk0a7r/if_we_ever_got_a_prototype_remake_what_would_you/",
+        "publication_date": "2026-03-03",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "Prototype™",
+          "release_year": 2009
+        },
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-006",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/10150/reviews/",
         "publication_date": null,
         "language": "non_russian",
-        "freshness": "older",
-        "evidence_role": "durable_trait",
-        "player_feedback": true
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "10150",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-007",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/10150/discussions/0/797838866430156262/",
+        "publication_date": "2026-03-19",
+        "language": "non_russian",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-008",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/10150/discussions/0/",
+        "publication_date": null,
+        "language": "mixed",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "10150",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "publication_date": "2023-09-08",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-003",
+        "publication_date": "2026-08-29",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-004",
+        "publication_date": "2026-02-09",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-005",
+        "publication_date": "2026-03-03",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-005",
+        "publication_date": "2026-03-03",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-005",
+        "publication_date": "2026-03-03",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-007",
+        "source_id": "source-006",
+        "publication_date": "2026-10-03",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-008",
+        "source_id": "source-006",
+        "publication_date": "2026-10-05",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-009",
+        "source_id": "source-006",
+        "publication_date": "2026-10-06",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-010",
+        "source_id": "source-007",
+        "url": "https://steamcommunity.com/app/10150/discussions/0/797838866430156262/",
+        "publication_date": "2026-03-19",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-011",
+        "source_id": "source-008",
+        "publication_date": "2026-09-09",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-012",
+        "source_id": "source-008",
+        "publication_date": "2026-09-06",
+        "language": "non_russian",
+        "acquisition_mode": "search_result_observation"
       }
     ]
   }
