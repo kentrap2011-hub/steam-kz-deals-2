@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Build a public, read-only Pages snapshot from the canonical Director task registry."""
 import argparse
-import hashlib
 import json
 import re
 from datetime import date, datetime, timezone
@@ -171,6 +170,7 @@ def build_payload(plan, board_text, deep_map, *, now=None, verify_task_files=Tru
         "schema_version": 1, "contract": "SITE-DIRECTOR-TASKS-PUBLIC-V1",
         "generated_at_utc": timestamp, "plan_updated_on": plan["last_curated_on"],
         "known_forward_count": sum(i["status"] != "complete" for i in items),
+        "task_titles": {i["id"]: i["title"] for i in items},
         "groups": groups,
     }
 
@@ -187,7 +187,7 @@ def main():
     if args.validate_current:
         current = json.loads(args.validate_current.read_text(encoding="utf-8"))
         # Validate current shape and canonically computed task fields, but not its build time.
-        for field in ("contract", "schema_version", "plan_updated_on", "known_forward_count", "groups"):
+        for field in ("contract", "schema_version", "plan_updated_on", "known_forward_count", "task_titles", "groups"):
             if current.get(field) != payload[field]:
                 raise SystemExit(f"STALE_OR_INVALID_TASK_PAYLOAD field={field}")
         datetime.fromisoformat(current["generated_at_utc"].replace("Z", "+00:00"))
