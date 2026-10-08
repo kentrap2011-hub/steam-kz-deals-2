@@ -1,0 +1,40 @@
+name: Validate site task registry and page
+
+on:
+  pull_request:
+    paths:
+      - 'DIRECTOR_TASK_BOARD.md'
+      - 'config/director_task_plan.json'
+      - 'config/deep_two_stage_dependency_map.json'
+      - 'scripts/build_site_tasks.py'
+      - 'scripts/test_site_tasks.py'
+      - 'web/tasks*'
+      - 'web/index.html'
+      - 'web/styles.css'
+      - '.github/workflows/deploy-visual.yml'
+      - '.github/workflows/validate-site-tasks-page.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout PR head without production writes
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate canonical forward registry and UI
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/build_site_tasks.py scripts/test_site_tasks.py
+          node --check web/tasks.js
+          node web/tasks.test.js
+          python scripts/test_site_tasks.py
+          python scripts/build_site_tasks.py --output /tmp/site-tasks.json
+          python scripts/build_site_tasks.py --validate-current /tmp/site-tasks.json

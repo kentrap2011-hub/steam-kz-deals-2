@@ -1,12 +1,15 @@
 # DIRECTOR TASK BOARD
 
+**Canonical forward registry for the website:** `config/director_task_plan.json`. When Director/worker tooling assigns, adds, closes or reorders forward tasks, update this registry **in the same change** as the current Board planning section. The registry is the one machine-readable task source; historical accepted Board sections must not be parsed as live tasks. Check with `python scripts/test_site_tasks.py` and `python scripts/build_site_tasks.py --output /tmp/tasks.json`. New forward task filenames in the current Board lanes/Deep map fail validation until registered. No new scheduler is involved.
+
+
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
 ## CURRENT DIRECTOR STATE — 2026-10-07
 
 - **Context discipline:** new Director must stay shallow. Use `DIRECTOR_HANDOFF_CURRENT.md` + this top section only; do not broadly inspect code/history. Deep implementation analysis belongs in worker chats.
 - **Mandatory first response in new Director chat:** answer the user's three pending questions about (1) concrete deferred-game examples and why reserve is not deletion, (2) why PR #157 exists/diverged, and (3) why the previous Chat 2 continuation message was too long.
-- **ЧАТ 1:** `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md` implementation complete in PR #162 with green checks, but PR must be refreshed against current `main` after Stage 1 acceptance. Before merge, update the task registry/page state so Deep Stage 1 is no longer shown as active and the next Deep task is represented correctly. SAME current Chat 1 should do only this reconciliation/closeout.
+- **ЧАТ 1:** `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md` ready in PR #162, now reconciled with the accepted PR #163 Stage 1 and current `main`. Stage 1 appears as completed; the next Deep task is planned Fast removal/ranking migration for a NEW ЧАТ 2. All unassigned and later planned tasks remain in the registry. Final five PR checks passed on reconciled head `f29c0c8d444e88bb03904f03d044ee5e84c952ec`; merge and live Pages deployment still require Director acceptance. The same current Chat 1 stops after this closeout.
 - **ЧАТ 2:** Deep Stage 1 accepted and merged via PR #163, merge `e410ee6183e29ec595f2c1fce1336751ceea9585`; Stage 1 checks were green and implementation remains non-active until later cutover. Retire the completed Stage-1 conversation. Next in the pre-approved Deep sequence is a NEW Chat 2 for `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`.
 - PR #156 architecture freeze remains accepted and must not be re-audited without direct contradiction.
 - No Scheduled Task changes are authorized.

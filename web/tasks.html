@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0e1117">
+  <title>Задачи проекта — Игры со скидками</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="tasks.css">
+  <script defer src="tasks.js?v=site-current-tasks-page-01"></script>
+</head>
+<body>
+  <div class="tasks-shell">
+    <header class="tasks-head">
+      <a href="index.html" class="tasks-back">← К скидкам</a>
+      <h1>Задачи проекта</h1>
+      <p class="muted">Вся известная работа: что выполняется, что запланировано и что ожидает зависимостей. Порядок показывается только там, где он определён директором.</p>
+      <div id="tasksFreshness" class="tasks-freshness" aria-live="polite">Загружаем актуальный план…</div>
+      <div id="tasksCounters" class="tasks-counters" aria-label="Количество задач"></div>
+    </header>
+    <main id="tasksMain" aria-live="polite">
+      <p class="tasks-loading">Загружаем задачи…</p>
+    </main>
+    <footer class="tasks-footer">Задачи публикуются из GitHub при выпуске сайта. Эта страница не создаёт и не переназначает работу.</footer>
+  </div>
+</body>
+</html>
