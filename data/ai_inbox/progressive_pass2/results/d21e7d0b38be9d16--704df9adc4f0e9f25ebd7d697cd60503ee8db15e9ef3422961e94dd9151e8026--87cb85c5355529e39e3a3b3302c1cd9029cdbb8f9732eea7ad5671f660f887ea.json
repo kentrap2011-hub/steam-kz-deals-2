@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "38491d75e166e16122f4fe527c0457e518f19197",
+  "run_start_authority_commit": "6444c738579444234da8cc91b9f26ecd7d8c861b",
+  "run_started_at_utc": "2026-10-08T14:01:18+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "704df9adc4f0e9f25ebd7d697cd60503ee8db15e9ef3422961e94dd9151e8026",
+  "family_id": "game:1056570",
+  "taste_subject_key": "App_1056570",
+  "appid": "1056570",
+  "taste_fingerprint": "544ce39b8675179cfe550dc926553f8d5f0c719b0d6909f0c849047a2b301a5e",
+  "candidate_context_sha256": "24cd10e7ab54e93f396975bdf4af0e1faca94805ca0a04bf453cd63c88551105",
+  "dossier_content_sha256": "37629eadd140e41ac290e641d1101eee869eef2cf14554c8506831b9b948670b",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "87cb85c5355529e39e3a3b3302c1cd9029cdbb8f9732eea7ad5671f660f887ea",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Активная, остроумная героиня и переосмысление Золушки и Красной Шапочки дают персонажный крючок; иллюстрации, озвучка и музыка усиливают индивидуальность произведения.",
+    "Но Episode 1 — преимущественно текстовые две отдельные романтические линии с немногими игровыми задачами, поэтому соответствие профилю почти полностью зависит от силы характера и повествования.",
+    "Отзывы отмечают слишком быстрые переходы к отношениям и незакрытые сюжетные вопросы, для которых требуются следующие эпизоды; отсутствие самодостаточной сюжетной развязки и плотной активной механики снижает ожидаемое соответствие."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Часть игроков считает линии слишком короткими, а переход к романтическим отношениям слишком резким; важные вопросы откладываются на следующие эпизоды.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Настойчивость героини при решении проблем персонажей иногда воспринимается не как остроумный ход, а как манипуляция, особенно в линии Красной Шапочки.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Мнения об английской локализации расходятся; нельзя считать одну оценку дефектом текста для всех игроков.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Отдельные игроки жалуются на мелкий текст, размытое полноэкранное изображение и тихую озвучку относительно музыки.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Жанровый юмор уравновешивает серьёзные темы, но часть читателей находит начало затянутым.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
