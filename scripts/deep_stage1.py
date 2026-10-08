@@ -246,6 +246,8 @@ def make_work_item(source: dict, row: dict, sequence: int) -> dict:
 
 
 def verify_dossier(item: dict, root: Path = ROOT, *, validator=None) -> dict:
+    require(Path(item["dossier_path"]).parent == DOSSIERS,
+            "Stage-1 Dossier source must be the canonical accepted store")
     path = safe_repo_path(item["dossier_path"], root)
     require(path.is_file(), "canonically accepted dossier unavailable")
     require(file_sha256(path) == item["dossier_content_sha256"],
