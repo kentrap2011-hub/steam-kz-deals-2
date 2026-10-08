@@ -4,7 +4,7 @@ import copy
 import json
 import sys
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,21 +25,49 @@ class SiteTasksTests(unittest.TestCase):
             now=datetime(2026, 10, 8, 12, tzinfo=timezone.utc),
         )
 
+    @staticmethod
+    def expected_recent_ids(plan):
+        """Independent oracle: newest eligible completions, capped at three."""
+        eligible = [
+            item for item in plan["items"]
+            if item["status"] == "complete" and item["recent_completion"]
+        ]
+        eligible.sort(
+            key=lambda item: (
+                datetime.fromisoformat(item["updated_at_utc"].replace("Z", "+00:00")).astimezone(timezone.utc),
+                item["id"],
+            ),
+            reverse=True,
+        )
+        return [item["id"] for item in eligible[:3]]
+
+    @staticmethod
+    def recent_ids(payload):
+        return [task["id"] for group in payload["groups"] if group["status"] == "complete" for task in group["tasks"]]
+
     def test_full_forward_backlog_and_mobile_nav(self):
         payload = self.build()
         self.assertEqual(payload["contract"], "SITE-DIRECTOR-TASKS-PUBLIC-V1")
         counts = {g["status"]: g["count"] for g in payload["groups"]}
-        self.assertGreaterEqual(counts["active"], 4)
-        self.assertGreaterEqual(counts["planned"], 8)
-        self.assertGreaterEqual(counts["blocked"], 2)
-        self.assertEqual(sum(counts[s] for s in ("active", "planned", "blocked")), payload["known_forward_count"])
+        expected_forward = {i["id"] for i in self.plan["items"] if i["status"] != "complete"}
+        actual_forward = {t["id"] for g in payload["groups"] if g["status"] != "complete" for t in g["tasks"]}
+        self.assertEqual(actual_forward, expected_forward)
+        self.assertEqual(sum(counts[s] for s in ("active", "planned", "blocked")), len(expected_forward))
+        self.assertEqual(payload["known_forward_count"], len(expected_forward))
+        for status in ("active", "planned", "blocked"):
+            self.assertEqual(counts[status], sum(i["status"] == status for i in self.plan["items"]))
+        self.assertEqual(self.recent_ids(payload), self.expected_recent_ids(self.plan))
+        self.assertEqual(counts["complete"], len(self.expected_recent_ids(self.plan)))
+
         by_id = {t["id"]: t for group in payload["groups"] for t in group["tasks"]}
-        for tid in ("site-tasks", "deep-stage1", "steam-50-top100", "owned-dlc",
-                    "deep-ranking", "deep-site", "deep-cutover", "steam-prefilter",
-                    "steam-error-watch", "giveaway-decouple", "giveaway-itad",
-                    "architecture-cleanup"):
-            self.assertIn(tid, by_id)
-        self.assertIsNone(by_id["deep-site"]["worker_slot"])
+        self.assertEqual(set(by_id), expected_forward | set(self.expected_recent_ids(self.plan)))
+        for item in self.plan["items"]:
+            self.assertEqual(payload["task_titles"][item["id"]], item["title"])
+        self.assertEqual(len(payload["task_titles"]), len(self.plan["items"]))
+        for tid in ("steam-50-top100", "owned-dlc", "deep-site", "deep-cutover",
+                    "steam-prefilter", "steam-error-watch", "giveaway-decouple",
+                    "giveaway-itad", "architecture-cleanup"):
+            self.assertIn(tid, actual_forward)
         self.assertEqual(by_id["steam-50-top100"]["order"]["position"], 1)
         self.assertEqual(by_id["owned-dlc"]["order"]["position"], 2)
         self.assertEqual(by_id["deep-cutover"]["status"], "blocked")
@@ -55,53 +83,74 @@ class SiteTasksTests(unittest.TestCase):
         self.assertIn("min-width:700px", (ROOT / "web/tasks.css").read_text(encoding="utf-8"))
         self.assertNotIn("api.github.com", (ROOT / "web/tasks.js").read_text(encoding="utf-8"))
 
-    def test_stage1_merged_and_next_deep_task_planned_with_full_backlog(self):
-        """The Stage 1 merge must not leave a misleading active worker on the website."""
-        self.assertEqual(next(t for t in self.plan["items"] if t["id"] == "deep-stage1")["status"], "complete")
-        self.assertIn("WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md", self.board)
+    def test_completed_registry_entries_survive_recent_display_eviction(self):
+        """Public titles preserve all canonical task identities, even when hidden by the cap."""
         payload = self.build()
-        expected_forward = {i["id"] for i in self.plan["items"] if i["status"] != "complete"}
+        items = {item["id"]: item for item in self.plan["items"]}
+        expected_forward = {tid for tid, item in items.items() if item["status"] != "complete"}
         actual_forward = {t["id"] for g in payload["groups"] if g["status"] != "complete" for t in g["tasks"]}
-        self.assertEqual(payload["known_forward_count"], len(expected_forward))
         self.assertEqual(actual_forward, expected_forward)
-        statuses = {g["status"]: {t["id"]: t for t in g["tasks"]} for g in payload["groups"]}
-        self.assertNotIn("deep-stage1", statuses["active"])
-        self.assertIn("deep-stage1", statuses["complete"])
-        self.assertIn("deep-ranking", statuses["planned"])
-        self.assertEqual(statuses["planned"]["deep-ranking"]["worker_slot"], "ЧАТ 2 (следующий)")
-        self.assertEqual(statuses["planned"]["deep-ranking"]["order"]["position"], 3)
-        self.assertEqual(statuses["planned"]["deep-ranking"]["depends_on"], ["deep-freeze", "deep-stage1"])
-        self.assertIn("deep-cutover", statuses["blocked"])
-        self.assertIn("steam-prefilter", statuses["planned"])
-        self.assertIn("architecture-cleanup", statuses["planned"])
-        self.assertEqual(set(payload["task_titles"]), {i["id"] for i in self.plan["items"]})
+        self.assertEqual(payload["known_forward_count"], len(expected_forward))
+        self.assertEqual(set(payload["task_titles"]), set(items))
 
-    def test_closeout_does_not_evict_recent_deep_stage1(self):
-        """Completing the site page must not falsify a dynamic count or hide fresh Stage 1."""
+        completed = {tid for tid, item in items.items() if item["status"] == "complete"}
+        recent = self.recent_ids(payload)
+        self.assertEqual(recent, self.expected_recent_ids(self.plan))
+        self.assertLessEqual(len(recent), 3)
+        self.assertTrue(set(recent).issubset(completed))
+        displayed = {t["id"] for g in payload["groups"] for t in g["tasks"]}
+        self.assertEqual(completed - set(recent), set(payload["task_titles"]) - displayed)
+
+    def test_new_completion_displaces_older_recent_without_losing_backlog(self):
+        """A later completion takes a capped slot; evicted completions stay in the registry."""
         plan = copy.deepcopy(self.plan)
-        by_id = {item["id"]: item for item in plan["items"]}
-        site = by_id["site-tasks"]
-        site.update(status="complete", recent_completion=True, blocker="",
-                    updated_on="2026-10-08", updated_at_utc="2026-10-08T11:02:09Z")
+        previous_recent = set(self.recent_ids(self.build()))
+        target = next(item for item in plan["items"] if item["status"] == "active" and not item["depends_on"])
+        latest = max(
+            datetime.fromisoformat(item["updated_at_utc"].replace("Z", "+00:00")).astimezone(timezone.utc)
+            for item in plan["items"]
+        ) + timedelta(seconds=1)
+        target.update(status="complete", recent_completion=True, blocker="",
+                      updated_on=latest.date().isoformat(),
+                      updated_at_utc=latest.isoformat().replace("+00:00", "Z"))
         payload = self.build(plan)
         unfinished = {item["id"] for item in plan["items"] if item["status"] != "complete"}
-        displayed = {t["id"] for g in payload["groups"] if g["status"] != "complete" for t in g["tasks"]}
+        displayed_forward = {t["id"] for g in payload["groups"] if g["status"] != "complete" for t in g["tasks"]}
         self.assertEqual(payload["known_forward_count"], len(unfinished))
-        self.assertEqual(displayed, unfinished)
-        recent = [item["id"] for item in payload["groups"][3]["tasks"]]
+        self.assertEqual(displayed_forward, unfinished)
+        recent = self.recent_ids(payload)
+        self.assertEqual(recent, self.expected_recent_ids(plan))
+        self.assertEqual(recent[0], target["id"])
         self.assertLessEqual(len(recent), 3)
-        self.assertEqual(recent[:2], ["site-tasks", "deep-stage1"])
-        self.assertNotIn("deep-stage1", displayed)
+        evicted = previous_recent - set(recent)
+        self.assertTrue(evicted, "The fixture must exercise a full recent-completion cap")
+        self.assertTrue(evicted.issubset(payload["task_titles"]))
+        self.assertTrue(evicted.isdisjoint(displayed_forward))
+        self.assertEqual(set(payload["task_titles"]), {item["id"] for item in plan["items"]})
 
     def test_recent_completion_uses_precise_time_not_same_day_id(self):
         plan = copy.deepcopy(self.plan)
-        by_id = {item["id"]: item for item in plan["items"]}
-        by_id["site-tasks"].update(status="complete", recent_completion=True, blocker="",
-                                   updated_on="2026-10-08", updated_at_utc="2026-10-08T11:02:09Z")
+        eligible = sorted(
+            (item for item in plan["items"] if item["status"] == "complete" and item["recent_completion"]),
+            key=lambda item: item["id"],
+        )
+        self.assertGreaterEqual(len(eligible), 2)
+        # Lexically smaller ID is newer by one second on the same day.
+        # Date-only sorting followed by reverse ID would pick the wrong winner.
+        latest = max(
+            datetime.fromisoformat(item["updated_at_utc"].replace("Z", "+00:00")).astimezone(timezone.utc)
+            for item in plan["items"]
+        )
+        next_day = latest.date() + timedelta(days=1)
+        earlier = datetime(next_day.year, next_day.month, next_day.day, 12, tzinfo=timezone.utc)
+        for item, instant in ((eligible[0], earlier + timedelta(seconds=1)), (eligible[1], earlier)):
+            item.update(updated_on=instant.date().isoformat(),
+                        updated_at_utc=instant.isoformat().replace("+00:00", "Z"))
         recent = self.build(plan)["groups"][3]["tasks"]
-        stamps = [datetime.fromisoformat(i["updated_at_utc"].replace("Z", "+00:00")) for i in recent]
+        self.assertEqual([item["id"] for item in recent[:2]], [eligible[0]["id"], eligible[1]["id"]])
+        self.assertEqual([item["id"] for item in recent], self.expected_recent_ids(plan))
+        stamps = [datetime.fromisoformat(item["updated_at_utc"].replace("Z", "+00:00")) for item in recent]
         self.assertEqual(stamps, sorted(stamps, reverse=True))
-        self.assertIn("deep-stage1", [i["id"] for i in recent])
 
     def test_missing_late_unassigned_task_fails(self):
         plan = copy.deepcopy(self.plan)
