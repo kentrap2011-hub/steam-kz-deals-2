@@ -38,6 +38,12 @@ def forward_refs(board_text, dependency_map):
     selected = [value for heading, value in parts.items() if heading.startswith(prefixes)]
     if len(selected) < 4:
         raise ValueError("Board is missing a required forward-planning section")
+    # The later-work section may also name explicitly superseded old proposals.
+    # A superseded task is not an outstanding forward task.
+    selected = ["\n".join(
+        line for line in chunk.splitlines()
+        if "superseded" not in line.lower() and "отменён" not in line.lower()
+    ) for chunk in selected]
     found = set(TASK_REF.findall("\n".join(selected)))
     found.add(dependency_map["architecture_freeze_task"])
     found.update(task["task"] for task in dependency_map["parallelizable_after_freeze"])
