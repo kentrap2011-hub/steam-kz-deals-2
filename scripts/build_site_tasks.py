@@ -168,7 +168,7 @@ def build_payload(plan, board_text, deep_map, *, now=None, verify_task_files=Tru
     for status, label in names:
         chunk = [i for i in items if i["status"] == status and (status != "complete" or i["recent_completion"])]
         if status == "complete":
-            chunk.sort(key=lambda i: (i["updated_on"], i["id"]), reverse=True)
+            chunk.sort(key=lambda i: (datetime.fromisoformat(i["updated_at_utc"].replace("Z", "+00:00")).astimezone(timezone.utc), i["id"]), reverse=True)
             chunk = chunk[:3]
         else:
             chunk.sort(key=order_key)
