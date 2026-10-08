@@ -23,6 +23,9 @@ const base={
 assert(deep.active(base));
 assert(!deep.calibrated(base));
 assert.strictEqual(deep.compactScore(base),'Ожидает сравнительной калибровки');
+assert.strictEqual(deep.compactScore({...base,stage1_status:'pending',stage2_status:'not_eligible'}),'Ожидает анализа Stage 1');
+assert.strictEqual(deep.compactScore({...base,stage1_status:'completed_not_fit',stage2_status:'not_eligible'}),'Анализ завершён: не подходит');
+assert.strictEqual(deep.compactScore({...base,stage2_status:'diagnostic_incomplete'}),'Калибровка требует диагностики');
 const pendingHtml=deep.detailHtml(base);
 assert(pendingHtml.includes('45,20/56'));
 assert(pendingHtml.includes('Сильная механика'));
