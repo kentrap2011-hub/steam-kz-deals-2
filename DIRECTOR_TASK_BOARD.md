@@ -9,7 +9,7 @@
 
 - **Context discipline:** new Director must stay shallow. Use `DIRECTOR_HANDOFF_CURRENT.md` + this top section only; do not broadly inspect code/history. Deep implementation analysis belongs in worker chats.
 - **Mandatory first response in new Director chat:** answer the user's three pending questions about (1) concrete deferred-game examples and why reserve is not deletion, (2) why PR #157 exists/diverged, and (3) why the previous Chat 2 continuation message was too long.
-- **ЧАТ 1:** historical unimplemented backlog audit accepted via PR #167, merge `3d90b18ea2581c006dffbce6df09d18c0869de64`. Report found five strong restoration candidates and three Director-decision cases; none were auto-added to forward backlog. Physical ЧАТ 1 is free.
+- **ЧАТ 1:** assigned `WORKER_TASK_DOSSIER_THROUGHPUT_QUALITY_PRESERVING_DIAGNOSTIC_01.md`. Diagnostic only: measure current Dossier bottlenecks/retry tax and propose quality-preserving acceleration. No validator weakening, no scope reduction, no Scheduled Tasks, no implementation.
 - **ЧАТ 2:** clean replacement PR #166 accepted and merged as `4d1cfb4745989994051f6233a3810759f1f1a305`. Exactly four task-owned files changed; Fast-free 56+4+40 ranking preparation is complete and still non-active until cutover. Old PR #164 is closed superseded. Physical ЧАТ 2 is free; remaining Deep prerequisite before cutover is the separate mirror UI/Statistics task.
 - PR #156 architecture freeze remains accepted and must not be re-audited without direct contradiction.
 - No Scheduled Task changes are authorized.
