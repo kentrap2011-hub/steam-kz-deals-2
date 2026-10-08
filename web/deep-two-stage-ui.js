@@ -22,6 +22,10 @@
     if(!Array.isArray(rows)||!rows.length)return '<p class="muted">'+esc(empty)+'</p>';
     return '<ul class="deep2-finding-list">'+rows.map(row=>'<li>'+esc(row)+'</li>').join('')+'</ul>';
   }
+  const dossierLabels={
+    ready:'готово',pending:'ожидает подготовки',
+    failed_or_recovery:'требуется восстановление',not_required:'не требуется'
+  };
   const st1={
     not_ready:'Ещё не готов',pending:'Ожидает анализа',completed_fit:'Анализ завершён: подходит',
     completed_not_fit:'Анализ завершён: не подходит',diagnostic_incomplete:'Требуется диагностика'
@@ -72,7 +76,7 @@
         ['Вместе /100',total],
         ['Позиция',ready&&game.priority_rank!=null?'№'+esc(game.priority_rank):'—']
       ].map(([k,v])=>'<div><span>'+esc(k)+'</span><b>'+v+'</b></div>').join('')+'</div>'+
-      '<p class="muted">Досье: '+esc(game.dossier_status||'—')+
+      '<p class="muted">Досье: '+esc(dossierLabels[game.dossier_status]||'состояние не опубликовано')+
       ' · Stage 1: '+esc(st1[game.stage1_status]||'—')+
       ' · Stage 2: '+esc(st2[game.stage2_status]||'—')+'</p>';
     const sections=[
