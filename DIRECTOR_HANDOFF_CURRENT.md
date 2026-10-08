@@ -114,6 +114,8 @@ Do not restate the entire task specification in the chat message when the canoni
 
 - ЧАТ 2 is complete/free. Two-stage Dossier Research/Assembly architecture accepted via PR #171 (`290d31a52c00d9feea86ecfc78fdb1f037db66bb`). No implementation/activation yet; one GitHub queue owner and unchanged strict final Dossier validator remain mandatory.
 
+- ЧАТ 2 active: `WORKER_TASK_DOSSIER_TWO_STAGE_CONTRACT_SCHEMA_IMPLEMENT_01.md` (`dossier-two-stage-contracts`). Implement inactive Research package + Assembly assignment/result/receipt contracts only. Current one-stage Dossier remains authoritative; no Scheduled Task or activation changes.
+
 ## CURRENT PHYSICAL WORKER SLOTS
 
 ### ЧАТ 1 — DIAGNOSTIC COMPLETE
