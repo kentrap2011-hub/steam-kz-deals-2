@@ -143,7 +143,7 @@ Accepted PR:
 
 Deep Stage 1 is accepted and merged via PR #163 as `e410ee6183e29ec595f2c1fce1336751ceea9585`.
 
-Current ЧАТ 2 task `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md` is implementation-complete in PR #164 with green task-specific checks. Reconciliation is almost complete: the effective PR diff is task-specific except `CURRENT_TASK.md` still includes one stale unrelated site-task block claiming live Pages verification is pending. Same Chat 2 must remove that stale block, retain only its own minimal closeout note, rerun checks, then stop for Director acceptance.
+Current ЧАТ 2 task `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md` is implementation-complete in PR #164 with green task-specific checks. Its stale site block cleanup is correct, but fresh main advanced again due accepted Dossier progress and Director backlog-audit state. PR #164 is stale/non-mergeable until one final preservation sync from current main; preserve all Dossier/Deep/Director changes, rerun checks, then stop for Director acceptance.
 
 Branch:
 `implement/deep-stage2-calibration-worker-01`
