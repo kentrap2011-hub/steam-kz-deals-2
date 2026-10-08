@@ -16,6 +16,7 @@
     if(new Set(tasks.map(t=>t.id)).size!==tasks.length)throw new Error("Повторяющиеся задачи");
     if(tasks.some(t=>!t.id||!t.title||!t.goal||!t.effort_reason||!t.urgency_reason||!t.updated_on||!Array.isArray(t.depends_on)))throw new Error("Некорректная задача");
     if(tasks.filter(t=>t.status!=="complete").length!==payload.known_forward_count)throw new Error("Неполный список");
+    if(!payload.task_titles||tasks.some(t=>payload.task_titles[t.id]!==t.title||t.depends_on.some(id=>!payload.task_titles[id])))throw new Error("Нарушенные зависимости");
     return tasks;
   }
   function dateLabel(value){
@@ -68,7 +69,7 @@
     const freshness=doc.getElementById("tasksFreshness");
     if(!mount||!counters||!freshness)throw new Error("Нет контейнеров страницы задач");
     mount.replaceChildren();counters.replaceChildren();
-    const titles=new Map(all.map(t=>[t.id,t.title]));
+    const titles=new Map(Object.entries(payload.task_titles));
     for(const group of payload.groups){
       if(group.status!=="complete"){
         const c=el(doc,"div","tasks-counter");
