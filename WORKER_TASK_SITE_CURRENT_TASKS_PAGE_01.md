@@ -7,24 +7,33 @@ Base/source of truth: `main`
 IMPLEMENT / VALIDATE after START gate and architecture preflight.
 
 ## User goal
-Add a separate page to the site where the user can see the queue of **current project tasks**.
+Add a separate page to the site where the user can see **all current and planned project tasks**.
+
+The page must not be limited to the tasks currently assigned to worker chats or only the next few queue entries. It must expose the full known forward plan currently recorded by the Director/project task state.
 
 ## Required page
 Russian user-facing page, for example `Актуальные задачи`.
 
-Show only current operationally useful task information:
+Show the full known forward task list:
 - active tasks;
-- queued tasks;
+- **all planned tasks**, including tasks not yet assigned to a worker chat;
+- queued tasks in their intended order when such order is known;
 - blocked/waiting tasks when applicable;
+- dependencies / prerequisites between planned tasks;
 - short plain-Russian goal;
 - status;
 - worker slot if assigned;
+- priority/order when known;
 - dependency/blocker if one exists;
 - last update time;
 - **трудоёмкость**: низкая / средняя / высокая, with a short reason;
 - **срочность**: критическая / высокая / обычная / низкая, with a short reason.
 
-Do not dump historical completed-task archive onto this page. A small recently-completed section is optional only if it improves orientation.
+The user must be able to open this page and understand not only “what is being done now” but also **everything already planned next for the project**.
+
+Do not silently omit lower-priority or later planned tasks merely because they are not in the immediate worker queue.
+
+Do not dump the full historical completed-task archive onto this page. A small recently-completed section is optional only if it improves orientation.
 
 ## Source of truth
 Do not make the browser call GitHub APIs and do not manually maintain a second independent task list.
@@ -43,9 +52,12 @@ Do not publish:
 
 ## Acceptance
 - navigation reaches the new page on mobile and desktop;
-- page clearly separates active / queued / blocked;
+- page clearly separates active / planned / blocked-waiting work;
+- **the complete known planned backlog is visible, not only currently assigned or nearest tasks**;
+- future tasks that are known but not yet assigned still appear with an appropriate status;
+- intended order/priority and dependencies are visible where known;
 - every displayed task shows трудоёмкость and срочность with plain-Russian rationale;
-- current queued Steam tasks appear after the queue entries are added;
+- current queued Steam tasks and the remaining planned Deep/site/project tasks appear from the canonical project plan;
 - stale task payload is detectable through a visible update timestamp;
 - existing discount cards/statistics remain unchanged except for navigation/task-page additions;
 - existing Pages publication route is used;
