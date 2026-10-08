@@ -453,3 +453,19 @@ Currentness invariant after PPD-012:
 9. `scripts/test_site_publication_resilience.py` + `web/progressive-personalization-ui.test.js` — Tetris/local-defect, quarantine dedupe/resolution, global identity guard, status/UI regressions.
 
 **Global guards that remain intentionally blocking:** canonical source/schema/authority contradictions, Progressive scope/accounting invariants, full visual exact material binding, persistent material drift, missing mandatory global identity. Do not route those through local quarantine.
+
+---
+
+
+## Site tasks page / canonical Director forward plan
+
+**Проверено:** 2026-10-08, branch `implement/site-current-tasks-page-01` (использовать main после merge).
+
+1. `config/director_task_plan.json` — один структурированный реестр известных текущих и будущих задач, включая неназначенные, статусы, причины трудоёмкости/срочности, порядок, зависимости и дату проверки.
+2. `DIRECTOR_TASK_BOARD.md` — human-readable состояние директора; текущие forward-секции и `config/deep_two_stage_dependency_map.json` сверяются при публикации, а исторические sections не превращаются в очередь.
+3. `scripts/build_site_tasks.py` — проверка полноты, связности и безопасности, статический `web/data/tasks.json` в существующем GitHub Pages deploy.
+4. `.github/workflows/deploy-visual.yml` — read-only построение task-payload перед Pages artifact, без API-запросов из браузера и без нового scheduler.
+5. `web/tasks.html`, `web/tasks.js`, `web/tasks.css` — адаптивная страница; `web/index.html` — вход.
+6. `scripts/test_site_tasks.py`, `web/tasks.test.js`, `.github/workflows/validate-site-tasks-page.yml` — обязательные PR checks.
+
+При назначении/изменении/закрытии задачи директор меняет Board current planning + JSON в одном update. CI запрещает новые task-file ссылки в forward-секциях Board и Deep map без registry entry. Старые исторические sections не являются live state. После приёмки этого PR необходимо закрыть `site-tasks` в реестре.
