@@ -1,0 +1,36 @@
+name: Validate Deep site mirror UI
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/deep_two_stage_site_projection.py'
+      - 'scripts/test_deep_two_stage_site_projection.py'
+      - 'web/deep-two-stage-*'
+      - 'web/app.js'
+      - 'web/progressive-personalization-ui.js'
+      - 'web/score-details-ui.js'
+      - 'web/index.html'
+      - '.github/workflows/validate-deep-site-mirror-ui.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deep-site-mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Compile non-active producer projection and regressions
+        run: python3 -m py_compile scripts/deep_two_stage_site_projection.py scripts/test_deep_two_stage_site_projection.py
+      - name: Canonical producer projection and fail-closed regression
+        run: python3 scripts/test_deep_two_stage_site_projection.py
+      - name: Deep Stage 1 Stage 2 UI and Statistics regression
+        run: node web/deep-two-stage-ui.test.js
+      - name: Legacy statistics and stage compatibility
+        run: node web/progressive-personalization-ui.test.js
+      - name: Existing score-detail UI compatibility
+        run: node web/score-details-ui.test.js

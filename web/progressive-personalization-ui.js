@@ -124,8 +124,72 @@
     return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'unknown',lit:false,title:'Глубокий разбор: состояние не опубликовано'};
   }
 
+  const TWO_STAGE_CONTRACT='DEEP-TWO-STAGE-SITE-PROJECTION-V1';
+  function twoStageIndicator(key,symbol,label,state,completeStates,negativeStates,descriptions){
+    const completed=completeStates.includes(state);
+    const negative=negativeStates.includes(state);
+    return {key,symbol,label,lit:completed,tone:completed?(negative?'negative':'positive'):'idle',
+      title:label+': '+(descriptions[state]||'состояние не опубликовано')};
+  }
   function stageIndicators(game){
+    if(game&&game.deep_two_stage_site_contract===TWO_STAGE_CONTRACT){
+      return [
+        twoStageIndicator('dossier','▤','Досье',game.dossier_status,['ready'],[],
+          {ready:'готово',pending:'ожидает',failed_or_recovery:'требуется восстановление',not_required:'не требуется'}),
+        twoStageIndicator('deep_stage1','Ⅰ','Deep Stage 1 — Анализ игры',game.stage1_status,
+          ['completed_fit','completed_not_fit'],['completed_not_fit'],
+          {not_ready:'ещё не готов',pending:'ожидает анализа',completed_fit:'подходит',
+           completed_not_fit:'не подходит',diagnostic_incomplete:'требуется диагностика'}),
+        twoStageIndicator('deep_stage2','Ⅱ','Deep Stage 2 — Сравнительная калибровка',game.stage2_status,
+          ['calibrated'],[],
+          {not_eligible:'не требуется',awaiting_calibration:'ожидает калибровки',
+           calibrated:'готово',diagnostic_incomplete:'требуется диагностика'}),
+      ];
+    }
     return [fastIndicator(game),dossierIndicator(game),deepIndicator(game)];
+  }
+  function twoStageStatisticsSections(status){
+    const dossier=status.dossier||{};
+    const first=status.deep_stage1||{};
+    const second=status.deep_stage2||{};
+    const datum=(source,key)=>field(source,key);
+    const rows=(source,pairs)=>pairs.map(([label,key])=>({
+      label,key,value:datum(source,key),
+    }));
+    const sections=[
+      {
+        key:'dossier',title:'Досье',scopeLabel:'Игр для подготовки досье',
+        denominator:datum(dossier,'total_eligible'),
+        lastWriteAtUtc:dossier.last_attempt_at_utc??null,
+        lastSuccessAtUtc:dossier.last_successful_result_at_utc??null,
+        rows:rows(dossier,[['Готово','completed'],['Ожидает','pending'],
+          ['Требует восстановления','diagnostic_incomplete']]),
+      },
+      {
+        key:'deep_stage1',title:'Deep Stage 1 — Анализ игры',
+        scopeLabel:'Игр для анализа',denominator:datum(first,'total_eligible'),
+        lastWriteAtUtc:first.last_attempt_at_utc??null,
+        lastSuccessAtUtc:first.last_successful_result_at_utc??null,
+        rows:rows(first,[['Завершено','completed'],['Подходит','completed_fit'],
+          ['Не подходит','completed_not_fit'],['Ожидает','pending'],
+          ['Требует диагностики','diagnostic_incomplete'],
+          ['Прогресс, %','progress_percent']]),
+      },
+      {
+        key:'deep_stage2',title:'Deep Stage 2 — Сравнительная калибровка',
+        scopeLabel:'Игр после Stage 1',denominator:datum(second,'stage1_fit_eligible'),
+        lastWriteAtUtc:second.last_attempt_at_utc??null,
+        lastSuccessAtUtc:second.last_successful_calibration_at_utc??null,
+        rows:rows(second,[['Откалибровано','calibrated'],
+          ['Ожидает калибровки','awaiting_calibration'],
+          ['Требует диагностики','diagnostic_incomplete'],
+          ['Прогресс, %','progress_percent']]),
+      },
+    ];
+    // Keep independent translation and publication diagnostics; Fast/legacy Deep
+    // are not current two-stage semantic stages.
+    const auxiliary=statisticsSections({...status,deep_two_stage_site_contract:null}).slice(3);
+    return sections.concat(auxiliary);
   }
 
   function field(status,key){
@@ -164,6 +228,9 @@
   }
   function statisticsSections(status){
     status=status||{};
+    if(status.deep_two_stage_site_contract===TWO_STAGE_CONTRACT){
+      return twoStageStatisticsSections(status);
+    }
     return [
       {
         key:'fast',

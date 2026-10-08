@@ -269,7 +269,7 @@ assert(app.includes("progressiveUi().stageIndicators"));
 assert(app.includes("ind.lit===true"));
 assert(app.includes("'unlit'"));
 assert(app.includes('statistics-note'));
-assert(app.includes("$('decision').classList.toggle('hidden',!personalized)"));
+assert(app.includes("$('decision').classList.toggle('hidden',!personalized&&!twoStage)"));
 for(const stale of ['analysisBadge','processingStats','processingUpdated','progressiveUi().labelFor','progressiveUi().processingLines']){
   assert(!app.includes(stale),`stale large-status hook remains: ${stale}`);
 }

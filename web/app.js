@@ -157,9 +157,12 @@ function stageIndicatorsHtml(g){
 }
 function renderStatisticsView(){
   const root=$('stageStatistics');if(!root)return;
-  const status=(siteStatus&&siteStatus.processing_status)||data.processing_status||{};
+  // After explicit cutover, published stage metrics outrank an older site-status cache.
+  const status=data.deep_two_stage_site_contract==='DEEP-TWO-STAGE-SITE-PROJECTION-V1'
+    ?(data.processing_status||{})
+    :((siteStatus&&siteStatus.processing_status)||data.processing_status||{});
   const sections=progressiveUi().statisticsSections(status);
-  root.innerHTML=sections.map(section=>`<section class="statistics-stage statistics-stage-${escapeHtml(section.key)}"><div class="statistics-stage-head"><h3>${escapeHtml(section.title)}</h3><div class="statistics-scope"><span>${escapeHtml(section.scopeLabel)}</span><b>${escapeHtml(statisticsValue(section.denominator))}</b></div></div>${section.showLastWrite===false?'':`<div class="statistics-last-write">Последняя запись: <b>${escapeHtml(progressiveUi().formatLastWriteAt(section.lastWriteAtUtc))}</b></div>`}<div class="statistics-metrics">${section.rows.map(row=>`<div class="statistics-metric" data-stat-field="${escapeHtml(row.key)}"><span>${escapeHtml(row.label)}</span><b>${escapeHtml(statisticsValue(row.value))}</b></div>`).join('')}</div>${section.note?`<p class="statistics-note">${escapeHtml(section.note)}</p>`:''}</section>`).join('');
+  root.innerHTML=sections.map(section=>`<section class="statistics-stage statistics-stage-${escapeHtml(section.key)}"><div class="statistics-stage-head"><h3>${escapeHtml(section.title)}</h3><div class="statistics-scope"><span>${escapeHtml(section.scopeLabel)}</span><b>${escapeHtml(statisticsValue(section.denominator))}</b></div></div>${section.showLastWrite===false?'':`<div class="statistics-last-write">Последняя запись: <b>${escapeHtml(progressiveUi().formatLastWriteAt(section.lastWriteAtUtc))}</b></div>`}<div class="statistics-metrics">${section.rows.map(row=>`<div class="statistics-metric" data-stat-field="${escapeHtml(row.key)}"><span>${escapeHtml(row.label)}</span><b>${escapeHtml(statisticsValue(row.value))}</b></div>`).join('')}</div>${section.lastSuccessAtUtc===undefined?'':`<div class="statistics-last-write">Последний успешный результат: <b>${escapeHtml(progressiveUi().formatLastWriteAt(section.lastSuccessAtUtc))}</b></div>`}${section.note?`<p class="statistics-note">${escapeHtml(section.note)}</p>`:''}</section>`).join('');
 }
 function renderRisk(g){
   const status=g.risk_status;
@@ -219,6 +222,16 @@ function scoreGroupHtml(label,points,max,components){
   return `<div class="score-group"><div class="score-group-head"><span>${escapeHtml(label)}</span><b>${Number(points).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></div><div class="score-components">${(components||[]).map(scoreComponentHtml).join('')}</div></div>`;
 }
 function renderPriority(g){
+  if(window.DeepTwoStageUI?.active(g)){
+    $('prioritySection').classList.remove('hidden');
+    const local=queuePosition(g.id);
+    $('priorityWhy').textContent=local?'Место в текущей ленте: №'+local+'.':'Позиция в текущей ленте пока не определена.';
+    $('priorityFactors').innerHTML='<div class="priority-factor"><span>Текущий этап</span><b>'+
+      escapeHtml(g.stage2_status==='calibrated'?'Откалиброванная оценка':'Ожидает сравнительной калибровки')+
+      '</b></div><div class="priority-factor"><span>Личная / итоговая оценка</span><b>'+
+      escapeHtml(window.DeepTwoStageUI.compactScore(g))+'</b></div>';
+    return;
+  }
   const factors=Array.isArray(g.priority_factors)?g.priority_factors:[];
   const score=g.score_breakdown||null;
   const section=$('prioritySection');
@@ -268,14 +281,19 @@ function renderFeed(){
   currentShot=0;setShot(g,0);preloadNearby();
   const r=rec(g.id);$('newBadge').classList.toggle('hidden',!isNew(g.id));$('repeatBadge').classList.toggle('hidden',!(r.seen>0));$('repeatBadge').textContent=r.seen?`🔁 Показ №${r.seen+1}`:'';
   const p=g.better_purchase_option;const packageBadge=p&&p.package_price_rub!=null?` · 🎁 ${Number(p.covered_visible_game_count)||0} игр за ${fmtRub(p.package_price_rub)}`:'';
-  const personalized=g.analysis_state==='analyzed_fit';
+  const twoStage=window.DeepTwoStageUI?.active(g)===true;
+  const personalized=!twoStage&&g.analysis_state==='analyzed_fit';
   $('stageIndicators').innerHTML=stageIndicatorsHtml(g);
-  $('title').textContent=g.title;$('decision').classList.toggle('hidden',!personalized);$('decision').textContent=personalized?`${g.decision||''}${packageBadge}`:'';$('price').textContent=fmtRub(g.current_price_rub);$('oldPrice').textContent=fmtRub(g.original_price_rub);$('discount').textContent=`−${g.discount_percent}%`;
+  $('title').textContent=g.title;$('decision').classList.toggle('hidden',!personalized&&!twoStage);
+  $('decision').textContent=twoStage?window.DeepTwoStageUI.compactScore(g):(personalized?`${g.decision||''}${packageBadge}`:'');$('price').textContent=fmtRub(g.current_price_rub);$('oldPrice').textContent=fmtRub(g.original_price_rub);$('discount').textContent=`−${g.discount_percent}%`;
   $('histPrice').textContent=g.previously_free?'Ранее была бесплатной':`Ист. минимум: ${g.historical_minimum_rub==null?'нет данных':fmtRub(g.historical_minimum_rub)}`;
   $('deadline').textContent=deadlineText(g.sale_end_utc);$('summary').textContent=g.summary||'Краткое описание пока недоступно.';
   const gp=(g.gameplay_points||[]).filter(Boolean);$('gameplaySection').classList.toggle('hidden',!gp.length);$('gameplay').innerHTML=gp.map(x=>`<li>${escapeHtml(x)}</li>`).join('');
+  $('deepTwoStageDetail').classList.toggle('hidden',!twoStage);
+  $('deepTwoStageDetail').innerHTML=twoStage?window.DeepTwoStageUI.detailHtml(g):'';
   $('personalizationSection').classList.toggle('hidden',!personalized);
   if(personalized){textList($('whyFit'),g.why_fit,'Персональная причина пока не подготовлена.');renderRisk(g);renderPriority(g)}
+  else if(twoStage){renderPriority(g);$('riskStatus').classList.add('hidden');$('whyFit').textContent='';$('risks').textContent='';$('cautions').textContent=''}
   else{$('prioritySection').classList.add('hidden');$('riskStatus').classList.add('hidden');$('whyFit').textContent='';$('risks').textContent='';$('cautions').textContent=''}
   $('fit').classList.toggle('hidden',!personalized);
   $('fit').textContent=personalized?`Соответствие вкусу: ${g.fit==='strong'?'сильное':'умеренное'}`:'';
@@ -293,7 +311,7 @@ function listPositionText(g){
 function miniCard(g,status){
   const img=shotUrls(g)[0]||'';
   const place=status==='wishlist'?`★ В желаемом · ${listPositionText(g)} · `:'';
-  const score=g.total_score!=null?` · ${Number(g.total_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/100`:'';
+  const score=window.DeepTwoStageUI?.active(g)?' · '+escapeHtml(window.DeepTwoStageUI.compactScore(g)):(g.total_score!=null?` · ${Number(g.total_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/100`:'');
   const p=g.better_purchase_option;const packageText=p&&p.package_price_rub!=null?` · 🎁 ${Number(p.covered_visible_game_count)||0} игр за ${fmtRub(p.package_price_rub)}`:'';
   return `<div class="list-card"><img src="${escapeHtml(img)}" alt=""><div><div class="list-card-head"><div class="list-title">${escapeHtml(g.title)}</div><div class="stage-indicators stage-indicators-mini" aria-label="Этапы персонального разбора">${stageIndicatorsHtml(g)}</div></div><div class="list-meta">${place}${fmtRub(g.current_price_rub)} · −${g.discount_percent}%${score}${packageText} · ${escapeHtml(deadlineText(g.sale_end_utc))}</div><div class="list-actions">${status==='liked'?`<button class="small-btn" data-to-final="${escapeHtml(g.id)}" type="button">🏆 В финал</button>`:''}<button class="small-btn" data-focus="${escapeHtml(g.id)}" type="button">Показать в ленте</button></div></div></div>`;
 }

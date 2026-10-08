@@ -1,0 +1,18 @@
+/* Non-active frozen Deep two-stage details; shown only for versioned producer projection. */
+.deep2-detail{display:flex;flex-direction:column;gap:11px;margin-top:14px}
+.deep2-detail-part{border:1px solid var(--border);background:var(--card2);border-radius:13px;padding:12px;min-width:0}
+.deep2-detail-part h3{font-size:14px;font-weight:800;margin:0 0 8px}
+.deep2-detail-part h4{font-size:12px;font-weight:750;margin:10px 0 4px}
+.deep2-detail-part p{margin:6px 0;font-size:13px;line-height:1.45;overflow-wrap:anywhere}
+.deep2-detail-part .muted{color:var(--muted)}
+.deep2-finding-list,.deep2-breakdown,.deep2-neighbors{margin:6px 0;padding-left:19px;font-size:13px}
+.deep2-finding-list li,.deep2-breakdown li,.deep2-neighbors li{margin:6px 0;overflow-wrap:anywhere}
+.deep2-breakdown li{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.deep2-breakdown li b{flex:0 0 auto}
+.deep2-breakdown small{display:block;font-size:11px;color:var(--muted);margin-top:2px;overflow-wrap:anywhere}
+.deep2-neighbors ul{padding-left:15px}
+.deep2-score-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin:8px 0}
+.deep2-score-grid>div{border:1px solid var(--border);background:var(--card);padding:8px;border-radius:9px;min-width:0}
+.deep2-score-grid span{display:block;font-size:10px;color:var(--muted);overflow-wrap:anywhere}
+.deep2-score-grid b{display:block;margin-top:3px;font-size:13px;overflow-wrap:anywhere}
+@media(min-width:560px){.deep2-score-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
