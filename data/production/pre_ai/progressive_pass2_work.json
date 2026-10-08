@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 155,
     "deep_completed_not_fit_count": 29,
     "deep_incomplete_or_recovery_count": 21,
-    "deep_waiting_for_dossier_count": 2096,
-    "deep_ready_or_pending_count": 0,
+    "deep_waiting_for_dossier_count": 2093,
+    "deep_ready_or_pending_count": 3,
     "deep_normal_first_pass_remaining_count": 2096,
     "deep_remaining_until_all_authoritative_count": 2117,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 15,
-    "dossier_waiting_count": 2096,
+    "dossier_waiting_count": 2093,
     "pass2_attempted_count": 205,
-    "pass2_eligible_count": 0,
-    "normal_pass2_eligible_count": 0,
+    "pass2_eligible_count": 3,
+    "normal_pass2_eligible_count": 3,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -107,5 +107,197 @@
       "complete": true
     }
   },
-  "items": []
+  "items": [
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1062160",
+      "taste_subject_key": "App_1062160",
+      "appid": "1062160",
+      "taste_fingerprint": "21e87acb70a2a3d4beabdbe830025f45394f5c5b7e8a1e0f3aad1439aa587486",
+      "candidate_context_sha256": "4c60ade8c46dfffda1208308c223dfd9f79ed624a46686c0d4278baae989034f",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "7dbb0cecd8d5f84be7a40b893df04b40ea6dc34b6eb1a57ee601c84c500b84cf",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Poly Bridge 2",
+        "short_description": "The acclaimed bridge-building indie-hit is back! More levels, more features, more physics fun!",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "28 May, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1062160"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1062160.json",
+      "dossier_content_sha256": "7224aa49a039858793da8d3107fb9156ddfbf41211a66b4ba7bea8000f6edc21",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T15:48:00.751Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "f938312a509828a05e6e8b824b4ab7a3d325978c8f93143c3e297fc5e057bb13",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--7dbb0cecd8d5f84be7a40b893df04b40ea6dc34b6eb1a57ee601c84c500b84cf--f938312a509828a05e6e8b824b4ab7a3d325978c8f93143c3e297fc5e057bb13.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--7dbb0cecd8d5f84be7a40b893df04b40ea6dc34b6eb1a57ee601c84c500b84cf--f938312a509828a05e6e8b824b4ab7a3d325978c8f93143c3e297fc5e057bb13.json",
+      "sequence": 1
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1063660",
+      "taste_subject_key": "App_1063660",
+      "appid": "1063660",
+      "taste_fingerprint": "82ebde3f1592756f5d5b8ea32b2331870da38ed807e17e6da25b31c77883e670",
+      "candidate_context_sha256": "f567c3c3e688730ff994929ae72349d7f0ca4de4c69bd577144c69f3f3c11b8a",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "6ab9ee92458d141a15c7b767f7860521c88e7a767816ff27c547907e3466cdba",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Bendy and the Dark Revival",
+        "short_description": "Bendy and the Dark Revival® is a first-person survival horror game set in the creepiest cartoon studio to ever exist. Discover the truth. Escape the studio. Above all, fear the Ink Demon…and survive.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Adventure",
+          "Horror",
+          "Singleplayer",
+          "Survival Horror"
+        ],
+        "core_fit_count": 2,
+        "release_date": "15 Nov, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1063660"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1063660.json",
+      "dossier_content_sha256": "80d44257261777a5fc27138514435bab4c9fd7fa6f106739074bece6ce28c02c",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T15:48:00.751Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "d3f83d34a86897e3c6240a7521234c424e5ca53e5b28b68bbfe637cd0dadac6c",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--6ab9ee92458d141a15c7b767f7860521c88e7a767816ff27c547907e3466cdba--d3f83d34a86897e3c6240a7521234c424e5ca53e5b28b68bbfe637cd0dadac6c.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--6ab9ee92458d141a15c7b767f7860521c88e7a767816ff27c547907e3466cdba--d3f83d34a86897e3c6240a7521234c424e5ca53e5b28b68bbfe637cd0dadac6c.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1063490",
+      "taste_subject_key": "App_1063490",
+      "appid": "1063490",
+      "taste_fingerprint": "3eca965b343a908a81c323bd8aee28053def5cd0e52b0632c3df371935a8ddd8",
+      "candidate_context_sha256": "7e8f09341106e9626f97e74f1d2c4340896ac31fccf6bf806c71bad7b413f596",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "00f99581557fe18443b2b807135777d8a4f7f0c2ad872943c48d9bceca0aa629",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Still There",
+        "short_description": "Every day is the same on the faraway Bento space-lighthouse - until a mysterious radio message breaks through. Evade the past, welcome oblivion, make the perfect Italian coffee. Still There is a psychological adventure game about grief, technical puzzles, wacky AIs and dark humour. How far is far enough?",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Emotional",
+          "Sci-fi",
+          "Story Rich"
+        ],
+        "core_fit_count": 3,
+        "release_date": "20 Nov, 2019",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1063490"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1063490.json",
+      "dossier_content_sha256": "7400bc154c4d118055fe3e0bb380f6e4d29a50c5bc938c5232e1aa163f756eb3",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T15:48:00.751Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "ee4ccd5d432a1ccac56b21581840e349aaa4695e50d7ee7f1e855de5888ee2af",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--00f99581557fe18443b2b807135777d8a4f7f0c2ad872943c48d9bceca0aa629--ee4ccd5d432a1ccac56b21581840e349aaa4695e50d7ee7f1e855de5888ee2af.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--00f99581557fe18443b2b807135777d8a4f7f0c2ad872943c48d9bceca0aa629--ee4ccd5d432a1ccac56b21581840e349aaa4695e50d7ee7f1e855de5888ee2af.json",
+      "sequence": 3
+    }
+  ]
 }
