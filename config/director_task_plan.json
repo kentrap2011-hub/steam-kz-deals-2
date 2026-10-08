@@ -542,21 +542,21 @@
       "id": "dossier-two-stage-architecture",
       "title": "Dossier: разделить исследование и сборку",
       "goal": "Спроектировать двухступенчатый Dossier: отдельный Research worker собирает максимум evidence, Assembly worker превращает его в технически корректный canonical Dossier.",
-      "status": "planned",
+      "status": "active",
       "effort": "средняя",
       "effort_reason": "Нужно определить промежуточный evidence-контракт, границы двух semantic ролей, GitHub ownership, retries и безопасный pipeline.",
       "urgency": "высокая",
       "urgency_reason": "Это основной кандидат на ускорение Dossier без снижения качества.",
       "task_file": "WORKER_TASK_DOSSIER_TWO_STAGE_RESEARCH_ASSEMBLY_ARCHITECTURE_01.md",
-      "worker_slot": "ЧАТ 1",
+      "worker_slot": "ЧАТ 2",
       "order": null,
       "depends_on": [
         "dossier-throughput-audit"
       ],
-      "blocker": "Запустить после текущего узкого исправления site-task regression в ЧАТ 1.",
+      "blocker": "",
       "updated_on": "2026-10-08",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-08T12:55:00Z"
+      "updated_at_utc": "2026-10-08T12:58:00Z"
     }
   ]
 }
