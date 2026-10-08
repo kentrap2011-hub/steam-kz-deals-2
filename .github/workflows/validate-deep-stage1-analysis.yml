@@ -1,0 +1,28 @@
+name: Validate Deep Stage 1 analysis
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/deep_stage1.py'
+      - 'scripts/build_deep_stage1_work.py'
+      - 'scripts/ingest_deep_stage1.py'
+      - 'scripts/test_deep_stage1_worker.py'
+      - 'config/deep_stage1_*'
+      - 'config/deep_two_stage_*'
+      - '.github/workflows/validate-deep-stage1-analysis.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deep-stage1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile bounded Stage-1 scripts
+        run: python3 -m py_compile scripts/deep_stage1.py scripts/build_deep_stage1_work.py scripts/ingest_deep_stage1.py scripts/test_deep_stage1_worker.py
+      - name: Stage-1 frozen interface and nonblocking ingest regression
+        run: python3 scripts/test_deep_stage1_worker.py
+      - name: Frozen two-stage architecture regression
+        run: python3 scripts/test_deep_two_stage_architecture_freeze.py
