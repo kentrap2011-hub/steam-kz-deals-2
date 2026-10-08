@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "d644ede6cae95297e2ece58dcf3f1ce8acc62241",
+  "run_start_authority_commit": "c4a7b35ddf7658e6ffc44346cb8e5dec673a7259",
+  "run_started_at_utc": "2026-10-08T15:53:38+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "ec4c5d8619315366acdf593840235cae441d81c5bff102269bcbfed6a1fcd686",
+  "family_id": "game:1067540",
+  "taste_subject_key": "App_1067540",
+  "appid": "1067540",
+  "taste_fingerprint": "a65b849204577149da1f542f0c40c29d2e1c5dce8717d64d420ead1ff45619b4",
+  "candidate_context_sha256": "f799d1ce034cca967a8bee7c8f460b182abdda4f95b00f85dea8ed55beb1331e",
+  "dossier_content_sha256": "4f343907b5b45a83fb3571820a31c9662cff4ae64e6b3d328bd0a669f127dd31",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "ff24711457dd021f2fa09c5d0dff9320eb0de532abc3768fa1385169e71f543b",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "base_support_compatible": null,
+  "positive_evidence": [
+    "Поиск брата в сказочном зимнем лесу связывает семейную историю с существами скандинавского фольклора; это даёт конкретную тайну и эмоциональную цель (наблюдение 0).",
+    "Иллюстративная визуальная стилистика, зимние леса, мягкая музыка и запоминающиеся фольклорные существа создают узнаваемую художественную идентичность (наблюдение 2).",
+    "Исследование связанных локаций, разговоры с мифическими обитателями и предметные головоломки позволяют постепенно продвигаться по истории и проверять решения задач (наблюдения 1, 3)."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 43,
+    "development_variety": 54,
+    "structure_pacing_direction": 44,
+    "identity_hooks": 82,
+    "breadth_of_match": 55
+  },
+  "score_findings": [
+    {
+      "finding_id": "nordic-storybook-identity",
+      "text_ru": "Зимняя сказка о поисках брата, духах и существах скандинавского фольклора выделяется выразительным оформлением и эмоциональной завязкой.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "В профиле высокая ценность запоминающейся художественной идентичности."
+        },
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "Сюжет и персонажи способны поддерживать интерес, особенно когда история имеет личный смысл."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 82
+        }
+      ]
+    },
+    {
+      "finding_id": "fairytale-journey-variety",
+      "text_ru": "Продвижение по сказочному лесу чередует общение с мифическими персонажами, поиск предметов и отдельные головоломки, а не только одну абстрактную задачу.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Важна эволюция впечатлений и смена игровых ситуаций."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 54
+        }
+      ]
+    },
+    {
+      "finding_id": "inventory-puzzle-learning",
+      "text_ru": "Предметные загадки предлагают самостоятельное сопоставление улик и решений, однако часть поздних задач недостаточно хорошо подсказывает правильный ход мыслей.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Ценно освоение понятной механики, но не непрозрачные повторы."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 43
+        }
+      ]
+    },
+    {
+      "finding_id": "walking-pacing-friction",
+      "text_ru": "Повторные переходы по большим снежным локациям и длинные анимации замедляют приключение; во второй части некоторые игроки отмечают потерю темпа.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8/pattern",
+          "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+          "match_text_ru": "Повторы допустимы, когда дают новые впечатления, а длительные однообразные возвращения снижают вовлечение."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 44
+        }
+      ]
+    },
+    {
+      "finding_id": "adventure-fit-with-friction",
+      "text_ru": "Загадочная семейная история и обитатели леса могут заинтересовать, но медленное управление, необязательные поиски секретов и неоднозначный финал сужают круг сильных совпадений.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/pattern",
+          "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+          "match_text_ru": "Любовь к загадке не означает готовности терпеть потерянность и вязкую навигацию."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 55
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Некоторые поздние загадки недостаточно явно подсказывают решение, из-за чего игроки иногда обращаются к прохождениям.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Возвращения через большие локации, повторные анимации и позднее блуждание могут снижать темп истории.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Управление мышью и клавиатурой и повторные щелчки в диалогах описаны как менее удобные, чем вариант с контроллером.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Несмотря на эмоциональные моменты, впечатления от развязки расходятся; поиск всех секретов может потребовать дополнительных возвращений.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      }
+    ]
+  }
+}
