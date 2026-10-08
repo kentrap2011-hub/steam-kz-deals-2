@@ -9,7 +9,7 @@
 
 - **Context discipline:** new Director must stay shallow. Use `DIRECTOR_HANDOFF_CURRENT.md` + this top section only; do not broadly inspect code/history. Deep implementation analysis belongs in worker chats.
 - **Mandatory first response in new Director chat:** answer the user's three pending questions about (1) concrete deferred-game examples and why reserve is not deletion, (2) why PR #157 exists/diverged, and (3) why the previous Chat 2 continuation message was too long.
-- **ЧАТ 1:** site project-tasks page accepted and merged via PR #162, merge `5f797a0652af961c7ffea1bc89909dbe092682e8`. The page contains the complete known forward backlog, not only current tasks; registry entry `site-tasks` is complete. Physical ЧАТ 1 is free for a new task.
+- **ЧАТ 1:** PR #162 is merged, but post-merge Pages deploy failed in the task-page regression after the Director marked `site-tasks` complete. Root cause is narrow: tests hard-code the pre-closeout forward count (19) and the recent-completions ordering can evict newly completed Stage 1 when another task closes. SAME current ЧАТ 1 must do a bounded closeout fix, rerun checks, and prove a successful Pages deploy before the slot is free.
 - **ЧАТ 2:** Deep Stage 1 accepted and merged via PR #163, merge `e410ee6183e29ec595f2c1fce1336751ceea9585`; Stage 1 checks were green and implementation remains non-active until later cutover. Retire the completed Stage-1 conversation. Next in the pre-approved Deep sequence is a NEW Chat 2 for `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`.
 - PR #156 architecture freeze remains accepted and must not be re-audited without direct contradiction.
 - No Scheduled Task changes are authorized.
