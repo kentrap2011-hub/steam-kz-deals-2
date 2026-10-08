@@ -6,8 +6,8 @@
 
 - **Context discipline:** new Director must stay shallow. Use `DIRECTOR_HANDOFF_CURRENT.md` + this top section only; do not broadly inspect code/history. Deep implementation analysis belongs in worker chats.
 - **Mandatory first response in new Director chat:** answer the user's three pending questions about (1) concrete deferred-game examples and why reserve is not deletion, (2) why PR #157 exists/diverged, and (3) why the previous Chat 2 continuation message was too long.
-- **ЧАТ 1:** systemic nonblocking site-publication work accepted. PR #160 merged the quarantine + independent Statistics architecture; PR #161 merged the follow-up that makes a fresh status refresh wake Pages. Runtime proof: current status generated after merge with exact current Deep binding, quarantine visible (1 current card-explanation item), and Deploy visual mailing run 37622618874 succeeded with a fresh github-pages artifact. Physical ЧАТ 1 is free for a new task.
-- **ЧАТ 2:** assigned to `WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md` after accepted Stage 2. No durable Stage 1 progress is visible yet: no Stage-1 branch, PR, worker report, or Stage-1 validation run found at latest Director check. SAME physical ЧАТ 2 remains assigned to this task.
+- **ЧАТ 1:** nonblocking site-publication work accepted (PR #160 + #161). SAME physical ЧАТ 1 now continues with `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`: add the Russian current-project-tasks page using repository-owned task state and the existing publication route.
+- **ЧАТ 2:** remains assigned to `WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md` after accepted Stage 2. Latest Director check still found no durable Stage 1 branch/PR/report/validation evidence, so continue the same task and do not restart or switch work.
 - PR #156 architecture freeze remains accepted and must not be re-audited without direct contradiction.
 - No Scheduled Task changes are authorized.
 
