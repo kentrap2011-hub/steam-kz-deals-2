@@ -10,6 +10,7 @@
     "assembly_assignment_id",
     "original_research_assignment",
     "accepted_research",
+    "accepted_research_receipt_blob_sha",
     "assembly_marker_anchor_commit",
     "assembly_marker_nonce",
     "assembly_contract_sha256",
@@ -514,6 +515,10 @@
     },
     "canonical_acceptance_authority": {
       "const": "existing_github_strict_v2_validator_and_group_ingest_only"
+    },
+    "accepted_research_receipt_blob_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
     }
   }
 }
