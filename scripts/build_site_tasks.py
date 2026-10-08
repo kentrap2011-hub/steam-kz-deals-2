@@ -19,7 +19,7 @@ PROHIBITED_PUBLIC = re.compile(r"https?://|[\w.+-]+@[\w.-]+\.[a-z]{2,}|(?:api[_ 
 VISIBLE_FIELDS = (
     "id", "title", "goal", "status", "worker_slot", "order",
     "depends_on", "blocker", "effort", "effort_reason", "urgency",
-    "urgency_reason", "updated_on",
+    "urgency_reason", "updated_on", "updated_at_utc",
 )
 
 
@@ -67,7 +67,7 @@ def validate_plan(plan, board_text, dependency_map, *, verify_task_files=True):
         if not isinstance(item, dict) or set(item) != {
             "id", "title", "goal", "status", "effort", "effort_reason", "urgency",
             "urgency_reason", "task_file", "worker_slot", "order", "depends_on",
-            "blocker", "updated_on", "recent_completion"
+            "blocker", "updated_on", "updated_at_utc", "recent_completion"
         }:
             raise ValueError("Unexpected/omitted task registry fields")
         tid = item["id"]
@@ -87,6 +87,9 @@ def validate_plan(plan, board_text, dependency_map, *, verify_task_files=True):
             if not isinstance(val, str) or len(val) > 300 or PROHIBITED_PUBLIC.search(val):
                 raise ValueError(f"Unsafe public field {tid}.{field}")
         date.fromisoformat(item["updated_on"])
+        instant = datetime.fromisoformat(item["updated_at_utc"].replace("Z", "+00:00"))
+        if instant.tzinfo is None:
+            raise ValueError(f"Missing update timestamp timezone: {tid}")
         if not isinstance(item["recent_completion"], bool):
             raise ValueError(f"recent_completion is not boolean: {tid}")
         dep = item["depends_on"]
