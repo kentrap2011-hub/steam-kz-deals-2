@@ -557,6 +557,26 @@
       "updated_on": "2026-10-08",
       "recent_completion": true,
       "updated_at_utc": "2026-10-08T14:01:57Z"
+    },
+    {
+      "id": "dossier-two-stage-contracts",
+      "title": "Dossier: контракты Research → Assembly",
+      "goal": "Реализовать неактивные версии контрактов и схем для передачи Research evidence в Assembly без изменения текущего production Dossier.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Нужно заморозить Research package, Assembly bindings/outcomes, lifecycle и compatibility до реализации GitHub staging и semantic workers.",
+      "urgency": "высокая",
+      "urgency_reason": "Это первый implementation-шаг принятой двухступенчатой архитектуры Dossier.",
+      "task_file": "WORKER_TASK_DOSSIER_TWO_STAGE_CONTRACT_SCHEMA_IMPLEMENT_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-two-stage-architecture"
+      ],
+      "blocker": "",
+      "updated_on": "2026-10-08",
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-08T15:40:00Z"
     }
   ]
 }
