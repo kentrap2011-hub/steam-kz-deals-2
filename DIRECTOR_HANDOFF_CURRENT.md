@@ -45,7 +45,7 @@ Current approved and implemented direction:
 - PR #158 accepted and merged as `9c9d79194fba3ff22ad491d80257277a87fdcfaf`;
 - validations on PR head were green;
 - no Stage 1/Stage 2 scoring logic changed;
-- ЧАТ 1 nonblocking publication task is accepted (PR #160 + #161). Retire that completed conversation. Start a NEW conversation in physical slot ЧАТ 1 for `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`, requiring current tasks plus the complete known planned backlog, including future unassigned tasks.
+- ЧАТ 1 task-page implementation is complete in PR #162 with green checks. It now needs a narrow refresh/reconciliation against current `main` after Deep Stage 1 acceptance, including updating the public task registry so Stage 1 is no longer shown active. Do not merge the stale task-plan snapshot before this refresh.
 - PR #157 remains closed without merge as superseded.
 
 The older ~581 + ~1,720 reserve analysis below remains historical diagnostic evidence only and must not be turned into production gating unless the user explicitly reopens that decision.
@@ -139,10 +139,12 @@ Accepted task:
 Accepted PR:
 `#159` merged as `06aeeda19bf550899fd690f08f413e58d6f33b1d`
 
-Next task stays in physical slot ЧАТ 2 but should use a NEW conversation thread:
-`WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md`
+Deep Stage 1 is accepted and merged via PR #163 as `e410ee6183e29ec595f2c1fce1336751ceea9585`.
 
-Reason: Stage 2 is complete and its conversation is large; Stage 1 is a separate canonical task file, so a fresh thread conserves context without changing Deep ownership.
+Next Deep task remains in physical slot ЧАТ 2 but should use a NEW conversation thread:
+`WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`
+
+Reason: Stage 1 is complete; a fresh thread preserves context while continuing serialized Deep ownership.
 
 Branch:
 `implement/deep-stage2-calibration-worker-01`
