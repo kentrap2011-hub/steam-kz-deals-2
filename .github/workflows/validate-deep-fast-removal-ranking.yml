@@ -1,0 +1,29 @@
+name: Validate Deep Fast-removal ranking preparation
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/deep_two_stage_ranking.py'
+      - 'scripts/test_deep_fast_removal_ranking_migration.py'
+      - 'config/deep_two_stage_*'
+      - 'config/final_ranking_policy.json'
+      - 'scripts/priority_ranking.py'
+      - '.github/workflows/validate-deep-fast-removal-ranking.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ranking-migration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile isolated cutover candidate
+        run: python3 -m py_compile scripts/deep_two_stage_ranking.py scripts/test_deep_fast_removal_ranking_migration.py
+      - name: Fast authority and 56+4+40 score regression
+        run: python3 scripts/test_deep_fast_removal_ranking_migration.py
+      - name: Legacy production ranking must still pass unchanged
+        run: python3 scripts/validate_priority_ranking.py
+      - name: Frozen architecture invariants
+        run: python3 scripts/test_deep_two_stage_architecture_freeze.py
