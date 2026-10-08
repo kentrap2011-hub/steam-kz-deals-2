@@ -55,6 +55,24 @@ class SiteTasksTests(unittest.TestCase):
         self.assertIn("min-width:700px", (ROOT / "web/tasks.css").read_text(encoding="utf-8"))
         self.assertNotIn("api.github.com", (ROOT / "web/tasks.js").read_text(encoding="utf-8"))
 
+    def test_stage1_merged_and_next_deep_task_planned_with_full_backlog(self):
+        """The Stage 1 merge must not leave a misleading active worker on the website."""
+        self.assertIn("Stage 1 accepted and merged via PR #163", self.board)
+        self.assertIn("WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md", self.board)
+        payload = self.build()
+        self.assertEqual(payload["known_forward_count"], 19)
+        statuses = {g["status"]: {t["id"]: t for t in g["tasks"]} for g in payload["groups"]}
+        self.assertNotIn("deep-stage1", statuses["active"])
+        self.assertIn("deep-stage1", statuses["complete"])
+        self.assertIn("deep-ranking", statuses["planned"])
+        self.assertEqual(statuses["planned"]["deep-ranking"]["worker_slot"], "ЧАТ 2 (следующий)")
+        self.assertEqual(statuses["planned"]["deep-ranking"]["order"]["position"], 3)
+        self.assertEqual(statuses["planned"]["deep-ranking"]["depends_on"], ["deep-freeze", "deep-stage1"])
+        self.assertIn("deep-cutover", statuses["blocked"])
+        self.assertIn("steam-prefilter", statuses["planned"])
+        self.assertIn("architecture-cleanup", statuses["planned"])
+        self.assertEqual(len(payload["task_titles"]), 24)
+
     def test_missing_late_unassigned_task_fails(self):
         plan = copy.deepcopy(self.plan)
         plan["items"] = [t for t in plan["items"] if t["id"] != "steam-error-watch"]
