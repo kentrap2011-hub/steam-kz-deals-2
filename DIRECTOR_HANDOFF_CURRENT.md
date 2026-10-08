@@ -108,7 +108,9 @@ Do not restate the entire task specification in the chat message when the canoni
 
 - ЧАТ 1 historical backlog audit is accepted via PR #167. Five strong restoration candidates and three Director-decision cases were found; none are yet auto-restored. Physical slot is free.
 
-- ЧАТ 1 active: `WORKER_TASK_DOSSIER_THROUGHPUT_QUALITY_PRESERVING_DIAGNOSTIC_01.md`. Diagnostic only; quantify Dossier bottlenecks/rejections and recommend speedups without lowering evidence/provenance/validation quality. No implementation or Scheduled Task changes.
+- ЧАТ 1 Dossier throughput diagnostic accepted via PR #169. Conditional target is ~1.4–1.8× more accepted output per active effort through mechanical rejection prevention/assembly reuse, subject to real-data parity proof. New active task: `WORKER_TASK_SITE_TASKS_RECENT_COMPLETION_REGRESSION_FIX_01.md`, narrow shared test repair only.
+
+- ЧАТ 2 Deep site/UI task is implementation-complete in PR #168. Its own checks are green; only the shared site-task registry test fails, and current main deploys fail for the same stale hard-coded recent-completion expectations. Do not sync/rewrite PR #168 for this. Wait for the narrow main test fix, then accept/merge and verify main.
 
 ## CURRENT PHYSICAL WORKER SLOTS
 
