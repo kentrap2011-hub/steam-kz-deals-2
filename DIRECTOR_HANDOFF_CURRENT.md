@@ -108,12 +108,11 @@ Do not restate the entire task specification in the chat message when the canoni
 
 - ЧАТ 1 historical backlog audit is accepted via PR #167. Five strong restoration candidates and three Director-decision cases were found; none are yet auto-restored. Physical slot is free.
 
-- ЧАТ 1 Dossier throughput diagnostic accepted via PR #169. Conditional target is ~1.4–1.8× more accepted output per active effort through mechanical rejection prevention/assembly reuse, subject to real-data parity proof. New active task: `WORKER_TASK_SITE_TASKS_RECENT_COMPLETION_REGRESSION_FIX_01.md`, narrow shared test repair only.
+- ЧАТ 1 is complete/free. Site-task recent-completion regression fix accepted via PR #170 (`6444c738579444234da8cc91b9f26ecd7d8c861b`); real Pages deploy #37789023003 succeeded.
 
-- ЧАТ 2 Deep site/UI task is implementation-complete in PR #168. Its own checks are green; only the shared site-task registry test fails, and current main deploys fail for the same stale hard-coded recent-completion expectations. Do not sync/rewrite PR #168 for this. Wait for the narrow main test fix, then accept/merge and verify main.
+- Deep site/UI PR #168 is accepted and merged as `ae06070f6e26ae8bdf7cf1864981b78c0e31cee7`; all Deep implementation prerequisites are complete and final integration/cutover is now unblocked.
 
-- ЧАТ 1 active: narrow `WORKER_TASK_SITE_TASKS_RECENT_COMPLETION_REGRESSION_FIX_01.md` only.
-- New ЧАТ 2 active: `WORKER_TASK_DOSSIER_TWO_STAGE_RESEARCH_ASSEMBLY_ARCHITECTURE_01.md`. Architecture/recon only; may run in parallel because it does not touch site-task tests or Deep UI implementation. Old Deep UI chat is retired; PR #168 remains pending shared-test repair.
+- ЧАТ 2 is complete/free. Two-stage Dossier Research/Assembly architecture accepted via PR #171 (`290d31a52c00d9feea86ecfc78fdb1f037db66bb`). No implementation/activation yet; one GitHub queue owner and unchanged strict final Dossier validator remain mandatory.
 
 ## CURRENT PHYSICAL WORKER SLOTS
 
