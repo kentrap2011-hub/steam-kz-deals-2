@@ -1,0 +1,315 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "6a82f650a4685a1f351689b36f1b264cf6fd4b96",
+  "run_start_authority_commit": "9abf9b63baca424ebb3b07c6e6c7fd26b2f88793",
+  "run_started_at_utc": "2026-10-08T17:33:30+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "72e788d864b0a3377783df319231844c710b75f52dab0ae18a4b0b3caa5ff2d0",
+  "family_id": "game:107100",
+  "taste_subject_key": "App_107100",
+  "appid": "107100",
+  "taste_fingerprint": "1c1eef85e7d48ab5905ba679678bb2a9f4e9352e94b9e722305456935481fb94",
+  "candidate_context_sha256": "4b4e2f7a92f9d278971789641b506943b6fde007147d581f5bb8f312873cc9d8",
+  "dossier_content_sha256": "83c91c8101c5dbdfa31c87cbebd1a22e75aee632dce984f4c6f997025f9e0284",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "7e7145f88d70337c87b0e750994049565a2e9609c6cf260be72a64e332deab0b",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Реагирующий на действия рассказчик и постепенно складывающийся рисованный мир помогают раскрывать сюжет в процессе прохождения (наблюдения 1–2).",
+    "Настройки оружия, способности и дополнительные испытания позволяют менять боевой подход (наблюдения 0, 3–4).",
+    "Художественный стиль, музыка и история катастрофы формируют отличимую игровую идентичность (наблюдения 1–2, 7)."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 72,
+    "development_variety": 68,
+    "structure_pacing_direction": 73,
+    "identity_hooks": 89,
+    "breadth_of_match": 78
+  },
+  "score_findings": [
+    {
+      "finding_id": "narration_identity",
+      "text_ru": "Озвученное повествование реагирует на действия, а рисованные локации складываются по мере пути: история катастрофы раскрывается прямо во время продвижения, не только в отдельных сценах.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Выразительный художественный стиль — сильный самостоятельный крючок."
+        },
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "Сюжетная интрига помогает, когда не вытесняет содержательный игровой процесс."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 89
+        },
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 73
+        }
+      ]
+    },
+    {
+      "finding_id": "weapon_growth",
+      "text_ru": "Улучшения оружия, дополнительные эффекты, способности и модификаторы сложности дают понятные способы менять тактику, а бои предлагают уклонение, блокирование и сочетание ближнего с дальним боем.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/pattern",
+          "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+          "match_text_ru": "Понятные улучшения оружия и их заметный эффект соответствуют предпочтению осмысленной прокачки."
+        },
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Боевые испытания и освоение приёмов важнее самой по себе высокой сложности."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 72
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 68
+        }
+      ]
+    },
+    {
+      "finding_id": "breadth",
+      "text_ru": "В Bastion сочетаются активные сражения, настройка оружия, рассказ о катастрофе и узнаваемая музыка с художественной подачей — не один изолированный крючок, а несколько разных причин продолжать.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "Сюжетная интрига помогает, когда не вытесняет содержательный игровой процесс."
+        },
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Выразительный художественный стиль — сильный самостоятельный крючок."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 78
+        }
+      ]
+    },
+    {
+      "finding_id": "arena_repeat",
+      "text_ru": "Повторяющиеся аренные схватки и преимущественно прямолинейные этапы могут со временем ослабить ощущение новизны и замедлять продвижение к сюжетным эпизодам.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Особенно важны развитие игрового опыта и новые ситуации вместо повторения одной формулы."
+        },
+        {
+          "json_pointer": "/taste_profile/8/pattern",
+          "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+          "match_text_ru": "Повторение аренных боёв допустимо лишь если остальные достоинства удерживают интерес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "lowers",
+          "normalized_value": 68
+        },
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 73
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 78
+        }
+      ]
+    },
+    {
+      "finding_id": "control_friction",
+      "text_ru": "Хотя испытания поощряют практику, сообщения о неловких столкновениях, движении и непостоянной отзывчивости вводят оговорку для удовольствия от точного боевого мастерства.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1/pattern",
+          "profile_value_sha256": "03ee46ab2d98957c01bd73fe09574b97f6da1eef6a0ceb054817add03d66d5e1",
+          "match_text_ru": "Удовольствие от управления важно, поэтому шероховатости движения нельзя игнорировать."
+        },
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Боевые испытания и освоение приёмов важнее самой по себе высокой сложности."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 72
+        }
+      ]
+    }
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Повторение аренных сражений и прямолинейных этапов может надоесть, если новые виды врагов и улучшения перестанут обновлять основной цикл.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Некоторые игроки отмечают неуклюжую обработку столкновений и перемещений, что может мешать точному уклонению и парированию.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "История и эмоциональные решения оцениваются неоднозначно; в отдельных отзывах подача кажется слишком прямолинейной.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
