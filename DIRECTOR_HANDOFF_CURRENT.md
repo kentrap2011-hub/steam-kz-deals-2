@@ -45,7 +45,7 @@ Current approved and implemented direction:
 - PR #158 accepted and merged as `9c9d79194fba3ff22ad491d80257277a87fdcfaf`;
 - validations on PR head were green;
 - no Stage 1/Stage 2 scoring logic changed;
-- ЧАТ 1 task-page implementation is complete in PR #162 with green checks. It now needs a narrow refresh/reconciliation against current `main` after Deep Stage 1 acceptance, including updating the public task registry so Stage 1 is no longer shown active. Do not merge the stale task-plan snapshot before this refresh.
+- ЧАТ 1 task-page implementation is accepted and merged via PR #162 as `5f797a0652af961c7ffea1bc89909dbe092682e8`. The registry/page shows the complete known forward backlog and current Deep state; physical ЧАТ 1 is free for a new task.
 - PR #157 remains closed without merge as superseded.
 
 The older ~581 + ~1,720 reserve analysis below remains historical diagnostic evidence only and must not be turned into production gating unless the user explicitly reopens that decision.
