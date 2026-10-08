@@ -485,22 +485,22 @@
       "updated_at_utc": "2026-10-08T10:36:42Z"
     },
     {
-      "id": "youtube-reviews",
-      "title": "YouTube-обзоры на странице игры",
-      "goal": "Добавить на страницу игры блок с релевантными YouTube-обзорами.",
-      "status": "planned",
+      "id": "historical-backlog-audit",
+      "title": "Аудит старых незавершённых задач",
+      "goal": "Найти все ранние запланированные, но не реализованные задачи и подготовить список для возврата в план.",
+      "status": "active",
       "effort": "средняя",
-      "effort_reason": "Нужны источник/привязка роликов к игре, безопасная публикация и UI-блок.",
-      "urgency": "обычная",
-      "urgency_reason": "Полезное расширение карточки игры, но не блокирует текущий Deep и сбор скидок.",
-      "task_file": null,
-      "worker_slot": null,
+      "effort_reason": "Нужно проверить исторические планы, task-файлы, отчёты и PR и отделить забытые задачи от завершённых/отменённых.",
+      "urgency": "высокая",
+      "urgency_reason": "Текущая страница задач может быть неполной, пока старый backlog не восстановлен.",
+      "task_file": "WORKER_TASK_HISTORICAL_UNIMPLEMENTED_BACKLOG_AUDIT_01.md",
+      "worker_slot": "ЧАТ 1",
       "order": null,
       "depends_on": [],
-      "blocker": "Перед реализацией нужно восстановить и зафиксировать точные правила отбора YouTube-обзоров из старого замысла.",
+      "blocker": "",
       "updated_on": "2026-10-08",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-08T11:30:00Z"
+      "updated_at_utc": "2026-10-08T11:35:00Z"
     }
   ]
 }
