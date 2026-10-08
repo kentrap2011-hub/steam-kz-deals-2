@@ -22,6 +22,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Compile bounded Stage-1 scripts
         run: python3 -m py_compile scripts/deep_stage1.py scripts/build_deep_stage1_work.py scripts/ingest_deep_stage1.py scripts/test_deep_stage1_worker.py
+      - name: Read current GitHub-owned work without activating Stage 1
+        run: |
+          python3 scripts/build_deep_stage1_work.py --out "$RUNNER_TEMP/deep-stage1-work.json"
+          python3 scripts/ingest_deep_stage1.py --work "$RUNNER_TEMP/deep-stage1-work.json" --state "$RUNNER_TEMP/deep-stage1-state.json" --inbox-glob "$RUNNER_TEMP/empty-stage1-inbox/*.json"
       - name: Stage-1 frozen interface and nonblocking ingest regression
         run: python3 scripts/test_deep_stage1_worker.py
       - name: Frozen two-stage architecture regression
