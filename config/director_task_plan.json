@@ -30,7 +30,7 @@
       "id": "deep-stage1",
       "title": "Deep Stage 1 — анализ игры",
       "goal": "Подготовить анализ плюсов, минусов, нюансов и предварительный балл 0–56.",
-      "status": "active",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Новый semantic worker, ingest и строгая проверка.",
       "urgency": "высокая",
@@ -46,8 +46,8 @@
       ],
       "blocker": "",
       "updated_on": "2026-10-08",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-08T10:36:42Z"
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-08T10:47:23Z"
     },
     {
       "id": "translation",
@@ -173,7 +173,7 @@
       "urgency": "высокая",
       "urgency_reason": "Предпосылка безопасного cutover.",
       "task_file": "WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md",
-      "worker_slot": null,
+      "worker_slot": "ЧАТ 2 (следующий)",
       "order": {
         "track": "Очередь Deep",
         "position": 3
@@ -185,7 +185,7 @@
       "blocker": "",
       "updated_on": "2026-10-08",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-08T10:36:42Z"
+      "updated_at_utc": "2026-10-08T10:47:23Z"
     },
     {
       "id": "deep-site",
@@ -225,10 +225,10 @@
         "deep-ranking",
         "deep-site"
       ],
-      "blocker": "Ожидает принятия четырёх реализаций.",
+      "blocker": "Stage 1 и Stage 2 приняты; переключение ожидает миграцию Fast/рейтинга и реализацию зеркального UI, затем интеграционную проверку.",
       "updated_on": "2026-10-08",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-08T10:36:42Z"
+      "updated_at_utc": "2026-10-08T10:47:23Z"
     },
     {
       "id": "taste-profile",
