@@ -191,7 +191,7 @@
       "id": "deep-site",
       "title": "Deep: карточки и статистика",
       "goal": "Показать готовые новые Stage 1/2 и компоненты рейтинга.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Новые проекции и UI-компоненты.",
       "urgency": "обычная",
@@ -204,14 +204,14 @@
       ],
       "blocker": "",
       "updated_on": "2026-10-08",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-08T12:41:10Z"
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-08T14:03:00Z"
     },
     {
       "id": "deep-cutover",
       "title": "Deep: интеграция и переключение",
       "goal": "Проверить миграцию и переключить продакшн без смешанных баллов.",
-      "status": "blocked",
+      "status": "planned",
       "effort": "высокая",
       "effort_reason": "Потребуются все четыре реализации и end-to-end тест.",
       "urgency": "высокая",
@@ -225,10 +225,10 @@
         "deep-ranking",
         "deep-site"
       ],
-      "blocker": "Stage 1, Stage 2 и Fast/ranking migration приняты; переключение ожидает реализацию зеркального Deep UI/Statistics и затем интеграционную проверку.",
+      "blocker": "",
       "updated_on": "2026-10-08",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-08T11:50:25Z"
+      "updated_at_utc": "2026-10-08T14:03:00Z"
     },
     {
       "id": "taste-profile",
@@ -524,7 +524,7 @@
       "id": "site-tasks-recent-regression",
       "title": "Исправить тест последних завершённых задач",
       "goal": "Убрать устаревшие жёсткие ожидания deep-stage1/site-tasks и восстановить зелёную публикацию страницы задач.",
-      "status": "active",
+      "status": "complete",
       "effort": "низкая",
       "effort_reason": "Узкий дефект тестов/fixtures страницы задач; builder предположительно уже корректен.",
       "urgency": "высокая",
@@ -535,14 +535,14 @@
       "depends_on": [],
       "blocker": "",
       "updated_on": "2026-10-08",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-08T12:50:00Z"
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-08T14:01:05Z"
     },
     {
       "id": "dossier-two-stage-architecture",
       "title": "Dossier: разделить исследование и сборку",
       "goal": "Спроектировать двухступенчатый Dossier: отдельный Research worker собирает максимум evidence, Assembly worker превращает его в технически корректный canonical Dossier.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Нужно определить промежуточный evidence-контракт, границы двух semantic ролей, GitHub ownership, retries и безопасный pipeline.",
       "urgency": "высокая",
@@ -555,8 +555,8 @@
       ],
       "blocker": "",
       "updated_on": "2026-10-08",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-08T12:58:00Z"
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-08T14:01:57Z"
     }
   ]
 }
