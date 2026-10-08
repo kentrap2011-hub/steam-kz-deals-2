@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 155,
     "deep_completed_not_fit_count": 29,
     "deep_incomplete_or_recovery_count": 21,
-    "deep_waiting_for_dossier_count": 2093,
-    "deep_ready_or_pending_count": 3,
+    "deep_waiting_for_dossier_count": 2090,
+    "deep_ready_or_pending_count": 6,
     "deep_normal_first_pass_remaining_count": 2096,
     "deep_remaining_until_all_authoritative_count": 2117,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 15,
-    "dossier_waiting_count": 2093,
+    "dossier_waiting_count": 2090,
     "pass2_attempted_count": 205,
-    "pass2_eligible_count": 3,
-    "normal_pass2_eligible_count": 3,
+    "pass2_eligible_count": 6,
+    "normal_pass2_eligible_count": 6,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -171,6 +171,131 @@
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1066780",
+      "taste_subject_key": "App_1066780",
+      "appid": "1066780",
+      "taste_fingerprint": "56b03f1e1660e38f7013796f2831e731953d67d7bc84b89ad72d1df181b75a82",
+      "candidate_context_sha256": "ceeffa2a2e08417e7c9cd43eab09360b820c826db48bd8d96318fa2e405d910f",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "78a6b0ff7b72461a3017ca5468848ea2bd8972e7b5aa39fc83f7b3f7d4003f8a",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Transport Fever 2",
+        "short_description": "The classic transport simulation genre has a new gold standard with Transport Fever 2. Discover a whole new world by navigating transport routes through land, water and air. May progress and prosperity find their way!",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "11 Dec, 2019",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1066780"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1066780.json",
+      "dossier_content_sha256": "05d70c99520135ae43ebc7859fa0939f0440ff3b8cd2390b22b6d8b59ad8c1ac",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T15:52:03.176Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "f932ec1970794e8ea8f1ee1c9e3f7ba7180ccbb608ceee44e9cd4a8edada0f5c",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--78a6b0ff7b72461a3017ca5468848ea2bd8972e7b5aa39fc83f7b3f7d4003f8a--f932ec1970794e8ea8f1ee1c9e3f7ba7180ccbb608ceee44e9cd4a8edada0f5c.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--78a6b0ff7b72461a3017ca5468848ea2bd8972e7b5aa39fc83f7b3f7d4003f8a--f932ec1970794e8ea8f1ee1c9e3f7ba7180ccbb608ceee44e9cd4a8edada0f5c.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1067540",
+      "taste_subject_key": "App_1067540",
+      "appid": "1067540",
+      "taste_fingerprint": "a65b849204577149da1f542f0c40c29d2e1c5dce8717d64d420ead1ff45619b4",
+      "candidate_context_sha256": "f799d1ce034cca967a8bee7c8f460b182abdda4f95b00f85dea8ed55beb1331e",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "ec4c5d8619315366acdf593840235cae441d81c5bff102269bcbfed6a1fcd686",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Röki",
+        "short_description": "Röki is a stunning adventure set in the snowcapped wilderness. As Tove, you must explore an uncharted world of hidden legends and forgotten monsters. Solve puzzles, collect curiosities, and uncover a tale of tragic loss, as you chart your path to redemption.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Emotional",
+          "Singleplayer",
+          "Story Rich"
+        ],
+        "core_fit_count": 2,
+        "release_date": "23 Jul, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1067540"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1067540.json",
+      "dossier_content_sha256": "4f343907b5b45a83fb3571820a31c9662cff4ae64e6b3d328bd0a669f127dd31",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T15:52:03.176Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "ff24711457dd021f2fa09c5d0dff9320eb0de532abc3768fa1385169e71f543b",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ec4c5d8619315366acdf593840235cae441d81c5bff102269bcbfed6a1fcd686--ff24711457dd021f2fa09c5d0dff9320eb0de532abc3768fa1385169e71f543b.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ec4c5d8619315366acdf593840235cae441d81c5bff102269bcbfed6a1fcd686--ff24711457dd021f2fa09c5d0dff9320eb0de532abc3768fa1385169e71f543b.json",
+      "sequence": 3
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "family_id": "game:1063660",
       "taste_subject_key": "App_1063660",
       "appid": "1063660",
@@ -232,7 +357,7 @@
       "authorization_id": "d3f83d34a86897e3c6240a7521234c424e5ca53e5b28b68bbfe637cd0dadac6c",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--6ab9ee92458d141a15c7b767f7860521c88e7a767816ff27c547907e3466cdba--d3f83d34a86897e3c6240a7521234c424e5ca53e5b28b68bbfe637cd0dadac6c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--6ab9ee92458d141a15c7b767f7860521c88e7a767816ff27c547907e3466cdba--d3f83d34a86897e3c6240a7521234c424e5ca53e5b28b68bbfe637cd0dadac6c.json",
-      "sequence": 2
+      "sequence": 4
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -297,7 +422,67 @@
       "authorization_id": "ee4ccd5d432a1ccac56b21581840e349aaa4695e50d7ee7f1e855de5888ee2af",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--00f99581557fe18443b2b807135777d8a4f7f0c2ad872943c48d9bceca0aa629--ee4ccd5d432a1ccac56b21581840e349aaa4695e50d7ee7f1e855de5888ee2af.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--00f99581557fe18443b2b807135777d8a4f7f0c2ad872943c48d9bceca0aa629--ee4ccd5d432a1ccac56b21581840e349aaa4695e50d7ee7f1e855de5888ee2af.json",
-      "sequence": 3
+      "sequence": 5
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1066890",
+      "taste_subject_key": "App_1066890",
+      "appid": "1066890",
+      "taste_fingerprint": "55dc8256b5b7ebd7ba852e0b1454b76d8f3da0bdff6925ba3174d74a4cd8361a",
+      "candidate_context_sha256": "64511cf160fa5fedc11ebeb64b6b667c3e9ed597ddaa86c3e137294821f678e2",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "a09015e0a3dfab957a6ea1ec6a2673e891396e5ae383b74ef021bb215da64436",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Automobilista 2",
+        "short_description": "Automobilista 2 is all the racing simulators you ever wanted - in just one.  An incredibly diverse collection of cars and tracks cohesively simulated, featuring incredible graphics and audio quality, dynamic weather and track conditions and the best VR support for a racing experience like no other.",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "30 Jun, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1066890"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1066890.json",
+      "dossier_content_sha256": "5753b7c77a97f900bb18ddcf8c327d88f94164baba1dc77e97c129382c55968d",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T15:52:03.176Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "9150bd2f7984eb7fd53270b75683ee8772fc6de30b0e65eb1782ace1d0e9366c",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--a09015e0a3dfab957a6ea1ec6a2673e891396e5ae383b74ef021bb215da64436--9150bd2f7984eb7fd53270b75683ee8772fc6de30b0e65eb1782ace1d0e9366c.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--a09015e0a3dfab957a6ea1ec6a2673e891396e5ae383b74ef021bb215da64436--9150bd2f7984eb7fd53270b75683ee8772fc6de30b0e65eb1782ace1d0e9366c.json",
+      "sequence": 6
     }
   ]
 }
