@@ -1,5 +1,17 @@
 # CURRENT TASK
 
+## COMPLETE — Deep Stage 1 independent analysis worker implementation 01
+Статус: `implementation_complete_ready_for_review`.
+- task: `WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md`;
+- PR #163; branch `implement/deep-stage1-worker-01`;
+- frozen two-stage interfaces unchanged; Stage 2 PR #159 not reimplemented;
+- added non-active exact Stage-1 manifest builder, independent manual semantic prompt, strict dossier/profile-bound result validation, 0–56 dynamic point breakdown, nonblocking result ingest/receipts, accepted state/progress and separate PR regression;
+- GitHub remains authority for scope/order/retries/validation/persistence; interactive chat did not execute backlog, create a scheduler or switch production;
+- `Validate Deep Stage 1 analysis` runs 37765065600 and 37765168097 passed, including current prepared-work smoke and Stage-2 accepted-result adapter;
+- report: `reviews/worker_reports/deep-stage1-worker-implement-01.md`;
+- no Fast removal, ranking migration, UI, Stage 2 changes, Scheduled Tasks or integration/cutover;
+- stop boundary: review PR #163; do not auto-start another task.
+
 ## COMPLETE — Deep Stage 2 comparative calibration worker implementation 01
 Статус: `implementation_complete_ready_for_review`.
 - task: `WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`;
