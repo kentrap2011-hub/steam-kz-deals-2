@@ -9,8 +9,8 @@
 
 - **Context discipline:** new Director must stay shallow. Use `DIRECTOR_HANDOFF_CURRENT.md` + this top section only; do not broadly inspect code/history. Deep implementation analysis belongs in worker chats.
 - **Mandatory first response in new Director chat:** answer the user's three pending questions about (1) concrete deferred-game examples and why reserve is not deletion, (2) why PR #157 exists/diverged, and (3) why the previous Chat 2 continuation message was too long.
-- **ЧАТ 1:** nonblocking site-publication work accepted (PR #160 + #161). The old Chat 1 conversation should be retired to protect context. Start a NEW conversation in physical slot ЧАТ 1 for `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`: Russian project-tasks page showing current work plus the complete known planned backlog, including unassigned future tasks, with order/dependencies where known.
-- **ЧАТ 2:** Stage 2 is complete and accepted. Retire the completed Stage-2 conversation and start a NEW conversation in physical slot ЧАТ 2 for `WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md`. This preserves serialized Deep ownership while avoiding carrying the large Stage-2 chat context into the separate Stage-1 task.
+- **ЧАТ 1:** `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md` implementation complete in PR #162 with green checks, but PR must be refreshed against current `main` after Stage 1 acceptance. Before merge, update the task registry/page state so Deep Stage 1 is no longer shown as active and the next Deep task is represented correctly. SAME current Chat 1 should do only this reconciliation/closeout.
+- **ЧАТ 2:** Deep Stage 1 accepted and merged via PR #163, merge `e410ee6183e29ec595f2c1fce1336751ceea9585`; Stage 1 checks were green and implementation remains non-active until later cutover. Retire the completed Stage-1 conversation. Next in the pre-approved Deep sequence is a NEW Chat 2 for `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`.
 - PR #156 architecture freeze remains accepted and must not be re-audited without direct contradiction.
 - No Scheduled Task changes are authorized.
 

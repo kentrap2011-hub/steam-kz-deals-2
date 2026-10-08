@@ -454,8 +454,21 @@ Currentness invariant after PPD-012:
 
 **Global guards that remain intentionally blocking:** canonical source/schema/authority contradictions, Progressive scope/accounting invariants, full visual exact material binding, persistent material drift, missing mandatory global identity. Do not route those through local quarantine.
 
----
+## Deep Stage 1 independent semantic analysis (non-active implementation)
 
+**Checked:** 2026-10-08; implementation branch `implement/deep-stage1-worker-01`, PR #163.
+
+**Short path (do not load previous chats):**
+1. `config/deep_stage1_contract.json` + `config/deep_stage1_result_schema.json` — frozen independent score 0–56, game-specific finding/point breakdown interface; never redefine here.
+2. `scripts/build_deep_stage1_work.py` + `scripts/deep_stage1.py` — prepare only existing exact GitHub-owned normal first-pass PASS-2 items, preserving order and immutable profile/Dossier binding; no implicit legacy migration, scope expansion or retry.
+3. `data/production/pre_ai/deep_stage1_work.json` — non-active prepared Stage-1 work; current zero work is not a production readiness claim.
+4. `config/deep_stage1_manual_worker_prompt.md` — separate Stage-1 semantic worker with explicit execution activation gate, Dossier facts only, pinned profile, no wishlist/purchase/ranking neighbors.
+5. `scripts/ingest_deep_stage1.py` — independent exact-path strict validation, create-only accepted results/receipts, nonblocking rejected-transport diagnostics; canonical state `data/cache/deep_stage1_state.json` and accepted results `data/cache/deep_stage1_results/<work_id>.json`.
+6. `scripts/test_deep_stage1_worker.py` + `.github/workflows/validate-deep-stage1-analysis.yml` — regression for exact inputs, dynamic point reconciliation, nonblocking ingest, idempotent replay and Stage-2 accepted Stage-1 consumption.
+
+**Boundaries:** Stage 1 implementation does not activate production; current `FAST-DOSSIER-DEEP-V1` remains authoritative until explicit integration/cutover. No Stage-2 artifacts, ranking/UI, Fast removal, Scheduled Tasks or new production ingress workflow were changed. Current legacy PASS-2 work is a bounded pre-cutover source adapter, not independent activation or migration authority.
+
+---
 
 ## Site tasks page / canonical Director forward plan
 

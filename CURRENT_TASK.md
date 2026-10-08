@@ -5,14 +5,26 @@
 - task: `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`;
 - PR: `#162` — `Add complete public Director task page with forward backlog`;
 - branch: `implement/site-current-tasks-page-01`;
-- canonical companion: `config/director_task_plan.json` — 24 known tasks, including 20 active/planned/blocked forward tasks; all unassigned future entries are retained;
+- canonical companion: `config/director_task_plan.json` — 24 known tasks, including 19 active/planned/blocked forward tasks; all unassigned future entries are retained;
 - new standalone Russian page: `web/tasks.html`; top site navigation, responsive mobile/desktop, complete status/order/dependency, effort/urgency rationale and visible update times;
 - existing read-only GitHub Pages deploy generates public static `web/data/tasks.json` from the canonical registry; validation guards missing Board/Deep map planned tasks, cycles, unsafe public fields;
-- PR run `37765202110` site-task registry/UI success; sibling site publication resilience `37765201944`, package `37765201923`, backlog `37765202175` and PASS 2 `37765202252` all success on tested implementation head;
+- PR run `37765202110` site-task registry/UI success before accepted Stage 1 sync; sibling site publication resilience `37765201944`, package `37765201923`, backlog `37765202175` and PASS 2 `37765202252` all success on tested implementation head;
 - earlier red site check was fixed by excluding explicitly superseded Director Board entries from current forward scope;
 - report: `reviews/worker_reports/site-current-tasks-page-01.md`;
-- no other ongoing tasks deleted or modified, no scheduler/Scheduled Task or semantic/Steam/ranking changes;
+- PR #163 Stage 1 merged, so `deep-stage1` is complete and Fast-removal/ranking migration is the next planned Deep task for a NEW ЧАТ 2; full backlog preserved; no other ongoing tasks deleted or modified, no scheduler/Scheduled Task or semantic/Steam/ranking changes;
 - pending: PR merge and ordinary Pages publication/live acceptance; close `site-tasks` in canonical registry when Director accepts live rollout; worker stops at this task boundary.
+
+## COMPLETE — Deep Stage 1 independent analysis worker implementation 01
+Статус: `implementation_complete_ready_for_review`.
+- task: `WORKER_TASK_DEEP_STAGE1_WORKER_IMPLEMENT_01.md`;
+- PR #163; branch `implement/deep-stage1-worker-01`;
+- frozen two-stage interfaces unchanged; Stage 2 PR #159 not reimplemented;
+- added non-active exact Stage-1 manifest builder, independent manual semantic prompt, strict dossier/profile-bound result validation, 0–56 dynamic point breakdown, nonblocking result ingest/receipts, accepted state/progress and separate PR regression;
+- GitHub remains authority for scope/order/retries/validation/persistence; interactive chat did not execute backlog, create a scheduler or switch production;
+- `Validate Deep Stage 1 analysis` runs 37765065600 and 37765168097 passed, including current prepared-work smoke and Stage-2 accepted-result adapter;
+- report: `reviews/worker_reports/deep-stage1-worker-implement-01.md`;
+- no Fast removal, ranking migration, UI, Stage 2 changes, Scheduled Tasks or integration/cutover;
+- stop boundary: review PR #163; do not auto-start another task.
 
 ## COMPLETE — Deep Stage 2 comparative calibration worker implementation 01
 Статус: `implementation_complete_ready_for_review`.
