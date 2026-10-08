@@ -10,9 +10,13 @@
   function calibrated(game){return active(game)&&game.stage2_status==='calibrated'&&numeric(game.stage2_calibrated_deep_fit_score_0_56)&&numeric(game.personal_quality_score_0_60)&&numeric(game.total_score_0_100)}
   function compactScore(game){
     if(!active(game))return '';
-    return calibrated(game)
-      ? 'Личное: '+score(game.personal_quality_score_0_60,60)+' · Итог: '+score(game.total_score_0_100,100)
-      : 'Ожидает сравнительной калибровки';
+    if(calibrated(game))
+      return 'Личное: '+score(game.personal_quality_score_0_60,60)+' · Итог: '+score(game.total_score_0_100,100);
+    if(game.stage2_status==='diagnostic_incomplete')return 'Калибровка требует диагностики';
+    if(game.stage1_status==='completed_not_fit')return 'Анализ завершён: не подходит';
+    if(game.stage1_status==='diagnostic_incomplete')return 'Анализ требует диагностики';
+    if(game.stage1_status!=='completed_fit')return 'Ожидает анализа Stage 1';
+    return 'Ожидает сравнительной калибровки';
   }
   function values(rows,empty='Данных пока нет.'){
     if(!Array.isArray(rows)||!rows.length)return '<p class="muted">'+esc(empty)+'</p>';
