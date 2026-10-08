@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 160,
     "deep_completed_not_fit_count": 36,
     "deep_incomplete_or_recovery_count": 24,
-    "deep_waiting_for_dossier_count": 2072,
-    "deep_ready_or_pending_count": 9,
+    "deep_waiting_for_dossier_count": 2069,
+    "deep_ready_or_pending_count": 12,
     "deep_normal_first_pass_remaining_count": 2081,
     "deep_remaining_until_all_authoritative_count": 2105,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 15,
-    "dossier_waiting_count": 2072,
+    "dossier_waiting_count": 2069,
     "pass2_attempted_count": 220,
-    "pass2_eligible_count": 9,
-    "normal_pass2_eligible_count": 9,
+    "pass2_eligible_count": 12,
+    "normal_pass2_eligible_count": 12,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -108,6 +108,71 @@
     }
   },
   "items": [
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1082430",
+      "taste_subject_key": "App_1082430",
+      "appid": "1082430",
+      "taste_fingerprint": "4a348c22dc2cd0f854f6df0f9a159c3594a385c943ddd94e5a7a090a1ddbcd27",
+      "candidate_context_sha256": "476b2260001113a4630f984ab8d54934948c23170c9f22daf634431fdda9851f",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "8ff736c6bae2764be7c2a7f3ff66cf34b8e3fcf10d05afa2dd4de19b9498e9bd",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Before Your Eyes",
+        "short_description": "Embark on an emotional first-person narrative adventure where you control the story—and affect its outcomes—with your real-life blinks. With this innovative technique you will fully immerse yourself in a world of memories, both joyous and heartbreaking, as your whole life flashes before your eyes.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Emotional",
+          "Narrative",
+          "Singleplayer",
+          "Story Rich"
+        ],
+        "core_fit_count": 3,
+        "release_date": "8 Apr, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1082430"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1082430.json",
+      "dossier_content_sha256": "156715eed29e0d6a2f268c848857fcd76f88881542ed1e9e23763505af153c36",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T18:19:23.849Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "aa3abda7f107202bce72c5c7be10c641d23de82065fb2cc98fdcd90fcd13c316",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--8ff736c6bae2764be7c2a7f3ff66cf34b8e3fcf10d05afa2dd4de19b9498e9bd--aa3abda7f107202bce72c5c7be10c641d23de82065fb2cc98fdcd90fcd13c316.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--8ff736c6bae2764be7c2a7f3ff66cf34b8e3fcf10d05afa2dd4de19b9498e9bd--aa3abda7f107202bce72c5c7be10c641d23de82065fb2cc98fdcd90fcd13c316.json",
+      "sequence": 1
+    },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
@@ -168,7 +233,7 @@
       "authorization_id": "81978ca93c580753e461fc37ed87086f1d79e6ade257c7487d19dcf91836764c",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--58505532097ebf91d891f018510e79f589e7723259b8ccdc0f002c3c30bcf660--81978ca93c580753e461fc37ed87086f1d79e6ade257c7487d19dcf91836764c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--58505532097ebf91d891f018510e79f589e7723259b8ccdc0f002c3c30bcf660--81978ca93c580753e461fc37ed87086f1d79e6ade257c7487d19dcf91836764c.json",
-      "sequence": 1
+      "sequence": 2
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -231,7 +296,7 @@
       "authorization_id": "7c6730f1888d284f657ad0a96f101a533cf23e6cf23d8cdb4075ef3adad95f8c",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--e0251adc462666bf0701d726d554a39de310165ad7560c3a84fde2c1bf980554--7c6730f1888d284f657ad0a96f101a533cf23e6cf23d8cdb4075ef3adad95f8c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--e0251adc462666bf0701d726d554a39de310165ad7560c3a84fde2c1bf980554--7c6730f1888d284f657ad0a96f101a533cf23e6cf23d8cdb4075ef3adad95f8c.json",
-      "sequence": 2
+      "sequence": 3
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -293,7 +358,7 @@
       "authorization_id": "e4778c001731cb2224b8bd90362fc651054f2e6c2282e268dacb7fe44ca7359b",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--81caecc90949802eb5f4c6a66aa6e3267b7e976a83cbbef194b4d1ecabc9dd30--e4778c001731cb2224b8bd90362fc651054f2e6c2282e268dacb7fe44ca7359b.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--81caecc90949802eb5f4c6a66aa6e3267b7e976a83cbbef194b4d1ecabc9dd30--e4778c001731cb2224b8bd90362fc651054f2e6c2282e268dacb7fe44ca7359b.json",
-      "sequence": 3
+      "sequence": 4
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -356,7 +421,7 @@
       "authorization_id": "b657efbca4b7e077adba5daa311edecc9d8758d696c69f6bd19a4cce0858a7ef",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--fab8616cf9f0883ca35b55c29fd2d7ce9000318781d888a5691e93ee9fcc731d--b657efbca4b7e077adba5daa311edecc9d8758d696c69f6bd19a4cce0858a7ef.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--fab8616cf9f0883ca35b55c29fd2d7ce9000318781d888a5691e93ee9fcc731d--b657efbca4b7e077adba5daa311edecc9d8758d696c69f6bd19a4cce0858a7ef.json",
-      "sequence": 4
+      "sequence": 5
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -418,7 +483,71 @@
       "authorization_id": "9efe71b8979c66454625f0a3a807fb177709bb8e902a788b82dd59d119813e13",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--784984a676499bc0444b7afa364d8c499bcc1cb9984e744de5f09368aa47bc8f--9efe71b8979c66454625f0a3a807fb177709bb8e902a788b82dd59d119813e13.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--784984a676499bc0444b7afa364d8c499bcc1cb9984e744de5f09368aa47bc8f--9efe71b8979c66454625f0a3a807fb177709bb8e902a788b82dd59d119813e13.json",
-      "sequence": 5
+      "sequence": 6
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1082710",
+      "taste_subject_key": "App_1082710",
+      "appid": "1082710",
+      "taste_fingerprint": "facaa01ee05e0878d72006962d1b1c9cd3e58c6a15b9f849958d6cfc19a64c0e",
+      "candidate_context_sha256": "a52edfde7a21eae9e7a22edf32279d6b845241698fa374c1282ce17dff6da132",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "676354fa7b32814d269e94f387b635cea7a7d98e731ad4ffb1b8cc92d61e92ae",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Bug Fables: The Everlasting Sapling",
+        "short_description": "Follow Vi, Kabbu, and Leif as they uncover the secrets of the Land of Bugaria! Explore and combine your team's abilities to solve puzzles, defeat powerful enemies and find ancient treasures!",
+        "bundle_members": [],
+        "fit_tags": [
+          "Exploration",
+          "JRPG",
+          "RPG"
+        ],
+        "core_fit_count": 1,
+        "release_date": "21 Nov, 2019",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1082710"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1082710.json",
+      "dossier_content_sha256": "57884eb568a5d29d7391f210afd85216831028b81551442acf808734874c9377",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T18:19:23.849Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "366319f248774c960d51d96b6e79e561eceedf58c22ecdf4516c62b46e394167",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--676354fa7b32814d269e94f387b635cea7a7d98e731ad4ffb1b8cc92d61e92ae--366319f248774c960d51d96b6e79e561eceedf58c22ecdf4516c62b46e394167.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--676354fa7b32814d269e94f387b635cea7a7d98e731ad4ffb1b8cc92d61e92ae--366319f248774c960d51d96b6e79e561eceedf58c22ecdf4516c62b46e394167.json",
+      "sequence": 7
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -482,7 +611,71 @@
       "authorization_id": "20a27b56fd9f74b22a37832850011a321fdc9542a3da64efab74362a729db159",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--e7c9b06f70963146554adb836fe3b257e6d486bdb775566cb08a19805373cd9f--20a27b56fd9f74b22a37832850011a321fdc9542a3da64efab74362a729db159.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--e7c9b06f70963146554adb836fe3b257e6d486bdb775566cb08a19805373cd9f--20a27b56fd9f74b22a37832850011a321fdc9542a3da64efab74362a729db159.json",
-      "sequence": 6
+      "sequence": 8
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1083790",
+      "taste_subject_key": "App_1083790",
+      "appid": "1083790",
+      "taste_fingerprint": "6a75800523153165d1e775f4f619a75fd71b5d93fea71fee3c1a7d418d54e2ce",
+      "candidate_context_sha256": "694bac34d5f48af51a1849050099ab29b67f52cc389791803b1584e38906b55b",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "766e4604ad32e8251eed5614877d17e58d8e8d1f1bee2d3744e6cd32e6a83696",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Deathbulge: Battle of the Bands",
+        "short_description": "The party-based RPG where you kick down doors and fight with music as a 3-piece band of idiots.",
+        "bundle_members": [],
+        "fit_tags": [
+          "JRPG",
+          "RPG",
+          "Story Rich"
+        ],
+        "core_fit_count": 2,
+        "release_date": "8 Aug, 2023",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1083790"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1083790.json",
+      "dossier_content_sha256": "cba6f318111ccff767ca4fee646641bf72bb4517c24eb2dc086f685eaed8cf5a",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T18:19:23.849Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "175d86029d77c9cb2cccfc3f544c612ab0ceb28f68e14398e7f75b8855e85103",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--766e4604ad32e8251eed5614877d17e58d8e8d1f1bee2d3744e6cd32e6a83696--175d86029d77c9cb2cccfc3f544c612ab0ceb28f68e14398e7f75b8855e85103.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--766e4604ad32e8251eed5614877d17e58d8e8d1f1bee2d3744e6cd32e6a83696--175d86029d77c9cb2cccfc3f544c612ab0ceb28f68e14398e7f75b8855e85103.json",
+      "sequence": 9
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -546,7 +739,7 @@
       "authorization_id": "765c60a5b06e34121f14170577eb803c81a921bf1e35e3fb6e6de2ba6f2a2c25",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--bfd9ebfc2a14c22e7b09d27806dc87e71c1b8e5510fb30fcfd1dca6974875dcf--765c60a5b06e34121f14170577eb803c81a921bf1e35e3fb6e6de2ba6f2a2c25.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--bfd9ebfc2a14c22e7b09d27806dc87e71c1b8e5510fb30fcfd1dca6974875dcf--765c60a5b06e34121f14170577eb803c81a921bf1e35e3fb6e6de2ba6f2a2c25.json",
-      "sequence": 7
+      "sequence": 10
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -609,7 +802,7 @@
       "authorization_id": "e31a323a831ed33e1e0ffbf1c4c06e1d83d34d984102d9b5aaacc21fbeeacf0c",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ae5bb3e88ed21e5744072823315ac7e7aa4bf71b0b430bf1c9a479bc5c6831e1--e31a323a831ed33e1e0ffbf1c4c06e1d83d34d984102d9b5aaacc21fbeeacf0c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ae5bb3e88ed21e5744072823315ac7e7aa4bf71b0b430bf1c9a479bc5c6831e1--e31a323a831ed33e1e0ffbf1c4c06e1d83d34d984102d9b5aaacc21fbeeacf0c.json",
-      "sequence": 8
+      "sequence": 11
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -673,7 +866,7 @@
       "authorization_id": "7ee5b6f26fe5895aa9b223d13e2ee9a070b4cd10bde4006ccc16352eb67effc1",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--7d4cec86b96b089ff581a9fb6e968a3d8cdd874ff430509ce94e32d9f22c080e--7ee5b6f26fe5895aa9b223d13e2ee9a070b4cd10bde4006ccc16352eb67effc1.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--7d4cec86b96b089ff581a9fb6e968a3d8cdd874ff430509ce94e32d9f22c080e--7ee5b6f26fe5895aa9b223d13e2ee9a070b4cd10bde4006ccc16352eb67effc1.json",
-      "sequence": 9
+      "sequence": 12
     }
   ]
 }

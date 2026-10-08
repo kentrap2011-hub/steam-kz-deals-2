@@ -4,21 +4,21 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
-    "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
-    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
-    "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
   "appid": "1083790",
   "title": "Deathbulge: Battle of the Bands",
-  "generated_at_utc": "2026-09-19T11:00:00Z",
-  "expires_at_utc": "2026-10-09T11:00:00Z",
+  "generated_at_utc": "2026-10-08T18:19:23.849Z",
+  "expires_at_utc": "2026-10-28T18:19:23.849Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Deathbulge: Battle of the Bands",
@@ -38,12 +38,93 @@
       }
     ]
   },
-  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 11 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
       "category": "mechanics",
-      "statement": "Recent player feedback praises the strategic turn-based combat built around manipulating ATB-style measure effects, alongside the humor, art, and music.",
+      "statement": "Battles use a music-measure timing bar where status effects alter upcoming turns; swapping the active bandmate changes speed, defense and resource recovery.",
       "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Music-themed classes, skill mods, gear patches and different bandmember builds provide meaningful tactical customization throughout the adventure.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-004",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "The punk-band setting permeates encounters, locations, quests, characters and the unusual role-playing vocabulary, giving the comedy a consistent identity.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-005",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Expressive cartoon animation, original music and recurring slapstick dialogue are commonly enjoyed, including by people unfamiliar with the original webcomic.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003",
+        "feedback-004",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "A completed-playthrough account characterizes the central adventure as compact for the genre, with distinct locations, visible encounters and optional bosses.",
+      "sentiment": "neutral",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
@@ -51,10 +132,121 @@
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "source-002"
+        "source-003"
       ],
       "player_feedback_ids": [
-        "feedback-001"
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Players find optional bosses more demanding than some regular encounters; an optimized party can substantially reduce the challenge of certain main fights.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "A completed-playthrough account says the level/stat cap can be reached early with optimized builds, reducing the incentive to fight further battles.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Reception of the irreverent comedy is not unanimous: a player appreciates the underlying battle system and visuals while finding some jokes excessively random.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "A July 2026 Mad Zone player requested easier restarting of hard boss encounters, describing delay before trying another strategy; the thread includes guidance for exiting to the title menu.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-007"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Players describe exploration-led dungeons, quests and environmental interactions with humorous consequences beyond the turn-based battles.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "A player praises flexibility and potential reruns with varied builds; another says some late-game encounter incentives decrease after reaching progression caps.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-004",
+        "feedback-006"
       ]
     }
   ],
@@ -62,11 +254,113 @@
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "source_mix_status": "single_source_only",
-    "single_source_reason": "Bounded research yielded one contract-usable exact-product player-feedback thread used for the validated durable finding.",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
     "russian_attempt": "searched_no_existence_signal",
-    "overall_strength": "limited",
-    "stop_reason": "evidence_stable"
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            6
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            4,
+            10
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            5,
+            8
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            4,
+            9
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            9
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            3,
+            7
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            5,
+            6,
+            7,
+            8,
+            10
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "covered",
+          "observation_indices": [
+            8
+          ]
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
   },
   "provenance": {
     "sources": [
@@ -75,32 +369,110 @@
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
         "url": "https://store.steampowered.com/app/1083790/",
-        "publication_date": "2023-08-08",
+        "publication_date": null,
         "language": "non_russian",
-        "freshness": "older",
         "evidence_role": "identity",
-        "player_feedback": false
+        "player_feedback": false,
+        "freshness": "unknown"
       },
       {
         "source_id": "source-002",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1083790/reviews/?browsefilter=toprated&l=english",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1083790",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
         "source_type": "reddit",
         "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/JRPG/comments/1ryy1k2/deathbulge_battle_of_the_bands_is_a_brilliant/",
-        "publication_date": "2026-03-20",
+        "url": "https://www.reddit.com/r/JRPG/comments/1oleccr/deathbulge_battle_of_the_bands_is_a_concise_funny/",
+        "publication_date": null,
         "language": "non_russian",
-        "freshness": "recent",
         "evidence_role": "durable_trait",
-        "player_feedback": true
+        "player_feedback": true,
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1083790/discussions/0/568165241142158172/",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1083790",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
       }
     ],
     "player_feedback_records": [
       {
         "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "url": "https://www.reddit.com/r/JRPG/comments/1ryy1k2/deathbulge_battle_of_the_bands_is_a_brilliant/",
-        "publication_date": "2026-03-20",
+        "publication_date": "2023-08-08",
         "language": "non_russian",
-        "identity_mode": "stable_locator"
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": "2024-01-09",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-002",
+        "publication_date": "2023-10-15",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-002",
+        "publication_date": "2025-12-30",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-002",
+        "publication_date": "2023-09-20",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-003",
+        "publication_date": null,
+        "language": "non_russian",
+        "acquisition_mode": "stable_item",
+        "url": "https://www.reddit.com/r/JRPG/comments/1oleccr/deathbulge_battle_of_the_bands_is_a_concise_funny/"
+      },
+      {
+        "feedback_id": "feedback-007",
+        "source_id": "source-004",
+        "publication_date": "2026-07-06",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
       }
     ]
   }
