@@ -9,7 +9,7 @@
 
 - **Context discipline:** new Director must stay shallow. Use `DIRECTOR_HANDOFF_CURRENT.md` + this top section only; do not broadly inspect code/history. Deep implementation analysis belongs in worker chats.
 - **Mandatory first response in new Director chat:** answer the user's three pending questions about (1) concrete deferred-game examples and why reserve is not deletion, (2) why PR #157 exists/diverged, and (3) why the previous Chat 2 continuation message was too long.
-- **ЧАТ 1:** `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md` ready in PR #162, now reconciled with the accepted PR #163 Stage 1 and current `main`. Stage 1 appears as completed; the next Deep task is planned Fast removal/ranking migration for a NEW ЧАТ 2. All unassigned and later planned tasks remain in the registry. Final five PR checks passed on reconciled head `f29c0c8d444e88bb03904f03d044ee5e84c952ec`; merge and live Pages deployment still require Director acceptance. The same current Chat 1 stops after this closeout.
+- **ЧАТ 1:** site project-tasks page accepted and merged via PR #162, merge `5f797a0652af961c7ffea1bc89909dbe092682e8`. The page contains the complete known forward backlog, not only current tasks; registry entry `site-tasks` is complete. Physical ЧАТ 1 is free for a new task.
 - **ЧАТ 2:** Deep Stage 1 accepted and merged via PR #163, merge `e410ee6183e29ec595f2c1fce1336751ceea9585`; Stage 1 checks were green and implementation remains non-active until later cutover. Retire the completed Stage-1 conversation. Next in the pre-approved Deep sequence is a NEW Chat 2 for `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`.
 - PR #156 architecture freeze remains accepted and must not be re-audited without direct contradiction.
 - No Scheduled Task changes are authorized.
@@ -36,9 +36,7 @@ Priority order:
 2. `WORKER_TASK_STEAM_OWNED_LIBRARY_DLC_SUPPORT_01.md` — научиться безопасно получать список принадлежащих пользователю игр Steam и затем разрешать дополнения к подходящим **или принадлежащим** базовым играм.
    - трудоёмкость: **средняя** — нужны безопасное получение библиотеки, свежесть данных и связь дополнения с базовой игрой;
    - срочность: **обычная** — полезно для полноты дополнений, но временно можно работать по правилу подходящей базовой игры.
-3. `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md` — добавить русскую страницу активных/очередных/заблокированных задач, включая **трудоёмкость** и **срочность** с коротким объяснением.
-   - трудоёмкость: **средняя** — нужен единый источник состояния задач плюс страница и навигация;
-   - срочность: **обычная** — улучшает контроль проекта, но сама не разблокирует сбор скидок Steam.
+3. `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md` — **выполнено и принято через PR #162**; страница показывает текущие и все известные запланированные задачи, включая порядок/зависимости там, где они определены.
 
 Corrected user product decisions behind this queue:
 - “50” means **minimum discount 50%**, not 50 offers;
