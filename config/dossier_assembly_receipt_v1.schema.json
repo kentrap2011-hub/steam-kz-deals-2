@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "DOSSIER-ASSEMBLY-RECEIPT-V1",
+  "title": "GitHub-only Stage B staging receipt; never accepted Dossier",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "owner",
+    "assembly_assignment_id",
+    "original_research_assignment",
+    "accepted_research_package_sha256",
+    "assembly_result_path",
+    "assembly_result_sha256",
+    "assembly_result_blob_sha",
+    "assembly_outcome",
+    "classification",
+    "validation_revision",
+    "canonical_dossier_accepted",
+    "deep_eligibility_issued",
+    "retry_or_recovery_authorized"
+  ],
+  "properties": {
+    "schema": {
+      "const": "DOSSIER-ASSEMBLY-RECEIPT-V1"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "owner": {
+      "const": "github_control_plane"
+    },
+    "assembly_assignment_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{7,127}$"
+    },
+    "original_research_assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assignment_id",
+        "snapshot_id",
+        "group_sequence",
+        "group_sha256",
+        "prepared_required_sha256",
+        "group_plan_sha256",
+        "items_sha256",
+        "item_index",
+        "appid",
+        "title",
+        "scope_source",
+        "source_queue_sha256",
+        "research_contract_sha256",
+        "web_evidence_contract_binding",
+        "research_marker_anchor_commit",
+        "research_marker_nonce"
+      ],
+      "properties": {
+        "assignment_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{7,127}$"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "group_sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "group_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "prepared_required_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "group_plan_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "items_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "item_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "appid": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 250
+        },
+        "scope_source": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 250
+        },
+        "source_queue_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "research_contract_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "web_evidence_contract_binding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "evidence_contract_schema",
+            "evidence_contract_version",
+            "evidence_contract_revision",
+            "evidence_contract_sha256",
+            "worker_schema",
+            "worker_schema_version",
+            "worker_schema_revision",
+            "worker_schema_sha256",
+            "dossier_schema",
+            "dossier_schema_version",
+            "worker_prompt_revision",
+            "worker_prompt_sha256"
+          ],
+          "properties": {
+            "evidence_contract_schema": {
+              "const": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2"
+            },
+            "evidence_contract_version": {
+              "const": 2
+            },
+            "evidence_contract_revision": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "evidence_contract_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "worker_schema": {
+              "const": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2"
+            },
+            "worker_schema_version": {
+              "const": 2
+            },
+            "worker_schema_revision": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "worker_schema_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "dossier_schema": {
+              "const": "TASTE-STEAM-REVIEW-DOSSIER-V2"
+            },
+            "dossier_schema_version": {
+              "const": 2
+            },
+            "worker_prompt_revision": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "worker_prompt_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "research_marker_anchor_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "research_marker_nonce": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        }
+      }
+    },
+    "accepted_research_package_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "assembly_result_path": {
+      "type": "string",
+      "pattern": "^data/ai_inbox/dossier_assembly/[0-9a-f]{64}/g[0-9]{6}/[0-9]+--[a-z0-9._-]+\\.json$"
+    },
+    "assembly_result_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "assembly_result_blob_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "assembly_outcome": {
+      "type": "string",
+      "enum": [
+        "assembled_candidate_ready",
+        "exact_source_revisit_required",
+        "exact_source_revisit_resolved",
+        "narrow_gap_lookup_required",
+        "narrow_gap_lookup_resolved",
+        "unresolved_semantic_gap",
+        "source_unavailable",
+        "invalid_or_duplicate_research_evidence",
+        "binding_mismatch_or_stale_package",
+        "runtime_or_tool_failure"
+      ]
+    },
+    "classification": {
+      "type": "string",
+      "enum": [
+        "created",
+        "staged_validated",
+        "rejected_invalid",
+        "research_incomplete",
+        "assembly_gap",
+        "runtime_blocked"
+      ]
+    },
+    "validation_revision": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 120
+    },
+    "canonical_dossier_accepted": {
+      "const": false
+    },
+    "deep_eligibility_issued": {
+      "const": false
+    },
+    "retry_or_recovery_authorized": {
+      "const": false
+    }
+  }
+}

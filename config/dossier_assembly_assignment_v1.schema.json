@@ -1,0 +1,524 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "DOSSIER-ASSEMBLY-ASSIGNMENT-V1",
+  "title": "Inactive immutable Stage B GitHub-prepared assignment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "assembly_assignment_id",
+    "original_research_assignment",
+    "accepted_research",
+    "accepted_research_receipt_blob_sha",
+    "assembly_marker_anchor_commit",
+    "assembly_marker_nonce",
+    "assembly_contract_sha256",
+    "assembly_prompt_sha256",
+    "assembly_prompt_revision",
+    "canonical_dossier_target",
+    "output_path",
+    "permitted_result_namespace",
+    "create_only",
+    "canonical_acceptance_authority"
+  ],
+  "properties": {
+    "schema": {
+      "const": "DOSSIER-ASSEMBLY-ASSIGNMENT-V1"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "assembly_assignment_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{7,127}$"
+    },
+    "original_research_assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assignment_id",
+        "snapshot_id",
+        "group_sequence",
+        "group_sha256",
+        "prepared_required_sha256",
+        "group_plan_sha256",
+        "items_sha256",
+        "item_index",
+        "appid",
+        "title",
+        "scope_source",
+        "source_queue_sha256",
+        "research_contract_sha256",
+        "web_evidence_contract_binding",
+        "research_marker_anchor_commit",
+        "research_marker_nonce"
+      ],
+      "properties": {
+        "assignment_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{7,127}$"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "group_sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "group_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "prepared_required_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "group_plan_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "items_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "item_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "appid": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 250
+        },
+        "scope_source": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 250
+        },
+        "source_queue_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "research_contract_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "web_evidence_contract_binding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "evidence_contract_schema",
+            "evidence_contract_version",
+            "evidence_contract_revision",
+            "evidence_contract_sha256",
+            "worker_schema",
+            "worker_schema_version",
+            "worker_schema_revision",
+            "worker_schema_sha256",
+            "dossier_schema",
+            "dossier_schema_version",
+            "worker_prompt_revision",
+            "worker_prompt_sha256"
+          ],
+          "properties": {
+            "evidence_contract_schema": {
+              "const": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2"
+            },
+            "evidence_contract_version": {
+              "const": 2
+            },
+            "evidence_contract_revision": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "evidence_contract_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "worker_schema": {
+              "const": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2"
+            },
+            "worker_schema_version": {
+              "const": 2
+            },
+            "worker_schema_revision": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "worker_schema_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "dossier_schema": {
+              "const": "TASTE-STEAM-REVIEW-DOSSIER-V2"
+            },
+            "dossier_schema_version": {
+              "const": 2
+            },
+            "worker_prompt_revision": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "worker_prompt_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "research_marker_anchor_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "research_marker_nonce": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        }
+      }
+    },
+    "accepted_research": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "schema_version",
+        "status",
+        "owner",
+        "assignment",
+        "research_package_path",
+        "research_package_sha256",
+        "research_package_blob_sha",
+        "research_package_git_commit",
+        "validation_revision",
+        "research_schema_id",
+        "research_contract_sha256",
+        "accepted_identity",
+        "canonical_acceptance",
+        "deep_eligibility_issued"
+      ],
+      "properties": {
+        "schema": {
+          "const": "DOSSIER-RESEARCH-ACCEPTANCE-RECEIPT-V1"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "status": {
+          "const": "accepted_structural_evidence_not_canonical_dossier"
+        },
+        "owner": {
+          "const": "github_control_plane"
+        },
+        "assignment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "assignment_id",
+            "snapshot_id",
+            "group_sequence",
+            "group_sha256",
+            "prepared_required_sha256",
+            "group_plan_sha256",
+            "items_sha256",
+            "item_index",
+            "appid",
+            "title",
+            "scope_source",
+            "source_queue_sha256",
+            "research_contract_sha256",
+            "web_evidence_contract_binding",
+            "research_marker_anchor_commit",
+            "research_marker_nonce"
+          ],
+          "properties": {
+            "assignment_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9._-]{7,127}$"
+            },
+            "snapshot_id": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "group_sequence": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "group_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "prepared_required_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "group_plan_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "items_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "item_index": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "appid": {
+              "type": "string",
+              "pattern": "^[0-9]+$"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 250
+            },
+            "scope_source": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 250
+            },
+            "source_queue_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "research_contract_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "web_evidence_contract_binding": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "evidence_contract_schema",
+                "evidence_contract_version",
+                "evidence_contract_revision",
+                "evidence_contract_sha256",
+                "worker_schema",
+                "worker_schema_version",
+                "worker_schema_revision",
+                "worker_schema_sha256",
+                "dossier_schema",
+                "dossier_schema_version",
+                "worker_prompt_revision",
+                "worker_prompt_sha256"
+              ],
+              "properties": {
+                "evidence_contract_schema": {
+                  "const": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2"
+                },
+                "evidence_contract_version": {
+                  "const": 2
+                },
+                "evidence_contract_revision": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 600
+                },
+                "evidence_contract_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "worker_schema": {
+                  "const": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2"
+                },
+                "worker_schema_version": {
+                  "const": 2
+                },
+                "worker_schema_revision": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 600
+                },
+                "worker_schema_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "dossier_schema": {
+                  "const": "TASTE-STEAM-REVIEW-DOSSIER-V2"
+                },
+                "dossier_schema_version": {
+                  "const": 2
+                },
+                "worker_prompt_revision": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 600
+                },
+                "worker_prompt_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
+            },
+            "research_marker_anchor_commit": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "research_marker_nonce": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{32}$"
+            }
+          }
+        },
+        "research_package_path": {
+          "type": "string",
+          "pattern": "^data/ai_inbox/dossier_research/[0-9a-f]{64}/g[0-9]{6}/[0-9]+--[a-z0-9._-]+\\.json$"
+        },
+        "research_package_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "research_package_blob_sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "research_package_git_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "validation_revision": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 120
+        },
+        "research_schema_id": {
+          "const": "DOSSIER-RESEARCH-PACKAGE-V1"
+        },
+        "research_contract_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "accepted_identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "appid",
+            "title",
+            "original_work_release_year",
+            "identity_resolution"
+          ],
+          "properties": {
+            "appid": {
+              "type": "string",
+              "pattern": "^[0-9]+$"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 250
+            },
+            "original_work_release_year": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1970,
+                  "maximum": 2100
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "identity_resolution": {
+              "enum": [
+                "resolved",
+                "unresolved"
+              ]
+            }
+          }
+        },
+        "canonical_acceptance": {
+          "const": false
+        },
+        "deep_eligibility_issued": {
+          "const": false
+        }
+      }
+    },
+    "assembly_marker_anchor_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "assembly_marker_nonce": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{32}$"
+    },
+    "assembly_contract_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "assembly_prompt_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "assembly_prompt_revision": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 120
+    },
+    "canonical_dossier_target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "schema_version",
+        "worker_schema",
+        "worker_schema_version",
+        "web_evidence_contract",
+        "web_evidence_contract_version",
+        "canonical_worker_binding_sha256"
+      ],
+      "properties": {
+        "schema": {
+          "const": "TASTE-STEAM-REVIEW-DOSSIER-V2"
+        },
+        "schema_version": {
+          "const": 2
+        },
+        "worker_schema": {
+          "const": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2"
+        },
+        "worker_schema_version": {
+          "const": 2
+        },
+        "web_evidence_contract": {
+          "const": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2"
+        },
+        "web_evidence_contract_version": {
+          "const": 2
+        },
+        "canonical_worker_binding_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "output_path": {
+      "type": "string",
+      "pattern": "^data/ai_inbox/dossier_assembly/[0-9a-f]{64}/g[0-9]{6}/[0-9]+--[a-z0-9._-]+\\.json$"
+    },
+    "permitted_result_namespace": {
+      "const": "data/ai_inbox/dossier_assembly/"
+    },
+    "create_only": {
+      "const": true
+    },
+    "canonical_acceptance_authority": {
+      "const": "existing_github_strict_v2_validator_and_group_ingest_only"
+    },
+    "accepted_research_receipt_blob_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    }
+  }
+}

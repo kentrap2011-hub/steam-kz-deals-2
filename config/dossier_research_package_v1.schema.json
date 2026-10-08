@@ -1,0 +1,1003 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "DOSSIER-RESEARCH-PACKAGE-V1",
+  "title": "Inactive per-game neutral Research evidence package (no canonical acceptance)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "assignment",
+    "identity",
+    "sources",
+    "observed_feedback",
+    "findings",
+    "research_audit",
+    "package_hash_algorithm"
+  ],
+  "properties": {
+    "schema": {
+      "const": "DOSSIER-RESEARCH-PACKAGE-V1"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assignment_id",
+        "snapshot_id",
+        "group_sequence",
+        "group_sha256",
+        "prepared_required_sha256",
+        "group_plan_sha256",
+        "items_sha256",
+        "item_index",
+        "appid",
+        "title",
+        "scope_source",
+        "source_queue_sha256",
+        "research_contract_sha256",
+        "web_evidence_contract_binding",
+        "research_marker_anchor_commit",
+        "research_marker_nonce"
+      ],
+      "properties": {
+        "assignment_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{7,127}$"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "group_sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "group_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "prepared_required_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "group_plan_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "items_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "item_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "appid": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 250
+        },
+        "scope_source": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 250
+        },
+        "source_queue_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "research_contract_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "web_evidence_contract_binding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "evidence_contract_schema",
+            "evidence_contract_version",
+            "evidence_contract_revision",
+            "evidence_contract_sha256",
+            "worker_schema",
+            "worker_schema_version",
+            "worker_schema_revision",
+            "worker_schema_sha256",
+            "dossier_schema",
+            "dossier_schema_version",
+            "worker_prompt_revision",
+            "worker_prompt_sha256"
+          ],
+          "properties": {
+            "evidence_contract_schema": {
+              "const": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2"
+            },
+            "evidence_contract_version": {
+              "const": 2
+            },
+            "evidence_contract_revision": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "evidence_contract_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "worker_schema": {
+              "const": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2"
+            },
+            "worker_schema_version": {
+              "const": 2
+            },
+            "worker_schema_revision": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "worker_schema_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "dossier_schema": {
+              "const": "TASTE-STEAM-REVIEW-DOSSIER-V2"
+            },
+            "dossier_schema_version": {
+              "const": 2
+            },
+            "worker_prompt_revision": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "worker_prompt_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "research_marker_anchor_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "research_marker_nonce": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resolved_title",
+        "original_work_release_year",
+        "resolution",
+        "corroborators",
+        "identity_source_refs",
+        "ambiguity_notes"
+      ],
+      "properties": {
+        "resolved_title": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 250
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "original_work_release_year": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1970,
+              "maximum": 2100
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "resolution": {
+          "type": "string",
+          "enum": [
+            "resolved",
+            "unresolved"
+          ]
+        },
+        "corroborators": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "value"
+            ],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "appid",
+                  "developer",
+                  "publisher",
+                  "platform",
+                  "version",
+                  "other_identifier"
+                ]
+              },
+              "value": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 250
+              }
+            }
+          },
+          "minItems": 0
+        },
+        "identity_source_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^rsource-[0-9]{3}$"
+          },
+          "minItems": 0
+        },
+        "ambiguity_notes": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 4,
+              "maxLength": 500
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ref",
+          "locator",
+          "normalized_locator",
+          "domain",
+          "physical_source_identity",
+          "source_type",
+          "evidence_role_hint",
+          "player_feedback",
+          "language",
+          "publication_date",
+          "temporal_kind_hint",
+          "feedback_surface_mode",
+          "exact_product_binding",
+          "observed_mode",
+          "availability_on_revisit"
+        ],
+        "properties": {
+          "ref": {
+            "type": "string",
+            "pattern": "^rsource-[0-9]{3}$"
+          },
+          "locator": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "url"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "pattern": "^https://[^/?#@\\s]+(?:[/?#][^\\s]*)?$",
+                    "maxLength": 1000
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "public_ref"
+                ],
+                "properties": {
+                  "public_ref": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9._:/#-]{2,300}$"
+                  }
+                }
+              }
+            ]
+          },
+          "normalized_locator": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "domain": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9.-]{2,253}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "physical_source_identity": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_type": {
+            "type": "string",
+            "enum": [
+              "steam_reviews",
+              "steam_community",
+              "reddit",
+              "forum",
+              "store_user_reviews",
+              "community_discussion",
+              "other_player_feedback",
+              "official_metadata",
+              "professional_context"
+            ]
+          },
+          "evidence_role_hint": {
+            "type": "string",
+            "enum": [
+              "current_state",
+              "historical",
+              "durable_trait",
+              "uncertain",
+              "identity"
+            ]
+          },
+          "player_feedback": {
+            "type": "boolean"
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "russian",
+              "non_russian",
+              "mixed",
+              "unknown"
+            ]
+          },
+          "publication_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "temporal_kind_hint": {
+            "type": "string",
+            "enum": [
+              "current_sensitive",
+              "historical",
+              "durable",
+              "uncertain",
+              "identity"
+            ]
+          },
+          "feedback_surface_mode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "concrete_item_collection",
+                  "search_result_representation"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "exact_product_binding": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "basis",
+                  "appid",
+                  "title",
+                  "original_work_release_year",
+                  "evidence_source_refs"
+                ],
+                "properties": {
+                  "basis": {
+                    "type": "string",
+                    "enum": [
+                      "appid",
+                      "title_and_work_year",
+                      "official_metadata",
+                      "unresolved"
+                    ]
+                  },
+                  "appid": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[0-9]+$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "title": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 250
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "original_work_release_year": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 1970,
+                        "maximum": 2100
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "evidence_source_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^rsource-[0-9]{3}$"
+                    },
+                    "minItems": 0
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "observed_mode": {
+            "type": "string",
+            "enum": [
+              "opened_source",
+              "inspected_collection",
+              "search_representation"
+            ]
+          },
+          "availability_on_revisit": {
+            "type": "string",
+            "enum": [
+              "not_checked",
+              "accessible",
+              "unavailable"
+            ]
+          }
+        }
+      },
+      "minItems": 0
+    },
+    "observed_feedback": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ref",
+          "parent_source_ref",
+          "acquisition_mode",
+          "item_locator",
+          "publication_date",
+          "language",
+          "exact_product_binding_ref",
+          "observed",
+          "independent_evidence_note"
+        ],
+        "properties": {
+          "ref": {
+            "type": "string",
+            "pattern": "^rfeedback-[0-9]{3}$"
+          },
+          "parent_source_ref": {
+            "type": "string",
+            "pattern": "^rsource-[0-9]{3}$"
+          },
+          "acquisition_mode": {
+            "type": "string",
+            "enum": [
+              "stable_item",
+              "inspected_collection_item",
+              "search_result_observation"
+            ]
+          },
+          "item_locator": {
+            "anyOf": [
+              {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "url"
+                    ],
+                    "properties": {
+                      "url": {
+                        "type": "string",
+                        "pattern": "^https://[^/?#@\\\\s]+(?:[/?#][^\\\\s]*)?$",
+                        "maxLength": 1000
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "public_ref"
+                    ],
+                    "properties": {
+                      "public_ref": {
+                        "type": "string",
+                        "pattern": "^[a-z0-9][a-z0-9._:/#-]{2,300}$"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "publication_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "russian",
+              "non_russian",
+              "mixed",
+              "unknown"
+            ]
+          },
+          "exact_product_binding_ref": {
+            "type": "string",
+            "pattern": "^rsource-[0-9]{3}$"
+          },
+          "observed": {
+            "const": true
+          },
+          "independent_evidence_note": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 4,
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "minItems": 0
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ref",
+          "kind",
+          "safe_neutral_synthesis",
+          "polarity_hint",
+          "recurrence_basis",
+          "dimension_hints",
+          "support_feedback_refs",
+          "contextual_source_refs",
+          "temporal_relevance_hint",
+          "uncertainty_note"
+        ],
+        "properties": {
+          "ref": {
+            "type": "string",
+            "pattern": "^rfinding-[0-9]{3}$"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "observation",
+              "conflict"
+            ]
+          },
+          "safe_neutral_synthesis": {
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 600
+          },
+          "polarity_hint": {
+            "type": "string",
+            "enum": [
+              "positive",
+              "negative",
+              "mixed",
+              "neutral"
+            ]
+          },
+          "recurrence_basis": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 4,
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dimension_hints": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "core_play_mechanics",
+                "controls_game_feel",
+                "progression_development_unlocks",
+                "variety_repetition_over_time",
+                "difficulty_mastery_learning_friction",
+                "pacing_structure_direction",
+                "exploration_mission_activity_structure",
+                "multiplayer_coop_dependence",
+                "story_characters_identity_hooks",
+                "recurring_strengths",
+                "recurring_complaints_tradeoffs",
+                "technical_performance_localization_regional"
+              ]
+            },
+            "minItems": 1
+          },
+          "support_feedback_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^rfeedback-[0-9]{3}$"
+            },
+            "minItems": 1
+          },
+          "contextual_source_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^rsource-[0-9]{3}$"
+            },
+            "minItems": 0
+          },
+          "temporal_relevance_hint": {
+            "type": "string",
+            "enum": [
+              "current_sensitive",
+              "historical",
+              "durable",
+              "uncertain"
+            ]
+          },
+          "uncertainty_note": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 4,
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "minItems": 0
+    },
+    "research_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "russian_attempt_observed",
+        "russian_existence_signal",
+        "dimension_survey",
+        "strengths_investigated",
+        "weaknesses_tradeoffs_investigated",
+        "used_distinct_route_classes",
+        "required_route_state",
+        "unresolved_gaps",
+        "completeness",
+        "completion_basis"
+      ],
+      "properties": {
+        "russian_attempt_observed": {
+          "type": "string",
+          "enum": [
+            "found_and_used",
+            "searched_no_existence_signal",
+            "existence_established_retrieval_unresolved",
+            "existence_established_access_unresolved"
+          ]
+        },
+        "russian_existence_signal": {
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "not_observed",
+            "unresolved"
+          ]
+        },
+        "dimension_survey": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "dimension",
+              "finding_refs",
+              "investigation_state"
+            ],
+            "properties": {
+              "dimension": {
+                "type": "string",
+                "enum": [
+                  "core_play_mechanics",
+                  "controls_game_feel",
+                  "progression_development_unlocks",
+                  "variety_repetition_over_time",
+                  "difficulty_mastery_learning_friction",
+                  "pacing_structure_direction",
+                  "exploration_mission_activity_structure",
+                  "multiplayer_coop_dependence",
+                  "story_characters_identity_hooks",
+                  "recurring_strengths",
+                  "recurring_complaints_tradeoffs",
+                  "technical_performance_localization_regional"
+                ]
+              },
+              "finding_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^rfinding-[0-9]{3}$"
+                },
+                "minItems": 0
+              },
+              "investigation_state": {
+                "type": "string",
+                "enum": [
+                  "supported",
+                  "not_material",
+                  "routes_exhausted_no_usable_support",
+                  "material_gap"
+                ]
+              }
+            }
+          },
+          "minItems": 12,
+          "maxItems": 12
+        },
+        "strengths_investigated": {
+          "type": "boolean"
+        },
+        "weaknesses_tradeoffs_investigated": {
+          "type": "boolean"
+        },
+        "used_distinct_route_classes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "steam_reviews",
+              "steam_community",
+              "reddit",
+              "forum",
+              "store_user_reviews",
+              "community_discussion",
+              "other_player_feedback",
+              "official_metadata",
+              "professional_context",
+              "search_representation",
+              "other_distinct_route"
+            ]
+          },
+          "minItems": 0
+        },
+        "required_route_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "identity",
+            "russian",
+            "source_diversification",
+            "temporal"
+          ],
+          "properties": {
+            "identity": {
+              "type": "string",
+              "enum": [
+                "investigated",
+                "blocked",
+                "unresolved"
+              ]
+            },
+            "russian": {
+              "type": "string",
+              "enum": [
+                "investigated",
+                "blocked",
+                "unresolved"
+              ]
+            },
+            "source_diversification": {
+              "type": "string",
+              "enum": [
+                "investigated",
+                "blocked",
+                "unresolved"
+              ]
+            },
+            "temporal": {
+              "type": "string",
+              "enum": [
+                "investigated",
+                "blocked",
+                "unresolved"
+              ]
+            }
+          }
+        },
+        "unresolved_gaps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "gap_id",
+              "field_or_dimension",
+              "reason",
+              "source_refs",
+              "material",
+              "next_materially_distinct_route"
+            ],
+            "properties": {
+              "gap_id": {
+                "type": "string",
+                "pattern": "^rgap-[0-9]{3}$"
+              },
+              "field_or_dimension": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              },
+              "reason": {
+                "type": "string",
+                "enum": [
+                  "not_observed",
+                  "ambiguous",
+                  "source_unavailable",
+                  "contradictory"
+                ]
+              },
+              "source_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^rsource-[0-9]{3}$"
+                },
+                "minItems": 0
+              },
+              "material": {
+                "type": "boolean"
+              },
+              "next_materially_distinct_route": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 120
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          },
+          "minItems": 0
+        },
+        "completeness": {
+          "type": "string",
+          "enum": [
+            "assembly_ready",
+            "research_incomplete",
+            "semantic_exhausted"
+          ]
+        },
+        "completion_basis": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "broad_neutral_picture",
+                "compact_central_experience",
+                "sufficient_after_route_exhaustion"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "package_hash_algorithm": {
+      "const": "github_accepted_canonical_json_sha256_sorted_keys_compact_utf8"
+    }
+  },
+  "$comment": "No default keywords: unknown facts are explicit null/unknown. Cross-record joins, duplicates, privacy-safe URL checks and frozen matching must be fail-closed by deterministic P1 fixture guard and future P2 GitHub validator. Package hash is computed externally only after validation."
+}

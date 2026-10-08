@@ -1,0 +1,234 @@
+{
+  "schema": "DOSSIER-TWO-STAGE-INTERFACES-V1",
+  "version": 1,
+  "status": "implemented_inactive",
+  "implemented": true,
+  "active": false,
+  "authoritative": false,
+  "authorized_for_semantic_execution": false,
+  "authorized_for_staging_or_claims": false,
+  "authorized_for_canonical_ingest": false,
+  "accepted_architecture": "reviews/worker_reports/dossier-two-stage-research-assembly-architecture-01.md",
+  "canonical_production_authority": {
+    "mode": "one_stage_dossier_only",
+    "control_plane": "github_actions_control_plane",
+    "active_contract": "config/taste_steam_review_dossier_contract.json",
+    "active_web_evidence_contract": "config/taste_steam_review_dossier_web_evidence_contract.json",
+    "active_worker_schema": "config/taste_steam_review_dossier_schema.json",
+    "active_transport": "data/ai_inbox/taste_steam_review_dossiers/",
+    "existing_final_validator": "scripts/taste_steam_review_dossier_strict.py",
+    "existing_group_validator": "scripts/taste_steam_review_dossier_buffered.py",
+    "canonical_cache": "data/cache/taste_steam_review_dossiers/",
+    "current_one_stage_replacements_allowed": false,
+    "old_cache_migration_allowed": false,
+    "existing_dossier_and_deep_references_rewrite_allowed": false,
+    "old_worker_prompt_hash_auto_rebinding_allowed": false,
+    "new_two_stage_result_can_directly_mark_accepted": false
+  },
+  "schema_bindings": {
+    "research_package": {
+      "id": "DOSSIER-RESEARCH-PACKAGE-V1",
+      "path": "config/dossier_research_package_v1.schema.json",
+      "schema_version": 1
+    },
+    "research_acceptance_receipt": {
+      "id": "DOSSIER-RESEARCH-ACCEPTANCE-RECEIPT-V1",
+      "path": "config/dossier_research_acceptance_receipt_v1.schema.json",
+      "schema_version": 1
+    },
+    "assembly_assignment": {
+      "id": "DOSSIER-ASSEMBLY-ASSIGNMENT-V1",
+      "path": "config/dossier_assembly_assignment_v1.schema.json",
+      "schema_version": 1
+    },
+    "assembly_result": {
+      "id": "DOSSIER-ASSEMBLY-RESULT-V1",
+      "path": "config/dossier_assembly_result_v1.schema.json",
+      "schema_version": 1
+    },
+    "assembly_receipt": {
+      "id": "DOSSIER-ASSEMBLY-RECEIPT-V1",
+      "path": "config/dossier_assembly_receipt_v1.schema.json",
+      "schema_version": 1
+    },
+    "canonical_target": {
+      "id": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "strict_validator_owned_by": "existing_github_strict_dossier_ingest"
+    }
+  },
+  "namespaces": {
+    "research_candidate": "data/ai_inbox/dossier_research/{snapshot_id}/g{sequence:06d}/{appid}--{assignment_id}.json",
+    "github_accepted_research_receipt": "data/control/dossier_research_accepted/{snapshot_id}/g{sequence:06d}/{appid}--{assignment_id}.json",
+    "assembly_candidate": "data/ai_inbox/dossier_assembly/{snapshot_id}/g{sequence:06d}/{appid}--{assembly_assignment_id}.json",
+    "github_assembly_receipt": "data/control/dossier_assembly_receipts/{snapshot_id}/g{sequence:06d}/{appid}--{assembly_assignment_id}.json",
+    "transport_create_only": true,
+    "collision_policy": "stop_without_rename_overwrite_or_alternate_path",
+    "no_current_one_stage_transport_collision": true,
+    "artifacts_production_enabled": false
+  },
+  "authority": {
+    "assignment_owner": "github_actions_control_plane",
+    "accepted_package_receipt_owner": "github_actions_control_plane",
+    "stage_workers_select_games": false,
+    "stage_workers_reorder": false,
+    "stage_workers_choose_retry_recovery": false,
+    "stage_workers_create_lease_claim": false,
+    "stage_workers_accept_dossier": false,
+    "stage_workers_write_cache_progress_or_deep": false,
+    "original_three_game_group_final_acceptance_atomic": true,
+    "stage_a_acceptance_not_dossier_acceptance": true,
+    "staging_state_owner": "github_actions_control_plane",
+    "group_final_validator": "existing_strict_v2_buffered_ingest_only",
+    "shared_writer_domain_if_ever_activated": "taste-steam-review-dossier-canonical-writer",
+    "existing_group_nonblocking_independence_preserved": true,
+    "no_new_scheduled_task_authorized": true
+  },
+  "binding_model": {
+    "original_assignment_fields": [
+      "assignment_id",
+      "snapshot_id",
+      "group_sequence",
+      "group_sha256",
+      "prepared_required_sha256",
+      "group_plan_sha256",
+      "items_sha256",
+      "item_index",
+      "appid",
+      "title",
+      "scope_source",
+      "source_queue_sha256",
+      "research_contract_sha256",
+      "web_evidence_contract_binding",
+      "research_marker_anchor_commit",
+      "research_marker_nonce"
+    ],
+    "immutable_proof": "exact_field_equality_from_github_prepared_assignment_and_frozen_marker_parent",
+    "research_package_content_hash": "sha256_compact_sorted_keys_utf8_entire_validated_package_not_self_asserted",
+    "accepted_receipt_contains": [
+      "assignment",
+      "research_package_sha256",
+      "research_package_blob_sha",
+      "research_package_git_commit",
+      "research_contract_sha256",
+      "accepted_identity"
+    ],
+    "assembly_must_copy": [
+      "original_research_assignment",
+      "accepted_research_package_sha256",
+      "accepted_research_receipt_blob_sha",
+      "assembly_contract_sha256",
+      "assembly_prompt_sha256",
+      "canonical_dossier_target"
+    ],
+    "required_assembly_package_state": "accepted_structural_evidence_not_canonical_dossier",
+    "stale_or_wrong_hash": "fail_closed_zero_attempt_return_to_github",
+    "research_hash_is_not_worker_issued": true,
+    "original_release_year_binding": "research_observed_nullable_original_work_year_frozen_in_accepted_identity_then_checked_against_same_package_at_assembly",
+    "old_prompt_contract_hash_cross_version_auto_rewrite": false
+  },
+  "research_semantics": {
+    "one_exact_game_per_package": true,
+    "profile_blind": true,
+    "exact_product_only": true,
+    "no_raw_review_content": true,
+    "forbidden_personal_fields": [
+      "username",
+      "author",
+      "profile_url",
+      "account_id",
+      "steamid",
+      "author_hash",
+      "raw_text",
+      "review_body",
+      "post_body",
+      "comment_body",
+      "snippet",
+      "quote",
+      "excerpt"
+    ],
+    "forbid_author_identity_hashes_and_pseudonyms": true,
+    "forbid_profile_scoped_locators": true,
+    "require_public_https_or_safe_public_ref": true,
+    "no_evidence_generated_by_json_schema_defaults": true,
+    "unknown_date_must_be_null": true,
+    "unknown_language": "unknown",
+    "current_freshness_derived_only_from_actual_dated_feedback_by_github": true,
+    "no_player_feedback_from_aggregates_search_hits_only_or_professional_metadata": true,
+    "physical_source_alias_not_independent": true,
+    "source_and_child_parent_identity_required": true,
+    "exactly_twelve_coverage_dimensions": true,
+    "no_numeric_source_or_review_quota": true,
+    "completeness_over_speed": true
+  },
+  "assembly_supplemental_rule": {
+    "ordering": [
+      "accepted_research_package",
+      "exact_source_revisit_for_named_gap",
+      "narrow_named_gap_lookup_only_after_exact_source_genuinely_lacks_fact",
+      "typed_unresolved_or_failure_to_github"
+    ],
+    "operations_bind_to_predeclared_research_gap_id": true,
+    "source_ref_must_resolve_to_original_package": true,
+    "exact_source_revisit_required_before_narrow_lookup": true,
+    "parent_revisit_does_not_count_as_disappeared_child_reobserved": true,
+    "narrow_lookup_allowed_only_when_revisit_status": "genuinely_absent",
+    "narrow_lookup_requires_exact_appid_work_title_and_release_binding": true,
+    "narrow_lookup_one_named_field_or_dimension_per_operation": true,
+    "unrelated_topics_and_broad_game_research_forbidden": true,
+    "new_source_observation_must_use_same_privacy_and_provenance": true,
+    "materially_many_gaps_or_identity_contradictions": "return_unresolved_semantic_gap_to_github",
+    "source_unavailable": "return_source_unavailable_no_exhaustion_assumption",
+    "no_inferred_dates_identity_authors_languages_support": true,
+    "status_vocabulary": [
+      "assembled_candidate_ready",
+      "exact_source_revisit_required",
+      "exact_source_revisit_resolved",
+      "narrow_gap_lookup_required",
+      "narrow_gap_lookup_resolved",
+      "unresolved_semantic_gap",
+      "source_unavailable",
+      "invalid_or_duplicate_research_evidence",
+      "binding_mismatch_or_stale_package",
+      "runtime_or_tool_failure"
+    ]
+  },
+  "future_inactive_lifecycle": {
+    "research": [
+      "pending",
+      "assigned",
+      "candidate_created",
+      "accepted_structural_evidence",
+      "rejected_invalid",
+      "research_incomplete",
+      "semantic_exhausted",
+      "runtime_blocked"
+    ],
+    "assembly": [
+      "waiting_for_accepted_research",
+      "assigned",
+      "candidate_created",
+      "staged_validated",
+      "rejected_invalid",
+      "assembly_gap",
+      "runtime_blocked"
+    ],
+    "group": [
+      "existing_pending",
+      "existing_accepted",
+      "existing_failed_or_invalid_pending_recovery"
+    ],
+    "attempted_semantic_first_pass_consumed_by_stage_only": false,
+    "no_automatic_retry_or_recovery": true,
+    "stage_status_never_updates_existing_canonical_group_progress": true
+  },
+  "activation_prerequisites": [
+    "P2_GitHub_deterministic_validators_and_atomic_staging",
+    "P3_inactive_Research_semantic_worker",
+    "P4_inactive_Assembly_semantic_worker",
+    "P5_real_evidence_offline_parity",
+    "P6_inactive_shadow_quality_proof",
+    "P7_explicit_Director_authorized_cutover_and_operator_scheduler_review"
+  ],
+  "recommended_next_task": "P2 GitHub deterministic helpers/validators; separate PR"
+}
