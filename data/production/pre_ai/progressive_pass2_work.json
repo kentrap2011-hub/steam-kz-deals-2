@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 141,
     "deep_completed_not_fit_count": 16,
     "deep_incomplete_or_recovery_count": 21,
-    "deep_waiting_for_dossier_count": 2123,
-    "deep_ready_or_pending_count": 0,
+    "deep_waiting_for_dossier_count": 2120,
+    "deep_ready_or_pending_count": 3,
     "deep_normal_first_pass_remaining_count": 2123,
     "deep_remaining_until_all_authoritative_count": 2144,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 15,
-    "dossier_waiting_count": 2123,
+    "dossier_waiting_count": 2120,
     "pass2_attempted_count": 178,
-    "pass2_eligible_count": 0,
-    "normal_pass2_eligible_count": 0,
+    "pass2_eligible_count": 3,
+    "normal_pass2_eligible_count": 3,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -107,5 +107,207 @@
       "complete": true
     }
   },
-  "items": []
+  "items": [
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1030840",
+      "taste_subject_key": "App_40990",
+      "appid": "40990",
+      "taste_fingerprint": "65a0e5edec382240a14c5267c28898ffdb7de0b26e56df23e48f98202d41e896",
+      "candidate_context_sha256": "8500eecdf9654c37739a65cf609c6d02b157295362946bffdc642f908c6db173",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "5c8c3e31b0b73099b307c8e28eb0f682458406c30311a443d089b5ae67fab84e",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Mafia",
+        "short_description": "It’s 1930. After an inadvertent brush with the mafia, cabdriver Tommy Angelo is reluctantly thrust into the world of organized crime. Initially, he is uneasy about falling in with the Salieri family, but soon the rewards become too big to ignore. As he rises through the ranks, the paydays keep getting bigger, but the jobs get even dirtier. Tommy may ultimately earn the respect of the Salieris, but becoming a Made Man will leave him more conflicted than ever with the new life he has chosen.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Crime",
+          "Open World",
+          "Singleplayer",
+          "Story Rich"
+        ],
+        "core_fit_count": 3,
+        "release_date": "28 Aug, 2002",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1030840",
+            "40990"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_40990.json",
+      "dossier_content_sha256": "8a8d6593ee74195a5e301a78d549a49a683f25fbb48e4a48786493907909eeef",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T11:49:54.392Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "87d89229459e5111df727d7137d40110f46f120dbcf971375532b08794a09a13",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--5c8c3e31b0b73099b307c8e28eb0f682458406c30311a443d089b5ae67fab84e--87d89229459e5111df727d7137d40110f46f120dbcf971375532b08794a09a13.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--5c8c3e31b0b73099b307c8e28eb0f682458406c30311a443d089b5ae67fab84e--87d89229459e5111df727d7137d40110f46f120dbcf971375532b08794a09a13.json",
+      "sequence": 1
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1030830",
+      "taste_subject_key": "App_1030830",
+      "appid": "1030830",
+      "taste_fingerprint": "17fc6989f171bfe34024313270a8c275b3e1670b91720d8b2ea1b0fd34f802f0",
+      "candidate_context_sha256": "a3a9b04731e819d3539a62708795bc2d4f9370ac8b6102279f3f97a4e337e263",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "a30109a4cc3a766fae1872f21092576b7dba674d7aaf3355681f365104c4918a",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Mafia II: Definitive Edition",
+        "short_description": "War hero Vito Scaletta becomes entangled with the mob in hopes of paying his father’s debts. Vito works to prove himself, climbing the family ladder with crimes of larger reward and consequence.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Adventure",
+          "Crime",
+          "Open World",
+          "Singleplayer",
+          "Story Rich"
+        ],
+        "core_fit_count": 3,
+        "release_date": "19 May, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1030830"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1030830.json",
+      "dossier_content_sha256": "c1534b8c4dcaa64e2490060013705879e5940c2dbba85d5567ebf551d55729ef",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T11:49:54.392Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "063b3ca73310be0353fd2605b63aa402d4bd4daef53ba0dd5f838e2a8972035b",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--a30109a4cc3a766fae1872f21092576b7dba674d7aaf3355681f365104c4918a--063b3ca73310be0353fd2605b63aa402d4bd4daef53ba0dd5f838e2a8972035b.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--a30109a4cc3a766fae1872f21092576b7dba674d7aaf3355681f365104c4918a--063b3ca73310be0353fd2605b63aa402d4bd4daef53ba0dd5f838e2a8972035b.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1032590",
+      "taste_subject_key": "App_1032590",
+      "appid": "1032590",
+      "taste_fingerprint": "65bb862489f3b6f30774ee58402489703f2c29c326e1f42e5e84fe2c2aca19a6",
+      "candidate_context_sha256": "913e49c5147fd77fbec955ce28d30fe497cb75ab8125d4e9ed71412c1255eefd",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "e82c8b51327f7e76d1e059e5858ee3b6d4deb27a4210a8f2f956c077c1c85650",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Heaven Dust",
+        "short_description": "When you awake, you find yourself in a mansion, where was the secret research center, is now a maze full of horrible zombies and deadly traps. You'll have to escape by overcoming your fears, collecting items, solving innovative puzzles and revealing the cruel truth.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Adventure",
+          "Horror",
+          "RPG",
+          "Story Rich",
+          "Survival Horror"
+        ],
+        "core_fit_count": 3,
+        "release_date": "26 Feb, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1032590"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1032590.json",
+      "dossier_content_sha256": "61c470b6018f531f5ad0c2e460b84090300b03ca040e220f794443e312d4fe71",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T11:49:54.392Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "9c2e410c04ae021d97edcf39c3de9ea582adfd442407bfb2d7862e6edf0a5a20",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--e82c8b51327f7e76d1e059e5858ee3b6d4deb27a4210a8f2f956c077c1c85650--9c2e410c04ae021d97edcf39c3de9ea582adfd442407bfb2d7862e6edf0a5a20.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--e82c8b51327f7e76d1e059e5858ee3b6d4deb27a4210a8f2f956c077c1c85650--9c2e410c04ae021d97edcf39c3de9ea582adfd442407bfb2d7862e6edf0a5a20.json",
+      "sequence": 3
+    }
+  ]
 }
