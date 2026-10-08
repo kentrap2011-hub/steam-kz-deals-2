@@ -106,6 +106,8 @@ The Director over-packed the continuation prompt with state the worker can read 
 
 Do not restate the entire task specification in the chat message when the canonical task file already contains it.
 
+- Restored backlog item `youtube-reviews`: planned game-page YouTube review block. Exact historical source/selection rules were not found in current main, so implementation must recover/freeze scope before coding.
+
 ## CURRENT PHYSICAL WORKER SLOTS
 
 ### ЧАТ 1 — DIAGNOSTIC COMPLETE
