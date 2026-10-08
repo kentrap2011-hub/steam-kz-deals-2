@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "e64a59c21fbfd61625e040f42335730e7c5b11ad",
+  "run_start_authority_commit": "36cc95b0cb6d0a30c3e11545b934f83b6a939e5e",
+  "run_started_at_utc": "2026-10-08T12:11:27+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "5a3ab68bc5606b29a6178d11b977e16ca9f8fa7e2c126628a84cbd4bff9fdd35",
+  "family_id": "game:1041720",
+  "taste_subject_key": "App_1041720",
+  "appid": "1041720",
+  "taste_fingerprint": "206f59f924373906d9cbba77fb5e05937ba60ec4ff3ae4e17b8b513b4526d043",
+  "candidate_context_sha256": "966a6af8b9d311e9621da8520535ad418e1b9fcbe47ff24632076026cbdac7e3",
+  "dossier_content_sha256": "e128308002912a0e8473bffb3c7002c208d75bad8924a76922d1cea6902bb702",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "06c1d68d069037857bc4f468313697e149a6e5bcb20fe4be23d711a654fdbe39",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Отзывчивые схватки с комбо, уклонениями и добычей снаряжения, вместе с развитием персонажа, попадают в часть важных предпочтений профиля к бою и понятному усилению героя.",
+    "Но масштабная одиночная RPG часто заполняет десятки часов побочными поручениями с повторяющимися боевыми и курьерскими целями; для редких игровых сессий это заметный риск насыщения и потери интереса.",
+    "Яркое фэнтези и фракционные задания частично смягчают повторяемость, но центральная история оценивается как обычная, а ремастер не меняет существенно старую структуру. Суммарно достаточных сильных крючков для долгой кампании не просматривается."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Многочисленные побочные задания могут сводиться к похожим доставкам и боям по однотипному шаблону в течение десятков часов — критичный риск утомления от неизменной формулы.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Красочный фэнтези-мир и разные враги могут поддерживать исследование, но для части игроков сюжет слишком обычный, чтобы сам по себе удерживать длинную кампанию.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Ремастер даёт сравнительно небольшие визуальные и системные отличия от старой версии; это не самостоятельное свидетельство низкого качества боевой системы.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Исторические русскоязычные отзывы отмечали неоднородность перевода, но не доказывают такого же состояния сегодня; у старой анимации и движения тоже встречаются шероховатости.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
