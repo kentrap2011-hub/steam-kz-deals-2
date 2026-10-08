@@ -45,7 +45,7 @@ Current approved and implemented direction:
 - PR #158 accepted and merged as `9c9d79194fba3ff22ad491d80257277a87fdcfaf`;
 - validations on PR head were green;
 - no Stage 1/Stage 2 scoring logic changed;
-- ЧАТ 1 PR #162 is merged, but live acceptance is NOT complete: post-merge deploy run 37767502828 failed in site-task UI regressions after marking `site-tasks` complete. Same Chat 1 needs a narrow closeout fix: remove the hard-coded pre-closeout forward count and make recent-completion selection stable enough that newly completed Deep Stage 1 is not accidentally evicted; then prove a successful Pages deploy.
+- ЧАТ 1 task-page work is fully accepted and published: PR #165 fixed the closeout regression and merged as `b9ad7aed7bcc76237fb3402a291cb632ac730598`; real Pages deploys 37768728895 and 37769122260 succeeded. ЧАТ 1 is complete and free.
 - PR #157 remains closed without merge as superseded.
 
 The older ~581 + ~1,720 reserve analysis below remains historical diagnostic evidence only and must not be turned into production gating unless the user explicitly reopens that decision.
@@ -141,7 +141,7 @@ Accepted PR:
 
 Deep Stage 1 is accepted and merged via PR #163 as `e410ee6183e29ec595f2c1fce1336751ceea9585`.
 
-Current ЧАТ 2 task `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md` is implementation-complete in PR #164 with green task-specific checks. Do NOT merge yet: its branch is stale against current main and contains older concurrent site-task/Director-state files. Same current Chat 2 must reconcile from fresh main, preserve unrelated current-main state exactly, reduce PR to intended task-specific changes, rerun checks, then stop for Director acceptance.
+Current ЧАТ 2 task `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md` is implementation-complete in PR #164 with green task-specific checks. Reconciliation is almost complete: the effective PR diff is task-specific except `CURRENT_TASK.md` still includes one stale unrelated site-task block claiming live Pages verification is pending. Same Chat 2 must remove that stale block, retain only its own minimal closeout note, rerun checks, then stop for Director acceptance.
 
 Branch:
 `implement/deep-stage2-calibration-worker-01`
