@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 147,
     "deep_completed_not_fit_count": 22,
     "deep_incomplete_or_recovery_count": 21,
-    "deep_waiting_for_dossier_count": 2111,
-    "deep_ready_or_pending_count": 0,
+    "deep_waiting_for_dossier_count": 2108,
+    "deep_ready_or_pending_count": 3,
     "deep_normal_first_pass_remaining_count": 2111,
     "deep_remaining_until_all_authoritative_count": 2132,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 15,
-    "dossier_waiting_count": 2111,
+    "dossier_waiting_count": 2108,
     "pass2_attempted_count": 190,
-    "pass2_eligible_count": 0,
-    "normal_pass2_eligible_count": 0,
+    "pass2_eligible_count": 3,
+    "normal_pass2_eligible_count": 3,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -107,5 +107,192 @@
       "complete": true
     }
   },
-  "items": []
+  "items": [
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:10500",
+      "taste_subject_key": "App_10500",
+      "appid": "10500",
+      "taste_fingerprint": "6ac7446fcd780d373a619529f59a8a6abfd73047ba92d21a9aaab173acc31316",
+      "candidate_context_sha256": "d987268995562a4ccd9ad64a8f16619e09b86de4857501109dddbe7e1afc582d",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "495f672f511eb43b2ca1e247dd61e3a952a7f05ec9d0d11f9606cf6fc5b2428e",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Total War: EMPIRE – Definitive Edition",
+        "short_description": "Command the seas, control the land, forge a new nation, and conquer the globe.",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "4 Mar, 2009",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "10500"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_10500.json",
+      "dossier_content_sha256": "feb550f64b922354d71215e7760ae0eac3a1ff112cf3d313baff029c7bf64180",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T12:46:08Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "96f5b25b5e727425a13418423c3c9218f9e6ce7f07442572fe6c74f7d67bbb4e",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--495f672f511eb43b2ca1e247dd61e3a952a7f05ec9d0d11f9606cf6fc5b2428e--96f5b25b5e727425a13418423c3c9218f9e6ce7f07442572fe6c74f7d67bbb4e.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--495f672f511eb43b2ca1e247dd61e3a952a7f05ec9d0d11f9606cf6fc5b2428e--96f5b25b5e727425a13418423c3c9218f9e6ce7f07442572fe6c74f7d67bbb4e.json",
+      "sequence": 1
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1052990",
+      "taste_subject_key": "App_1052990",
+      "appid": "1052990",
+      "taste_fingerprint": "df634ab83081ef263aaf7d47cb6545930dc6f6ebff38f6335c4d75fc51252338",
+      "candidate_context_sha256": "1ff846d1378f923007a8220d3cd081b9b5671fa65e28c6132fc624909548a3c9",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "1b6887b319e108d90aea34c0eab9ead690c46d14cc339bc90c139c3fc84aee53",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "A Monster's Expedition",
+        "short_description": "An adorable and relaxing open world puzzle adventure for monsters who love to learn about humans!",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Exploration",
+          "Open World"
+        ],
+        "core_fit_count": 1,
+        "release_date": "10 Sep, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1052990"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1052990.json",
+      "dossier_content_sha256": "ce75893c0e5991f44497af0cda83d959e4e49044d8c6198a2f797da20c90543d",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T12:46:08Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "eb84b5f8dadd334fc0c39ea3f6f813e8757ac0c47c9b4e970edd535901aef386",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--1b6887b319e108d90aea34c0eab9ead690c46d14cc339bc90c139c3fc84aee53--eb84b5f8dadd334fc0c39ea3f6f813e8757ac0c47c9b4e970edd535901aef386.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--1b6887b319e108d90aea34c0eab9ead690c46d14cc339bc90c139c3fc84aee53--eb84b5f8dadd334fc0c39ea3f6f813e8757ac0c47c9b4e970edd535901aef386.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1049410",
+      "taste_subject_key": "App_1049410",
+      "appid": "1049410",
+      "taste_fingerprint": "8853c5bdeca52d816c0fe19b8e589c28f91aa8622763b84e9aae3969104ddda0",
+      "candidate_context_sha256": "bb67c6fc1a551a344816ca92659c493643c019c60ad5d355ab63df72757eac62",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "220e2aed6f87ce4dfa1c40913a60d93213a46d1c19e65b9611f2d1b3aeb38223",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Superliminal",
+        "short_description": "Perception is reality. In this mind-bending first-person puzzler, you escape a surreal dream world through solving impossible puzzles using the ambiguity of depth and perspective.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Singleplayer"
+        ],
+        "core_fit_count": 0,
+        "release_date": "5 Nov, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1049410"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1049410.json",
+      "dossier_content_sha256": "fcdd70ad6d2b9bca7be10ecfc01529807b15344d283b1c312c0f7b48784bbfc9",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T12:46:08Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "3137944805364edd3f9f8489ed056842fa4228a82fcdc8a6f4a1526601ad29a7",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--220e2aed6f87ce4dfa1c40913a60d93213a46d1c19e65b9611f2d1b3aeb38223--3137944805364edd3f9f8489ed056842fa4228a82fcdc8a6f4a1526601ad29a7.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--220e2aed6f87ce4dfa1c40913a60d93213a46d1c19e65b9611f2d1b3aeb38223--3137944805364edd3f9f8489ed056842fa4228a82fcdc8a6f4a1526601ad29a7.json",
+      "sequence": 3
+    }
+  ]
 }
