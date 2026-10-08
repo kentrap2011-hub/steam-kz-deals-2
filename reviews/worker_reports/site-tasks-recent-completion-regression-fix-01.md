@@ -3,7 +3,7 @@
 - Task: `WORKER_TASK_SITE_TASKS_RECENT_COMPLETION_REGRESSION_FIX_01.md`
 - Source of truth: `main`; narrow fix branch: `fix/site-tasks-recent-completion-regression-01`.
 - Scope: test/fixture expectations for the capped recent-completion task display only.
-- Status: implementation complete; PR CI validation and post-merge Pages confirmation are separate gates.
+- Status: implementation complete; focused PR CI validated; post-merge Pages confirmation is a separate gate.
 
 ## Root cause and canonical behavior
 
@@ -21,7 +21,8 @@ No generator, plan, task status, task order, UI implementation, publication work
 
 - CI workflow `Validate site task registry and page` executes Python syntax checks, `node --check web/tasks.js`, `node web/tasks.test.js`, the eleven `scripts/test_site_tasks.py` regressions and static build/validate round trip.
 - The full publication workflow's additional existing UI regressions can only be truthfully marked passed after the appropriate GitHub Actions execution; a successful task-registry PR check alone does not prove a Pages deployment.
-- **PR check outcome:** pending recording from GitHub Actions.
+- **PR check outcome: PASS** for head `ac1060a5083660f29ff28317858135d37ebc7d71`: `Validate site task registry and page` run `37785564554` succeeded (11 Python tests, JavaScript UI test, syntax checks, build `forward=19`, validate round trip); `Validate backlog dispositions` run `37785564790` succeeded.
+- **Before-fix main reproduction:** `Deploy visual mailing` run `37784813107` failed at `Run UI regressions` with four old Python assertions (`test_full_forward_backlog_and_mobile_nav`, `test_stage1_merged_and_next_deep_task_planned_with_full_backlog`, `test_closeout_does_not_evict_recent_deep_stage1`, `test_recent_completion_uses_precise_time_not_same_day_id`). Its subsequent static tasks generation / Pages steps were skipped. PR check now passes those replacement invariants.
 - **Actual merged-main `Deploy visual mailing` / Pages confirmation:** pending merge and later observed GitHub Actions result; this worker must not claim it before it happens.
 
 ## Ownership and boundaries
