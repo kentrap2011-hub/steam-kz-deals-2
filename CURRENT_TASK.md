@@ -1,5 +1,19 @@
 # CURRENT TASK
 
+## COMPLETE — Deep Fast removal and ranking migration preparation 01
+Статус: `implementation_complete_ready_for_director_review`.
+- task: `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`;
+- PR #164; branch `implement/deep-fast-removal-ranking-migration-01`;
+- frozen two-stage interface unchanged, code strictly `implemented_not_active` until dedicated atomic integration;
+- isolated post-cutover scorer accepts only exact current Stage-1 accepted + Stage-2 calibrated state; no Fast/old Deep score, provisional score, card reason or rating-derived arithmetic fallback;
+- 0–56 calibrated + deterministic Wishlist 0/+4 = personal 0–60, plus existing deterministic purchase 0–40 = combined 0–100; no independent risk/duration/achievement arithmetic;
+- incomplete/not-yet-calibrated cards have null semantic/total score and purchase-only operational order; Stage-1 not-fit has no positive priority rank;
+- new `scripts/deep_two_stage_ranking.py`, targeted tests and CI workflow; legacy consumer/removal inventory in `reviews/worker_reports/deep-fast-removal-ranking-migration-01.md`;
+- reconciled-head validation: ranking run `37767471591` success, backlog run `37767471631` success; PASS 2 core `37767464492` in progress at report edit;
+- no producer/frontend/contract active changes, no mass migration, semantic backlog, Scheduled Task, UI work or cutover;
+- stop boundary: Director reviews PR/report; integration/cutover belongs to a separate task.
+
+
 ## COMPLETE — Site current tasks page 01
 Статус: `implementation_complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`;
