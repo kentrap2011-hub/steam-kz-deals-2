@@ -10,7 +10,7 @@
 
 Implemented a separate mobile/desktop Russian **Задачи проекта** page at `web/tasks.html`, reachable from the site's top navigation. It displays the **full currently known forward plan**, not just assigned workers or the nearest queue entries. It separates *В работе / Запланировано / Ожидает / заблокировано*; a tiny recently completed block is optional and currently contains two recent entries.
 
-The canonical machine-readable companion `config/director_task_plan.json` contains **24 known task entries: 6 active + 11 planned + 3 blocked + 4 completed** (20 unfinished forward tasks). Planned entries include unassigned items from the product queue, the frozen Deep integration map, the later queue, and follow-ups recorded in Director state. Every item carries the short Russian goal, status, optional worker slot, known ordering/priority, dependency/blocker when known, **трудоёмкость** with reason, **срочность** with reason, and a per-task update timestamp. The page displays the actual plan-curation date and the generated site-snapshot timestamp separately, highlighting when the plan becomes stale.
+The canonical machine-readable companion `config/director_task_plan.json` contains **24 known task entries: 5 active + 11 planned + 3 blocked + 5 completed** (19 unfinished forward tasks). Planned entries include unassigned items from the product queue, the frozen Deep integration map, the later queue, and follow-ups recorded in Director state. Every item carries the short Russian goal, status, optional worker slot, known ordering/priority, dependency/blocker when known, **трудоёмкость** with reason, **срочность** with reason, and a per-task update timestamp. The page displays the actual plan-curation date and the generated site-snapshot timestamp separately, highlighting when the plan becomes stale.
 
 Completed historical Director archive sections are **not** projected as outstanding tasks. The rejected first-wave/reserve semantic gating is **not** revived. The superseded publication-freshness sentinel does **not** enter the forward backlog.
 
@@ -34,6 +34,16 @@ Completed historical Director archive sections are **not** projected as outstand
 - Existing PR checks at the same head: **Validate site publication resilience** run **37765201944**, **Validate package purchase value** **37765201923**, **Validate backlog dispositions** **37765202175**, **Validate Progressive PASS 2 core** **37765202252** — all **success**.
 - Initial site-tasks check **37765048852** exposed an incorrect inclusion of the Board's explicitly **superseded** publication-freshness task; the forward-section parser was corrected to omit explicit superseded/cancelled lines. Later check **37765202110** passed.
 - Current PR **#162**, `implement/site-current-tasks-page-01` -> `main`: open and mergeable when last checked.
+
+## PR #163 / main reconciliation — 2026-10-08
+
+- Verified PR #163 is **merged** in main, merge commit `e410ee6183e29ec595f2c1fce1336751ceea9585`. Stage 1 is implemented but remains non-active at runtime until integration.
+- `deep-stage1` changed from `active` to `complete`; it remains visible in the small recent-completions section, but no longer appears under ongoing workers.
+- The next approved ЧАТ 2 task is `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`. It is **planned**, not already running, order #3 in the Deep sequence, and visibly reserved for `ЧАТ 2 (следующий)`.
+- Integration/cutover remains **blocked** until Fast/ranking migration and Deep mirror UI are accepted; prior Stage 1 and Stage 2 implementations are not restarted.
+- **All 24 known tasks remain:** 5 active, 11 planned, 3 blocked and 5 completed; all **19 unfinished** tasks remain in the forward backlog, including unrelated Steam and later unassigned work.
+- PR #162 is refreshed against `main` using a two-parent Git merge that retains newer Stage-1 state and files; no changes to other workstreams.
+- Added a regression requiring Stage 1 completed, next Deep step planned and original backlog preserved.
 
 ## Remaining acceptance boundary
 
