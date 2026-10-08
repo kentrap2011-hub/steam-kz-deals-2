@@ -49,9 +49,9 @@ PRIVATE_QUERY_KEYS = {
 }
 PRIVATE_PATH = re.compile(r"/(?:id|profiles?|users?|u|authors?)/[^/]+(?:/|$)", re.I)
 PRIVATE_TEXT = re.compile(
-    r"(?i)(?:\\b(?:username|display[ _-]?name|author|profile)\\s*[:=]|"
+    r"(?i)(?:\b(?:username|display[ _-]?name|author|profile)\s*[:=]|"
     r"(?<![a-z0-9_])@[a-z0-9_][a-z0-9_.-]{1,}|"
-    r"\\b(?:u|user)/[a-z0-9_][a-z0-9_.-]{1,})"
+    r"\b(?:u|user)/[a-z0-9_][a-z0-9_.-]{1,})"
 )
 RAW_QUOTE = re.compile(r'["“”«»]')
 
