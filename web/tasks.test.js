@@ -10,7 +10,7 @@ function node(tag){
 }
 const elements={tasksMain:node("main"),tasksCounters:node("div"),tasksFreshness:node("div")};
 const doc={createElement:node,getElementById:id=>elements[id]};
-const base=(id,status)=>({id,title:"Проверка "+id,goal:"Показать результат",status,worker_slot:null,order:null,depends_on:[],blocker:"",effort:"низкая",effort_reason:"Одна страница",urgency:"обычная",urgency_reason:"Без блокеров",updated_on:"2026-10-08"});
+const base=(id,status)=>({id,title:"Проверка "+id,goal:"Показать результат",status,worker_slot:null,order:null,depends_on:[],blocker:"",effort:"низкая",effort_reason:"Одна страница",urgency:"обычная",urgency_reason:"Без блокеров",updated_on:"2026-10-08",updated_at_utc:"2026-10-08T10:36:42Z"});
 const a=base("active-1","active");
 const b=base("planned-1","planned");b.depends_on=["old-complete"];b.worker_slot=null;b.order={track:"Очередь",position:5};
 const c=base("blocked-1","blocked");c.blocker="Ожидает подтверждения";
