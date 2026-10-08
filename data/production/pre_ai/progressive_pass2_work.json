@@ -51,15 +51,15 @@
   },
   "scope": {
     "deep_total_current_coverage_target": 2301,
-    "deep_first_pass_attempted_count": 187,
-    "deep_authoritative_completed_count": 166,
-    "deep_completed_fit_count": 145,
-    "deep_completed_not_fit_count": 21,
+    "deep_first_pass_attempted_count": 190,
+    "deep_authoritative_completed_count": 169,
+    "deep_completed_fit_count": 147,
+    "deep_completed_not_fit_count": 22,
     "deep_incomplete_or_recovery_count": 21,
     "deep_waiting_for_dossier_count": 2111,
-    "deep_ready_or_pending_count": 3,
-    "deep_normal_first_pass_remaining_count": 2114,
-    "deep_remaining_until_all_authoritative_count": 2135,
+    "deep_ready_or_pending_count": 0,
+    "deep_normal_first_pass_remaining_count": 2111,
+    "deep_remaining_until_all_authoritative_count": 2132,
     "deep_normal_first_pass_complete": false,
     "deep_all_current_authoritative_complete": false,
     "recovery_owned_count": 21,
@@ -67,9 +67,9 @@
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 15,
     "dossier_waiting_count": 2111,
-    "pass2_attempted_count": 187,
-    "pass2_eligible_count": 3,
-    "normal_pass2_eligible_count": 3,
+    "pass2_attempted_count": 190,
+    "pass2_eligible_count": 0,
+    "normal_pass2_eligible_count": 0,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -107,198 +107,5 @@
       "complete": true
     }
   },
-  "items": [
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:1046030",
-      "taste_subject_key": "App_1046030",
-      "appid": "1046030",
-      "taste_fingerprint": "b6ac8de1f2497ed9121761217f370ced2212edc1c1c9340e1096d99eb51f3cac",
-      "candidate_context_sha256": "878ca9901b1f87d5df9989dd58d4c57d79dce05ecd85d886a813ac7e3c55f4d9",
-      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
-      "work_id": "737b00da454f9823d158c0f7e603e632aa24c1bb4cfc5b02265dcdd923ba814b",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "ISLANDERS",
-        "short_description": "ISLANDERS is a minimalist strategy game about building cities on colorful islands.",
-        "bundle_members": [],
-        "fit_tags": [],
-        "core_fit_count": 0,
-        "release_date": "4 Apr, 2019",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1046030"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1046030.json",
-      "dossier_content_sha256": "c783b957db4e235283d82d8f4409b691f5ced7d4295751e66913d1109e9f2a92",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-28T12:19:23.007Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "70895f11aa3a2d84d820ac1cd4ed2f3490c377152d691c325d70dc59727ecd0e",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--737b00da454f9823d158c0f7e603e632aa24c1bb4cfc5b02265dcdd923ba814b--70895f11aa3a2d84d820ac1cd4ed2f3490c377152d691c325d70dc59727ecd0e.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--737b00da454f9823d158c0f7e603e632aa24c1bb4cfc5b02265dcdd923ba814b--70895f11aa3a2d84d820ac1cd4ed2f3490c377152d691c325d70dc59727ecd0e.json",
-      "sequence": 1
-    },
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:1045720",
-      "taste_subject_key": "App_1045720",
-      "appid": "1045720",
-      "taste_fingerprint": "86531bb9ef441d6bdce138f1da40346a48125dd4ec4f0e43b80d7c02a8f176fb",
-      "candidate_context_sha256": "02e120c9a2cd0b9cfbdfebec63a23bcab71dc4c112b146b38e9462e6a9ff7ba8",
-      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
-      "work_id": "892f4fbe2eadd4cf920aee94ae00d51115e8f2248b5e05fade28160e80051178",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "The Coma 2: Vicious Sisters",
-        "short_description": "The Coma 2: Vicious Sisters is a Korean survival horror-adventure. Venture from your deserted school to survive the horrors of the night. Explore the surrounding Sehwa district and uncover the shadow realm's dark secrets. Use everything at your disposal to avoid a demoness hellbent on killing you!",
-        "bundle_members": [],
-        "fit_tags": [
-          "Action",
-          "Adventure",
-          "Horror",
-          "Singleplayer",
-          "Survival Horror"
-        ],
-        "core_fit_count": 2,
-        "release_date": "28 Jan, 2020",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1045720"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1045720.json",
-      "dossier_content_sha256": "22ea6fe4cc4200b41395bbcedb5bf1891dfb72b463dbf13ef2ca834ac71fe9fc",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-28T12:19:23.007Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "d04096b386f66e2709592f45b59689f02678645d43ad98d0dafe542901916a4d",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--892f4fbe2eadd4cf920aee94ae00d51115e8f2248b5e05fade28160e80051178--d04096b386f66e2709592f45b59689f02678645d43ad98d0dafe542901916a4d.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--892f4fbe2eadd4cf920aee94ae00d51115e8f2248b5e05fade28160e80051178--d04096b386f66e2709592f45b59689f02678645d43ad98d0dafe542901916a4d.json",
-      "sequence": 2
-    },
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:1042800",
-      "taste_subject_key": "App_1042800",
-      "appid": "1042800",
-      "taste_fingerprint": "5a944bee7e8ed2c7971c3381865b6e79029cb61e9fa383b367141a74ad012742",
-      "candidate_context_sha256": "42c437911ce5bafd774d69df18aaeb37997e0d87728a9f5870ae248aff9b1a77",
-      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
-      "work_id": "8f974d086ea8ae6f883c43bb7c56b526d4c3ddd0b99bb4132c059c492810da8f",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Warhammer 40,000: Inquisitor - Prophecy",
-        "short_description": "Foul Tyranids rampaging on barren worlds; the mysterious Aeldari waging war on the Imperium; a prophecy that could change the fate of an entire Sector. Purge the unclean with the new Tech-Adept Inquisitor and carry out the Emperor’s will in the grim Action-RPG “WH40k: Inquisitor - Prophecy”.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Action",
-          "Action RPG",
-          "Adventure",
-          "Hack and Slash",
-          "RPG"
-        ],
-        "core_fit_count": 2,
-        "release_date": "30 Jul, 2019",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1042800"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1042800.json",
-      "dossier_content_sha256": "6bba2b9338e41f6ad7f0508ef66951bdfbd5980530ddfa3902126d57375c520a",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-28T12:19:23.007Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "cc9d1039a3aaffb653e055e3d7e5857c17ad22633b4338efdad3f521e850c5d7",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--8f974d086ea8ae6f883c43bb7c56b526d4c3ddd0b99bb4132c059c492810da8f--cc9d1039a3aaffb653e055e3d7e5857c17ad22633b4338efdad3f521e850c5d7.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--8f974d086ea8ae6f883c43bb7c56b526d4c3ddd0b99bb4132c059c492810da8f--cc9d1039a3aaffb653e055e3d7e5857c17ad22633b4338efdad3f521e850c5d7.json",
-      "sequence": 3
-    }
-  ]
+  "items": []
 }
