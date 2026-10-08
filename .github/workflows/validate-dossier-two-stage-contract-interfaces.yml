@@ -1,0 +1,33 @@
+name: Validate inactive Dossier two-stage interfaces
+
+on:
+  pull_request:
+    paths:
+      - "config/dossier_*v1.schema.json"
+      - "config/dossier_two_stage_interfaces_contract.json"
+      - "scripts/dossier_two_stage_contract_guard.py"
+      - "scripts/test_dossier_two_stage_contract_schemas.py"
+      - ".github/workflows/validate-dossier-two-stage-contract-interfaces.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  offline-contract-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out PR
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install offline schema validator dependency
+        run: python -m pip install "jsonschema>=4.21,<5"
+      - name: Strict two-stage P1 schema and contract fixtures
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_contract_schemas.py' -v
+      - name: Existing one-stage Dossier factual date regression
+        run: python -m unittest discover -s scripts -p 'test_taste_dossier_github_date_derivation.py' -v
+      - name: Existing Dossier and Deep release-year identity compatibility regression
+        run: python -m unittest discover -s scripts -p 'test_dossier_deep_release_year_identity_compatibility.py' -v
