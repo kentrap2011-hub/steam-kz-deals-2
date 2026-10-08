@@ -9,7 +9,7 @@
 
 - **Context discipline:** new Director must stay shallow. Use `DIRECTOR_HANDOFF_CURRENT.md` + this top section only; do not broadly inspect code/history. Deep implementation analysis belongs in worker chats.
 - **Mandatory first response in new Director chat:** answer the user's three pending questions about (1) concrete deferred-game examples and why reserve is not deletion, (2) why PR #157 exists/diverged, and (3) why the previous Chat 2 continuation message was too long.
-- **ЧАТ 1:** site tasks page PR #162 and post-merge closeout fix PR #165 are **merged and accepted**. Canonical `site-tasks` is **complete**; all 18 unfinished forward tasks remain. Recent-completion sorting uses exact UTC timestamp, keeping accepted Deep Stage 1 visible. PR #165 validations passed (`37768566594`, `37768566812`) and real Pages deployment **#37768728895 succeeded** (`Run UI regressions`, static `forward=18`, JSON validation, Pages artifact and GitHub Pages deployment all green). Worker report `reviews/worker_reports/site-current-tasks-page-01.md` is final; ЧАТ 1 closeout finished, no Scheduled Task changes.
+- **ЧАТ 1:** site tasks page work is complete and accepted. Physical slot is now assigned to `WORKER_TASK_HISTORICAL_UNIMPLEMENTED_BACKLOG_AUDIT_01.md`: diagnostic-only recovery of all older planned-but-unimplemented tasks that may have disappeared from the new forward registry. YouTube reviews are only one known example; worker must search historical planning evidence and classify every candidate before Director restores anything.
 - **ЧАТ 2:** PR #164 is now substantially reconciled and task-specific checks are green. Net task diff is limited to the new Fast-free ranking scorer, its regression/workflow, worker report and `CURRENT_TASK.md`. One stale unrelated block still remains in `CURRENT_TASK.md`: it says the site-task closeout is pending live Pages verification, but ЧАТ 1 already proved successful Pages deployments. Do not merge yet; SAME current ЧАТ 2 must remove that stale unrelated site block, keep only its own minimal closeout note, rerun checks, and stop for Director acceptance.
 - PR #156 architecture freeze remains accepted and must not be re-audited without direct contradiction.
 - No Scheduled Task changes are authorized.
@@ -28,7 +28,6 @@ User revised worker allocation:
 - Final integration/cutover remains `WORKER_TASK_DEEP_TWO_STAGE_INTEGRATION_CUTOVER_01.md`.
 
 
-- **Restored planned task — YouTube reviews:** add a game-page block with relevant YouTube reviews. The old detailed selection rules are not currently present in main, so implementation must first recover/freeze that exact product scope rather than inventing source/channel rules. This task must remain visible in the full planned backlog.
 
 ## QUEUED PRODUCT WORK — 2026-10-04
 
