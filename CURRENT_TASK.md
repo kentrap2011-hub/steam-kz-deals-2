@@ -1,20 +1,15 @@
 # CURRENT TASK
 
 ## COMPLETE — Site current tasks page 01
-Статус: `implementation_complete_ready_for_director_acceptance`.
-- task: `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`;
-- PR: `#162` — `Add complete public Director task page with forward backlog`;
-- branch: `implement/site-current-tasks-page-01`;
-- canonical companion: `config/director_task_plan.json` — 24 known tasks, including 19 active/planned/blocked forward tasks; all unassigned future entries are retained;
-- new standalone Russian page: `web/tasks.html`; top site navigation, responsive mobile/desktop, complete status/order/dependency, effort/urgency rationale and visible update times;
-- existing read-only GitHub Pages deploy generates public static `web/data/tasks.json` from the canonical registry; validation guards missing Board/Deep map planned tasks, cycles, unsafe public fields;
-- PR run `37765202110` site-task registry/UI success before accepted Stage 1 sync; sibling site publication resilience `37765201944`, package `37765201923`, backlog `37765202175` and PASS 2 `37765202252` all success on tested implementation head;
-- earlier red site check was fixed by excluding explicitly superseded Director Board entries from current forward scope;
-- report: `reviews/worker_reports/site-current-tasks-page-01.md`;
-- PR #163 Stage 1 merged, so `deep-stage1` is complete and Fast-removal/ranking migration is the next planned Deep task for a NEW ЧАТ 2; full backlog preserved; no other ongoing tasks deleted or modified, no scheduler/Scheduled Task or semantic/Steam/ranking changes;
-- accepted Stage 1 PR #163 merged; `deep-stage1` now completed, next Deep Fast/removal/ranking migration planned for a NEW ЧАТ 2; total known 24 / forward unfinished 19;
-- reconciled PR-head `f29c0c8d444e88bb03904f03d044ee5e84c952ec` five green checks: tasks `37766869091`, PASS 2 `37766869134`, backlog `37766869308`, publication resilience `37766869082`, package `37766868939`;
-- pending: PR merge and ordinary Pages publication/live acceptance; close `site-tasks` in canonical registry when Director accepts live rollout; worker stops at this task boundary.
+Статус: `closeout_fix_merged_pending_live_pages_verification`.
+- task: `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`; original implementation PR #162 already merged.
+- bounded closeout fix: PR #165 merged as `b9ad7aed7bcc76237fb3402a291cb632ac730598`, branch `fix/site-tasks-closeout-publication-01`.
+- original post-merge Pages failure: run `37767623563` failed UI regression because `known_forward_count` was pinned at 19 and sorting by date-only ID hid recently accepted Deep Stage 1.
+- site tests now derive all open task IDs/count from canonical registry; recently completed tasks sort by exact UTC timestamp. A simulated completion regression verifies Stage 1 is still visible.
+- canonical registry currently has 24 known tasks, 18 unfinished (4 active + 11 planned + 3 blocked), 6 completed; `site-tasks` status `complete`, Deep Stage 1 remains recently completed; all other planned backlog retained.
+- PR #165 checks passed: site tasks `37768566594`, backlog dispositions `37768566812`.
+- pending: successful actual Pages deployment and live verification on the merged main; no Scheduled Task, semantic execution, Steam, Fast, ranking or other project task affected.
+- durable report: `reviews/worker_reports/site-current-tasks-page-01.md`.
 
 ## COMPLETE — Deep Stage 1 independent analysis worker implementation 01
 Статус: `implementation_complete_ready_for_review`.
