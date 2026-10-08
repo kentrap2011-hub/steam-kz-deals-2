@@ -134,6 +134,10 @@
   root.setScoreDetailsExpanded=setScoreDetailsExpanded;
   root.toggleScoreDetails=toggleScoreDetails;
   root.renderPriority=function(g){
+    if(root.DeepTwoStageUI?.active(g)){
+      if(baseRenderPriority)return baseRenderPriority(g);
+      return;
+    }
     const factors=Array.isArray(g?.priority_factors)?g.priority_factors:[];
     const score=g?.score_breakdown||null;
     const section=typeof $==='function'?$('prioritySection'):null;
