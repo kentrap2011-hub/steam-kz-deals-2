@@ -150,11 +150,13 @@ def validate_research(document, *, expected_assignment=None):
         source[ref] = row
         key = _locator(row["locator"])
         if row["normalized_locator"] is not None:
-            if not row["normalized_locator"].startswith(("https://", "ref:")):
+            normalized = row["normalized_locator"]
+            if normalized.startswith("https://"):
+                _locator({"url": normalized})
+            elif normalized.startswith("ref:"):
+                _locator({"public_ref": normalized[4:]})
+            else:
                 _fail("normalized locator not safely typed")
-        _locator({"url": row["normalized_locator"]} if
-                 row["normalized_locator"] and row["normalized_locator"].startswith("https://")
-                 else None)
         dedupe = row["physical_source_identity"] or key
         if dedupe in physical:
             _fail("duplicate physical source / alias")
@@ -251,6 +253,13 @@ def validate_research_receipt(receipt, package):
         _fail("accepted Research contract binding mismatch")
     if receipt["research_package_sha256"] != validate_research(package):
         _fail("accepted Research package hash mismatch")
+    a = package["assignment"]
+    expected_path = (
+        f"data/ai_inbox/dossier_research/{a['snapshot_id']}/"
+        f"g{a['group_sequence']:06d}/{a['appid']}--{a['assignment_id']}.json"
+    )
+    if receipt["research_package_path"] != expected_path:
+        _fail("accepted Research transport path mismatch")
     ident = package["identity"]
     got = receipt["accepted_identity"]
     if (got["appid"] != package["assignment"]["appid"]
@@ -290,7 +299,7 @@ def validate_assembly_result(result, work, package):
             _fail("Stage B immutable binding mismatch: " + key)
     if result["accepted_research_package_sha256"] != work["accepted_research"]["research_package_sha256"]:
         _fail("Stage B stale/unaccepted Research package hash")
-    if result["accepted_research_receipt_blob_sha"] != work["accepted_research"]["research_package_blob_sha"]:
+    if result["accepted_research_receipt_blob_sha"] != work["accepted_research_receipt_blob_sha"]:
         _fail("Stage B accepted receipt authority mismatch")
     if result["payload"]["status"] != result["outcome"]:
         _fail("ambiguous Assembly typed outcome")
