@@ -14,7 +14,7 @@
     if(payload.groups.length!==4||payload.groups.some((g,i)=>g.status!==STATUSES[i]||!Array.isArray(g.tasks)||g.count!==g.tasks.length))throw new Error("Неполная группировка задач");
     const tasks=payload.groups.flatMap(g=>g.tasks);
     if(new Set(tasks.map(t=>t.id)).size!==tasks.length)throw new Error("Повторяющиеся задачи");
-    if(tasks.some(t=>!t.id||!t.title||!t.goal||!t.effort_reason||!t.urgency_reason||!t.updated_on||!Array.isArray(t.depends_on)))throw new Error("Некорректная задача");
+    if(tasks.some(t=>!t.id||!t.title||!t.goal||!t.effort_reason||!t.urgency_reason||!t.updated_on||!t.updated_at_utc||!Array.isArray(t.depends_on)))throw new Error("Некорректная задача");
     if(tasks.filter(t=>t.status!=="complete").length!==payload.known_forward_count)throw new Error("Неполный список");
     if(!payload.task_titles||tasks.some(t=>payload.task_titles[t.id]!==t.title||t.depends_on.some(id=>!payload.task_titles[id])))throw new Error("Нарушенные зависимости");
     return tasks;
@@ -53,7 +53,8 @@
     }
     article.appendChild(factors);
     const meta=el(doc,"div","task-details");
-    addText(meta,doc,"div","", "Обновлено: "+dateLabel(task.updated_on));
+    const exactTime=new Date(task.updated_at_utc);
+    addText(meta,doc,"div","","Обновлено: "+(Number.isNaN(exactTime.getTime())?dateLabel(task.updated_on):exactTime.toLocaleString("ru-RU")));
     if(task.depends_on.length){
       const deps=task.depends_on.map(id=>titles.get(id)||"Неизвестная задача ("+id+")");
       addText(meta,doc,"div","task-dependency","После: "+deps.join("; "));
