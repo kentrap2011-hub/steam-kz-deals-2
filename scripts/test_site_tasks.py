@@ -46,7 +46,7 @@ class SiteTasksTests(unittest.TestCase):
         self.assertEqual(len(by_id["deep-cutover"]["depends_on"]), 4)
         for entry in by_id.values():
             for field in ("goal", "status", "effort", "effort_reason", "urgency",
-                          "urgency_reason", "updated_on"):
+                          "urgency_reason", "updated_on", "updated_at_utc"):
                 self.assertTrue(entry[field], (entry["id"], field))
             self.assertNotIn("task_file", entry)
             self.assertNotIn("secret", str(entry).lower())
