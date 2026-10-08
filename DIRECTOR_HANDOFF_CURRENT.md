@@ -106,7 +106,7 @@ The Director over-packed the continuation prompt with state the worker can read 
 
 Do not restate the entire task specification in the chat message when the canonical task file already contains it.
 
-- Restored backlog item `youtube-reviews`: planned game-page YouTube review block. Exact historical source/selection rules were not found in current main, so implementation must recover/freeze scope before coding.
+- ЧАТ 1 next task: `WORKER_TASK_HISTORICAL_UNIMPLEMENTED_BACKLOG_AUDIT_01.md`. Diagnostic only. Recover all old planned-but-unimplemented tasks from repository history; YouTube reviews are one remembered example, not a single-item restoration. Do not mutate the canonical backlog until Director reviews the report.
 
 ## CURRENT PHYSICAL WORKER SLOTS
 
