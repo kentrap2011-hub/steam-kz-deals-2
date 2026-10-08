@@ -23,7 +23,7 @@ No generator, plan, task status, task order, UI implementation, publication work
 - The full publication workflow's additional existing UI regressions can only be truthfully marked passed after the appropriate GitHub Actions execution; a successful task-registry PR check alone does not prove a Pages deployment.
 - **PR check outcome: PASS** for head `ac1060a5083660f29ff28317858135d37ebc7d71`: `Validate site task registry and page` run `37785564554` succeeded (11 Python tests, JavaScript UI test, syntax checks, build `forward=19`, validate round trip); `Validate backlog dispositions` run `37785564790` succeeded.
 - **Before-fix main reproduction:** `Deploy visual mailing` run `37784813107` failed at `Run UI regressions` with four old Python assertions (`test_full_forward_backlog_and_mobile_nav`, `test_stage1_merged_and_next_deep_task_planned_with_full_backlog`, `test_closeout_does_not_evict_recent_deep_stage1`, `test_recent_completion_uses_precise_time_not_same_day_id`). Its subsequent static tasks generation / Pages steps were skipped. PR check now passes those replacement invariants.
-- **Actual merged-main `Deploy visual mailing` / Pages confirmation:** pending merge and later observed GitHub Actions result; this worker must not claim it before it happens.
+- **Initial PR #170 post-merge Pages acceptance:** superseded by the bounded lifecycle follow-up below; real Pages success after follow-up PR #172 is recorded there.
 
 ## Ownership and boundaries
 
@@ -39,5 +39,8 @@ Narrow follow-up `fix/site-tasks-lifecycle-regression-02`: in `scripts/test_site
 
 ### Follow-up acceptance
 
-- **Focused PR and CI:** pending.
-- **Actual merged-main Pages deploy:** pending.
+- **Follow-up PR #172** `Fix remaining site task lifecycle assertions after Deep site completion`: merged into `main`, merge commit `31f5049c1366c59a125ed73db2e74cf5e77e1b72` (squash).
+- **Focused PR CI: PASS.** `Validate site task registry and page` run `37802743158`: 11 Python tests, JS UI test, static generation (`forward=17`) and validation succeeded; `Validate backlog dispositions` run `37802743292`: success.
+- **Real merged-main Pages deploy: PASS.** `Deploy visual mailing` run `37803117331` (post-merge, executed `Checkout current main`) finished success. `Run UI regressions`, `Generate static Director task page data from canonical GitHub plan` (`SITE_TASKS=built forward=18`, `SITE_TASKS=validated`), `Upload Pages artifact`, and `Deploy to GitHub Pages` each finished success. Published environment URL: `https://kentrap2011-hub.github.io/steam-kz-deals-2/`.
+- **Independent transient observation (not part of this test fix):** one intermediate deploy encountered a Deep site-status scope mismatch (`deep_first_pass_attempted_count status=202 source=203`); the later successful GitHub-owned run passed the same status validation without any worker changes to Deep. Concurrent production pushes cancelled earlier deployments. No unrelated code was changed to work around these outcomes.
+- **Final status:** `complete_published_pages_verified_by_github_actions`. Worker stopped, no further task started.
