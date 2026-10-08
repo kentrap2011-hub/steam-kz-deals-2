@@ -60,7 +60,10 @@ class SiteTasksTests(unittest.TestCase):
         self.assertIn("Stage 1 accepted and merged via PR #163", self.board)
         self.assertIn("WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md", self.board)
         payload = self.build()
-        self.assertEqual(payload["known_forward_count"], 19)
+        expected_forward = {i["id"] for i in self.plan["items"] if i["status"] != "complete"}
+        actual_forward = {t["id"] for g in payload["groups"] if g["status"] != "complete" for t in g["tasks"]}
+        self.assertEqual(payload["known_forward_count"], len(expected_forward))
+        self.assertEqual(actual_forward, expected_forward)
         statuses = {g["status"]: {t["id"]: t for t in g["tasks"]} for g in payload["groups"]}
         self.assertNotIn("deep-stage1", statuses["active"])
         self.assertIn("deep-stage1", statuses["complete"])
@@ -71,7 +74,34 @@ class SiteTasksTests(unittest.TestCase):
         self.assertIn("deep-cutover", statuses["blocked"])
         self.assertIn("steam-prefilter", statuses["planned"])
         self.assertIn("architecture-cleanup", statuses["planned"])
-        self.assertEqual(len(payload["task_titles"]), 24)
+        self.assertEqual(set(payload["task_titles"]), {i["id"] for i in self.plan["items"]})
+
+    def test_closeout_does_not_evict_recent_deep_stage1(self):
+        """Completing the site page must not falsify a dynamic count or hide fresh Stage 1."""
+        plan = copy.deepcopy(self.plan)
+        by_id = {item["id"]: item for item in plan["items"]}
+        site = by_id["site-tasks"]
+        site.update(status="complete", recent_completion=True, blocker="",
+                    updated_on="2026-10-08", updated_at_utc="2026-10-08T11:02:09Z")
+        payload = self.build(plan)
+        unfinished = {item["id"] for item in plan["items"] if item["status"] != "complete"}
+        displayed = {t["id"] for g in payload["groups"] if g["status"] != "complete" for t in g["tasks"]}
+        self.assertEqual(payload["known_forward_count"], len(unfinished))
+        self.assertEqual(displayed, unfinished)
+        recent = [item["id"] for item in payload["groups"][3]["tasks"]]
+        self.assertLessEqual(len(recent), 3)
+        self.assertEqual(recent[:2], ["site-tasks", "deep-stage1"])
+        self.assertNotIn("deep-stage1", displayed)
+
+    def test_recent_completion_uses_precise_time_not_same_day_id(self):
+        plan = copy.deepcopy(self.plan)
+        by_id = {item["id"]: item for item in plan["items"]}
+        by_id["site-tasks"].update(status="complete", recent_completion=True, blocker="",
+                                   updated_on="2026-10-08", updated_at_utc="2026-10-08T11:02:09Z")
+        recent = self.build(plan)["groups"][3]["tasks"]
+        stamps = [datetime.fromisoformat(i["updated_at_utc"].replace("Z", "+00:00")) for i in recent]
+        self.assertEqual(stamps, sorted(stamps, reverse=True))
+        self.assertIn("deep-stage1", [i["id"] for i in recent])
 
     def test_missing_late_unassigned_task_fails(self):
         plan = copy.deepcopy(self.plan)
