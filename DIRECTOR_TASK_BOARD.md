@@ -13,7 +13,7 @@
 - **ЧАТ 2:** two-stage Dossier Research/Assembly architecture accepted via PR #171, merge `290d31a52c00d9feea86ecfc78fdb1f037db66bb`. Architecture only, no activation. Proposed design keeps one GitHub control plane, immutable per-game Research packages, bounded Assembly gap-fill, unchanged strict final validator and pipelined Research N+1 / Assembly N. Physical slot is free.
 - Deep site/UI PR #168 accepted and merged as `ae06070f6e26ae8bdf7cf1864981b78c0e31cee7`; its previous only-red check was the now-fixed shared site-task regression. All Deep prerequisites are implemented, so final integration/cutover is unblocked.
 - PR #156 architecture freeze remains accepted and must not be re-audited without direct contradiction.
-- **ЧАТ 2:** assigned `WORKER_TASK_DOSSIER_TWO_STAGE_CONTRACT_SCHEMA_IMPLEMENT_01.md`: implement only the inactive Research→Assembly contracts/schemas from accepted PR #171 architecture. No semantic worker implementation, no activation, no queue/scheduler change.
+- **ЧАТ 2:** Dossier two-stage P1 contracts/schemas accepted via PR #173, merge `1aaf1afacb6bbfab2406abb489df6a0c35e09250`. Research package + Assembly assignment/result/receipt interfaces are implemented but inactive; current one-stage Dossier remains authoritative. Physical slot is free. Next recommended step is P2 GitHub deterministic staging/helpers, not started.
 - No Scheduled Task changes are authorized.
 
 
