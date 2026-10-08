@@ -1,5 +1,19 @@
 # CURRENT TASK
 
+## COMPLETE — Site current tasks page 01
+Статус: `implementation_complete_ready_for_director_acceptance`.
+- task: `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`;
+- PR: `#162` — `Add complete public Director task page with forward backlog`;
+- branch: `implement/site-current-tasks-page-01`;
+- canonical companion: `config/director_task_plan.json` — 24 known tasks, including 20 active/planned/blocked forward tasks; all unassigned future entries are retained;
+- new standalone Russian page: `web/tasks.html`; top site navigation, responsive mobile/desktop, complete status/order/dependency, effort/urgency rationale and visible update times;
+- existing read-only GitHub Pages deploy generates public static `web/data/tasks.json` from the canonical registry; validation guards missing Board/Deep map planned tasks, cycles, unsafe public fields;
+- PR run `37765202110` site-task registry/UI success; sibling site publication resilience `37765201944`, package `37765201923`, backlog `37765202175` and PASS 2 `37765202252` all success on tested implementation head;
+- earlier red site check was fixed by excluding explicitly superseded Director Board entries from current forward scope;
+- report: `reviews/worker_reports/site-current-tasks-page-01.md`;
+- no other ongoing tasks deleted or modified, no scheduler/Scheduled Task or semantic/Steam/ranking changes;
+- pending: PR merge and ordinary Pages publication/live acceptance; close `site-tasks` in canonical registry when Director accepts live rollout; worker stops at this task boundary.
+
 ## COMPLETE — Deep Stage 2 comparative calibration worker implementation 01
 Статус: `implementation_complete_ready_for_review`.
 - task: `WORKER_TASK_DEEP_STAGE2_CALIBRATION_WORKER_IMPLEMENT_01.md`;
