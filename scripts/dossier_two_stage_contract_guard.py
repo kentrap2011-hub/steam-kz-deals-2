@@ -314,7 +314,7 @@ def validate_assembly_result(result, work, package):
         gap = gaps.get(op["gap_id"])
         if gap is None or op["source_ref"] not in sources:
             _fail("Assembly unsolicited new research scope")
-        if op["field_or_dimension"] != gap["field_or_dimension"]:
+        if op["missing_field_or_dimension"] != gap["field_or_dimension"]:
             _fail("Assembly gap identity mismatch")
         look = op["narrow_gap_lookup"]
         if look is not None:
