@@ -45,7 +45,7 @@ Current approved and implemented direction:
 - PR #158 accepted and merged as `9c9d79194fba3ff22ad491d80257277a87fdcfaf`;
 - validations on PR head were green;
 - no Stage 1/Stage 2 scoring logic changed;
-- ЧАТ 1 nonblocking publication task is accepted (PR #160 + #161). SAME physical ЧАТ 1 is now assigned to `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`, the previously queued Russian current-project-tasks page.
+- ЧАТ 1 nonblocking publication task is accepted (PR #160 + #161). SAME physical ЧАТ 1 is now assigned to `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`, now explicitly requiring both current tasks and the complete known planned backlog, including future unassigned tasks.
 - PR #157 remains closed without merge as superseded.
 
 The older ~581 + ~1,720 reserve analysis below remains historical diagnostic evidence only and must not be turned into production gating unless the user explicitly reopens that decision.
