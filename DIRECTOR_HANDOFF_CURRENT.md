@@ -108,7 +108,7 @@ Do not restate the entire task specification in the chat message when the canoni
 
 - ЧАТ 1 historical backlog audit is accepted via PR #167. Five strong restoration candidates and three Director-decision cases were found; none are yet auto-restored. Physical slot is free.
 
-- ЧАТ 1 is complete/free. Site-task recent-completion regression fix accepted via PR #170 (`6444c738579444234da8cc91b9f26ecd7d8c861b`); real Pages deploy #37789023003 succeeded.
+- ЧАТ 1 continues the same narrow site-task regression task. PR #170 fixed recent-completion IDs, but after `deep-site` became complete and `deep-cutover` planned, a real deploy exposed two more hard-coded lifecycle assertions in `scripts/test_site_tasks.py`. Fix only those dynamically from canonical plan; no product-state changes.
 
 - Deep site/UI PR #168 is accepted and merged as `ae06070f6e26ae8bdf7cf1864981b78c0e31cee7`; all Deep implementation prerequisites are complete and final integration/cutover is now unblocked.
 
