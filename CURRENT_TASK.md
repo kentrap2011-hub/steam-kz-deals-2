@@ -1,5 +1,13 @@
 # CURRENT TASK
 
+## COMPLETE — Deep Fast removal and ranking migration preparation 01
+Статус: `implementation_complete_ready_for_director_review`.
+- task: `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`; PR #164;
+- new isolated Stage-2-only ranking candidate (56+4+40), strict accepted bindings and Fast fallback exclusion; current production/cutover unchanged;
+- tests: `.github/workflows/validate-deep-fast-removal-ranking.yml`; report: `reviews/worker_reports/deep-fast-removal-ranking-migration-01.md`;
+- stop boundary: Director acceptance only; integration/cutover is a separate task.
+
+
 ## COMPLETE — Site current tasks page 01
 Статус: `implementation_complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`;
