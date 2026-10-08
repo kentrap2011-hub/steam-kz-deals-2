@@ -10,7 +10,7 @@ from pathlib import Path
 from deep_stage1 import (
     INBOX, RESULTS, ROOT, Stage1Error, accept_result, empty_state,
     file_sha256, load_json, recompute_progress, record_diagnostic,
-    safe_repo_path, validate_result, validate_state, validate_work_manifest,
+    safe_repo_path, require, validate_result, validate_state, validate_work_manifest,
 )
 
 DEFAULT_WORK = ROOT / "data/production/pre_ai/deep_stage1_work.json"
@@ -66,7 +66,8 @@ def ingest_documents(work: dict, state: dict, submissions: list[Path], *,
             continue
         try:
             # Work path is bound by manifest. This is a filesystem verification, not acceptance.
-            assert safe_repo_path(rel, repo_root) == submission
+            require(safe_repo_path(rel, repo_root) == submission,
+                    "submission must be the exact repository-root-relative path")
             raw = submission.read_bytes()
             doc = json.loads(raw.decode("utf-8"))
             validate_result(doc, item, root=repo_root)
