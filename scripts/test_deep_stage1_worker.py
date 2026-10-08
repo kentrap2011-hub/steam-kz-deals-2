@@ -187,6 +187,10 @@ def main() -> None:
         broken["projection_status"] = "legacy_full_reanalysis_migration_active"
         dormant = build_work_manifest(broken, empty_state(), root=root)
         assert dormant["total_eligible"] == 0 and not dormant["items"] and dormant["diagnostics"]
+        off_store = deepcopy(source)
+        off_store["items"][0]["dossier_path"] = "data/ai_inbox/deep_stage1/results/forged.json"
+        off_store_work = build_work_manifest(off_store, empty_state(), root=root)
+        assert off_store_work["total_eligible"] == 1 and len(off_store_work["diagnostics"]) == 1
         forbidden = deepcopy(source)
         forbidden["items"][0]["semantic_input"]["wishlist"] = True
         rejected = build_work_manifest(forbidden, empty_state(), root=root)
