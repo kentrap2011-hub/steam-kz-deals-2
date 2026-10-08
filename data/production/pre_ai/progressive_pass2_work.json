@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 155,
     "deep_completed_not_fit_count": 29,
     "deep_incomplete_or_recovery_count": 21,
-    "deep_waiting_for_dossier_count": 2090,
-    "deep_ready_or_pending_count": 6,
+    "deep_waiting_for_dossier_count": 2087,
+    "deep_ready_or_pending_count": 9,
     "deep_normal_first_pass_remaining_count": 2096,
     "deep_remaining_until_all_authoritative_count": 2117,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 15,
-    "dossier_waiting_count": 2090,
+    "dossier_waiting_count": 2087,
     "pass2_attempted_count": 205,
-    "pass2_eligible_count": 6,
-    "normal_pass2_eligible_count": 6,
+    "pass2_eligible_count": 9,
+    "normal_pass2_eligible_count": 9,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -108,6 +108,70 @@
     }
   },
   "items": [
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:10680",
+      "taste_subject_key": "App_10680",
+      "appid": "10680",
+      "taste_fingerprint": "a90eaedacf11ba90e99a90140392ff627c32c7d1ada456d2598dff6827079d7d",
+      "candidate_context_sha256": "e390ee167dd3641eacf6b7d1849c63b173e2f2974cc69ab4bbe62d42275d5f64",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "b15f58d028137ee710b88e869792a6fd37f19b96544ba3a8c3d62684171d121f",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Aliens vs. Predator™",
+        "short_description": "Survive, hunt and prey in the deadly jungles and swamps in distinctly new and thrilling first person gameplay.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Horror",
+          "Sci-fi"
+        ],
+        "core_fit_count": 2,
+        "release_date": "16 Feb, 2010",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "10680"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_10680.json",
+      "dossier_content_sha256": "69b8f2d9eaeda46974a46fe3324b71b5fb794b0658a3a8e711e1caec87b80970",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T15:54:14.270Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "3c2837013bb9c7443d5b6abf7db54416465e68a598a37eca6685c57f35890e33",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--b15f58d028137ee710b88e869792a6fd37f19b96544ba3a8c3d62684171d121f--3c2837013bb9c7443d5b6abf7db54416465e68a598a37eca6685c57f35890e33.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--b15f58d028137ee710b88e869792a6fd37f19b96544ba3a8c3d62684171d121f--3c2837013bb9c7443d5b6abf7db54416465e68a598a37eca6685c57f35890e33.json",
+      "sequence": 1
+    },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
@@ -166,7 +230,7 @@
       "authorization_id": "f938312a509828a05e6e8b824b4ab7a3d325978c8f93143c3e297fc5e057bb13",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--7dbb0cecd8d5f84be7a40b893df04b40ea6dc34b6eb1a57ee601c84c500b84cf--f938312a509828a05e6e8b824b4ab7a3d325978c8f93143c3e297fc5e057bb13.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--7dbb0cecd8d5f84be7a40b893df04b40ea6dc34b6eb1a57ee601c84c500b84cf--f938312a509828a05e6e8b824b4ab7a3d325978c8f93143c3e297fc5e057bb13.json",
-      "sequence": 1
+      "sequence": 2
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -226,7 +290,7 @@
       "authorization_id": "f932ec1970794e8ea8f1ee1c9e3f7ba7180ccbb608ceee44e9cd4a8edada0f5c",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--78a6b0ff7b72461a3017ca5468848ea2bd8972e7b5aa39fc83f7b3f7d4003f8a--f932ec1970794e8ea8f1ee1c9e3f7ba7180ccbb608ceee44e9cd4a8edada0f5c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--78a6b0ff7b72461a3017ca5468848ea2bd8972e7b5aa39fc83f7b3f7d4003f8a--f932ec1970794e8ea8f1ee1c9e3f7ba7180ccbb608ceee44e9cd4a8edada0f5c.json",
-      "sequence": 2
+      "sequence": 3
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -291,7 +355,7 @@
       "authorization_id": "ff24711457dd021f2fa09c5d0dff9320eb0de532abc3768fa1385169e71f543b",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ec4c5d8619315366acdf593840235cae441d81c5bff102269bcbfed6a1fcd686--ff24711457dd021f2fa09c5d0dff9320eb0de532abc3768fa1385169e71f543b.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ec4c5d8619315366acdf593840235cae441d81c5bff102269bcbfed6a1fcd686--ff24711457dd021f2fa09c5d0dff9320eb0de532abc3768fa1385169e71f543b.json",
-      "sequence": 3
+      "sequence": 4
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -357,7 +421,7 @@
       "authorization_id": "d3f83d34a86897e3c6240a7521234c424e5ca53e5b28b68bbfe637cd0dadac6c",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--6ab9ee92458d141a15c7b767f7860521c88e7a767816ff27c547907e3466cdba--d3f83d34a86897e3c6240a7521234c424e5ca53e5b28b68bbfe637cd0dadac6c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--6ab9ee92458d141a15c7b767f7860521c88e7a767816ff27c547907e3466cdba--d3f83d34a86897e3c6240a7521234c424e5ca53e5b28b68bbfe637cd0dadac6c.json",
-      "sequence": 4
+      "sequence": 5
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -422,7 +486,134 @@
       "authorization_id": "ee4ccd5d432a1ccac56b21581840e349aaa4695e50d7ee7f1e855de5888ee2af",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--00f99581557fe18443b2b807135777d8a4f7f0c2ad872943c48d9bceca0aa629--ee4ccd5d432a1ccac56b21581840e349aaa4695e50d7ee7f1e855de5888ee2af.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--00f99581557fe18443b2b807135777d8a4f7f0c2ad872943c48d9bceca0aa629--ee4ccd5d432a1ccac56b21581840e349aaa4695e50d7ee7f1e855de5888ee2af.json",
-      "sequence": 5
+      "sequence": 6
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1068360",
+      "taste_subject_key": "App_1068360",
+      "appid": "1068360",
+      "taste_fingerprint": "9c4c2e74c288f6abc76428d3b6b1c0c01be8528ed10f30cf1599296612d8e57d",
+      "candidate_context_sha256": "74d2ceabb7af623416b477c1952f3112a36ea40bbab9fa2246ff08fcc4a04f29",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "075053d1518eb3db7e52d7465fe76d0543e46e89eaaf76898192f9a39b489872",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Fearmonium",
+        "short_description": "Fearmonium is a psychedelic metroidvania where suspense intertwines with humour. Beginning the game as an unpleasant memory, you must progress and become a true phobia by breaking through all boundaries to uncover the most hidden corners of Max's mind.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action-Adventure",
+          "Adventure",
+          "Character Action",
+          "Story Rich"
+        ],
+        "core_fit_count": 3,
+        "release_date": "20 May, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1068360"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1068360.json",
+      "dossier_content_sha256": "0648655871b80211eb63e9910f13de3665f94801a80d521b76a1366dda8f14cb",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T15:54:14.270Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "888f42ddeac63a19d30345c0d7c0c3ef5be02c68bf1e2f863aaa0a0d18f4ce50",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--075053d1518eb3db7e52d7465fe76d0543e46e89eaaf76898192f9a39b489872--888f42ddeac63a19d30345c0d7c0c3ef5be02c68bf1e2f863aaa0a0d18f4ce50.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--075053d1518eb3db7e52d7465fe76d0543e46e89eaaf76898192f9a39b489872--888f42ddeac63a19d30345c0d7c0c3ef5be02c68bf1e2f863aaa0a0d18f4ce50.json",
+      "sequence": 7
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1067850",
+      "taste_subject_key": "App_1067850",
+      "appid": "1067850",
+      "taste_fingerprint": "c7bacaa73cce776882fa236b7afe1ff4476ea7960db4be6bcbd420ff6a4c3123",
+      "candidate_context_sha256": "4e719ef2504c8e0981f059d955c89c9255a18fefd8969ad5898abdf4fc385b7e",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "f51352992c764ef1215a729a1d367c684e531aaddb7fb0c8cd8afc2483d876a4",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Kindergarten 2",
+        "short_description": "Welcome to Kindergarten 2, which takes place on Tuesday! After the events of Monday, you'll find yourself in a new school with new friends...and new ways to get ruthlessly murdered.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure"
+        ],
+        "core_fit_count": 0,
+        "release_date": "29 Jul, 2019",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1067850"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1067850.json",
+      "dossier_content_sha256": "156a487f37ab25b93421fbbbea7c602a861e6493ac8f530501572365ae33fdab",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T15:54:14.270Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "5d57e721532b84bba0a6c0c442d159a42508b00049dc67a1d57c838e69f6ff10",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--f51352992c764ef1215a729a1d367c684e531aaddb7fb0c8cd8afc2483d876a4--5d57e721532b84bba0a6c0c442d159a42508b00049dc67a1d57c838e69f6ff10.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--f51352992c764ef1215a729a1d367c684e531aaddb7fb0c8cd8afc2483d876a4--5d57e721532b84bba0a6c0c442d159a42508b00049dc67a1d57c838e69f6ff10.json",
+      "sequence": 8
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -482,7 +673,7 @@
       "authorization_id": "9150bd2f7984eb7fd53270b75683ee8772fc6de30b0e65eb1782ace1d0e9366c",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--a09015e0a3dfab957a6ea1ec6a2673e891396e5ae383b74ef021bb215da64436--9150bd2f7984eb7fd53270b75683ee8772fc6de30b0e65eb1782ace1d0e9366c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--a09015e0a3dfab957a6ea1ec6a2673e891396e5ae383b74ef021bb215da64436--9150bd2f7984eb7fd53270b75683ee8772fc6de30b0e65eb1782ace1d0e9366c.json",
-      "sequence": 6
+      "sequence": 9
     }
   ]
 }
