@@ -12,7 +12,7 @@ const base={
   stage1_positives:['Сильная механика'],
   stage1_negatives:['Неровный темп'],
   stage1_nuances:['Ниша'],
-  stage1_point_breakdown:[{label_ru:'Глубина',direction:'positive',points:45.2}],
+  stage1_point_breakdown:[{label_ru:'Глубина',direction:'positive',points:45.2,finding_reasons_ru:['Сильная механика']}],
   stage1_provisional_deep_fit_score_0_56:45.2,
   stage2_calibrated_deep_fit_score_0_56:null,stage2_calibration_delta:null,
   wishlist_bonus_0_or_4:4,purchase_score_0_40:30,
@@ -25,6 +25,7 @@ assert(!deep.calibrated(base));
 assert.strictEqual(deep.compactScore(base),'Ожидает сравнительной калибровки');
 const pendingHtml=deep.detailHtml(base);
 assert(pendingHtml.includes('45,20/56'));
+assert(pendingHtml.includes('Сильная механика'));
 assert(!pendingHtml.includes('99/100'),'legacy Fast total leaked');
 assert(!pendingHtml.includes('49,2/60'),'Stage-1 provisional leaked as final');
 const markers=[...pendingHtml.matchAll(/data-deep2-section="(\d+)"/g)].map(m=>Number(m[1]));
