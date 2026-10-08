@@ -1,14 +1,15 @@
 # CURRENT TASK
 
 ## COMPLETE — Site current tasks page 01
-Статус: `closeout_fix_merged_pending_live_pages_verification`.
+Статус: `complete_published_pages_verified_by_github_actions`.
 - task: `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`; original implementation PR #162 already merged.
 - bounded closeout fix: PR #165 merged as `b9ad7aed7bcc76237fb3402a291cb632ac730598`, branch `fix/site-tasks-closeout-publication-01`.
 - original post-merge Pages failure: run `37767623563` failed UI regression because `known_forward_count` was pinned at 19 and sorting by date-only ID hid recently accepted Deep Stage 1.
 - site tests now derive all open task IDs/count from canonical registry; recently completed tasks sort by exact UTC timestamp. A simulated completion regression verifies Stage 1 is still visible.
 - canonical registry currently has 24 known tasks, 18 unfinished (4 active + 11 planned + 3 blocked), 6 completed; `site-tasks` status `complete`, Deep Stage 1 remains recently completed; all other planned backlog retained.
 - PR #165 checks passed: site tasks `37768566594`, backlog dispositions `37768566812`.
-- pending: successful actual Pages deployment and live verification on the merged main; no Scheduled Task, semantic execution, Steam, Fast, ranking or other project task affected.
+- final GitHub Pages run `37768728895` — success: 11 Python tests, UI regressions, static `forward=18`, validate, Pages artifact and `Deploy to GitHub Pages` all successful; canonical site `https://kentrap2011-hub.github.io/steam-kz-deals-2/`. Independent external HTTP fetch was unavailable; no fabricated live browser assertion.
+- no Scheduled Task, semantic execution, Steam, Fast, ranking or other project task affected; worker closeout complete.
 - durable report: `reviews/worker_reports/site-current-tasks-page-01.md`.
 
 ## COMPLETE — Deep Stage 1 independent analysis worker implementation 01
