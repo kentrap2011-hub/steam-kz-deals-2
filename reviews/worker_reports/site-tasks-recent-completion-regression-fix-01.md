@@ -28,3 +28,16 @@ No generator, plan, task status, task order, UI implementation, publication work
 ## Ownership and boundaries
 
 Architecture preflight: GitHub remains control-plane owner of the plan, deterministic builder, validations and static Pages publication; the interactive chat only proposes developer-side test changes. No workflow, recurring responsibility, runtime/scheduler, queue, retry, checkpoint, semantic-worker authority or Scheduled Task has changed.
+
+## Continuation — lifecycle assertions after PR #170 merged (2026-10-08)
+
+PR #170 is merged and the initial capped-recents fix is accepted. Subsequent canonical plan updates following merged Deep site PR #168 exposed two further historical assertions, both in `test_full_forward_backlog_and_mobile_nav`: `deep-site` was permanently required in the forward set, and `deep-cutover` was permanently required to be `blocked`.
+
+Verified current `main` canonical registry: `deep-site.status=complete`; `deep-cutover.status=planned`, with an empty blocker and the original four canonical dependencies. These are valid lifecycle transitions, not registry/builder defects.
+
+Narrow follow-up `fix/site-tasks-lifecycle-regression-02`: in `scripts/test_site_tasks.py`, do not require those two mutable lifecycle IDs to be forever unfinished; instead compare display membership, status, dependencies and blocker against each task's **current canonical plan**. If a completed entry ages out of the three newest, it remains in `task_titles` rather than in rendered cards. All pre-existing all-forward coverage and safety invariants stay. No task registry/status, application logic, Deep/Dossier/Steam/ranking, workflow or Scheduled Task changed.
+
+### Follow-up acceptance
+
+- **Focused PR and CI:** pending.
+- **Actual merged-main Pages deploy:** pending.
