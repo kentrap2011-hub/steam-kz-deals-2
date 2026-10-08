@@ -106,7 +106,7 @@ The Director over-packed the continuation prompt with state the worker can read 
 
 Do not restate the entire task specification in the chat message when the canonical task file already contains it.
 
-- ЧАТ 1 next task: `WORKER_TASK_HISTORICAL_UNIMPLEMENTED_BACKLOG_AUDIT_01.md`. Diagnostic only. Recover all old planned-but-unimplemented tasks from repository history; YouTube reviews are one remembered example, not a single-item restoration. Do not mutate the canonical backlog until Director reviews the report.
+- ЧАТ 1 historical backlog audit is accepted via PR #167. Five strong restoration candidates and three Director-decision cases were found; none are yet auto-restored. Physical slot is free.
 
 ## CURRENT PHYSICAL WORKER SLOTS
 
@@ -143,7 +143,7 @@ Accepted PR:
 
 Deep Stage 1 is accepted and merged via PR #163 as `e410ee6183e29ec595f2c1fce1336751ceea9585`.
 
-Current ЧАТ 2 task `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md` is implementation-complete in PR #164 with green task-specific checks. Its stale site block cleanup is correct, but fresh main advanced again due accepted Dossier progress and Director backlog-audit state. PR #164 is stale/non-mergeable until one final preservation sync from current main; preserve all Dossier/Deep/Director changes, rerun checks, then stop for Director acceptance.
+Deep Fast-removal/ranking migration preparation is accepted via clean replacement PR #166 (`4d1cfb4745989994051f6233a3810759f1f1a305`). Old #164 is closed superseded. The new scorer remains non-active until cutover; remaining Deep prerequisite is the separate mirror UI/Statistics implementation. Physical ЧАТ 2 is free.
 
 Branch:
 `implement/deep-stage2-calibration-worker-01`
