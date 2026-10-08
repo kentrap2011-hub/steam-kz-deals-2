@@ -51,15 +51,15 @@
   },
   "scope": {
     "deep_total_current_coverage_target": 2301,
-    "deep_first_pass_attempted_count": 179,
-    "deep_authoritative_completed_count": 158,
-    "deep_completed_fit_count": 141,
+    "deep_first_pass_attempted_count": 181,
+    "deep_authoritative_completed_count": 160,
+    "deep_completed_fit_count": 143,
     "deep_completed_not_fit_count": 17,
     "deep_incomplete_or_recovery_count": 21,
     "deep_waiting_for_dossier_count": 2114,
-    "deep_ready_or_pending_count": 8,
-    "deep_normal_first_pass_remaining_count": 2122,
-    "deep_remaining_until_all_authoritative_count": 2143,
+    "deep_ready_or_pending_count": 6,
+    "deep_normal_first_pass_remaining_count": 2120,
+    "deep_remaining_until_all_authoritative_count": 2141,
     "deep_normal_first_pass_complete": false,
     "deep_all_current_authoritative_complete": false,
     "recovery_owned_count": 21,
@@ -67,9 +67,9 @@
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 15,
     "dossier_waiting_count": 2114,
-    "pass2_attempted_count": 179,
-    "pass2_eligible_count": 8,
-    "normal_pass2_eligible_count": 8,
+    "pass2_attempted_count": 181,
+    "pass2_eligible_count": 6,
+    "normal_pass2_eligible_count": 6,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -108,136 +108,6 @@
     }
   },
   "items": [
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:1030840",
-      "taste_subject_key": "App_40990",
-      "appid": "40990",
-      "taste_fingerprint": "65a0e5edec382240a14c5267c28898ffdb7de0b26e56df23e48f98202d41e896",
-      "candidate_context_sha256": "8500eecdf9654c37739a65cf609c6d02b157295362946bffdc642f908c6db173",
-      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
-      "work_id": "5c8c3e31b0b73099b307c8e28eb0f682458406c30311a443d089b5ae67fab84e",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Mafia",
-        "short_description": "It’s 1930. After an inadvertent brush with the mafia, cabdriver Tommy Angelo is reluctantly thrust into the world of organized crime. Initially, he is uneasy about falling in with the Salieri family, but soon the rewards become too big to ignore. As he rises through the ranks, the paydays keep getting bigger, but the jobs get even dirtier. Tommy may ultimately earn the respect of the Salieris, but becoming a Made Man will leave him more conflicted than ever with the new life he has chosen.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Action",
-          "Crime",
-          "Open World",
-          "Singleplayer",
-          "Story Rich"
-        ],
-        "core_fit_count": 3,
-        "release_date": "28 Aug, 2002",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1030840",
-            "40990"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_40990.json",
-      "dossier_content_sha256": "8a8d6593ee74195a5e301a78d549a49a683f25fbb48e4a48786493907909eeef",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-28T11:49:54.392Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "87d89229459e5111df727d7137d40110f46f120dbcf971375532b08794a09a13",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--5c8c3e31b0b73099b307c8e28eb0f682458406c30311a443d089b5ae67fab84e--87d89229459e5111df727d7137d40110f46f120dbcf971375532b08794a09a13.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--5c8c3e31b0b73099b307c8e28eb0f682458406c30311a443d089b5ae67fab84e--87d89229459e5111df727d7137d40110f46f120dbcf971375532b08794a09a13.json",
-      "sequence": 1
-    },
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:1040230",
-      "taste_subject_key": "App_1040230",
-      "appid": "1040230",
-      "taste_fingerprint": "6211a586fcf446441948c0c947609b50991aa207a2ca7365d6abe9e513c9a8e4",
-      "candidate_context_sha256": "26b54914ee3475c0052ce65ca688272aea31fd3247ee74e53712c871532ec131",
-      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
-      "work_id": "9e4205db454dda53f975eabf0a2f2f14a2576948c6c64492112dac67fcac91e2",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Curious Expedition 2",
-        "short_description": "Curious Expedition 2 is a turn-based narrative roguelike set in a reimagined version of the late 19th century that uses procedural gameplay and story elements to create completely unique and epic adventures every time you play.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Adventure",
-          "Exploration"
-        ],
-        "core_fit_count": 0,
-        "release_date": "28 Jan, 2021",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1040230"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1040230.json",
-      "dossier_content_sha256": "23cb3858fbd3645f0443b32f35a48f36f91a21a47882c483e4732102f510b6ec",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-28T11:53:25.190Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "a12686fba1b97f102213ae6541cf717f2bd54461cd6f9d544bbfe3703aa13a57",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--9e4205db454dda53f975eabf0a2f2f14a2576948c6c64492112dac67fcac91e2--a12686fba1b97f102213ae6541cf717f2bd54461cd6f9d544bbfe3703aa13a57.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--9e4205db454dda53f975eabf0a2f2f14a2576948c6c64492112dac67fcac91e2--a12686fba1b97f102213ae6541cf717f2bd54461cd6f9d544bbfe3703aa13a57.json",
-      "sequence": 2
-    },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
@@ -299,7 +169,7 @@
       "authorization_id": "ba2e904cc0784afa98a3627ff5d253de3cb164d593dec1551cc2339d1a989dcf",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--e2078e85bd20de69c9d8991e7b08a75b69e44fa8522b08378548214e03e730a0--ba2e904cc0784afa98a3627ff5d253de3cb164d593dec1551cc2339d1a989dcf.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--e2078e85bd20de69c9d8991e7b08a75b69e44fa8522b08378548214e03e730a0--ba2e904cc0784afa98a3627ff5d253de3cb164d593dec1551cc2339d1a989dcf.json",
-      "sequence": 3
+      "sequence": 1
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -364,7 +234,7 @@
       "authorization_id": "b41c7c2570543a49352abc0f2ad9a532f7d2fe43267f9ab3fa49677d0e3b5897",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--356e8fb3eca30ed4ea5d49b4042888ff4195c86127d502ebd51f77d046147bb1--b41c7c2570543a49352abc0f2ad9a532f7d2fe43267f9ab3fa49677d0e3b5897.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--356e8fb3eca30ed4ea5d49b4042888ff4195c86127d502ebd51f77d046147bb1--b41c7c2570543a49352abc0f2ad9a532f7d2fe43267f9ab3fa49677d0e3b5897.json",
-      "sequence": 4
+      "sequence": 2
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -427,7 +297,7 @@
       "authorization_id": "d4b267bd92a53451dde68026799174f6207b25118ad742ee0c90be7d10be961f",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ed66a1c7572795f305fe81c55c3a91d652d5a5fc607d2342516a9fbfaa1339b6--d4b267bd92a53451dde68026799174f6207b25118ad742ee0c90be7d10be961f.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ed66a1c7572795f305fe81c55c3a91d652d5a5fc607d2342516a9fbfaa1339b6--d4b267bd92a53451dde68026799174f6207b25118ad742ee0c90be7d10be961f.json",
-      "sequence": 5
+      "sequence": 3
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -494,7 +364,7 @@
       "authorization_id": "063b3ca73310be0353fd2605b63aa402d4bd4daef53ba0dd5f838e2a8972035b",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--a30109a4cc3a766fae1872f21092576b7dba674d7aaf3355681f365104c4918a--063b3ca73310be0353fd2605b63aa402d4bd4daef53ba0dd5f838e2a8972035b.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--a30109a4cc3a766fae1872f21092576b7dba674d7aaf3355681f365104c4918a--063b3ca73310be0353fd2605b63aa402d4bd4daef53ba0dd5f838e2a8972035b.json",
-      "sequence": 6
+      "sequence": 4
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -561,7 +431,7 @@
       "authorization_id": "06c1d68d069037857bc4f468313697e149a6e5bcb20fe4be23d711a654fdbe39",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--5a3ab68bc5606b29a6178d11b977e16ca9f8fa7e2c126628a84cbd4bff9fdd35--06c1d68d069037857bc4f468313697e149a6e5bcb20fe4be23d711a654fdbe39.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--5a3ab68bc5606b29a6178d11b977e16ca9f8fa7e2c126628a84cbd4bff9fdd35--06c1d68d069037857bc4f468313697e149a6e5bcb20fe4be23d711a654fdbe39.json",
-      "sequence": 7
+      "sequence": 5
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -628,7 +498,7 @@
       "authorization_id": "9c2e410c04ae021d97edcf39c3de9ea582adfd442407bfb2d7862e6edf0a5a20",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--e82c8b51327f7e76d1e059e5858ee3b6d4deb27a4210a8f2f956c077c1c85650--9c2e410c04ae021d97edcf39c3de9ea582adfd442407bfb2d7862e6edf0a5a20.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--e82c8b51327f7e76d1e059e5858ee3b6d4deb27a4210a8f2f956c077c1c85650--9c2e410c04ae021d97edcf39c3de9ea582adfd442407bfb2d7862e6edf0a5a20.json",
-      "sequence": 8
+      "sequence": 6
     }
   ]
 }
