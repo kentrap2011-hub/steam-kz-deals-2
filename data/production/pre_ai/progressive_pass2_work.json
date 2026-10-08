@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 149,
     "deep_completed_not_fit_count": 23,
     "deep_incomplete_or_recovery_count": 21,
-    "deep_waiting_for_dossier_count": 2108,
-    "deep_ready_or_pending_count": 0,
+    "deep_waiting_for_dossier_count": 2105,
+    "deep_ready_or_pending_count": 3,
     "deep_normal_first_pass_remaining_count": 2108,
     "deep_remaining_until_all_authoritative_count": 2129,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 15,
-    "dossier_waiting_count": 2108,
+    "dossier_waiting_count": 2105,
     "pass2_attempted_count": 193,
-    "pass2_eligible_count": 0,
-    "normal_pass2_eligible_count": 0,
+    "pass2_eligible_count": 3,
+    "normal_pass2_eligible_count": 3,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -107,5 +107,196 @@
       "complete": true
     }
   },
-  "items": []
+  "items": [
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1048100",
+      "taste_subject_key": "App_1048100",
+      "appid": "1048100",
+      "taste_fingerprint": "42de3d3d5eb982e272d94a6308b1dc8148b15f5cf7dffd277db1f9ae7dbc168f",
+      "candidate_context_sha256": "87049696657c6340c8e3df6851a791eb4db957e536b988b18507bea3602231b7",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "79e4cf0b77c69e01ea302369026250360b26a2046f2962d006863e84e0058418",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Peekaboo",
+        "short_description": "Peekaboo — Hide & Seek Online. \r\nPlayers are divided into two teams: props and hunters.\r\nProps take the form of objects and adopt their physical properties, and hunters are trying with all their might to find them.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Stealth"
+        ],
+        "core_fit_count": 1,
+        "release_date": "7 Aug, 2019",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1048100"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1048100.json",
+      "dossier_content_sha256": "e67d31c60477758b0de46fa0ed65e722daa790684dd6a09e12b3a33c1236bdca",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T12:58:25.207Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "1d2a789c945641f368808867803c59053305e1c8746e44c54f2adca8672112f7",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--79e4cf0b77c69e01ea302369026250360b26a2046f2962d006863e84e0058418--1d2a789c945641f368808867803c59053305e1c8746e44c54f2adca8672112f7.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--79e4cf0b77c69e01ea302369026250360b26a2046f2962d006863e84e0058418--1d2a789c945641f368808867803c59053305e1c8746e44c54f2adca8672112f7.json",
+      "sequence": 1
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1046790",
+      "taste_subject_key": "App_1046790",
+      "appid": "1046790",
+      "taste_fingerprint": "06485908ee4b6105fefd8407e3f962564f5e6a51caa3f054a28af73ef348fc80",
+      "candidate_context_sha256": "c5f43f6e188e28669ebf8c43e5d92a186235d99d129c379894744f99ad23a3ff",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "2cec8446c3ed8352b7d2d93dbddcd5d61c3be6ddc31e153f8c392c526141e8ec",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Eternal Threads",
+        "short_description": "Eternal Threads is a single-player, first-person story-driven puzzle game of time manipulation, choice and consequence.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Choices Matter",
+          "Detective",
+          "Story Rich"
+        ],
+        "core_fit_count": 3,
+        "release_date": "19 May, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1046790"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1046790.json",
+      "dossier_content_sha256": "7613d8fb7714ed4ace81287dcad5448d2724b3e67a1c2b79f50e29b1faf1edcb",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T12:58:25.206Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "5483266f527b651958dd31abed1fd586c11d4cf99aa263b339fd01f0b4c7dda7",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--2cec8446c3ed8352b7d2d93dbddcd5d61c3be6ddc31e153f8c392c526141e8ec--5483266f527b651958dd31abed1fd586c11d4cf99aa263b339fd01f0b4c7dda7.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--2cec8446c3ed8352b7d2d93dbddcd5d61c3be6ddc31e153f8c392c526141e8ec--5483266f527b651958dd31abed1fd586c11d4cf99aa263b339fd01f0b4c7dda7.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1047010",
+      "taste_subject_key": "App_1047010",
+      "appid": "1047010",
+      "taste_fingerprint": "318e6de6c7c120260e7620fadde6c35a433dc82971651dfb031ba54982bea6ab",
+      "candidate_context_sha256": "abf7a971738797232d079bb48b9e9126f518b723e0768ad856f170bf40984028",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "99b7f4caf6a08252a90c7366e14be37f2a7c55a7bbbb27566da1704380ed88d9",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Synergia",
+        "short_description": "Synergia is a yuri thriller visual novel that takes place in a cyberpunk future, wrapped up in a beautifully unique, vibrant neon aesthetic. At the end of the world, sometimes love is the ultimate crime.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Cyberpunk",
+          "Sci-fi"
+        ],
+        "core_fit_count": 2,
+        "release_date": "27 Jul, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1047010"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1047010.json",
+      "dossier_content_sha256": "849def19872bdcdb06ecba4aea359b83b6c71b088518f68baadde9144255f4f1",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T12:58:25.207Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "62668fa9ffbc63004c1d9e569a20b63c8f3167bd7990eb0b9eebb215ec1762d1",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--99b7f4caf6a08252a90c7366e14be37f2a7c55a7bbbb27566da1704380ed88d9--62668fa9ffbc63004c1d9e569a20b63c8f3167bd7990eb0b9eebb215ec1762d1.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--99b7f4caf6a08252a90c7366e14be37f2a7c55a7bbbb27566da1704380ed88d9--62668fa9ffbc63004c1d9e569a20b63c8f3167bd7990eb0b9eebb215ec1762d1.json",
+      "sequence": 3
+    }
+  ]
 }
