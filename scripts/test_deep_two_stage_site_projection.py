@@ -62,11 +62,11 @@ class SiteProjectionTest(unittest.TestCase):
             "family_id": "family-1", "appid": "101", "outcome": outcome,
             "profile_semantic_sha256": "p", "dossier_content_sha256": "d",
             "summary_ru": "Вывод о конкретной игре",
-            "positives": [{"text_ru": "Продуманная система"}],
-            "negatives": [{"text_ru": "Монотонный темп"}],
-            "nuances": [{"text_ru": "Много дополнительных режимов"}],
+            "positives": [{"finding_id": "p1", "text_ru": "Продуманная система"}],
+            "negatives": [{"finding_id": "n1", "text_ru": "Монотонный темп"}],
+            "nuances": [{"finding_id": "o1", "text_ru": "Много дополнительных режимов"}],
             "point_breakdown": [{"label_ru": "Боевая глубина",
-                                 "direction": "positive", "points": 46.2}],
+                                 "direction": "positive", "points": 46.2, "finding_refs": ["p1"]}],
             "provisional_deep_fit_score_0_56": 46.2 if outcome == "analyzed_fit" else None,
         }
         rel = Path("data/cache/deep_stage1_results/result.json")
@@ -114,6 +114,7 @@ class SiteProjectionTest(unittest.TestCase):
         self.assertEqual(game["stage2_status"], "awaiting_calibration")
         self.assertEqual(game["stage1_provisional_deep_fit_score_0_56"], 46.2)
         self.assertEqual(game["stage1_point_breakdown"][0]["label_ru"], "Боевая глубина")
+        self.assertEqual(game["stage1_point_breakdown"][0]["finding_reasons_ru"], ["Продуманная система"])
         self.assertIsNone(game["personal_quality_score_0_60"])
         self.assertIsNone(game["total_score_0_100"])
         self.assertNotIn("total_score", game)
@@ -144,6 +145,7 @@ class SiteProjectionTest(unittest.TestCase):
         self.assertEqual(g["personal_quality_score_0_60"], 51.03)
         self.assertEqual(g["purchase_score_0_40"], 31.1)
         self.assertEqual(g["total_score_0_100"], 82.13)
+        self.assertEqual(g["total_score"], 82.13)
         self.assertEqual(g["stage2_neighbor_comparisons"][0]["relation"], "near_tie_target_above")
         self.assertEqual(p["processing_status"]["deep_stage2"]["progress_percent"], 100.0)
 
