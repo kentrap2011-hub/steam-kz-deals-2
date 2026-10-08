@@ -141,10 +141,7 @@ Accepted PR:
 
 Deep Stage 1 is accepted and merged via PR #163 as `e410ee6183e29ec595f2c1fce1336751ceea9585`.
 
-Next Deep task remains in physical slot ЧАТ 2 but should use a NEW conversation thread:
-`WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`
-
-Reason: Stage 1 is complete; a fresh thread preserves context while continuing serialized Deep ownership.
+Current ЧАТ 2 task `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md` is implementation-complete in PR #164 with green task-specific checks. Do NOT merge yet: its branch is stale against current main and contains older concurrent site-task/Director-state files. Same current Chat 2 must reconcile from fresh main, preserve unrelated current-main state exactly, reduce PR to intended task-specific changes, rerun checks, then stop for Director acceptance.
 
 Branch:
 `implement/deep-stage2-calibration-worker-01`
