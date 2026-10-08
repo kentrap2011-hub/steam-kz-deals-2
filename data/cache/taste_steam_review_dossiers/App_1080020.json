@@ -15,14 +15,14 @@
     "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
     "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
-  "appid": "1081510",
-  "title": "She Sees Red - Interactive Movie",
+  "appid": "1080020",
+  "title": "Electrician Simulator",
   "generated_at_utc": "2026-10-08T17:46:06.803Z",
   "expires_at_utc": "2026-10-28T17:46:06.803Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "She Sees Red - Interactive Movie",
-    "release_year": 2019,
+    "work_title": "Electrician Simulator",
+    "release_year": 2022,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "source-001"
@@ -30,11 +30,11 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1081510"
+        "value": "1080020"
       },
       {
         "kind": "developer",
-        "value": "Rhinotales"
+        "value": "Take IT Studio!"
       }
     ]
   },
@@ -42,7 +42,7 @@
   "observations": [
     {
       "category": "mechanics",
-      "statement": "This full-motion-video crime thriller periodically presents time-limited binary decisions between filmed scenes; interaction is choosing story routes, not controlling a character or solving conventional puzzles.",
+      "statement": "The game turns repair work into accessible first-person tasks such as replacing sockets and lamps, drawing wires, inspecting rooms and reassembling workshop appliances.",
       "sentiment": "mixed",
       "recurrence": "limited",
       "mention_count": 4,
@@ -56,16 +56,60 @@
         "source-003"
       ],
       "player_feedback_ids": [
-        "feedback-001",
         "feedback-002",
         "feedback-004",
-        "feedback-005"
+        "feedback-005",
+        "feedback-009"
       ]
     },
     {
       "category": "structure",
-      "statement": "Each pass takes roughly half an hour, and subsequent choices reveal intersecting perspectives and one of four endings, so multiple viewings are necessary for a fuller understanding.",
+      "statement": "Jobs arrive as client assignments, supplemented by device repair and garage work; completing them and buying parts form a simple service-business cycle rather than an open-ended electrical sandbox.",
       "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 4,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-004",
+        "feedback-005",
+        "feedback-009"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "The connecting, matching and disassembly minigames are approachable without prior electrical training, but even knowledgeable players rarely encounter realistic circuit calculation or diagnosis.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-004",
+        "feedback-005",
+        "feedback-007"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Qualified or aspiring electricians repeatedly report unrealistic wiring shortcuts and omitted safety, electrical code and circuit details, making it a simplified puzzle rather than dependable job training.",
+      "sentiment": "negative",
       "recurrence": "moderate",
       "mention_count": 6,
       "evidence_languages": [
@@ -75,24 +119,23 @@
       "evidence_status": "durable",
       "source_ids": [
         "source-002",
-        "source-003",
-        "source-004"
+        "source-003"
       ],
       "player_feedback_ids": [
-        "feedback-001",
         "feedback-002",
         "feedback-004",
         "feedback-005",
         "feedback-006",
-        "feedback-007"
+        "feedback-007",
+        "feedback-008"
       ]
     },
     {
-      "category": "other",
-      "statement": "Players often enjoy energetic direction, convincing production values, violent action staging and a suspenseful soundtrack despite the small-scale filmed setting.",
-      "sentiment": "positive",
+      "category": "repetition",
+      "statement": "Repetitive actions such as fastening screws, drawing obvious connections and repeating short assignments can feel padded once the limited range of puzzles becomes familiar.",
+      "sentiment": "negative",
       "recurrence": "limited",
-      "mention_count": 4,
+      "mention_count": 3,
       "evidence_languages": [
         "russian",
         "non_russian"
@@ -100,20 +143,39 @@
       "evidence_status": "durable",
       "source_ids": [
         "source-002",
-        "source-003",
-        "source-004"
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-007",
+        "feedback-008"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Completing orders earns money to spend on equipment and workspace improvement, but some players find those reward loops too light to make repeated jobs interesting.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
       ],
       "player_feedback_ids": [
         "feedback-002",
         "feedback-005",
-        "feedback-006",
-        "feedback-007"
+        "feedback-009"
       ]
     },
     {
-      "category": "repetition",
-      "statement": "Rewatching branches opens substantially different footage, with scene skipping making later replays shorter, though completing every branch or scene achievement can become repetitive.",
-      "sentiment": "mixed",
+      "category": "other",
+      "statement": "Several players find the laid-back process of disassembling devices and restoring working fixtures pleasant, aided by readable object models and an undemanding presentation.",
+      "sentiment": "positive",
       "recurrence": "limited",
       "mention_count": 5,
       "evidence_languages": [
@@ -123,20 +185,39 @@
       "evidence_status": "durable",
       "source_ids": [
         "source-002",
-        "source-003",
-        "source-004"
+        "source-003"
       ],
       "player_feedback_ids": [
         "feedback-001",
         "feedback-004",
         "feedback-005",
         "feedback-006",
-        "feedback-007"
+        "feedback-009"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "What begins as pleasant hands-on work can slow down through lengthy animations or repeated clicking, especially for players expecting quicker diagnostics or deeper challenges.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-008"
       ]
     },
     {
       "category": "other",
-      "statement": "The initial mystery deliberately withholds context until alternative paths are watched; some appreciate the recontextualization while others find the plot confusing or full of gaps.",
+      "statement": "The theme gives a playful sense of practicing an occupation, but its deliberately limited educational realism means its strengths are casual tinkering and satisfying completion rather than authentic simulation.",
       "sentiment": "mixed",
       "recurrence": "limited",
       "mention_count": 5,
@@ -151,101 +232,7 @@
       ],
       "player_feedback_ids": [
         "feedback-001",
-        "feedback-002",
         "feedback-003",
-        "feedback-004",
-        "feedback-005"
-      ]
-    },
-    {
-      "category": "friction",
-      "statement": "The brevity, limited number of decisions and occasional quick choice timers create friction for players expecting a lengthy film or deeper interactivity.",
-      "sentiment": "negative",
-      "recurrence": "limited",
-      "mention_count": 5,
-      "evidence_languages": [
-        "russian",
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-002",
-        "source-003",
-        "source-004"
-      ],
-      "player_feedback_ids": [
-        "feedback-003",
-        "feedback-004",
-        "feedback-005",
-        "feedback-006",
-        "feedback-007"
-      ]
-    },
-    {
-      "category": "voice",
-      "statement": "Players can use the original Russian performances or an English-dubbed version; several viewers consider the English voice lip synchronization less natural than the Russian track.",
-      "sentiment": "mixed",
-      "recurrence": "limited",
-      "mention_count": 4,
-      "evidence_languages": [
-        "russian",
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-002",
-        "source-003",
-        "source-004"
-      ],
-      "player_feedback_ids": [
-        "feedback-001",
-        "feedback-004",
-        "feedback-005",
-        "feedback-007"
-      ]
-    },
-    {
-      "category": "other",
-      "statement": "Opinions about the acting and writing diverge: some find the performances engaging and the story coherent after replay, while others criticize stiff acting or weak plot resolution.",
-      "sentiment": "mixed",
-      "recurrence": "limited",
-      "mention_count": 5,
-      "evidence_languages": [
-        "russian",
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-002",
-        "source-003",
-        "source-004"
-      ],
-      "player_feedback_ids": [
-        "feedback-002",
-        "feedback-003",
-        "feedback-004",
-        "feedback-005",
-        "feedback-007"
-      ]
-    },
-    {
-      "category": "difficulty",
-      "statement": "Because the experience involves brief prompted decisions rather than a skill or resource system, mastery is mainly identifying branches and remembering which filmed scenes have been seen.",
-      "sentiment": "neutral",
-      "recurrence": "limited",
-      "mention_count": 4,
-      "evidence_languages": [
-        "russian",
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-002",
-        "source-003",
-        "source-004"
-      ],
-      "player_feedback_ids": [
-        "feedback-001",
         "feedback-004",
         "feedback-005",
         "feedback-007"
@@ -254,21 +241,20 @@
   ],
   "conflicts": [
     {
-      "statement": "Branching choices and short runtime make it easy to explore different scenes, but the same compact duration and thin interaction disappoint those expecting fuller cinematic or gameplay depth.",
+      "statement": "Players new to electrical work enjoy simple repair puzzles, while experienced tradespeople often find the omitted wiring practices and technical depth actively misleading or dull.",
       "recurrence": "limited",
       "mention_count": 6,
       "source_ids": [
         "source-002",
-        "source-003",
-        "source-004"
+        "source-003"
       ],
       "player_feedback_ids": [
         "feedback-001",
         "feedback-002",
-        "feedback-003",
         "feedback-004",
-        "feedback-006",
-        "feedback-007"
+        "feedback-005",
+        "feedback-007",
+        "feedback-008"
       ]
     }
   ],
@@ -294,29 +280,29 @@
           "state": "covered",
           "observation_indices": [
             0,
-            5
+            7
           ]
         },
         {
           "dimension": "progression_development_unlocks",
           "state": "covered",
           "observation_indices": [
-            1,
-            3
+            5
           ]
         },
         {
           "dimension": "variety_repetition_over_time",
           "state": "covered",
           "observation_indices": [
-            3
+            4
           ]
         },
         {
           "dimension": "difficulty_mastery_learning_friction",
           "state": "covered",
           "observation_indices": [
-            8
+            2,
+            3
           ]
         },
         {
@@ -324,7 +310,7 @@
           "state": "covered",
           "observation_indices": [
             1,
-            5
+            7
           ]
         },
         {
@@ -342,26 +328,22 @@
         },
         {
           "dimension": "story_characters_identity_hooks",
-          "state": "covered",
-          "observation_indices": [
-            2,
-            4
-          ]
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
         },
         {
           "dimension": "recurring_strengths",
           "state": "covered",
           "observation_indices": [
-            1,
-            2
+            6
           ]
         },
         {
           "dimension": "recurring_complaints_tradeoffs",
           "state": "covered",
           "observation_indices": [
+            3,
             4,
-            5,
             7
           ]
         },
@@ -369,7 +351,7 @@
           "dimension": "technical_performance_localization_regional",
           "state": "covered",
           "observation_indices": [
-            6
+            3
           ]
         }
       ],
@@ -384,8 +366,8 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1081510/",
-        "publication_date": "2019-07-11",
+        "url": "https://store.steampowered.com/app/1080020/",
+        "publication_date": "2022-09-21",
         "language": "non_russian",
         "evidence_role": "identity",
         "player_feedback": false,
@@ -393,17 +375,17 @@
       },
       {
         "source_id": "source-002",
-        "url": "https://store.steampowered.com/app/1081510/She_Sees_Red/?curator_clanid=6857971&l=russian",
-        "domain": "store.steampowered.com",
+        "url": "https://steamcommunity.com/app/1080020/reviews/?browsefilter=toprated&l=russian",
+        "domain": "steamcommunity.com",
         "source_type": "steam_reviews",
-        "language": "russian",
+        "language": "mixed",
         "publication_date": null,
         "evidence_role": "durable_trait",
         "player_feedback": true,
-        "feedback_surface_mode": "search_result_representation",
+        "feedback_surface_mode": "concrete_item_collection",
         "exact_product_binding": {
           "basis": "source_appid",
-          "appid": "1081510",
+          "appid": "1080020",
           "title": null,
           "release_year": null
         },
@@ -411,35 +393,17 @@
       },
       {
         "source_id": "source-003",
-        "url": "https://steamcommunity.com/app/1081510/reviews/?browsefilter=toprated",
+        "url": "https://steamcommunity.com/app/1080020/reviews/?browsefilter=toprated",
         "domain": "steamcommunity.com",
         "source_type": "steam_reviews",
         "language": "non_russian",
         "publication_date": null,
         "evidence_role": "durable_trait",
         "player_feedback": true,
-        "feedback_surface_mode": "search_result_representation",
+        "feedback_surface_mode": "concrete_item_collection",
         "exact_product_binding": {
           "basis": "source_appid",
-          "appid": "1081510",
-          "title": null,
-          "release_year": null
-        },
-        "freshness": "unknown"
-      },
-      {
-        "source_id": "source-004",
-        "url": "https://www.gog.com/ru/game/she_sees_red_interactive_movie",
-        "domain": "gog.com",
-        "source_type": "store_user_reviews",
-        "language": "non_russian",
-        "publication_date": null,
-        "evidence_role": "durable_trait",
-        "player_feedback": true,
-        "feedback_surface_mode": "search_result_representation",
-        "exact_product_binding": {
-          "basis": "source_appid",
-          "appid": "1081510",
+          "appid": "1080020",
           "title": null,
           "release_year": null
         },
@@ -450,51 +414,65 @@
       {
         "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "publication_date": null,
+        "publication_date": "2025-01-09",
         "language": "russian",
-        "acquisition_mode": "search_result_observation"
+        "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-002",
         "source_id": "source-002",
-        "publication_date": "2025-08-24",
+        "publication_date": "2023-01-24",
         "language": "russian",
-        "acquisition_mode": "search_result_observation"
+        "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-003",
         "source_id": "source-002",
-        "publication_date": null,
+        "publication_date": "2022-09-24",
         "language": "russian",
-        "acquisition_mode": "search_result_observation"
+        "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-004",
         "source_id": "source-003",
-        "publication_date": "2025-04-22",
+        "publication_date": "2022-09-21",
         "language": "non_russian",
-        "acquisition_mode": "search_result_observation"
+        "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-005",
         "source_id": "source-003",
-        "publication_date": "2020-09-14",
+        "publication_date": "2023-04-04",
         "language": "non_russian",
-        "acquisition_mode": "search_result_observation"
+        "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-006",
         "source_id": "source-003",
-        "publication_date": "2019-10-05",
+        "publication_date": "2024-02-23",
         "language": "non_russian",
-        "acquisition_mode": "search_result_observation"
+        "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-007",
-        "source_id": "source-004",
-        "publication_date": "2021-04-19",
+        "source_id": "source-003",
+        "publication_date": "2024-01-26",
         "language": "non_russian",
-        "acquisition_mode": "search_result_observation"
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-008",
+        "source_id": "source-003",
+        "publication_date": "2025-05-01",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-009",
+        "source_id": "source-003",
+        "publication_date": "2023-05-13",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
       }
     ]
   }

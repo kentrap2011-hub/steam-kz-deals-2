@@ -1,67 +1,506 @@
 {
-  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
-  "schema_version": 1,
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
   "appid": "1080750",
   "title": "Mutazione",
-  "generated_at_utc": "2026-09-14T04:46:00+00:00",
-  "expires_at_utc": "2026-10-04T04:46:00+00:00",
+  "generated_at_utc": "2026-10-08T17:46:06.803Z",
+  "expires_at_utc": "2026-10-28T17:46:06.803Z",
   "ttl_days": 20,
-  "summary": "Narrative adventure focused on a close-knit mutant community, relationships, gossip and a supernatural mystery, with a garden-building layer rather than combat-driven progression. The accessible review index was sparse, so the dossier relies mainly on the store description for structural characterization.",
+  "game_identity": {
+    "work_title": "Mutazione",
+    "release_year": 2019,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "1080750"
+      },
+      {
+        "kind": "developer",
+        "value": "Die Gute Fabrik"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 9 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
       "category": "structure",
-      "statement": "The game is structured around conversations, community relationships and exploration of a small settlement rather than conventional combat.",
+      "statement": "Play centers on Kai's visit to an isolated mutant community, with a day-part schedule of conversations, short errands and changing character interactions.",
       "sentiment": "neutral",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "recurrence": "limited",
+      "mention_count": 4,
       "evidence_languages": [
-        "store"
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "The richly characterized island residents and their intimate conflicts are a central attraction, gradually blending cozy everyday conversations with grief, secrets and supernatural history.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 6,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003",
+        "feedback-004",
+        "feedback-005",
+        "feedback-006"
       ]
     },
     {
       "category": "mechanics",
-      "statement": "Magical gardens provide a light interactive system alongside the narrative and exploration focus.",
-      "sentiment": "neutral",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "statement": "Exploration and dialogue are simple and story-directed, with seed collecting and musical garden cultivation supplying a calmer secondary activity rather than demanding mechanical challenges.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 6,
       "evidence_languages": [
-        "store"
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003",
+        "feedback-006",
+        "feedback-007",
+        "feedback-008"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "The deliberate, unhurried structure gives conversations and setting room to breathe, but players seeking regular action or immediately visible goals can find it painfully slow.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 5,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003",
+        "feedback-005",
+        "feedback-007",
+        "feedback-008"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Hand-illustrated colorful scenery, distinctive character animations, ambient sound and the garden's gentle musical elements repeatedly draw praise.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 5,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003",
+        "feedback-004",
+        "feedback-005",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "Progress often entails walking back through familiar village spaces and revisiting characters at different times of day; some enjoy this routine, while others consider it tedious backtracking.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 4,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003",
+        "feedback-007",
+        "feedback-008"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "The mostly fixed dialogue outcomes and lightweight garden puzzles may leave players who want substantial choices or systems-driven gardening unsatisfied.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-007",
+        "feedback-008"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Some viewers respond warmly to the gentle depiction of acceptance and community, while others find the emotional tone overly sentimental or the protagonist's voice unconvincing.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 4,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-004",
+        "feedback-008",
+        "feedback-009"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "The story reaches a deliberate ending over several in-game days; the absence of extensive post-story free-roaming can disappoint players hoping to keep visiting their gardens.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-005"
       ]
     }
   ],
-  "conflicts": [],
-  "review_sample": {
-    "strategy": "adaptive_stability",
-    "sampled_russian": 0,
-    "sampled_non_russian": 0,
-    "sampled_total": 0,
-    "sample_ids_sha256": "e865b5a0319d15332f114382a0f9678dd1e4da951da2d85a3ae2f9e7e6f2389b",
-    "lanes": [
-      {
-        "language_scope": "russian",
-        "sampled": 0,
-        "batches": 1,
-        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
-      },
-      {
-        "language_scope": "non_russian",
-        "sampled": 0,
-        "batches": 1,
-        "stop_reason": "source_sparse_in_accessible_steam_review_index"
-      }
-    ]
+  "conflicts": [
+    {
+      "statement": "The muted interactivity and gentle pace are regarded as immersive storytelling by some, but as unrewarding walking and trivial gardening by others.",
+      "recurrence": "limited",
+      "mention_count": 5,
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003",
+        "feedback-007",
+        "feedback-008"
+      ]
+    }
+  ],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            2
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            5
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            8
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            5
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            6
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            3,
+            8
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            2,
+            5
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            7
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            4
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            3,
+            5,
+            6
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
   },
   "provenance": {
-    "store_description": {
-      "url": "https://store.steampowered.com/app/1080750/",
-      "captured_at_utc": "2026-09-14T04:46:00+00:00",
-      "content_sha256": "01a73a5c3b317a0611459d15f6d6ba3c6a929a368e4b73e313486daf8a8c955d"
-    },
-    "steam_reviews": {
-      "url": "https://store.steampowered.com/app/1080750/#app_reviews_hash",
-      "captured_at_utc": "2026-09-14T04:46:00+00:00",
-      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
-      "source_refs_sha256": "e865b5a0319d15332f114382a0f9678dd1e4da951da2d85a3ae2f9e7e6f2389b"
-    }
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1080750/",
+        "publication_date": "2019-09-19",
+        "language": "non_russian",
+        "evidence_role": "identity",
+        "player_feedback": false,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-002",
+        "url": "https://store.steampowered.com/app/1080750/Mutazione/?curator_clanid=44393020&l=russian",
+        "domain": "store.steampowered.com",
+        "source_type": "steam_reviews",
+        "language": "russian",
+        "publication_date": null,
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1080750",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "url": "https://steamcommunity.com/app/1080750/reviews/?browsefilter=toprated",
+        "domain": "steamcommunity.com",
+        "source_type": "steam_reviews",
+        "language": "non_russian",
+        "publication_date": null,
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1080750",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-004",
+        "url": "https://steamcommunity.com/app/1080750/negativereviews/?browsefilter=toprated",
+        "domain": "steamcommunity.com",
+        "source_type": "steam_reviews",
+        "language": "non_russian",
+        "publication_date": null,
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1080750",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "publication_date": "2025-03-29",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": "2024-10-20",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-003",
+        "publication_date": "2019-10-03",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-003",
+        "publication_date": "2024-02-27",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-003",
+        "publication_date": "2020-03-01",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-003",
+        "publication_date": "2020-05-12",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-007",
+        "source_id": "source-004",
+        "publication_date": "2020-02-20",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-008",
+        "source_id": "source-004",
+        "publication_date": "2023-06-04",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-009",
+        "source_id": "source-004",
+        "publication_date": "2025-07-30",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      }
+    ]
   }
 }
