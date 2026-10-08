@@ -124,8 +124,19 @@ def stage_statistics(stage1_work, stage1_state, stage2_state, dossier_status):
         "pending": dossier_status.get("dossier_pending_count"),
         "diagnostic_incomplete": dossier_status.get("dossier_failed_or_recovery_count"),
         "last_attempt_at_utc": dossier_status.get("dossier_last_write_at_utc"),
-        "last_successful_result_at_utc": dossier_status.get("dossier_last_write_at_utc"),
+        # Last write is NOT proof of successful Dossier acceptance.
+        "last_successful_result_at_utc": dossier_status.get(
+            "dossier_last_successful_result_at_utc"),
     }
+    if all(type(dossier[k]) is int and dossier[k] >= 0 for k in
+           ("total_eligible", "completed", "pending", "diagnostic_incomplete")):
+        require(dossier["total_eligible"] == dossier["completed"] +
+                dossier["pending"] + dossier["diagnostic_incomplete"],
+                "Dossier current-scope arithmetic mismatch")
+        dossier["progress_percent"] = percent(
+            dossier["completed"], dossier["total_eligible"])
+    else:
+        dossier["progress_percent"] = None
     return {
         "deep_two_stage_site_contract": CONTRACT,
         "dossier": dossier,
@@ -248,13 +259,22 @@ def project_visual(visual, *, stage1_work, stage1_state, stage2_state,
     owns activation and pass-through of the new ranking/purchase outputs.
     """
     eligible, entries1, entries2 = canonical_states(stage1_work, stage1_state, stage2_state)
+    # Work.items contains pending eligible scope, while accepted entries carry
+    # completed work that is no longer present in the pending item list.
     stage1_by_family = {}
+    for item in stage1_work.get("items", []):
+        work_id = item.get("work_id")
+        require(work_id in eligible, "non-eligible Stage-1 work item")
+        key = (item.get("family_id"), str(item.get("appid")))
+        require(key not in stage1_by_family, "duplicate Stage-1 work family/appid")
+        stage1_by_family[key] = work_id
     for work_id in eligible:
         entry = entries1.get(work_id)
         if entry:
-            key = (entry["family_id"], str(entry["appid"]))
-            require(key not in stage1_by_family, "ambiguous Stage-1 family/appid binding")
-            stage1_by_family[key] = entry
+            key = (entry.get("family_id"), str(entry.get("appid")))
+            require(key not in stage1_by_family or stage1_by_family[key] == work_id,
+                    "ambiguous Stage-1 family/appid binding")
+            stage1_by_family[key] = work_id
     stage2_by_stage1 = {}
     for entry in entries2.values():
         key = entry.get("stage1_work_id")
@@ -266,12 +286,13 @@ def project_visual(visual, *, stage1_work, stage1_state, stage2_state,
     for game in projected.get("items", []):
         family = game.get("family_id")
         appid = game.get("appid")
-        match = stage1_by_family.get((family, str(appid)))
+        work_id = stage1_by_family.get((family, str(appid)))
+        match = entries1.get(work_id) if work_id else None
         stage1_result = load_accepted_stage1(match, root=root) if match else None
         output.append(project_game(
             game, stage1_entry=match, stage1_result=stage1_result,
-            stage2_entry=stage2_by_stage1.get(match["work_id"]) if match else None,
-            stage1_eligible=bool(match),
+            stage2_entry=stage2_by_stage1.get(work_id) if work_id else None,
+            stage1_eligible=work_id is not None,
         ))
     projected["items"] = output
     old_status = projected.get("processing_status") or {}
