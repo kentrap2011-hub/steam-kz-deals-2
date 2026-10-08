@@ -14,7 +14,8 @@
 - PR #156 architecture freeze remains accepted and must not be re-audited without direct contradiction.
 - No Scheduled Task changes are authorized.
 
-- **ЧАТ 1 next after the current narrow site-task regression fix:** `WORKER_TASK_DOSSIER_TWO_STAGE_RESEARCH_ASSEMBLY_ARCHITECTURE_01.md`. User-approved direction: split Dossier into Research (completeness/evidence) and Assembly (strict canonical structuring + bounded gap fill), while GitHub remains the sole queue/acceptance authority. Architecture/recon only before implementation.
+- **ЧАТ 1:** continue only the narrow `WORKER_TASK_SITE_TASKS_RECENT_COMPLETION_REGRESSION_FIX_01.md`.
+- **New ЧАТ 2:** run `WORKER_TASK_DOSSIER_TWO_STAGE_RESEARCH_ASSEMBLY_ARCHITECTURE_01.md` in parallel. Architecture/recon only; independent of the site-test fix. Old Deep UI conversation is retired; PR #168 waits for the shared main test repair and must not be resynchronized.
 
 ## TWO-STAGE DEEP IMPLEMENTATION WAVES — 2026-10-06
 
