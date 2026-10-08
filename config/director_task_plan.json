@@ -524,7 +524,7 @@
       "id": "site-tasks-recent-regression",
       "title": "Исправить тест последних завершённых задач",
       "goal": "Убрать устаревшие жёсткие ожидания deep-stage1/site-tasks и восстановить зелёную публикацию страницы задач.",
-      "status": "active",
+      "status": "complete",
       "effort": "низкая",
       "effort_reason": "Узкий дефект тестов/fixtures страницы задач; builder предположительно уже корректен.",
       "urgency": "высокая",
@@ -533,10 +533,10 @@
       "worker_slot": "ЧАТ 1",
       "order": null,
       "depends_on": [],
-      "blocker": "После первого фикса реальный main выявил ещё две жёсткие lifecycle-проверки: deep-site обязан быть unfinished и deep-cutover обязан быть blocked. Нужно заменить их на динамические проверки canonical plan.",
+      "blocker": "",
       "updated_on": "2026-10-08",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-08T14:06:00Z"
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-08T15:44:17Z"
     },
     {
       "id": "dossier-two-stage-architecture",
