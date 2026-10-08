@@ -47,9 +47,8 @@ def _decimal(value: Any, field: str, low: int, high: int, places: str) -> Decima
 def _state(doc: dict, contract: str) -> dict:
     require(isinstance(doc, dict) and doc.get("schema_version") == 1
             and doc.get("contract") == contract
-            and doc.get("implementation_status") == "implemented_not_active"
             and isinstance(doc.get("entries"), dict),
-            f"{contract}: expected non-active canonical accepted state")
+            f"{contract}: expected canonical accepted state")
     return doc["entries"]
 
 
