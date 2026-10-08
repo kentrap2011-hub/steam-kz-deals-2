@@ -28,7 +28,7 @@ PR head before last presentation-only updates: `71ecee51bcdfc2fb2bf4fb3dfa2342c1
 - **PASS** — `Validate Deep site mirror UI`, run **37778452925**: Python projection tests, new Node UI tests, legacy statistics and score UI compatibility.
 - **PASS** — `Validate site publication resilience`, run **37778452379**.
 - **PASS** — `Validate package purchase value`, run **37778452351**.
-- `Validate Progressive PASS 2 core` **37778452789**: still running at this report snapshot; previous head `137c9c10fd4051d005ba6b67cf9443f2d993b74d` run **37777875331** succeeded.
+- **PASS** — `Validate Progressive PASS 2 core`, run **37778452789** (completed successfully on the same implementation head).
 - **Unrelated existing shared-state regression** — `Validate site task registry and page`, run **37778452411** failed on assertions hardcoded to older “recent completed” identities (`site-tasks`, `deep-stage1`), while current `main` registers more recent `historical-backlog-audit` and `deep-ranking`. No task-registry, task-page or shared Director files were changed by this PR; this separate issue is **not** claimed fixed. CI is therefore not fully green.
 
 ## Remaining limitations / acceptance
