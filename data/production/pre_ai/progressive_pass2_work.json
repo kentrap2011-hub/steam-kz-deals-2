@@ -51,25 +51,25 @@
   },
   "scope": {
     "deep_total_current_coverage_target": 2301,
-    "deep_first_pass_attempted_count": 211,
+    "deep_first_pass_attempted_count": 212,
     "deep_authoritative_completed_count": 190,
     "deep_completed_fit_count": 158,
     "deep_completed_not_fit_count": 32,
-    "deep_incomplete_or_recovery_count": 21,
+    "deep_incomplete_or_recovery_count": 22,
     "deep_waiting_for_dossier_count": 2081,
-    "deep_ready_or_pending_count": 9,
-    "deep_normal_first_pass_remaining_count": 2090,
+    "deep_ready_or_pending_count": 8,
+    "deep_normal_first_pass_remaining_count": 2089,
     "deep_remaining_until_all_authoritative_count": 2111,
     "deep_normal_first_pass_complete": false,
     "deep_all_current_authoritative_complete": false,
-    "recovery_owned_count": 21,
+    "recovery_owned_count": 22,
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 15,
     "dossier_waiting_count": 2081,
-    "pass2_attempted_count": 211,
-    "pass2_eligible_count": 9,
-    "normal_pass2_eligible_count": 9,
+    "pass2_attempted_count": 212,
+    "pass2_eligible_count": 8,
+    "normal_pass2_eligible_count": 8,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -108,72 +108,6 @@
     }
   },
   "items": [
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:107100",
-      "taste_subject_key": "App_107100",
-      "appid": "107100",
-      "taste_fingerprint": "1c1eef85e7d48ab5905ba679678bb2a9f4e9352e94b9e722305456935481fb94",
-      "candidate_context_sha256": "4b4e2f7a92f9d278971789641b506943b6fde007147d581f5bb8f312873cc9d8",
-      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
-      "work_id": "72e788d864b0a3377783df319231844c710b75f52dab0ae18a4b0b3caa5ff2d0",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Bastion",
-        "short_description": "Discover the secrets of the Calamity, a surreal catastrophe that shattered the world to pieces.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Action",
-          "Hack and Slash",
-          "RPG",
-          "Singleplayer",
-          "Story Rich"
-        ],
-        "core_fit_count": 2,
-        "release_date": "16 Aug, 2011",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "107100"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_107100.json",
-      "dossier_content_sha256": "83c91c8101c5dbdfa31c87cbebd1a22e75aee632dce984f4c6f997025f9e0284",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-28T16:11:45Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "7e7145f88d70337c87b0e750994049565a2e9609c6cf260be72a64e332deab0b",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--72e788d864b0a3377783df319231844c710b75f52dab0ae18a4b0b3caa5ff2d0--7e7145f88d70337c87b0e750994049565a2e9609c6cf260be72a64e332deab0b.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--72e788d864b0a3377783df319231844c710b75f52dab0ae18a4b0b3caa5ff2d0--7e7145f88d70337c87b0e750994049565a2e9609c6cf260be72a64e332deab0b.json",
-      "sequence": 1
-    },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
@@ -236,7 +170,7 @@
       "authorization_id": "3c2837013bb9c7443d5b6abf7db54416465e68a598a37eca6685c57f35890e33",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--b15f58d028137ee710b88e869792a6fd37f19b96544ba3a8c3d62684171d121f--3c2837013bb9c7443d5b6abf7db54416465e68a598a37eca6685c57f35890e33.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--b15f58d028137ee710b88e869792a6fd37f19b96544ba3a8c3d62684171d121f--3c2837013bb9c7443d5b6abf7db54416465e68a598a37eca6685c57f35890e33.json",
-      "sequence": 2
+      "sequence": 1
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -301,7 +235,7 @@
       "authorization_id": "41869fed0510551fa10f0a881ee0c3424922ccb5f7b2e6c395d4d81c887f5590",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--8da2f1e2e3a3c79de425303aef0335562c405a1a34e049b7c2f285f28fbf7100--41869fed0510551fa10f0a881ee0c3424922ccb5f7b2e6c395d4d81c887f5590.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--8da2f1e2e3a3c79de425303aef0335562c405a1a34e049b7c2f285f28fbf7100--41869fed0510551fa10f0a881ee0c3424922ccb5f7b2e6c395d4d81c887f5590.json",
-      "sequence": 3
+      "sequence": 2
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -364,7 +298,7 @@
       "authorization_id": "e6dde9badc8ea30f72290cb60674bcefa265e9f3955d59e7d2a3255918a742a8",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--53a34935979cef41d06ed2a5f2d3353171d64b2f87e66e9c45da3c961809fa9c--e6dde9badc8ea30f72290cb60674bcefa265e9f3955d59e7d2a3255918a742a8.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--53a34935979cef41d06ed2a5f2d3353171d64b2f87e66e9c45da3c961809fa9c--e6dde9badc8ea30f72290cb60674bcefa265e9f3955d59e7d2a3255918a742a8.json",
-      "sequence": 4
+      "sequence": 3
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -427,7 +361,7 @@
       "authorization_id": "3b32c9d531af5b775f598991c114e66e249321a7ff5f49b4166bc26999f6d6d0",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--c77f05c59abe1aa23f34d3b2e1c2261081c1ce681aba99f27d727b20547a8696--3b32c9d531af5b775f598991c114e66e249321a7ff5f49b4166bc26999f6d6d0.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--c77f05c59abe1aa23f34d3b2e1c2261081c1ce681aba99f27d727b20547a8696--3b32c9d531af5b775f598991c114e66e249321a7ff5f49b4166bc26999f6d6d0.json",
-      "sequence": 5
+      "sequence": 4
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -492,7 +426,7 @@
       "authorization_id": "888f42ddeac63a19d30345c0d7c0c3ef5be02c68bf1e2f863aaa0a0d18f4ce50",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--075053d1518eb3db7e52d7465fe76d0543e46e89eaaf76898192f9a39b489872--888f42ddeac63a19d30345c0d7c0c3ef5be02c68bf1e2f863aaa0a0d18f4ce50.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--075053d1518eb3db7e52d7465fe76d0543e46e89eaaf76898192f9a39b489872--888f42ddeac63a19d30345c0d7c0c3ef5be02c68bf1e2f863aaa0a0d18f4ce50.json",
-      "sequence": 6
+      "sequence": 5
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -555,7 +489,7 @@
       "authorization_id": "6570c3dc23480641a31b35ab80acfcda6d4f7931de9592fa614c0ceb1eef59d3",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ed638c0594df5b7475acc206539ad0874f5c5db4ffbad0ca7329b75d0c415d78--6570c3dc23480641a31b35ab80acfcda6d4f7931de9592fa614c0ceb1eef59d3.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ed638c0594df5b7475acc206539ad0874f5c5db4ffbad0ca7329b75d0c415d78--6570c3dc23480641a31b35ab80acfcda6d4f7931de9592fa614c0ceb1eef59d3.json",
-      "sequence": 7
+      "sequence": 6
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -617,7 +551,7 @@
       "authorization_id": "5d57e721532b84bba0a6c0c442d159a42508b00049dc67a1d57c838e69f6ff10",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--f51352992c764ef1215a729a1d367c684e531aaddb7fb0c8cd8afc2483d876a4--5d57e721532b84bba0a6c0c442d159a42508b00049dc67a1d57c838e69f6ff10.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--f51352992c764ef1215a729a1d367c684e531aaddb7fb0c8cd8afc2483d876a4--5d57e721532b84bba0a6c0c442d159a42508b00049dc67a1d57c838e69f6ff10.json",
-      "sequence": 8
+      "sequence": 7
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -681,7 +615,7 @@
       "authorization_id": "795b8ada3aa9d17d49ced052373e16ebada61418e84db76f69e5e2d08c009614",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--18f065679ca62e07addf04b3d731038cccd9b09c282929537fcb96f538f119d3--795b8ada3aa9d17d49ced052373e16ebada61418e84db76f69e5e2d08c009614.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--18f065679ca62e07addf04b3d731038cccd9b09c282929537fcb96f538f119d3--795b8ada3aa9d17d49ced052373e16ebada61418e84db76f69e5e2d08c009614.json",
-      "sequence": 9
+      "sequence": 8
     }
   ]
 }
