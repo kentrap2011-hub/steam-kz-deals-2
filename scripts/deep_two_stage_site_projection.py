@@ -165,7 +165,8 @@ def finding_text(rows):
 
 
 def project_game(game, *, stage1_entry=None, stage1_result=None,
-                 stage2_entry=None, stage1_eligible=False):
+                 stage2_entry=None, stage1_eligible=False,
+                 anchor_catalog=None):
     """Mirror exactly supplied, already-bound GitHub state into one card."""
     result = deepcopy(game)
     dossier = result.get("dossier_stage_state")
@@ -245,7 +246,13 @@ def project_game(game, *, stage1_entry=None, stage1_result=None,
                 result["stage2_calibration_delta"] = display(calibrated - provisional)
                 result["personal_quality_score_0_60"] = display(calibrated + bonus)
                 result["total_score_0_100"] = display(calibrated + bonus + purchase)
-                result["stage2_neighbor_comparisons"] = deepcopy(stage2_entry.get("comparisons") or [])
+                comparisons = deepcopy(stage2_entry.get("comparisons") or [])
+                for comparison in comparisons:
+                    anchor = (anchor_catalog or {}).get(comparison.get("anchor_id"))
+                    if anchor:
+                        comparison["anchor_appid"] = anchor["appid"]
+                        comparison["anchor_title_ru"] = anchor["title_ru"]
+                result["stage2_neighbor_comparisons"] = comparisons
                 result["stage2_why_changed_ru"] = stage2_entry.get("why_stage2_changed_ru")
                 result["stage2_why_above_ru"] = deepcopy(stage2_entry.get("why_above_ru") or [])
                 result["stage2_why_below_ru"] = deepcopy(stage2_entry.get("why_below_ru") or [])
@@ -297,8 +304,23 @@ def project_visual(visual, *, stage1_work, stage1_state, stage2_state,
             require(key not in stage2_by_stage1, "ambiguous Stage-2 stage1 binding")
             stage2_by_stage1[key] = entry
     projected = deepcopy(visual)
+    # The calibrated anchor ID is a SHA, not a useful game name. Resolve
+    # canonical Stage-2 anchor identities to the published title when present,
+    # otherwise expose the exact Steam AppID instead of inventing a title.
+    items = projected.get("items", [])
+    titles = {(game.get("family_id"), str(game.get("appid"))): game.get("title")
+              for game in items}
+    anchor_catalog = {}
+    for anchor_id, entry in entries2.items():
+        if entry.get("status") != "calibrated":
+            continue
+        family, appid = entry.get("family_id"), str(entry.get("appid"))
+        anchor_catalog[anchor_id] = {
+            "appid": appid,
+            "title_ru": titles.get((family, appid)) or f"Steam AppID {appid}",
+        }
     output = []
-    for game in projected.get("items", []):
+    for game in items:
         family = game.get("family_id")
         appid = game.get("appid")
         work_id = stage1_by_family.get((family, str(appid)))
@@ -308,6 +330,7 @@ def project_visual(visual, *, stage1_work, stage1_state, stage2_state,
             game, stage1_entry=match, stage1_result=stage1_result,
             stage2_entry=stage2_by_stage1.get(work_id) if work_id else None,
             stage1_eligible=work_id is not None,
+            anchor_catalog=anchor_catalog,
         ))
     projected["items"] = output
     old_status = projected.get("processing_status") or {}
