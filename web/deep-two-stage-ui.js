@@ -27,8 +27,12 @@
     calibrated:'Сравнительная калибровка завершена',diagnostic_incomplete:'Требуется диагностика'
   };
   function scoreEvolution(game){
-    const breakdown=(game.stage1_point_breakdown||[]).map(row=>
-      '<li><span>'+esc(row.label_ru)+'</span><b>'+esc(row.direction||'')+' '+esc(row.points)+'</b></li>').join('');
+    const breakdown=(game.stage1_point_breakdown||[]).map(row=>{
+      const reasons=Array.isArray(row.finding_reasons_ru)?row.finding_reasons_ru:[];
+      return '<li><div><span>'+esc(row.label_ru)+'</span>'+
+        (reasons.length?'<small>'+reasons.map(esc).join('; ')+'</small>':'')+
+        '</div><b>'+esc(row.direction||'')+' '+esc(row.points)+'</b></li>';
+    }).join('');
     const evolution='<p>Stage 1 (предварительно): <b>'+score(game.stage1_provisional_deep_fit_score_0_56,56)+
       '</b> → Stage 2 (итог): <b>'+score(game.stage2_calibrated_deep_fit_score_0_56,56)+'</b></p>';
     const delta=numeric(game.stage2_calibration_delta)
