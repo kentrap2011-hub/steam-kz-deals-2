@@ -212,6 +212,9 @@ def make_work_item(source: dict, row: dict, sequence: int) -> dict:
             "GitHub-owned immutable profile pin missing")
     semantic = deepcopy(row["semantic_input"])
     require(isinstance(semantic, dict), "semantic input invalid")
+    require(not set(semantic) & {"price", "purchase", "wishlist", "discount",
+                                 "ranking_neighbors", "lower_anchors", "upper_anchors"},
+            "commercial/wishlist/comparative input forbidden in Stage 1")
     # A distinct Stage-1 work ID ensures dossiers and profile revisions cannot collide.
     work_id = canonical_sha256({
         "contract": WORK_CONTRACT,
