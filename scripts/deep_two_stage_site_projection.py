@@ -115,7 +115,7 @@ def stage_statistics(stage1_work, stage1_state, stage2_state, dossier_status):
     diagnostic2 = progress2.get("diagnostic_incomplete")
     require(all(type(v) is int and v >= 0 for v in
                 (eligible2, calibrated, awaiting, diagnostic2)) and
-            calibrated + awaiting + diagnostic2 <= eligible2,
+            calibrated + awaiting + diagnostic2 <= eligible2 and eligible2 == fit,
             "invalid Stage-2 canonical progress")
     require(isinstance(dossier_status, dict), "canonical Dossier status missing")
     dossier = {
@@ -212,7 +212,18 @@ def project_game(game, *, stage1_entry=None, stage1_result=None,
                                ("negatives", "stage1_negatives"),
                                ("nuances", "stage1_nuances")):
             result[target] = finding_text(stage1_result[source])
-        result["stage1_point_breakdown"] = deepcopy(stage1_result["point_breakdown"])
+        reasons = {
+            finding["finding_id"]: finding["text_ru"]
+            for part in ("positives", "negatives", "nuances")
+            for finding in stage1_result[part]
+        }
+        breakdown = deepcopy(stage1_result["point_breakdown"])
+        for row in breakdown:
+            refs = row.get("finding_refs") or []
+            require(all(ref in reasons for ref in refs),
+                    "Stage-1 point breakdown has unbound findings")
+            row["finding_reasons_ru"] = [reasons[ref] for ref in refs]
+        result["stage1_point_breakdown"] = breakdown
         if outcome == "analyzed_fit":
             provisional = score(stage1_result["provisional_deep_fit_score_0_56"], 56)
             result["stage1_provisional_deep_fit_score_0_56"] = display(provisional)
@@ -248,6 +259,10 @@ def project_game(game, *, stage1_entry=None, stage1_result=None,
     result.pop("score_breakdown", None)
     result.pop("personal_score", None)
     result.pop("total_score", None)
+    if result["stage2_status"] == "calibrated":
+        # Legacy card/queue consumers may use this canonical calibrated alias,
+        # but no older Fast/Stage-1 score survives before Stage 2.
+        result["total_score"] = result["total_score_0_100"]
     return result
 
 
