@@ -1,0 +1,283 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "19574b3759e6fc6c9f766ed36bd2038b43279aef",
+  "run_start_authority_commit": "886fc01861f5d4813e9e321d953b67e58fd19caa",
+  "run_started_at_utc": "2026-10-08T12:28:28+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "892f4fbe2eadd4cf920aee94ae00d51115e8f2248b5e05fade28160e80051178",
+  "family_id": "game:1045720",
+  "taste_subject_key": "App_1045720",
+  "appid": "1045720",
+  "taste_fingerprint": "86531bb9ef441d6bdce138f1da40346a48125dd4ec4f0e43b80d7c02a8f176fb",
+  "candidate_context_sha256": "02e120c9a2cd0b9cfbdfebec63a23bcab71dc4c112b146b38e9462e6a9ff7ba8",
+  "dossier_content_sha256": "22ea6fe4cc4200b41395bbcedb5bf1891dfb72b463dbf13ef2ca834ac71fe9fc",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "d04096b386f66e2709592f45b59689f02678645d43ad98d0dafe542901916a4d",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Атмосферный корейский хоррор с рисованным стилем, звуком и загадочным сюжетом даёт значимый личный крючок.",
+    "Новые районы и побочные задачи добавляют разнообразие исследованию по сравнению с историей в одной школе.",
+    "Погоня и дефицит ресурсов создают конкретные напряжённые тактические эпизоды, хотя комфорт управления и повторяемость ограничивают соответствие."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 48,
+    "development_variety": 63,
+    "structure_pacing_direction": 54,
+    "identity_hooks": 82,
+    "breadth_of_match": 58
+  },
+  "base_support_compatible": null,
+  "score_findings": [
+    {
+      "finding_id": "horror_identity",
+      "text_ru": "Корейский школьный хоррор с выразительной рисованной подачей, напряжённым звуком и разворачивающейся тайной даёт конкретный атмосферный и сюжетный крючок.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/raises",
+          "profile_value_sha256": "f1997cf9d87235a0d984a3c5bceefb8aa566143fb2e8edddfb81312ba09aef35",
+          "match_text_ru": "Интересует раскрываемая тайна с понятным направлением."
+        },
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Самобытная эстетика и атмосфера особенно ценны."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 82
+        }
+      ]
+    },
+    {
+      "finding_id": "district_variety",
+      "text_ru": "Исследование нескольких городских и сверхъестественных районов с побочными заданиями расширяет маршрут за пределы исходной школы, хотя не доказывает постоянного обновления механик.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Важны новые ситуации, а не однообразное продолжение стартовой формулы."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 63
+        }
+      ]
+    },
+    {
+      "finding_id": "evasion_mechanics",
+      "text_ru": "Вместо прямого боя приходится прятаться, следить за преследователем, рассчитывать запас выносливости и выполнять реакции на время: это даёт напряжённые решения, но не обещает глубокой механической школы боя.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Осмысленные тайминги и заметное освоение системы нравятся, но не любая трудность является достоинством."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 48
+        }
+      ]
+    },
+    {
+      "finding_id": "chase_retries",
+      "text_ru": "Повторные проходы по комнатам и перезапуски погонь иногда растягивают путь между сюжетными открытиями и ослабляют ритм.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8/lowers",
+          "profile_value_sha256": "0190267bc95b26d6a6c3d6c7ec4a3e9c3dc45950de5ac94ebaff3b97b434b73b",
+          "match_text_ru": "Повтор без нового опыта при слабом развитии быстро утомляет."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 54
+        }
+      ]
+    },
+    {
+      "finding_id": "broad_tradeoff",
+      "text_ru": "Атмосфера и сюжет поддерживают интерес, однако неловкое перемещение и однотипные эпизоды укрытия создают трение именно в центральном действии, а не только в побочных занятиях.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/геймплей_и_ощущение_управления/level",
+          "profile_value_sha256": "53cef86c139ac75703d153055fd8a263376851df604c77b702f8423e34cdeb29",
+          "match_text_ru": "Ощущение непосредственного управления является критически важным."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 58
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "stealth_restart_pressure",
+        "text_ru": "Перезапуски погонь, QTE и повторное прохождение одних комнат после неудачи могут превращать скрытное выживание в навязанные повторы вместо осмысленного поиска нового решения.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Скрытность и расходуемые защитные предметы важнее прямого боя, а неожиданные встречи иногда дают резкую потерю здоровья: это возможное неудобство, но не доказанная несовместимость со сложностью.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          },
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть отдельные жалобы на неудобство движения, при этом часть игроков ценит напряжение таких эпизодов; без личной пробы нельзя считать это гарантированным техническим недостатком.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      }
+    ]
+  }
+}
