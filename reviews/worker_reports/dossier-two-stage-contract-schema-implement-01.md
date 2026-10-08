@@ -58,7 +58,7 @@ Architecture preflight: GitHub remains control-plane owner; the new PR-only test
 - `python -m unittest discover -s scripts -p 'test_dossier_deep_release_year_identity_compatibility.py' -v` (existing Dossier/Deep boundary).
 - PR-only workflow installs its own `jsonschema`, runs the three deterministic suites and has **no production permissions**.
 
-**Status at report creation:** PR CI results to be verified before closing; do not equate a created commit or typed result with validated production execution. Fixtures are unit-test data only and are not written to any production inbox.
+**Verified:** PR-only workflow `Validate inactive Dossier two-stage interfaces` run `37806079484`, job `113410585094` — **success** on implementation SHA `e037228ddcc9f577f1c0335b3a1a5477b13b8795`; 15/15 P1 deterministic fixture tests green; 9/9 active one-stage GitHub factual-date tests green; existing `test_dossier_deep_release_year_identity_compatibility.py` executed directly and succeeded (the earlier unittest discovery matched 0 tests and was corrected). `Validate backlog dispositions` is an independent PR regression. These are schema/compatibility checks, not live two-stage execution or production proof. Fixtures are unit-test data only and are not written to any production inbox.
 
 ## 7. Scope and next task
 
