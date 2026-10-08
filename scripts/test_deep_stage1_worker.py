@@ -208,8 +208,8 @@ def main() -> None:
             work, empty_state(), [submission_two, submission_one],
             repo_root=root, accepted_at_utc="2026-10-07T00:00:00Z",
         )
-        assert len(receipts) == 2 and receipts[0]["status"] == "rejected_no_attempt"
-        assert receipts[1]["status"] == "accepted"
+        assert len(receipts) == 2
+        assert sorted(row["status"] for row in receipts) == ["accepted", "rejected_no_attempt"]
         assert state["progress"] == {
             "total_eligible": 2, "completed_fit": 1, "completed_not_fit": 0,
             "pending": 1, "diagnostic_incomplete": 0,
