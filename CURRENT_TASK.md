@@ -1,5 +1,13 @@
 # CURRENT TASK
 
+## COMPLETE — Deep Fast removal and ranking migration preparation 01
+Статус: `implementation_complete_ready_for_director_review`.
+- task: `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`; PR #164;
+- prepared fail-closed Stage-2-only 56+4+40 scorer, no Fast fallback/double-counting and no cutover;
+- checks: `.github/workflows/validate-deep-fast-removal-ranking.yml`; report: `reviews/worker_reports/deep-fast-removal-ranking-migration-01.md`;
+- worker stopped; next integration is separately owned.
+
+
 ## COMPLETE — Site current tasks page 01
 Статус: `complete_published_pages_verified_by_github_actions`.
 - task: `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`; original implementation PR #162 already merged.
