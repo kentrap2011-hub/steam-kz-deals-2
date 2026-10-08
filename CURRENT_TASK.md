@@ -1,5 +1,17 @@
 # CURRENT TASK
 
+## COMPLETE — Historical unimplemented backlog audit 01
+Статус: `diagnostic_complete_accepted`.
+- task: `WORKER_TASK_HISTORICAL_UNIMPLEMENTED_BACKLOG_AUDIT_01.md`; PR #167 merged as `3d90b18ea2581c006dffbce6df09d18c0869de64`;
+- found five strong restoration candidates and three Director-decision cases; no recovered task was auto-added or implemented;
+- report: `reviews/worker_reports/historical-unimplemented-backlog-audit-01.md`.
+
+## COMPLETE — Deep Fast removal and ranking migration preparation 01
+Статус: `implementation_complete_accepted_non_active`.
+- task: `WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md`; clean replacement PR #166 merged as `4d1cfb4745989994051f6233a3810759f1f1a305`;
+- exactly four task-owned files; Fast-free Stage-2 56+4+40 scorer remains non-active until integration/cutover;
+- old PR #164 closed superseded; no shared Director/production state carried by the replacement.
+
 ## COMPLETE — Site current tasks page 01
 Статус: `complete_published_pages_verified_by_github_actions`.
 - task: `WORKER_TASK_SITE_CURRENT_TASKS_PAGE_01.md`; original implementation PR #162 already merged.
