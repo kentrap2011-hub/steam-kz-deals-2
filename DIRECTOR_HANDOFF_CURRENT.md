@@ -108,6 +108,8 @@ Do not restate the entire task specification in the chat message when the canoni
 
 - ЧАТ 1 historical backlog audit is accepted via PR #167. Five strong restoration candidates and three Director-decision cases were found; none are yet auto-restored. Physical slot is free.
 
+- ЧАТ 1 active: `WORKER_TASK_DOSSIER_THROUGHPUT_QUALITY_PRESERVING_DIAGNOSTIC_01.md`. Diagnostic only; quantify Dossier bottlenecks/rejections and recommend speedups without lowering evidence/provenance/validation quality. No implementation or Scheduled Task changes.
+
 ## CURRENT PHYSICAL WORKER SLOTS
 
 ### ЧАТ 1 — DIAGNOSTIC COMPLETE
