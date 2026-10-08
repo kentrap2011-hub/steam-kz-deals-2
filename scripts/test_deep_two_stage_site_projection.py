@@ -82,6 +82,10 @@ class SiteProjectionTest(unittest.TestCase):
             "accepted_result_path": str(rel), "accepted_result_sha256": sha,
         }
         self.work["items"] = []
+        if outcome == "analyzed_fit":
+            self.stage2["progress"].update({
+                "stage1_fit_eligible": 1, "awaiting_calibration": 1,
+            })
         self.stage1["progress"].update({
             "completed_fit": int(outcome == "analyzed_fit"),
             "completed_not_fit": int(outcome == "analyzed_not_fit"),
@@ -134,6 +138,7 @@ class SiteProjectionTest(unittest.TestCase):
         }
         self.stage2["progress"].update({
             "stage1_fit_eligible": 1, "calibrated": 1,
+            "awaiting_calibration": 0,
             "last_attempt_at_utc": "2026-10-08T13:00:00Z",
             "last_successful_calibration_at_utc": "2026-10-08T13:00:00Z",
         })
@@ -162,6 +167,10 @@ class SiteProjectionTest(unittest.TestCase):
             "stage1_work_id": "w1", "stage1_result_sha256": sha,
             "profile_semantic_sha256": "p", "status": "calibration_incomplete",
         }
+        self.stage2["progress"].update({
+            "stage1_fit_eligible": 1, "awaiting_calibration": 0,
+            "diagnostic_incomplete": 1,
+        })
         g = self.project()["items"][0]
         self.assertEqual(g["stage2_status"], "diagnostic_incomplete")
         self.assertIsNone(g["personal_quality_score_0_60"])
