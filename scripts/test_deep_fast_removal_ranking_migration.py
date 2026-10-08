@@ -168,7 +168,7 @@ def test_order_is_explicit():
     s2 = {H("f"): stage2("b", 1, "z", 0)}
     rows = attempt(games, bindings, s1, s2)
     assert {row["id"]: row["priority_rank"] for row in rows} == {
-        "z": 1, "a": 3, "b": 2
+        "z": 1, "a": 2, "b": 3
     }
     # The audit-only Fast score is never considered for a not-analyzed row.
     poisoned = attempt(
