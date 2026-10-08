@@ -12,6 +12,11 @@ on:
     branches: [main]
     paths:
       - 'web/**'
+      - 'DIRECTOR_TASK_BOARD.md'
+      - 'config/director_task_plan.json'
+      - 'config/deep_two_stage_dependency_map.json'
+      - 'scripts/build_site_tasks.py'
+      - 'scripts/test_site_tasks.py'
       - 'data/production/visual/current.json'
       - 'data/production/site/current_status.json'
       - 'config/site_publication_resilience_contract.json'
@@ -298,6 +303,8 @@ jobs:
           node web/paid-freshness-ui.test.js
           node web/progressive-personalization-ui.test.js
           node scripts/test_feed_bootstrap_cache_identity.js
+          python scripts/test_site_tasks.py
+          node web/tasks.test.js
 
       - name: Stage precomputed visual payload
         shell: bash
@@ -310,6 +317,13 @@ jobs:
           if [ -s data/production/site/current_status.json ]; then
             cp data/production/site/current_status.json web/data/status.json
           fi
+
+      - name: Generate static Director task page data from canonical GitHub plan
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/build_site_tasks.py --output web/data/tasks.json
+          python scripts/build_site_tasks.py --validate-current web/data/tasks.json
 
       - name: Bind staged publication to triggering build freshness receipt
         id: freshness
