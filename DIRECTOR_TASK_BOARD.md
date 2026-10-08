@@ -27,6 +27,9 @@ User revised worker allocation:
 - Site/UI implementation remains a later independent task after logic contracts/results are sufficiently stable.
 - Final integration/cutover remains `WORKER_TASK_DEEP_TWO_STAGE_INTEGRATION_CUTOVER_01.md`.
 
+
+- **Restored planned task — YouTube reviews:** add a game-page block with relevant YouTube reviews. The old detailed selection rules are not currently present in main, so implementation must first recover/freeze that exact product scope rather than inventing source/channel rules. This task must remain visible in the full planned backlog.
+
 ## QUEUED PRODUCT WORK — 2026-10-04
 
 Priority order:
