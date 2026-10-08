@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "e64a59c21fbfd61625e040f42335730e7c5b11ad",
+  "run_start_authority_commit": "36cc95b0cb6d0a30c3e11545b934f83b6a939e5e",
+  "run_started_at_utc": "2026-10-08T12:11:27+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "e2078e85bd20de69c9d8991e7b08a75b69e44fa8522b08378548214e03e730a0",
+  "family_id": "game:1042490",
+  "taste_subject_key": "App_1042490",
+  "appid": "1042490",
+  "taste_fingerprint": "604b070f39d5f43cc4fb700100b3e5b53ad3024afacc74167ba5d86fad69e381",
+  "candidate_context_sha256": "e8bf2cef4e4b24b583016b2594a4961f2e275edf56e8b847210a65692998b74f",
+  "dossier_content_sha256": "2e5174b3ec00d2057e072040c007fd230b9340778fa372bd53f8f8e5de0a3099",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "ba2e904cc0784afa98a3627ff5d253de3cb164d593dec1551cc2339d1a989dcf",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "taste_factors": {
+    "gameplay_mastery": 49,
+    "development_variety": 55,
+    "structure_pacing_direction": 58,
+    "identity_hooks": 86,
+    "breadth_of_match": 66
+  },
+  "positive_evidence": [
+    "Тропический остров, заметки экспедиции, загадочные символы и дневник образуют цельный детективно-исследовательский процесс с понятным предметом поиска.",
+    "Выразительный художественный стиль, озвучка и мистическая история дают редкий атмосферный крючок даже без боёв, хотя чистый puzzle-loop подходит менее уверенно."
+  ],
+  "score_findings": [
+    {
+      "finding_id": "identity_hooks",
+      "text_ru": "Тёплая тропическая палитра и мистическая история экспедиции выделяются на фоне обычного хоррора; выразительная озвучка поддерживает атмосферу.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Яркая художественная индивидуальность повышает шанс, что игра запомнится."
+        },
+        {
+          "json_pointer": "/taste_profile/5/pattern",
+          "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+          "match_text_ru": "Загадка мира — важная мотивация исследовать."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 86
+        }
+      ]
+    },
+    {
+      "finding_id": "breadth_of_match",
+      "text_ru": "Поиск заметок, расшифровка символов и использование дневника связывают исследование с конкретными головоломками, а не только бесцельной ходьбой.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/pattern",
+          "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+          "match_text_ru": "Профилю нравятся тайна, записки и достаточно понятные загадки."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 66
+        }
+      ]
+    },
+    {
+      "finding_id": "gameplay_mastery",
+      "text_ru": "Часть загадок даёт удовлетворительную логику решения, но другие механизмы слишком очевидны либо плохо читаются без тщательного поиска.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Удовольствие от сложности зависит от понятного роста умения разбираться в механике."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 49
+        }
+      ]
+    },
+    {
+      "finding_id": "structure_pacing_direction",
+      "text_ru": "Медленная ходьба и долгие анимации поиска триггеров нарушают темп между открытиями и самостоятельными головоломками.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/active_core_loop_vs_low_stimulation_filler/summary",
+          "profile_value_sha256": "b4a73bd07d3acb93744f9800c2ccc182334128a573b98d020cc696b40af3ff44",
+          "match_text_ru": "Неактивные проходы между интересными задачами могут заметно утомлять."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 58
+        }
+      ]
+    },
+    {
+      "finding_id": "development_variety",
+      "text_ru": "Короткая последовательность глав может сдерживать усталость, но схожий цикл осмотра объектов и загадок для части игроков исчерпывается раньше финала.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Профилю важно обновление ситуаций, а не один и тот же поиск на протяжении всей игры."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 55
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Некоторые решения загадок слишком очевидны, а другие требуют искать незаметные объекты; качество логических подсказок неодинаково.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Медленная ходьба и затянутые анимации могут размывать интерес между находками и загадками.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "История и повороты сюжета воспринимаются по-разному, а повторяющийся поиск улик не всегда удерживает интригу до конца.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
