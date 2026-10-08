@@ -47,5 +47,6 @@
 
 **PR:** [#164](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/164).  
 **CI verification:** `Validate Deep Fast-removal ranking preparation` run `37767349534` SUCCESS for head `c0caaf8ecfa53fd036bcede959fec96180dc2121`, covering compile, isolated regression, current V2 regression and frozen architecture regression. `Validate backlog dispositions` run `37767317909` SUCCESS at prior implementation head; latest head check pending at time of report update. Earlier run `37767230110` failed on an incorrect expected diagnostic/not-analyzed test order, corrected by commit `fc124398bf8469937a435c1418f78f87bd7ee561`.  
-**Status:** `implementation_complete_ready_for_director_review`, pending final branch/main reconciliation and subsequent CI.  
+**Current reconciled code head:** `432d6222eb73369ec05aadc7f228c5d0a6d7f6a8` (merge of `main` `5f797a0652af961c7ffea1bc89909dbe092682e8` into the PR branch; subsequent production data commits may advance `main` independently). `Validate Deep Fast-removal ranking preparation` **37767471591: success** and `Validate backlog dispositions` **37767471631: success** on this reconciled head. PASS 2 core `37767464492` initiated by the reconciliation and was still in progress at this edit; no production activation is implied.  
+**Status:** `implementation_complete_ready_for_director_review`; PR remains unmerged, no production cutover.  
 **Stop boundary:** no integration/cutover, semantic execution, site redesign, Scheduled Tasks or other worker task.
