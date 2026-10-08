@@ -112,7 +112,8 @@ Do not restate the entire task specification in the chat message when the canoni
 
 - ЧАТ 2 Deep site/UI task is implementation-complete in PR #168. Its own checks are green; only the shared site-task registry test fails, and current main deploys fail for the same stale hard-coded recent-completion expectations. Do not sync/rewrite PR #168 for this. Wait for the narrow main test fix, then accept/merge and verify main.
 
-- Next ЧАТ 1 task after the narrow site-task regression fix: `WORKER_TASK_DOSSIER_TWO_STAGE_RESEARCH_ASSEMBLY_ARCHITECTURE_01.md` (`dossier-two-stage-architecture`). Architecture only: Research worker for evidence completeness, Assembly worker for strict canonical structuring/bounded gap fill, one GitHub control-plane owner, no implementation yet.
+- ЧАТ 1 active: narrow `WORKER_TASK_SITE_TASKS_RECENT_COMPLETION_REGRESSION_FIX_01.md` only.
+- New ЧАТ 2 active: `WORKER_TASK_DOSSIER_TWO_STAGE_RESEARCH_ASSEMBLY_ARCHITECTURE_01.md`. Architecture/recon only; may run in parallel because it does not touch site-task tests or Deep UI implementation. Old Deep UI chat is retired; PR #168 remains pending shared-test repair.
 
 ## CURRENT PHYSICAL WORKER SLOTS
 
