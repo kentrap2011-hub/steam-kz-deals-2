@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "408b7c9a4373db000b7d82fa96961468a9db9bdf",
+  "run_start_authority_commit": "69c7969d229f3fc87559b32a5d2f729ccfa9fcc3",
+  "run_started_at_utc": "2026-10-08T12:49:24+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "1b6887b319e108d90aea34c0eab9ead690c46d14cc339bc90c139c3fc84aee53",
+  "family_id": "game:1052990",
+  "taste_subject_key": "App_1052990",
+  "appid": "1052990",
+  "taste_fingerprint": "df634ab83081ef263aaf7d47cb6545930dc6f6ebff38f6335c4d75fc51252338",
+  "candidate_context_sha256": "1ff846d1378f923007a8220d3cd081b9b5671fa65e28c6132fc624909548a3c9",
+  "dossier_content_sha256": "ce75893c0e5991f44497af0cda83d959e4e49044d8c6198a2f797da20c90543d",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "eb84b5f8dadd334fc0c39ea3f6f813e8757ac0c47c9b4e970edd535901aef386",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Основной цикл строится почти целиком вокруг спиливания деревьев, толкания и перекатывания брёвен для переходов между островками; несколько игроков отмечают повторяемость этого действия на длинной дистанции.",
+    "Нелинейная сеть островов и усложняющиеся пространственные загадки создают содержательные локальные испытания, но не устраняют риск однотипной основной деятельности, который для профиля особенно значим.",
+    "Помимо спокойной атмосферы и музейного юмора игра предлагает мало сюжетных событий и смены типов занятий; для данного профиля это сужает опоры интереса при многочасовом прохождении."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      },
+      {
+        "kind": "observation",
+        "index": 10
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Долгое перекатывание брёвен через похожие островки может восприниматься как повтор одного приёма без достаточной смены занятий — именно такое затяжное однообразие часто снижает интерес в данном профиле.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 10
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Неочевидные переходы между соседними островами иногда требуют окольного маршрута или позднего открытия, что может создавать ощущение потерянности.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Для самых сложных необязательных секретов может потребоваться долго экспериментировать либо обратиться к подсказкам, хотя в игре есть отмена действий и перезапуск.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Музейный юмор нравится не всем, а отдельные игроки отмечают недостаток диалогов и других происходящих событий; атмосфера здесь не заменяет насыщенного сюжета.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 9
+          },
+          {
+            "kind": "observation",
+            "index": 10
+          }
+        ]
+      }
+    ]
+  }
+}
