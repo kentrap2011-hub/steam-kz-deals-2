@@ -64,14 +64,27 @@ class SiteTasksTests(unittest.TestCase):
         for item in self.plan["items"]:
             self.assertEqual(payload["task_titles"][item["id"]], item["title"])
         self.assertEqual(len(payload["task_titles"]), len(self.plan["items"]))
-        for tid in ("steam-50-top100", "owned-dlc", "deep-site", "deep-cutover",
-                    "steam-prefilter", "steam-error-watch", "giveaway-decouple",
-                    "giveaway-itad", "architecture-cleanup"):
+        for tid in ("steam-50-top100", "owned-dlc", "steam-prefilter",
+                    "steam-error-watch", "giveaway-decouple", "giveaway-itad",
+                    "architecture-cleanup"):
             self.assertIn(tid, actual_forward)
         self.assertEqual(by_id["steam-50-top100"]["order"]["position"], 1)
         self.assertEqual(by_id["owned-dlc"]["order"]["position"], 2)
-        self.assertEqual(by_id["deep-cutover"]["status"], "blocked")
-        self.assertEqual(len(by_id["deep-cutover"]["depends_on"]), 4)
+
+        # Lifecycle is owned by the current plan, not by historical Deep rollout phases.
+        canonical = {item["id"]: item for item in self.plan["items"]}
+        recent = set(self.expected_recent_ids(self.plan))
+        for tid in ("deep-site", "deep-cutover"):
+            source = canonical[tid]
+            self.assertIn(tid, payload["task_titles"])
+            self.assertEqual(tid in actual_forward, source["status"] != "complete")
+            if source["status"] != "complete" or tid in recent:
+                self.assertIn(tid, by_id)
+                self.assertEqual(by_id[tid]["status"], source["status"])
+                self.assertEqual(by_id[tid]["depends_on"], source["depends_on"])
+                self.assertEqual(by_id[tid]["blocker"], source["blocker"])
+            else:
+                self.assertNotIn(tid, by_id)
         for entry in by_id.values():
             for field in ("goal", "status", "effort", "effort_reason", "urgency",
                           "urgency_reason", "updated_on", "updated_at_utc"):
