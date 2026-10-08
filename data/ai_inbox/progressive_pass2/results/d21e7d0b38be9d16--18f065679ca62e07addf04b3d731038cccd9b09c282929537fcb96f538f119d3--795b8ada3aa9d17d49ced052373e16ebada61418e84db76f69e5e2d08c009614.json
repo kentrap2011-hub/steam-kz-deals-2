@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "6a82f650a4685a1f351689b36f1b264cf6fd4b96",
+  "run_start_authority_commit": "9abf9b63baca424ebb3b07c6e6c7fd26b2f88793",
+  "run_started_at_utc": "2026-10-08T17:33:30+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "18f065679ca62e07addf04b3d731038cccd9b09c282929537fcb96f538f119d3",
+  "family_id": "game:1069160",
+  "taste_subject_key": "App_1069160",
+  "appid": "1069160",
+  "taste_fingerprint": "ec306161708e46203635090fc068749087f0aecd592263e645346807a11b1192",
+  "candidate_context_sha256": "5f8af7193301be72701825fa9c3f357ad8cdf9ea56914a7b4632f35a08078dd2",
+  "dossier_content_sha256": "b13a4ab3d5a23f438e47330e20cf7304d12e5783cea10d7bbb5e72a331574260",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "795b8ada3aa9d17d49ced052373e16ebada61418e84db76f69e5e2d08c009614",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Тактические пошаговые бои и насыщенная текстом лавкрафтианская история дают сильную исходную интригу, но медленные схватки и малоэффективные варианты развития ограничивают важные для профиля ощущение мастерства и полезной прокачки (наблюдения 0, 2–4).",
+    "В поздних локациях меньше новых историй, занятий и последствий решений; повторяющиеся сражения и возвраты могут привести к усталости от неизменного игрового цикла (наблюдения 5–7).",
+    "Выразительный пиксель-арт, музыка и мрачная атмосфера — существенные достоинства, но в этом сочетании недостаточно компенсируют недостатки основной структуры и развития (наблюдение 1)."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Ближе к концу игры беднеют доступные занятия и побочные истории, а повторные бои и путешествия назад способны утомить до завершения сюжета.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Затянутые схватки с бронированными врагами и слабая полезность части заклинаний могут снизить удовлетворение от тактической прокачки.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Лавкрафтианская история и текстовые задания нравятся части игроков, но концовка и последствия сюжетного выбора оцениваются неоднозначно.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          },
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
