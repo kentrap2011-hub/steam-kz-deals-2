@@ -1,5 +1,8 @@
 # DIRECTOR TASK BOARD
 
+**Canonical forward registry for the website:** `config/director_task_plan.json`. When Director/worker tooling assigns, adds, closes or reorders forward tasks, update this registry **in the same change** as the current Board planning section. The registry is the one machine-readable task source; historical accepted Board sections must not be parsed as live tasks. Check with `python scripts/test_site_tasks.py` and `python scripts/build_site_tasks.py --output /tmp/tasks.json`. New forward task filenames in the current Board lanes/Deep map fail validation until registered. No new scheduler is involved.
+
+
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
 ## CURRENT DIRECTOR STATE — 2026-10-07
