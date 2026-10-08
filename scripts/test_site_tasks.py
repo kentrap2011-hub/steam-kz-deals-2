@@ -57,7 +57,7 @@ class SiteTasksTests(unittest.TestCase):
 
     def test_stage1_merged_and_next_deep_task_planned_with_full_backlog(self):
         """The Stage 1 merge must not leave a misleading active worker on the website."""
-        self.assertIn("Stage 1 accepted and merged via PR #163", self.board)
+        self.assertEqual(next(t for t in self.plan["items"] if t["id"] == "deep-stage1")["status"], "complete")
         self.assertIn("WORKER_TASK_DEEP_FAST_REMOVAL_RANKING_MIGRATION_01.md", self.board)
         payload = self.build()
         expected_forward = {i["id"] for i in self.plan["items"] if i["status"] != "complete"}
