@@ -12,6 +12,8 @@
 - earlier red site check was fixed by excluding explicitly superseded Director Board entries from current forward scope;
 - report: `reviews/worker_reports/site-current-tasks-page-01.md`;
 - PR #163 Stage 1 merged, so `deep-stage1` is complete and Fast-removal/ranking migration is the next planned Deep task for a NEW ЧАТ 2; full backlog preserved; no other ongoing tasks deleted or modified, no scheduler/Scheduled Task or semantic/Steam/ranking changes;
+- accepted Stage 1 PR #163 merged; `deep-stage1` now completed, next Deep Fast/removal/ranking migration planned for a NEW ЧАТ 2; total known 24 / forward unfinished 19;
+- reconciled PR-head `f29c0c8d444e88bb03904f03d044ee5e84c952ec` five green checks: tasks `37766869091`, PASS 2 `37766869134`, backlog `37766869308`, publication resilience `37766869082`, package `37766868939`;
 - pending: PR merge and ordinary Pages publication/live acceptance; close `site-tasks` in canonical registry when Director accepts live rollout; worker stops at this task boundary.
 
 ## COMPLETE — Deep Stage 1 independent analysis worker implementation 01

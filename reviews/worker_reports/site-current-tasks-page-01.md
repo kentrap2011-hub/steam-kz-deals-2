@@ -44,6 +44,8 @@ Completed historical Director archive sections are **not** projected as outstand
 - **All 24 known tasks remain:** 5 active, 11 planned, 3 blocked and 5 completed; all **19 unfinished** tasks remain in the forward backlog, including unrelated Steam and later unassigned work.
 - PR #162 is refreshed against `main` using a two-parent Git merge that retains newer Stage-1 state and files; no changes to other workstreams.
 - Added a regression requiring Stage 1 completed, next Deep step planned and original backlog preserved.
+- **Reconciled PR-head `f29c0c8d444e88bb03904f03d044ee5e84c952ec`: all five checks succeeded.** `Validate site task registry and page` run **37766869091** (9 Python tests, JS UI test, static snapshot `forward=19`, independent validate); `Validate Progressive PASS 2 core` **37766869134**; `Validate backlog dispositions` **37766869308**; `Validate package purchase value` **37766868939**; `Validate site publication resilience` **37766869082**. No red checks on this reconciled implementation head.
+- On the reconciled head, PR #162 was mergeable and 0 commits behind `main`. New report/Board/hand-off closeout text is documentation-only; the actual UI registry builder and test implementations are unchanged after these five successes.
 
 ## Remaining acceptance boundary
 
