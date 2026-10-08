@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "38491d75e166e16122f4fe527c0457e518f19197",
+  "run_start_authority_commit": "6444c738579444234da8cc91b9f26ecd7d8c861b",
+  "run_started_at_utc": "2026-10-08T14:01:18+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "e09b572da4f3ee01fdd22a4e5ea578455b08c02cb410f23218ed1b8e3066008d",
+  "family_id": "game:1054510",
+  "taste_subject_key": "App_1054510",
+  "appid": "1054510",
+  "taste_fingerprint": "d46c216de8623afb70e8a6560ddbf06d81b1ad123418b7bb6809ce3ecf3d9991",
+  "candidate_context_sha256": "0ca540b6ebbc75c3cfa616e0c7a15de37594c2bb3e9502f102c0499b98d001ec",
+  "dossier_content_sha256": "bd03b883814f875322071f9d8dfd8f145d4652b8e63eb04dc567d2ec1e2c572e",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "6f0a18c87ebfc65d18b9f55b9bf1468d431764e7459674f4207f39398fc676af",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Зомби-выживание сочетает поиск ресурсов, строительство и реальные столкновения с угрозой скрытой инфекции внутри поселения.",
+    "Управление поселением строится вокруг роста общины, работы жителей, отношений и выбора между открытой песочницей и сюжетным режимом.",
+    "Межличностные реакции выживших придают колонии свою индивидуальность, позволяя наблюдать последствия решений."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 75,
+    "development_variety": 88,
+    "structure_pacing_direction": 65,
+    "identity_hooks": 79,
+    "breadth_of_match": 82
+  },
+  "score_findings": [
+    {
+      "finding_id": "surv-tactics",
+      "text_ru": "Опасность незаметной инфекции сочетается с боями и поиском припасов, заставляя учитывать состояние группы и выбирать подход под угрозу.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Важны ситуации, где понимание угроз и мастерство помогают преуспеть."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 75
+        }
+      ]
+    },
+    {
+      "finding_id": "surv-colony-growth",
+      "text_ru": "Найм новых людей, распределение профессий и развитие продовольствия и защиты меняют задачи колонии со временем.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "По мере прохождения должны появляться новые возможности и ситуации."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 88
+        }
+      ]
+    },
+    {
+      "finding_id": "surv-mode-choice",
+      "text_ru": "Сюжетный режим предлагает более заданную траекторию, а песочница — самостоятельное развитие поселения и отношения с другими группами.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/pattern",
+          "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+          "match_text_ru": "Чёткие задачи предпочтительнее неопределённого блуждания, даже при любви к загадкам."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 65
+        }
+      ]
+    },
+    {
+      "finding_id": "surv-character-hook",
+      "text_ru": "Нужды, связи и поведение выживших делают социальную жизнь посёлка самостоятельным источником неожиданных ситуаций.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/13/pattern",
+          "profile_value_sha256": "8f815538f23c7c4151de010d40acbe09cd5db3af8a8ec1917060877048370be6",
+          "match_text_ru": "Запоминающийся собственный крючок игры важнее формального качества."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 79
+        }
+      ]
+    },
+    {
+      "finding_id": "surv-systems",
+      "text_ru": "Поиск припасов, выращивание еды, строительство, бой и конфликты с другими общинами создают несколько пересекающихся направлений действий.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/4/pattern",
+          "profile_value_sha256": "b78024665ef842b6b94422838313a1573b0871a6f69180097befb4078ecc5a50",
+          "match_text_ru": "В открытом мире нужны содержательные причины заниматься разными задачами."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 82
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Старт может наказывать частыми смертями и неудачной организацией обороны; сложность болезни в песочнице частично регулируется.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Жалобы на отдельные элементы интерфейса и качество русских переводов исходят от отдельных рецензентов и не доказывают общий дефект.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Социальные механики обширны, но некоторым игрокам не хватает более выразительной графики.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Сообщения о торможении совместной игры на расстоянии между напарниками относятся к февралю 2025 года; текущая ситуация неизвестна.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
