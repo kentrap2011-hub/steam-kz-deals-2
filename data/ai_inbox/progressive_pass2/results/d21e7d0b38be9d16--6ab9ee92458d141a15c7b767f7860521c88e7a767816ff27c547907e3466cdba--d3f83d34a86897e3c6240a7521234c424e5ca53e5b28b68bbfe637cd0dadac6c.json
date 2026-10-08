@@ -1,0 +1,301 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "d644ede6cae95297e2ece58dcf3f1ce8acc62241",
+  "run_start_authority_commit": "c4a7b35ddf7658e6ffc44346cb8e5dec673a7259",
+  "run_started_at_utc": "2026-10-08T15:53:38+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "6ab9ee92458d141a15c7b767f7860521c88e7a767816ff27c547907e3466cdba",
+  "family_id": "game:1063660",
+  "taste_subject_key": "App_1063660",
+  "appid": "1063660",
+  "taste_fingerprint": "82ebde3f1592756f5d5b8ea32b2331870da38ed807e17e6da25b31c77883e670",
+  "candidate_context_sha256": "f567c3c3e688730ff994929ae72349d7f0ca4de4c69bd577144c69f3f3c11b8a",
+  "dossier_content_sha256": "80d44257261777a5fc27138514435bab4c9fd7fa6f106739074bece6ce28c02c",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "d3f83d34a86897e3c6240a7521234c424e5ca53e5b28b68bbfe637cd0dadac6c",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "base_support_compatible": null,
+  "positive_evidence": [
+    "Сепийная мультяшная студия, улучшенные локации и анимация, выразительный звук и мрачная атмосфера создают сильный узнаваемый художественный мир (наблюдение 1).",
+    "В отличие от прежнего акцента на поручениях, исследование студии дополняют стелс, ближний бой, загадки и сверхъестественные способности (наблюдение 0).",
+    "Путешествие Одри расширяет мифологию чернильного мира и знакомит с прежними персонажами, что даёт тайну и сюжетную мотивацию, хотя качество раскрытия неоднозначно (наблюдение 6)."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 34,
+    "development_variety": 58,
+    "structure_pacing_direction": 47,
+    "identity_hooks": 82,
+    "breadth_of_match": 54
+  },
+  "score_findings": [
+    {
+      "finding_id": "sepia-horror-visual-identity",
+      "text_ru": "Сепийный мультяшный мир киностудии, мрачные пространства, анимация и звуковой дизайн формируют выразительную хоррор-атмосферу.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Яркая художественная идентичность — один из наиболее устойчивых эстетических приоритетов."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 82
+        }
+      ]
+    },
+    {
+      "finding_id": "horror-activities-variety",
+      "text_ru": "Исследование студии перемежается загадками, скрытностью, ударами трубой и новыми сверхъестественными возможностями — набор действий разнообразнее простой цепочки поручений.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Профилю особенно важно развитие и обновление игровых ситуаций."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 58
+        }
+      ]
+    },
+    {
+      "finding_id": "melee-limits-mastery",
+      "text_ru": "Схватки вблизи описываются как простые и неуклюжие, с небольшим количеством защитных решений, поэтому борьба вряд ли раскроет любимую глубину освоения боевой системы.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "conflict",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "В профиле высоко ценится мастерство, зависящее от понятных приёмов и роста навыка."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "lowers",
+          "normalized_value": 34
+        }
+      ]
+    },
+    {
+      "finding_id": "exploration-pacing-backtracks",
+      "text_ru": "Закрытые пути и загадки мотивируют возвращаться в локации, однако часть игроков воспринимает обратные маршруты и ограничения доступа к пропущенным предметам как затягивание прохождения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8/pattern",
+          "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+          "match_text_ru": "Повторные маршруты ценны лишь тогда, когда обновляют опыт, а не заставляют повторять прежнее."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 47
+        }
+      ]
+    },
+    {
+      "finding_id": "story-horror-frictions",
+      "text_ru": "История Одри развивает мифологию мира, но сюжетные объяснения и образ Чернильного Демона вызывают разногласия, а принудительные укрытия и отдельные сбои могут мешать погружению.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "Сюжет и персонажи способны усиливать впечатление, но их ценность зависит от того, чем занята большая часть игры."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 54
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      },
+      {
+        "kind": "conflict",
+        "index": 1
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Стелс и ближний бой добавляют активности, но боевую систему критикуют за простоту и неуклюжесть, особенно если ждать глубокой механики выживания.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          },
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "conflict",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Повторные маршруты по студии, пропускаемые предметы и ограничения сохранений могут осложнять исследование и сбор коллекционных объектов.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Появления Чернильного Демона и принудительные прятки часть игроков считает скорее заскриптованными, чем пугающими; сравнительные оценки атмосферы с первой игрой расходятся.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Восприятие мифологии и возвращённых персонажей неоднозначно; отдельные старые сообщения о сбоях не доказывают массовую актуальную техническую проблему.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
