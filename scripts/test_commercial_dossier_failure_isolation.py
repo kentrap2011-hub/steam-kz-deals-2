@@ -220,20 +220,34 @@ def test_failed_dossier_full_build_includes_new_not_analyzed_current_game():
             "progressive_candidate_count": 1,
         },
     }
-    # No accepted Dossier/Deep: the actual default state constructor supplies
-    # not_analyzed; only observational stage flags describe the pending state.
-    state = progressive_personalization._base_state()
-    state.update({
-        "fast_stage_state": "not_started",
-        "fast_stage_outcome": None,
-        "dossier_stage_state": "not_ready",
-        "deep_stage_state": "waiting_for_dossier",
-        "deep_stage_outcome": None,
-        "deep_recovery_state": "none",
-        "effective_analysis_source": "none",
-        "taste_entry": {},
-        "projection": {},
-    })
+    # Derive the new candidate's state from the *real* canonical Progressive
+    # state projection with no accepted Fast/Dossier/Deep evidence. The prior
+    # visual never contained game:300; Dossier did not prepare this generation.
+    import progressive_pass1
+    import progressive_pass2
+
+    binding = {"family_id": "game:300", "appid": "300", "work_id": "new-work"}
+    with (
+        patch.object(progressive_personalization, "load_contract", return_value={}),
+        patch.object(progressive_pass1, "load_state", return_value={"entries": {}}),
+        patch.object(progressive_pass2, "load_state", return_value={"entries": {}}),
+        patch.object(progressive_pass1, "load_jsonl", return_value=[]),
+        patch.object(progressive_pass1, "current_bindings", return_value=(
+            {"semantic_generation_id": "current-generation"},
+            {"game:300": binding},
+            {"game:300": {"title": "Fresh New Game", "appid": "300"}},
+        )),
+        patch.object(progressive_pass2, "current_dossier_binding", return_value={}),
+        patch.object(progressive_pass2, "load_json", return_value={"items": []}),
+        patch.object(progressive_pass2, "canonical_dossier_loader", return_value=None),
+    ):
+        projected = progressive_personalization.build_state_index(
+            context_rows=[new_row], projection_doc={"entries": {}}, taste_entries={}
+        )
+    state = projected["game:300"]
+    assert state["analysis_state"] == "not_analyzed"
+    assert state["dossier_stage_state"] == "not_ready"
+    assert state["deep_stage_state"] == "waiting_for_dossier"
     with tempfile.TemporaryDirectory() as td:
         output = Path(td) / "fresh-visual.json"
         with (
