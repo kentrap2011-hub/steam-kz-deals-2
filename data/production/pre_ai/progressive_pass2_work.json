@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 178,
     "deep_completed_not_fit_count": 42,
     "deep_incomplete_or_recovery_count": 27,
-    "deep_waiting_for_dossier_count": 2054,
-    "deep_ready_or_pending_count": 0,
+    "deep_waiting_for_dossier_count": 2051,
+    "deep_ready_or_pending_count": 3,
     "deep_normal_first_pass_remaining_count": 2054,
     "deep_remaining_until_all_authoritative_count": 2081,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 15,
-    "dossier_waiting_count": 2054,
+    "dossier_waiting_count": 2051,
     "pass2_attempted_count": 247,
-    "pass2_eligible_count": 0,
-    "normal_pass2_eligible_count": 0,
+    "pass2_eligible_count": 3,
+    "normal_pass2_eligible_count": 3,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -107,5 +107,202 @@
       "complete": true
     }
   },
-  "items": []
+  "items": [
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1096530",
+      "taste_subject_key": "App_1096530",
+      "appid": "1096530",
+      "taste_fingerprint": "6d3b715e70af2d3ae2d9f7f2b294e94f25985af27607f309a61741fc2bf35637",
+      "candidate_context_sha256": "899f57c2854b567407388fe9b82d1f00a91e5b4158c8ad502d18597599f75b92",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "ca017c15ed1ff40664f67cbb8e1776e960b75762970219dcb1569a5d4e6d59cf",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Solasta: Crown of the Magister",
+        "short_description": "Roll for initiative, take attacks of opportunity, manage player location and the verticality of the battle field in this Turn-Based Tactical RPG based on the SRD 5.1 Ruleset. In Solasta, you make the choices, dice decide your destiny.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Choices Matter",
+          "Fantasy",
+          "RPG",
+          "Story Rich"
+        ],
+        "core_fit_count": 3,
+        "release_date": "27 May, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1096530"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1096530.json",
+      "dossier_content_sha256": "a961e3ace995fb5245820cc6401da85e04a2205be8f588058b6022787e9792ae",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-29T08:02:49.770Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "4fa255c9bf90b514d4d56a502588414c47c7b3b4f38cbf1e4065e325207bc76f",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ca017c15ed1ff40664f67cbb8e1776e960b75762970219dcb1569a5d4e6d59cf--4fa255c9bf90b514d4d56a502588414c47c7b3b4f38cbf1e4065e325207bc76f.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ca017c15ed1ff40664f67cbb8e1776e960b75762970219dcb1569a5d4e6d59cf--4fa255c9bf90b514d4d56a502588414c47c7b3b4f38cbf1e4065e325207bc76f.json",
+      "sequence": 1
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1094520",
+      "taste_subject_key": "App_1094520",
+      "appid": "1094520",
+      "taste_fingerprint": "5430b28c89f1d2d0d7569f919fea33f0b00c21ba77ce21d72da4097d3169acdf",
+      "candidate_context_sha256": "e3ed5d41c294b7f892b07b2db494a8ea3891d7d7999e2c8533a3173d7d04857c",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "2fcadb0cb1919e3b31d779952b9d537c6025ceeb33745002094992377032be58",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Sands of Salzaar",
+        "short_description": "Bringing you to an exotic desert where you’ll recruit, train, and guide your troops into battle against rival cities and factions. Embark on an adventure that’s uniquely yours; Customizable characters, professions, and factions. The land is filled with a variety of hidden secrets.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Open World",
+          "RPG"
+        ],
+        "core_fit_count": 1,
+        "release_date": "15 Dec, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1094520"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1094520.json",
+      "dossier_content_sha256": "9d94cc841410c35ac4d941f6cc0083cacabf574af4354fd386a895145ee26dce",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-29T08:02:49.770Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "b394eff1843aafb1b70128bd81333ac0a02cf5484c743fd72815362cdcb671af",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--2fcadb0cb1919e3b31d779952b9d537c6025ceeb33745002094992377032be58--b394eff1843aafb1b70128bd81333ac0a02cf5484c743fd72815362cdcb671af.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--2fcadb0cb1919e3b31d779952b9d537c6025ceeb33745002094992377032be58--b394eff1843aafb1b70128bd81333ac0a02cf5484c743fd72815362cdcb671af.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1096570",
+      "taste_subject_key": "App_1096570",
+      "appid": "1096570",
+      "taste_fingerprint": "2f97fc44b968d24722f7ac2d6649ba8075dd6cda6bfa5af13c4c34b5adc5d577",
+      "candidate_context_sha256": "41cc1c6b6e2ea9ad0be083e03e9c1e69f290a5596fac5f5aec9790e7a12ef818",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "e0f690b451d6f58b47c3fcafe7ed582234cbf0d4d332e3ec61ebf2b26c4aa91f",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "SONG OF HORROR COMPLETE EDITION",
+        "short_description": "A 3rd person, fixed-camera survival horror adventure. Fear the Presence, a mysterious entity you cannot fight: stay alert, hide, breathe slowly... Explore cursed places where unseen spirits and lost souls linger in a true horror story for the ages.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action-Adventure",
+          "Horror",
+          "Singleplayer",
+          "Story Rich",
+          "Third Person"
+        ],
+        "core_fit_count": 4,
+        "release_date": "31 Oct, 2019",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1096570"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1096570.json",
+      "dossier_content_sha256": "d2589c512cb66837fcc0d1b4d70f431a1aad3e38ff6dd2cf446387e4be34a64e",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-29T08:02:49.770Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "188701409bf687fb0c2875a3db518e69fef8c73ed5a2c2d4438a29b989af6286",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--e0f690b451d6f58b47c3fcafe7ed582234cbf0d4d332e3ec61ebf2b26c4aa91f--188701409bf687fb0c2875a3db518e69fef8c73ed5a2c2d4438a29b989af6286.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--e0f690b451d6f58b47c3fcafe7ed582234cbf0d4d332e3ec61ebf2b26c4aa91f--188701409bf687fb0c2875a3db518e69fef8c73ed5a2c2d4438a29b989af6286.json",
+      "sequence": 3
+    }
+  ]
 }
