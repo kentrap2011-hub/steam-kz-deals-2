@@ -31,7 +31,8 @@ class ResearchWorkerTests(unittest.TestCase):
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes((ROOT / PROMPT_PATH).read_bytes()
                              if prompt_contents is None else prompt_contents)
-        x.f.commit("Freeze prompt bytes and GitHub-prepared Research scope")
+        if add_prompt:
+            x.f.commit("Freeze prompt bytes and GitHub-prepared Research scope")
         nonce = "f" * 32
         x.f.save(f"{RESEARCH_MARKER}/{nonce}.json", {
             "schema": "DOSSIER-RESEARCH-RUN-START-MARKER-V1",
