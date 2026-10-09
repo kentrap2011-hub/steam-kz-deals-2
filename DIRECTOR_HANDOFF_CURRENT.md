@@ -116,6 +116,8 @@ Do not restate the entire task specification in the chat message when the canoni
 
 - ЧАТ 2 complete/free: Dossier two-stage P1 contracts/schemas accepted via PR #173 (`1aaf1afacb6bbfab2406abb489df6a0c35e09250`). New interfaces are implemented inactive (`active=false`, `authoritative=false`); one-stage Dossier remains production authority. Next recommended task is P2 GitHub deterministic staging/helpers; not started.
 
+- ЧАТ 1 active/urgent: `WORKER_TASK_COMMERCIAL_REFRESH_INDEPENDENT_FROM_DOSSIER_FAILURE_01.md` (`commercial-refresh-dossier-isolation`). Goal: current Steam prices/discounts must persist and publish even if Dossier-local tests/preparation fail; strict Dossier validation remains unchanged. Current observed incident: 2026-10-08 Steam + mailing succeeded, pre-AI failed on expired Dossier test fixtures, site stayed on 2026-10-06 commercial source.
+
 ## CURRENT PHYSICAL WORKER SLOTS
 
 ### ЧАТ 1 — DIAGNOSTIC COMPLETE
