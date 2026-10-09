@@ -280,8 +280,35 @@ def commercial_fallback_eligible(
         visual.get('processing_status'), len(items)
     ):
         return False
-    if not isinstance(visual.get('progressive_personalization'), dict):
+    progressive = visual.get('progressive_personalization')
+    if not isinstance(progressive, dict) or (
+        progressive.get('contract') != 'PROGRESSIVE-PERSONALIZED-DEALS-V1'
+        or progressive.get('phase') != 'phase_b'
+        or progressive.get('pass1_active') is not True
+        or progressive.get('pass2_implemented') is not True
+        or progressive.get('pass2_active') is not True
+    ):
         return False
+    seen_ids = set()
+    for item in items:
+        if not isinstance(item, dict):
+            return False
+        family_id = item.get('id')
+        state = item.get('analysis_state')
+        if not family_id or family_id in seen_ids or state not in VISIBLE_STATES:
+            return False
+        seen_ids.add(family_id)
+        if item.get('analysis_tier') != {
+            'analyzed_fit': 1, 'analysis_incomplete': 2, 'not_analyzed': 3
+        }[state]:
+            return False
+        for field in (
+            'fast_stage_state', 'fast_stage_outcome', 'dossier_stage_state',
+            'deep_stage_state', 'deep_stage_outcome', 'deep_recovery_state',
+            'effective_analysis_source',
+        ):
+            if field not in item:
+                return False
     expected = {
         'source_taste_steam_review_dossier_work_blob_sha': dossier_work_blob,
         'progressive_personalization_contract_blob_sha': progressive_contract_blob,
