@@ -1,0 +1,367 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "843e608f3f51289c57b5c7512327b1c856dffc74",
+  "run_start_authority_commit": "77f895664498df8194978177a16d727b02447f95",
+  "run_started_at_utc": "2026-10-09T15:03:13+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+  "work_id": "3aa59c44f37949da0da61a74459a6b41676984a45bbd40a5bc94c1537470db68",
+  "family_id": "game:1281040",
+  "taste_subject_key": "App_1281040",
+  "appid": "1281040",
+  "taste_fingerprint": "0bc968c857dcb1750a3b6d2ea95a783e5019457c1f604f5ec5711dc7e5e64e2f",
+  "candidate_context_sha256": "071cab4f6b6bf69104daef217abf3323b6d6e37769fe7d755407d6edda0b917c",
+  "dossier_content_sha256": "4dd19959db96ef1d213e809d7888781c40ff244c9deb9e216cd2421f121d0d2b",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "0ce066a35a037d9e0967635e6d46ed7b26d49e7e2d89a384d778453c5f30cd1c",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Необычная физическая система ходьбы требует лично овладеть координацией каждого шага, что может заинтересовать любителя механического мастерства (наблюдения 0, 3).",
+    "Дополнительные трудные восхождения и секретные маршруты создают добровольные испытания на улучшение техники (наблюдение 6).",
+    "Абсурдный юмор и неудачи персонажа дают игре самостоятельную комедийную идентичность (наблюдение 5)."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 78,
+    "development_variety": 45,
+    "structure_pacing_direction": 39,
+    "identity_hooks": 73,
+    "breadth_of_match": 54
+  },
+  "score_findings": [
+    {
+      "finding_id": "each_step_is_skill",
+      "text_ru": "Ногу надо поставить и сбалансировать вручную, поэтому даже подъём на небольшой склон становится собственной задачей на координацию и точное управление телом.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1",
+          "profile_value_sha256": "eea16e0b6b2de79dd07acac864c406860d99691433b9b2149e2b8492681fbcd8",
+          "match_text_ru": "Выразительное непривычное перемещение может быть самостоятельным удовольствием."
+        },
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "edeced74c18dc6f94ea4ae8882f30e2db8dfd546419d1cbcf6cfa274bfaca73a",
+          "match_text_ru": "Освоение сложного движения и рост точности высоко ценятся, если управление обучаемо."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 78
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 54
+        }
+      ]
+    },
+    {
+      "finding_id": "optional_hard_routes",
+      "text_ru": "Секретные тропы и дополнительные трудные подъёмы дают проверку выученной техники ходьбы за рамками основного маршрута.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "edeced74c18dc6f94ea4ae8882f30e2db8dfd546419d1cbcf6cfa274bfaca73a",
+          "match_text_ru": "Добровольные сложные испытания способны превратить мастерство в осмысленную цель."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 45
+        }
+      ]
+    },
+    {
+      "finding_id": "absurd_humour",
+      "text_ru": "Нелепые падения героя и абсурдные сцены добавляют игре узнаваемый комический тон, который может работать вместе с необычным управлением.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7",
+          "profile_value_sha256": "f94957e7f369714de6a70c9cdaa1b1bb625ccdf9a2bd19f5b4bde419ccfecf7a",
+          "match_text_ru": "Собственный художественный характер и юмор помогают игре запомниться."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 73
+        }
+      ]
+    },
+    {
+      "finding_id": "severe_falls",
+      "text_ru": "Ошибки на длинных склонах могут лишить большого куска пройденного пути и заставить снова медленно преодолевать ту же дистанцию, несмотря на маленький прирост навыка.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8",
+          "profile_value_sha256": "0e6624dd4b0ea00e882eded98b52cbb23093fec7ba3c0ee0137b689a88a4e2f0",
+          "match_text_ru": "Повтор без изменившихся условий сильнее утомляет, даже если сам вызов сначала интересен."
+        },
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "edeced74c18dc6f94ea4ae8882f30e2db8dfd546419d1cbcf6cfa274bfaca73a",
+          "match_text_ru": "Высокая сложность привлекательна только когда повторы помогают осмысленно освоить навык."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "lowers",
+          "normalized_value": 45
+        },
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 78
+        }
+      ]
+    },
+    {
+      "finding_id": "ambiguous_navigation",
+      "text_ru": "Неочевидные развилки на извилистой трассе вынуждают искать дорогу и делать долгие обходы, хотя непосредственное преодоление препятствий само по себе увлекательно.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5",
+          "profile_value_sha256": "08091731e0895f3d8e7f6b98b48da27ab8a9dc337e12dea3d74c1463b34252b1",
+          "match_text_ru": "Предпочтение тайнам не означает удовольствия от неясной цели или блуждания без направления."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 39
+        }
+      ]
+    },
+    {
+      "finding_id": "monotone_steps",
+      "text_ru": "Весь игровой цикл держится на размеренной перестановке ног; если навык перестанет приносить удовольствие, новых видов активности для переключения останется мало.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "b584a23bde72bbcacc284a93f33e49bda9cde0b89c7d750aa3d954ed1fef2055",
+          "match_text_ru": "Важно, чтобы основной опыт заметно развивался, а не полностью раскрывался в начале."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 54
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "difficulty_punishment",
+        "text_ru": "Падение способно стереть длительный подъём и потребовать снова проходить уже освоенный отрезок: это риск бессодержательной серии одинаковых попыток.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "directionlessness",
+        "text_ru": "Петляющие маршруты и неочевидные направления могут приводить к долгому блужданию, а профиль особенно чувствителен к отсутствию понятного пути и цели.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Почти вся игра строится на одинаковом медленном контроле шагов; то, что часть игроков воспринимает как медитативный навык, других утомляет.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          },
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Клавиатура и мышь работают, но на некоторых препятствиях контроль высоты ноги может быть менее удобен, чем на геймпаде.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Нелепые падения поддерживают юмор, но комедийная подача не всегда компенсирует повторный подъём после ошибки.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  }
+}
