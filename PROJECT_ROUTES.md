@@ -486,18 +486,17 @@ Currentness invariant after PPD-012:
 
 ---
 
-## Inactive two-stage Dossier: asynchronous Research → Assembly buffers
+## Inactive two-stage Dossier: fully async Research → Assembly
 
-**Checked:** 2026-10-09; PR #177, branch `implement/dossier-two-stage-async-buffer-amendment-01`; not production-authorized.
+**Checked:** 2026-10-09; `implement/dossier-fully-async-pipeline-01` against current `main` after PR #177. Not production-authorized.
 
 **Short route:**
-1. `config/dossier_two_stage_interfaces_contract.json` — P1 exact per-item Research/Assembly interfaces, current one-stage authority, now explicit non-blocking lifecycle.
-2. `config/dossier_two_stage_staging_contract.json` — P2 immutable Research receipt/state and Assembly plan/assignment/staging rules.
-3. `config/dossier_two_stage_async_buffer_contract.json` — GitHub-owned frozen multi-item manifests; 8 open item slots per lane, not daily quota; no previous sibling receipt dependency.
-4. `scripts/dossier_two_stage_staging.py` — existing inactive per-game Git marker-parent, create-only and strict binding helper.
-5. `scripts/dossier_two_stage_async_buffer.py` — offline manifest construction/frozen verification, independent Research receipt planning, accepted-only multi-Assembly staging, exact staged result checks.
-6. `scripts/test_dossier_two_stage_async_buffer.py` — real temporary Git history for no per-item ack, local rejection isolation, capacity, immutable order/retry and one-stage noninterference.
-7. `.github/workflows/validate-dossier-two-stage-contract-interfaces.yml` — PR-only offline suite (P1/P2/async and unchanged one-stage/date regressions).
-8. `reviews/worker_reports/dossier-two-stage-async-pipeline-amendment-01.md` — exact boundaries and remaining future semantic workers/integration.
+1. `config/dossier_two_stage_interfaces_contract.json`, `config/dossier_two_stage_staging_contract.json`, `config/dossier_two_stage_async_buffer_contract.json` — preauthorized item scope, exact submitted Research handoff, GitHub-only eventual validation and local quarantine.
+2. `scripts/dossier_two_stage_async_buffer.py` — offline finite preauthorization, Git frozen marker-parent verification, exact original Research create-only commit/blob/raw and canonical SHA, provisional Assembly handoff and eventual per-item Research → Assembly → strict V2 validation. No unresolved-slot cap, sibling-ack read or GH accepted receipt in Assembly liveness.
+3. `config/dossier_async_assembly_result_v1.schema.json` — create-only Assembly candidate references original submitted Research transport, NOT an accepted receipt.
+4. `scripts/dossier_two_stage_staging.py` + `scripts/dossier_two_stage_contract_guard.py` — unchanged inactive legacy P2 accepted-only strict validators reused only AFTER eventual GH Research validation; not Assembly semantic handoff.
+5. `scripts/test_dossier_two_stage_async_buffer.py` — disposable Git history: Research A not accepted while B/C traverse, Assembly A direct Research, rejected A chain isolation, immutable bytes, no worker retry/reordering.
+6. `.github/workflows/validate-dossier-two-stage-contract-interfaces.yml` — PR-only offline regression, also verifies legacy P1/P2 and live one-stage compatibility.
+7. `reviews/worker_reports/dossier-fully-async-pipeline-01.md` — worker boundaries, regression status, next activation gates.
 
-**Not an activation:** both workers absent; no ingest workflow, Scheduled Task, live queue/scheduler or canonical Dossier validator change. Only accepted Research qualifies an individual game for Assembly. Strict final three-game Dossier acceptance remains GitHub-owned.
+**Invariants:** GitHub may cap only **future new preauthorizations**, never pause workers already holding an exact frozen manifest; Assembly directly consumes exact submitted immutable Research package, never requires Research acceptance; later GH checks Research, Assembly identity and strict final three-game Dossier as one provenance chain. Invalid A is item-local and cannot become canonical or Deep-ready. One-stage remains production authority. No semantic workers, live ingest integration, new scheduler or Scheduled Task mutation.
