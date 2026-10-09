@@ -1,0 +1,1822 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "619036c810f9f3eda9a6d0e573fad375cb32416869d2857dc30ab6d0024fbd06",
+  "prepared_required_sha256": "66a1890b24d3b23f623aa361734f04c23f3d17b209697e4895e7e361f545ee74",
+  "group_plan_sha256": "8e3e80400e5ea77151993efa02d770641137e708c20a77e4583a90ccd9d98671",
+  "group_count": 712,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 29,
+  "start_index": 84,
+  "end_index_exclusive": 87,
+  "appids": [
+    "1092790",
+    "1093290",
+    "1093910"
+  ],
+  "items_sha256": "2ffcd7e519886b27df1e903de5f8b05d976caf6e309fc66261c7e1ed386fae39",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "c7484ab14aadc6ccd7bf1ecec065d4363a77dbdd8243a0b007d7b0949764d27a",
+  "items": [
+    {
+      "key": "App_1092790",
+      "appid": "1092790",
+      "title": "Inscryption",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1092790.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1093290",
+      "appid": "1093290",
+      "title": "The Wild at Heart",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1093290.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1093910",
+      "appid": "1093910",
+      "title": "Tales of the Black Forest",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1093910.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "df0d7565731fb45f3403b73b41dc2661fa17623eceddeed2f03f4e79c2fdfb15",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1092790",
+      "title": "Inscryption",
+      "generated_at_utc": "2026-10-09T06:43:00+00:00",
+      "expires_at_utc": "2026-10-29T06:43:00+00:00",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Inscryption",
+        "release_year": 2021,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1092790"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 10 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Players appreciate the first act's deckbuilding combat centered on resource trades, sacrifice and evolving card synergies; its mix of tactical card play with room puzzles stands apart from a pure roguelike.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-007",
+            "feedback-011",
+            "feedback-012"
+          ],
+          "source_ids": [
+            "source-004",
+            "source-006",
+            "source-007"
+          ],
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "structure",
+          "statement": "The campaign radically changes its visual presentation and deckbuilding rules across successive acts, prompting strong reactions to the twists beyond the original cabin setting.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 6,
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-006",
+            "feedback-008",
+            "feedback-010",
+            "feedback-012"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004",
+            "source-005",
+            "source-006",
+            "source-007"
+          ],
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "pacing",
+          "statement": "Many fans advise avoiding spoilers to preserve narrative surprises and fourth-wall-breaking experiments, while some report that the later act pacing sags and interrupts the early card-combat rhythm.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-006",
+            "feedback-009"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "repetition",
+          "statement": "After completing the main narrative, Kaycee's Mod returns to a more replayable variant of the original cabin deckbuilder, offering a sustained challenge for players who want consistent tactical runs.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "player_feedback_ids": [
+            "feedback-004",
+            "feedback-009",
+            "feedback-010",
+            "feedback-011"
+          ],
+          "source_ids": [
+            "source-003",
+            "source-005",
+            "source-006"
+          ],
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "friction",
+          "statement": "Players who favor the first act sometimes find the second act's sudden pixel-art style and larger range of deck systems confusing, demanding renewed learning just when earlier mechanics became familiar.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-007",
+            "feedback-010"
+          ],
+          "source_ids": [
+            "source-004",
+            "source-006"
+          ],
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "difficulty",
+          "statement": "Difficulty is variable across acts; comments describe demanding act-two deck construction and occasional sharp card matchup challenges, while others adapt by changing starting deck and learn to enjoy it.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-007",
+            "feedback-010",
+            "feedback-011"
+          ],
+          "source_ids": [
+            "source-004",
+            "source-006"
+          ],
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "other",
+          "statement": "Russian-language player accounts praise the narrative, atmosphere, unconventional changing mechanics and humorous meta moments; some single out uneven pacing near the end.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-004",
+            "feedback-012"
+          ],
+          "source_ids": [
+            "source-003",
+            "source-007"
+          ],
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "other",
+          "statement": "The mystery surrounding cards, the cabin and figures such as Leshy motivates play well beyond a normal card-strategy match, drawing praise for a memorable psychological storytelling payoff.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "repetition",
+          "statement": "The expanded acts divide opinion: some enjoy each new board style and play pattern while others would have preferred deeper development of only the first act's systems.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-008",
+            "feedback-009",
+            "feedback-010"
+          ],
+          "source_ids": [
+            "source-004",
+            "source-005",
+            "source-006"
+          ],
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "other",
+          "statement": "One Russian reviewer praises core card-battle satisfaction even without uncovering the mystery, while another mainly recalls the emotional ending and characters.",
+          "sentiment": "positive",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-005"
+          ],
+          "source_ids": [
+            "source-003"
+          ],
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable"
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "Some players regard the act-to-act transformation as the game's artistic strength, while others dislike leaving the familiar first-act roguelike mechanics and horror setting behind.",
+          "recurrence": "moderate",
+          "mention_count": 6,
+          "source_ids": [
+            "source-003",
+            "source-004",
+            "source-005",
+            "source-006",
+            "source-007"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-006",
+            "feedback-008",
+            "feedback-009",
+            "feedback-010",
+            "feedback-012"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                4
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                8
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                7
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                7,
+                9
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                6,
+                7
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                4,
+                8
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1092790/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1092790/reviews/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1092790",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "other_player_feedback",
+            "domain": "steamstat.io",
+            "url": "https://steamstat.io/ru/app/1092790",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1092790",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/inscryption/comments/1s4scc0/not_really_liking_act_ii/",
+            "publication_date": "2026-03-27",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Inscryption",
+              "release_year": 2021
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/inscryption/comments/1w2zt0b/would_you_play_a_game_thats_basically_just_act_2/",
+            "publication_date": "2026-08-31",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Inscryption",
+              "release_year": 2021
+            }
+          },
+          {
+            "source_id": "source-006",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/inscryption/comments/1qrbku9/i_cant_seem_to_enjoy_act_2/",
+            "publication_date": "2026-01-30",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Inscryption",
+              "release_year": 2021
+            }
+          },
+          {
+            "source_id": "source-007",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1092790/positivereviews/",
+            "publication_date": null,
+            "language": "mixed",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1092790",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2026-09-23",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2026-09-20",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-003",
+            "publication_date": "2026-10-01",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": "2026-09-30",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
+            "publication_date": "2026-09-03",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-004",
+            "publication_date": "2026-03-27",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-004",
+            "publication_date": "2026-03-27",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-005",
+            "publication_date": "2026-08-31",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-005",
+            "publication_date": "2026-08-31",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-010",
+            "source_id": "source-006",
+            "publication_date": "2026-01-30",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-011",
+            "source_id": "source-006",
+            "publication_date": "2026-01-30",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-012",
+            "source_id": "source-007",
+            "publication_date": "2026-09-12",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1093290",
+      "title": "The Wild at Heart",
+      "generated_at_utc": "2026-10-09T06:43:00+00:00",
+      "expires_at_utc": "2026-10-29T06:43:00+00:00",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "The Wild at Heart",
+        "release_year": 2021,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1093290"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 12 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "The game builds a Pikmin-like loop around throwing and assigning differently powered Spritelings to combat, carry supplies, clear obstacles and solve environmental puzzles; players enjoy this distinctive creature management.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-005",
+            "feedback-010",
+            "feedback-012"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005",
+            "source-007"
+          ],
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "progression",
+          "statement": "New Spriteling types and tools gradually allow access to formerly blocked areas, producing a connected exploration loop with crafting, resource gathering and upgrades.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-006",
+            "feedback-010"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "other",
+          "statement": "The hand-drawn storybook artwork, woodland soundscape and bright creature designs receive frequent praise as a gentle fairytale aesthetic.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-004",
+            "feedback-005",
+            "feedback-008",
+            "feedback-010"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "pacing",
+          "statement": "Early progression may feel slow with only a few Spriteling types, while later map traversal and relic collection involves long backtracking or errands; other players find the gradual opening of routes satisfying.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-006",
+            "feedback-012"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-007"
+          ],
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "difficulty",
+          "statement": "Players generally describe the puzzles and fighting as approachable, but some object to imprecise aiming and anticlimactic final fights; exploration at night can cause disproportionate stress.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-007",
+            "feedback-011"
+          ],
+          "source_ids": [
+            "source-003",
+            "source-006"
+          ],
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "friction",
+          "statement": "The 2.5D perspective makes landing certain throws awkward and resource objects respawn, making it hard to mark areas as permanently cleared; a detailed review calls the map inadequate for required Spriteling types.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-012"
+          ],
+          "source_ids": [
+            "source-003",
+            "source-007"
+          ],
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "other",
+          "statement": "A Russian-language player who completed the console edition praises the visual style and mechanics but says some progression triggers were obscure, compounded by English-only dialogue for that player.",
+          "sentiment": "mixed",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "player_feedback_ids": [
+            "feedback-009"
+          ],
+          "source_ids": [
+            "source-004"
+          ],
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "other",
+          "statement": "One Russian player's account says a console achievement bug forced a second completion in 2023; this historical console report cannot establish a present PC issue.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "player_feedback_ids": [
+            "feedback-009"
+          ],
+          "source_ids": [
+            "source-004"
+          ],
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "uncertain"
+        },
+        {
+          "category": "structure",
+          "statement": "The story follows two young runaways through an interconnected wooded world, with a mixture of character conversations, gathering quests, puzzle zones and occasional night-survival detours.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "player_feedback_ids": [
+            "feedback-004",
+            "feedback-008",
+            "feedback-010"
+          ],
+          "source_ids": [
+            "source-003",
+            "source-005"
+          ],
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "repetition",
+          "statement": "Players differ over repeated daytime foraging and backtracking: some enjoy relaxed wandering and searching, while others find repeat objects, late fetch quests and modest enemy variety tedious.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-010",
+            "feedback-012"
+          ],
+          "source_ids": [
+            "source-003",
+            "source-005",
+            "source-007"
+          ],
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "difficulty",
+          "statement": "Nightfall turns a mostly cozy experience into a risk-management exercise because hostile shadows can threaten the Spritelings and cause players to retreat to campfires.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "player_feedback_ids": [
+            "feedback-008",
+            "feedback-011",
+            "feedback-012"
+          ],
+          "source_ids": [
+            "source-003",
+            "source-006",
+            "source-007"
+          ],
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "other",
+          "statement": "A few players appreciate the charming narrative but consider the dialogue child-oriented and the combat less rewarding than discovery and exploration.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "player_feedback_ids": [
+            "feedback-005",
+            "feedback-006",
+            "feedback-007"
+          ],
+          "source_ids": [
+            "source-003"
+          ],
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "The game's warm art and gentle exploration attract praise, but feedback differs on how enjoyable repeat foraging, night-risk and occasional unclear puzzle dependencies remain over its length.",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "source_ids": [
+            "source-003",
+            "source-004",
+            "source-005",
+            "source-006",
+            "source-007"
+          ],
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-009",
+            "feedback-010",
+            "feedback-011",
+            "feedback-012"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                9
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                4,
+                10
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                8
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                8,
+                11
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2,
+                8
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                5,
+                9
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                7
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1093290/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1093290/reviews/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1093290",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "other_player_feedback",
+            "domain": "playze.io",
+            "url": "https://playze.io/game/the-wild-at-heart",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1093290",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "other_player_feedback",
+            "domain": "dtf.ru",
+            "url": "https://dtf.ru/playstation/2364544-moi-platinovyi-2023-god-s-playstation",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "The Wild at Heart",
+              "release_year": 2021
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/CozyGamers/comments/1o5rq08/the_wild_at_heart_cute_pikminlike_game_with/",
+            "publication_date": "2025-10-13",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "The Wild at Heart",
+              "release_year": 2021
+            }
+          },
+          {
+            "source_id": "source-006",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/CozyGamers/comments/1fafy6l/exploring_at_night_in_the_wild_at_heart/",
+            "publication_date": "2024-09-06",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "The Wild at Heart",
+              "release_year": 2021
+            }
+          },
+          {
+            "source_id": "source-007",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1093290/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1093290",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2026-10-07",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2026-10-06",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2026-10-05",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": "2026-08-31",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
+            "publication_date": "2026-08-30",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-003",
+            "publication_date": "2026-08-21",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-003",
+            "publication_date": "2026-08-21",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-003",
+            "publication_date": "2026-08-16",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-004",
+            "publication_date": "2023-12-31",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-010",
+            "source_id": "source-005",
+            "publication_date": "2025-10-13",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-011",
+            "source_id": "source-006",
+            "publication_date": "2024-09-06",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-012",
+            "source_id": "source-007",
+            "publication_date": "2021-08-30",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1093910",
+      "title": "Tales of the Black Forest",
+      "generated_at_utc": "2026-10-09T06:43:00+00:00",
+      "expires_at_utc": "2026-10-29T06:43:00+00:00",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Tales of the Black Forest",
+        "release_year": 2019,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1093910"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 11 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "other",
+          "statement": "Player reviews emphasize the tale of a schoolgirl moving through eerie Japanese folklore and intersecting characters' histories; emotional twists and small human stories matter more than scares.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-007",
+            "feedback-008"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-004",
+            "source-005"
+          ],
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "structure",
+          "statement": "The journey is a compact, largely linear three-chapter adventure with two endings, optional scenes and dialogue; some players can finish in several hours without exhaustive exploration.",
+          "sentiment": "neutral",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004",
+            "feedback-007"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "pacing",
+          "statement": "Players describe a dialogue-heavy interactive novel pace despite the RPG Maker visuals; some enjoy being carried by the mystery, while others dislike frequent cutscenes and limited agency.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-006",
+            "feedback-007",
+            "feedback-009"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "mechanics",
+          "statement": "Progress mainly involves walking, finding story objects and solving light puzzles, interrupted by occasional supernatural chase scenes; tactical RPG systems are not its focus.",
+          "sentiment": "neutral",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "player_feedback_ids": [
+            "feedback-004",
+            "feedback-005",
+            "feedback-007"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "difficulty",
+          "statement": "Puzzles are mostly gentle, but individual chase sequences can be disproportionately demanding relative to the otherwise casual reading and exploration.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "player_feedback_ids": [
+            "feedback-005",
+            "feedback-007"
+          ],
+          "source_ids": [
+            "source-003",
+            "source-004"
+          ],
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "other",
+          "statement": "The pixel-art settings, supernatural character sprites and accompanying soundtrack are frequently praised for carrying a warm yet unsettling fairy-tale mood.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 6,
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-005",
+            "feedback-007",
+            "feedback-008"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "repetition",
+          "statement": "Because the main path is directed and the story is the draw, player accounts report limited repeat-play incentives beyond minor side events and viewing a different ending.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-007"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "friction",
+          "statement": "Some players find the English localization awkward: Japanese honorifics and terms are left inline with parentheses, breaking reading flow and requiring extra interpretation.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-007"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "other",
+          "statement": "Russian feedback praises the human-centered plot but disputes whether a weak horror component, very easy puzzles and relatively shallow characters justify the game's genre labels.",
+          "sentiment": "mixed",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "player_feedback_ids": [
+            "feedback-007"
+          ],
+          "source_ids": [
+            "source-004"
+          ],
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable"
+        },
+        {
+          "category": "other",
+          "statement": "One Russian player highlights small inconsistencies in pixel scale and the lack of a fullscreen option on their setup; it is a dated, isolated observation rather than verified current PC-wide behavior.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "player_feedback_ids": [
+            "feedback-007"
+          ],
+          "source_ids": [
+            "source-004"
+          ],
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "uncertain"
+        },
+        {
+          "category": "other",
+          "statement": "One Japanese-language review argues that the story builds in emotional force by later chapters and praises the natural Japanese translation while cautioning about dark historical references.",
+          "sentiment": "positive",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "player_feedback_ids": [
+            "feedback-010"
+          ],
+          "source_ids": [
+            "source-006"
+          ],
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable"
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "Players distinguish between the admired folklore-driven narrative and the very limited puzzle/adventure gameplay; whether this is a strength depends on preference for story-heavy experiences.",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-004",
+            "feedback-006",
+            "feedback-007",
+            "feedback-009"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                7
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                6
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                8,
+                10
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                5
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                7,
+                8
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                9
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1093910/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "other_player_feedback",
+            "domain": "playze.io",
+            "url": "https://playze.io/game/tales-of-the-black-forest",
+            "publication_date": null,
+            "language": "mixed",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1093910",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1093910/reviews/?browsefilter=toprated&l=english",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1093910",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "other_player_feedback",
+            "domain": "stopgame.ru",
+            "url": "https://stopgame.ru/game/tales_of_the_black_forest/reviews",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Tales of the Black Forest",
+              "release_year": 2019
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "other_player_feedback",
+            "domain": "metacritic.com",
+            "url": "https://www.metacritic.com/game/tales-of-the-black-forest/",
+            "publication_date": null,
+            "language": "mixed",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Tales of the Black Forest",
+              "release_year": 2019
+            }
+          },
+          {
+            "source_id": "source-006",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1093910/reviews/?browsefilter=toprated&l=japanese",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1093910",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2026-10-01",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2026-09-30",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2026-09-28",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-002",
+            "publication_date": "2026-08-10",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
+            "publication_date": "2022-04-24",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-003",
+            "publication_date": "2019-12-23",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-004",
+            "publication_date": "2025-06-22",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-005",
+            "publication_date": "2023-10-05",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-005",
+            "publication_date": "2025-01-09",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-010",
+            "source_id": "source-006",
+            "publication_date": "2026-02-01",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    }
+  ],
+  "run_start_authority": {
+    "schema": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-REFERENCE-V1",
+    "schema_version": 1,
+    "run_start_anchor_commit": "405a434a6442300a7c0f3d2a8fcfdd1e45b14670",
+    "run_start_nonce": "8527b8e2749a8b88f7e4792965dccb9d"
+  }
+}
