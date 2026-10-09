@@ -118,6 +118,9 @@ Do not restate the entire task specification in the chat message when the canoni
 
 - ЧАТ 1 complete/free: commercial/Dossier isolation accepted via PR #174 (`a243b7bf61b2127a75491646ca1265fa5d13e149`). Fresh deterministic commercial data now persists before Dossier. Real pre-AI run #37909195575 and visual run #37909274274 succeeded. The first Pages deploy then failed only because Director registry metadata had invalid `order: 0`; that metadata is corrected separately.
 
+- ЧАТ 1 active: `WORKER_TASK_DOSSIER_TWO_STAGE_ASYNC_PIPELINE_AMENDMENT_01.md`. User explicitly rejected per-item GitHub waiting. Research and Assembly must continue on buffered GitHub-preauthorized work while GitHub validates prior outputs asynchronously. Current two-stage system remains inactive.
+- ЧАТ 2 active: `WORKER_TASK_DEEP_TWO_STAGE_INTEGRATION_CUTOVER_01.md`. All accepted Deep prerequisites are complete. Integrate/cut over without depending on the new two-stage Dossier; no Scheduled Task changes are authorized.
+
 ## CURRENT PHYSICAL WORKER SLOTS
 
 ### ЧАТ 1 — DIAGNOSTIC COMPLETE
