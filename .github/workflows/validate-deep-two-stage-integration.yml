@@ -26,7 +26,7 @@ jobs:
       - name: Fail-closed preflight unit tests
         run: python scripts/test_deep_two_stage_cutover_preflight.py
       - name: Independent Stage-1 regression
-        run: python scripts/test_deep_stage1.py
+        run: python scripts/test_deep_stage1_worker.py
       - name: Comparative Stage-2 regression
         run: python scripts/test_deep_stage2_calibration.py
       - name: Fast-free Wishlist 4 plus purchase 40 ranking regression
