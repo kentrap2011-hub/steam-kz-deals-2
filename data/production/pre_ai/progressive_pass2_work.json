@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 12,
     "deep_completed_not_fit_count": 6,
     "deep_incomplete_or_recovery_count": 4,
-    "deep_waiting_for_dossier_count": 221,
-    "deep_ready_or_pending_count": 2,
+    "deep_waiting_for_dossier_count": 218,
+    "deep_ready_or_pending_count": 5,
     "deep_normal_first_pass_remaining_count": 223,
     "deep_remaining_until_all_authoritative_count": 227,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 0,
-    "dossier_waiting_count": 221,
+    "dossier_waiting_count": 218,
     "pass2_attempted_count": 22,
-    "pass2_eligible_count": 2,
-    "normal_pass2_eligible_count": 2,
+    "pass2_eligible_count": 5,
+    "normal_pass2_eligible_count": 5,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -232,6 +232,193 @@
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--c5f7b2319e7a52218ba238c45526cf834e00335f93887fa19e08c99b70efca9e--82060a146badd8ad1baf413665c79ab723621f00ec89f2cd109ddbf64d377d2c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--c5f7b2319e7a52218ba238c45526cf834e00335f93887fa19e08c99b70efca9e--82060a146badd8ad1baf413665c79ab723621f00ec89f2cd109ddbf64d377d2c.json",
       "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1122680",
+      "taste_subject_key": "App_1122680",
+      "appid": "1122680",
+      "taste_fingerprint": "e2d9c45819c1816e9204ada80c074bb12c4ff6aa60741273e1895aea4f8f2141",
+      "candidate_context_sha256": "1987883b0a8a7ae462ad1c888bf732eafaea9c6ea8cd1fcf8be006a7129e844f",
+      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+      "work_id": "a70ef54d93f9a9c386fbed5dc1565928de42599dbac4dbcd5addb92e651d25d6",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "The Artful Escape",
+        "short_description": "A teenage guitar prodigy sets out on a psychedelic journey to inspire his stage persona and confront the legacy of a dead folk legend. Starring voice performances by Michael Johnston, Caroline Kinley, Lena Headey, Jason Schwartzman, Mark Strong, and Carl Weathers.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Sci-fi",
+          "Singleplayer",
+          "Story Rich"
+        ],
+        "core_fit_count": 2,
+        "release_date": "9 Sep, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1122680"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1122680.json",
+      "dossier_content_sha256": "99692f76b417754f2b7bf0f270d5134accd550f8d37c3f33837421b738bfa34a",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-29T12:51:03.974Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "617129bc88134d93a2c2218d042e3e6489eda5463111e945339f03916916a031",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--a70ef54d93f9a9c386fbed5dc1565928de42599dbac4dbcd5addb92e651d25d6--617129bc88134d93a2c2218d042e3e6489eda5463111e945339f03916916a031.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--a70ef54d93f9a9c386fbed5dc1565928de42599dbac4dbcd5addb92e651d25d6--617129bc88134d93a2c2218d042e3e6489eda5463111e945339f03916916a031.json",
+      "sequence": 3
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1135230",
+      "taste_subject_key": "App_1135230",
+      "appid": "1135230",
+      "taste_fingerprint": "9b0285601f85f5c30c48a71d77fe7b92aec5c47e0dc3e3aa20ae99b90db9356e",
+      "candidate_context_sha256": "c47504594f30d6b18f80e549d2030593db4bc2e3cacb6aaab502ee71933e39c2",
+      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+      "work_id": "67941053a2bef1d1cc8b679cf95863c0760acea572fd935c4e11de506d94baea",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Ember Knights",
+        "short_description": "Ember Knights is an action rogue-lite for 1-4 players where you play as legendary knights, the last spark of hope against the mad sorcerer Praxis and his hordes of unwavering fiends. Wield weapons & skills, build synergies with game-changing relics and free the universe of Praxis’ corruption.",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "18 Jul, 2023",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1135230"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1135230.json",
+      "dossier_content_sha256": "ea5908f180de5e6244e8e10ad31cd402203e07961124fd7674a4aa2f290ed7ce",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-29T12:51:03.974Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "42dd5ec0bb857e707da2ad491f983728811531da5fa262b16624e3f55faab043",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--67941053a2bef1d1cc8b679cf95863c0760acea572fd935c4e11de506d94baea--42dd5ec0bb857e707da2ad491f983728811531da5fa262b16624e3f55faab043.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--67941053a2bef1d1cc8b679cf95863c0760acea572fd935c4e11de506d94baea--42dd5ec0bb857e707da2ad491f983728811531da5fa262b16624e3f55faab043.json",
+      "sequence": 4
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1122720",
+      "taste_subject_key": "App_1122720",
+      "appid": "1122720",
+      "taste_fingerprint": "cdeb82acfae6e0a316a143136cab7ddda3201982654854c589eb9cbd53be1ed0",
+      "candidate_context_sha256": "3de41edc04d95b2b62ab856c82706fe9310ff22fbe90685dd80c0ec08f6e67de",
+      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+      "work_id": "5ff11b0bcc0fff1f524e94c316a206b487fa87b167e1c8695bdb13f32e655f50",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Sayonara Wild Hearts",
+        "short_description": "Sayonara Wild Hearts is a dreamy arcade game about riding motorcycles, skateboarding, dance battling, shooting lasers, wielding swords, and breaking hearts at 200 mph.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action"
+        ],
+        "core_fit_count": 0,
+        "release_date": "12 Dec, 2019",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1122720"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1122720.json",
+      "dossier_content_sha256": "529d95f4259718c52267f20db1429bf9419d5bba73055839817684d7359bf634",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-29T12:51:03.974Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "c86bbfffdbbf13fe1cff7ef6fd0ea878fda8cae3c6c9a487a768b1ca7eecc7cf",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--5ff11b0bcc0fff1f524e94c316a206b487fa87b167e1c8695bdb13f32e655f50--c86bbfffdbbf13fe1cff7ef6fd0ea878fda8cae3c6c9a487a768b1ca7eecc7cf.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--5ff11b0bcc0fff1f524e94c316a206b487fa87b167e1c8695bdb13f32e655f50--c86bbfffdbbf13fe1cff7ef6fd0ea878fda8cae3c6c9a487a768b1ca7eecc7cf.json",
+      "sequence": 5
     }
   ]
 }
