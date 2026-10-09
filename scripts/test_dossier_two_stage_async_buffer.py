@@ -304,5 +304,69 @@ class FullyAsyncBufferTests(unittest.TestCase):
             self.assertFalse(x.inspect(i, x.assembly_submit(i, r))["deep_ready"])
 
 
+    def test_12_more_than_eight_already_preauthorized_items_never_backpressured(self):
+        x = self.x
+        # Prepare three further exact three-game groups in disposable Git, keeping
+        # the original group; this is a real 12-item > legacy-8 frozen test.
+        paths = list(x.paths)
+        for seq in (2, 3, 4):
+            items = [
+                {"appid": str(120000 + seq * 10 + j),
+                 "title": f"Frozen Group {seq} Game {j}"}
+                for j in range(3)
+            ]
+            base = x.docs[0]["assignment"]
+            fields = {
+                "snapshot_id": base["snapshot_id"],
+                "prepared_required_sha256": base["prepared_required_sha256"],
+                "sequence": seq, "start_index": (seq - 1) * 3,
+                "end_index_exclusive": seq * 3,
+                "appids": [t["appid"] for t in items],
+                "items_sha256": canonical_sha256(items),
+                "scope_source": base["scope_source"],
+                "source_queue_sha256": base["source_queue_sha256"],
+            }
+            group_sha = canonical_sha256(fields)
+            descriptor = copy.deepcopy(x.f.descriptor)
+            descriptor.update(fields)
+            descriptor["items"] = items
+            descriptor["group_sha256"] = group_sha
+            descriptor["group_count"] = 4
+            x.f.save("data/production/pre_ai/taste_steam_review_dossier_worker_groups/"
+                     f"{base['snapshot_id']}/g{seq:06d}.json", descriptor)
+            for j, item in enumerate(items):
+                a = copy.deepcopy(base)
+                a.update({
+                    "assignment_id": f"research-extra-{seq:02d}-{j:02d}",
+                    "group_sequence": seq, "item_index": j,
+                    "appid": item["appid"], "title": item["title"],
+                    "group_sha256": group_sha,
+                    "items_sha256": fields["items_sha256"],
+                })
+                p = prepared_path(a)
+                x.f.save(p, {k: v for k, v in a.items()
+                             if k not in ("research_marker_anchor_commit", "research_marker_nonce")})
+                paths.append(p)
+        x.f.index["pending_group_sequences"] = [1, 2, 3, 4]
+        x.f.save("data/production/pre_ai/taste_steam_review_dossier_worker_index.json",
+                 x.f.index)
+        source = x.f.commit("Preauthorize 12 independent Research items")
+        buf = make_buffer(x.f.root, source_commit=source, phase="research",
+                          ordered_work_paths=paths)
+        self.assertEqual(buf["reserved_count"], 12)
+        x.f.save(buf["path"], buf["manifest"])
+        x.f.commit("Freeze all 12 immutable Research authorizations")
+        nonce = "d" * 32
+        x.f.save(f"{RESEARCH_MARKER}/{nonce}.json", {
+            "schema": "DOSSIER-RESEARCH-RUN-START-MARKER-V1",
+            "schema_version": 1, "run_start_nonce": nonce,
+        })
+        marker = x.f.commit("New marker for 12 authorized items")
+        frozen = frozen_buffer(x.f.root, marker_commit=marker,
+                               buffer_path=buf["path"], phase="research")
+        self.assertEqual(len(frozen["items"]), 12)
+        self.assertEqual(frozen["items"][-1]["group_sequence"], 4)
+
+
 if __name__ == "__main__":
     unittest.main()
