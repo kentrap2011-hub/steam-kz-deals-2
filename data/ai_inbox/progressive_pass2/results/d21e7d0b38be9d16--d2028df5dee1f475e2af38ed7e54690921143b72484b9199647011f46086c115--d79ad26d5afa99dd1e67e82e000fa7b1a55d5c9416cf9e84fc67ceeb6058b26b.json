@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "2807f94aafcdd94494f505b42a9a3bb77e000e32",
+  "run_start_authority_commit": "b449c90e707bf6c00ea3d2b89e4ed313e714ada4",
+  "run_started_at_utc": "2026-10-09T13:55:03+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+  "work_id": "d2028df5dee1f475e2af38ed7e54690921143b72484b9199647011f46086c115",
+  "family_id": "game:1213700",
+  "taste_subject_key": "App_1213700",
+  "appid": "1213700",
+  "taste_fingerprint": "452f7fd95665b3479f2ce0f4d5db8fe5c15f38b65b456e1b5d7c652b92cd447e",
+  "candidate_context_sha256": "7769a0a7a21e869dd381765efa6fe64cdf041ccac6238eb299bd27b14360e693",
+  "dossier_content_sha256": "f6f6aaa0d0f1a68e13448dc5fa3ecd31de6ade105107f97f742f2ddf9782c9cc",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "d79ad26d5afa99dd1e67e82e000fa7b1a55d5c9416cf9e84fc67ceeb6058b26b",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Сильные визуальный стиль и музыка не компенсируют для данного вкуса преимущественно простые механики с медленным, мало меняющимся темпом; существенная ценность обычно ожидается от активного процесса и развития ситуаций.",
+    "Неочевидные маршруты и поиск скрытых целей на слабо интерактивных пространствах совпадают с явной неприязнью профиля к потерянности, растянутому хождению и повторному обследованию уже пройденного.",
+    "Жалобы на неточные прыжки и неудобное управление особенно существенны для профиля, которому важно само удовольствие от перемещения."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "directionlessness",
+        "text_ru": "Неочевидные маршруты, спрятанные цели и возвраты по просторным уровням рискуют превратить исследование в поиск без понятного следующего шага.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 9
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Простые загадки, редкие интерактивные события и неторопливое путешествие могут не дать достаточно активного и меняющегося процесса, который удерживает этот игровой профиль.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Неточные прыжки и неудобное перемещение способны раздражать именно в эпизодах, требующих аккуратной платформенной навигации.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Бессловесная символическая подача нравится не всем: часть игроков воспринимает саму историю как слишком тонкую.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть единичное сообщение о проблеме сохранения или прогресса при возвращении в старые зоны; массовость этой проблемы не установлена.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      }
+    ]
+  }
+}
