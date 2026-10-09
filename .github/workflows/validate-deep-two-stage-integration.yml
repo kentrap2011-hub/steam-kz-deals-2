@@ -25,6 +25,8 @@ jobs:
           python -m py_compile scripts/deep_two_stage_cutover_preflight.py scripts/test_deep_two_stage_cutover_preflight.py scripts/deep_stage1.py scripts/deep_stage2.py scripts/deep_two_stage_ranking.py scripts/deep_two_stage_site_projection.py
       - name: Fail-closed preflight unit tests
         run: python scripts/test_deep_two_stage_cutover_preflight.py
+      - name: Frozen interfaces and no premature activation
+        run: python scripts/test_deep_two_stage_architecture_freeze.py
       - name: Independent Stage-1 regression
         run: python scripts/test_deep_stage1_worker.py
       - name: Comparative Stage-2 regression
