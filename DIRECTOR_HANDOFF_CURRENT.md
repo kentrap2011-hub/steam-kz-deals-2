@@ -114,9 +114,9 @@ Do not restate the entire task specification in the chat message when the canoni
 
 - ЧАТ 2 is complete/free. Two-stage Dossier Research/Assembly architecture accepted via PR #171 (`290d31a52c00d9feea86ecfc78fdb1f037db66bb`). No implementation/activation yet; one GitHub queue owner and unchanged strict final Dossier validator remain mandatory.
 
-- ЧАТ 2 complete/free: Dossier two-stage P1 contracts/schemas accepted via PR #173 (`1aaf1afacb6bbfab2406abb489df6a0c35e09250`). New interfaces are implemented inactive (`active=false`, `authoritative=false`); one-stage Dossier remains production authority. Next recommended task is P2 GitHub deterministic staging/helpers; not started.
+- ЧАТ 2 complete/free: Dossier two-stage P1 contracts/schemas accepted via PR #173; P2 inactive GitHub staging/control-plane accepted via PR #175 (`ae92337ae5e8360ec15a4af4f85802bad39767b7`). Research intake validation, receipts, lifecycle state and accepted-only Assembly assignment are implemented but inactive/non-authoritative. One-stage Dossier remains production authority.
 
-- ЧАТ 1 active/urgent: `WORKER_TASK_COMMERCIAL_REFRESH_INDEPENDENT_FROM_DOSSIER_FAILURE_01.md` (`commercial-refresh-dossier-isolation`). Goal: current Steam prices/discounts must persist and publish even if Dossier-local tests/preparation fail; strict Dossier validation remains unchanged. Current observed incident: 2026-10-08 Steam + mailing succeeded, pre-AI failed on expired Dossier test fixtures, site stayed on 2026-10-06 commercial source.
+- ЧАТ 1 complete/free: commercial/Dossier isolation accepted via PR #174 (`a243b7bf61b2127a75491646ca1265fa5d13e149`). Fresh deterministic commercial data now persists before Dossier. Real pre-AI run #37909195575 and visual run #37909274274 succeeded. The first Pages deploy then failed only because Director registry metadata had invalid `order: 0`; that metadata is corrected separately.
 
 ## CURRENT PHYSICAL WORKER SLOTS
 
