@@ -1,0 +1,58 @@
+name: Validate Deep Stage 1 migration preparation
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/prepare_deep_stage1_migration_work.py'
+      - 'scripts/test_deep_stage1_migration_work.py'
+      - '.github/workflows/validate-deep-stage1-migration-preparation.yml'
+      - 'config/deep_two_stage_migration_contract.json'
+      - 'scripts/deep_stage1.py'
+      - 'scripts/progressive_pass2.py'
+      - 'scripts/progressive_pass1.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  migration-preparation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile and unit-test the Stage-1 preparation gate
+        run: |
+          python3 -m py_compile scripts/prepare_deep_stage1_migration_work.py scripts/test_deep_stage1_migration_work.py
+          PYTHONPATH=scripts python3 scripts/test_deep_stage1_migration_work.py
+      - name: Produce read-only current canonical Stage-1 migration plan
+        run: |
+          python3 scripts/prepare_deep_stage1_migration_work.py --preview-out "$RUNNER_TEMP/deep-stage1-migration-preparation.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          p = json.loads((Path(os.environ["RUNNER_TEMP"]) / "deep-stage1-migration-preparation.json").read_text())
+          assert p["semantic_execution_authorized"] is False
+          assert p["production_cutover_performed"] is False
+          assert p["research_assembly_dossier_used"] is False
+          assert p["executable_materialization_authorized"] is False
+          assert 0 <= p["requires_stage1_semantics"] <= p["eligible_with_current_dossier"] <= p["current_scope_total"]
+          assert len(p["canonical_work_if_authorized"]["items"]) == p["requires_stage1_semantics"]
+          assert not p["canonical_work_if_authorized"]["implementation_status"] == "active"
+          print("migration preview is non-executable; contract authority not bypassed")
+          PY
+      - name: Prove current canonical Stage-1 manifest remains non-active
+        run: |
+          python3 - <<'PY'
+          import json
+          w = json.load(open("data/production/pre_ai/deep_stage1_work.json"))
+          assert w["implementation_status"] == "implemented_not_active"
+          assert not w["items"]
+          m = json.load(open("config/deep_two_stage_migration_contract.json"))
+          assert m["mass_migration_authorized"] is False
+          print("Production canonical Stage-1 work unchanged")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deep-stage1-migration-preparation
+          path: ${{ runner.temp }}/deep-stage1-migration-preparation.json
+          retention-days: 14
