@@ -63,6 +63,9 @@ class GateTests(unittest.TestCase):
             "sequence": 1, "work_id": "b" * 64,
             "result_submission_path": "data/ai_inbox/deep_stage1/results/x.json"
         }]
+        with self.assertRaises(gate.PreflightError):
+            self.plan(d)  # unlisted item is never an authorized queue
+        d["stage1_work"]["eligible_work_ids"] = ["b" * 64]
         p = self.plan(d)
         self.assertEqual([x["work_id"] for x in p["canonical_stage1_authorized_queue"]],
                          ["b" * 64])
