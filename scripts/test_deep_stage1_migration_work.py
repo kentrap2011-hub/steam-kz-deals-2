@@ -93,7 +93,7 @@ class MigrationTests(unittest.TestCase):
         self.assertFalse(p["executable_materialization_authorized"])
         self.assertFalse(p["semantic_execution_authorized"])
         self.assertEqual((p["current_scope_total"], p["eligible_with_current_dossier"],
-                          p["requires_stage1_semantics"]), (3, 2, 2))
+                          p["requires_stage1_semantics"]), (3, 2, 2), str(p["blocked_or_waiting"]))
         self.assertEqual(len(p["blocked_or_waiting"]), 1)
         work = p["canonical_work_if_authorized"]
         self.assertEqual([x["appid"] for x in work["items"]], ["42", "41"])
