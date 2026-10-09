@@ -62,3 +62,14 @@ Integration PR CI runs focused component and read-only real-data checks and publ
 - Proposed PR: integration preflight / blocked boundary (PR URL from GitHub after creation).
 - Preflight output: Actions artifact `deep-two-stage-precutover-plan`.
 - Stop here; return to Director for authorization of bounded GitHub-controlled semantic migration / Stage-2 bootstrap plan. Do not start another task or change external Scheduled Tasks.
+
+## Final PR and CI evidence (2026-10-09)
+
+- **PR #176:** https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/176 — open, mergeable, intentionally not merged by the worker.
+- **Validate Deep two-stage integration preflight:** GitHub Actions run `37918411911` **success**; all steps passed, including syntax compilation, fail-closed unit tests, frozen architecture, Stage 1, Stage 2, isolated Fast-free scoring, Python site/Statistics/detail and browser UI tests. Link: https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/37918411911
+- **Validate backlog dispositions:** run `37918411970` **success**.
+- Exact-checkout preflight output: `cutover_ready=false`, `cutover_performed=false`, **304 legacy historical state entries classified** as needing Stage-1 reanalysis; **0 GitHub-authorized Stage-1 items; 0 GitHub-authorized Stage-2 items; 0 accepted Stage-1 results; 0 calibrated Stage-2 results**. Four exact blockers: `current_canonical_dossier_evidence_incomplete`, `stage1_eligible_scope_does_not_cover_current_games`, `stage1_authoritative_semantics_not_complete`, `stage2_seed_or_anchors_not_yet_proven`.
+- **Important:** 304 legacy historical entries are **not** 304 currently eligible semantic tasks; do not convert audit entries to executable queue without GitHub-approved exact current Dossier/profile/product binding and explicit migration authority. 245 current coverage targets and 223 Dossier-waiting were counts in the referenced current legacy work snapshot, not a new work quota.
+- Read-only CI artifact: `deep-two-stage-precutover-plan`, artifact id `11610177335`, exact source file SHA-256s, all legacy classification audit keys and literal GitHub-authorized Stage 1/2 queues. This is a frozen CI-checkout diagnostic, not an active semantic worker request.
+
+**Worker stop point:** after successful bounded checks and report/PR; no migration execution, production cutover, semantic result invention or Scheduled Task mutation.
