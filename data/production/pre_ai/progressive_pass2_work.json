@@ -51,15 +51,15 @@
   },
   "scope": {
     "deep_total_current_coverage_target": 245,
-    "deep_first_pass_attempted_count": 43,
-    "deep_authoritative_completed_count": 33,
-    "deep_completed_fit_count": 22,
+    "deep_first_pass_attempted_count": 44,
+    "deep_authoritative_completed_count": 34,
+    "deep_completed_fit_count": 23,
     "deep_completed_not_fit_count": 11,
     "deep_incomplete_or_recovery_count": 10,
     "deep_waiting_for_dossier_count": 197,
-    "deep_ready_or_pending_count": 5,
-    "deep_normal_first_pass_remaining_count": 202,
-    "deep_remaining_until_all_authoritative_count": 212,
+    "deep_ready_or_pending_count": 4,
+    "deep_normal_first_pass_remaining_count": 201,
+    "deep_remaining_until_all_authoritative_count": 211,
     "deep_normal_first_pass_complete": false,
     "deep_all_current_authoritative_complete": false,
     "recovery_owned_count": 10,
@@ -67,9 +67,9 @@
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 0,
     "dossier_waiting_count": 197,
-    "pass2_attempted_count": 43,
-    "pass2_eligible_count": 5,
-    "normal_pass2_eligible_count": 5,
+    "pass2_attempted_count": 44,
+    "pass2_eligible_count": 4,
+    "normal_pass2_eligible_count": 4,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -233,70 +233,6 @@
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:12130",
-      "taste_subject_key": "App_12130",
-      "appid": "12130",
-      "taste_fingerprint": "f26f32cf8d67e54eab6a8077e0b5538a2ebe2569527f46356a2d95a51023c522",
-      "candidate_context_sha256": "b2b66c62e27c0d3cbadcb5f86522bc8bfa63772d3a99169a377d1d053949f84e",
-      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
-      "work_id": "c1e81d690fd135a350d2820817675f93f172e1668489840669694fcd735bb9a7",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Manhunt",
-        "short_description": "You awake to the sound of your own panicked breath. In Manhunt, you must run, hide and fight to survive. If you can stay alive long enough, you may find out who did this to you. This is a brutal blood sport.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Action",
-          "Horror",
-          "Stealth"
-        ],
-        "core_fit_count": 2,
-        "release_date": "6 Jan, 2011",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "12130"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_12130.json",
-      "dossier_content_sha256": "653ed387274089f15ec6eac19dca48d8e5fa5ee35ab5b15652f1fa6292e8a5c9",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-29T13:25:34Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "b52e03ad12455b5342ec16ef5a6c557094f5e7387766ecffa3dea1157ed4aff9",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--c1e81d690fd135a350d2820817675f93f172e1668489840669694fcd735bb9a7--b52e03ad12455b5342ec16ef5a6c557094f5e7387766ecffa3dea1157ed4aff9.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--c1e81d690fd135a350d2820817675f93f172e1668489840669694fcd735bb9a7--b52e03ad12455b5342ec16ef5a6c557094f5e7387766ecffa3dea1157ed4aff9.json",
-      "sequence": 3
-    },
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "family_id": "game:1281040",
       "taste_subject_key": "App_1281040",
       "appid": "1281040",
@@ -357,7 +293,7 @@
       "authorization_id": "0ce066a35a037d9e0967635e6d46ed7b26d49e7e2d89a384d778453c5f30cd1c",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--3aa59c44f37949da0da61a74459a6b41676984a45bbd40a5bc94c1537470db68--0ce066a35a037d9e0967635e6d46ed7b26d49e7e2d89a384d778453c5f30cd1c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--3aa59c44f37949da0da61a74459a6b41676984a45bbd40a5bc94c1537470db68--0ce066a35a037d9e0967635e6d46ed7b26d49e7e2d89a384d778453c5f30cd1c.json",
-      "sequence": 4
+      "sequence": 3
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -419,7 +355,7 @@
       "authorization_id": "d760546b4f2e5d3398a8ed7b46d4bb845c66f091958d01ff8713e3b4ec563269",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--82475384c3c83fea1593a1f79e581969b404922eb374424d71e2a32b684e62c5--d760546b4f2e5d3398a8ed7b46d4bb845c66f091958d01ff8713e3b4ec563269.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--82475384c3c83fea1593a1f79e581969b404922eb374424d71e2a32b684e62c5--d760546b4f2e5d3398a8ed7b46d4bb845c66f091958d01ff8713e3b4ec563269.json",
-      "sequence": 5
+      "sequence": 4
     }
   ]
 }
