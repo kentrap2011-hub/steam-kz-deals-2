@@ -28,13 +28,13 @@ No edit to Assembly worker files, shared staging/contracts, `CURRENT_TASK.md` (l
 
 ## Checks
 
-- Research fixture test file includes 12 tests, including twelve GitHub-prepared Research games across four original three-game groups (above the deprecated eight-slot gating model).
-- PR-only workflow: `Validate inactive Dossier Research semantic worker` (Research, P1, P2, fully async, one-stage date, Dossier/Deep release-year). Actual GitHub Actions result must be inspected; a commit or PR alone is **not** proof of a passed test run.
+- Research fixture test file includes 12 passing tests, including twelve GitHub-prepared Research games across four original three-game groups (above the deprecated eight-slot gating model). The final optimized guard caches only immutable marker-parent proof within an invocation, returning defensive copies and rechecking inactive gates; this avoids quadratic repeat Git scans without introducing any sibling ack/worker-owned queue.
+- **Authoritative GitHub Actions success:** `Validate inactive Dossier Research semantic worker`, run [37955966206](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/37955966206), validated Research implementation head `98f4e3385e9f49e9c1df4fe491061a6a73359c3d`. All job steps passed: Research **12/12** (7.933 s), P1 strict schemas **15/15**, P2 staging Git history **25/25**, async Research/Assembly buffers **12/12**, one-stage GitHub factual date regression **9/9**, Dossier/Deep release-year identity compatibility **PASS**. Total: **73 Python unit tests and 1 compatibility regression**. `Validate backlog dispositions` run [37955966152](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/37955966152) also **success**.
 - No real Steam/web semantic work or current production data used in fixtures.
 
 ## Remaining blockers and strict stop
 
-- PR #181 requires successful offline CI and Director review; this report is not a claim of production readiness or final acceptance.
+- PR #181 has **successful offline CI** and remains unmerged; Director review and separate integration authorization are still required. This report is not a claim of production readiness or final acceptance.
 - Research-only implementation **does not** make `semantic_workers_implemented=true`. Independently owned Assembly semantic worker, future GitHub-owned live integration/writer and item acceptance, real-evidence parity, shadow quality and explicit Director-authorized cutover remain required.
 - Existing GitHub P2 provenance validator and the original atomic three-game final Dossier acceptance remain the eventual authoritative path. Newly submitted Research is never itself a validated/canonical Dossier.
 - No Scheduled Tasks created/edited/toggled or executed, no real Research run, no production activation, no PR auto-merge.
