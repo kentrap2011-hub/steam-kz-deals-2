@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "b562fa2269a44b617144113919467b8e6eeee67b",
+  "run_start_authority_commit": "22a1edc5272556ab98560896e2ed39cdd927a3ef",
+  "run_started_at_utc": "2026-10-09T06:45:35+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "ae5bb3e88ed21e5744072823315ac7e7aa4bf71b0b430bf1c9a479bc5c6831e1",
+  "family_id": "game:1080750",
+  "taste_subject_key": "App_1080750",
+  "appid": "1080750",
+  "taste_fingerprint": "9c7bf69fad1788b89fdad5dcd47a95e8722ed61f4a8dfa6eb58019ea3ab18656",
+  "candidate_context_sha256": "c44093663c868214906742500540e307503f4f53ac9973f500364ad0da505499",
+  "dossier_content_sha256": "e5eda15ed2bf1d39917650251976ec03f51590989e78fc2acb822e73928a833c",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "e31a323a831ed33e1e0ffbf1c4c06e1d83d34d984102d9b5aaacc21fbeeacf0c",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Основное игровое время занято спокойными диалогами и несложными поручениями, а посадка садов почти не требует освоения системы; профиль может быстро утратить вовлечённость при таком слабом основном действии.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Повторные проходы по знакомым маршрутам в разные часы иногда ощущаются как однообразные поручения.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Диалоговые последствия в основном фиксированы, а после финала нельзя бесконечно заниматься садами.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Некоторым сюжет кажется излишне сентиментальным, а голос главной героини — неубедительным; это субъективные впечатления, не универсальный дефект.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  },
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Крепкие характеры жителей, уютные и печальные истории острова создают выразительный сюжет, но основа взаимодействия — короткие поручения, разговоры и перемещение по расписанию (наблюдения 0, 1, 3).",
+    "Посадка музыкальных садов и сбор семян дают расслабляющий ритуал, однако механика проста и не развивает задачи освоения или содержательной прокачки (наблюдения 2, 6).",
+    "Возвраты по одним и тем же улицам, медленный темп и преимущественно фиксированные диалоги делают игровой процесс малоизменяющимся, несмотря на сильную художественную подачу (наблюдения 4–5, 7–8)."
+  ]
+}
