@@ -157,6 +157,8 @@ def offline_assembly_candidate(repo, *, marker_commit, buffer_path, work_path,
         fail("Assembly candidate schema invalid: " + errors[0].message)
     if payload["status"] != outcome:
         fail("Assembly outcome differs from typed payload status")
+    if outcome != "assembled_candidate_ready":
+        _privacy(payload)  # Typed diagnostics may not leak quote or author content.
     if outcome == "assembled_candidate_ready":
         dossier = payload["dossier"]
         if (dossier["appid"] != work["original_research_assignment"]["appid"]
