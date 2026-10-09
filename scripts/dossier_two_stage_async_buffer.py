@@ -1,256 +1,365 @@
 #!/usr/bin/env python3
-"""Inactive GitHub-owned async Research/Assembly buffer planner and provenance guard.
+"""INACTIVE offline two-stage Dossier authorization and eventual chain checker.
 
-Pure planning/validation against immutable Git history; NO CLI, live scanner,
-scheduler, semantic worker, canonical Dossier ingest or production writes.
+GitHub preauthorizes finite immutable scope once. Research and Assembly semantic
+execution is never gated on Github receipt, slot release or sibling completion.
+Nothing here runs a semantic worker, scans an inbox, writes canonical state or
+activates production. The final strict V2 validator remains mandatory.
 """
 import copy
+import hashlib
 import json
 import re
 
-from dossier_two_stage_contract_guard import CONFIG, canonical_sha256, validate_assembly_result
+from dossier_two_stage_contract_guard import (
+    CONFIG, canonical_sha256, schema_validate, validate_assembly_result,
+)
 from dossier_two_stage_staging import (
-    gate, fail, git, file_at, json_at, blob, blob_for, exists, marker_context,
-    research_authority, assembly_authority, prepare_assembly, receive_research,
-    strict_json, require_only_new, first_parent_contains, bytes_json, no_collisions,
+    gate, fail, blob, blob_for, bytes_json, file_at, first_parent_contains,
+    json_at, marker_context, research_authority, receive_research, receipt_paths,
+    require_only_new, strict_json,
 )
 
-SCHEMA = "DOSSIER-TWO-STAGE-ASYNC-BUFFER-V1"
-CAPACITY = 8
+SCHEMA = "DOSSIER-TWO-STAGE-ASYNC-BUFFER-V2"
 PHASES = ("research", "assembly")
-WORK_PREFIX = {
-    "research": "data/control/dossier_research_assignments",
-    "assembly": "data/control/dossier_assembly_plans",
-}
 BUFFER_PREFIX = "data/control/dossier_two_stage_buffers"
+RESEARCH_PREFIX = "data/control/dossier_research_assignments"
+ASSEMBLY_PREFIX = "data/control/dossier_assembly_plans"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
+AID = re.compile(r"^[a-z0-9][a-z0-9._-]{7,127}$")
 
 
 def inactive_gate():
     interfaces, staging = gate()
     config = json.loads((CONFIG / "dossier_two_stage_async_buffer_contract.json").read_text("utf-8"))
-    if (config.get("schema") != "DOSSIER-TWO-STAGE-ASYNC-BUFFER-CONTRACT-V1"
+    if (config.get("schema") != "DOSSIER-TWO-STAGE-ASYNC-BUFFER-CONTRACT-V2"
             or config.get("active") is not False or config.get("authoritative") is not False
             or config.get("executable_in_production") is not False
             or config.get("semantic_workers_implemented") is not False
-            or config.get("capacity", {}).get("max_open_slots_per_phase") != CAPACITY
+            or config.get("capacity", {}).get("semantic_liveness_depends_on_open_slots") is not False
             or staging.get("asynchronous_buffers", {}).get("activation") is not False
             or interfaces.get("asynchronous_buffered_execution", {}).get("activation") is not False):
-        fail("async contract must remain inactive and GitHub-owned")
+        fail("fully async contract must remain inactive and GitHub-owned")
     return config
 
 
-def _entry(repo, revision, phase, work_path):
-    prefix = WORK_PREFIX[phase]
-    match = re.fullmatch(
-        re.escape(prefix) + r"/([0-9a-f]{64})/g([0-9]{6})/([0-9]+)--([a-z0-9._-]+)[.]json",
-        work_path,
-    )
-    if not match:
-        fail("not an exact GitHub-prepared work path")
-    snapshot, seq, appid, assignment_id = match.groups()
-    doc = json_at(repo, revision, work_path)
-    if not isinstance(doc, dict):
-        fail("invalid immutable work record")
-    if phase == "research":
-        if (doc.get("assignment_id") != assignment_id or doc.get("snapshot_id") != snapshot
-                or doc.get("group_sequence") != int(seq) or doc.get("appid") != appid
-                or not isinstance(doc.get("item_index"), int)):
-            fail("Research immutable assignment mismatch")
-        idx = doc["item_index"]
-    else:
-        if (doc.get("schema") != "DOSSIER-ASSEMBLY-GITHUB-PLAN-V1"
-                or doc.get("research_assignment_id") != assignment_id
-                or doc.get("schema_version") != 1):
-            fail("Assembly predeclared plan mismatch")
-        accepted_path = (f"data/control/dossier_research_accepted/"
-                         f"{snapshot}/g{seq}/{appid}--{assignment_id}.json")
-        accepted = json_at(repo, revision, accepted_path)
-        a = accepted.get("assignment", {})
-        if (accepted.get("status") != "accepted_structural_evidence_not_canonical_dossier"
-                or a.get("snapshot_id") != snapshot or a.get("appid") != appid
-                or a.get("group_sequence") != int(seq)
-                or a.get("assignment_id") != assignment_id
-                or not isinstance(a.get("item_index"), int)):
-            fail("Assembly plan not tied to an accepted exact Research item")
-        idx = a["item_index"]
+def _research_entry(repo, revision, path):
+    m = re.fullmatch(re.escape(RESEARCH_PREFIX) +
+                     r"/([0-9a-f]{64})/g([0-9]{6})/([0-9]+)--([a-z0-9._-]+)\.json", path)
+    if not m:
+        fail("Research work outside exact authorized namespace")
+    snapshot, sequence, appid, aid = m.groups()
+    prepared = json_at(repo, revision, path)
+    if (not isinstance(prepared, dict) or prepared.get("assignment_id") != aid
+            or prepared.get("snapshot_id") != snapshot
+            or prepared.get("group_sequence") != int(sequence)
+            or prepared.get("appid") != appid
+            or type(prepared.get("item_index")) is not int):
+        fail("Research prepared binding mismatch")
     return {
-        "work_path": work_path, "work_blob_sha": blob(repo, revision, work_path),
-        "assignment_id": assignment_id, "snapshot_id": snapshot,
-        "group_sequence": int(seq), "item_index": idx, "appid": appid,
+        "work_path": path, "work_blob_sha": blob(repo, revision, path),
+        "snapshot_id": snapshot, "group_sequence": int(sequence),
+        "item_index": prepared["item_index"], "appid": appid, "assignment_id": aid,
     }
 
 
-def _ordered_unique(entries):
+def _assembly_entry(repo, revision, path):
+    m = re.fullmatch(re.escape(ASSEMBLY_PREFIX) +
+                     r"/([0-9a-f]{64})/g([0-9]{6})/([0-9]+)--([a-z0-9._-]+)\.json", path)
+    if not m:
+        fail("Assembly plan outside exact authorized namespace")
+    snapshot, sequence, appid, aid = m.groups()
+    plan = json_at(repo, revision, path)
+    required = {"schema", "schema_version", "research_assignment_id",
+                "research_prepared_work_path", "research_prepared_work_blob_sha",
+                "assembly_assignment_id", "assembly_contract_sha256",
+                "assembly_prompt_sha256", "assembly_prompt_revision",
+                "canonical_dossier_target"}
+    if not isinstance(plan, dict) or set(plan) != required or (
+            plan["schema"] != "DOSSIER-ASSEMBLY-GITHUB-PREAUTH-PLAN-V2"
+            or plan["schema_version"] != 2 or plan["research_assignment_id"] != aid
+            or not AID.fullmatch(str(plan["assembly_assignment_id"]))
+            or not isinstance(plan["assembly_prompt_revision"], str)
+            or not plan["assembly_prompt_revision"]):
+        fail("invalid GitHub-preauthorized Assembly plan")
+    for key in ("research_prepared_work_blob_sha",):
+        if not HEX40.fullmatch(str(plan[key])):
+            fail("invalid preauthorized Research Git blob")
+    for key in ("assembly_contract_sha256", "assembly_prompt_sha256"):
+        if not HEX64.fullmatch(str(plan[key])):
+            fail("invalid preauthorized Assembly digest")
+    r = _research_entry(repo, revision, plan["research_prepared_work_path"])
+    if ((r["snapshot_id"], r["group_sequence"], r["appid"], r["assignment_id"]) !=
+            (snapshot, int(sequence), appid, aid)
+            or r["work_blob_sha"] != plan["research_prepared_work_blob_sha"]):
+        fail("Assembly plan not tied to same exact frozen Research work")
+    prepared = json_at(repo, revision, r["work_path"])
+    target = {
+        "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2", "schema_version": 2,
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "web_evidence_contract": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "web_evidence_contract_version": 2,
+        "canonical_worker_binding_sha256": canonical_sha256(
+            prepared["web_evidence_contract_binding"]),
+    }
+    if plan["canonical_dossier_target"] != target:
+        fail("Assembly canonical target differs from frozen original binding")
+    return {**r, "work_path": path, "work_blob_sha": blob(repo, revision, path),
+            "research_prepared_work_path": r["work_path"],
+            "research_prepared_work_blob_sha": r["work_blob_sha"],
+            "assembly_assignment_id": plan["assembly_assignment_id"]}
+
+
+def _entry(repo, revision, phase, path):
+    return (_research_entry if phase == "research" else _assembly_entry)(repo, revision, path)
+
+
+def _ordered(entries):
     identities = [(x["group_sequence"], x["item_index"], x["appid"], x["assignment_id"])
                   for x in entries]
-    if len(set(identities)) != len(identities):
-        fail("duplicate immutable buffer assignment")
-    if identities != sorted(identities):
-        fail("buffer order must be exact canonical group/item order")
+    if identities != sorted(identities) or len(set(identities)) != len(identities):
+        fail("scope must contain unique exact GitHub ordered work")
     if len({x["work_path"] for x in entries}) != len(entries):
-        fail("duplicate immutable work path")
+        fail("duplicate GitHub work path")
 
 
-def make_buffer(repo, *, source_commit, phase, ordered_work_paths, occupied_slots=0):
-    """GitHub control plane only: reserve remaining capacity, not wait for ack.
+def make_buffer(repo, *, source_commit, phase, ordered_work_paths, new_authorization_limit=None):
+    """GitHub-only finite preauthorization. Optional limit applies BEFORE issuance.
 
-    occupied_slots MUST be computed from GitHub's unresolved reserved work state;
-    submitted but not ingested items remain occupied. Nothing is persisted here.
+    Once issued, the entire buffer may be traversed irrespective of unresolved
+    work, pending ingest, acknowledgements, or subsequent GitHub movement.
     """
     inactive_gate()
     if phase not in PHASES or not HEX40.fullmatch(str(source_commit)):
-        fail("invalid buffer phase or Git authority")
-    if not isinstance(occupied_slots, int) or isinstance(occupied_slots, bool) or not 0 <= occupied_slots <= CAPACITY:
-        fail("invalid GitHub-owned occupied slot count")
-    if not isinstance(ordered_work_paths, (tuple, list)) or any(
-            not isinstance(p, str) for p in ordered_work_paths):
-        fail("buffer scope must be explicit GitHub work paths")
-    if len(set(ordered_work_paths)) != len(ordered_work_paths):
-        fail("duplicate GitHub work request")
-    # Validate ALL candidate order before applying capacity, so overflow cannot
-    # conceal a malformed or re-ordered candidate list.
+        fail("invalid source commit or phase")
+    if (not isinstance(ordered_work_paths, (list, tuple)) or not ordered_work_paths
+            or any(not isinstance(p, str) for p in ordered_work_paths)):
+        fail("must preauthorize nonempty finite explicit work scope")
+    if new_authorization_limit is not None and (
+            type(new_authorization_limit) is not int or new_authorization_limit < 1
+            or len(ordered_work_paths) > new_authorization_limit):
+        fail("new GitHub authorization exceeds upstream resource budget")
     entries = [_entry(repo, source_commit, phase, p) for p in ordered_work_paths]
-    _ordered_unique(entries)
-    entries = entries[:CAPACITY - occupied_slots]
-    if not entries:
-        return None
+    _ordered(entries)
     snapshot = entries[0]["snapshot_id"]
-    if any(x["snapshot_id"] != snapshot for x in entries):
-        fail("buffer mixes snapshot identities")
-    body = {
-        "schema": SCHEMA, "schema_version": 1,
-        "phase": phase, "snapshot_id": snapshot,
-        "capacity": CAPACITY, "items": entries,
-    }
+    if any(e["snapshot_id"] != snapshot for e in entries):
+        fail("cross-snapshot authorization forbidden")
+    body = {"schema": SCHEMA, "schema_version": 2, "phase": phase,
+            "snapshot_id": snapshot, "items": entries}
     doc = {**body, "buffer_id": canonical_sha256(body)}
     path = f"{BUFFER_PREFIX}/{phase}/{snapshot}/{doc['buffer_id']}.json"
+    # Explicit immutable GitHub-prepared buffer only; no worker-chosen scope.
+    from dossier_two_stage_staging import exists
     if exists(repo, source_commit, path):
-        fail("buffer manifest already exists; never overwrite")
+        fail("preauthorization already exists")
     return {"path": path, "manifest": doc, "reserved_count": len(entries)}
 
 
 def frozen_buffer(repo, *, marker_commit, buffer_path, phase):
-    """Prove buffer membership from the marker's actual Git parent, not HEAD."""
     inactive_gate()
     if phase not in PHASES:
-        fail("invalid buffer phase")
+        fail("invalid phase")
     frozen, _ = marker_context(repo, marker_commit, phase)
     doc = json_at(repo, frozen, buffer_path)
-    if not isinstance(doc, dict) or set(doc) != {
-            "schema", "schema_version", "phase", "snapshot_id",
-            "capacity", "items", "buffer_id"}:
-        fail("invalid immutable buffer document")
-    if (doc["schema"] != SCHEMA or doc["schema_version"] != 1
-            or doc["phase"] != phase or doc["capacity"] != CAPACITY
-            or not isinstance(doc["items"], list)
-            or not 1 <= len(doc["items"]) <= CAPACITY
-            or not HEX64.fullmatch(str(doc["snapshot_id"]))
+    if (not isinstance(doc, dict) or set(doc) !=
+            {"schema", "schema_version", "phase", "snapshot_id", "items", "buffer_id"}
+            or doc["schema"] != SCHEMA or doc["schema_version"] != 2
+            or doc["phase"] != phase or not isinstance(doc["items"], list)
+            or not doc["items"] or not HEX64.fullmatch(str(doc["snapshot_id"]))
             or not HEX64.fullmatch(str(doc["buffer_id"]))):
-        fail("bad frozen buffer gate/capacity/identity")
-    body = {k: v for k, v in doc.items() if k != "buffer_id"}
-    if canonical_sha256(body) != doc["buffer_id"]:
-        fail("buffer content hash mismatch")
+        fail("invalid frozen two-stage authorization")
+    if canonical_sha256({k: v for k, v in doc.items() if k != "buffer_id"}) != doc["buffer_id"]:
+        fail("tampered immutable buffer content hash")
     if buffer_path != f"{BUFFER_PREFIX}/{phase}/{doc['snapshot_id']}/{doc['buffer_id']}.json":
-        fail("buffer path not exactly bound")
-    verified = [_entry(repo, frozen, phase, x["work_path"]) for x in doc["items"]]
-    if verified != doc["items"]:
-        fail("work SHA, scope or item bindings differ from immutable marker parent")
-    _ordered_unique(verified)
-    if any(x["snapshot_id"] != doc["snapshot_id"] for x in verified):
-        fail("mixed snapshot buffer")
-    # Individual authorizations share the exact marker parent and NEVER depend
-    # on a sibling's submission, receipt, rejection or final acceptance.
-    for x in verified:
-        if phase == "research":
-            a = research_authority(repo, marker_commit, x["work_path"])
-            if (a["assignment_id"], a["appid"]) != (x["assignment_id"], x["appid"]):
-                fail("Research buffer authority mismatch")
-        else:
-            assembly_authority(repo, marker_commit, x["work_path"])
-            prepare_assembly(repo, marker_commit=marker_commit,
-                             plan_path=x["work_path"], check_collisions=False)
+        fail("frozen buffer path/hash mismatch")
+    entries = [_entry(repo, frozen, phase, e["work_path"]) for e in doc["items"]]
+    if entries != doc["items"] or any(e["snapshot_id"] != doc["snapshot_id"] for e in entries):
+        fail("frozen Git work blobs/order/bindings changed")
+    _ordered(entries)
+    if phase == "research":
+        for e in entries:
+            research_authority(repo, marker_commit, e["work_path"])
+    # NO Research accepted receipt, sibling ack or unresolved-slot read here.
     return doc
 
 
-def _member(doc, work_path):
-    for x in doc["items"]:
-        if x["work_path"] == work_path:
-            return x
-    fail("worker requested an unprepared item/retry outside frozen buffer")
+def _member(doc, path):
+    for entry in doc["items"]:
+        if entry["work_path"] == path:
+            return entry
+    fail("out-of-scope, worker-invented or recovery work")
 
 
 def receive_buffered_research(repo, *, marker_commit, buffer_path, work_path, package_commit):
     doc = frozen_buffer(repo, marker_commit=marker_commit, buffer_path=buffer_path,
                         phase="research")
     _member(doc, work_path)
-    # Previous Research acceptance/rejection is deliberately never inspected.
     return receive_research(repo, marker_commit=marker_commit,
                             prepared_work_path=work_path, package_commit=package_commit)
 
 
-def stage_assembly_buffer(repo, *, marker_commit, buffer_path):
-    """Return one atomic create-only proposal for all accepted Research members."""
-    doc = frozen_buffer(repo, marker_commit=marker_commit, buffer_path=buffer_path,
-                        phase="assembly")
-    files = {}
-    assignment_by_work_path = {}
-    for entry in doc["items"]:
-        work_path = entry["work_path"]
-        proposal = prepare_assembly(repo, marker_commit=marker_commit, plan_path=work_path,
-                                    check_collisions=False)
-        for path, value in proposal["files"].items():
-            if path in files:
-                fail("two Assembly assignments collide")
-            files[path] = value
-        assignment_by_work_path[work_path] = proposal["assignment_path"]
-    no_collisions(repo, files)
-    return {"files": files, "assignments": assignment_by_work_path,
-            "status": "staged_inactive", "canonical_acceptance": False}
+def submitted_research_transport(repo, *, assembly_frozen, plan_entry, package_commit):
+    """Read exact raw Research bytes without misrepresenting GH acceptance.
+
+    Invalid Research semantics are intentionally NOT an Assembly liveness gate;
+    GitHub's eventual validation rejects the corresponding item chain.
+    """
+    rpath = plan_entry["research_prepared_work_path"]
+    prepared = json_at(repo, assembly_frozen, rpath)
+    a_id = plan_entry["assignment_id"]
+    path = (f"data/ai_inbox/dossier_research/{plan_entry['snapshot_id']}/"
+            f"g{plan_entry['group_sequence']:06d}/{plan_entry['appid']}--{a_id}.json")
+    if not HEX40.fullmatch(str(package_commit)):
+        fail("Research package commit was not supplied exactly")
+    introduction = require_only_new(repo, package_commit, [path])
+    raw = file_at(repo, package_commit, path)
+    package = strict_json(raw)
+    if not isinstance(package, dict) or not isinstance(package.get("assignment"), dict):
+        fail("submitted Research package has no exact preauthorized binding")
+    a = package["assignment"]
+    marker = a.get("research_marker_anchor_commit")
+    if not HEX40.fullmatch(str(marker)):
+        fail("missing immutable Research run-start marker")
+    frozen_research, nonce = marker_context(repo, marker, "research")
+    exact = research_authority(repo, marker, rpath)
+    if (a != exact or plan_entry["research_prepared_work_blob_sha"] !=
+            blob(repo, frozen_research, rpath)
+            or blob(repo, assembly_frozen, rpath) != blob(repo, frozen_research, rpath)
+            or not first_parent_contains(repo, marker, introduction)):
+        fail("Research source marker/work/assignment Git ancestry mismatch")
+    actual_blob = blob(repo, package_commit, path)
+    if actual_blob != blob_for(raw):
+        fail("raw submitted Research Git blob identity changed")
+    return a, package, {
+        "research_marker_anchor_commit": marker,
+        "research_package_git_commit": package_commit,
+        "research_package_path": path,
+        "research_package_blob_sha": actual_blob,
+        "research_package_raw_sha256": hashlib.sha256(raw).hexdigest(),
+        "research_package_sha256": canonical_sha256(package),
+        "research_prepared_work_path": rpath,
+        "research_prepared_work_blob_sha": plan_entry["research_prepared_work_blob_sha"],
+        "assembly_plan_blob_sha": plan_entry["work_blob_sha"],
+    }
 
 
-def staged_assembly_member(repo, *, marker_commit, buffer_path, work_path, staging_commit):
-    """Read exact already-prepared Stage-B work; sibling A receipt is irrelevant."""
+def provisional_assembly_work(repo, *, marker_commit, buffer_path, work_path, package_commit):
+    """Exact submitted Research handoff, with no GH acceptance/ack prerequisite."""
     doc = frozen_buffer(repo, marker_commit=marker_commit, buffer_path=buffer_path,
                         phase="assembly")
-    _member(doc, work_path)
-    if not first_parent_contains(repo, marker_commit, staging_commit):
-        fail("staged Assembly work is not descended from frozen marker")
-    # Stage one immutable batch of all GitHub-owned assignments + states.
-    expected = {}
-    assignment_path = None
-    for entry in doc["items"]:
-        proposal = prepare_assembly(repo, marker_commit=marker_commit,
-                                    plan_path=entry["work_path"], check_collisions=False)
-        expected.update(proposal["files"])
-        if entry["work_path"] == work_path:
-            assignment_path = proposal["assignment_path"]
-    require_only_new(repo, staging_commit, list(expected))
-    for path, value in expected.items():
-        raw = file_at(repo, staging_commit, path)
-        if raw != bytes_json(value) or blob_for(raw) != blob(repo, staging_commit, path):
-            fail("staged assignment/state bytes differ from GitHub proposal")
-    return strict_json(file_at(repo, staging_commit, assignment_path))
+    entry = _member(doc, work_path)
+    frozen, nonce = marker_context(repo, marker_commit, "assembly")
+    a, package, transport = submitted_research_transport(
+        repo, assembly_frozen=frozen, plan_entry=entry, package_commit=package_commit)
+    if not first_parent_contains(repo, transport["research_marker_anchor_commit"], marker_commit):
+        fail("Assembly marker not descended from Research authorization")
+    plan = json_at(repo, frozen, work_path)
+    work = {
+        "schema": "DOSSIER-ASYNC-ASSEMBLY-PREAUTHORIZED-WORK-V1",
+        "assembly_assignment_id": plan["assembly_assignment_id"],
+        "original_research_assignment": a,
+        "research_transport": transport,
+        "assembly_marker_anchor_commit": marker_commit,
+        "assembly_marker_nonce": nonce,
+        "assembly_contract_sha256": plan["assembly_contract_sha256"],
+        "assembly_prompt_sha256": plan["assembly_prompt_sha256"],
+        "assembly_prompt_revision": plan["assembly_prompt_revision"],
+        "canonical_dossier_target": plan["canonical_dossier_target"],
+        "output_path": (f"data/ai_inbox/dossier_assembly/{entry['snapshot_id']}/"
+                        f"g{entry['group_sequence']:06d}/{entry['appid']}--"
+                        f"{plan['assembly_assignment_id']}.json"),
+        "create_only": True,
+        "canonical_dossier_accepted": False,
+    }
+    return work
 
 
 def inspect_buffered_assembly_candidate(repo, *, marker_commit, buffer_path,
-                                        work_path, staging_commit, result_commit):
-    """Offline strict interface check, NOT final canonical strict Dossier acceptance."""
-    work = staged_assembly_member(repo, marker_commit=marker_commit,
-                                  buffer_path=buffer_path, work_path=work_path,
-                                  staging_commit=staging_commit)
-    if not first_parent_contains(repo, staging_commit, result_commit):
-        fail("Assembly result predates staging")
-    result_path = work["output_path"]
+                                        work_path, result_commit):
+    """Eventual GitHub per-item chain check. Never itself accepts canonical data."""
+    # Candidate's untrusted transport locator is not an authority: GH checks its
+    # create-only original commit, exact plan, marker parent and original bytes.
+    frozen, _ = marker_context(repo, marker_commit, "assembly")
+    entry = _member(frozen_buffer(repo, marker_commit=marker_commit,
+                                  buffer_path=buffer_path, phase="assembly"), work_path)
+    plan = json_at(repo, frozen, work_path)
+    result_path = (f"data/ai_inbox/dossier_assembly/{entry['snapshot_id']}/"
+                   f"g{entry['group_sequence']:06d}/{entry['appid']}--"
+                   f"{plan['assembly_assignment_id']}.json")
     require_only_new(repo, result_commit, [result_path])
+    if not first_parent_contains(repo, marker_commit, result_commit):
+        fail("Assembly result predates frozen marker")
     raw = file_at(repo, result_commit, result_path)
-    if blob_for(raw) != blob(repo, result_commit, result_path):
-        fail("Assembly candidate blob mismatch")
+    if blob(repo, result_commit, result_path) != blob_for(raw):
+        fail("Assembly raw immutable blob mismatch")
     result = strict_json(raw)
-    receipt = work["accepted_research"]
-    source = strict_json(file_at(
-        repo, receipt["research_package_git_commit"], receipt["research_package_path"]))
-    validate_assembly_result(result, work, source)
-    return {"status": "candidate_submitted_pending_github_final_strict_ingest",
-            "canonical_dossier_accepted": False, "result_path": result_path}
+    from jsonschema import Draft202012Validator
+    schema = json.loads((CONFIG / "dossier_async_assembly_result_v1.schema.json").read_text("utf-8"))
+    Draft202012Validator.check_schema(schema)
+    errors = list(Draft202012Validator(schema).iter_errors(result))
+    if errors:
+        fail("invalid fully-async Assembly candidate schema: " + errors[0].message)
+    transport = result["research_transport"]
+    package_commit = transport["research_package_git_commit"]
+    if not first_parent_contains(repo, package_commit, result_commit):
+        fail("Assembly result did not consume ancestor submitted Research Git commit")
+    work = provisional_assembly_work(repo, marker_commit=marker_commit,
+                                     buffer_path=buffer_path, work_path=work_path,
+                                     package_commit=package_commit)
+    for key in ("assembly_assignment_id", "original_research_assignment",
+                "research_transport", "assembly_marker_anchor_commit",
+                "assembly_marker_nonce", "assembly_contract_sha256",
+                "assembly_prompt_sha256", "canonical_dossier_target", "output_path"):
+        if result[key] != work[key]:
+            fail("Assembly result did not use exact immutable Research/plan bytes: " + key)
+    # GitHub Research verdict is downstream, NOT in the Assembly execution path.
+    a = work["original_research_assignment"]
+    proposal = receive_research(repo, marker_commit=a["research_marker_anchor_commit"],
+                                prepared_work_path=transport["research_prepared_work_path"],
+                                package_commit=package_commit)
+    if proposal["status"] != "accepted_structural_evidence":
+        return {"status": "research_rejected_item_chain_quarantined",
+                "research_status": proposal["status"], "canonical_dossier_accepted": False,
+                "deep_ready": False, "item_local_only": True}
+    receipt = proposal["files"][proposal["receipt_path"]]
+    package = strict_json(file_at(repo, package_commit, transport["research_package_path"]))
+    # Reuse P1's strict Assembly provenance/gap semantics AFTER GH has validated
+    # Research. The adapter is local validation input, never worker provenance.
+    accepted_work = {
+        "schema": "DOSSIER-ASSEMBLY-ASSIGNMENT-V1", "schema_version": 1,
+        "assembly_assignment_id": work["assembly_assignment_id"],
+        "original_research_assignment": a,
+        "accepted_research": receipt,
+        "accepted_research_receipt_blob_sha": proposal["receipt_blob_sha"],
+        "assembly_marker_anchor_commit": work["assembly_marker_anchor_commit"],
+        "assembly_marker_nonce": work["assembly_marker_nonce"],
+        "assembly_contract_sha256": work["assembly_contract_sha256"],
+        "assembly_prompt_sha256": work["assembly_prompt_sha256"],
+        "assembly_prompt_revision": work["assembly_prompt_revision"],
+        "canonical_dossier_target": work["canonical_dossier_target"],
+        "output_path": work["output_path"],
+        "permitted_result_namespace": "data/ai_inbox/dossier_assembly/",
+        "create_only": True,
+        "canonical_acceptance_authority": "existing_github_strict_v2_validator_and_group_ingest_only",
+    }
+    accepted_result = copy.deepcopy(result)
+    accepted_result["schema"] = "DOSSIER-ASSEMBLY-RESULT-V1"
+    del accepted_result["research_transport"]
+    accepted_result["accepted_research_package_sha256"] = receipt["research_package_sha256"]
+    accepted_result["accepted_research_receipt_blob_sha"] = proposal["receipt_blob_sha"]
+    validate_assembly_result(accepted_result, accepted_work, package)
+    if result["outcome"] == "assembled_candidate_ready":
+        # Strict validator + existing atomic 3-game group ingest are both still
+        # mandatory. This local verdict is NOT canonical acceptance.
+        from taste_steam_review_dossier_strict import validate_dossier_strict
+        contract = json.loads((CONFIG / "taste_steam_review_dossier_contract.json").read_text("utf-8"))
+        validate_dossier_strict(result["payload"]["dossier"], contract,
+                                expected_appid=a["appid"], expected_title=a["title"])
+        status = "strict_item_valid_pending_existing_atomic_group_ingest"
+    else:
+        status = "typed_assembly_item_pending_github_classification"
+    return {"status": status, "research_status": proposal["status"],
+            "canonical_dossier_accepted": False, "deep_ready": False,
+            "item_local_only": True, "result_path": result_path}
