@@ -15,8 +15,8 @@
 - PR #156 architecture freeze remains accepted and must not be re-audited without direct contradiction.
 - **ЧАТ 2:** Dossier two-stage P1 accepted via PR #173; P2 inactive GitHub Research→Assembly staging/control-plane accepted via PR #175, merge `ae92337ae5e8360ec15a4af4f85802bad39767b7`. Both remain inactive/non-authoritative; current one-stage Dossier stays production authority. Physical slot is free.
 - **ЧАТ 1:** commercial/Dossier isolation accepted via PR #174, merge `a243b7bf61b2127a75491646ca1265fa5d13e149`. Fresh deterministic commercial state is persisted before Dossier; new current games can publish honestly as `not_analyzed / waiting_for_dossier`; strict Dossier validation remains unchanged. Real pre-AI run #37909195575 and visual run #37909274274 succeeded. Physical slot is free.
-- **ЧАТ 1 active:** `WORKER_TASK_DOSSIER_TWO_STAGE_ASYNC_PIPELINE_AMENDMENT_01.md`. Amend inactive P1/P2 so Research and Assembly use buffered preauthorized work and never require per-item GitHub acknowledgement before continuing. GitHub remains queue/validation/acceptance owner. No production activation.
-- **ЧАТ 2 active:** `WORKER_TASK_DEEP_TWO_STAGE_INTEGRATION_CUTOVER_01.md`. Integrate accepted Stage 1 + Stage 2 + ranking + site pieces and perform the bounded Deep migration/cutover. New two-stage Dossier remains inactive and is not a prerequisite.
+- **ЧАТ 1:** async Dossier amendment accepted via PR #177, merge `d4a19c595fbd20cebe8f3f186c0afc1bfb63ff3f`. Research and Assembly use immutable preauthorized buffers and do not wait for the previous item's GitHub receipt. New path remains inactive/non-authoritative. Physical slot is free.
+- **ЧАТ 2:** Deep cutover preflight accepted via PR #176, merge `a2eaeef1a3203585970b62cb548e801faa073bc4`. Actual production cutover is blocked at the authorized semantic boundary: no accepted new Stage 1/Stage 2 semantics and no approved Stage 2 bootstrap anchors. No semantic results were invented. Physical slot is free pending Director/user authorization of the next semantic migration step.
 - No Scheduled Task changes are authorized.
 
 
