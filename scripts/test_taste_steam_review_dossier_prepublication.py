@@ -4,14 +4,14 @@ import hashlib
 import json
 import tempfile
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from taste_steam_review_dossier_buffered import plan_buffered_drain, validate_buffer_artifact
 from taste_steam_review_dossier_daily import BUFFER_GROUP_SCHEMA, build_daily_work_manifest, load_contract
 from taste_steam_review_dossier_prepublication import validate_prepublication_artifact
 from taste_steam_review_dossier_recovery import quarantine_stale_snapshot_inbox
-from taste_steam_review_dossier_strict import derive_dossier_summary
+from taste_steam_review_dossier_strict import derive_dossier_summary, validate_dossier_strict
 from taste_steam_review_dossier_test_fixture import web_dossier
 from taste_steam_review_dossier_worker_projection import (
     WORKER_GROUP_SCHEMA,
@@ -20,7 +20,8 @@ from taste_steam_review_dossier_worker_projection import (
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_CONTRACT = load_contract(ROOT / "config/taste_steam_review_dossier_contract.json")
-NOW = datetime(2026, 9, 16, 20, 0, tzinfo=timezone.utc)
+# Test-only clock. Production acceptance always uses its real wall-clock validator.
+NOW = datetime.now(timezone.utc).replace(microsecond=0)
 
 
 def queue(appids):
@@ -81,6 +82,18 @@ class PrepublicationParityTests(unittest.TestCase):
             validate_prepublication_artifact(copy.deepcopy(artifact), self.work, self.contract)
         with self.assertRaisesRegex(ValueError, expected):
             validate_buffer_artifact(copy.deepcopy(artifact), self.descriptor, self.work, self.contract)
+
+    def test_production_expiry_still_rejects_real_expired_candidate(self):
+        expired_generated = NOW - timedelta(days=60)
+        expired = web_dossier("710001", expired_generated, title="Game 710001")
+        with self.assertRaisesRegex(ValueError, "already-expired dossier cannot be canonically ingested"):
+            validate_dossier_strict(
+                expired,
+                self.contract,
+                expected_appid="710001",
+                expected_title="Game 710001",
+                now=NOW,
+            )
 
     def test_group_size_remains_three_and_valid_group_passes_both_paths(self):
         self.assertEqual(self.contract["checkpointing"]["checkpoint_size"], 3)
