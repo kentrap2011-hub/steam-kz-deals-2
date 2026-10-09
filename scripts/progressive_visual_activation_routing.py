@@ -246,6 +246,79 @@ def progressive_visual_compatible(
     return True, 'compatible_progressive_visual'
 
 
+def commercial_fallback_eligible(
+    *,
+    payload,
+    store,
+    family,
+    visual,
+    progressive_context_count,
+    dossier_work_blob,
+    progressive_contract_blob,
+    pass1_state_blob,
+    pass2_state_blob,
+):
+    """Allow only a new commercial cycle over an unchanged, previously validated
+    semantic overlay. Dossier/Deep drift still requires the full producer.
+    This is an availability fallback, never semantic re-acceptance.
+    """
+    if not source_integrity_ok(payload, store, family):
+        return False
+    source = payload.get('source_mailing_updated_at_utc')
+    # Even if a previous bounded refresh already stamped the current paid
+    # commercial source, its older semantic visual may still lack newly added
+    # families. Permit the full current-universe rebuild in that case.
+    if visual.get('source_mailing_updated_at_utc') == source:
+        return False
+    try:
+        if int(payload.get('progressive_candidate_count')) != int(progressive_context_count):
+            return False
+    except (ValueError, TypeError):
+        return False
+    items = visual.get('items')
+    if not isinstance(items, list) or not processing_status_valid(
+        visual.get('processing_status'), len(items)
+    ):
+        return False
+    progressive = visual.get('progressive_personalization')
+    if not isinstance(progressive, dict) or (
+        progressive.get('contract') != 'PROGRESSIVE-PERSONALIZED-DEALS-V1'
+        or progressive.get('phase') != 'phase_b'
+        or progressive.get('pass1_active') is not True
+        or progressive.get('pass2_implemented') is not True
+        or progressive.get('pass2_active') is not True
+    ):
+        return False
+    seen_ids = set()
+    for item in items:
+        if not isinstance(item, dict):
+            return False
+        family_id = item.get('id')
+        state = item.get('analysis_state')
+        if not family_id or family_id in seen_ids or state not in VISIBLE_STATES:
+            return False
+        seen_ids.add(family_id)
+        if item.get('analysis_tier') != {
+            'analyzed_fit': 1, 'analysis_incomplete': 2, 'not_analyzed': 3
+        }[state]:
+            return False
+        for field in (
+            'fast_stage_state', 'fast_stage_outcome', 'dossier_stage_state',
+            'deep_stage_state', 'deep_stage_outcome', 'deep_recovery_state',
+            'effective_analysis_source',
+        ):
+            if field not in item:
+                return False
+    expected = {
+        'source_taste_steam_review_dossier_work_blob_sha': dossier_work_blob,
+        'progressive_personalization_contract_blob_sha': progressive_contract_blob,
+        'progressive_pass1_state_blob_sha': pass1_state_blob,
+        'progressive_pass2_state_blob_sha': pass2_state_blob,
+    }
+    contract = visual.get('production_contract') or {}
+    return all(contract.get(key) == value for key, value in expected.items())
+
+
 def classify_current_files():
     try:
         payload = _read(PAYLOAD)
@@ -263,6 +336,7 @@ def classify_current_files():
             'source_integrity_ok': False,
             'compatible': False,
             'full_progressive_build_required': False,
+            'commercial_fallback_eligible': False,
             'reason': f'classification_input_error:{type(exc).__name__}',
         }
 
@@ -279,9 +353,21 @@ def classify_current_files():
         pass1_state_blob=pass1_state_blob,
         pass2_state_blob=pass2_state_blob,
     )
+    fallback = commercial_fallback_eligible(
+        payload=payload,
+        store=store,
+        family=family,
+        visual=visual,
+        progressive_context_count=context_count,
+        dossier_work_blob=dossier_work_blob,
+        progressive_contract_blob=contract_blob,
+        pass1_state_blob=pass1_state_blob,
+        pass2_state_blob=pass2_state_blob,
+    )
     return {
         'source_integrity_ok': integrity,
         'compatible': compatible,
+        'commercial_fallback_eligible': fallback,
         # Invalid deterministic source must fail in the normal producer path;
         # this helper must not convert malformed source state into a bounded refresh.
         'full_progressive_build_required': bool(integrity and not compatible),
@@ -290,6 +376,10 @@ def classify_current_files():
 
 
 def main():
+    if '--commercial-fallback-eligible' in sys.argv[1:]:
+        result = classify_current_files()
+        print('true' if result['commercial_fallback_eligible'] else 'false')
+        return
     result = classify_current_files()
     print(
         'PROGRESSIVE_SCOPE '

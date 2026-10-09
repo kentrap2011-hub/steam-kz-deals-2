@@ -10,6 +10,10 @@ on:
       - "scripts/isolate_site_publication_defects.py"
       - "scripts/build_site_status.py"
       - "scripts/test_site_publication_resilience.py"
+      - "scripts/test_commercial_dossier_failure_isolation.py"
+      - "scripts/progressive_visual_activation_routing.py"
+      - "scripts/test_progressive_visual_activation_routing.py"
+      - "scripts/refresh_visual_commercial_fields.py"
       - "scripts/giveaway_visual_handoff.py"
       - "scripts/test_giveaway_visual_handoff.py"
       - "scripts/grounded_negative_visual.py"
@@ -60,6 +64,9 @@ jobs:
           set -euo pipefail
           python scripts/validate_execution_ownership.py
           python scripts/test_site_publication_resilience.py
+          python scripts/test_progressive_visual_activation_routing.py
+          python scripts/test_commercial_refresh.py
+          python scripts/test_commercial_dossier_failure_isolation.py
           python scripts/test_giveaway_visual_handoff.py
           python scripts/test_progressive_personalization.py
           node web/progressive-personalization-ui.test.js
