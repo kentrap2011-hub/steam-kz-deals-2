@@ -51,15 +51,15 @@
   },
   "scope": {
     "deep_total_current_coverage_target": 245,
-    "deep_first_pass_attempted_count": 23,
-    "deep_authoritative_completed_count": 19,
-    "deep_completed_fit_count": 12,
+    "deep_first_pass_attempted_count": 24,
+    "deep_authoritative_completed_count": 20,
+    "deep_completed_fit_count": 13,
     "deep_completed_not_fit_count": 7,
     "deep_incomplete_or_recovery_count": 4,
     "deep_waiting_for_dossier_count": 218,
-    "deep_ready_or_pending_count": 4,
-    "deep_normal_first_pass_remaining_count": 222,
-    "deep_remaining_until_all_authoritative_count": 226,
+    "deep_ready_or_pending_count": 3,
+    "deep_normal_first_pass_remaining_count": 221,
+    "deep_remaining_until_all_authoritative_count": 225,
     "deep_normal_first_pass_complete": false,
     "deep_all_current_authoritative_complete": false,
     "recovery_owned_count": 4,
@@ -67,9 +67,9 @@
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 0,
     "dossier_waiting_count": 218,
-    "pass2_attempted_count": 23,
-    "pass2_eligible_count": 4,
-    "normal_pass2_eligible_count": 4,
+    "pass2_attempted_count": 24,
+    "pass2_eligible_count": 3,
+    "normal_pass2_eligible_count": 3,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -108,69 +108,6 @@
     }
   },
   "items": [
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:1105670",
-      "taste_subject_key": "App_1105670",
-      "appid": "1105670",
-      "taste_fingerprint": "adf4b88445522da376aac9ca4216cac46b7cf8a67eb51a0b68da58f5caf77d8e",
-      "candidate_context_sha256": "be33e15d223b2ed4afd89e5e6985bac841cf0a2b099462b72ee239e4121bddbe",
-      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
-      "work_id": "c5f7b2319e7a52218ba238c45526cf834e00335f93887fa19e08c99b70efca9e",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "The Last Spell",
-        "short_description": "Defend the last bastion of humanity with your squad of heroes! Exterminate fiendish monsters with magic and brute force by night and re-build your battered city defenses by day in this tactical RPG with rogue-lite mechanics.",
-        "bundle_members": [],
-        "fit_tags": [
-          "RPG",
-          "Singleplayer"
-        ],
-        "core_fit_count": 0,
-        "release_date": "9 Mar, 2023",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1105670"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1105670.json",
-      "dossier_content_sha256": "581f5ceac4c72f6b7d8642e9fa55ab18f2592b80d2da64d0bc1f5b7bdee36f02",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-29T12:46:28.624Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "82060a146badd8ad1baf413665c79ab723621f00ec89f2cd109ddbf64d377d2c",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--c5f7b2319e7a52218ba238c45526cf834e00335f93887fa19e08c99b70efca9e--82060a146badd8ad1baf413665c79ab723621f00ec89f2cd109ddbf64d377d2c.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--c5f7b2319e7a52218ba238c45526cf834e00335f93887fa19e08c99b70efca9e--82060a146badd8ad1baf413665c79ab723621f00ec89f2cd109ddbf64d377d2c.json",
-      "sequence": 1
-    },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
@@ -234,7 +171,7 @@
       "authorization_id": "617129bc88134d93a2c2218d042e3e6489eda5463111e945339f03916916a031",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--a70ef54d93f9a9c386fbed5dc1565928de42599dbac4dbcd5addb92e651d25d6--617129bc88134d93a2c2218d042e3e6489eda5463111e945339f03916916a031.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--a70ef54d93f9a9c386fbed5dc1565928de42599dbac4dbcd5addb92e651d25d6--617129bc88134d93a2c2218d042e3e6489eda5463111e945339f03916916a031.json",
-      "sequence": 2
+      "sequence": 1
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -294,7 +231,7 @@
       "authorization_id": "42dd5ec0bb857e707da2ad491f983728811531da5fa262b16624e3f55faab043",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--67941053a2bef1d1cc8b679cf95863c0760acea572fd935c4e11de506d94baea--42dd5ec0bb857e707da2ad491f983728811531da5fa262b16624e3f55faab043.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--67941053a2bef1d1cc8b679cf95863c0760acea572fd935c4e11de506d94baea--42dd5ec0bb857e707da2ad491f983728811531da5fa262b16624e3f55faab043.json",
-      "sequence": 3
+      "sequence": 2
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -356,7 +293,7 @@
       "authorization_id": "c86bbfffdbbf13fe1cff7ef6fd0ea878fda8cae3c6c9a487a768b1ca7eecc7cf",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--5ff11b0bcc0fff1f524e94c316a206b487fa87b167e1c8695bdb13f32e655f50--c86bbfffdbbf13fe1cff7ef6fd0ea878fda8cae3c6c9a487a768b1ca7eecc7cf.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--5ff11b0bcc0fff1f524e94c316a206b487fa87b167e1c8695bdb13f32e655f50--c86bbfffdbbf13fe1cff7ef6fd0ea878fda8cae3c6c9a487a768b1ca7eecc7cf.json",
-      "sequence": 4
+      "sequence": 3
     }
   ]
 }
