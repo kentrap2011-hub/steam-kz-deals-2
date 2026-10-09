@@ -1,0 +1,312 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "2807f94aafcdd94494f505b42a9a3bb77e000e32",
+  "run_start_authority_commit": "b449c90e707bf6c00ea3d2b89e4ed313e714ada4",
+  "run_started_at_utc": "2026-10-09T13:55:03+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+  "work_id": "8f2d4e79c7cb41f50d9004bf68069d930e3fcd790923364666e54645df06c850",
+  "family_id": "game:1265930",
+  "taste_subject_key": "App_1265930",
+  "appid": "1265930",
+  "taste_fingerprint": "6f4925474cfc3cdb8035a3dd4bccae04cfbaaafe75497e65b0d5256f22e51ca3",
+  "candidate_context_sha256": "d7437434628d36e566f0adb8515a75e116926b8306d2d20570c00852a1a903d6",
+  "dossier_content_sha256": "3638d656c41201461d759c39b2364b0e3489a63b7d2540e99cfd46f62dd2e80b",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "5b5239d9b33dcc59d04a80126d45fa00e1a3bc0561fb82921ee933478a47f947",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Связь Хлои и Рэйчел и семейные конфликты формируют личную историю с эмоциональными последствиями.",
+    "Панк- и инди-музыка, визуальная атмосфера и бонусный прощальный эпизод усиливают характер повествования.",
+    "Короткий формат из трёх основных глав делает историю более компактной, чем долгую сюжетную кампанию."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 29,
+    "development_variety": 45,
+    "structure_pacing_direction": 57,
+    "identity_hooks": 82,
+    "breadth_of_match": 59
+  },
+  "score_findings": [
+    {
+      "finding_id": "chloe_rachel_drama",
+      "text_ru": "Отношения Хлои и Рэйчел, переживание утраты, бунт и семейные конфликты дают приквелу эмоциональный центр, особенно для игрока, которому важны персонажи.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 9
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "Качество отношений героев особенно важно, когда игровые действия вторичны."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 82
+        }
+      ]
+    },
+    {
+      "finding_id": "backtalk_instead_of_rewind",
+      "text_ru": "Вместо перемотки времени используются диалоговые споры и сюжетные ответы, поэтому возможностей экспериментировать с действиями и совершенствовать игровое умение меньше.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 9
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Обычно привлекательнее механики с понятным освоением и ощутимым мастерством."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 29
+        }
+      ]
+    },
+    {
+      "finding_id": "three_chapters_music",
+      "text_ru": "Три сюжетные главы и прощальный бонусный эпизод сопровождаются панк- и инди-музыкой, но больший упор на прямую драму и меньше загадок ограничивают разнообразие опыта.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Новые игровые или сюжетные элементы нужны, чтобы поддерживать интерес после первоначального крючка."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 45
+        }
+      ]
+    },
+    {
+      "finding_id": "soapy_middle_and_finale",
+      "text_ru": "Характерная драма может увлечь через эмоциональные сцены, но часть зрителей воспринимает середину и завершение как затянутую подростковую мелодраму.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "В диалоговом приключении сюжетная цель и выразительный финал имеют большой вес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 57
+        }
+      ]
+    },
+    {
+      "finding_id": "remaster_readability",
+      "text_ru": "Музыка и образы персонажей создают настроение, однако сообщения о сдвигах субтитров, пропадании озвучки и спорных изменениях лиц особенно чувствительны для игры, где почти весь процесс — диалоги.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        },
+        {
+          "kind": "observation",
+          "index": 10
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/13/pattern",
+          "profile_value_sha256": "8f815538f23c7c4151de010d40acbe09cd5db3af8a8ec1917060877048370be6",
+          "match_text_ru": "Даже сильный художественный крючок теряет часть эффекта, если мешает воспринимать историю."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 59
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      },
+      {
+        "kind": "observation",
+        "index": 10
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Диалоговые споры заменяют перемотку времени, поэтому здесь меньше самостоятельных механических способов влиять на ситуацию; загадка и развитие истории также более линейны.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          },
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 9
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Некоторые игроки считают середину и финал затянутой подростковой драмой с меньшей интригой, чем в оригинальной игре.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Для ремастера описаны пропадающие звуковые реплики, неправильно работающие или зависающие субтитры и анимационные ошибки; имеется как старое, так и отдельное сообщение за сентябрь 2026 года, но достоверная распространённость неизвестна.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "observation",
+            "index": 10
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Качество визуальных обновлений по сравнению с оригиналом спорно, а часть владельцев предпочитает прежнюю версию с учётом технических жалоб.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      }
+    ]
+  }
+}
