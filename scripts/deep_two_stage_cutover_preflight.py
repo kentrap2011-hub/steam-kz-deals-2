@@ -149,21 +149,49 @@ def plan(documents, fingerprints):
             type(dossier_waiting) is int and 0 <= dossier_waiting <= total,
             "legacy Deep coverage scope is not current and countable")
     calibrated = unique_calibrations(s2)
-    stage1_completed = sum(v.get("outcome") in ("analyzed_fit", "analyzed_not_fit")
-                           and v.get("status") == "accepted"
-                           for v in s1.values())
-    fit = sum(v.get("outcome") == "analyzed_fit" and v.get("status") == "accepted"
-              for v in s1.values())
+    eligible_ids = d["stage1_work"].get("eligible_work_ids")
+    require(isinstance(eligible_ids, list) and
+            all(isinstance(x, str) and len(x) == 64 for x in eligible_ids) and
+            len(set(eligible_ids)) == len(eligible_ids),
+            "GitHub prepared Stage-1 full eligibility ledger is invalid")
+    eligible = set(eligible_ids)
+    require({item["work_id"] for item in w1}.issubset(eligible),
+            "Stage-1 queue escapes its canonical eligibility ledger")
+    current_s1 = {key: value for key, value in s1.items()
+                  if key in eligible and isinstance(value, dict)
+                  and value.get("status") == "accepted"
+                  and value.get("accepted") is True
+                  and value.get("outcome") in ("analyzed_fit", "analyzed_not_fit")}
+    stage1_completed = len(current_s1)
+    fit_ids = {key for key, value in current_s1.items()
+               if value["outcome"] == "analyzed_fit"}
+    fit = len(fit_ids)
+    linked_fit_ids = set()
+    for stage2 in s2.values():
+        if stage2.get("status") != "calibrated":
+            continue
+        work_id = stage2.get("stage1_work_id")
+        prior = current_s1.get(work_id)
+        if (prior is not None and work_id in fit_ids
+                and stage2.get("outcome") == "calibrated_fit"
+                and stage2.get("family_id") == prior.get("family_id")
+                and str(stage2.get("appid")) == str(prior.get("appid"))
+                and stage2.get("profile_semantic_sha256") == prior.get("profile_semantic_sha256")
+                and stage2.get("stage1_result_path") == prior.get("accepted_result_path")
+                and stage2.get("stage1_result_sha256") == prior.get("accepted_result_sha256")):
+            require(work_id not in linked_fit_ids,
+                    f"two calibrated Stage-2 states bind the same current Stage-1 fit {work_id}")
+            linked_fit_ids.add(work_id)
     missing = []
     if total == 0:
         missing.append("no_current_scope_to_verify")
     if dossier_waiting:
         missing.append("current_canonical_dossier_evidence_incomplete")
-    if d["stage1_work"].get("total_eligible") != total:
+    if d["stage1_work"].get("total_eligible") != total or len(eligible) != total:
         missing.append("stage1_eligible_scope_does_not_cover_current_games")
     if stage1_completed != total:
         missing.append("stage1_authoritative_semantics_not_complete")
-    if fit != calibrated:
+    if fit != len(linked_fit_ids):
         missing.append("stage2_calibrations_not_complete_for_all_stage1_fit")
     if w1 or w2:
         missing.append("authorized_semantic_items_still_pending")
@@ -189,6 +217,7 @@ def plan(documents, fingerprints):
         "stage1_fit_accepted": fit,
         "stage2_accepted_entries": len(s2),
         "stage2_unique_calibrated": calibrated,
+        "stage2_current_exactly_linked_fit_calibrations": len(linked_fit_ids),
         "canonical_dossier": "current_accepted_taste_steam_review_dossier_only",
         "research_assembly_dossier_used": False,
         "semantic_execution_performed": False,
