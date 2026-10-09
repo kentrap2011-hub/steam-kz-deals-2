@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "9b1cfd809238afd06e1ca958a9fa479800727760",
+  "run_start_authority_commit": "707e4b44a582fa11833fd17059e3cd413fe5d268",
+  "run_started_at_utc": "2026-10-09T13:14:00+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+  "work_id": "c5f7b2319e7a52218ba238c45526cf834e00335f93887fa19e08c99b70efca9e",
+  "family_id": "game:1105670",
+  "taste_subject_key": "App_1105670",
+  "appid": "1105670",
+  "taste_fingerprint": "adf4b88445522da376aac9ca4216cac46b7cf8a67eb51a0b68da58f5caf77d8e",
+  "candidate_context_sha256": "be33e15d223b2ed4afd89e5e6985bac841cf0a2b099462b72ee239e4121bddbe",
+  "dossier_content_sha256": "581f5ceac4c72f6b7d8642e9fa55ab18f2592b80d2da64d0bc1f5b7bdee36f02",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "82060a146badd8ad1baf413665c79ab723621f00ec89f2cd109ddbf64d377d2c",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "high",
+  "positive_evidence": [
+    "Пошаговая оборона против нарастающих волн заставляет позиционировать героев, сочетать эффекты навыков и учиться планировать действия (observations 0, 1) — соответствует интересу к освоению механик и тактическим задачам.",
+    "Дневная подготовка базы сменяется ночными боями, а оружие, свойства героев и постоянные улучшения дают заметную смену способов решения задач (observations 0, 1, 2).",
+    "Мрачная осада и выразительная тяжёлая музыка добавляют запоминающуюся атмосферу (observation 6), хотя история персонажей отодвинута на второй план."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 85,
+    "development_variety": 73,
+    "structure_pacing_direction": 69,
+    "identity_hooks": 64,
+    "breadth_of_match": 71
+  },
+  "score_findings": [
+    {
+      "finding_id": "siege-tactics",
+      "text_ru": "Пошаговые ночные волны требуют выбирать позиции героев, сочетать оружейные атаки и массовые эффекты: здесь можно постепенно отточить реальные тактические решения, а не просто повышать характеристики.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile",
+          "profile_value_sha256": "dcb42fc9b1482b18c85c66c45bf4e15a6c38ee5408b48398fb316ddc1c6d95a2",
+          "match_text_ru": "В закреплённом профиле особенно ценится наблюдаемый рост мастерства и поиск подхода к сложной ситуации."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 85
+        }
+      ]
+    },
+    {
+      "finding_id": "build-and-runs",
+      "text_ru": "Оружейные приёмы, сборки героев и дневное строительство меняют подход к обороне, но случайные награды и знакомые карты могут со временем ограничить ощущение новизны.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "b584a23bde72bbcacc284a93f33e49bda9cde0b89c7d750aa3d954ed1fef2055",
+          "match_text_ru": "Профилю нужна эволюция опыта, поэтому вариативные сборки важнее простого повторения волн."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 73
+        }
+      ]
+    },
+    {
+      "finding_id": "day-night-rhythm",
+      "text_ru": "Разделение на дневную подготовку и ночную битву задаёт понятный цикл и цели, однако долгие попытки и невозможность легко переиграть один неудачный день повышают цену ошибки.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/play_pattern_and_length",
+          "profile_value_sha256": "8feb65b868ff41d014b3f6543c6f1db8fba66982c66b920e1ff9be811f4c6b35",
+          "match_text_ru": "При игре примерно раз в неделю ясные цели помогают возвращаться, но длинные неудачные забеги могут утомлять."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 69
+        }
+      ]
+    },
+    {
+      "finding_id": "siege-identity",
+      "text_ru": "Мрачная атмосфера осаждённого поселения и рок-металлическая музыка придают боям узнаваемый характер; глубокая история героев при этом не является центральной частью игры.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7",
+          "profile_value_sha256": "f94957e7f369714de6a70c9cdaa1b1bb625ccdf9a2bd19f5b4bde419ccfecf7a",
+          "match_text_ru": "Яркая художественная идентичность служит важным усилителем даже при тактическом фокусе."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 64
+        }
+      ]
+    },
+    {
+      "finding_id": "progression-tradeoff",
+      "text_ru": "Постоянные разблокировки и усложняющиеся враги соединяют развитие билда с проверкой навыка, но случайные характеристики и накопительный гринд могут ослабить отдачу от повторных прохождений.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2",
+          "profile_value_sha256": "57d7818e21d072f96e97cbb9e8494b36bd0b9cc02b183a1765fb09f67e6ea159",
+          "match_text_ru": "Пользователь любит прокачку с понятным эффектом, а не само накопление ресурсов."
+        },
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "edeced74c18dc6f94ea4ae8882f30e2db8dfd546419d1cbcf6cfa274bfaca73a",
+          "match_text_ru": "Сложность важна как осмысленное обучение, а не как серия одинаковых наказаний."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 71
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Повторные прохождения помогают открывать снаряжение, но случайные награды, гринд улучшений и ограниченное разнообразие позднего повторения способны снижать чувство отдачи от времени.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Поздние волны и боссы могут резко усложняться, а ошибка в длинном забеге обходится дорого; профиль любит сложность, когда попытка учит новому, поэтому не всякая тяжёлая неудача автоматически станет плюсом.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Количество отдельных действий за героев требует внимательности, особенно при затяжных сражениях; тактическая насыщенность может превращаться в утомительную микрорутину.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  }
+}
