@@ -7,15 +7,21 @@ This is the compact transfer point for the next Director chat.
 
 ## MANDATORY FIRST RESPONSE IN THE NEW DIRECTOR CHAT
 
-The user's first expected response is **NOT** a new repository audit.
+The user's first expected response is: **куда отправляем оба физических worker-чата после текущих задач**.
 
-Before doing anything else, answer the user's three unresolved questions from the previous Director chat:
+Answer this immediately, before any new audit:
 
-1. Give concrete examples of games that the shortlist-reduction diagnostic would move out of the first semantic wave, and explain the exact reason for each. Be precise that these games are **deferred to reserve, not permanently deleted/excluded**. Use current known examples/signals already summarized below; do not start a broad code/data investigation just to answer.
-2. Explain why PR #157 was created at all, and why PR #157 now differs/conflicts with `main`.
-3. Explain why the previous Chat 2 continuation message was unnecessarily long, and provide a shorter normal worker continuation message style going forward.
+- **Старые ЧАТ 1 и ЧАТ 2 не продолжать для новых отдельных задач.** Оба текущих substantial worker-task завершены до PR и после Director acceptance должны быть retired; следующие задачи идут в **новые разговоры** в тех же физических слотах.
+- **ЧАТ 1 → новый worker-чат по следующему Dossier implementation этапу: Research semantic worker / transport against the fully asynchronous contract.** Но сначала Director должен принять/merge PR #179. Новый Research worker обязан идти по frozen preauthorized work и не ждать GitHub acknowledgements; Assembly пока отдельным следующим task.
+- **ЧАТ 2 → новый worker-чат по следующему Deep migration-control-plane этапу: explicit Stage-1 migration authorization/materialization from current main, continuing from PR #178.** Не повторять preflight. Не запускать semantic Stage 1 внутри developer-чата. После materialization Stage-1 semantics запускается отдельным manual semantic worker, который не занимает физический developer slot.
+- **Fast removal:** actual Fast production authority is removed only at final atomic Deep cutover after accepted Stage 1 + Stage 2 semantics. The code preparation for Fast-free ranking already exists; do not create a competing earlier removal that would leave production without valid new Deep authority.
 
-Only after answering those three questions should the new Director continue project management.
+Before giving worker prompts, finish Director acceptance check of the two current PRs:
+- PR #179 — fully asynchronous Dossier; open, green; branch `implement/dossier-fully-async-pipeline-01`; head last checked `7631ceb7a0fdc9ac3a73e9aafab1f4fdd06c0fa8`. It removes fixed 8-slot liveness blocking and lets Assembly consume the exact submitted immutable Research package before Research GitHub acceptance. New path stays inactive/non-authoritative.
+- PR #178 — Deep Stage 1 migration work preparation; open, green; branch `implement/deep-stage1-migration-work-preparation-01`; head last checked `1768dae0ab52e8abc6df68de780afc14814c1d54`. It produced an exact non-executable preview and stopped correctly at `mass_migration_authorized=false`.
+- Both branches were ~17 commits behind moving `main`, but the reverse-compare found **no overlap** between the main-side changes and either PR's task-owned files. Do not merge moving `main` into the branches merely because they are behind. Recheck head/checks/overlap, then squash-merge if still clean.
+
+The first user-facing answer should therefore be short and concrete: **ЧАТ 1 goes to a fresh Dossier Research-worker implementation chat; ЧАТ 2 goes to a fresh Deep Stage-1 migration authorization/materialization chat; semantic Stage 1 itself is a separate manual semantic worker.**
 
 ## CONTEXT-BUDGET / DEPTH RULE — VERY IMPORTANT
 
@@ -196,6 +202,17 @@ implement/deep-stage2-calibration-worker-01
 
 Не переходи к следующей задаче.
 ```
+
+
+## CURRENT TURN HANDOFF — 2026-10-09
+
+- User stopped this Director chat because context limit was reached.
+- Pending Director action: complete acceptance of PR #179 and PR #178; neither had been merged at the last check.
+- PR #179 checks green: inactive Dossier two-stage interfaces, execution ownership, site publication resilience, Progressive PASS 2 core, backlog dispositions. Core result: no fixed unresolved-slot liveness gate; Assembly can use exact submitted Research bytes before GitHub Research acceptance; GitHub validates/quarantines the item chain later; one-stage Dossier remains production authority.
+- PR #178 checks green: Deep Stage 1 migration preparation + backlog dispositions. Real-data preview last reported 245 current targets, 27 with current accepted one-stage Dossier eligible for Stage 1, 27 requiring Stage 1 semantics, 218 waiting/blocked, 0 accepted new Stage 1. Preview is non-executable because canonical migration contract still has `mass_migration_authorized=false`.
+- Do not confuse the 27-item current eligible preview with a permanent quota; rerun from current main at authorization/materialization time.
+- User explicitly wants Fast removed. Actual Fast production authority must disappear at the final atomic Deep cutover, after valid new Stage 1 and Stage 2 semantic authority exists. Fast-free ranking preparation is already accepted; current production Fast must not be removed prematurely.
+- No Scheduled Task changes authorized.
 
 ## CRITICAL START RULE FOR THE NEXT DIRECTOR
 
