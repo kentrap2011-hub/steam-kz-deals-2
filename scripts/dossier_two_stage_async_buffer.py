@@ -44,7 +44,7 @@ def inactive_gate():
 def _entry(repo, revision, phase, work_path):
     prefix = WORK_PREFIX[phase]
     match = re.fullmatch(
-        re.escape(prefix) + r"/([0-9a-f]{64})/g([0-9]{6})/([0-9]+)--([a-z0-9._-]+)\\.json",
+        re.escape(prefix) + r"/([0-9a-f]{64})/g([0-9]{6})/([0-9]+)--([a-z0-9._-]+)[.]json",
         work_path,
     )
     if not match:
