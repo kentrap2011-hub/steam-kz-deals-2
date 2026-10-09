@@ -1,0 +1,319 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "372acefe2bff8df5640e89055bdcd98d54f263c3",
+  "run_start_authority_commit": "182f70b5329e6c987634e82f7b3079adc7f2b409",
+  "run_started_at_utc": "2026-10-09T15:49:56+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+  "work_id": "e54cc1e49ae9e752ad327d8f3902fc70832aa117094f9b9f8dbd3c11635d4502",
+  "family_id": "game:1331210",
+  "taste_subject_key": "App_1331210",
+  "appid": "1331210",
+  "taste_fingerprint": "f472e47690c988c7d151568f8fb9d05ac0976e56a5ccf5e8ec31d20e7a4894d7",
+  "candidate_context_sha256": "dc4ef28a5c0bd47cba70a6e853f6ce23f2d4e81bc75716a145f29ee43c1a24a1",
+  "dossier_content_sha256": "7c837278646ac2161b15fe53aeeee8e218625c3fba19eb3957e6d7388435d495",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "b721b43479a42a876f0ba132f17e19f59798b100ba3e9f5c8351839e50effbae",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "В игре чередуются пошаговые бои гигантских роботов, ремонт и настройка меха, общение с персонажами и городские занятия между турнирными схватками.",
+    "Харизматичные герои, выразительные диалоги, чёрно-белое художественное оформление и музыка создают заметную идентичность истории.",
+    "Техническая подготовка меха и разные конфигурации экипировки дают дополнительное пространство для тактического интереса, хотя глубина боёв оценивается игроками неоднозначно."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 50,
+    "development_variety": 55,
+    "structure_pacing_direction": 48,
+    "identity_hooks": 85,
+    "breadth_of_match": 62
+  },
+  "score_findings": [
+    {
+      "finding_id": "wolf-character-world",
+      "text_ru": "Харизматичная команда героев, драматические диалоги и аниме-атмосфера создают яркий эмоциональный центр между боями роботов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/персонажи/note",
+          "profile_value_sha256": "bc3718749990ae6d43822e549c943adecc7fe5269c309392ee90c5132afc3769",
+          "match_text_ru": "Привязанность к конкретным героям заметно усиливает интерес к сюжетной игре."
+        },
+        {
+          "json_pointer": "/factor_importance/сюжет/note",
+          "profile_value_sha256": "15ba2c92b96e2588caf57b0833025ed85f06fd0ded251d5f7d49bcc23bec0b3d",
+          "match_text_ru": "В сюжетных играх драматургия может быть важнейшим источником вовлечения."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 85
+        }
+      ]
+    },
+    {
+      "finding_id": "wolf-mech-mix",
+      "text_ru": "Пошаговые поединки мехов сочетаются с ремонтом, оснащением робота и приключенческими сценами, предлагая несколько взаимосвязанных занятий вместо одного вида активности.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/геймплей_и_ощущение_управления/note",
+          "profile_value_sha256": "cdc4a8d45692525173f04e1f0bfe3afd477568a93562f0582665213abc8525b2",
+          "match_text_ru": "Основное игровое занятие должно само по себе быть увлекательным."
+        },
+        {
+          "json_pointer": "/factor_importance/развитие_и_разнообразие/note",
+          "profile_value_sha256": "0580f077432002933245e702ef32d0a5e3ac046bc717580f70c7ebcc99027b7d",
+          "match_text_ru": "Важно, чтобы менялись игровые ситуации и происходило развитие опыта."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 50
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 62
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 55
+        }
+      ]
+    },
+    {
+      "finding_id": "wolf-combat-depth",
+      "text_ru": "Улучшение и перенастройка меха дают повод готовиться к поединкам, но часть игроков считает сами пошаговые схватки слишком неглубокими для длительного освоения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/мастерство_и_глубина/note",
+          "profile_value_sha256": "a43efcc6ca12d86ef6b51409a596c0d2446a50253e4d8b8612e4bc6111bed82e",
+          "match_text_ru": "Особенно ценится возможность заметно развивать собственное мастерство."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 50
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 55
+        }
+      ]
+    },
+    {
+      "finding_id": "wolf-story-balance",
+      "text_ru": "Долгие сюжетные эпизоды между турнирными боями делают повествование важнее непрерывного геймплея; это может работать ради героев, но снижает плотность боевых задач.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/сюжет/note",
+          "profile_value_sha256": "15ba2c92b96e2588caf57b0833025ed85f06fd0ded251d5f7d49bcc23bec0b3d",
+          "match_text_ru": "Сюжет важен в соответствующем жанровом контексте, но не заменяет любой геймплей."
+        },
+        {
+          "json_pointer": "/factor_importance/tемп/note",
+          "profile_value_sha256": "a79a54657031ce862cf6c6d317d9adbc854a447415cf166fe07efc3487e41761",
+          "match_text_ru": "Регулярные причины продолжать важнее постоянного экшена как такового."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 48
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 62
+        }
+      ]
+    },
+    {
+      "finding_id": "wolf-city-padding",
+      "text_ru": "Повторные переходы по коротким городским участкам и малособытийные дни удлиняют паузы между содержательными встречами и боями.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/repetition_and_revisiting/summary",
+          "profile_value_sha256": "901465f98796f76ad70fb5b3f75bee97d6bf0f46783634d16b81abf21561c52d",
+          "match_text_ru": "Неизменный повтор без нового опыта быстро утомляет."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 48
+        }
+      ]
+    },
+    {
+      "finding_id": "wolf-monochrome-art",
+      "text_ru": "Контрастная чёрно-белая подача придаёт истории характер, хотя на некоторых фонах персонажа бывает труднее отделить от окружения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/атмосфера_и_арт_дирекшен/note",
+          "profile_value_sha256": "11c4e50bb902ad30b7931451ca92d1379a22e8794871e8033700c50f052ea878",
+          "match_text_ru": "Выразительная эстетика очень важна, но сама не компенсирует игровой дискомфорт."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "qualifies",
+          "normalized_value": 85
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Между боями встречаются продолжительные визуально-новелльные фрагменты: активных схваток может оказаться меньше ожидаемого.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Подготовка меха интересна, но глубина и сложность самих пошаговых поединков некоторым игрокам кажутся недостаточными.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Повторные переходы по одним городским отрезкам и пустоватые дни способны создавать ощущение затянутости.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Монохромное оформление иногда ухудшает различимость активного переднего плана.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  }
+}
