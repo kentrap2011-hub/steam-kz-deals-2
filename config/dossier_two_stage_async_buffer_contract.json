@@ -1,0 +1,68 @@
+{
+  "schema": "DOSSIER-TWO-STAGE-ASYNC-BUFFER-CONTRACT-V1",
+  "version": 1,
+  "implemented": true,
+  "active": false,
+  "authoritative": false,
+  "executable_in_production": false,
+  "parent_contracts": [
+    "config/dossier_two_stage_interfaces_contract.json",
+    "config/dossier_two_stage_staging_contract.json"
+  ],
+  "owner": "github_actions_control_plane",
+  "semantic_workers_implemented": false,
+  "manifest_schema": "DOSSIER-TWO-STAGE-ASYNC-BUFFER-V1",
+  "buffer_paths": {
+    "research": "data/control/dossier_two_stage_buffers/research/{snapshot_id}/{buffer_id}.json",
+    "assembly": "data/control/dossier_two_stage_buffers/assembly/{snapshot_id}/{buffer_id}.json"
+  },
+  "capacity": {
+    "max_open_slots_per_phase": 8,
+    "slot": "exact_unique_github_prepared_assignment_or_assembly_plan",
+    "occupied_count": "all_previously_prepared_still_unresolved_slots_in_phase_including_submitted_pending_ingest",
+    "new_slot_count": "min(max_open_slots_per_phase - occupied_count, number_of_eligible_unreserved_items)",
+    "no_daily_quota": true,
+    "no_per_item_ack_barrier": true,
+    "no_new_scheduler_or_queue_owner": true,
+    "empty_capacity": "github_does_not_issue_new_buffer_until_slots_free_but_existing_authorizations_continue",
+    "reservation_release": "github_authoritative_terminal_receipt_or_existing_canonical_reconciliation_only",
+    "rejected_or_stale": "isolated_slot_and_fresh_explicit_github_recovery_authorization_no_worker_retry"
+  },
+  "marker": {
+    "commit": "create_only_nonce_marker_exactly_one_git_parent",
+    "buffer_source": "exact_marker_parent_git_blob",
+    "research_work_source": "github_prepared_assignments_in_same_marker_parent",
+    "assembly_work_source": "github_prepared_plans_and_accepted_research_receipts_in_same_marker_parent",
+    "worker_must_not_choose_prior_authority": true,
+    "later_main_movement_does_not_invalidate_frozen_buffer": true
+  },
+  "execution": {
+    "research": "iterate_frozen_manifest_order; publish_create_only_each_exact_item; continue_without_research_acceptance_for_previous",
+    "assembly": "iterate_frozen_manifest_order; publish_create_only_each_exact_item; continue_without_final_acceptance_for_previous",
+    "existing_transport": "already_submitted_do_not_recreate_not_accepted",
+    "semantic_item_failure": "no_head_of_line_blocking_for_independent_frozen_siblings",
+    "never_use_previous_sibling_receipt_for_liveness": true,
+    "workers_cannot_expand_retry_reorder": true,
+    "assembly_entry": "only_after_Research_GitHub_receipt_accepted_structural_evidence_and_exact_immutable_assembly_assignment",
+    "final_acceptance": "unchanged_one_stage_strict_v2_atomic_three_game_group_validation_under_shared_writer_domain",
+    "final_group_wait": "only_actual_strict_group_validation_not_Research_stage_or_Assembly_buffer_scheduling"
+  },
+  "transport": {
+    "research": "data/ai_inbox/dossier_research/",
+    "assembly": "data/ai_inbox/dossier_assembly/",
+    "create_only": true,
+    "duplicate_mismatch_stale": "fail_closed_zero_mutations_and_zero_attempt_consumption",
+    "ingest_parallelism": "GitHub_independent_from_semantic_buffer_traversal",
+    "production_enabled": false
+  },
+  "implementation_scope": "offline_deterministic_pure_helper_and_disposable_git_fixture_tests_only",
+  "forbidden": [
+    "new_scheduled_task",
+    "semantic_worker",
+    "production_queue_change",
+    "canonical_Dossier_validator_change",
+    "one_stage_Dossier_source_or_state_change",
+    "commercial_refresh_change",
+    "Deep_Fast_rank_translation_UI_change"
+  ]
+}
