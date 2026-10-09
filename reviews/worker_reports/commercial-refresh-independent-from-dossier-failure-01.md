@@ -40,6 +40,8 @@ pre-AI upstream.
    after verifying that the fresh commercial snapshot is durably committed,
    complete and source-bound, that the existing visual has a valid semantic
    overlay, and that Dossier/Fast/Deep **acceptance** blobs are unchanged.
+   This also works when a prior commercial-only publish already stamped today's
+   paid freshness but the semantic visual and its new-family lineup remain old.
    The previous commercial-only path was insufficient because it could only
    retain/remove old cards. Other upstream failures or unsafe global state
    remain fail-closed.
@@ -101,6 +103,8 @@ regression explicitly supplies a genuinely expired candidate and expects
   no fabricated Fast/Deep result. Workflow-routing assertions verify that
   failed-upstream fallback goes through the full producer (not the
   old-card-only path) and never emits a contradictory no-build receipt.
+  The gate also permits full rebuilding an older semantic visual even when
+  its commercial stamp already matches the newly persisted current cycle.
 - `python scripts/test_taste_steam_review_dossier_prepublication.py`:
   valid fixture parity and deliberately expired strict rejection.
 - Existing `scripts/test_progressive_visual_activation_routing.py`,
