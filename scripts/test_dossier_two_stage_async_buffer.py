@@ -7,12 +7,11 @@ import unittest
 
 from dossier_two_stage_contract_guard import canonical_sha256
 from dossier_two_stage_staging import (
-    RESEARCH_MARKER, ASSEMBLY_MARKER, receipt_paths, prepared_path,
+    RESEARCH_MARKER, ASSEMBLY_MARKER, receipt_paths, prepared_path, blob,
 )
 from dossier_two_stage_async_buffer import (
-    CAPACITY, inactive_gate, make_buffer, frozen_buffer,
-    receive_buffered_research, stage_assembly_buffer, staged_assembly_member,
-    inspect_buffered_assembly_candidate,
+    inactive_gate, make_buffer, frozen_buffer, receive_buffered_research,
+    provisional_assembly_work, inspect_buffered_assembly_candidate,
 )
 from test_dossier_two_stage_staging import GitFixture
 from test_dossier_two_stage_contract_schemas import result_fixture
@@ -87,43 +86,31 @@ class AsyncFixture:
         self.f.source_path = receipt_paths(self.f.a)["candidate"]
         self.accepted = {}
 
+
     def research_submit(self, index, *, tamper=None):
-        doc = copy.deepcopy(self.docs[index])
+        d = copy.deepcopy(self.docs[index])
         if tamper:
-            tamper(doc)
-        path = receipt_paths(self.docs[index]["assignment"])["candidate"]
-        self.f.save(path, doc)
-        commit = self.f.commit(f"Submit Research item {index} without prior ack")
-        return commit
+            tamper(d)
+        self.f.save(receipt_paths(self.docs[index]["assignment"])["candidate"], d)
+        return self.f.commit(f"Research {index} submitted, no GH ack")
 
-    def research_receive(self, index, commit, persist=False):
-        proposal = receive_buffered_research(
-            self.f.root, marker_commit=self.f.marker, buffer_path=self.rbuffer["path"],
-            work_path=self.paths[index], package_commit=commit)
-        if persist:
-            self.f.persist(proposal)
-            if proposal["status"] == "accepted_structural_evidence":
-                self.accepted[index] = proposal
-        return proposal
+    def research_receive(self, i, commit):
+        return receive_buffered_research(self.f.root, marker_commit=self.f.marker,
+                                         buffer_path=self.rbuffer["path"],
+                                         work_path=self.paths[i], package_commit=commit)
 
-    def accept_research(self, index):
-        return self.research_receive(index, self.research_submit(index), persist=True)
-
-    def make_assembly(self, indexes=(0, 1, 2)):
+    def preauthorize_assembly(self, indexes=(0, 1, 2)):
+        paths = []
         for i in indexes:
-            if i not in self.accepted:
-                self.accept_research(i)
-        plans = []
-        for i in indexes:
-            d = self.docs[i]
-            a = d["assignment"]
-            receipt = self.accepted[i]["files"][self.accepted[i]["receipt_path"]]
+            a = self.docs[i]["assignment"]
             plan = {
-                "schema": "DOSSIER-ASSEMBLY-GITHUB-PLAN-V1", "schema_version": 1,
+                "schema": "DOSSIER-ASSEMBLY-GITHUB-PREAUTH-PLAN-V2",
+                "schema_version": 2,
                 "research_assignment_id": a["assignment_id"],
+                "research_prepared_work_path": self.paths[i],
+                "research_prepared_work_blob_sha": blob(
+                    self.f.root, self.f.run("rev-parse", "HEAD"), self.paths[i]),
                 "assembly_assignment_id": f"assembly-prepared-fixture-000{i+1}",
-                "accepted_research_package_sha256": receipt["research_package_sha256"],
-                "accepted_research_receipt_blob_sha": self.accepted[i]["receipt_blob_sha"],
                 "assembly_contract_sha256": "9" * 64,
                 "assembly_prompt_sha256": "8" * 64,
                 "assembly_prompt_revision": "fixture-inactive",
@@ -137,181 +124,184 @@ class AsyncFixture:
                         a["web_evidence_contract_binding"]),
                 },
             }
-            p = receipt_paths(a)["assembly_plan"]
-            self.f.save(p, plan)
-            plans.append(p)
-        source = self.f.commit("GitHub plans Assembly from accepted Research only")
+            path = receipt_paths(a)["assembly_plan"]
+            self.f.save(path, plan)
+            paths.append(path)
+        source = self.f.commit("GitHub preauthorizes Assembly; no Research receipt")
         self.abuffer = make_buffer(self.f.root, source_commit=source, phase="assembly",
-                                   ordered_work_paths=plans)
+                                   ordered_work_paths=paths)
         self.f.save(self.abuffer["path"], self.abuffer["manifest"])
-        self.f.commit("Publish immutable Assembly buffer")
+        self.f.commit("GitHub freezes Assembly preauthorization")
         nonce = "e" * 32
         self.f.save(f"{ASSEMBLY_MARKER}/{nonce}.json", {
             "schema": "DOSSIER-ASSEMBLY-RUN-START-MARKER-V1",
             "schema_version": 1, "run_start_nonce": nonce,
         })
-        self.amarker = self.f.commit("Freeze accepted Research Assembly buffer")
-        self.apaths = plans
-        stage = stage_assembly_buffer(self.f.root, marker_commit=self.amarker,
-                                      buffer_path=self.abuffer["path"])
-        self.stage = stage
-        self.stage_commit = self.f.persist(stage)
+        self.amarker = self.f.commit("Freeze exact future Assembly buffer")
+        self.apaths = paths
 
-    def member(self, i):
-        return staged_assembly_member(self.f.root, marker_commit=self.amarker,
-                                      buffer_path=self.abuffer["path"],
-                                      work_path=self.apaths[i], staging_commit=self.stage_commit)
+    def assembly_work(self, i, research_commit):
+        return provisional_assembly_work(
+            self.f.root, marker_commit=self.amarker, buffer_path=self.abuffer["path"],
+            work_path=self.apaths[i], package_commit=research_commit)
 
-    def assembly_submit(self, i, mutate=None):
-        work = self.member(i)
-        doc = result_fixture(work)
+    def assembly_submit(self, i, research_commit, mutate=None):
+        work = self.assembly_work(i, research_commit)
+        doc = {
+            "schema": "DOSSIER-ASYNC-ASSEMBLY-RESULT-V1",
+            "schema_version": 1,
+            "assembly_assignment_id": work["assembly_assignment_id"],
+            "original_research_assignment": copy.deepcopy(work["original_research_assignment"]),
+            "research_transport": copy.deepcopy(work["research_transport"]),
+            "assembly_marker_anchor_commit": work["assembly_marker_anchor_commit"],
+            "assembly_marker_nonce": work["assembly_marker_nonce"],
+            "assembly_contract_sha256": work["assembly_contract_sha256"],
+            "assembly_prompt_sha256": work["assembly_prompt_sha256"],
+            "canonical_dossier_target": copy.deepcopy(work["canonical_dossier_target"]),
+            "output_path": work["output_path"], "outcome": "unresolved_semantic_gap",
+            "payload": {
+                "status": "unresolved_semantic_gap", "gap_id": None, "source_ref": None,
+                "field_or_dimension": None, "safe_diagnostic": "No additional verified evidence.",
+                "requires_github_classification": True,
+                "normal_first_pass_attempt_consumed": False,
+            },
+            "supplemental_operations": [],
+            "staged_only": True, "canonical_acceptance": False,
+        }
         if mutate:
             mutate(doc)
         self.f.save(work["output_path"], doc)
-        return self.f.commit(f"Submit Assembly item {i}")
+        return self.f.commit(f"Assembly item {i} submitted without GH ack")
 
-    def assembly_inspect(self, i, result_commit):
+    def inspect(self, i, commit):
         return inspect_buffered_assembly_candidate(
             self.f.root, marker_commit=self.amarker, buffer_path=self.abuffer["path"],
-            work_path=self.apaths[i], staging_commit=self.stage_commit,
-            result_commit=result_commit)
+            work_path=self.apaths[i], result_commit=commit)
 
 
-class AsyncBufferTests(unittest.TestCase):
+class FullyAsyncBufferTests(unittest.TestCase):
     def setUp(self):
-        temp = tempfile.TemporaryDirectory()
-        self.addCleanup(temp.cleanup)
-        self.x = AsyncFixture(temp.name)
+        t = tempfile.TemporaryDirectory()
+        self.addCleanup(t.cleanup)
+        self.x = AsyncFixture(t.name)
 
-    def test_01_inactive_authority_and_real_three_game_boundary_unchanged(self):
+    def test_01_gates_current_one_stage_remains_authority(self):
         cfg = inactive_gate()
         self.assertFalse(cfg["active"])
         self.assertFalse(cfg["authoritative"])
         self.assertFalse(cfg["executable_in_production"])
-        self.assertEqual(CAPACITY, 8)
-        self.assertEqual(len(self.x.f.descriptor["items"]), 3)
-        self.assertEqual(self.x.rbuffer["reserved_count"], 3)
+        self.assertFalse(cfg["semantic_workers_implemented"])
+        self.assertFalse(cfg["capacity"]["semantic_liveness_depends_on_open_slots"])
+        self.assertEqual(self.x.f.descriptor["schema"], "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1")
 
-    def test_02_research_B_and_C_pre_authorized_after_A_submission_without_receipt(self):
+    def test_02_research_A_unaccepted_does_not_block_B_C(self):
         x = self.x
         x.research_submit(0)
-        doc = frozen_buffer(x.f.root, marker_commit=x.f.marker,
-                            buffer_path=x.rbuffer["path"], phase="research")
-        self.assertEqual(len(doc["items"]), 3)
-        self.assertEqual(x.research_receive(1, x.research_submit(1))["status"],
-                         "accepted_structural_evidence")
-        self.assertEqual(x.research_receive(2, x.research_submit(2))["status"],
-                         "accepted_structural_evidence")
-
-    def test_03_research_rejected_A_does_not_revoke_B_C(self):
-        x = self.x
-        a_commit = x.research_submit(0, tamper=lambda d: d["assignment"].update(appid="99999"))
-        self.assertEqual(x.research_receive(0, a_commit, persist=True)["status"],
-                         "rejected_invalid")
-        for i in (1, 2):
-            self.assertEqual(x.research_receive(i, x.research_submit(i))["status"],
-                             "accepted_structural_evidence")
-
-    def test_04_assembly_B_C_authorized_after_A_submission_without_final_receipt(self):
-        x = self.x
-        x.make_assembly()
-        x.assembly_submit(0)
-        self.assertEqual(x.member(1)["assembly_assignment_id"], "assembly-prepared-fixture-0002")
-        self.assertEqual(x.member(2)["assembly_assignment_id"], "assembly-prepared-fixture-0003")
-        self.assertFalse(x.stage["canonical_acceptance"])
-        self.assertEqual(x.assembly_inspect(1, x.assembly_submit(1))["canonical_dossier_accepted"], False)
-
-    def test_05_invalid_assembly_A_cannot_revoke_unrelated_B(self):
-        x = self.x
-        x.make_assembly()
-        invalid_commit = x.assembly_submit(0, mutate=lambda d: d.update(assembly_assignment_id="wrong"))
-        with self.assertRaises(ValueError):
-            x.assembly_inspect(0, invalid_commit)
-        valid = x.assembly_submit(1)
-        self.assertIn("pending_github_final_strict_ingest",
-                      x.assembly_inspect(1, valid)["status"])
-
-    def test_06_accepted_Research_A_feeds_Assembly_while_later_Research_B_C_continue(self):
-        x = self.x
-        x.accept_research(0)
-        x.make_assembly(indexes=(0,))
-        self.assertEqual(x.member(0)["original_research_assignment"]["appid"], "12345")
-        for i in (1, 2):
-            self.assertEqual(x.research_receive(i, x.research_submit(i))["status"],
-                             "accepted_structural_evidence")
-
-    def test_07_capacity_backpressure_is_deterministic_and_not_daily_quota(self):
-        x = self.x
-        source = x.research_source
-        for occupied, expected in ((0, 3), (6, 2), (7, 1), (8, 0)):
-            a = make_buffer(x.f.root, source_commit=source, phase="research",
-                            ordered_work_paths=x.paths, occupied_slots=occupied)
-            b = make_buffer(x.f.root, source_commit=source, phase="research",
-                            ordered_work_paths=x.paths, occupied_slots=occupied)
-            self.assertEqual(a, b)
-            self.assertEqual(0 if a is None else a["reserved_count"], expected)
-
-    def test_08_no_self_assigned_work_or_retries_and_duplicate_paths(self):
-        x = self.x
-        with self.assertRaises(ValueError):
-            make_buffer(x.f.root, source_commit=x.f.marker, phase="research",
-                        ordered_work_paths=[x.paths[0], x.paths[0]])
-        with self.assertRaises(ValueError):
-            make_buffer(x.f.root, source_commit=x.f.marker, phase="research",
-                        ordered_work_paths=list(reversed(x.paths)))
-        with self.assertRaises(ValueError):
-            receive_buffered_research(x.f.root, marker_commit=x.f.marker,
-                                     buffer_path=x.rbuffer["path"],
-                                     work_path="data/control/dossier_research_assignments/forged.json",
-                                     package_commit=x.f.marker)
-
-    def test_09_stale_tampered_frozen_buffer_fails_closed(self):
-        x = self.x
-        x.f.save(x.rbuffer["path"], {**x.rbuffer["manifest"], "capacity": 100})
-        x.f.commit("Tamper mutable later HEAD, original marker-parent unchanged")
         self.assertEqual(len(frozen_buffer(x.f.root, marker_commit=x.f.marker,
-                            buffer_path=x.rbuffer["path"], phase="research")["items"]), 3)
-        with self.assertRaises(ValueError):
-            frozen_buffer(x.f.root, marker_commit=x.f.marker,
-                          buffer_path=x.rbuffer["path"], phase="assembly")
+                             buffer_path=x.rbuffer["path"], phase="research")["items"]), 3)
+        for i in (1, 2):
+            self.assertEqual(x.research_receive(i, x.research_submit(i))["status"],
+                             "accepted_structural_evidence")
 
-    def test_10_stale_or_duplicate_assembly_candidates_fail_closed(self):
+    def test_03_Assembly_A_direct_submitted_Research_without_receipt(self):
         x = self.x
-        x.make_assembly()
-        good = x.assembly_submit(0)
-        self.assertFalse(x.assembly_inspect(0, good)["canonical_dossier_accepted"])
-        path = x.member(0)["output_path"]
+        x.preauthorize_assembly()
+        research_commit = x.research_submit(0)
+        work = x.assembly_work(0, research_commit)
+        self.assertEqual(work["research_transport"]["research_package_git_commit"], research_commit)
+        self.assertFalse(work["canonical_dossier_accepted"])
+        self.assertEqual(x.inspect(0, x.assembly_submit(0, research_commit))["status"],
+                         "typed_assembly_item_pending_github_classification")
+
+    def test_04_research_A_later_rejected_assembly_A_is_quarantined_B_C_continue(self):
+        x = self.x
+        x.preauthorize_assembly()
+        bad = x.research_submit(0, tamper=lambda d: d["findings"][0].update(
+            support_feedback_refs=["rfeedback-999"]))
+        candidate = x.assembly_submit(0, bad)
+        self.assertEqual(x.inspect(0, candidate)["status"],
+                         "research_rejected_item_chain_quarantined")
+        for i in (1, 2):
+            r = x.research_submit(i)
+            self.assertEqual(x.inspect(i, x.assembly_submit(i, r))["status"],
+                             "typed_assembly_item_pending_github_classification")
+
+    def test_05_assembly_A_invalid_B_C_unaffected(self):
+        x = self.x
+        x.preauthorize_assembly()
+        ra = x.research_submit(0)
+        bad = x.assembly_submit(0, ra, mutate=lambda d: d.update(assembly_assignment_id="wrong"))
+        with self.assertRaises(ValueError):
+            x.inspect(0, bad)
+        for i in (1, 2):
+            r = x.research_submit(i)
+            self.assertFalse(x.inspect(i, x.assembly_submit(i, r))["canonical_dossier_accepted"])
+
+    def test_06_no_unresolved_slots_ack_check_or_daily_quota(self):
+        x = self.x
+        self.assertEqual(x.rbuffer["reserved_count"], 3)
+        a = make_buffer(x.f.root, source_commit=x.research_source, phase="research",
+                        ordered_work_paths=x.paths)
+        self.assertEqual(a, x.rbuffer)
+        # Limits can refuse only NEW GH preauthorization, not frozen traversal.
+        with self.assertRaises(ValueError):
+            make_buffer(x.f.root, source_commit=x.research_source, phase="research",
+                        ordered_work_paths=x.paths, new_authorization_limit=2)
+        frozen = frozen_buffer(x.f.root, marker_commit=x.f.marker,
+                               buffer_path=x.rbuffer["path"], phase="research")
+        self.assertEqual(len(frozen["items"]), 3)
+
+    def test_07_exact_raw_blob_replay_and_tamper_fail_closed(self):
+        x = self.x
+        x.preauthorize_assembly()
+        r = x.research_submit(0)
+        result = x.assembly_submit(0, r)
+        self.assertFalse(x.inspect(0, result)["canonical_dossier_accepted"])
+        path = x.assembly_work(0, r)["output_path"]
         x.f.save(path, {"schema": "overwritten"})
-        second = x.f.commit("Attempt duplicate overwrite")
+        overwrite = x.f.commit("Mutate submitted assembly bytes")
         with self.assertRaises(ValueError):
-            x.assembly_inspect(0, second)
+            x.inspect(0, overwrite)
         with self.assertRaises(ValueError):
-            x.assembly_inspect(1, good)
+            x.inspect(1, result)
 
-    def test_11_rejected_Research_is_not_assembly_eligible(self):
+    def test_08_wrong_package_identity_cannot_be_consumed(self):
         x = self.x
-        a = x.research_submit(0, tamper=lambda d: d.update(schema="untrusted"))
-        x.research_receive(0, a, persist=True)
-        # Assembly candidate planning is GitHub-only and requires an accepted receipt.
+        x.preauthorize_assembly()
+        wrong = x.research_submit(0)
         with self.assertRaises(ValueError):
-            make_buffer(x.f.root, source_commit=x.f.run("rev-parse", "HEAD"),
-                        phase="assembly",
-                        ordered_work_paths=[receipt_paths(x.docs[0]["assignment"])["assembly_plan"]])
+            x.assembly_work(1, wrong)
 
-
-    def test_12_out_of_order_completion_preserves_frozen_authority(self):
+    def test_09_frozen_authority_survives_later_main_movement(self):
         x = self.x
-        # Later Research C commits and is accepted before A/B even submit.
-        self.assertEqual(x.research_receive(2, x.research_submit(2), persist=True)["status"],
-                         "accepted_structural_evidence")
-        x.accept_research(0)
-        x.accept_research(1)
-        x.make_assembly()
-        # Assembly C commits before A/B; no receipt for A or B is needed.
-        self.assertIn("pending_github_final_strict_ingest",
-                      x.assembly_inspect(2, x.assembly_submit(2))["status"])
-        self.assertIn("pending_github_final_strict_ingest",
-                      x.assembly_inspect(0, x.assembly_submit(0))["status"])
+        x.preauthorize_assembly()
+        x.f.save(x.rbuffer["path"], {"schema": "tamper"})
+        x.f.commit("Later unrelated Git movement")
+        self.assertEqual(len(frozen_buffer(x.f.root, marker_commit=x.f.marker,
+                             buffer_path=x.rbuffer["path"], phase="research")["items"]), 3)
+
+    def test_10_no_worker_scope_expansion_or_recovery(self):
+        x = self.x
+        x.preauthorize_assembly(indexes=(0,))
+        with self.assertRaises(ValueError):
+            provisional_assembly_work(
+                x.f.root, marker_commit=x.amarker, buffer_path=x.abuffer["path"],
+                work_path=receipt_paths(x.docs[1]["assignment"])["assembly_plan"],
+                package_commit=x.f.marker)
+        with self.assertRaises(ValueError):
+            make_buffer(x.f.root, source_commit=x.research_source, phase="research",
+                        ordered_work_paths=list(reversed(x.paths)))
+
+    def test_11_Assembly_B_C_carry_independent_immutable_Research_refs(self):
+        x = self.x
+        x.preauthorize_assembly()
+        a = x.research_submit(0)
+        x.assembly_submit(0, a)
+        b = x.research_submit(1)
+        c = x.research_submit(2)
+        for i, r in ((1, b), (2, c)):
+            self.assertEqual(x.assembly_work(i, r)["research_transport"]["research_package_git_commit"], r)
+            self.assertFalse(x.inspect(i, x.assembly_submit(i, r))["deep_ready"])
 
 
 if __name__ == "__main__":
