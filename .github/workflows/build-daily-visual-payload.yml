@@ -247,7 +247,7 @@ jobs:
              [ "${UPSTREAM_NAME:-}" = "Build pre-AI deterministic payload" ] && \
              [ "${UPSTREAM_CONCLUSION:-}" = "failure" ] && \
              [ "${UPSTREAM_BRANCH:-}" = "main" ] && \
-             [ "$commercial_needed" = "true" ]; then
+             [ "$full_progressive_required" = "true" ]; then
             fallback_eligible=$(python scripts/progressive_visual_activation_routing.py --commercial-fallback-eligible)
             if [ "$fallback_eligible" = "true" ]; then
               full_progressive_required=true
