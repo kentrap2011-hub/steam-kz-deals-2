@@ -13,8 +13,8 @@
 - **ЧАТ 2:** two-stage Dossier Research/Assembly architecture accepted via PR #171, merge `290d31a52c00d9feea86ecfc78fdb1f037db66bb`. Architecture only, no activation. Proposed design keeps one GitHub control plane, immutable per-game Research packages, bounded Assembly gap-fill, unchanged strict final validator and pipelined Research N+1 / Assembly N. Physical slot is free.
 - Deep site/UI PR #168 accepted and merged as `ae06070f6e26ae8bdf7cf1864981b78c0e31cee7`; its previous only-red check was the now-fixed shared site-task regression. All Deep prerequisites are implemented, so final integration/cutover is unblocked.
 - PR #156 architecture freeze remains accepted and must not be re-audited without direct contradiction.
-- **ЧАТ 2:** Dossier two-stage P1 contracts/schemas accepted via PR #173, merge `1aaf1afacb6bbfab2406abb489df6a0c35e09250`. Research package + Assembly assignment/result/receipt interfaces are implemented but inactive; current one-stage Dossier remains authoritative. Physical slot is free. Next recommended step is P2 GitHub deterministic staging/helpers, not started.
-- **ЧАТ 1 urgent:** `WORKER_TASK_COMMERCIAL_REFRESH_INDEPENDENT_FROM_DOSSIER_FAILURE_01.md`. Decouple fresh Steam/commercial persistence/publication from Dossier-local failure; also repair the time-brittle Dossier fixture. Strict Dossier validation stays fail-closed. No Scheduled Task changes.
+- **ЧАТ 2:** Dossier two-stage P1 accepted via PR #173; P2 inactive GitHub Research→Assembly staging/control-plane accepted via PR #175, merge `ae92337ae5e8360ec15a4af4f85802bad39767b7`. Both remain inactive/non-authoritative; current one-stage Dossier stays production authority. Physical slot is free.
+- **ЧАТ 1:** commercial/Dossier isolation accepted via PR #174, merge `a243b7bf61b2127a75491646ca1265fa5d13e149`. Fresh deterministic commercial state is persisted before Dossier; new current games can publish honestly as `not_analyzed / waiting_for_dossier`; strict Dossier validation remains unchanged. Real pre-AI run #37909195575 and visual run #37909274274 succeeded. Physical slot is free.
 - No Scheduled Task changes are authorized.
 
 
