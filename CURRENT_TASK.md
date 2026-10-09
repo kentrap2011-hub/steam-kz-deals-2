@@ -1550,3 +1550,13 @@
 - Report: `reviews/worker_reports/dossier-two-stage-async-pipeline-amendment-01.md`.
 - Both new semantic workers and production activation remain forbidden/unimplemented. No Scheduled Tasks, canonical one-stage Dossier, Deep/Fast/ranking, commercial refresh or visual sources changed.
 - Other active work above remains independent; do not treat this completed handoff as a production activation.
+
+## COMPLETE — Dossier fully asynchronous Research → Assembly inactive amendment 01 (2026-10-09)
+
+- Worker slot: ЧАТ 1; task `WORKER_TASK_DOSSIER_FULLY_ASYNC_PIPELINE_01.md`.
+- Implementation branch: `implement/dossier-fully-async-pipeline-01`; PR opened for Director review (not merged/cut over).
+- Exact frozen GitHub preauthorizations remain finite and immutable; no fixed unresolved-slot Semantic Research/Assembly wait; Assembly can consume an exact unaccepted Research transport.
+- GitHub owns eventual strict item-chain and existing three-game canonical ingest; Research/Assembly invalidity isolated per item; no worker-authored retry/recovery.
+- Tests: inactive PR-only Git-history scenarios plus unchanged P1/P2/one-stage compatibility checks; check PR actions for authoritative run result.
+- Report: `reviews/worker_reports/dossier-fully-async-pipeline-01.md`.
+- No new semantic worker, no production activation, no Scheduled Tasks, no Fast/Deep/ranking/UI changes. Other concurrent tasks above preserved.
