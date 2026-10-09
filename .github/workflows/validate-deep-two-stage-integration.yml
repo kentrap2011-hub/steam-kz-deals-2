@@ -1,0 +1,47 @@
+name: Validate Deep two-stage integration preflight
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/deep_two_stage_cutover_preflight.py'
+      - 'scripts/test_deep_two_stage_cutover_preflight.py'
+      - 'reviews/worker_reports/deep-two-stage-integration-cutover-01.md'
+      - '.github/workflows/validate-deep-two-stage-integration.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bounded-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile integration and existing Stage-1/Stage-2 candidates
+        run: |
+          python -m py_compile scripts/deep_two_stage_cutover_preflight.py scripts/test_deep_two_stage_cutover_preflight.py scripts/deep_stage1.py scripts/deep_stage2.py scripts/deep_two_stage_ranking.py scripts/deep_two_stage_site_projection.py
+      - name: Fail-closed preflight unit tests
+        run: python scripts/test_deep_two_stage_cutover_preflight.py
+      - name: Independent Stage-1 regression
+        run: python scripts/test_deep_stage1.py
+      - name: Comparative Stage-2 regression
+        run: python scripts/test_deep_stage2_calibration.py
+      - name: Fast-free Wishlist 4 plus purchase 40 ranking regression
+        run: python scripts/test_deep_fast_removal_ranking_migration.py
+      - name: Canonical Statistics and detail projection regression
+        run: python scripts/test_deep_two_stage_site_projection.py
+      - name: Browser Deep mirror regression
+        run: node web/deep-two-stage-ui.test.js
+      - name: Audit exact current state and produce read-only bound queues
+        run: |
+          python scripts/deep_two_stage_cutover_preflight.py --out /tmp/deep-two-stage-precutover-plan.json
+          python -c "import json; p=json.load(open('/tmp/deep-two-stage-precutover-plan.json')); assert p['cutover_performed'] is False; assert p['production_authority'] == 'FAST-DOSSIER-DEEP-V1'"
+      - name: Publish exact migration classification and authorized queues
+        uses: actions/upload-artifact@v4
+        with:
+          name: deep-two-stage-precutover-plan
+          path: /tmp/deep-two-stage-precutover-plan.json
+          retention-days: 14
