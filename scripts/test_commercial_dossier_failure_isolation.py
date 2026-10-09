@@ -6,6 +6,10 @@ import re
 import subprocess
 import tempfile
 from pathlib import Path
+from unittest.mock import patch
+
+import build_visual_feed_v2 as visual_builder
+import progressive_personalization
 
 import progressive_visual_activation_routing as routing
 import test_progressive_visual_activation_routing as fixtures
@@ -41,8 +45,18 @@ def test_workflow_has_durable_commercial_boundary():
     assert "bash scripts/persist_pre_ai_commercial.sh" in workflow
     visual = VISUAL.read_text(encoding="utf-8")
     assert '"Build pre-AI deterministic payload"' in visual
-    assert "committed_commercial_dossier_failure_semantics_preserved" in visual
-    assert "needs.scope.outputs.failed_upstream_commercial == 'true'" in visual
+    assert "committed_commercial_dossier_failure_current_universe" in visual
+    assert "needs.scope.outputs.failed_upstream_full == 'true'" in visual
+    assert "needs.scope.outputs.failed_upstream_full != 'true'" in visual
+    assert "failed_upstream_commercial" not in visual
+    # Failures cannot route through stale-card-only commercial refresh.
+    commercial_job = visual.split("  commercial_refresh:", 1)[1].split("  no_build_receipt:", 1)[0]
+    full_job = visual.split("\n  build:", 1)[1]
+    assert "needs.scope.outputs.failed_upstream_full == 'true'" not in commercial_job
+    assert "needs.scope.outputs.failed_upstream_full == 'true'" in full_job
+    assert "python scripts/build_final_visual_payload.py" in full_job
+    assert "python scripts/visual_material_freshness_guard.py validate-visual" in full_job
+    assert "python scripts/test_site_publication_resilience.py" in visual
     assert "python scripts/test_site_publication_resilience.py" in visual
 
 
@@ -157,15 +171,116 @@ def test_paid_refresh_advances_commercial_not_semantic_or_dossier():
     assert previous["items"][0]["discount_percent"] == 50
 
 
+
+def test_failed_dossier_full_build_includes_new_not_analyzed_current_game():
+    """Real canonical Phase-A visual builder, fed current deterministic GitHub data.
+
+    A new family absent from the prior visual is intentionally NOT present in any
+    Dossier, Fast, Deep or Taste cache input. No new semantic result is invented.
+    """
+    source = "2026-10-09T00:10:00+00:00"
+    new_row = {
+        "family_id": "game:300",
+        "family_type": "base_game",
+        "taste_subject_key": "App_300",
+        "purchase": {
+            "key": "App_300",
+            "title": "Fresh New Game",
+            "discount_percent": 70,
+            "current_price_rub_display": 30,
+            "original_price_rub_display": 100,
+            "sale_end_utc": "2026-10-20T00:00:00+00:00",
+        },
+        "semantic_condition": {"base_appids": ["300"]},
+        "context_only": {"wishlist": False},
+    }
+    current = {
+        str(visual_builder.STORE_SNAPSHOT): {
+            "status": "complete", "entries": {
+                "App_300": {
+                    "appid": "300", "title": "Fresh New Game",
+                    "final_kzt": 150, "original_kzt": 500,
+                    "discount_percent": 70,
+                    "discount_end_utc": "2026-10-20T00:00:00+00:00",
+                }
+            },
+        },
+        str(visual_builder.FAMILY_GRAPH): {
+            "status": "complete", "families": [{
+                "family_id": "game:300", "family_type": "base_game",
+                "base_appids": ["300"], "primary_key": "App_300",
+                "alternative_purchase_keys": [],
+            }],
+        },
+        str(visual_builder.HISTORY_SNAPSHOT): {"entries": {}},
+        str(visual_builder.TASTE_PROJECTION): {"entries": {}},
+        str(visual_builder.CHATGPT_PAYLOAD): {
+            "source_mailing_updated_at_utc": source,
+            "fx_binding": {"kzt_per_rub": 5},
+            "progressive_candidate_count": 1,
+        },
+    }
+    # No accepted Dossier/Deep: the actual default state constructor supplies
+    # not_analyzed; only observational stage flags describe the pending state.
+    state = progressive_personalization._base_state()
+    state.update({
+        "fast_stage_state": "not_started",
+        "fast_stage_outcome": None,
+        "dossier_stage_state": "not_ready",
+        "deep_stage_state": "waiting_for_dossier",
+        "deep_stage_outcome": None,
+        "deep_recovery_state": "none",
+        "effective_analysis_source": "none",
+        "taste_entry": {},
+        "projection": {},
+    })
+    with tempfile.TemporaryDirectory() as td:
+        output = Path(td) / "fresh-visual.json"
+        with (
+            patch.object(visual_builder, "OUT", output),
+            patch.object(visual_builder.progressive_personalization, "load_jsonl", return_value=[new_row]),
+            patch.object(visual_builder, "load_json", side_effect=lambda p: current.get(str(p), {})),
+            patch.object(visual_builder, "load_content_metadata_by_appid", return_value={}),
+            patch.object(visual_builder, "effective_taste_entries", return_value={}),
+            patch.object(visual_builder, "load_translation_cache", return_value={}),
+            patch.object(visual_builder, "resolve_description_for_appids", return_value={"summary": None}),
+            patch.object(visual_builder.progressive_personalization, "build_state_index", return_value={"game:300": state}),
+            patch.object(visual_builder.progressive_personalization, "build_processing_status", return_value={
+                "total_current_candidates": 1, "not_analyzed_count": 1,
+            }),
+            patch.object(visual_builder.progressive_personalization, "validate_processing_status"),
+            patch.object(visual_builder, "apply_visual_semantic_status"),
+        ):
+            visual_builder.main()
+        published = json.loads(output.read_text(encoding="utf-8"))
+    assert published["source_mailing_updated_at_utc"] == source
+    assert published["item_count"] == 1
+    game = published["items"][0]
+    assert game["id"] == "game:300"
+    assert game["analysis_state"] == "not_analyzed"
+    assert game["analysis_tier"] == 3
+    assert game["dossier_stage_state"] == "not_ready"
+    assert game["deep_stage_state"] == "waiting_for_dossier"
+    assert game["fast_stage_state"] == "not_started"
+    assert game["pass1_attempted"] is False
+    assert game["pass2_attempted"] is False
+    assert game["effective_analysis_source"] == "none"
+    assert "fit" not in game
+    assert "why_fit" not in game
+    assert game["current_price_rub"] == 30
+    assert game["discount_percent"] == 70
+
+
 def main():
     for test in (
         test_workflow_has_durable_commercial_boundary,
         test_real_git_persistence_survives_later_dossier_error,
         test_failed_dossier_safe_commercial_fallback_only,
         test_paid_refresh_advances_commercial_not_semantic_or_dossier,
+        test_failed_dossier_full_build_includes_new_not_analyzed_current_game,
     ):
         test()
-    print("commercial/Dossier failure isolation: 4 tests passed")
+    print("commercial/Dossier failure isolation: 5 tests passed")
 
 
 if __name__ == "__main__":
