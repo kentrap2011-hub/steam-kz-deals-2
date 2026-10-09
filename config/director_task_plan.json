@@ -225,10 +225,10 @@
         "deep-ranking",
         "deep-site"
       ],
-      "blocker": "Нужны GitHub-prepared Stage 1 semantic migration work, реальные принятые Stage 1 результаты и явно авторизованные Stage 2 bootstrap anchors до atomic cutover.",
+      "blocker": "Stage 1 migration preparation is accepted; next requires explicit authorization to materialize current executable Stage 1 migration work and separately authorize manual Stage 1 semantic execution. Stage 2 bootstrap/semantic coverage remains later prerequisite before atomic Fast-free cutover.",
       "updated_on": "2026-10-09",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-09T10:45:00Z"
+      "updated_at_utc": "2026-10-09T13:02:00Z"
     },
     {
       "id": "taste-profile",
@@ -640,7 +640,7 @@
       "id": "dossier-fully-async-pipeline",
       "title": "Dossier: полностью асинхронный Research → Assembly",
       "goal": "Убрать GitHub из liveness path обоих semantic stages: Assembly может работать по точному submitted Research package до GitHub acceptance; плохая цепочка изолируется локально.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Нужно заменить accepted-Research gate и fixed-slot backpressure на frozen end-to-end preauthorization и позднюю GitHub validation всей цепочки.",
       "urgency": "высокая",
@@ -653,14 +653,14 @@
       ],
       "blocker": "",
       "updated_on": "2026-10-09",
-      "updated_at_utc": "2026-10-09T12:30:00Z",
-      "recent_completion": false
+      "updated_at_utc": "2026-10-09T13:02:00Z",
+      "recent_completion": true
     },
     {
       "id": "deep-stage1-migration-work",
       "title": "Deep: подготовить Stage 1 migration work",
       "goal": "Сформировать точную GitHub-owned очередь новой Stage 1 semantic migration для текущего eligible scope без выдумывания результатов.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Нужно связать текущий canonical Dossier с новой Stage 1 migration scope, детерминированными work IDs и result paths.",
       "urgency": "высокая",
@@ -673,8 +673,8 @@
       ],
       "blocker": "",
       "updated_on": "2026-10-09",
-      "updated_at_utc": "2026-10-09T12:30:00Z",
-      "recent_completion": false
+      "updated_at_utc": "2026-10-09T13:02:00Z",
+      "recent_completion": true
     }
   ]
 }
