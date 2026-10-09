@@ -63,5 +63,18 @@
   },
   "new_work_authorization": false,
   "source_project_authority": "one_stage_dossier_remains_production_owner",
-  "no_scheduled_tasks": true
+  "no_scheduled_tasks": true,
+  "asynchronous_buffers": {
+    "contract": "config/dossier_two_stage_async_buffer_contract.json",
+    "research_immutable_buffer": "data/control/dossier_two_stage_buffers/research/{snapshot_id}/{buffer_id}.json",
+    "assembly_immutable_buffer": "data/control/dossier_two_stage_buffers/assembly/{snapshot_id}/{buffer_id}.json",
+    "max_buffer_items_per_phase": 8,
+    "buffer_is_frozen_at": "actual_run_start_marker_single_git_parent",
+    "worker_next_item_depends_on_prior_receipt": false,
+    "worker_can_self_extend_buffer": false,
+    "github_ingest_can_lag_worker_progress": true,
+    "github_only_retry_recovery": true,
+    "no_whole_research_group_assembly_barrier": true,
+    "activation": false
+  }
 }
