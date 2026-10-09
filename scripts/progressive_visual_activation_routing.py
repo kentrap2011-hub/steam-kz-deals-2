@@ -265,10 +265,10 @@ def commercial_fallback_eligible(
     if not source_integrity_ok(payload, store, family):
         return False
     source = payload.get('source_mailing_updated_at_utc')
-    if (
-        visual.get('source_mailing_updated_at_utc') == source
-        or visual.get('commercial_source_mailing_updated_at_utc') == source
-    ):
+    # Even if a previous bounded refresh already stamped the current paid
+    # commercial source, its older semantic visual may still lack newly added
+    # families. Permit the full current-universe rebuild in that case.
+    if visual.get('source_mailing_updated_at_utc') == source:
         return False
     try:
         if int(payload.get('progressive_candidate_count')) != int(progressive_context_count):
