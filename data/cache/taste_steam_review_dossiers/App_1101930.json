@@ -15,13 +15,13 @@
     "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
     "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
-  "appid": "1101450",
-  "title": "Miss Neko",
+  "appid": "1101930",
+  "title": "Monsters of Little Haven",
   "generated_at_utc": "2026-10-09T09:11:13.613Z",
   "expires_at_utc": "2026-10-29T09:11:13.613Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Miss Neko",
+    "work_title": "Monsters of Little Haven",
     "release_year": 2019,
     "resolution_status": "resolved",
     "identity_source_ids": [
@@ -30,18 +30,18 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1101450"
+        "value": "1101930"
       }
     ]
   },
-  "summary": "Evidence summary: 5 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
       "category": "mechanics",
-      "statement": "Player accounts characterize the central loop as tile-picture puzzles followed by a brief rock-paper-scissors interaction to unlock adult-themed illustrations.",
+      "statement": "The experience is a choice-driven, text-forward psychological-horror visual novel; routes and endings, rather than dexterity or combat, form the main interaction.",
       "sentiment": "neutral",
-      "recurrence": "limited",
-      "mention_count": 2,
+      "recurrence": "moderate",
+      "mention_count": 3,
       "evidence_languages": [
         "russian",
         "non_russian"
@@ -52,33 +52,39 @@
         "source-003"
       ],
       "player_feedback_ids": [
-        "feedback-001",
-        "feedback-002"
+        "feedback-002",
+        "feedback-004",
+        "feedback-005"
       ]
     },
     {
-      "category": "difficulty",
-      "statement": "A Russian player describes several puzzle difficulty settings while character stages gradually lead into the end-of-stage minigame.",
+      "category": "structure",
+      "statement": "Different narrative endings reveal complementary fragments of the underlying family mystery, making route exploration an important part of understanding the plot.",
       "sentiment": "positive",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "recurrence": "moderate",
+      "mention_count": 4,
       "evidence_languages": [
-        "russian"
+        "russian",
+        "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "source-002"
+        "source-002",
+        "source-003"
       ],
       "player_feedback_ids": [
-        "feedback-001"
+        "feedback-002",
+        "feedback-004",
+        "feedback-005",
+        "feedback-006"
       ]
     },
     {
       "category": "pacing",
-      "statement": "The experience is a compact, low-pressure collection of largely self-contained puzzles rather than a long-form campaign.",
+      "statement": "Individual playthroughs are short, but revisiting branching paths to unlock all endings can feel laborious to some players.",
       "sentiment": "mixed",
-      "recurrence": "limited",
-      "mention_count": 2,
+      "recurrence": "moderate",
+      "mention_count": 3,
       "evidence_languages": [
         "russian",
         "non_russian"
@@ -90,15 +96,16 @@
       ],
       "player_feedback_ids": [
         "feedback-001",
-        "feedback-002"
+        "feedback-002",
+        "feedback-005"
       ]
     },
     {
       "category": "other",
-      "statement": "A player appreciates the calm background audio and polished character illustrations, but finds the soundtrack unmemorable and the unlockable scenes less varied than expected.",
+      "statement": "Players highlight the black-and-white artwork, ominous music and voice acting as distinctive elements; the oppressive mood and stark look can be divisive.",
       "sentiment": "mixed",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "recurrence": "moderate",
+      "mention_count": 3,
       "evidence_languages": [
         "russian"
       ],
@@ -107,15 +114,17 @@
         "source-002"
       ],
       "player_feedback_ids": [
-        "feedback-001"
+        "feedback-002",
+        "feedback-003",
+        "feedback-004"
       ]
     },
     {
-      "category": "repetition",
-      "statement": "The repeated character-puzzle-then-minigame structure offers a consistent casual rhythm but relatively little mechanical variation.",
-      "sentiment": "mixed",
-      "recurrence": "limited",
-      "mention_count": 2,
+      "category": "structure",
+      "statement": "Some branches and endings are considered less compelling or unevenly written, even by players who liked the overall story.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
+      "mention_count": 3,
       "evidence_languages": [
         "russian",
         "non_russian"
@@ -126,8 +135,30 @@
         "source-003"
       ],
       "player_feedback_ids": [
-        "feedback-001",
-        "feedback-002"
+        "feedback-003",
+        "feedback-005",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Players describe the story as unexpectedly disturbing beneath its child-focused setup, with late revelations that recontextualize earlier events.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-004",
+        "feedback-006"
       ]
     }
   ],
@@ -138,7 +169,7 @@
     "source_mix_status": "multi_source",
     "single_source_reason": null,
     "russian_attempt": "found_and_used",
-    "overall_strength": "limited",
+    "overall_strength": "moderate",
     "stop_reason": "evidence_stable",
     "coverage": {
       "dimensions": [
@@ -146,8 +177,7 @@
           "dimension": "core_play_mechanics",
           "state": "covered",
           "observation_indices": [
-            0,
-            2
+            0
           ]
         },
         {
@@ -161,22 +191,22 @@
           "dimension": "progression_development_unlocks",
           "state": "covered",
           "observation_indices": [
-            2
+            1
           ]
         },
         {
           "dimension": "variety_repetition_over_time",
           "state": "covered",
           "observation_indices": [
-            2,
-            4
+            1,
+            2
           ]
         },
         {
           "dimension": "difficulty_mastery_learning_friction",
           "state": "covered",
           "observation_indices": [
-            1
+            2
           ]
         },
         {
@@ -189,8 +219,10 @@
         },
         {
           "dimension": "exploration_mission_activity_structure",
-          "state": "not_material_or_not_applicable",
-          "observation_indices": []
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
         },
         {
           "dimension": "multiplayer_coop_dependence",
@@ -199,29 +231,35 @@
         },
         {
           "dimension": "story_characters_identity_hooks",
-          "state": "not_material_or_not_applicable",
-          "observation_indices": []
+          "state": "covered",
+          "observation_indices": [
+            1,
+            5
+          ]
         },
         {
           "dimension": "recurring_strengths",
           "state": "covered",
           "observation_indices": [
             1,
-            3
+            3,
+            5
           ]
         },
         {
           "dimension": "recurring_complaints_tradeoffs",
           "state": "covered",
           "observation_indices": [
-            3,
+            2,
             4
           ]
         },
         {
           "dimension": "technical_performance_localization_regional",
-          "state": "not_material_or_not_applicable",
-          "observation_indices": []
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
         }
       ],
       "closure_basis": "broad_neutral_picture",
@@ -235,7 +273,7 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1101450/Miss_Neko/",
+        "url": "https://store.steampowered.com/app/1101930/Monsters_of_Little_Haven/",
         "publication_date": null,
         "language": "non_russian",
         "evidence_role": "identity",
@@ -245,34 +283,34 @@
       {
         "source_id": "source-002",
         "source_type": "other_player_feedback",
-        "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/curator/45885862/",
+        "domain": "stmstat.com",
+        "url": "https://stmstat.com/ru/app/1101930/reviews",
         "publication_date": null,
         "language": "russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
         "feedback_surface_mode": "search_result_representation",
         "exact_product_binding": {
-          "basis": "source_appid_title_release",
-          "appid": "1101450",
-          "title": "Miss Neko",
-          "release_year": 2019
+          "basis": "source_appid",
+          "appid": "1101930",
+          "title": null,
+          "release_year": null
         },
         "freshness": "unknown"
       },
       {
         "source_id": "source-003",
-        "source_type": "steam_reviews",
-        "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1101450/Miss_Neko/?l=german",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1101930/discussions/0/3825286048543954563/",
         "publication_date": null,
         "language": "non_russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
-        "feedback_surface_mode": "search_result_representation",
+        "feedback_surface_mode": "concrete_item_collection",
         "exact_product_binding": {
           "basis": "source_appid",
-          "appid": "1101450",
+          "appid": "1101930",
           "title": null,
           "release_year": null
         },
@@ -283,16 +321,44 @@
       {
         "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "publication_date": "2025-12-28",
+        "publication_date": null,
         "language": "russian",
         "acquisition_mode": "search_result_observation"
       },
       {
         "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-005",
         "source_id": "source-003",
         "publication_date": null,
         "language": "non_russian",
-        "acquisition_mode": "search_result_observation"
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-003",
+        "publication_date": null,
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
       }
     ]
   }

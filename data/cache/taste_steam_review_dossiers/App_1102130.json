@@ -15,14 +15,14 @@
     "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
     "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
-  "appid": "1101450",
-  "title": "Miss Neko",
+  "appid": "1102130",
+  "title": "Florence",
   "generated_at_utc": "2026-10-09T09:11:13.613Z",
   "expires_at_utc": "2026-10-29T09:11:13.613Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Miss Neko",
-    "release_year": 2019,
+    "work_title": "Florence",
+    "release_year": 2020,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "source-001"
@@ -30,55 +30,40 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1101450"
+        "value": "1102130"
       }
     ]
   },
-  "summary": "Evidence summary: 5 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 7 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
       "category": "mechanics",
-      "statement": "Player accounts characterize the central loop as tile-picture puzzles followed by a brief rock-paper-scissors interaction to unlock adult-themed illustrations.",
-      "sentiment": "neutral",
-      "recurrence": "limited",
-      "mention_count": 2,
-      "evidence_languages": [
-        "russian",
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-002",
-        "source-003"
-      ],
-      "player_feedback_ids": [
-        "feedback-001",
-        "feedback-002"
-      ]
-    },
-    {
-      "category": "difficulty",
-      "statement": "A Russian player describes several puzzle difficulty settings while character stages gradually lead into the end-of-stage minigame.",
-      "sentiment": "positive",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-002"
-      ],
-      "player_feedback_ids": [
-        "feedback-001"
-      ]
-    },
-    {
-      "category": "pacing",
-      "statement": "The experience is a compact, low-pressure collection of largely self-contained puzzles rather than a long-form campaign.",
+      "statement": "Interaction consists mainly of brief, low-difficulty visual tasks such as assembling dialogue bubbles, moving through illustrated scenes and colouring rather than complex puzzles.",
       "sentiment": "mixed",
-      "recurrence": "limited",
-      "mention_count": 2,
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003",
+        "feedback-004",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "The storyline is linear and very short; limited replay variation is a recurring concern even among players who value the experience.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
       "evidence_languages": [
         "russian",
         "non_russian"
@@ -90,29 +75,77 @@
       ],
       "player_feedback_ids": [
         "feedback-001",
-        "feedback-002"
+        "feedback-004",
+        "feedback-005"
       ]
     },
     {
       "category": "other",
-      "statement": "A player appreciates the calm background audio and polished character illustrations, but finds the soundtrack unmemorable and the unlockable scenes less varied than expected.",
-      "sentiment": "mixed",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "statement": "Illustration, use of colour and music are repeatedly praised for communicating emotion with relatively little dialogue.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 4,
       "evidence_languages": [
-        "russian"
+        "russian",
+        "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "source-002"
+        "source-002",
+        "source-003"
       ],
       "player_feedback_ids": [
-        "feedback-001"
+        "feedback-002",
+        "feedback-003",
+        "feedback-004",
+        "feedback-005"
       ]
     },
     {
-      "category": "repetition",
-      "statement": "The repeated character-puzzle-then-minigame structure offers a consistent casual rhythm but relatively little mechanical variation.",
+      "category": "mechanics",
+      "statement": "The changing number and shape of dialogue-puzzle pieces are appreciated as a metaphor for growing familiarity and relationship tension.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "The intimate narrative about a relationship, breakup and personal growth is emotionally resonant to many players, although interpretations of its ending differ.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "A critical player finds the everyday romance conventional and the post-breakup recovery too compressed, while others value the straightforward, relatable storytelling.",
       "sentiment": "mixed",
       "recurrence": "limited",
       "mention_count": 2,
@@ -127,7 +160,25 @@
       ],
       "player_feedback_ids": [
         "feedback-001",
-        "feedback-002"
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Some players consider the simple interactions too passive and brief to supply much agency or gameplay challenge.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-005",
+        "feedback-006"
       ]
     }
   ],
@@ -138,7 +189,7 @@
     "source_mix_status": "multi_source",
     "single_source_reason": null,
     "russian_attempt": "found_and_used",
-    "overall_strength": "limited",
+    "overall_strength": "moderate",
     "stop_reason": "evidence_stable",
     "coverage": {
       "dimensions": [
@@ -147,44 +198,43 @@
           "state": "covered",
           "observation_indices": [
             0,
-            2
+            3
           ]
         },
         {
           "dimension": "controls_game_feel",
           "state": "covered",
           "observation_indices": [
-            0
+            0,
+            6
           ]
         },
         {
           "dimension": "progression_development_unlocks",
-          "state": "covered",
-          "observation_indices": [
-            2
-          ]
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
         },
         {
           "dimension": "variety_repetition_over_time",
-          "state": "covered",
-          "observation_indices": [
-            2,
-            4
-          ]
-        },
-        {
-          "dimension": "difficulty_mastery_learning_friction",
           "state": "covered",
           "observation_indices": [
             1
           ]
         },
         {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            6
+          ]
+        },
+        {
           "dimension": "pacing_structure_direction",
           "state": "covered",
           "observation_indices": [
-            2,
-            4
+            1,
+            5
           ]
         },
         {
@@ -199,23 +249,28 @@
         },
         {
           "dimension": "story_characters_identity_hooks",
-          "state": "not_material_or_not_applicable",
-          "observation_indices": []
+          "state": "covered",
+          "observation_indices": [
+            4,
+            5
+          ]
         },
         {
           "dimension": "recurring_strengths",
           "state": "covered",
           "observation_indices": [
-            1,
-            3
+            2,
+            3,
+            4
           ]
         },
         {
           "dimension": "recurring_complaints_tradeoffs",
           "state": "covered",
           "observation_indices": [
-            3,
-            4
+            1,
+            5,
+            6
           ]
         },
         {
@@ -235,7 +290,7 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1101450/Miss_Neko/",
+        "url": "https://store.steampowered.com/app/1102130/Florence/",
         "publication_date": null,
         "language": "non_russian",
         "evidence_role": "identity",
@@ -244,35 +299,35 @@
       },
       {
         "source_id": "source-002",
-        "source_type": "other_player_feedback",
+        "source_type": "steam_reviews",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/curator/45885862/",
+        "url": "https://store.steampowered.com/app/1102130/Florence/?curator_clanid=36591967&l=russian",
         "publication_date": null,
         "language": "russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
         "feedback_surface_mode": "search_result_representation",
         "exact_product_binding": {
-          "basis": "source_appid_title_release",
-          "appid": "1101450",
-          "title": "Miss Neko",
-          "release_year": 2019
+          "basis": "source_appid",
+          "appid": "1102130",
+          "title": null,
+          "release_year": null
         },
         "freshness": "unknown"
       },
       {
         "source_id": "source-003",
         "source_type": "steam_reviews",
-        "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1101450/Miss_Neko/?l=german",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1102130/reviews/?browsefilter=toprated",
         "publication_date": null,
         "language": "non_russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
-        "feedback_surface_mode": "search_result_representation",
+        "feedback_surface_mode": "concrete_item_collection",
         "exact_product_binding": {
           "basis": "source_appid",
-          "appid": "1101450",
+          "appid": "1102130",
           "title": null,
           "release_year": null
         },
@@ -283,16 +338,44 @@
       {
         "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "publication_date": "2025-12-28",
+        "publication_date": null,
         "language": "russian",
         "acquisition_mode": "search_result_observation"
       },
       {
         "feedback_id": "feedback-002",
-        "source_id": "source-003",
+        "source_id": "source-002",
         "publication_date": null,
-        "language": "non_russian",
+        "language": "russian",
         "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-003",
+        "publication_date": "2021-01-18",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-003",
+        "publication_date": "2020-02-13",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-003",
+        "publication_date": "2020-04-12",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
       }
     ]
   }
