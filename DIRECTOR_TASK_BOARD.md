@@ -19,6 +19,9 @@
 - **ЧАТ 2:** Deep cutover preflight accepted via PR #176, merge `a2eaeef1a3203585970b62cb548e801faa073bc4`. Actual production cutover is blocked at the authorized semantic boundary: no accepted new Stage 1/Stage 2 semantics and no approved Stage 2 bootstrap anchors. No semantic results were invented. Physical slot is free pending Director/user authorization of the next semantic migration step.
 - **ЧАТ 1:** fully asynchronous Dossier amendment accepted via PR #179, merge `707e4b44a582fa11833fd17059e3cd413fe5d268`. No fixed unresolved-slot liveness gate; Assembly can consume the exact submitted Research package before GitHub acceptance; GitHub validates the chain later. New path remains inactive/non-authoritative. Physical slot is free.
 - **ЧАТ 2:** Deep Stage 1 migration preparation accepted via PR #178, merge `c429cead3788875e36f2596f2abb770307cd75cc`. Current preview found 27 Stage-1-ready candidates and 218 waiting/blocked; executable materialization remains gated by `mass_migration_authorized=false`. No semantic execution or cutover occurred. Physical slot is free.
+- **Pending Director acceptance:** PR #179 (ЧАТ 1 fully async Dossier) is green/open; if head/checks/overlap remain clean, accept it, retire the old worker chat, then use a fresh ЧАТ 1 for Research semantic worker implementation against the async contract.
+- **Pending Director acceptance:** PR #178 (ЧАТ 2 Deep Stage 1 migration preparation) is green/open; it correctly stops at `mass_migration_authorized=false`. After acceptance, retire the old worker chat; fresh ЧАТ 2 should handle explicit Stage-1 migration authorization/materialization, not semantic execution.
+- **Fast removal remains explicit final-cutover work:** Fast-free ranking code is prepared, but production Fast authority must be removed only atomically after accepted new Stage 1 + Stage 2 semantics.
 - No Scheduled Task changes are authorized.
 
 
