@@ -14,6 +14,7 @@
 - Deep site/UI PR #168 accepted and merged as `ae06070f6e26ae8bdf7cf1864981b78c0e31cee7`; its previous only-red check was the now-fixed shared site-task regression. All Deep prerequisites are implemented, so final integration/cutover is unblocked.
 - PR #156 architecture freeze remains accepted and must not be re-audited without direct contradiction.
 - **ЧАТ 2:** Dossier two-stage P1 contracts/schemas accepted via PR #173, merge `1aaf1afacb6bbfab2406abb489df6a0c35e09250`. Research package + Assembly assignment/result/receipt interfaces are implemented but inactive; current one-stage Dossier remains authoritative. Physical slot is free. Next recommended step is P2 GitHub deterministic staging/helpers, not started.
+- **ЧАТ 1 urgent:** `WORKER_TASK_COMMERCIAL_REFRESH_INDEPENDENT_FROM_DOSSIER_FAILURE_01.md`. Decouple fresh Steam/commercial persistence/publication from Dossier-local failure; also repair the time-brittle Dossier fixture. Strict Dossier validation stays fail-closed. No Scheduled Task changes.
 - No Scheduled Task changes are authorized.
 
 
