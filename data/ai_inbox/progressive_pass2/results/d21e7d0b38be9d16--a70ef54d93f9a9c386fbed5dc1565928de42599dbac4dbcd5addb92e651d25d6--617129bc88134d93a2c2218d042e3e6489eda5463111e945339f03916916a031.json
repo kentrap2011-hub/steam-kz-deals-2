@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "9b1cfd809238afd06e1ca958a9fa479800727760",
+  "run_start_authority_commit": "707e4b44a582fa11833fd17059e3cd413fe5d268",
+  "run_started_at_utc": "2026-10-09T13:14:00+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+  "work_id": "a70ef54d93f9a9c386fbed5dc1565928de42599dbac4dbcd5addb92e651d25d6",
+  "family_id": "game:1122680",
+  "taste_subject_key": "App_1122680",
+  "appid": "1122680",
+  "taste_fingerprint": "e2d9c45819c1816e9204ada80c074bb12c4ff6aa60741273e1895aea4f8f2141",
+  "candidate_context_sha256": "1987883b0a8a7ae462ad1c888bf732eafaea9c6ea8cd1fcf8be006a7129e844f",
+  "dossier_content_sha256": "99692f76b417754f2b7bf0f270d5134accd550f8d37c3f33837421b738bfa34a",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "617129bc88134d93a2c2218d042e3e6489eda5463111e945339f03916916a031",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "high",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "The Artful Escape предлагает выразительные психоделические миры, музыку и озвучку (observation 4): художественная уникальность заметно соответствует вкусовому профилю, но остаётся почти единственным устойчиво сильным совпадением.",
+    "Основные действия сводятся к простому перемещению, лёгким прыжкам и последовательностям клавиш, а решения и диалоги мало влияют на происходящее (observations 0, 2, 5). Для профиля с особой ценностью активного управления, освоения навыка и содержательного геймплея это существенное несовпадение.",
+    "Короткая история про собственную музыкальную идентичность может эмоционально сработать (observation 3), но отзывы отмечают предсказуемость, и при малом объёме интерактивности сюжет должен нести почти весь интерес; повтор базовых команд (observation 1) дополнительно ограничивает развитие игрового опыта."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Прохождение главным образом состоит из лёгкого перемещения и повторения музыкальных команд почти без требовательных игровых решений; при сильной потребности в активном интересном процессе впечатляющая картинка может не удержать вовлечённость.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          },
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Психоделические локации сменяются, но базовые гитарные и платформенные действия повторяются даже в коротком трёх-четырёхчасовом путешествии: зрелищная смена сцен не всегда означает развитие механики.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Личная история музыканта некоторым игрокам кажется трогательной, другим — предсказуемой; поскольку сюжет несёт большую часть впечатления, эмоциональный результат нельзя считать гарантированным.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      }
+    ]
+  }
+}
