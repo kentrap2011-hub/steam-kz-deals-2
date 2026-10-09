@@ -2,7 +2,7 @@
 
 Task: `WORKER_TASK_DOSSIER_TWO_STAGE_ASYNC_PIPELINE_AMENDMENT_01.md`.
 Source: `main`; implementation branch: `implement/dossier-two-stage-async-buffer-amendment-01`.
-Status: **implemented inactive; CI verification pending PR checks**.
+Status: **implemented inactive; PR #177 validation passed; not merged or active**.
 
 ## 1. Previously implicit blocking risk
 
@@ -45,7 +45,10 @@ Important integration boundary: this is an offline pure planner with the counts 
 6. Existing final strict authority remains disabled for the new path.
 7. Invalid/stale/tampered/duplicate result/manifest/work fails closed, including forged scope and no worker-issued retries.
 8. Open-slot arithmetic is stable; 8 occupied slots issue no new buffer while existing authorization remains valid.
-9. Existing P1/P2 schema, Git history, one-stage date, and Dossier/Deep release-year checks remain in the existing CI job.
+9. Later Research C can complete and be accepted before A/B, and Assembly C can submit before A/B, without losing frozen order/authority.
+10. Existing P1/P2 schema, Git history, one-stage date, and Dossier/Deep release-year checks remain in the existing CI job.
+
+**Verified GitHub PR checks:** `Validate inactive Dossier two-stage interfaces` run `37918769747` — success: 12/12 asynchronous Git-history tests, 25/25 previous P2 staging tests, 15/15 P1 contract schema tests, 9/9 current one-stage factual date tests, and the Dossier/Deep identity compatibility regression. `Validate backlog dispositions` run `37918769764` — success. No production invocation or semantic execution was performed.
 
 ## 6. Production noninterference and deferred work
 
