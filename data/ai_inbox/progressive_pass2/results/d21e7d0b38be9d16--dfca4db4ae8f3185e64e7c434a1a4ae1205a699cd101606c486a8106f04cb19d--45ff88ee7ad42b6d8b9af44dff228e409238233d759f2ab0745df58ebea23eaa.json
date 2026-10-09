@@ -1,0 +1,318 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "843e608f3f51289c57b5c7512327b1c856dffc74",
+  "run_start_authority_commit": "77f895664498df8194978177a16d727b02447f95",
+  "run_started_at_utc": "2026-10-09T15:03:13+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+  "work_id": "dfca4db4ae8f3185e64e7c434a1a4ae1205a699cd101606c486a8106f04cb19d",
+  "family_id": "game:1337520",
+  "taste_subject_key": "App_1337520",
+  "appid": "1337520",
+  "taste_fingerprint": "16afc1e5dcec007467e738dfbed97655952b71c77a59915ee681fa6f490a131f",
+  "candidate_context_sha256": "238ee82ac7a861795abe76ff219c8e89075062ba72fc411a7938182c6e45d2ce",
+  "dossier_content_sha256": "ad5313bcf6cfdf0dd2068f997be5dd404134477f7de8f119d560d0204c40b5b9",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "45ff88ee7ad42b6d8b9af44dff228e409238233d759f2ab0745df58ebea23eaa",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "high",
+  "positive_evidence": [
+    "Активные сражения нарастающей сложности дают простор для освоения таймингов и поведения врагов (наблюдения 0, 9).",
+    "Выжившие, артефакты, альтернативные умения и комбинации предметов меняют последующие попытки (наблюдения 2, 6).",
+    "Кооператив и выразительная пиксельная подача расширяют способы получать удовольствие от игрового процесса (наблюдения 5, 8)."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 82,
+    "development_variety": 78,
+    "structure_pacing_direction": 62,
+    "identity_hooks": 67,
+    "breadth_of_match": 75
+  },
+  "score_findings": [
+    {
+      "finding_id": "escalating_combat",
+      "text_ru": "Бои на двухмерных аренах требуют постоянно выбирать момент продвижения и усиливать персонажа добытыми предметами, пока враги опаснее с каждой минутой.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 9
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "edeced74c18dc6f94ea4ae8882f30e2db8dfd546419d1cbcf6cfa274bfaca73a",
+          "match_text_ru": "Рост навыка, управление таймингами и отработка поведения врагов — один из самых сильных вкусовых сигналов."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 82
+        },
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 62
+        }
+      ]
+    },
+    {
+      "finding_id": "survivor_unlocks",
+      "text_ru": "Новые выжившие, альтернативные умения, предметы и артефакты заметно меняют тактику следующих забегов, а не только добавляют численные награды.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "b584a23bde72bbcacc284a93f33e49bda9cde0b89c7d750aa3d954ed1fef2055",
+          "match_text_ru": "Важно, чтобы повторное прохождение приносило новые механики и боевые ситуации."
+        },
+        {
+          "json_pointer": "/taste_profile/8",
+          "profile_value_sha256": "0e6624dd4b0ea00e882eded98b52cbb23093fec7ba3c0ee0137b689a88a4e2f0",
+          "match_text_ru": "Повторы приемлемы, когда сам процесс меняется с новыми наборами возможностей."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 78
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 75
+        }
+      ]
+    },
+    {
+      "finding_id": "remaster_style",
+      "text_ru": "Пиксельная графика, обновлённая музыка и узнаваемые наборы выживших создают собственный образ динамичного двумерного выживания.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 8
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7",
+          "profile_value_sha256": "f94957e7f369714de6a70c9cdaa1b1bb625ccdf9a2bd19f5b4bde419ccfecf7a",
+          "match_text_ru": "Выразительная эстетика усиливает запоминаемость, но сама не заменяет игровой прогресс."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 67
+        }
+      ]
+    },
+    {
+      "finding_id": "movement_friction",
+      "text_ru": "Вертикальное лазание, горизонтальное прицеливание и затяжной поиск телепорта иногда сбивают ритм динамичных боёв; часть игроков считает наследованные схемы управления неудобными.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1",
+          "profile_value_sha256": "eea16e0b6b2de79dd07acac864c406860d99691433b9b2149e2b8492681fbcd8",
+          "match_text_ru": "Отзывчивое передвижение имеет самостоятельную ценность, поэтому неуклюжий контроль может сильно помешать."
+        },
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "b584a23bde72bbcacc284a93f33e49bda9cde0b89c7d750aa3d954ed1fef2055",
+          "match_text_ru": "Промежутки без новых игровых задач заметно ухудшают увлечённость."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 62
+        },
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 82
+        }
+      ]
+    },
+    {
+      "finding_id": "repeated_maps",
+      "text_ru": "Даже при новых наборах умений знакомые участки и повторяющиеся противники могут ограничить ощущение свежести от очередного забега.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8",
+          "profile_value_sha256": "0e6624dd4b0ea00e882eded98b52cbb23093fec7ba3c0ee0137b689a88a4e2f0",
+          "match_text_ru": "Повторяемость становится проблемой именно без обновляющихся ситуаций."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 78
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "На некоторых участках лазание, прицеливание и поиск телепорта осложняют управление, особенно под растущим давлением врагов; даже настроек сложности не всегда достаточно, чтобы устранить это трение.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          },
+          {
+            "kind": "observation",
+            "index": 9
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Знакомые арены и враги повторяются; новые персонажи и предметы частично обновляют забеги, но не для всех снимают усталость от похожих маршрутов.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "В совместных забегах найденные случайные предметы приходится делить, из-за чего взаимодействие не всегда одинаково удобно для участников.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  }
+}
