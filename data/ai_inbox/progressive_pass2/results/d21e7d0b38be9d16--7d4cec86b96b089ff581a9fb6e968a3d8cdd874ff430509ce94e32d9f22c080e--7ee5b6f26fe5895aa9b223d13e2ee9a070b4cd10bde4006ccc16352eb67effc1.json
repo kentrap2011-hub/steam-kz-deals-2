@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "b562fa2269a44b617144113919467b8e6eeee67b",
+  "run_start_authority_commit": "22a1edc5272556ab98560896e2ed39cdd927a3ef",
+  "run_started_at_utc": "2026-10-09T06:45:35+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "7d4cec86b96b089ff581a9fb6e968a3d8cdd874ff430509ce94e32d9f22c080e",
+  "family_id": "game:107200",
+  "taste_subject_key": "App_107200",
+  "appid": "107200",
+  "taste_fingerprint": "453938deee6a604c505d48d605250e98deed39a7888733111f1abe2bbc8ecfa1",
+  "candidate_context_sha256": "241b7bcac4ad866bc7f79cbf09b25766a5231be6ae807d0d349c9ed95b5bea5a",
+  "dossier_content_sha256": "2c1d5f7f0d15d520de8a157b6c51c185134bb3ca77a4b440d184a677fd52b348",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "7ee5b6f26fe5895aa9b223d13e2ee9a070b4cd10bde4006ccc16352eb67effc1",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "confidence": "medium",
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Повторяющийся сбор ресурсов, зачистка систем и одинаковые миссии способны исчерпать новизну раньше, чем завершится развитие флота.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Приказы кораблям поддержки и ручной выбор целей могут работать неудобно и мешать задуманным тактическим манёврам.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Неудачно подобранная специализация флота может серьёзно затруднить встречи со щитами и более сильными врагами.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      }
+    ]
+  },
+  "fit_level": "moderate",
+  "positive_evidence": [
+    "Активный прицельный бой космического корабля сочетается с выбором брони, оружия, кораблей поддержки и построением флота (наблюдение 0).",
+    "По мере прохождения открываются корпуса, технологии и варианты оснащения, ощутимо меняющие возможности отряда (наблюдение 1).",
+    "Освоение галактики, отношения фракций и поздняя новая угроза задают путешествию развитие, а яркие силуэты кораблей сохраняют визуальную узнаваемость (наблюдения 5, 8)."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 74,
+    "development_variety": 76,
+    "structure_pacing_direction": 45,
+    "identity_hooks": 69,
+    "breadth_of_match": 57
+  },
+  "base_support_compatible": null,
+  "score_findings": [
+    {
+      "finding_id": "ship_aim_and_loadouts",
+      "text_ru": "Прицельная стрельба и активное маневрирование сочетаются с выбором защиты и вооружения, превращая каждый корабль в управляемую боевую сборку.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Профиль высоко ценит управление, глубокое освоение приёмов и ощущение роста навыка."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 74
+        }
+      ]
+    },
+    {
+      "finding_id": "ship_upgrade_progress",
+      "text_ru": "Получение новых корпусов, вооружения и технологий заметно усиливает небольшой флот и расширяет варианты решения следующей схватки.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/pattern",
+          "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+          "match_text_ru": "Эффект прокачки должен быть понятен в самом игровом процессе."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 76
+        }
+      ]
+    },
+    {
+      "finding_id": "grind_between_fights",
+      "text_ru": "До новых областей приходится зачищать системы и собирать материалы; похожие миссии и поездки могут растягивать расстояние между интересными боями.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/active_core_loop_vs_low_stimulation_filler/summary",
+          "profile_value_sha256": "b4a73bd07d3acb93744f9800c2ccc182334128a573b98d020cc696b40af3ff44",
+          "match_text_ru": "Повторная рутина между активными эпизодами часто снижает вовлечённость."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 45
+        }
+      ]
+    },
+    {
+      "finding_id": "galactic_fleet_fantasy",
+      "text_ru": "Расширение флота в исследуемой галактике, соперничающие фракции и поздняя угроза формируют цельный образ космического капитана с собственной эволюцией.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Запоминающийся собственный стиль и образ мира служат заметным плюсом."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 69
+        }
+      ]
+    },
+    {
+      "finding_id": "companion_control_friction",
+      "text_ru": "Побочные корабли могут не исполнять приказы так, как ожидалось, а слабая сборка способна больно наказываться в сложных встречах: тактические возможности не всегда достаточно удобны.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/tactical_problem_solving/summary",
+          "profile_value_sha256": "d66110f8516a5c017644fb3fa523677af7a64ec44c74bde423b9b8e400b87dc5",
+          "match_text_ru": "Нужна возможность понять задачу и осмысленно применить найденную тактику."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 57
+        }
+      ]
+    }
+  ]
+}
