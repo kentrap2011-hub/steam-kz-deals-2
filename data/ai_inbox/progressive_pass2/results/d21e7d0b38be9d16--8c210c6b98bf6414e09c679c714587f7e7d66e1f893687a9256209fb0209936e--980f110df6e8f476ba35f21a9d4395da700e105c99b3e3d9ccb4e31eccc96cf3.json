@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "372acefe2bff8df5640e89055bdcd98d54f263c3",
+  "run_start_authority_commit": "182f70b5329e6c987634e82f7b3079adc7f2b409",
+  "run_started_at_utc": "2026-10-09T15:49:56+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+  "work_id": "8c210c6b98bf6414e09c679c714587f7e7d66e1f893687a9256209fb0209936e",
+  "family_id": "game:1336490",
+  "taste_subject_key": "App_1336490",
+  "appid": "1336490",
+  "taste_fingerprint": "2994f7b15f6ee446a06ab6695ea6bbb42752732081f70d333e29d0b80d8d38ba",
+  "candidate_context_sha256": "91c5e069aaefad6bf30bc3cdead6e19e85f89385c90fb817735ffb9ad676d913",
+  "dossier_content_sha256": "f609c2a8e2440b0258bdf3fabba58bfc1477e0c3712e53087547a50a25abf725",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "980f110df6e8f476ba35f21a9d4395da700e105c99b3e3d9ccb4e31eccc96cf3",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Каждое поселение — отдельный короткий градостроительный заход; смена карт, ресурсов и доступных зданий заставляет адаптировать решения вместо повторения одного плана.",
+    "Сочетание нужд нескольких рас, производственных цепочек, угроз леса и надвигающейся бури даёт предмет для постепенного освоения сложных систем.",
+    "Дождливо-штормовая атмосфера и цели каждой экспедиции создают узнаваемый облик и понятное локальное направление."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 72,
+    "development_variety": 87,
+    "structure_pacing_direction": 72,
+    "identity_hooks": 61,
+    "breadth_of_match": 70
+  },
+  "score_findings": [
+    {
+      "finding_id": "ats-adaptive-economy",
+      "text_ru": "Смена ресурсов, чертежей и целей на процедурных картах заставляет перестраивать экономику каждого поселения, поэтому решения заметно меняются от захода к заходу.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/развитие_и_разнообразие/note",
+          "profile_value_sha256": "0580f077432002933245e702ef32d0a5e3ac046bc717580f70c7ebcc99027b7d",
+          "match_text_ru": "Очень важны новые ситуации и эволюция игрового опыта."
+        },
+        {
+          "json_pointer": "/factor_importance/вариативность/note",
+          "profile_value_sha256": "424572796cee1fb82e4378c25c240b56ef9c8dedd96cc1d5a44fc5462c32e97d",
+          "match_text_ru": "Разные конкретные ситуации интересны, если не требуют бесцельного изучения всех вариантов."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 87
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 70
+        }
+      ]
+    },
+    {
+      "finding_id": "ats-learning-strategy",
+      "text_ru": "Управление потребностями разных видов, производственными цепочками и угрозами леса требует осваивать взаимосвязанные правила, а не только строить здания по шаблону.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/мастерство_и_глубина/note",
+          "profile_value_sha256": "a43efcc6ca12d86ef6b51409a596c0d2446a50253e4d8b8612e4bc6111bed82e",
+          "match_text_ru": "Нравится замечать рост собственного мастерства через освоение сложных систем."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 72
+        }
+      ]
+    },
+    {
+      "finding_id": "ats-storm-runs",
+      "text_ru": "Короткие самостоятельные поселения и узнаваемый мир непрерывного дождя сочетают ясный формат экспедиции с атмосферой угрозы от шторма.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/атмосфера_и_арт_дирекшен/note",
+          "profile_value_sha256": "11c4e50bb902ad30b7931451ca92d1379a22e8794871e8033700c50f052ea878",
+          "match_text_ru": "Выразительная атмосфера и визуальная идентичность усиливают вовлечённость."
+        },
+        {
+          "json_pointer": "/factor_importance/tемп/note",
+          "profile_value_sha256": "a79a54657031ce862cf6c6d317d9adbc854a447415cf166fe07efc3487e41761",
+          "match_text_ru": "Игре важно регулярно давать понятную причину продолжать."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 61
+        },
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 72
+        }
+      ]
+    },
+    {
+      "finding_id": "ats-repeat-restart",
+      "text_ru": "Повторное развитие очередного поселения с нуля способно утомлять на длинной дистанции даже при меняющихся задачах; разнообразие карт не полностью устраняет эту оговорку.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/repetition_and_revisiting/summary",
+          "profile_value_sha256": "901465f98796f76ad70fb5b3f75bee97d6bf0f46783634d16b81abf21561c52d",
+          "match_text_ru": "Повтор без существенно нового опыта со временем становится скучным."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 87
+        },
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 72
+        }
+      ]
+    },
+    {
+      "finding_id": "ats-onboarding-variance",
+      "text_ru": "Множество систем может перегружать на старте, а случайный набор чертежей иногда осложняет выстраивание нужной производственной цепочки.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/recommendation_rules/difficulty",
+          "profile_value_sha256": "6e271fcd66087fc8a8095b72ba778da52a364a3f3ee967ebc348dcb5f3ca6af3",
+          "match_text_ru": "Сложность интересна при ясном обучении и осмысленной награде за освоение."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 72
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Постоянное начало нового поселения может со временем ощущаться монотонным, хотя изменяющиеся карты и цели смягчают этот риск.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Стартовое количество взаимосвязанных механик бывает перегружающим; освоение требует терпения.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Случайный набор зданий иногда мешает выстроить требуемые производственные цепочки.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
