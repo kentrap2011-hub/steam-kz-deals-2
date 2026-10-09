@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "b562fa2269a44b617144113919467b8e6eeee67b",
+  "run_start_authority_commit": "22a1edc5272556ab98560896e2ed39cdd927a3ef",
+  "run_started_at_utc": "2026-10-09T06:45:35+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "da9cedf46c0e9aa5e7c4db83e8972e3edd8525b50e7969f772b601383034ef11",
+  "family_id": "game:1088790",
+  "taste_subject_key": "App_1088790",
+  "appid": "1088790",
+  "taste_fingerprint": "03b508675f5c7ca91e2ed6b569542c90865d956c7be9b27ebaf8584be13e39ab",
+  "candidate_context_sha256": "34b8560fb69749061ba408f543cb49d4cac9fed030ddc4c459b52382c3065c1b",
+  "dossier_content_sha256": "74677007c62bbbd65a8aa87bbfde3ae99f9c92914a0472aac9ce63688be21d22",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "19fd08c678c79672688495e47fce3e38c5a5ee3ba57ebabd2ebaa02cc10ff2e5",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "confidence": "medium",
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "felt_technical_burden",
+        "text_ru": "Трудно читаемые эффекты решений и задержки войск создают риск непонятной технической нагрузки вместо прозрачного развития собственного стратегического навыка.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "На высокой сложности часть неудач может восприниматься как случайность или неочевидная работа алгоритмов, а не полезная обратная связь.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Многократные похожие карты могут свести новые кампании к знакомой последовательности действий.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Исторические жалобы на небольшое публичное сообщество в августе 2025 года не устанавливают нынешнюю доступность мультиплеера.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  },
+  "fit_level": "moderate",
+  "positive_evidence": [
+    "Стабилизация региона требует одновременно сдерживать инфляцию, коррупцию, мятежников и учитывать доверие граждан, создавая взаимосвязанные решения (наблюдение 0).",
+    "Губернаторы, советники и кампании с несколькими регионами меняют доступные способы подготовки (наблюдение 3).",
+    "Сложные настройки дают пространство для продуманной стратегии, хотя часть последствий вызывает споры о понятности и случайности (наблюдение 2)."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 76,
+    "development_variety": 68,
+    "structure_pacing_direction": 49,
+    "identity_hooks": 53,
+    "breadth_of_match": 54
+  },
+  "base_support_compatible": null,
+  "score_findings": [
+    {
+      "finding_id": "interdependent_policy_tactics",
+      "text_ru": "Гражданские меры, бюджет, коррупция и военные действия связаны между собой: неверная последовательность решений меняет развитие всей операции.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/tactical_problem_solving/summary",
+          "profile_value_sha256": "d66110f8516a5c017644fb3fa523677af7a64ec44c74bde423b9b8e400b87dc5",
+          "match_text_ru": "Интересны задачи, где выбор тактики под условия сразу влияет на результат."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 76
+        }
+      ]
+    },
+    {
+      "finding_id": "governors_advisers_campaigns",
+      "text_ru": "Разные губернаторы, советники и многошаговые кампании добавляют новые ограничения и возможности поверх базовой стратегии региональной стабилизации.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Профиль любит заметное обновление игровых возможностей и условий."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 68
+        }
+      ]
+    },
+    {
+      "finding_id": "map_and_policy_routine",
+      "text_ru": "Несколько карт и модификаторов дают новые задачи, но знакомые тактики и повторные схемы могут превращать прохождение в привычную рутину.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8/pattern",
+          "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+          "match_text_ru": "Повторение допустимо, если меняются условия и появляется новая игровая ценность."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 49
+        }
+      ]
+    },
+    {
+      "finding_id": "focused_stabilization_theme",
+      "text_ru": "Сочетание социальной политики и защиты районов задаёт узнаваемую задачу восстановления порядка; интерес создаёт именно давление компромиссов, а не персонажи или кинематографичность.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Запоминающийся собственный игровой крючок важен, даже если это не сюжетная игра."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 53
+        }
+      ]
+    },
+    {
+      "finding_id": "opaque_policy_effects",
+      "text_ru": "Неясные последствия решений, задержки движения войск и спорные пути мятежников могут мешать учиться на ошибках, превращая стратегию в борьбу с интерфейсом.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/preplay_fit_role_and_felt_burden/summary",
+          "profile_value_sha256": "e9d1cea95acd28d33d7f27b1f177266e9168a600cdcaeedf7047966da07c50a0",
+          "match_text_ru": "Непрозрачная техническая нагрузка снижает желание начинать даже глубокую игру."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "lowers",
+          "normalized_value": 54
+        }
+      ]
+    }
+  ]
+}
