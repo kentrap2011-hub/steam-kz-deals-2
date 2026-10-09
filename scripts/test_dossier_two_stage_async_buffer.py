@@ -299,5 +299,20 @@ class AsyncBufferTests(unittest.TestCase):
                         ordered_work_paths=[receipt_paths(x.docs[0]["assignment"])["assembly_plan"]])
 
 
+    def test_12_out_of_order_completion_preserves_frozen_authority(self):
+        x = self.x
+        # Later Research C commits and is accepted before A/B even submit.
+        self.assertEqual(x.research_receive(2, x.research_submit(2), persist=True)["status"],
+                         "accepted_structural_evidence")
+        x.accept_research(0)
+        x.accept_research(1)
+        x.make_assembly()
+        # Assembly C commits before A/B; no receipt for A or B is needed.
+        self.assertIn("pending_github_final_strict_ingest",
+                      x.assembly_inspect(2, x.assembly_submit(2))["status"])
+        self.assertIn("pending_github_final_strict_ingest",
+                      x.assembly_inspect(0, x.assembly_submit(0))["status"])
+
+
 if __name__ == "__main__":
     unittest.main()
