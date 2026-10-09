@@ -1,5 +1,14 @@
 # CURRENT TASK
 
+## COMPLETE — Inactive fully async Dossier Assembly semantic worker 01 (ЧАТ 2)
+Статус: `implementation_complete_ready_for_director_review_inactive`.
+- task: `WORKER_TASK_DOSSIER_ASYNC_ASSEMBLY_SEMANTIC_WORKER_IMPLEMENT_01.md`; PR #182 open, not merged; branch `implement/dossier-async-assembly-semantic-worker-01`.
+- exact submitted immutable Research Git transport consumed without GitHub Research-accepted receipt; local per-item failures do not block frozen B/C; schema-valid create-only Assembly candidate remains unaccepted until strict GitHub V2 three-game validation.
+- PR-only isolated Git CI run `37955730859` passed P1/P2/V2/new Assembly, one-stage parity and execution ownership (71 unittest cases plus additional checks).
+- report: `reviews/worker_reports/dossier-async-assembly-semantic-worker-implement-01.md`.
+- no real semantic execution, activation, one-stage Dossier/Deep/Fast changes, Scheduled Tasks or canonical cutover; Research-owned files untouched.
+- next: Director reviews PR #182 and coordinates separately authorized integration/quality/activation with ЧАТ 1; worker stops.
+
 ## COMPLETE — Historical unimplemented backlog audit 01
 Статус: `diagnostic_complete_accepted`.
 - task: `WORKER_TASK_HISTORICAL_UNIMPLEMENTED_BACKLOG_AUDIT_01.md`; PR #167 merged as `3d90b18ea2581c006dffbce6df09d18c0869de64`;
