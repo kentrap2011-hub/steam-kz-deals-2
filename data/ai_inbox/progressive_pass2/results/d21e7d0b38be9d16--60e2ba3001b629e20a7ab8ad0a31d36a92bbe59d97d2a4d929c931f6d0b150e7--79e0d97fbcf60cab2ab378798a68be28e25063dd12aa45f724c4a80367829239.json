@@ -1,0 +1,300 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "4e800d629ccf2e2a529a2dd8060e6814181b5712",
+  "run_start_authority_commit": "173dc9aa1bc071bb99cdd6f79b43d2005e5862b6",
+  "run_started_at_utc": "2026-10-09T07:51:39+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "60e2ba3001b629e20a7ab8ad0a31d36a92bbe59d97d2a4d929c931f6d0b150e7",
+  "family_id": "game:1093290",
+  "taste_subject_key": "App_1093290",
+  "appid": "1093290",
+  "taste_fingerprint": "1c2786d88436d963dc36cb9da352b3b9f699a0a3092486484e5f60f25114ddc8",
+  "candidate_context_sha256": "0a5c07040ac4617755ba6e0993b0c9107eecbd0c9cb385743941f41fdb1c548a",
+  "dossier_content_sha256": "f2926016c8b76cff0ab5836343c612bd9e9f1a6f29b6d9b2504eb271e8399ef3",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "79e0d97fbcf60cab2ab378798a68be28e25063dd12aa45f724c4a80367829239",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Разные существа-спритлинги используются для боёв, переноски вещей и решения загадок: нужно осмысленно распределять задачи (наблюдение 0).",
+    "Постепенное открытие новых видов существ и инструментов меняет доступные маршруты и способы работы с миром (наблюдение 1).",
+    "Нарисованный вручную сказочный лес, музыка и милые образы существ образуют сильную художественную идентичность (наблюдение 2).",
+    "История двух беглецов связывает исследование леса, персонажей и решение экологических головоломок (наблюдение 8)."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 76,
+    "development_variety": 85,
+    "structure_pacing_direction": 58,
+    "identity_hooks": 84,
+    "breadth_of_match": 73
+  },
+  "score_findings": [
+    {
+      "finding_id": "wild-actions",
+      "text_ru": "Разные спритлинги нужны для сражений, переноски грузов и открытия проходов: удовольствие здесь рождается из выбора, кому какое действие поручить.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/геймплей_и_ощущение_управления",
+          "profile_value_sha256": "d3771421605762291318495b2f40d2daf128d3a24343353b6f66ff111a87f163",
+          "match_text_ru": "Осмысленные игровые действия и приятный базовый цикл важнее самого жанрового ярлыка."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 76
+        }
+      ]
+    },
+    {
+      "finding_id": "wild-growth",
+      "text_ru": "По мере открытия новых видов существ и инструментов ранее закрытые части леса становятся доступными, меняя набор задач и способы исследования.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "b584a23bde72bbcacc284a93f33e49bda9cde0b89c7d750aa3d954ed1fef2055",
+          "match_text_ru": "Развитие игрового опыта и появление новых механик — один из самых сильных вкусовых сигналов."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 85
+        }
+      ]
+    },
+    {
+      "finding_id": "wild-look",
+      "text_ru": "Рисованная книжная графика, звуки леса и яркий дизайн маленьких существ создают выразительную сказочную атмосферу.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7",
+          "profile_value_sha256": "f94957e7f369714de6a70c9cdaa1b1bb625ccdf9a2bd19f5b4bde419ccfecf7a",
+          "match_text_ru": "Яркая художественная идентичность и атмосфера часто делают игру запоминающейся."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 84
+        }
+      ]
+    },
+    {
+      "finding_id": "wild-backtracking",
+      "text_ru": "Некоторые поздние вылазки требуют вновь проходить знакомые места ради ресурсов и предметов; неясные требования загадок и карта могут затягивать возвращения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 9
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8",
+          "profile_value_sha256": "0e6624dd4b0ea00e882eded98b52cbb23093fec7ba3c0ee0137b689a88a4e2f0",
+          "match_text_ru": "Повторные маршруты приемлемы только когда меняют игровой опыт, а бесцельная рутина быстро надоедает."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 58
+        }
+      ]
+    },
+    {
+      "finding_id": "wild-explore",
+      "text_ru": "Два юных героя исследуют связанный лесной мир, где разговоры, загадочные зоны и сбор необходимых вещей чередуются с небольшими опасностями.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5",
+          "profile_value_sha256": "08091731e0895f3d8e7f6b98b48da27ab8a9dc337e12dea3d74c1463b34252b1",
+          "match_text_ru": "Исследование и загадки интересны, когда за ними стоит понятная цель и желание узнать новое о мире."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 73
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      },
+      {
+        "kind": "observation",
+        "index": 10
+      },
+      {
+        "kind": "observation",
+        "index": 11
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Повторный сбор ресурсов, долгие возвраты в знакомые зоны и поздние поручения могут не приносить нового опыта, а превращаться в утомительную рутину.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 9
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Прицеливание спритлингами не всегда точное, а карта и условия отдельных головоломок могут недостаточно ясно подсказывать нужный вид существа или следующий шаг.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Сражения и головоломки обычно доступны, но некоторые броски неудобны, финальные схватки могут разочаровать, а ночь резко повышает напряжение.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 10
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Часть игроков воспринимает диалоги как детские, а бои — менее содержательные, чем исследование леса.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 11
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Один старый отчёт об ошибке достижения касается консольной версии и не доказывает наличие такой проблемы на PC сегодня.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
