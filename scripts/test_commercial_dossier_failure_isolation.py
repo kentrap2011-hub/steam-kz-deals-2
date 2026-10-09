@@ -134,6 +134,11 @@ def test_failed_dossier_safe_commercial_fallback_only():
         )
 
     assert eligible(original) is True
+    # A previous commercial-only publish can have current paid freshness while
+    # the semantic visual is still old and missing new families.
+    paid_only_old_visual = copy.deepcopy(original)
+    paid_only_old_visual["commercial_source_mailing_updated_at_utc"] = "CURRENT"
+    assert eligible(paid_only_old_visual) is True
     assert eligible(original, dossier_blob="NEW-DOSSIER") is False
     assert eligible(original, pass2_blob="NEW-DEEP") is False
     assert eligible(original, store_doc=fixtures.store(source="STALE")) is False
