@@ -230,5 +230,19 @@
     "P6_inactive_shadow_quality_proof",
     "P7_explicit_Director_authorized_cutover_and_operator_scheduler_review"
   ],
-  "recommended_next_task": "P2 GitHub deterministic helpers/validators; separate PR"
+  "recommended_next_task": "P2 GitHub deterministic helpers/validators; separate PR",
+  "asynchronous_buffered_execution": {
+    "lifecycle": "github_prepared_immutable_multi_item_buffers_with_asynchronous_independent_ingest",
+    "buffer_contract": "config/dossier_two_stage_async_buffer_contract.json",
+    "research_next_item_gate": "membership_in_frozen_research_buffer_only_not_previous_item_receipt",
+    "assembly_next_item_gate": "membership_in_frozen_accepted_research_assembly_buffer_only_not_previous_final_receipt",
+    "research_ingest": "independent_per_item_receipt_and_state_writes_without_worker_ack_handshake",
+    "assembly_ingest": "independent_final_strict_v2_group_validation_without_worker_ack_handshake",
+    "completed_transport": "exists_means_submitted_do_not_recreate_never_acceptance",
+    "invalid_item_effect": "local_only_other_buffer_items_keep_preexisting_authorization",
+    "retry": "only_new_explicit_github_prepared_authorization_never_timeout_or_missing_ack",
+    "group_boundary": "unchanged_strict_three_game_final_acceptance_only_not_research_assembly_barrier",
+    "backpressure": "bounded_open_slots_selected_by_github_before_marker_not_wait_for_sibling_receipt",
+    "activation": false
+  }
 }
