@@ -989,3 +989,20 @@ A canonical Dossier/profile/work/repository write that lands **before** the mark
 **Ownership:** status projection, defect classification/reconciliation, fallback/omission, persistence и publication принадлежат GitHub/GitHub Actions. Новый scheduler, semantic queue, retry daemon или ChatGPT-owned backlog не создаются; Scheduled Tasks не меняются.
 
 **Основные места:** `config/site_publication_resilience_contract.json`, `config/execution_ownership_contract.json`, `scripts/site_publication_resilience.py`, `scripts/isolate_site_publication_defects.py`, `scripts/build_site_status.py`, `data/production/site/publication_quarantine.json`, `.github/workflows/build-site-current-status.yml`, `.github/workflows/build-daily-visual-payload.yml`, `.github/workflows/deploy-visual.yml`, `web/app.js`, `web/progressive-personalization-ui.js`.
+
+---
+
+## DOSSIER-ASYNC-001 — Research → Assembly semantic execution never waits for GitHub
+
+**Дата:** 2026-10-09  
+**Статус:** implemented inactive architecture amendment, pending PR review; current one-stage production Dossier unchanged.
+
+**Решение пользователя:** once GitHub has issued exact finite immutable per-game scope/bindings, neither Research nor Assembly may wait for GitHub acknowledgement, accepted-Research receipt or backpressure slot release. The former fixed 8 unresolved-slot rule was a semantic liveness bottleneck, not an agreed production quota. Resource limits are allowed only when GitHub issues **new** preauthorizations for a future invocation; they cannot revoke/stop traversal of already frozen work.
+
+**Research → Assembly:** Assembly derives the pre-authorized item from its exact Git marker-parent and consumes the exact create-only submitted Research Git commit/path/blob/raw SHA-256/canonical SHA-256 with the original Research prepared-work blob SHA and frozen Assembly plan SHA. It does not impersonate a GitHub acceptance receipt. The Assembly candidate repeats all of those bytes/bindings in an immutable envelope. Provisional Assembly may run even if Research for A will later be rejected; only A's chain will be quarantined.
+
+**Final authority:** GitHub alone eventually checks the Research marker/assignment, exact committed package and its strict Research verdict, immutable bytes consumed by Assembly, typed result, and current strict V2 final candidate. Valid individual candidates remain pending existing atomic three-game group validation before any canonical Dossier or Deep-ready state. A failed upstream Research invalidates the dependent Assembly result, never a sibling. No worker invents recovery/retry/scope. No two-stage semantic worker or production scheduler was implemented or activated.
+
+**Why not accepted-only Assembly or 8-slot backpressure:** accepted-only handoff serialized semantic work on GitHub ingest latency; an unresolved-slot cap caused previously prepared work to stall simply because receipts lagged. Neither was part of the user's intended asynchronous execution model.
+
+**Durable files:** `config/dossier_two_stage_async_buffer_contract.json`, `config/dossier_two_stage_interfaces_contract.json`, `config/dossier_two_stage_staging_contract.json`, `scripts/dossier_two_stage_async_buffer.py`, `config/dossier_async_assembly_result_v1.schema.json`, `scripts/test_dossier_two_stage_async_buffer.py`.
