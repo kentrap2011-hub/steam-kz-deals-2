@@ -101,6 +101,7 @@ def make_plan(*, legacy, previous, stage1_state, migration, ownership,
         "profile_pin": generation["profile_pin"],
         "semantic_bindings": generation["bindings"],
         "semantic_generation_id": generation["semantic_generation_id"],
+        "dossier_compatibility_binding": dossier_binding,
     }
     eligible, items, completed, blocked, diagnostics = [], [], [], [], []
     for sequence, (binding, source_queue, _, priority_error) in enumerate(candidates, 1):
