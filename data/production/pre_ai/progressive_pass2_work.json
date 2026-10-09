@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 23,
     "deep_completed_not_fit_count": 11,
     "deep_incomplete_or_recovery_count": 11,
-    "deep_waiting_for_dossier_count": 197,
-    "deep_ready_or_pending_count": 3,
+    "deep_waiting_for_dossier_count": 194,
+    "deep_ready_or_pending_count": 6,
     "deep_normal_first_pass_remaining_count": 200,
     "deep_remaining_until_all_authoritative_count": 211,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 0,
-    "dossier_waiting_count": 197,
+    "dossier_waiting_count": 194,
     "pass2_attempted_count": 45,
-    "pass2_eligible_count": 3,
-    "normal_pass2_eligible_count": 3,
+    "pass2_eligible_count": 6,
+    "normal_pass2_eligible_count": 6,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -171,6 +171,191 @@
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1337890",
+      "taste_subject_key": "App_1337890",
+      "appid": "1337890",
+      "taste_fingerprint": "5f1bf28fa61c231acb4cfd48608348cee90585d8b2fbaa09537bf63780e3d76d",
+      "candidate_context_sha256": "a7a29863713870566494069f6a1474a8f5f369812b086ab2cd1a9d91d58c1231",
+      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+      "work_id": "8e5b87428e6899b938a82f187c621b9da56c85f9f86ac83b418ec64c059e674c",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Choice of Life: Middle Ages",
+        "short_description": "A card game in a Medieval setting where you make decisions on which not only your life will depend, but also the future of the kingdom!",
+        "bundle_members": [],
+        "fit_tags": [
+          "Choices Matter",
+          "Singleplayer"
+        ],
+        "core_fit_count": 1,
+        "release_date": "6 Nov, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1337890"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1337890.json",
+      "dossier_content_sha256": "4131334bfe59514fa5d6d781e9ae8a7ed79dde8c2f2a56fb90052f47e211b05f",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-29T14:18:30.857Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "7ef83921a7f7e32ec6c02eb94f9e593be3a431c4277e21a07dbdf279b48d4f74",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--8e5b87428e6899b938a82f187c621b9da56c85f9f86ac83b418ec64c059e674c--7ef83921a7f7e32ec6c02eb94f9e593be3a431c4277e21a07dbdf279b48d4f74.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--8e5b87428e6899b938a82f187c621b9da56c85f9f86ac83b418ec64c059e674c--7ef83921a7f7e32ec6c02eb94f9e593be3a431c4277e21a07dbdf279b48d4f74.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1337520",
+      "taste_subject_key": "App_1337520",
+      "appid": "1337520",
+      "taste_fingerprint": "16afc1e5dcec007467e738dfbed97655952b71c77a59915ee681fa6f490a131f",
+      "candidate_context_sha256": "238ee82ac7a861795abe76ff219c8e89075062ba72fc411a7938182c6e45d2ce",
+      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+      "work_id": "dfca4db4ae8f3185e64e7c434a1a4ae1205a699cd101606c486a8106f04cb19d",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Risk of Rain Returns",
+        "short_description": "Carefully designed, beautifully remastered, and loaded with new ways to play—Risk of Rain is back and better than ever! Dive into the iconic roguelike full of unique loot combinations, enhanced with new Survivors, overhauled multiplayer, fan favorite content from Risk of Rain 2, and more!",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "8 Nov, 2023",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1337520"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1337520.json",
+      "dossier_content_sha256": "ad5313bcf6cfdf0dd2068f997be5dd404134477f7de8f119d560d0204c40b5b9",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-29T14:18:30.857Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "45ff88ee7ad42b6d8b9af44dff228e409238233d759f2ab0745df58ebea23eaa",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--dfca4db4ae8f3185e64e7c434a1a4ae1205a699cd101606c486a8106f04cb19d--45ff88ee7ad42b6d8b9af44dff228e409238233d759f2ab0745df58ebea23eaa.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--dfca4db4ae8f3185e64e7c434a1a4ae1205a699cd101606c486a8106f04cb19d--45ff88ee7ad42b6d8b9af44dff228e409238233d759f2ab0745df58ebea23eaa.json",
+      "sequence": 3
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1340480",
+      "taste_subject_key": "App_1340480",
+      "appid": "1340480",
+      "taste_fingerprint": "0db8f5411ec11fbf9cfb845ecd26f41d8d431c80440bb672dba6834d3fb5d15a",
+      "candidate_context_sha256": "a656a99ee4dfb4e9ac62db9ec9105390d2b6e3290e1ed59b0a682e4e88f6e525",
+      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+      "work_id": "351652530dd87a4131051da1c20d450249a37f8c5f1a3842110d23ad37ce58c9",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "The Cosmic Wheel Sisterhood",
+        "short_description": "Immerse yourself in an enchanting narrative experience as Fortuna, a fortune-teller Witch condemned to exile on her asteroid home. Craft your own Tarot deck, regain your freedom, and shape the fate of the cosmic Witch society.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Choices Matter"
+        ],
+        "core_fit_count": 1,
+        "release_date": "16 Aug, 2023",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1340480"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1340480.json",
+      "dossier_content_sha256": "3a1089a1bf47930a3db126931fc5e9a86c79e57fe1e7698d17926154830af96b",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-29T14:18:30.857Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "309408e489e2e600ce4b072a348512519b3a1cca9dffce8fd13a994365375e27",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--351652530dd87a4131051da1c20d450249a37f8c5f1a3842110d23ad37ce58c9--309408e489e2e600ce4b072a348512519b3a1cca9dffce8fd13a994365375e27.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--351652530dd87a4131051da1c20d450249a37f8c5f1a3842110d23ad37ce58c9--309408e489e2e600ce4b072a348512519b3a1cca9dffce8fd13a994365375e27.json",
+      "sequence": 4
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "family_id": "game:1280930",
       "taste_subject_key": "App_1280930",
       "appid": "1280930",
@@ -228,7 +413,7 @@
       "authorization_id": "ede5f439c0ef74a8a21aa1d604f1ea523772e159dbaeebedf3dd0152dadb00b5",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--944967265188556e34adfb06e3274812583b99cb98baec28b89b9fdd0f6eb2dc--ede5f439c0ef74a8a21aa1d604f1ea523772e159dbaeebedf3dd0152dadb00b5.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--944967265188556e34adfb06e3274812583b99cb98baec28b89b9fdd0f6eb2dc--ede5f439c0ef74a8a21aa1d604f1ea523772e159dbaeebedf3dd0152dadb00b5.json",
-      "sequence": 2
+      "sequence": 5
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -293,7 +478,7 @@
       "authorization_id": "0ce066a35a037d9e0967635e6d46ed7b26d49e7e2d89a384d778453c5f30cd1c",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--3aa59c44f37949da0da61a74459a6b41676984a45bbd40a5bc94c1537470db68--0ce066a35a037d9e0967635e6d46ed7b26d49e7e2d89a384d778453c5f30cd1c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--3aa59c44f37949da0da61a74459a6b41676984a45bbd40a5bc94c1537470db68--0ce066a35a037d9e0967635e6d46ed7b26d49e7e2d89a384d778453c5f30cd1c.json",
-      "sequence": 3
+      "sequence": 6
     }
   ]
 }
