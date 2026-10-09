@@ -185,6 +185,15 @@ jobs:
           python scripts/test_progressive_personalization.py
           python scripts/test_progressive_pass1.py
 
+      # Commercial inputs are complete and safe to persist now. A Dossier-local
+      # failure below must not discard this current-cycle deterministic snapshot.
+      - name: Validate commercial persistence / Dossier isolation boundary
+        run: python scripts/test_commercial_dossier_failure_isolation.py
+
+      - name: Persist deterministic commercial snapshot independently of Dossier
+        shell: bash
+        run: bash scripts/persist_pre_ai_commercial.sh
+
       - name: Prepare fixed daily full Steam review dossier backlog
         run: python scripts/build_taste_steam_review_dossier_work.py
 
