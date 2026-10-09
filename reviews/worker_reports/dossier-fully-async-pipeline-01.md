@@ -4,7 +4,7 @@ Date: 2026-10-09
 Worker slot: **ЧАТ 1**  
 Task: `WORKER_TASK_DOSSIER_FULLY_ASYNC_PIPELINE_01.md`  
 Base: `main`; implementation: `implement/dossier-fully-async-pipeline-01`  
-Status: **implementation submitted for PR-only validation / Director acceptance, NOT active**
+Status: **implementation verified by PR-only CI, ready for Director review; NOT active**
 
 ## Architecture preflight
 
@@ -35,8 +35,21 @@ Status: **implementation submitted for PR-only validation / Director acceptance,
 7. Exact Research transport blob, hash, marker and plan binding; stale/duplicate, wrong-work, and overwritten commit fail closed.
 8. Workers cannot invent/reorder/recover items beyond GitHub-prepared scope.
 9. Current one-stage and legacy P1/P2 interfaces remain untouched and disabled.
+10. A real 12-item frozen Research manifest (four 3-game groups) passes despite the former 8-slot boundary.
 
 PR-only validation workflow: `.github/workflows/validate-dossier-two-stage-contract-interfaces.yml` (P1/P2/async, one-stage factual dates, Dossier/Deep year-kind compatibility).
+
+## GitHub CI evidence
+
+PR: #179 (open). Implementation/test head `45ef0dfb587826444c15e5be7e525f7fe287e6a6`.
+
+- Inactive Dossier two-stage interfaces (P1/P2/async/one-stage factual dates/year-kind): run `37933053587` — **success**.
+- Validate execution ownership: `37933053650` — **success**.
+- Validate backlog dispositions: `37933053596` — **success**.
+- Validate Progressive PASS 2 core: `37933053638` — **success**.
+- Validate site publication resilience: `37933053622` — **success**.
+
+These are offline/PR-only regressions. They do **not** prove a live production pipeline, because activation and semantic workers remain explicitly forbidden.
 
 ## Boundaries / residual work
 
