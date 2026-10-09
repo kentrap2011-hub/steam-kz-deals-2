@@ -1,0 +1,67 @@
+{
+  "schema": "DOSSIER-TWO-STAGE-STAGING-P2-V1",
+  "version": 1,
+  "implemented": true,
+  "active": false,
+  "executable_in_production": false,
+  "authoritative": false,
+  "parent_contract": "config/dossier_two_stage_interfaces_contract.json",
+  "github_owner": "github_actions_control_plane",
+  "execution_policy": {
+    "pure_planning_and_offline_isolated_fixture_writes_only": true,
+    "real_repository_writes_while_gate_inactive": false,
+    "worker_transport_scan_enabled": false,
+    "claim_scheduler_queue_retry_added": false,
+    "atomic_publication_requires_later_shared_writer_integration": true
+  },
+  "git_binding": {
+    "assignment_source": "github_prepared_assignment_in_exact_marker_parent",
+    "descriptor_source": "existing_worker_group_descriptor_in_exact_marker_parent",
+    "pending_source": "existing_worker_index_in_exact_marker_parent",
+    "marker_authority": "actual_single_git_parent",
+    "marker_commit_change_scope": "only_create_nonce_marker",
+    "research_transport": "single_parent_addition_only",
+    "research_marker_must_be_first_parent_ancestor": true,
+    "assembly_plan_source": "github_prepared_plan_in_stage_b_marker_parent",
+    "research_acceptance_receipt_must_be_in_stage_b_marker_parent": true,
+    "content_sha256": "canonical_json_sorted_keys_utf8_compact",
+    "git_blob_sha": "git_object_sha_for_original_file_bytes",
+    "refusal": "fail_closed_never_rebind"
+  },
+  "lifecycle": {
+    "research": [
+      "accepted_structural_evidence",
+      "rejected_invalid",
+      "research_incomplete",
+      "semantic_exhausted"
+    ],
+    "assembly": [
+      "waiting_for_accepted_research",
+      "assigned",
+      "not_authorized"
+    ],
+    "immutable_transitions": "research_receipt_plus_research_state_then_assembly_assignment_plus_assembly_state",
+    "staging_results_are_not_canonical": true,
+    "duplicate_stage_attempt": "fail_closed_no_new_receipt",
+    "invalid_origin": "fail_closed_without_claiming_authoritative_receipt"
+  },
+  "namespaces": {
+    "research_prepared": "data/control/dossier_research_assignments/{snapshot_id}/g{sequence:06d}/{appid}--{assignment_id}.json",
+    "research_marker": "data/control/dossier_research_run_starts/{nonce}.json",
+    "research_candidate": "data/ai_inbox/dossier_research/{snapshot_id}/g{sequence:06d}/{appid}--{assignment_id}.json",
+    "research_acceptance": "data/control/dossier_research_accepted/{snapshot_id}/g{sequence:06d}/{appid}--{assignment_id}.json",
+    "research_rejection": "data/control/dossier_research_rejections/{snapshot_id}/g{sequence:06d}/{appid}--{assignment_id}.json",
+    "research_state": "data/control/dossier_two_stage_state/{snapshot_id}/g{sequence:06d}/{appid}--{assignment_id}--research.json",
+    "assembly_plan": "data/control/dossier_assembly_plans/{snapshot_id}/g{sequence:06d}/{appid}--{assignment_id}.json",
+    "assembly_marker": "data/control/dossier_assembly_run_starts/{nonce}.json",
+    "assembly_assignment": "data/control/dossier_assembly_assignments/{snapshot_id}/g{sequence:06d}/{appid}--{assembly_assignment_id}.json",
+    "assembly_state": "data/control/dossier_two_stage_state/{snapshot_id}/g{sequence:06d}/{appid}--{assignment_id}--assembly.json"
+  },
+  "schema_files": {
+    "research_rejection": "config/dossier_research_rejection_receipt_v1.schema.json",
+    "staging_state": "config/dossier_two_stage_staging_state_v1.schema.json"
+  },
+  "new_work_authorization": false,
+  "source_project_authority": "one_stage_dossier_remains_production_owner",
+  "no_scheduled_tasks": true
+}
