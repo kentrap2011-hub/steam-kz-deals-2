@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "b562fa2269a44b617144113919467b8e6eeee67b",
+  "run_start_authority_commit": "22a1edc5272556ab98560896e2ed39cdd927a3ef",
+  "run_started_at_utc": "2026-10-09T06:45:35+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "322b2dc1fac65cef8b3b09389cee1afd89c298e757fa3e4db2b006c1a153019e",
+  "family_id": "game:1088850",
+  "taste_subject_key": "App_1088850",
+  "appid": "1088850",
+  "taste_fingerprint": "97137f7af58d6f2aecfb4252b9fdb2731c820563184a5897b2e421ca1b0c91cf",
+  "candidate_context_sha256": "7bc367196511a676dc552b28fdc44cbc2df8795d28b3cf4f1338769adc3148c1",
+  "dossier_content_sha256": "bd98e97599d9c57d1d0f0a999790981c3673d57e0533f7dddc50c22d7892a5a3",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "0caf8d7a9e5894f4496c77997155e270b8a663888c7002ea3c0ba5c8ed1d097d",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "confidence": "medium",
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Стрельба и циклы умений могут стать повторяющимися, особенно на врагах с большим запасом здоровья.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Нельзя пропускать некоторые разговоры; простое перемещение и длинные постановочные сегменты замедляют действие.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Случайные технические сбои описаны отдельными игроками, но общую актуальную проблему это не доказывает.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Сложность боёв воспринимается неодинаково; настройки не гарантируют интересного баланса для каждого.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  },
+  "fit_level": "moderate",
+  "positive_evidence": [
+    "Питер Квилл стреляет и отдаёт приказы четырём Стражам, объединяя атаки напарников и взаимодействие со средой (наблюдение 0).",
+    "Беседы и взаимоотношения команды, юмор, саундтрек и сюжетные линии получают особенно высокую оценку игроков (наблюдение 1).",
+    "По мере сюжета открываются способности товарищей, расширяющие набор комбинаций в боях (наблюдение 3)."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 63,
+    "development_variety": 66,
+    "structure_pacing_direction": 62,
+    "identity_hooks": 88,
+    "breadth_of_match": 68
+  },
+  "base_support_compatible": null,
+  "score_findings": [
+    {
+      "finding_id": "team_orders_not_complex_action",
+      "text_ru": "Бой сочетает выстрелы Звёздного Лорда с командами четырём товарищам и совместными навыками, но не все считают систему достаточно глубокой.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Механическая глубина и возможность осваивать тактику важнее показной сложности."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 63
+        }
+      ]
+    },
+    {
+      "finding_id": "unlocked_guardian_skills",
+      "text_ru": "По мере развития истории Стражи получают дополнительные способности, благодаря чему появляются новые сочетания командных атак.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Профиль особенно ценит открытие новых механик и ситуаций по ходу игры."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 66
+        }
+      ]
+    },
+    {
+      "finding_id": "dense_banter_and_cutscenes",
+      "text_ru": "Постоянные перепалки команды и длинные сюжетные сцены создают насыщенный сериализованный ритм, который может как увлекать, так и задерживать следующий бой.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/active_core_loop_vs_low_stimulation_filler/summary",
+          "profile_value_sha256": "b4a73bd07d3acb93744f9800c2ccc182334128a573b98d020cc696b40af3ff44",
+          "match_text_ru": "Важен баланс между сюжетными сегментами и своевременным возвращением к содержательному действию."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 62
+        }
+      ]
+    },
+    {
+      "finding_id": "memorable_team_dynamic",
+      "text_ru": "Шутки, конфликты и постепенное сближение Стражей при поддержке саундтрека создают сильный командный сюжетный крючок.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "Яркие герои и эмоциональная история особенно важны в сюжетных приключениях."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 88
+        }
+      ]
+    },
+    {
+      "finding_id": "clunky_linear_parts",
+      "text_ru": "Между выразительными командными атаками встречаются слабая стрельба, повторные циклы умений и неловкое передвижение; ограниченные платформенные эпизоды не всем интересны.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1/pattern",
+          "profile_value_sha256": "03ee46ab2d98957c01bd73fe09574b97f6da1eef6a0ceb054817add03d66d5e1",
+          "match_text_ru": "Управление само по себе должно приносить удовольствие, а не мешать движению."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 68
+        }
+      ]
+    }
+  ]
+}
