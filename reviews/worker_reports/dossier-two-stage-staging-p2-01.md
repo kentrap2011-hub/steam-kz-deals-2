@@ -46,6 +46,17 @@ PR-only CI:
 `python -m unittest discover -s scripts -p 'test_dossier_two_stage_staging.py' -v` — 25 deterministic Git-history, acceptance/rejection/assembly/lifecycle/replay/stale/privacy tests.
 Existing P1 schema tests and Dossier/Deep compatibility checks are retained in the same CI job.
 
+**Verified CI:** implementation head `4e0d88d250dd1a1e1c8098ee13f064e5a27f5be2`.
+- `Validate inactive Dossier two-stage interfaces` run `37902329468`, job `113727538743` — **success**.
+- P2: **25/25** isolated temporary-Git staging tests passed, including rejected Research transport, real blob/first-parent/marker verification, immutable accepted receipt, stale/mismatch/collision refusals, accepted-only Assembly and disabled production authority.
+- P1: **15/15** prior strict schema/binding fixtures passed.
+- Current one-stage Dossier GitHub-derived date regression: **9/9** passed.
+- Existing Dossier/Deep release-year compatibility script: **success**.
+- `Validate backlog dispositions` run `37902329500` — **success**.
+- First P2 CI on PR #175 found one overly specific test diagnostic assertion for a nonexistent Assembly plan path (actual code correctly rejected it earlier at Git provenance); assertion corrected without weakening the rejection.
+
+These tests prove offline frozen Git provenance and deterministic staging plans, not production acceptance, publication or actual shared writer serialization.
+
 Note: these tests validate the **offline GitHub-owned transition planning**, not the final shared writer atomic Git commit/cancel coalescing, which must remain a separate integration step. An authorized future integration must serialize receipt + state / assignment + state commits with the existing canonical-writer and recheck all create-only paths under lock. Connecting this to current production workflows would conflict with the concurrent commercial-refresh worker and is deliberately **not attempted**.
 
 ## Next boundary
