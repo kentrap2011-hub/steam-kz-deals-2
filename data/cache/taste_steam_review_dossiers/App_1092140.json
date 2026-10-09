@@ -1,0 +1,458 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "appid": "1092140",
+  "title": "Exit From",
+  "generated_at_utc": "2026-10-09T06:38:00+00:00",
+  "expires_at_utc": "2026-10-29T06:38:00+00:00",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "Exit From",
+    "release_year": 2021,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "1092140"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 11 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The intended tension is first-person stealth and repeated searches for doors and keys through a shifting apartment building; players characterize the loop as a compact procedural escape room.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003",
+        "feedback-005"
+      ],
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "structure",
+      "statement": "Environment and item placements vary across runs and a world seed can reproduce a particular layout; the randomization encourages searching rooms rather than following a fixed campaign path.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003"
+      ],
+      "source_ids": [
+        "source-002"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "other",
+      "statement": "The dilapidated Soviet block, darkness and environmental audio are praised as a creepy setting that makes ordinary corridors and apartment rooms feel threatening.",
+      "sentiment": "positive",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "player_feedback_ids": [
+        "feedback-001"
+      ],
+      "source_ids": [
+        "source-002"
+      ],
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "progression",
+      "statement": "The design gives cosmetic and item-related rewards alongside achievements; player feedback notes inventory cosmetics and enemy appearance options.",
+      "sentiment": "positive",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "player_feedback_ids": [
+        "feedback-001"
+      ],
+      "source_ids": [
+        "source-002"
+      ],
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "friction",
+      "statement": "Some players object to poor camera field of view, doors obstructing narrow paths and confusing key-location searches, making otherwise simple navigation tedious.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003",
+        "feedback-005"
+      ],
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "friction",
+      "statement": "A December 2025 reviewer complains of unreliable menus, missing mouse cursor and unadvertised lean controls, illustrating discoverability problems with the PC interface on that setup.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "player_feedback_ids": [
+        "feedback-002"
+      ],
+      "source_ids": [
+        "source-002"
+      ],
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "other",
+      "statement": "Players differ substantially on the execution: one praises the procedural atmosphere and replay variants, while other concrete reviews report serious bugs that prevented them finishing.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-004",
+        "feedback-005"
+      ],
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "other",
+      "statement": "A June 2026 Russian discussion reports an apparently blocked objective despite carrying the requested axe; it is a specific player account, not proof all players encounter the issue.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "player_feedback_ids": [
+        "feedback-005"
+      ],
+      "source_ids": [
+        "source-003"
+      ],
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "uncertain"
+    },
+    {
+      "category": "other",
+      "statement": "A July 2026 Russian discussion says frame-rate and graphics options revert after being changed; this is one player's observed setup-specific technical complaint.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "player_feedback_ids": [
+        "feedback-006"
+      ],
+      "source_ids": [
+        "source-003"
+      ],
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "uncertain"
+    },
+    {
+      "category": "difficulty",
+      "statement": "A Russian review describes a frantic seven-minute search for keys, underlining time pressure and puzzle uncertainty as sources of challenge rather than conventional combat.",
+      "sentiment": "mixed",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "player_feedback_ids": [
+        "feedback-003"
+      ],
+      "source_ids": [
+        "source-002"
+      ],
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "durable"
+    },
+    {
+      "category": "pacing",
+      "statement": "The game relies on intermittent hide-and-search suspense in similar residential spaces; what some describe as a compelling escape-room loop others experience as tedious room-by-room searching.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003"
+      ],
+      "source_ids": [
+        "source-002"
+      ],
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable"
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "Procedural changes and horror atmosphere are appealing to some players, while others find navigation cumbersome and the technical implementation unreliable.",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-004",
+        "feedback-005"
+      ]
+    }
+  ],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            5
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            9
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            10
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            2,
+            3
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "covered",
+          "observation_indices": [
+            7,
+            8
+          ]
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1092140/",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "identity",
+        "player_feedback": false,
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "other_player_feedback",
+        "domain": "playze.io",
+        "url": "https://playze.io/game/exit-from",
+        "publication_date": null,
+        "language": "mixed",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1092140",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1092140",
+        "publication_date": null,
+        "language": "mixed",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1092140",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "publication_date": "2025-12-07",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": "2025-12-06",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-002",
+        "publication_date": "2026-07-13",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-002",
+        "publication_date": "2025-10-06",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-003",
+        "publication_date": "2026-06-29",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-003",
+        "publication_date": "2026-07-12",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      }
+    ]
+  }
+}
