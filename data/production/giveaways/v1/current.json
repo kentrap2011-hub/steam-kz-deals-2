@@ -2,8 +2,8 @@
   "contract": "CROSS-PLATFORM-GIVEAWAY-V1",
   "schema_version": 1,
   "country_code": "KZ",
-  "generated_at_utc": "2026-10-08T00:52:55.079272Z",
-  "fresh_until_utc": "2026-10-09T06:52:55.079272Z",
+  "generated_at_utc": "2026-10-09T00:21:16.417674Z",
+  "fresh_until_utc": "2026-10-10T06:21:16.417674Z",
   "snapshot_status": "incomplete",
   "required_sources": [
     "steam",
@@ -15,21 +15,21 @@
       "required": true,
       "status": "failed",
       "complete": false,
-      "observed_at_utc": "2026-10-08T00:52:55.079272Z",
+      "observed_at_utc": "2026-10-09T00:21:16.417674Z",
       "endpoint": "existing KZ Steam catalog + targeted first-party validation",
       "candidate_count": 0,
       "accepted_count": 0,
       "rejected_count": 0,
       "unverified_count": 0,
       "error_code": "SOURCE_STALE",
-      "error": "Steam candidate snapshot is stale: 700.1h",
+      "error": "Steam candidate snapshot is stale: 723.6h",
       "details": {}
     },
     "epic": {
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-10-08T00:52:55.079272Z",
+      "observed_at_utc": "2026-10-09T00:21:16.417674Z",
       "endpoint": "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions",
       "candidate_count": 2,
       "accepted_count": 2,
@@ -49,7 +49,7 @@
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-10-08T00:52:55.079272Z",
+      "observed_at_utc": "2026-10-09T00:21:16.417674Z",
       "endpoint": "https://catalog.gog.com/v1/catalog",
       "candidate_count": 0,
       "accepted_count": 0,
@@ -73,27 +73,27 @@
   "unverified_offer_count": 0,
   "games": [
     {
-      "canonical_game_key": "meta-v1:e9fe01655a53dfcd1fbcfc32",
+      "canonical_game_key": "meta-v1:abbf57217a9a4530ba05f48f",
       "identity_confidence": "high",
       "identity_evidence": {
         "basis": "exact_normalized_title_and_publishers",
         "publishers": [
-          "line games corporation"
+          "the gang studio ab"
         ]
       },
-      "title": "BURIED STARS",
+      "title": "Out of Sight",
       "offers": [
         {
           "source_id": "epic",
-          "source_offer_id": "epic:9bd512d68e3143909842932ac45a4182:af4c34934afe4db0870b8a1d82dceb94:2026-10-08T15:00:00Z:2026-10-01T15:00:00Z",
-          "source_product_id": "9bd512d68e3143909842932ac45a4182:af4c34934afe4db0870b8a1d82dceb94",
+          "source_offer_id": "epic:436099305a2249a8bbe4d9113fc41d53:cb733f3432db46bca94965b422c33ede:2026-10-15T15:00:00Z:2026-10-08T15:00:00Z",
+          "source_product_id": "436099305a2249a8bbe4d9113fc41d53:cb733f3432db46bca94965b422c33ede",
           "storefront": "epic",
-          "title": "BURIED STARS",
-          "claim_url": "https://store.epicgames.com/en-US/p/buried-stars-d7c88c",
-          "promotion_start_utc": "2026-10-01T15:00:00Z",
-          "promotion_end_utc": "2026-10-08T15:00:00Z",
-          "observed_at_utc": "2026-10-08T00:52:55.079272Z",
-          "base_price": 470000,
+          "title": "Out of Sight",
+          "claim_url": "https://store.epicgames.com/en-US/p/out-of-sight-b96ca8",
+          "promotion_start_utc": "2026-10-08T15:00:00Z",
+          "promotion_end_utc": "2026-10-15T15:00:00Z",
+          "observed_at_utc": "2026-10-09T00:21:16.417674Z",
+          "base_price": 410000,
           "final_price": 0,
           "currency": "KZT",
           "discount_percent": 100,
@@ -111,27 +111,27 @@
       ]
     },
     {
-      "canonical_game_key": "meta-v1:d6aba51ecfd74f33335a39f3",
+      "canonical_game_key": "meta-v1:4573103a0a476f088cc01d0b",
       "identity_confidence": "high",
       "identity_evidence": {
         "basis": "exact_normalized_title_and_publishers",
         "publishers": [
-          "atari"
+          "bitfall studios gmbh"
         ]
       },
-      "title": "System Shock 2: 25th Anniversary Remaster",
+      "title": "TerraScape",
       "offers": [
         {
           "source_id": "epic",
-          "source_offer_id": "epic:a90f2381d7aa48c09b4080515a9541cd:7ae00c3e89174012b175cc73b4737723:2026-10-08T15:00:00Z:2026-10-01T15:00:00Z",
-          "source_product_id": "a90f2381d7aa48c09b4080515a9541cd:7ae00c3e89174012b175cc73b4737723",
+          "source_offer_id": "epic:bfb80547289b477193ce3b14d83cd292:af6b823b8698465f9aedc3bddf2e8686:2026-10-15T15:00:00Z:2026-10-08T15:00:00Z",
+          "source_product_id": "bfb80547289b477193ce3b14d83cd292:af6b823b8698465f9aedc3bddf2e8686",
           "storefront": "epic",
-          "title": "System Shock 2: 25th Anniversary Remaster",
-          "claim_url": "https://store.epicgames.com/en-US/p/system-shock-2-25th-anniversary-remaster-cb94d9",
-          "promotion_start_utc": "2026-10-01T15:00:00Z",
-          "promotion_end_utc": "2026-10-08T15:00:00Z",
-          "observed_at_utc": "2026-10-08T00:52:55.079272Z",
-          "base_price": 555000,
+          "title": "TerraScape",
+          "claim_url": "https://store.epicgames.com/en-US/p/terrascape-2b12b1",
+          "promotion_start_utc": "2026-10-08T15:00:00Z",
+          "promotion_end_utc": "2026-10-15T15:00:00Z",
+          "observed_at_utc": "2026-10-09T00:21:16.417674Z",
+          "base_price": 315000,
           "final_price": 0,
           "currency": "KZT",
           "discount_percent": 100,
