@@ -110,6 +110,7 @@ jobs:
     outputs:
       giveaway_only: ${{ steps.classify.outputs.giveaway_only }}
       commercial_only: ${{ steps.classify.outputs.commercial_only }}
+      failed_upstream_commercial: ${{ steps.classify.outputs.failed_upstream_commercial }}
     steps:
       - name: Checkout current main
         uses: actions/checkout@v4
@@ -126,6 +127,9 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           BEFORE_SHA: ${{ github.event.before }}
           HEAD_SHA: ${{ github.sha }}
+          UPSTREAM_NAME: ${{ github.event.workflow_run.name }}
+          UPSTREAM_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          UPSTREAM_BRANCH: ${{ github.event.workflow_run.head_branch }}
         shell: bash
         run: |
           set -euo pipefail
@@ -232,6 +236,23 @@ jobs:
           fi
 
           full_progressive_required=$(python scripts/progressive_visual_activation_routing.py)
+          failed_upstream_commercial=false
+          # A failed Dossier tail is not a veto over a separately committed,
+          # complete current Steam/commercial snapshot. Allow this bounded path
+          # only if the previous Dossier/Fast/Deep semantic bindings are unchanged.
+          # Any independent semantic drift or global source failure stays fail-closed.
+          if [ "$EVENT_NAME" = "workflow_run" ] && \
+             [ "${UPSTREAM_NAME:-}" = "Build pre-AI deterministic payload" ] && \
+             [ "${UPSTREAM_CONCLUSION:-}" = "failure" ] && \
+             [ "${UPSTREAM_BRANCH:-}" = "main" ] && \
+             [ "$commercial_needed" = "true" ]; then
+            fallback_eligible=$(python scripts/progressive_visual_activation_routing.py --commercial-fallback-eligible)
+            if [ "$fallback_eligible" = "true" ]; then
+              full_progressive_required=false
+              failed_upstream_commercial=true
+              echo "VISUAL_SCOPE commercial_only=true reason=committed_commercial_dossier_failure_semantics_preserved"
+            fi
+          fi
           if [ "$full_progressive_required" = "true" ]; then
             # A stale/missing/incompatible progressive visual must be rebuilt as a
             # whole. Full build already refreshes giveaway and commercial fields,
@@ -243,6 +264,7 @@ jobs:
 
           echo "giveaway_only=$giveaway_needed" >> "$GITHUB_OUTPUT"
           echo "commercial_only=$commercial_needed" >> "$GITHUB_OUTPUT"
+          echo "failed_upstream_commercial=$failed_upstream_commercial" >> "$GITHUB_OUTPUT"
           echo "VISUAL_SCOPE giveaway_only=$giveaway_needed commercial_only=$commercial_needed"
 
   giveaway_refresh:
@@ -430,8 +452,11 @@ jobs:
       always() &&
       needs.scope.outputs.commercial_only == 'true' &&
       (github.event_name != 'workflow_run' ||
-       (github.event.workflow_run.conclusion == 'success' &&
-        github.event.workflow_run.head_branch == 'main')) &&
+       (github.event.workflow_run.head_branch == 'main' &&
+        (github.event.workflow_run.conclusion == 'success' ||
+         (github.event.workflow_run.conclusion == 'failure' &&
+          github.event.workflow_run.name == 'Build pre-AI deterministic payload' &&
+          needs.scope.outputs.failed_upstream_commercial == 'true')))) &&
       (needs.giveaway_refresh.result == 'success' || needs.giveaway_refresh.result == 'skipped')
     runs-on: ubuntu-latest
     timeout-minutes: 5
