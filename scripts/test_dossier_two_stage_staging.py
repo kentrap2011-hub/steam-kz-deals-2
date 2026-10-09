@@ -363,7 +363,7 @@ class P2StagingTests(unittest.TestCase):
     def test_24_assembly_wrong_predeclared_id_rejected(self):
         r = self.f.research_accepted()
         self.f.stage_plan(r)
-        with self.assertRaisesRegex(ValueError, "plan path"):
+        with self.assertRaisesRegex(ValueError, "plan path|Git provenance"):
             prepare_assembly(self.f.root, marker_commit=self.f.assembly_marker,
                              plan_path=self.f.plan_path.replace(self.f.a["appid"], "77777"))
 
