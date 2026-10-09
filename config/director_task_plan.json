@@ -211,13 +211,13 @@
       "id": "deep-cutover",
       "title": "Deep: интеграция и переключение",
       "goal": "Проверить миграцию и переключить продакшн без смешанных баллов.",
-      "status": "planned",
+      "status": "active",
       "effort": "высокая",
       "effort_reason": "Потребуются все четыре реализации и end-to-end тест.",
       "urgency": "высокая",
       "urgency_reason": "Ошибки cutover повредят сортировку.",
       "task_file": "WORKER_TASK_DEEP_TWO_STAGE_INTEGRATION_CUTOVER_01.md",
-      "worker_slot": null,
+      "worker_slot": "ЧАТ 2",
       "order": null,
       "depends_on": [
         "deep-stage1",
@@ -226,9 +226,9 @@
         "deep-site"
       ],
       "blocker": "",
-      "updated_on": "2026-10-08",
+      "updated_on": "2026-10-09",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-08T14:03:00Z"
+      "updated_at_utc": "2026-10-09T10:12:00Z"
     },
     {
       "id": "taste-profile",
@@ -615,6 +615,26 @@
       "updated_on": "2026-10-09",
       "updated_at_utc": "2026-10-09T09:09:20Z",
       "recent_completion": true
+    },
+    {
+      "id": "dossier-two-stage-async-pipeline",
+      "title": "Dossier: асинхронный Research → Assembly",
+      "goal": "Убрать синхронное ожидание GitHub между элементами Research и Assembly, сохранив GitHub владельцем очереди, проверок и acceptance.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Нужно скорректировать уже реализованные неактивные P1/P2 lifecycle/staging contracts и доказать buffered non-blocking progress.",
+      "urgency": "высокая",
+      "urgency_reason": "Без этого будущие semantic workers будут простаивать на каждом GitHub acknowledgement.",
+      "task_file": "WORKER_TASK_DOSSIER_TWO_STAGE_ASYNC_PIPELINE_AMENDMENT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-two-stage-staging-p2"
+      ],
+      "blocker": "",
+      "updated_on": "2026-10-09",
+      "updated_at_utc": "2026-10-09T10:12:00Z",
+      "recent_completion": false
     }
   ]
 }
