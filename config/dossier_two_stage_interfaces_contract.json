@@ -55,6 +55,11 @@
       "id": "TASTE-STEAM-REVIEW-DOSSIER-V2",
       "schema_version": 2,
       "strict_validator_owned_by": "existing_github_strict_dossier_ingest"
+    },
+    "async_assembly_result": {
+      "id": "DOSSIER-ASYNC-ASSEMBLY-RESULT-V1",
+      "path": "config/dossier_async_assembly_result_v1.schema.json",
+      "schema_version": 1
     }
   },
   "namespaces": {
@@ -115,16 +120,18 @@
     ],
     "assembly_must_copy": [
       "original_research_assignment",
-      "accepted_research_package_sha256",
-      "accepted_research_receipt_blob_sha",
+      "research_transport_exact_original_git_commit_path_blob_raw_and_canonical_sha256",
+      "research_prepared_work_path_and_blob_sha",
+      "assembly_plan_blob_sha",
+      "assembly_marker_binding",
       "assembly_contract_sha256",
       "assembly_prompt_sha256",
       "canonical_dossier_target"
     ],
-    "required_assembly_package_state": "accepted_structural_evidence_not_canonical_dossier",
+    "required_assembly_package_state": "submitted_create_only_immutable_Research_transport_under_exact_prepared_binding_no_Github_acceptance_required",
     "stale_or_wrong_hash": "fail_closed_zero_attempt_return_to_github",
     "research_hash_is_not_worker_issued": true,
-    "original_release_year_binding": "research_observed_nullable_original_work_year_frozen_in_accepted_identity_then_checked_against_same_package_at_assembly",
+    "original_release_year_binding": "GitHub_eventual_Research_validation_checks_original_work_release_year_before_any_strict_final_Dossier_acceptance",
     "old_prompt_contract_hash_cross_version_auto_rewrite": false
   },
   "research_semantics": {
@@ -163,7 +170,7 @@
   },
   "assembly_supplemental_rule": {
     "ordering": [
-      "accepted_research_package",
+      "exact_submitted_pre_authorized_research_package_without_Github_Research_acceptance",
       "exact_source_revisit_for_named_gap",
       "narrow_named_gap_lookup_only_after_exact_source_genuinely_lacks_fact",
       "typed_unresolved_or_failure_to_github"
@@ -205,10 +212,10 @@
       "runtime_blocked"
     ],
     "assembly": [
-      "waiting_for_accepted_research",
-      "assigned",
+      "preauthorized_pending_submitted_research",
+      "assigned_from_submitted_transport",
       "candidate_created",
-      "staged_validated",
+      "github_validated_pending_strict_group_ingest",
       "rejected_invalid",
       "assembly_gap",
       "runtime_blocked"
@@ -232,17 +239,19 @@
   ],
   "recommended_next_task": "P2 GitHub deterministic helpers/validators; separate PR",
   "asynchronous_buffered_execution": {
-    "lifecycle": "github_prepared_immutable_multi_item_buffers_with_asynchronous_independent_ingest",
+    "lifecycle": "github_finite_preauthorization_then_independent_Research_and_Assembly_semantics_then_eventual_strict_Github_chain_validation",
     "buffer_contract": "config/dossier_two_stage_async_buffer_contract.json",
-    "research_next_item_gate": "membership_in_frozen_research_buffer_only_not_previous_item_receipt",
-    "assembly_next_item_gate": "membership_in_frozen_accepted_research_assembly_buffer_only_not_previous_final_receipt",
-    "research_ingest": "independent_per_item_receipt_and_state_writes_without_worker_ack_handshake",
-    "assembly_ingest": "independent_final_strict_v2_group_validation_without_worker_ack_handshake",
+    "research_next_item_gate": "frozen_research_manifest_membership_only",
+    "assembly_next_item_gate": "frozen_assembly_preauthorization_and_exact_submitted_Research_Git_transport_no_GitHub_acceptance",
+    "research_ingest": "asynchronous_independent_item_research_validation",
+    "assembly_ingest": "eventual_research_to_assembly_chain_then_existing_strict_V2_atomic_three_game_ingest",
     "completed_transport": "exists_means_submitted_do_not_recreate_never_acceptance",
-    "invalid_item_effect": "local_only_other_buffer_items_keep_preexisting_authorization",
-    "retry": "only_new_explicit_github_prepared_authorization_never_timeout_or_missing_ack",
-    "group_boundary": "unchanged_strict_three_game_final_acceptance_only_not_research_assembly_barrier",
-    "backpressure": "bounded_open_slots_selected_by_github_before_marker_not_wait_for_sibling_receipt",
+    "invalid_item_effect": "local_chain_only_siblings_unblocked",
+    "retry": "only_new_explicit_Github_authorization",
+    "group_boundary": "existing_strict_three_game_final_acceptance_only",
+    "backpressure": "Github_may_limit_future_new_preauthorization_but_no_unresolved_slot_semantic_liveness_gate",
+    "new_result_schema": "config/dossier_async_assembly_result_v1.schema.json",
+    "legacy_p2_accepted_only_interfaces": "remain_inactive_reference_not_async_semantic_path",
     "activation": false
   }
 }
