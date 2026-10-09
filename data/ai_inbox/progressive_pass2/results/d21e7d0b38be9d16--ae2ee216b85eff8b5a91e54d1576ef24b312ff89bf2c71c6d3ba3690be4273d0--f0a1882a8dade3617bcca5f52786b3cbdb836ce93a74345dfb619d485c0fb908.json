@@ -1,0 +1,300 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "2807f94aafcdd94494f505b42a9a3bb77e000e32",
+  "run_start_authority_commit": "b449c90e707bf6c00ea3d2b89e4ed313e714ada4",
+  "run_started_at_utc": "2026-10-09T13:55:03+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+  "work_id": "ae2ee216b85eff8b5a91e54d1576ef24b312ff89bf2c71c6d3ba3690be4273d0",
+  "family_id": "game:1218210",
+  "taste_subject_key": "App_1218210",
+  "appid": "1218210",
+  "taste_fingerprint": "702845ceeb62786861b83dca5c4fafece9c3dbbd58870ae9fad23954e9c13511",
+  "candidate_context_sha256": "ab1a6439be66bdefc8946d7b7f5e3733e4ace6a0e44ad932d1a7453be1e74fa1",
+  "dossier_content_sha256": "a79263b5d1ff5fe17e87ef5223aa89cb9779c7643b006e0e22a91420a18b8689",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "f0a1882a8dade3617bcca5f52786b3cbdb836ce93a74345dfb619d485c0fb908",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Пошаговые сражения и настройка приёмов разных существ дают простор для тактики и освоения сложных боёв.",
+    "Параметры потенциала, развитие характеристик и открытие команд дают ясную прогрессию.",
+    "Яркие пиксельные локации и классическое поэтапное приключение дополнены головоломками и встречами с тренерами."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 81,
+    "development_variety": 76,
+    "structure_pacing_direction": 62,
+    "identity_hooks": 69,
+    "breadth_of_match": 70
+  },
+  "score_findings": [
+    {
+      "finding_id": "tactical_team_battles",
+      "text_ru": "Пошаговые бои позволяют собирать команду существ с разными приёмами, а сильные тренеры и дополнительные сложные правила дают повод подбирать осмысленную тактику.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 9
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Тактическое освоение правил и повышение мастерства способны поддерживать сложную игру."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 81
+        }
+      ]
+    },
+    {
+      "finding_id": "creature_progression",
+      "text_ru": "У существ есть варианты потенциала, настройка характеристик и комбинирование умений; вместе с продвижением по зонам это даёт заметное развитие команды и новые задачи.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/pattern",
+          "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+          "match_text_ru": "Приятно улучшать состав и видеть конкретный эффект прогрессии."
+        },
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Новые варианты прохождения и задачи по ходу пути помогают не застрять в одной формуле."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 76
+        }
+      ]
+    },
+    {
+      "finding_id": "classic_jrpg_rhythm",
+      "text_ru": "Путешествие устроено как череда зон, встреч с тренерами и побочных испытаний, но затяжные пошаговые анимации и возможная прокачка ради уровней могут заметно замедлять ритм.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8/pattern",
+          "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+          "match_text_ru": "Повторы приемлемы, если не превращаются в долгий неподвижный цикл."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 62
+        }
+      ]
+    },
+    {
+      "finding_id": "pixel_monsters",
+      "text_ru": "Яркий пиксельный мир и разнообразный дизайн существ придают приключению узнаваемый ретро-облик, хотя сам список существ заметно уже, чем у крупных представителей жанра.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Узнаваемый визуальный характер служит самостоятельным плюсом."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 69
+        }
+      ]
+    },
+    {
+      "finding_id": "battle_focus_tradeoffs",
+      "text_ru": "Глубокая настройка существ сочетается с обязательными пазлами и мини-играми, а также молодёжным тоном сюжета; для интереса к боевой системе такие перерывы могут не давать равной ценности.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/13/pattern",
+          "profile_value_sha256": "8f815538f23c7c4151de010d40acbe09cd5db3af8a8ec1917060877048370be6",
+          "match_text_ru": "Увлекательные механики ценны, но общий опыт может снижаться из-за долгих побочных препятствий."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 70
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "На обычной сложности быстрая прокачка может ослабить вызов; дополнительные режимы дают сложность, но не исправляют автоматически весь темп.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Длинные пошаговые анимации и гринд могут замедлить прохождение даже при интересной сборке команды.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Обязательные головоломки и мини-игры иногда надолго прерывают понравившийся игрокам цикл сражений.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Молодёжный тон истории подходит не всем, а количество вариантов монстров ограничено по сравнению с крупнейшими представителями жанра.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Встречаются единичные сообщения о сложностях запуска и облачных сохранений; распространённость таких проблем не установлена.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      }
+    ]
+  }
+}
