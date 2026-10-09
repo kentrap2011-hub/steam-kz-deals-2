@@ -635,6 +635,46 @@
       "updated_on": "2026-10-09",
       "updated_at_utc": "2026-10-09T10:45:00Z",
       "recent_completion": true
+    },
+    {
+      "id": "dossier-fully-async-pipeline",
+      "title": "Dossier: полностью асинхронный Research → Assembly",
+      "goal": "Убрать GitHub из liveness path обоих semantic stages: Assembly может работать по точному submitted Research package до GitHub acceptance; плохая цепочка изолируется локально.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Нужно заменить accepted-Research gate и fixed-slot backpressure на frozen end-to-end preauthorization и позднюю GitHub validation всей цепочки.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь требует, чтобы ни Research, ни Assembly не простаивали из-за скорости GitHub ingest.",
+      "task_file": "WORKER_TASK_DOSSIER_FULLY_ASYNC_PIPELINE_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-two-stage-async-pipeline"
+      ],
+      "blocker": "",
+      "updated_on": "2026-10-09",
+      "updated_at_utc": "2026-10-09T12:30:00Z",
+      "recent_completion": false
+    },
+    {
+      "id": "deep-stage1-migration-work",
+      "title": "Deep: подготовить Stage 1 migration work",
+      "goal": "Сформировать точную GitHub-owned очередь новой Stage 1 semantic migration для текущего eligible scope без выдумывания результатов.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Нужно связать текущий canonical Dossier с новой Stage 1 migration scope, детерминированными work IDs и result paths.",
+      "urgency": "высокая",
+      "urgency_reason": "Это следующий обязательный шаг после принятого Deep cutover preflight.",
+      "task_file": "WORKER_TASK_DEEP_STAGE1_MIGRATION_WORK_PREPARATION_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "deep-cutover"
+      ],
+      "blocker": "",
+      "updated_on": "2026-10-09",
+      "updated_at_utc": "2026-10-09T12:30:00Z",
+      "recent_completion": false
     }
   ]
 }
