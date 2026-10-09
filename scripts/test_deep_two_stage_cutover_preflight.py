@@ -26,7 +26,7 @@ def documents():
                                     "deep_waiting_for_dossier_count": 1}},
         "stage1_work": {"schema_version": 1, "contract": "DEEP-STAGE1-WORK-V1",
                         "implementation_status": "implemented_not_active",
-                        "total_eligible": 0, "items": []},
+                        "total_eligible": 0, "eligible_work_ids": [], "items": []},
         "stage1_state": {"schema_version": 1, "contract": "DEEP-STAGE1-STATE-V1",
                          "implementation_status": "implemented_not_active",
                          "entries": {}},
@@ -99,17 +99,30 @@ class GateTests(unittest.TestCase):
         d = documents()
         d["old_deep_work"]["scope"]["deep_waiting_for_dossier_count"] = 0
         d["stage1_work"]["total_eligible"] = 2
-        d["stage1_state"]["entries"] = {
-            "a" * 64: {"status": "accepted", "outcome": "analyzed_fit"},
-            "b" * 64: {"status": "accepted", "outcome": "analyzed_not_fit"},
-        }
+        d["stage1_work"]["eligible_work_ids"] = ["a" * 64, "b" * 64]
+        fit = {"status": "accepted", "accepted": True, "outcome": "analyzed_fit",
+               "family_id": "a", "appid": "10", "profile_semantic_sha256": "f" * 64,
+               "accepted_result_path": "data/cache/deep_stage1_results/a.json",
+               "accepted_result_sha256": "e" * 64}
+        not_fit = {"status": "accepted", "accepted": True,
+                   "outcome": "analyzed_not_fit", "family_id": "b"}
+        d["stage1_state"]["entries"] = {"a" * 64: fit, "b" * 64: not_fit}
         p = self.plan(d)
         self.assertIn("stage2_calibrations_not_complete_for_all_stage1_fit",
                       p["blocking_gates"])
-        d["stage2_state"]["entries"] = {
-            "c" * 64: {"status": "calibrated", "calibrated_deep_fit_score_0_56": 42.37}
+        calibration = {
+            "status": "calibrated", "outcome": "calibrated_fit",
+            "calibrated_deep_fit_score_0_56": 42.37,
+            "stage1_work_id": "a" * 64, "family_id": "a", "appid": "10",
+            "profile_semantic_sha256": "f" * 64,
+            "stage1_result_path": "data/cache/deep_stage1_results/a.json",
+            "stage1_result_sha256": "e" * 64,
         }
+        d["stage2_state"]["entries"] = {"c" * 64: calibration}
         self.assertTrue(self.plan(d)["cutover_ready"])
+        d["stage2_state"]["entries"]["c" * 64]["stage1_result_sha256"] = "d" * 64
+        self.assertIn("stage2_calibrations_not_complete_for_all_stage1_fit",
+                      self.plan(d)["blocking_gates"])
         self.assertFalse(self.plan(d)["cutover_performed"])
 
 
