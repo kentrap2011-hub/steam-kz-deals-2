@@ -68,6 +68,7 @@ class AsyncFixture:
         self.f.save("data/production/pre_ai/taste_steam_review_dossier_worker_groups/"
                     f"{self.f.a['snapshot_id']}/g000001.json", desc)
         frozen = self.f.commit("Prepare all three exact GitHub assignments")
+        self.research_source = frozen
         self.rbuffer = make_buffer(self.f.root, source_commit=frozen, phase="research",
                                    ordered_work_paths=self.paths)
         self.f.save(self.rbuffer["path"], self.rbuffer["manifest"])
@@ -241,7 +242,7 @@ class AsyncBufferTests(unittest.TestCase):
 
     def test_07_capacity_backpressure_is_deterministic_and_not_daily_quota(self):
         x = self.x
-        source = x.f.run("rev-parse", f"{x.f.marker}^")
+        source = x.research_source
         for occupied, expected in ((0, 3), (6, 2), (7, 1), (8, 0)):
             a = make_buffer(x.f.root, source_commit=source, phase="research",
                             ordered_work_paths=x.paths, occupied_slots=occupied)
