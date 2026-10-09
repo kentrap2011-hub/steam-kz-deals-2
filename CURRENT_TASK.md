@@ -1539,3 +1539,14 @@
 - Scope: GitHub-owned current site-status artifact, local publication quarantine/isolation, Statistics status source, and publication-chain local/global blocker split.
 - Global source/schema/material authority remains fail-closed; no semantic worker, ranking, queue ordering, Stage 1/2 scoring, or Scheduled Task change.
 - Required report: `reviews/worker_reports/site-nonblocking-freshness-and-quarantine-01.md`.
+
+
+## COMPLETE — Dossier two-stage async buffered Research → Assembly amendment 01 (2026-10-09)
+
+- Worker slot: ЧАТ 1; task `WORKER_TASK_DOSSIER_TWO_STAGE_ASYNC_PIPELINE_AMENDMENT_01.md`.
+- Implementation: `implement/dossier-two-stage-async-buffer-amendment-01`; PR #177 (open for Director review, **not merged**).
+- Result: immutable GitHub-prepared Research/Assembly buffers; no per-item sibling acknowledgement wait; accepted-Research-only Assembly handoff; deterministic 8-open-slot per-phase backpressure; create-only and immutable marker-parent checks.
+- Tests: PR-only offline Research/Assembly Git fixture tests plus retained strict P1/P2 and one-stage compatibility checks.
+- Report: `reviews/worker_reports/dossier-two-stage-async-pipeline-amendment-01.md`.
+- Both new semantic workers and production activation remain forbidden/unimplemented. No Scheduled Tasks, canonical one-stage Dossier, Deep/Fast/ranking, commercial refresh or visual sources changed.
+- Other active work above remains independent; do not treat this completed handoff as a production activation.

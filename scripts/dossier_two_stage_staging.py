@@ -435,7 +435,7 @@ def assembly_authority(repo, marker_commit, plan_path):
     return frozen, nonce, plan
 
 
-def prepare_assembly(repo, *, marker_commit, plan_path):
+def prepare_assembly(repo, *, marker_commit, plan_path, check_collisions=True):
     """Return create-only Assembly assignment + immutable state, no semantics."""
     frozen, nonce, plan = assembly_authority(repo, marker_commit, plan_path)
     # A plan can be read only after the accepted research receipt was committed
@@ -521,6 +521,7 @@ def prepare_assembly(repo, *, marker_commit, plan_path):
                    accepted_blob=blob(repo, frozen, accepted_path),
                    phase="assembly", assembly_id=plan["assembly_assignment_id"])
     check_schema(nstate, "dossier_two_stage_staging_state_v1.schema.json")
-    no_collisions(repo, {assign_path: None, paths["assembly_state"]: None})
+    if check_collisions:
+        no_collisions(repo, {assign_path: None, paths["assembly_state"]: None})
     return {"status": "assigned", "assignment_path": assign_path,
             "files": {assign_path: work, paths["assembly_state"]: nstate}}

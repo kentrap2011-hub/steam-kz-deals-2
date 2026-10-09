@@ -10,6 +10,9 @@ on:
       - "config/dossier_research_rejection_receipt_v1.schema.json"
       - "config/dossier_two_stage_staging_state_v1.schema.json"
       - "config/dossier_two_stage_staging_contract.json"
+      - "config/dossier_two_stage_async_buffer_contract.json"
+      - "scripts/dossier_two_stage_async_buffer.py"
+      - "scripts/test_dossier_two_stage_async_buffer.py"
       - "scripts/dossier_two_stage_staging.py"
       - "scripts/test_dossier_two_stage_staging.py"
       - ".github/workflows/validate-dossier-two-stage-contract-interfaces.yml"
@@ -34,6 +37,8 @@ jobs:
         run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_contract_schemas.py' -v
       - name: Inactive GitHub Research to Assembly staging Git-history tests
         run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_staging.py' -v
+      - name: Inactive asynchronous multi-item Research and Assembly buffer tests
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_async_buffer.py' -v
       - name: Existing one-stage Dossier factual date regression
         run: python -m unittest discover -s scripts -p 'test_taste_dossier_github_date_derivation.py' -v
       - name: Existing Dossier and Deep release-year identity compatibility regression

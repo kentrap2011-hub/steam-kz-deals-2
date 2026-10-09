@@ -482,3 +482,22 @@ Currentness invariant after PPD-012:
 6. `scripts/test_site_tasks.py`, `web/tasks.test.js`, `.github/workflows/validate-site-tasks-page.yml` — обязательные PR checks.
 
 При назначении/изменении/закрытии задачи директор меняет Board current planning + JSON в одном update. CI запрещает новые task-file ссылки в forward-секциях Board и Deep map без registry entry. Старые исторические sections не являются live state. После merged PR #162: статус `site-tasks` синхронизирован с Board как complete. Не фиксировать численность незавершённых задач в тестах: сверять весь набор ID со статусами текущего реестра. Для блока «Недавно завершено» сортировать по точному UTC `updated_at_utc` (а не по дню/ID), включая проверку закрытия очередной задачи, чтобы свежий Deep Stage 1 не исчезал из-за алфавитного порядка.
+
+
+---
+
+## Inactive two-stage Dossier: asynchronous Research → Assembly buffers
+
+**Checked:** 2026-10-09; PR #177, branch `implement/dossier-two-stage-async-buffer-amendment-01`; not production-authorized.
+
+**Short route:**
+1. `config/dossier_two_stage_interfaces_contract.json` — P1 exact per-item Research/Assembly interfaces, current one-stage authority, now explicit non-blocking lifecycle.
+2. `config/dossier_two_stage_staging_contract.json` — P2 immutable Research receipt/state and Assembly plan/assignment/staging rules.
+3. `config/dossier_two_stage_async_buffer_contract.json` — GitHub-owned frozen multi-item manifests; 8 open item slots per lane, not daily quota; no previous sibling receipt dependency.
+4. `scripts/dossier_two_stage_staging.py` — existing inactive per-game Git marker-parent, create-only and strict binding helper.
+5. `scripts/dossier_two_stage_async_buffer.py` — offline manifest construction/frozen verification, independent Research receipt planning, accepted-only multi-Assembly staging, exact staged result checks.
+6. `scripts/test_dossier_two_stage_async_buffer.py` — real temporary Git history for no per-item ack, local rejection isolation, capacity, immutable order/retry and one-stage noninterference.
+7. `.github/workflows/validate-dossier-two-stage-contract-interfaces.yml` — PR-only offline suite (P1/P2/async and unchanged one-stage/date regressions).
+8. `reviews/worker_reports/dossier-two-stage-async-pipeline-amendment-01.md` — exact boundaries and remaining future semantic workers/integration.
+
+**Not an activation:** both workers absent; no ingest workflow, Scheduled Task, live queue/scheduler or canonical Dossier validator change. Only accepted Research qualifies an individual game for Assembly. Strict final three-game Dossier acceptance remains GitHub-owned.
