@@ -5,10 +5,12 @@ No CLI, HTTP, semantic processing, Git writes, production-data fixture, retry
 engine, inbox scanner or acceptance decision. Called only in offline tests or
 after a separately authorized future activation/integration.
 """
+import copy
 import hashlib
+from functools import lru_cache
 from pathlib import Path
 
-from dossier_two_stage_async_buffer import frozen_buffer
+from dossier_two_stage_async_buffer import frozen_buffer, inactive_gate
 from dossier_two_stage_contract_guard import canonical_sha256, validate_research
 from dossier_two_stage_staging import (
     blob, blob_for, bytes_json, exists, file_at, first_parent_contains,
@@ -20,7 +22,8 @@ PROMPT_PATH = "config/dossier_two_stage_research_semantic_worker_prompt.md"
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def frozen_research_batch(repo, *, marker_commit, buffer_path):
+@lru_cache(maxsize=32)
+def _immutable_research_batch(repo, marker_commit, buffer_path, local_prompt_sha):
     """Return only independently GitHub-prepared work, in frozen manifest order.
 
     Exact prompt bytes are bound by the marker's *actual first parent*. No
@@ -60,6 +63,20 @@ def frozen_research_batch(repo, *, marker_commit, buffer_path):
         "prompt_sha256": hashlib.sha256(source_prompt).hexdigest(),
         "items": result,
     }
+
+
+def frozen_research_batch(repo, *, marker_commit, buffer_path):
+    """Re-use the same verified immutable Git-parent proof within an invocation.
+
+    Each caller gets its own copy. This cache cannot create authority: the key
+    includes exact marker, buffer path, repository and local prompt content.
+    A separate inactive gate is rechecked on every entry.
+    """
+    inactive_gate()
+    prompt_digest = hashlib.sha256((ROOT / PROMPT_PATH).read_bytes()).hexdigest()
+    result = _immutable_research_batch(
+        str(Path(repo).resolve()), marker_commit, buffer_path, prompt_digest)
+    return copy.deepcopy(result)
 
 
 def _exact_item(repo, marker_commit, buffer_path, work_path):
