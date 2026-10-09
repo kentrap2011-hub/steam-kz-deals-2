@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 14,
     "deep_completed_not_fit_count": 8,
     "deep_incomplete_or_recovery_count": 5,
-    "deep_waiting_for_dossier_count": 203,
-    "deep_ready_or_pending_count": 15,
+    "deep_waiting_for_dossier_count": 200,
+    "deep_ready_or_pending_count": 18,
     "deep_normal_first_pass_remaining_count": 218,
     "deep_remaining_until_all_authoritative_count": 223,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 0,
-    "dossier_waiting_count": 203,
+    "dossier_waiting_count": 200,
     "pass2_attempted_count": 27,
-    "pass2_eligible_count": 15,
-    "normal_pass2_eligible_count": 15,
+    "pass2_eligible_count": 18,
+    "normal_pass2_eligible_count": 18,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -556,6 +556,71 @@
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1269640",
+      "taste_subject_key": "App_1269640",
+      "appid": "1269640",
+      "taste_fingerprint": "13483657169e767b39eb5c759ad575e046a06fd1a15b248d10d2dd692d32b426",
+      "candidate_context_sha256": "d4757b7eaec6acd851a1fdf66d228dc02e1e1ca16c6c73ad920f2b19b0d69954",
+      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+      "work_id": "c86f1eabfb83dab64f83d1aa4aede015e04810edc6b42dce756348daa88731b1",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Beacon Pines",
+        "short_description": "Beacon Pines is a cute and creepy adventure set within a mysterious book. Sneak out late, make new friends, uncover hidden truths, and collect words that will change the course of fate!",
+        "bundle_members": [],
+        "fit_tags": [
+          "Emotional",
+          "Exploration",
+          "Singleplayer",
+          "Story Rich"
+        ],
+        "core_fit_count": 2,
+        "release_date": "22 Sep, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1269640"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1269640.json",
+      "dossier_content_sha256": "b39b1a537a4e8e8c0455566520258f05dda27884edd1be92f49b248564bbc834",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-29T13:44:22Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "22eda9108bac02f731ce439e75947d4313e18f920b612c2ca62cd86635cf9e80",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--c86f1eabfb83dab64f83d1aa4aede015e04810edc6b42dce756348daa88731b1--22eda9108bac02f731ce439e75947d4313e18f920b612c2ca62cd86635cf9e80.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--c86f1eabfb83dab64f83d1aa4aede015e04810edc6b42dce756348daa88731b1--22eda9108bac02f731ce439e75947d4313e18f920b612c2ca62cd86635cf9e80.json",
+      "sequence": 8
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "family_id": "game:1218210",
       "taste_subject_key": "App_1218210",
       "appid": "1218210",
@@ -614,7 +679,7 @@
       "authorization_id": "f0a1882a8dade3617bcca5f52786b3cbdb836ce93a74345dfb619d485c0fb908",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ae2ee216b85eff8b5a91e54d1576ef24b312ff89bf2c71c6d3ba3690be4273d0--f0a1882a8dade3617bcca5f52786b3cbdb836ce93a74345dfb619d485c0fb908.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ae2ee216b85eff8b5a91e54d1576ef24b312ff89bf2c71c6d3ba3690be4273d0--f0a1882a8dade3617bcca5f52786b3cbdb836ce93a74345dfb619d485c0fb908.json",
-      "sequence": 8
+      "sequence": 9
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -678,7 +743,67 @@
       "authorization_id": "91a7c45628dd2a184c30d12097b30443b9982b1f30cb4faa569add764821e034",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--18276db19b6244a8bc89247c1cf5df1471edd44c619014455df58d1f16e2d3b2--91a7c45628dd2a184c30d12097b30443b9982b1f30cb4faa569add764821e034.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--18276db19b6244a8bc89247c1cf5df1471edd44c619014455df58d1f16e2d3b2--91a7c45628dd2a184c30d12097b30443b9982b1f30cb4faa569add764821e034.json",
-      "sequence": 9
+      "sequence": 10
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1272320",
+      "taste_subject_key": "App_1272320",
+      "appid": "1272320",
+      "taste_fingerprint": "e31028b245d725cb42f8afe87dc46bc579d7a34dea714a973b2b5af302c0dddd",
+      "candidate_context_sha256": "e845215eefadecf871d62401141140c2ca44071310f0bbbebdda868c3c665416",
+      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+      "work_id": "4fe56fa99d16267eb83123f47026c61c4fff2d26bd92e0134d9c56f1bec28557",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Diplomacy is Not an Option",
+        "short_description": "Diplomacy is Not an Option is a strategy game set in a medieval fantasy world. Build your town and defenses, raise huge armies and fight against massive hordes of enemies. How long can you survive?",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "4 Oct, 2024",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1272320"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1272320.json",
+      "dossier_content_sha256": "175fb2d77ed96e2bd5b7b33929d3853aba85755807ee432251c9b76a141fb624",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-29T13:44:22Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "4c57770ac00c84d7044646a2b95113246b67e35c674f200b5654f2782ad27bad",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--4fe56fa99d16267eb83123f47026c61c4fff2d26bd92e0134d9c56f1bec28557--4c57770ac00c84d7044646a2b95113246b67e35c674f200b5654f2782ad27bad.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--4fe56fa99d16267eb83123f47026c61c4fff2d26bd92e0134d9c56f1bec28557--4c57770ac00c84d7044646a2b95113246b67e35c674f200b5654f2782ad27bad.json",
+      "sequence": 11
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -741,7 +866,7 @@
       "authorization_id": "8772ae7e2cd3895ac1f8b1e1f31973544489beccb7d5b9ceec79a12b4a68a162",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--311507ed04b4fdecacd5e7e03f2c85a1095c1998ffaa4dfd2655c731f8c19f48--8772ae7e2cd3895ac1f8b1e1f31973544489beccb7d5b9ceec79a12b4a68a162.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--311507ed04b4fdecacd5e7e03f2c85a1095c1998ffaa4dfd2655c731f8c19f48--8772ae7e2cd3895ac1f8b1e1f31973544489beccb7d5b9ceec79a12b4a68a162.json",
-      "sequence": 10
+      "sequence": 12
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -805,7 +930,7 @@
       "authorization_id": "5b5239d9b33dcc59d04a80126d45fa00e1a3bc0561fb82921ee933478a47f947",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--8f2d4e79c7cb41f50d9004bf68069d930e3fcd790923364666e54645df06c850--5b5239d9b33dcc59d04a80126d45fa00e1a3bc0561fb82921ee933478a47f947.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--8f2d4e79c7cb41f50d9004bf68069d930e3fcd790923364666e54645df06c850--5b5239d9b33dcc59d04a80126d45fa00e1a3bc0561fb82921ee933478a47f947.json",
-      "sequence": 11
+      "sequence": 13
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -869,7 +994,7 @@
       "authorization_id": "033ca645441b23bf8ebe75ee1658d9dd041bf642955eededae8889e98196f83b",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--7d7e533b7f0a88cb2e18c1d8225630be4a8ff708668e6f3d426db1504fce2947--033ca645441b23bf8ebe75ee1658d9dd041bf642955eededae8889e98196f83b.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--7d7e533b7f0a88cb2e18c1d8225630be4a8ff708668e6f3d426db1504fce2947--033ca645441b23bf8ebe75ee1658d9dd041bf642955eededae8889e98196f83b.json",
-      "sequence": 12
+      "sequence": 14
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -933,7 +1058,70 @@
       "authorization_id": "8ece0c58e2fff94d5c10c2ef0d1a24f03ca2152f1560ac9f08143be2cd03b36a",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ede4f77bfecf06a44d49cb06335cffafa2ba6d55c2a23860008812209daa4d01--8ece0c58e2fff94d5c10c2ef0d1a24f03ca2152f1560ac9f08143be2cd03b36a.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ede4f77bfecf06a44d49cb06335cffafa2ba6d55c2a23860008812209daa4d01--8ece0c58e2fff94d5c10c2ef0d1a24f03ca2152f1560ac9f08143be2cd03b36a.json",
-      "sequence": 13
+      "sequence": 15
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1273560",
+      "taste_subject_key": "App_1273560",
+      "appid": "1273560",
+      "taste_fingerprint": "c145aaab9cfdf4c126b2f2ec41aa389c53a25c02790c0fcd6a7884a61989f7ab",
+      "candidate_context_sha256": "4fd469a21fd2b417a1de321e65ff45730bcad04bef9f4e49ca1fc9e30ad9c084",
+      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+      "work_id": "7c06320fc72fbd6c5594bcf928adae044c2e187f21996cb004844f722c572b5f",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "DeathSprint 66",
+        "short_description": "Compete in a bloody fight to the finish in DEATHSPRINT 66, fusing high-speed on-foot racing with deadly obstacles and brutal abilities.\r\nUnleash your velocity, push limits, and claim glory like never before.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Cyberpunk",
+          "Third Person"
+        ],
+        "core_fit_count": 2,
+        "release_date": "12 Sep, 2024",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1273560"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1273560.json",
+      "dossier_content_sha256": "12ed6ce0e56809d65f0252f390fb22aa5c6b26dd44a4ca89a75c401a9004c1b3",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-29T13:44:22Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "63da8a908521c1f32bb32034c29ef2c58c708c66b04faa2aca71afae8171dc04",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--7c06320fc72fbd6c5594bcf928adae044c2e187f21996cb004844f722c572b5f--63da8a908521c1f32bb32034c29ef2c58c708c66b04faa2aca71afae8171dc04.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--7c06320fc72fbd6c5594bcf928adae044c2e187f21996cb004844f722c572b5f--63da8a908521c1f32bb32034c29ef2c58c708c66b04faa2aca71afae8171dc04.json",
+      "sequence": 16
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -997,7 +1185,7 @@
       "authorization_id": "b52e03ad12455b5342ec16ef5a6c557094f5e7387766ecffa3dea1157ed4aff9",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--c1e81d690fd135a350d2820817675f93f172e1668489840669694fcd735bb9a7--b52e03ad12455b5342ec16ef5a6c557094f5e7387766ecffa3dea1157ed4aff9.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--c1e81d690fd135a350d2820817675f93f172e1668489840669694fcd735bb9a7--b52e03ad12455b5342ec16ef5a6c557094f5e7387766ecffa3dea1157ed4aff9.json",
-      "sequence": 14
+      "sequence": 17
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -1059,7 +1247,7 @@
       "authorization_id": "d760546b4f2e5d3398a8ed7b46d4bb845c66f091958d01ff8713e3b4ec563269",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--82475384c3c83fea1593a1f79e581969b404922eb374424d71e2a32b684e62c5--d760546b4f2e5d3398a8ed7b46d4bb845c66f091958d01ff8713e3b4ec563269.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--82475384c3c83fea1593a1f79e581969b404922eb374424d71e2a32b684e62c5--d760546b4f2e5d3398a8ed7b46d4bb845c66f091958d01ff8713e3b4ec563269.json",
-      "sequence": 15
+      "sequence": 18
     }
   ]
 }
