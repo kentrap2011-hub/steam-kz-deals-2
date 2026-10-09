@@ -5,23 +5,15 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
-## MANDATORY FIRST RESPONSE IN THE NEW DIRECTOR CHAT
+## CURRENT DECISION / ASSIGNMENTS — 2026-10-09 (newer than historical snapshot below)
 
-The user's first expected response is: **куда отправляем оба физических worker-чата после текущих задач**.
-
-Answer this immediately, before any new audit:
-
-- **Старые ЧАТ 1 и ЧАТ 2 не продолжать для новых отдельных задач.** Оба текущих substantial worker-task завершены до PR и после Director acceptance должны быть retired; следующие задачи идут в **новые разговоры** в тех же физических слотах.
-- **ЧАТ 1 → новый worker-чат по следующему Dossier implementation этапу: Research semantic worker / transport against the fully asynchronous contract.** Но сначала Director должен принять/merge PR #179. Новый Research worker обязан идти по frozen preauthorized work и не ждать GitHub acknowledgements; Assembly пока отдельным следующим task.
-- **ЧАТ 2 → новый worker-чат по следующему Deep migration-control-plane этапу: explicit Stage-1 migration authorization/materialization from current main, continuing from PR #178.** Не повторять preflight. Не запускать semantic Stage 1 внутри developer-чата. После materialization Stage-1 semantics запускается отдельным manual semantic worker, который не занимает физический developer slot.
-- **Fast removal:** actual Fast production authority is removed only at final atomic Deep cutover after accepted Stage 1 + Stage 2 semantics. The code preparation for Fast-free ranking already exists; do not create a competing earlier removal that would leave production without valid new Deep authority.
-
-Before giving worker prompts, finish Director acceptance check of the two current PRs:
-- PR #179 — fully asynchronous Dossier; open, green; branch `implement/dossier-fully-async-pipeline-01`; head last checked `7631ceb7a0fdc9ac3a73e9aafab1f4fdd06c0fa8`. It removes fixed 8-slot liveness blocking and lets Assembly consume the exact submitted immutable Research package before Research GitHub acceptance. New path stays inactive/non-authoritative.
-- PR #178 — Deep Stage 1 migration work preparation; open, green; branch `implement/deep-stage1-migration-work-preparation-01`; head last checked `1768dae0ab52e8abc6df68de780afc14814c1d54`. It produced an exact non-executable preview and stopped correctly at `mass_migration_authorized=false`.
-- Both branches were ~17 commits behind moving `main`, but the reverse-compare found **no overlap** between the main-side changes and either PR's task-owned files. Do not merge moving `main` into the branches merely because they are behind. Recheck head/checks/overlap, then squash-merge if still clean.
-
-The first user-facing answer should therefore be short and concrete: **ЧАТ 1 goes to a fresh Dossier Research-worker implementation chat; ЧАТ 2 goes to a fresh Deep Stage-1 migration authorization/materialization chat; semantic Stage 1 itself is a separate manual semantic worker.**
+- PR #179 and PR #178 have **already been merged** into main; checks were successful. Do not merge them again.
+- **НОВЫЙ ЧАТ — ЧАТ 1:** `WORKER_TASK_DOSSIER_ASYNC_RESEARCH_SEMANTIC_WORKER_IMPLEMENT_01.md` — implement inactive asynchronous Dossier Research semantic worker, no GitHub item acknowledgements.
+- **НОВЫЙ ЧАТ — ЧАТ 2:** `WORKER_TASK_DOSSIER_ASYNC_ASSEMBLY_SEMANTIC_WORKER_IMPLEMENT_01.md` — implement inactive asynchronous Dossier Assembly semantic worker, use exact submitted immutable Research bytes, no GitHub Research acceptance wait.
+- These are two separate developer PR-only tasks, **not** live semantic executions; neither stage may activate production or alter Scheduled Tasks.
+- Deep Stage 1 executable migration still requires separate user authorization; `mass_migration_authorized=false`. A later authorized manual semantic worker does not consume ЧАТ 1/2.
+- Fast must stay production-authoritative until a **single atomic Deep cutover** with accepted Stage 1/2 semantics and Stage 2 anchors; explicit visible plan substep `deep-fast-production-off`.
+- The rest of this file is previous contextual/historical information; where stale, this latest assignment and `main` contracts win.
 
 ## CONTEXT-BUDGET / DEPTH RULE — VERY IMPORTANT
 

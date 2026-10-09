@@ -5,7 +5,7 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## CURRENT DIRECTOR STATE — 2026-10-07
+## CURRENT DIRECTOR STATE — 2026-10-09
 
 - **Context discipline:** new Director must stay shallow. Use `DIRECTOR_HANDOFF_CURRENT.md` + this top section only; do not broadly inspect code/history. Deep implementation analysis belongs in worker chats.
 - **Mandatory first response in new Director chat:** answer the user's three pending questions about (1) concrete deferred-game examples and why reserve is not deletion, (2) why PR #157 exists/diverged, and (3) why the previous Chat 2 continuation message was too long.
@@ -17,13 +17,22 @@
 - **ЧАТ 1:** commercial/Dossier isolation accepted via PR #174, merge `a243b7bf61b2127a75491646ca1265fa5d13e149`. Fresh deterministic commercial state is persisted before Dossier; new current games can publish honestly as `not_analyzed / waiting_for_dossier`; strict Dossier validation remains unchanged. Real pre-AI run #37909195575 and visual run #37909274274 succeeded. Physical slot is free.
 - **ЧАТ 1:** async Dossier amendment accepted via PR #177, merge `d4a19c595fbd20cebe8f3f186c0afc1bfb63ff3f`. Research and Assembly use immutable preauthorized buffers and do not wait for the previous item's GitHub receipt. New path remains inactive/non-authoritative. Physical slot is free.
 - **ЧАТ 2:** Deep cutover preflight accepted via PR #176, merge `a2eaeef1a3203585970b62cb548e801faa073bc4`. Actual production cutover is blocked at the authorized semantic boundary: no accepted new Stage 1/Stage 2 semantics and no approved Stage 2 bootstrap anchors. No semantic results were invented. Physical slot is free pending Director/user authorization of the next semantic migration step.
-- **ЧАТ 1:** fully asynchronous Dossier amendment accepted via PR #179, merge `707e4b44a582fa11833fd17059e3cd413fe5d268`. No fixed unresolved-slot liveness gate; Assembly can consume the exact submitted Research package before GitHub acceptance; GitHub validates the chain later. New path remains inactive/non-authoritative. Physical slot is free.
-- **ЧАТ 2:** Deep Stage 1 migration preparation accepted via PR #178, merge `c429cead3788875e36f2596f2abb770307cd75cc`. Current preview found 27 Stage-1-ready candidates and 218 waiting/blocked; executable materialization remains gated by `mass_migration_authorized=false`. No semantic execution or cutover occurred. Physical slot is free.
-- **Pending Director acceptance:** PR #179 (ЧАТ 1 fully async Dossier) is green/open; if head/checks/overlap remain clean, accept it, retire the old worker chat, then use a fresh ЧАТ 1 for Research semantic worker implementation against the async contract.
-- **Pending Director acceptance:** PR #178 (ЧАТ 2 Deep Stage 1 migration preparation) is green/open; it correctly stops at `mass_migration_authorized=false`. After acceptance, retire the old worker chat; fresh ЧАТ 2 should handle explicit Stage-1 migration authorization/materialization, not semantic execution.
-- **Fast removal remains explicit final-cutover work:** Fast-free ranking code is prepared, but production Fast authority must be removed only atomically after accepted new Stage 1 + Stage 2 semantics.
+- **ЧАТ 1:** fully asynchronous Dossier amendment accepted via PR #179, merge `707e4b44a582fa11833fd17059e3cd413fe5d268`. No fixed unresolved-slot liveness gate; Assembly can consume the exact submitted Research package before GitHub acceptance; GitHub validates the chain later. New path remains inactive/non-authoritative. Previous physical conversation retired; new ЧАТ 1 assigned to inactive Research worker.
+- **ЧАТ 2:** Deep Stage 1 migration preparation accepted via PR #178, merge `c429cead3788875e36f2596f2abb770307cd75cc`. Current preview found 27 Stage-1-ready candidates and 218 waiting/blocked; executable materialization remains gated by `mass_migration_authorized=false`. No semantic execution or cutover occurred. Previous physical conversation retired; new ЧАТ 2 assigned to inactive Assembly worker.
+- **ЧАТ 1 — НОВЫЙ разговор назначен, запуск пользователем ожидается:** `WORKER_TASK_DOSSIER_ASYNC_RESEARCH_SEMANTIC_WORKER_IMPLEMENT_01.md`. Inactive Research semantic worker, offline PR-only; Research никогда не ждёт GitHub acknowledgement; PR #179 уже merged. Старый физический ЧАТ 1 retired.
+- **ЧАТ 2 — НОВЫЙ разговор назначен, запуск пользователем ожидается:** `WORKER_TASK_DOSSIER_ASYNC_ASSEMBLY_SEMANTIC_WORKER_IMPLEMENT_01.md`. Inactive Assembly semantic worker, offline PR-only; exact submitted Research без GitHub acceptance; PR #178 уже merged. Старый физический ЧАТ 2 retired. Deep Stage 1 materialization/semantic остаётся отдельно заблокированным до разрешения.
+- **ОБЯЗАТЕЛЬНЫЙ отдельный видимый production-подшаг:** `deep-fast-production-off` — выключить Fast **только одновременно** с atomic Deep cutover после accepted новых Stage 1 + Stage 2 результатов/anchors; никогда не выключать заранее. Fast-free код уже готов, production Fast пока остаётся authoritative.
 - No Scheduled Task changes are authorized.
 
+
+
+## CURRENT ASSIGNED WORKER TASKS — 2026-10-09
+
+- **Куда отправить: НОВЫЙ ЧАТ — ЧАТ 1.** `WORKER_TASK_DOSSIER_ASYNC_RESEARCH_SEMANTIC_WORKER_IMPLEMENT_01.md`: inactive fully-async Research semantic worker; PR-only offline implementation. Does not consume Deep Stage 1 authorization.
+- **Куда отправить: НОВЫЙ ЧАТ — ЧАТ 2.** `WORKER_TASK_DOSSIER_ASYNC_ASSEMBLY_SEMANTIC_WORKER_IMPLEMENT_01.md`: inactive fully-async Assembly semantic worker using exact submitted Research without GitHub acceptance; PR-only offline implementation.
+- Research and Assembly are independently implementable; each worker must avoid concurrent edits to the other stage/shared contracts; no production activation or Scheduled Task change.
+- **Deep:** `mass_migration_authorized=false`. No executable Stage 1 migration queue or manual semantic run without explicit separate user decision; semantic runs do not occupy developer slots.
+- **Fast final production removal:** tracked visibly as `deep-fast-production-off`, executed only as part of the atomic Deep cutover after genuinely accepted Stage 1/2 and bootstrap anchors. Fast remains active until then.
 
 ## TWO-STAGE DEEP IMPLEMENTATION WAVES — 2026-10-06
 
