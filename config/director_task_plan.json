@@ -577,6 +577,24 @@
       "updated_on": "2026-10-08",
       "recent_completion": true,
       "updated_at_utc": "2026-10-08T16:06:14Z"
+    },
+    {
+      "id": "commercial-refresh-dossier-isolation",
+      "title": "Свежие скидки независимо от Dossier",
+      "goal": "Развязать сохранение и публикацию свежих Steam/коммерческих данных от Dossier-local failures без ослабления Dossier validator.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Нужно разделить persistence/failure boundary в production workflow и исправить time-brittle Dossier fixture.",
+      "urgency": "критическая",
+      "urgency_reason": "Сайт сейчас остаётся на коммерческом источнике 6 октября, хотя Steam-сбор 8 октября успешен.",
+      "task_file": "WORKER_TASK_COMMERCIAL_REFRESH_INDEPENDENT_FROM_DOSSIER_FAILURE_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": 0,
+      "depends_on": [],
+      "blocker": "",
+      "updated_on": "2026-10-09",
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-09T06:35:00Z"
     }
   ]
 }
