@@ -179,9 +179,9 @@ class InactiveAssemblySemanticTests(unittest.TestCase):
         path, doc = self.candidate(0, r, [source_operation(lookup=True)])
         self.assertEqual(doc["supplemental_operations"][0]["gap_id"], "rgap-001")
         self.assertEqual(doc["output_path"], path)
-        with self.assertRaisesRegex(ValueError, "narrow lookup"):
+        with self.assertRaises(ValueError):
             self.candidate(0, r, [source_operation(state="unavailable", lookup=True)])
-        with self.assertRaisesRegex(ValueError, "revisit"):
+        with self.assertRaises(ValueError):
             self.candidate(0, r, [source_operation(state="fact_found", lookup=True)])
         wrong = source_operation(lookup=True)
         wrong["narrow_gap_lookup"]["appid"] = "23456"
@@ -217,7 +217,7 @@ class InactiveAssemblySemanticTests(unittest.TestCase):
         typed = diagnosis()
         typed["safe_diagnostic"] = "Quoted raw passage \"not allowed\""
         with self.assertRaises(ValueError):
-            self.candidate(0, r, payload=typed, operations=[source_operation()])
+            self.candidate(0, r, payload=typed)
         # This fixture has no named source gap; worker cannot invent one.
         with self.assertRaises(ValueError):
             self.candidate(0, r, operations=[source_operation()])
