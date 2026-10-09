@@ -35,20 +35,31 @@ pre-AI upstream.
    Deep eligibility, pin/translation steps and final atomic Dossier-state
    persistence still execute afterward. Their failure cannot roll back the
    earlier durable commercial commit.
-4. When an upstream pre-AI run concludes failed, the existing visual workflow
-   can enter **commercial-only** publication **only** if its current commercial
-   source is distinct, complete and persisted, and the prior visual retains
-   exact unchanged Dossier manifest / Progressive contract / Fast state / Deep
-   state bindings and structurally valid old semantic status/cards. Malformed
-   or independently drifting semantic states retain the normal strict full
-   rebuild boundary; other failed upstream workflow types are not authorized.
-5. Existing `refresh_visual_commercial_fields.py` and final visual producer
-   refresh current price, discount, offer expiry, stale-family removal and
-   history, re-run purchase-option enrichment, preserve semantic fields,
-   preserve the old `source_mailing_updated_at_utc` and Dossier processing
-   status, and stamp **current commercial** source timestamp plus exact Git
-   source blobs. Pages remains a read-only consumer.
-6. Successful pre-AI runs preserve the existing full Progressive build path.
+4. When the upstream pre-AI run reports failure, the visual workflow can
+   exceptionally enter the **existing full Progressive visual producer**
+   after verifying that the fresh commercial snapshot is durably committed,
+   complete and source-bound, that the existing visual has a valid semantic
+   overlay, and that Dossier/Fast/Deep **acceptance** blobs are unchanged.
+   The previous commercial-only path was insufficient because it could only
+   retain/remove old cards. Other upstream failures or unsafe global state
+   remain fail-closed.
+5. The full producer enumerates the **fresh current
+   `progressive_candidate_context.jsonl`**, not the previous visual
+   `items`, via `build_visual_feed_v2.py`; its canonical
+   `progressive_personalization.build_state_index()` attaches a compatible
+   accepted Taste/Fast/Deep result only through the existing exact bindings.
+   An entirely new family without accepted semantic evidence is rendered as
+   `not_analyzed` with `dossier_stage_state=not_ready` and
+   `deep_stage_state=waiting_for_dossier`; no fake execution/acceptance.
+6. This full path runs the existing known-expiry/removal, fixed-package
+   purchase, ranking, status, card/translation/giveaway, material-binding and
+   visual publication validators. Expired/removed families are omitted,
+   current discounts/prices come from the fresh Store snapshot; Dossier
+   worker manifests and acceptance are **not** updated on this path.
+   Existing Dossier write timestamps and source-binding remain old, while
+   current commercial source/blobs advance. The normal successful
+   pre-AI pathway is unchanged.
+
 
 There is **no** manual production JSON/date modification, new schedule,
 semantic queue, retry manager, or direct Dossier acceptance.
@@ -69,7 +80,7 @@ regression explicitly supplies a genuinely expired candidate and expects
 - `.github/workflows/validate-site-publication-resilience.yml`
 - `scripts/persist_pre_ai_commercial.sh` (new)
 - `scripts/progressive_visual_activation_routing.py`
-- `scripts/test_commercial_dossier_failure_isolation.py` (new)
+- `scripts/test_commercial_dossier_failure_isolation.py` (new; extended)
 - `scripts/test_taste_steam_review_dossier_prepublication.py`
 - This report.
 
@@ -81,7 +92,15 @@ regression explicitly supplies a genuinely expired candidate and expects
   proves that the complete latest deterministic commercial source is still
   durable while old valid Dossier state is unchanged; separately checks
   unchanged-Dossier/Fast/Deep fallback gates and real paid-card price/discount
-  updates with old semantic timestamps/fields.
+  updates with old semantic timestamps/fields. An additional case calls
+  **real** `progressive_personalization.build_state_index()` over a freshly
+  added game with no accepted semantic/Dossier state, then invokes the
+  canonical `build_visual_feed_v2.main()` in an isolated temporary output:
+  the new previously absent game enters the current visual as
+  `not_analyzed / waiting_for_dossier`, with current price/discount and
+  no fabricated Fast/Deep result. Workflow-routing assertions verify that
+  failed-upstream fallback goes through the full producer (not the
+  old-card-only path) and never emits a contradictory no-build receipt.
 - `python scripts/test_taste_steam_review_dossier_prepublication.py`:
   valid fixture parity and deliberately expired strict rejection.
 - Existing `scripts/test_progressive_visual_activation_routing.py`,
@@ -102,18 +121,17 @@ Dossier's own write/acceptance state did not claim a new result; verify any
 failed Dossier validation still rejects that candidate, and Deep has not
 ingested unvalidated evidence.
 
-## Remaining limitation
+## Remaining conditions and verification boundary
 
-The guarded failure fallback intentionally **does not manufacture semantic
-cards for newly introduced current-cycle families**: it refreshes only
-previously published family cards (removing families no longer current), while
-the **full current candidate universe is durably preserved in the fresh
-family/progressive artifacts**. Newly introduced families become visible on
-the next successful full Progressive publication. The fallback therefore
-guarantees correct **current commercial data for displayed cards**, not a
-complete newly expanded visual lineup during a Dossier failure. This preserves
-the strict preexisting semantic/card accounting instead of inventing
-unvalidated Deep/Dossier results. This limitation should be evaluated in PR
-review against the task's current-universe requirement.
+The failed-upstream exception is deliberately limited to a durably persisted,
+complete and source-bound current commercial snapshot with an intact old
+semantic overlay and unchanged canonical Dossier/Fast/Deep acceptance blobs.
+A global data corruption or changed/ambiguous semantic authority still fails
+closed. New items do not require Dossier or Deep for honest unanalysed
+publication; previously accepted results are reused only with exact bindings.
 
-No post-merge live production or Pages result is claimed in this report.
+The full producer still uses all its normal global validation and
+read-only site publication gates. This PR proves routing and the new-item
+regression, but **does not** claim post-merge success of an authentic
+Steam/mailing → pre-AI (Dossier failure) → full visual → Pages sequence.
+That real run and latest live site must be inspected after merge.
