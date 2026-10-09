@@ -118,8 +118,8 @@ Do not restate the entire task specification in the chat message when the canoni
 
 - ЧАТ 1 complete/free: commercial/Dossier isolation accepted via PR #174 (`a243b7bf61b2127a75491646ca1265fa5d13e149`). Fresh deterministic commercial data now persists before Dossier. Real pre-AI run #37909195575 and visual run #37909274274 succeeded. The first Pages deploy then failed only because Director registry metadata had invalid `order: 0`; that metadata is corrected separately.
 
-- ЧАТ 1 active: `WORKER_TASK_DOSSIER_TWO_STAGE_ASYNC_PIPELINE_AMENDMENT_01.md`. User explicitly rejected per-item GitHub waiting. Research and Assembly must continue on buffered GitHub-preauthorized work while GitHub validates prior outputs asynchronously. Current two-stage system remains inactive.
-- ЧАТ 2 active: `WORKER_TASK_DEEP_TWO_STAGE_INTEGRATION_CUTOVER_01.md`. All accepted Deep prerequisites are complete. Integrate/cut over without depending on the new two-stage Dossier; no Scheduled Task changes are authorized.
+- ЧАТ 1 complete/free: async Dossier amendment PR #177 merged as `d4a19c595fbd20cebe8f3f186c0afc1bfb63ff3f`. Research/Assembly can traverse frozen preauthorized buffers without per-item acknowledgement; GitHub validates prior outputs asynchronously. Buffer cap is 8 unresolved slots per phase; this is backpressure, not per-item acknowledgement. New path remains inactive/non-authoritative.
+- ЧАТ 2 complete/free at semantic boundary: Deep integration preflight PR #176 merged as `a2eaeef1a3203585970b62cb548e801faa073bc4`. Cutover not performed. Current new Stage 1/Stage 2 accepted state is empty and Stage 2 has no approved bootstrap anchors. Next step requires explicit Director/user authorization for GitHub-prepared Stage 1 migration work and subsequent manual semantic execution; new two-stage Dossier remains inactive and is not a dependency.
 
 ## CURRENT PHYSICAL WORKER SLOTS
 
