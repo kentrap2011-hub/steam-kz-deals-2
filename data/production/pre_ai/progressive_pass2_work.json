@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 160,
     "deep_completed_not_fit_count": 36,
     "deep_incomplete_or_recovery_count": 24,
-    "deep_waiting_for_dossier_count": 2063,
-    "deep_ready_or_pending_count": 18,
+    "deep_waiting_for_dossier_count": 2060,
+    "deep_ready_or_pending_count": 21,
     "deep_normal_first_pass_remaining_count": 2081,
     "deep_remaining_until_all_authoritative_count": 2105,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 15,
-    "dossier_waiting_count": 2063,
+    "dossier_waiting_count": 2060,
     "pass2_attempted_count": 220,
-    "pass2_eligible_count": 18,
-    "normal_pass2_eligible_count": 18,
+    "pass2_eligible_count": 21,
+    "normal_pass2_eligible_count": 21,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -743,6 +743,73 @@
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1088850",
+      "taste_subject_key": "App_1088850",
+      "appid": "1088850",
+      "taste_fingerprint": "97137f7af58d6f2aecfb4252b9fdb2731c820563184a5897b2e421ca1b0c91cf",
+      "candidate_context_sha256": "7bc367196511a676dc552b28fdc44cbc2df8795d28b3cf4f1338769adc3148c1",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "322b2dc1fac65cef8b3b09389cee1afd89c298e757fa3e4db2b006c1a153019e",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Marvel's Guardians of the Galaxy",
+        "short_description": "Fire up a wild ride across the cosmos with a fresh take on Marvel’s Guardians of the Galaxy. In this action-adventure game, you are Star-Lord leading the unpredictable Guardians from one explosion of chaos to the next. You got this. Probably.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Action-Adventure",
+          "Choices Matter",
+          "Singleplayer",
+          "Story Rich",
+          "Superhero"
+        ],
+        "core_fit_count": 4,
+        "release_date": "26 Oct, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1088850"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1088850.json",
+      "dossier_content_sha256": "bd98e97599d9c57d1d0f0a999790981c3673d57e0533f7dddc50c22d7892a5a3",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-29T06:34:00+00:00",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "0caf8d7a9e5894f4496c77997155e270b8a663888c7002ea3c0ba5c8ed1d097d",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--322b2dc1fac65cef8b3b09389cee1afd89c298e757fa3e4db2b006c1a153019e--0caf8d7a9e5894f4496c77997155e270b8a663888c7002ea3c0ba5c8ed1d097d.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--322b2dc1fac65cef8b3b09389cee1afd89c298e757fa3e4db2b006c1a153019e--0caf8d7a9e5894f4496c77997155e270b8a663888c7002ea3c0ba5c8ed1d097d.json",
+      "sequence": 11
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "family_id": "game:1084640",
       "taste_subject_key": "App_1084640",
       "appid": "1084640",
@@ -803,7 +870,7 @@
       "authorization_id": "92a70523e1b1598b727ae27460bd236a1fa4dca1bd443e26cf6ab52da1d81b1d",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--e34cd8cd34621cd4d76888a73e62f2a4a0cb73e8329570df777b8059cc5dcc3e--92a70523e1b1598b727ae27460bd236a1fa4dca1bd443e26cf6ab52da1d81b1d.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--e34cd8cd34621cd4d76888a73e62f2a4a0cb73e8329570df777b8059cc5dcc3e--92a70523e1b1598b727ae27460bd236a1fa4dca1bd443e26cf6ab52da1d81b1d.json",
-      "sequence": 11
+      "sequence": 12
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -867,7 +934,7 @@
       "authorization_id": "366319f248774c960d51d96b6e79e561eceedf58c22ecdf4516c62b46e394167",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--676354fa7b32814d269e94f387b635cea7a7d98e731ad4ffb1b8cc92d61e92ae--366319f248774c960d51d96b6e79e561eceedf58c22ecdf4516c62b46e394167.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--676354fa7b32814d269e94f387b635cea7a7d98e731ad4ffb1b8cc92d61e92ae--366319f248774c960d51d96b6e79e561eceedf58c22ecdf4516c62b46e394167.json",
-      "sequence": 12
+      "sequence": 13
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -931,7 +998,67 @@
       "authorization_id": "20a27b56fd9f74b22a37832850011a321fdc9542a3da64efab74362a729db159",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--e7c9b06f70963146554adb836fe3b257e6d486bdb775566cb08a19805373cd9f--20a27b56fd9f74b22a37832850011a321fdc9542a3da64efab74362a729db159.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--e7c9b06f70963146554adb836fe3b257e6d486bdb775566cb08a19805373cd9f--20a27b56fd9f74b22a37832850011a321fdc9542a3da64efab74362a729db159.json",
-      "sequence": 13
+      "sequence": 14
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1088790",
+      "taste_subject_key": "App_1088790",
+      "appid": "1088790",
+      "taste_fingerprint": "03b508675f5c7ca91e2ed6b569542c90865d956c7be9b27ebaf8584be13e39ab",
+      "candidate_context_sha256": "34b8560fb69749061ba408f543cb49d4cac9fed030ddc4c459b52382c3065c1b",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "da9cedf46c0e9aa5e7c4db83e8972e3edd8525b50e7969f772b601383034ef11",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Rebel Inc: Escalation",
+        "short_description": "A unique and deeply engaging political/military strategic simulation from the creator of Plague Inc. Balance competing civilian and military priorities and deal with a deadly insurgency in order to stabilise a war-torn country.",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "13 Oct, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1088790"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1088790.json",
+      "dossier_content_sha256": "74677007c62bbbd65a8aa87bbfde3ae99f9c92914a0472aac9ce63688be21d22",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-29T06:34:00+00:00",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "19fd08c678c79672688495e47fce3e38c5a5ee3ba57ebabd2ebaa02cc10ff2e5",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--da9cedf46c0e9aa5e7c4db83e8972e3edd8525b50e7969f772b601383034ef11--19fd08c678c79672688495e47fce3e38c5a5ee3ba57ebabd2ebaa02cc10ff2e5.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--da9cedf46c0e9aa5e7c4db83e8972e3edd8525b50e7969f772b601383034ef11--19fd08c678c79672688495e47fce3e38c5a5ee3ba57ebabd2ebaa02cc10ff2e5.json",
+      "sequence": 15
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -995,7 +1122,7 @@
       "authorization_id": "175d86029d77c9cb2cccfc3f544c612ab0ceb28f68e14398e7f75b8855e85103",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--766e4604ad32e8251eed5614877d17e58d8e8d1f1bee2d3744e6cd32e6a83696--175d86029d77c9cb2cccfc3f544c612ab0ceb28f68e14398e7f75b8855e85103.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--766e4604ad32e8251eed5614877d17e58d8e8d1f1bee2d3744e6cd32e6a83696--175d86029d77c9cb2cccfc3f544c612ab0ceb28f68e14398e7f75b8855e85103.json",
-      "sequence": 14
+      "sequence": 16
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -1059,7 +1186,7 @@
       "authorization_id": "765c60a5b06e34121f14170577eb803c81a921bf1e35e3fb6e6de2ba6f2a2c25",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--bfd9ebfc2a14c22e7b09d27806dc87e71c1b8e5510fb30fcfd1dca6974875dcf--765c60a5b06e34121f14170577eb803c81a921bf1e35e3fb6e6de2ba6f2a2c25.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--bfd9ebfc2a14c22e7b09d27806dc87e71c1b8e5510fb30fcfd1dca6974875dcf--765c60a5b06e34121f14170577eb803c81a921bf1e35e3fb6e6de2ba6f2a2c25.json",
-      "sequence": 15
+      "sequence": 17
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -1122,7 +1249,7 @@
       "authorization_id": "e31a323a831ed33e1e0ffbf1c4c06e1d83d34d984102d9b5aaacc21fbeeacf0c",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ae5bb3e88ed21e5744072823315ac7e7aa4bf71b0b430bf1c9a479bc5c6831e1--e31a323a831ed33e1e0ffbf1c4c06e1d83d34d984102d9b5aaacc21fbeeacf0c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ae5bb3e88ed21e5744072823315ac7e7aa4bf71b0b430bf1c9a479bc5c6831e1--e31a323a831ed33e1e0ffbf1c4c06e1d83d34d984102d9b5aaacc21fbeeacf0c.json",
-      "sequence": 16
+      "sequence": 18
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -1186,7 +1313,7 @@
       "authorization_id": "7ee5b6f26fe5895aa9b223d13e2ee9a070b4cd10bde4006ccc16352eb67effc1",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--7d4cec86b96b089ff581a9fb6e968a3d8cdd874ff430509ce94e32d9f22c080e--7ee5b6f26fe5895aa9b223d13e2ee9a070b4cd10bde4006ccc16352eb67effc1.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--7d4cec86b96b089ff581a9fb6e968a3d8cdd874ff430509ce94e32d9f22c080e--7ee5b6f26fe5895aa9b223d13e2ee9a070b4cd10bde4006ccc16352eb67effc1.json",
-      "sequence": 17
+      "sequence": 19
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -1246,7 +1373,70 @@
       "authorization_id": "65792f799b50263d7510e15623d296ef91f59a15ef53d70083e3668f59ae4537",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--e02eeb64053836d0c91ae6c3b0822aac86a522f38e56156e6a32b842df4fea59--65792f799b50263d7510e15623d296ef91f59a15ef53d70083e3668f59ae4537.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--e02eeb64053836d0c91ae6c3b0822aac86a522f38e56156e6a32b842df4fea59--65792f799b50263d7510e15623d296ef91f59a15ef53d70083e3668f59ae4537.json",
-      "sequence": 18
+      "sequence": 20
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1089090",
+      "taste_subject_key": "App_1089090",
+      "appid": "1089090",
+      "taste_fingerprint": "c612c0414461025ef4e576a42281d38839ff35e257a32807fa8e1476111e84a4",
+      "candidate_context_sha256": "9cfbb304e02454e5bc001ec0e76350c6aaf3f35b1d48bf64ead383124a56d7b3",
+      "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+      "work_id": "65c1f82d1a2c51308d673e6dbb521e3794982b0237f0647116c9cef55b59f4ae",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "ONE PIECE: PIRATE WARRIORS 4",
+        "short_description": "ONE PIECE: PIRATE WARRIORS 4 is the latest evolution of PIRATE WARRIORS action!\r\n\r\nBased on the concept of \"experiencing a real ONE PIECE battlefield,\" buildings will come crashing down during the action and attacks will throw up smoke and dust, placing you in the thick of the ONE PIECE world!",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Hack and Slash"
+        ],
+        "core_fit_count": 1,
+        "release_date": "14 Sep, 2023",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1089090"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1089090.json",
+      "dossier_content_sha256": "653b98b1af140882a562b9def53159938719c5df9d1ed32c8d77f64e36bd5f9c",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-29T06:34:00+00:00",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "6b139c0faee1590ce6d6392facb90cc7a967e249e054e7d0eb9e909f7b71cf31",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--65c1f82d1a2c51308d673e6dbb521e3794982b0237f0647116c9cef55b59f4ae--6b139c0faee1590ce6d6392facb90cc7a967e249e054e7d0eb9e909f7b71cf31.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--65c1f82d1a2c51308d673e6dbb521e3794982b0237f0647116c9cef55b59f4ae--6b139c0faee1590ce6d6392facb90cc7a967e249e054e7d0eb9e909f7b71cf31.json",
+      "sequence": 21
     }
   ]
 }
