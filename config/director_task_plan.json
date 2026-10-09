@@ -211,13 +211,13 @@
       "id": "deep-cutover",
       "title": "Deep: интеграция и переключение",
       "goal": "Проверить миграцию и переключить продакшн без смешанных баллов.",
-      "status": "active",
+      "status": "blocked",
       "effort": "высокая",
       "effort_reason": "Потребуются все четыре реализации и end-to-end тест.",
       "urgency": "высокая",
       "urgency_reason": "Ошибки cutover повредят сортировку.",
       "task_file": "WORKER_TASK_DEEP_TWO_STAGE_INTEGRATION_CUTOVER_01.md",
-      "worker_slot": "ЧАТ 2",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "deep-stage1",
@@ -225,10 +225,10 @@
         "deep-ranking",
         "deep-site"
       ],
-      "blocker": "",
+      "blocker": "Нужны GitHub-prepared Stage 1 semantic migration work, реальные принятые Stage 1 результаты и явно авторизованные Stage 2 bootstrap anchors до atomic cutover.",
       "updated_on": "2026-10-09",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-09T10:12:00Z"
+      "updated_at_utc": "2026-10-09T10:45:00Z"
     },
     {
       "id": "taste-profile",
@@ -620,7 +620,7 @@
       "id": "dossier-two-stage-async-pipeline",
       "title": "Dossier: асинхронный Research → Assembly",
       "goal": "Убрать синхронное ожидание GitHub между элементами Research и Assembly, сохранив GitHub владельцем очереди, проверок и acceptance.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Нужно скорректировать уже реализованные неактивные P1/P2 lifecycle/staging contracts и доказать buffered non-blocking progress.",
       "urgency": "высокая",
@@ -633,8 +633,8 @@
       ],
       "blocker": "",
       "updated_on": "2026-10-09",
-      "updated_at_utc": "2026-10-09T10:12:00Z",
-      "recent_completion": false
+      "updated_at_utc": "2026-10-09T10:45:00Z",
+      "recent_completion": true
     }
   ]
 }
