@@ -327,5 +327,30 @@
     "new_scheduler_created": false,
     "new_semantic_queue_or_retry_loop_created": false,
     "scheduled_chatgpt_change": false
+  },
+  "dossier_two_stage_future_fully_async": {
+    "status": "implemented_inactive_not_production_authority",
+    "contracts": [
+      "config/dossier_two_stage_interfaces_contract.json",
+      "config/dossier_two_stage_staging_contract.json",
+      "config/dossier_two_stage_async_buffer_contract.json"
+    ],
+    "github_owns": [
+      "preauthorize_exact_scope_and_order",
+      "freeze_work_and_binding",
+      "eventual_Research_validation",
+      "eventual_Assembly_chain_and_strict_final_validation",
+      "canonical_3_game_group_acceptance",
+      "retry_recovery_and_Deep_gate"
+    ],
+    "semantic_liveness": [
+      "no_unresolved_slot_cap_or_Github_receipt_wait_for_preauthed_Research",
+      "no_Github_Research_acceptance_required_for_preauthorized_Assembly_to_consume_submitted_immutable_Research_bytes",
+      "sibling_invalidity_only_quarantines_own_chain"
+    ],
+    "scheduled_workers_implemented": false,
+    "production_activated": false,
+    "new_sched_tasks": false,
+    "one_stage_dossier_authoritative": true
   }
 }
