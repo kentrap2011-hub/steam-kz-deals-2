@@ -290,6 +290,44 @@ def test_failed_dossier_full_build_includes_new_not_analyzed_current_game():
     assert game["discount_percent"] == 70
 
 
+def test_failed_dossier_full_path_keeps_only_active_offers():
+    """Run the existing full-build expiry guard, not a UI/client fallback."""
+    import build_daily_visual_payload as full_builder
+
+    active = {
+        "id": "game:300", "analysis_state": "not_analyzed",
+        "offers": [{
+            "key": "App_300", "current_price_rub": 30,
+            "original_price_rub": 100, "discount_percent": 70,
+            "sale_end_utc": "2099-01-01T00:00:00+00:00",
+        }],
+    }
+    expired = {
+        "id": "game:old", "analysis_state": "not_analyzed",
+        "offers": [{
+            "key": "App_99", "current_price_rub": 40,
+            "original_price_rub": 90, "discount_percent": 55,
+            "sale_end_utc": "2020-01-01T00:00:00+00:00",
+        }],
+    }
+    with tempfile.TemporaryDirectory() as td:
+        history = Path(td) / "history.json"
+        history.write_text('{"entries":{}}', encoding="utf-8")
+        with patch.object(full_builder, "HISTORY_SNAPSHOT", history):
+            fresh = full_builder.enrich_history_and_remove_expired(
+                {"items": [expired, active]},
+                {
+                    "game:old": {"purchase": {"key": "App_99"}},
+                    "game:300": {"purchase": {"key": "App_300"}},
+                },
+                {"fx_binding": {"kzt_per_rub": 5}},
+            )
+    assert [row["id"] for row in fresh["items"]] == ["game:300"]
+    assert fresh["expired_family_ids_removed_at_build"] == ["game:old"]
+    assert fresh["expired_family_count_removed_at_build"] == 1
+    assert fresh["items"][0]["discount_percent"] == 70
+
+
 def main():
     for test in (
         test_workflow_has_durable_commercial_boundary,
@@ -297,9 +335,10 @@ def main():
         test_failed_dossier_safe_commercial_fallback_only,
         test_paid_refresh_advances_commercial_not_semantic_or_dossier,
         test_failed_dossier_full_build_includes_new_not_analyzed_current_game,
+        test_failed_dossier_full_path_keeps_only_active_offers,
     ):
         test()
-    print("commercial/Dossier failure isolation: 5 tests passed")
+    print("commercial/Dossier failure isolation: 6 tests passed")
 
 
 if __name__ == "__main__":
