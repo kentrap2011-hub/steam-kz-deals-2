@@ -35,10 +35,9 @@ jobs:
           assert p["production_cutover_performed"] is False
           assert p["research_assembly_dossier_used"] is False
           assert p["executable_materialization_authorized"] is False
-          assert p["current_scope_total"] == len(p["blocked_or_waiting"]) + p["eligible_with_current_dossier"] or all(
-              b["reason"].startswith("accepted_stage1_") for b in p["blocked_or_waiting"][
-                  p["current_scope_total"] - p["eligible_with_current_dossier"]:
-              ])
+          assert 0 <= p["requires_stage1_semantics"] <= p["eligible_with_current_dossier"] <= p["current_scope_total"]
+          assert len(p["canonical_work_if_authorized"]["items"]) == p["requires_stage1_semantics"]
+          assert not p["canonical_work_if_authorized"]["implementation_status"] == "active"
           print("migration preview is non-executable; contract authority not bypassed")
           PY
       - name: Prove current canonical Stage-1 manifest remains non-active
