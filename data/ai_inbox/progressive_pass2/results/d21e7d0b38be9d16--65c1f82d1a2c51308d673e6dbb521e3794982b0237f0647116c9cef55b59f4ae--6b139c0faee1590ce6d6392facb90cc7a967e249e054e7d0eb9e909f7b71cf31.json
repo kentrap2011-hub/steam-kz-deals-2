@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "b562fa2269a44b617144113919467b8e6eeee67b",
+  "run_start_authority_commit": "22a1edc5272556ab98560896e2ed39cdd927a3ef",
+  "run_started_at_utc": "2026-10-09T06:45:35+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "65c1f82d1a2c51308d673e6dbb521e3794982b0237f0647116c9cef55b59f4ae",
+  "family_id": "game:1089090",
+  "taste_subject_key": "App_1089090",
+  "appid": "1089090",
+  "taste_fingerprint": "c612c0414461025ef4e576a42281d38839ff35e257a32807fa8e1476111e84a4",
+  "candidate_context_sha256": "9cfbb304e02454e5bc001ec0e76350c6aaf3f35b1d48bf64ead383124a56d7b3",
+  "dossier_content_sha256": "653b98b1af140882a562b9def53159938719c5df9d1ed32c8d77f64e36bd5f9c",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "6b139c0faee1590ce6d6392facb90cc7a967e249e054e7d0eb9e909f7b71cf31",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "confidence": "medium",
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Многие задания сводятся к многократному уничтожению толп, а живучие боссы не всегда добавляют новые решения; при ослаблении интереса к комбинациям процесс может быстро наскучить.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Адаптация пропускает существенные части истории и некоторые карты или персонажей предыдущей части, из-за чего повествование ощущается сокращённым.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 9
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Часть игроков считает боссов слишком лёгкими, а дополнительные режимы не всегда компенсируют недостаток новой сложности.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Камера на специальных атаках, изменения управления и неочевидное открытие навыков могут мешать боевому потоку.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "По одному сообщению сентября 2026, участников сетевого кооператива нужно приглашать заново после каждой миссии; это не доказательство проблемы во всех режимах или версиях.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Старая жалоба одного пользователя 2021 года на геймпад и ролики не подтверждает массовую текущую техническую неисправность.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      }
+    ]
+  },
+  "fit_level": "moderate",
+  "positive_evidence": [
+    "Быстрые массовые бои используют зрелищные специальные приёмы, воздушные комбинации и разные атаки персонажей (наблюдение 0).",
+    "У бойцов различаются стили и усиленные формы, а заработанные в миссиях ресурсы можно направлять на навыки и новые комбинации (наблюдение 1).",
+    "Дополнительные задания Treasure Log дают повод освоить других героев и продолжать практиковаться после сюжетной части (наблюдение 4)."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 68,
+    "development_variety": 76,
+    "structure_pacing_direction": 65,
+    "identity_hooks": 74,
+    "breadth_of_match": 61
+  },
+  "base_support_compatible": null,
+  "score_findings": [
+    {
+      "finding_id": "fast_juggles_combos",
+      "text_ru": "Массовые схватки с жонглированием врагами в воздухе и яркими спецприёмами дают активное непосредственное управление, хотя серьёзный тактический вызов встречается не всегда.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Особенно ценится освоение приёмов и таймингов; сама лёгкая сложность не даёт большого плюса."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 68
+        }
+      ]
+    },
+    {
+      "finding_id": "distinct_fighter_styles",
+      "text_ru": "Различия персонажей, особые формы, улучшение навыков и комбо позволяют менять манеру боя и открывать варианты уже знакомых сражений.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Интерес поддерживается появлением новых способов играть, а не одним повторяемым приёмом."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 76
+        }
+      ]
+    },
+    {
+      "finding_id": "condensed_anime_story",
+      "text_ru": "История показывает выбранные крупные арки, пропуская связи между ними; короткие знакомые миссии облегчают движение, но понимание сюжета зависит от знакомства с первоисточником.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "История и персонажи важны, хотя хорошая боёвка способна частично компенсировать слабое повествование."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 65
+        }
+      ]
+    },
+    {
+      "finding_id": "one_piece_spectacle",
+      "text_ru": "Герои с собственными зрелищными атаками, сверхмощными формами и масштабными столкновениями создают узнаваемое аниме-приключение.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 9
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Выразительный стиль и характерный художественный образ помогают игре запомниться."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 74
+        }
+      ]
+    },
+    {
+      "finding_id": "mob_repetition_and_old_inputs",
+      "text_ru": "Многократное уничтожение толп и не всегда удобная камера могут утомить, даже если разных бойцов приятно прокачивать и осваивать.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8/pattern",
+          "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+          "match_text_ru": "Повторение допустимо, пока сами действия и новые ситуации доставляют удовольствие."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 61
+        }
+      ]
+    }
+  ]
+}
