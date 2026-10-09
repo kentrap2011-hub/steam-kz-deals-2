@@ -105,6 +105,9 @@ regression explicitly supplies a genuinely expired candidate and expects
   old-card-only path) and never emits a contradictory no-build receipt.
   The gate also permits full rebuilding an older semantic visual even when
   its commercial stamp already matches the newly persisted current cycle.
+  A separate regression invokes the canonical full-build expiry guard and
+  proves an already-expired old family is removed while a newly current
+  `not_analyzed` family's current offer survives.
 - `python scripts/test_taste_steam_review_dossier_prepublication.py`:
   valid fixture parity and deliberately expired strict rejection.
 - Existing `scripts/test_progressive_visual_activation_routing.py`,
