@@ -1,0 +1,285 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "4e800d629ccf2e2a529a2dd8060e6814181b5712",
+  "run_start_authority_commit": "173dc9aa1bc071bb99cdd6f79b43d2005e5862b6",
+  "run_started_at_utc": "2026-10-09T07:51:39+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387",
+  "work_id": "f9e245301ffede8daf3349805eb051a74ad5c6dccf8f3c62ec99d962df60d5b6",
+  "family_id": "game:1092790",
+  "taste_subject_key": "App_1092790",
+  "appid": "1092790",
+  "taste_fingerprint": "e88022092f62f5c3fafc9b557554c9daaf916fa30a7ae6cb86f21ae6d3391b14",
+  "candidate_context_sha256": "8ef48d929d411551d3c8fe2c921916a8099ec64dc0cc216862cfe6903fea47c7",
+  "dossier_content_sha256": "9ead302f7a1cd868019563f14e110a2f5086dc1eaa9f9ce5e4a2bfdbe4fa5f7e",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "1e612bb1c42abaa1af07e7f22d0011fec16c6409412c37df992488e4ccccefa8",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "high",
+  "positive_evidence": [
+    "Карточные бои с жертвованием ресурсов и синергиями дают локальные тактические задачи, дополненные загадками комнаты (наблюдение 0).",
+    "Структура игры заметно меняет правила и визуальный язык между актами, поэтому опыт не сводится к повторению стартовой формулы (наблюдения 1, 8).",
+    "Тайны карт, хижины и Лешего вместе с метаисторией и персонажами обеспечивают яркий сюжетный крючок (наблюдения 6, 7, 9).",
+    "После сюжетного прохождения Kaycee's Mod предлагает более постоянный тактический вызов в духе первого акта (наблюдение 3)."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 84,
+    "development_variety": 94,
+    "structure_pacing_direction": 74,
+    "identity_hooks": 96,
+    "breadth_of_match": 88
+  },
+  "score_findings": [
+    {
+      "finding_id": "insc-mystery",
+      "text_ru": "Тайна карты, хижины и фигуры Лешего связывает головоломки с карточными боями и ведёт к запоминающимся сюжетным открытиям.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 7
+        },
+        {
+          "kind": "observation",
+          "index": 9
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5",
+          "profile_value_sha256": "08091731e0895f3d8e7f6b98b48da27ab8a9dc337e12dea3d74c1463b34252b1",
+          "match_text_ru": "Пользователя особенно увлекают загадки и тайны, за разгадкой которых хочется идти."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 96
+        }
+      ]
+    },
+    {
+      "finding_id": "insc-tactics",
+      "text_ru": "Жертвование карт, ресурсные обмены и комбинации колоды требуют подбирать тактику под ситуацию; загадки комнаты добавляют второй тип задач.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/геймплей_и_ощущение_управления",
+          "profile_value_sha256": "d3771421605762291318495b2f40d2daf128d3a24343353b6f66ff111a87f163",
+          "match_text_ru": "Удовольствие от активного игрового цикла важно; в данном случае оно обеспечивается конкретными решениями о картах и ресурсах."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 84
+        }
+      ]
+    },
+    {
+      "finding_id": "insc-evolution",
+      "text_ru": "Между актами меняются визуальная форма и правила карточной игры: привычная механика не просто масштабируется, а преобразуется по ходу истории.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "b584a23bde72bbcacc284a93f33e49bda9cde0b89c7d750aa3d954ed1fef2055",
+          "match_text_ru": "Сильная личная потребность в развитии и новых ситуациях, а не раскрытой в начале формуле."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 94
+        }
+      ]
+    },
+    {
+      "finding_id": "insc-pacing",
+      "text_ru": "Резкий переход к новым правилам и пиксельной подаче во втором акте для части игроков сбивает привычный ритм и заставляет заново осваивать несколько систем колоды.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "b584a23bde72bbcacc284a93f33e49bda9cde0b89c7d750aa3d954ed1fef2055",
+          "match_text_ru": "Новые механики привлекательны, но раскрытие опыта не должно превращаться в непонятную перегрузку."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 74
+        }
+      ]
+    },
+    {
+      "finding_id": "insc-breadth",
+      "text_ru": "Сильная история, необычная атмосфера, вариативные карточные столкновения и отдельный режим тактических забегов дают несколько разных причин играть, а не один сюжетный трюк.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/13",
+          "profile_value_sha256": "c872c87eaf55c396b6be6b8099860a7a29496023e5ca2ae16758626dc9c60f15",
+          "match_text_ru": "Личный интерес поддерживает игра с яркой механической, художественной или повествовательной особенностью."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 88
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Второй акт резко меняет стиль и расширяет систему колод; может потребоваться заново разбираться в правилах, а не развивать уже освоенную стратегию первого акта.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Ближе к финалу отдельные игроки отмечают спад темпа и перерывы в привычном ритме карточных сражений.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Встречаются скачки сложности при подборе колоды и отдельных сочетаниях карт; это повод экспериментировать с колодой, а не признак непосильной сложности.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Не всем нравятся все смены правил: для части аудитории первый акт остаётся предпочтительным, и новые форматы ощущаются менее глубокими.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 8
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      }
+    ]
+  }
+}
