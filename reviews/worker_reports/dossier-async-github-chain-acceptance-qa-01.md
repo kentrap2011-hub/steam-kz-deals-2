@@ -4,7 +4,7 @@
 - Task: `WORKER_TASK_DOSSIER_ASYNC_GITHUB_CHAIN_ACCEPTANCE_QA_01.md`
 - Base: `main`; branch: `qa/dossier-async-github-chain-acceptance-01`.
 - Mode: **offline validation only; inactive; PR-only; never a semantic or production run**.
-- PR: to be recorded after creation. No merge performed.
+- PR: **#185** — https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/185 (open; no merge performed).
 
 ## Scope and independent ownership
 
@@ -12,7 +12,7 @@ Read current `CHAT_PROTOCOL.md`, `CHAT_CONTEXT.md`, task, bounded route and rele
 
 Added only:
 1. `scripts/test_dossier_two_stage_eventual_chain_qa.py` — independent disposable Git-history adversarial cases against **existing** `inspect_buffered_assembly_candidate`, `receive_research`, frozen buffers and strict current group-transport validator.
-2. `.github/workflows/validate-dossier-async-chain-acceptance-qa.yml` — PR-only isolated QA and existing P1/P2/async, one-stage factual-date and Deep-release-year regressions.
+2. `.github/workflows/validate-dossier-async-chain-acceptance-qa.yml` — PR-only isolated QA and existing P1/P2/async and one-stage factual-date fixture regressions. No tests read live cache dossiers.
 3. This report.
 
 ## What the checker actually does
@@ -38,7 +38,7 @@ Added only:
 | Swapped Research vs Assembly marker | refuse marker-kind/ancestry mismatch |
 | Strict original three-game group partial/reordered/duplicated/replaced | `validate_buffer_artifact` rejects independently of item-local chain verdicts |
 
-**Limitation:** synthetic tests prove rejection and group-transport guards; no artificial successful three-game V2 factual dossier is persisted or treated as canonical.
+**Strict V2 fixture proof:** a synthetic valid ready item returns `strict_item_valid_pending_existing_atomic_group_ingest` but never canonical/Deep-ready. A synthetic ready dossier with privacy-unsafe provenance is rejected. An entire synthetic valid three-game V2 artifact passes the *existing* strict buffered group validator; a single privacy-unsafe game causes rejection of the *entire* group. These are disposable offline checks: no canonical write or live Research/Assembly transport integration exists.
 
 ## Blocking gap found: inconsistent Research original release year
 
@@ -57,5 +57,5 @@ A **separate Director-authorized integration** would need: a GitHub-owned shared
 - Isolated disposable Git fixtures only; no external Research, semantic worker, current production inputs, real user game evidence or synthetic production data.
 - No cache/Deep/Fast/queue/retry/workflow production writes, no scheduled task/automation changes, no `manual-shell-write.yml`.
 - Existing one-stage Dossier strict validator left unchanged.
-- CI status: **pending PR-run confirmation**.
+- CI run **38072805912 — SUCCESS** on test/workflow head `6c0da496526d5564f16311587f60336693618c5e`: independent adverse Git-history QA (including **one explicitly expected failure** tracking original-year defect), existing async buffer, P2 staging, P1 schema and strict one-stage factual-date fixture checks all passed. Backlog dispositions run **38072806039 — SUCCESS**. The expected failure remains an unresolved activation blocker, not a passing safety property.
 - Merge: **not performed**.
