@@ -27,7 +27,7 @@ from dossier_two_stage_staging import (
 )
 from test_dossier_two_stage_assembly_semantic_worker import diagnosis
 from test_dossier_two_stage_async_buffer import AsyncFixture
-from test_dossier_two_stage_research_worker import ResearchWorkerTests
+import test_dossier_two_stage_research_worker as research_tests
 
 
 class CrossHelperCompatibilityTests(unittest.TestCase):
@@ -37,7 +37,7 @@ class CrossHelperCompatibilityTests(unittest.TestCase):
         self.x = AsyncFixture(temp.name)
         # Reuse the existing Research suite's GitHub-fixture expansion and
         # exact worker prompt pinning, not its synthetic package submission.
-        self.r = ResearchWorkerTests("test_01_inactive_and_exact_prompt_parent_identity")
+        self.r = research_tests.ResearchWorkerTests("test_01_inactive_and_exact_prompt_parent_identity")
         self.r.x = self.x
 
     def authorize(self, twelve=False):
@@ -180,11 +180,12 @@ class CrossHelperCompatibilityTests(unittest.TestCase):
         self.assertEqual([r["status"] for r in status],
                          ["research_not_submitted", "ready", "ready"])
         self.assertTrue(all(r["attempt_consumed"] is False for r in status))
+        sibling_commits = {}
         for i, commit in ((1, b), (2, c)):
             path, doc = self.candidate(i, commit)
             x.f.save(path, doc)
-            done = x.f.commit(f"Assembly sibling {i} ahead of A")
-            self.assertEqual(x.inspect(i, done)["status"],
+            sibling_commits[i] = x.f.commit(f"Assembly sibling {i} ahead of A")
+            self.assertEqual(x.inspect(i, sibling_commits[i])["status"],
                              "typed_assembly_item_pending_github_classification")
         # Invalid Research semantics are NOT an Assembly timing barrier;
         # eventual GitHub strict validation quarantines only its item.
@@ -196,9 +197,9 @@ class CrossHelperCompatibilityTests(unittest.TestCase):
         self.assertEqual(x.inspect(0, late)["status"],
                          "research_rejected_item_chain_quarantined")
         self.assertFalse(x.inspect(0, late)["deep_ready"])
-        self.assertEqual(x.inspect(1, done)["status"],
+        self.assertEqual(x.inspect(1, sibling_commits[1])["status"],
                          "typed_assembly_item_pending_github_classification")
-        self.assertEqual(x.inspect(2, done)["status"],
+        self.assertEqual(x.inspect(2, sibling_commits[2])["status"],
                          "typed_assembly_item_pending_github_classification")
 
     def test_03_wrong_work_wrong_commit_and_unapproved_scope_fail_closed(self):
