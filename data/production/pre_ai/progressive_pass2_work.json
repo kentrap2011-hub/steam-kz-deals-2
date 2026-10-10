@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 32,
     "deep_completed_not_fit_count": 18,
     "deep_incomplete_or_recovery_count": 13,
-    "deep_waiting_for_dossier_count": 210,
-    "deep_ready_or_pending_count": 3,
+    "deep_waiting_for_dossier_count": 207,
+    "deep_ready_or_pending_count": 6,
     "deep_normal_first_pass_remaining_count": 213,
     "deep_remaining_until_all_authoritative_count": 226,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 0,
-    "dossier_waiting_count": 210,
+    "dossier_waiting_count": 207,
     "pass2_attempted_count": 63,
-    "pass2_eligible_count": 3,
-    "normal_pass2_eligible_count": 3,
+    "pass2_eligible_count": 6,
+    "normal_pass2_eligible_count": 6,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -108,6 +108,66 @@
     }
   },
   "items": [
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1424330",
+      "taste_subject_key": "App_1424330",
+      "appid": "1424330",
+      "taste_fingerprint": "deec1ba56002fc7a942a8e8be7288aa4288cdc272a05b884635324091e8899fe",
+      "candidate_context_sha256": "cc8e8ce9c2d7ea0ba0ebb9e35ec8da3daf7dde24c191d3280c2df35646330a9c",
+      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+      "work_id": "cf994a8adf90272e3a53c03c9ca096b3b3bb2c4160ec096cd096ee02daf22cac",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Wobbledogs",
+        "short_description": "A 3D pet simulation where you raise your own personal hive of mutating dogs, physically simulated all the way down to their guts! Wobbledogs is a casual and chill sandbox for players of all ages who want to care for their very own virtual pets in a surprising, unique, and stress-free environment.",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "15 Mar, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1424330"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1424330.json",
+      "dossier_content_sha256": "a2fb83d55d37088cf69fc3e97d9e4c7ca2147bb422a5d6a38a34adc3ec95f371",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-30T17:37:51.143Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "085770699b143c2f1cd10f4b28c2275a13b1919cdb5dcc607f8bb05db7b07c51",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--cf994a8adf90272e3a53c03c9ca096b3b3bb2c4160ec096cd096ee02daf22cac--085770699b143c2f1cd10f4b28c2275a13b1919cdb5dcc607f8bb05db7b07c51.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--cf994a8adf90272e3a53c03c9ca096b3b3bb2c4160ec096cd096ee02daf22cac--085770699b143c2f1cd10f4b28c2275a13b1919cdb5dcc607f8bb05db7b07c51.json",
+      "sequence": 1
+    },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
@@ -172,7 +232,72 @@
       "authorization_id": "c05fcf4068109c425c168f8172149c462c61261918875a04a5c181d06d4eda95",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--4f1baebd695991ec8ec16d363d14e18568c3aca4053cd11ba98481bfcff1847c--c05fcf4068109c425c168f8172149c462c61261918875a04a5c181d06d4eda95.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--4f1baebd695991ec8ec16d363d14e18568c3aca4053cd11ba98481bfcff1847c--c05fcf4068109c425c168f8172149c462c61261918875a04a5c181d06d4eda95.json",
-      "sequence": 1
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1471650",
+      "taste_subject_key": "App_1471650",
+      "appid": "1471650",
+      "taste_fingerprint": "ed22157d453792e4da265e919d760db970fce5d4377143b38d74871d6c155e9f",
+      "candidate_context_sha256": "707b5215911b47dbeb0bb53c0ae54e87fa72d2f14cd796742859c188087c2d4a",
+      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+      "work_id": "710dbed1d85c4b6bb1fdbcce67d5aee68680fabd9dcb8fa40713779fe2a96a7a",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "The Knightling",
+        "short_description": "The Knightling is an open world, action-adventure where you play as an aspiring knight in search of their missing mentor, Sir Lionstone. Equipped with only a legendary shield, you’ll brave your way through the lands of Clesseia to become the unlikely hero.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action-Adventure",
+          "Hack and Slash",
+          "Open World",
+          "Story Rich"
+        ],
+        "core_fit_count": 4,
+        "release_date": "28 Aug, 2025",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1471650"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1471650.json",
+      "dossier_content_sha256": "0cc7211f3fe5184a6d09e62f2dfef17e47071cc94e90fde38ec52e5d421580f5",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-30T17:37:51.143Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "533335813f81876269744fdb810fe7d2495de903b5b315c5ad61a08291cb59f6",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--710dbed1d85c4b6bb1fdbcce67d5aee68680fabd9dcb8fa40713779fe2a96a7a--533335813f81876269744fdb810fe7d2495de903b5b315c5ad61a08291cb59f6.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--710dbed1d85c4b6bb1fdbcce67d5aee68680fabd9dcb8fa40713779fe2a96a7a--533335813f81876269744fdb810fe7d2495de903b5b315c5ad61a08291cb59f6.json",
+      "sequence": 3
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -232,7 +357,7 @@
       "authorization_id": "0998649601773d8fc6fd7dead316f76c69cdd963b23de7abbe602fdbe9259426",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--1dc5a14c0a6872e73d5245002ccdd9dd1c28ea805041ca16865d8e1da6fb12eb--0998649601773d8fc6fd7dead316f76c69cdd963b23de7abbe602fdbe9259426.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--1dc5a14c0a6872e73d5245002ccdd9dd1c28ea805041ca16865d8e1da6fb12eb--0998649601773d8fc6fd7dead316f76c69cdd963b23de7abbe602fdbe9259426.json",
-      "sequence": 2
+      "sequence": 4
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -295,7 +420,69 @@
       "authorization_id": "ebb3be756c3bcab8ca59ca0c20025884ed16fb5b9adcc96210bebaf0dfaddd2e",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--70876378cb8ab88c82e175c361886ca567ae9c150797d5257ac40d0f040f3169--ebb3be756c3bcab8ca59ca0c20025884ed16fb5b9adcc96210bebaf0dfaddd2e.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--70876378cb8ab88c82e175c361886ca567ae9c150797d5257ac40d0f040f3169--ebb3be756c3bcab8ca59ca0c20025884ed16fb5b9adcc96210bebaf0dfaddd2e.json",
-      "sequence": 3
+      "sequence": 5
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1429500",
+      "taste_subject_key": "App_1429500",
+      "appid": "1429500",
+      "taste_fingerprint": "798c8282ded50db4365407507063d7e3d1d4f7f606871538789fc401a787c731",
+      "candidate_context_sha256": "7604c45d2dc84ee0833bafc8175d072c7fbfde1ffb2854c3088a9f37b53e810e",
+      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+      "work_id": "29ca07442ed69369e7aa6c2b18bc44918812e790d59c0314c115c15fac1621c9",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Frontier Hunter: Erza’s Wheel of Fortune",
+        "short_description": "This is an anime-style Metroidvania game with an RPG progression system, numerous weapons for switching, and an emphasis on equipment building. It offers three switchable characters, smooth gameplay, impactful combat feedback, and anime-style story scenes.",
+        "bundle_members": [],
+        "fit_tags": [
+          "JRPG"
+        ],
+        "core_fit_count": 1,
+        "release_date": "26 Jul, 2024",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1429500"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1429500.json",
+      "dossier_content_sha256": "91d2ff1d5411ed5969b1d7c4a97035d5756c57e587a2f53c097001705b5f8e6b",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-30T17:37:51.143Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "e327bb71ca890d4169a77b60f76daec998087f4ea5018e2404f418c9f28caf76",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--29ca07442ed69369e7aa6c2b18bc44918812e790d59c0314c115c15fac1621c9--e327bb71ca890d4169a77b60f76daec998087f4ea5018e2404f418c9f28caf76.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--29ca07442ed69369e7aa6c2b18bc44918812e790d59c0314c115c15fac1621c9--e327bb71ca890d4169a77b60f76daec998087f4ea5018e2404f418c9f28caf76.json",
+      "sequence": 6
     }
   ]
 }
