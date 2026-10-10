@@ -1,0 +1,45 @@
+name: Validate inactive async Dossier Assembly semantic worker
+
+on:
+  pull_request:
+    paths:
+      - "config/dossier_two_stage_assembly_semantic_worker_prompt.md"
+      - "scripts/dossier_two_stage_assembly_semantic_worker.py"
+      - "scripts/test_dossier_two_stage_assembly_semantic_worker.py"
+      - "config/dossier_async_assembly_result_v1.schema.json"
+      - ".github/workflows/validate-dossier-async-assembly-semantic-worker.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  offline-assembly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check out proposed source without production credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install offline JSON schema dependency
+        run: python -m pip install "jsonschema>=4.21,<5"
+      - name: Compile inactive Assembly helper and fixture test
+        run: python -m py_compile scripts/dossier_two_stage_assembly_semantic_worker.py scripts/test_dossier_two_stage_assembly_semantic_worker.py
+      - name: P1 research and Assembly frozen schema tests
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_contract_schemas.py' -v
+      - name: P2 GitHub frozen-marker staging tests
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_staging.py' -v
+      - name: P2 V2 fully asynchronous buffer tests
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_async_buffer.py' -v
+      - name: Assembly-specific submitted-not-accepted and sibling isolation tests
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_assembly_semantic_worker.py' -v
+      - name: One-stage factual date and Deep identity parity tests
+        run: |
+          python -m unittest discover -s scripts -p 'test_taste_dossier_github_date_derivation.py' -v
+          python scripts/test_dossier_deep_release_year_identity_compatibility.py
+      - name: Execution ownership non-activation validation
+        run: python scripts/validate_execution_ownership.py
