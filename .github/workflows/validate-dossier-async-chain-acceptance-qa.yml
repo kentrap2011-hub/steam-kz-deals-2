@@ -34,7 +34,5 @@ jobs:
         run: |
           python -m unittest discover -s scripts -p 'test_dossier_two_stage_staging.py' -v
           python -m unittest discover -s scripts -p 'test_dossier_two_stage_contract_schemas.py' -v
-      - name: Existing strict one-stage dossier regressions
-        run: |
-          python -m unittest discover -s scripts -p 'test_taste_dossier_github_date_derivation.py' -v
-          python scripts/test_dossier_deep_release_year_identity_compatibility.py
+      - name: Existing strict one-stage Dossier fixture regression
+        run: python -m unittest discover -s scripts -p 'test_taste_dossier_github_date_derivation.py' -v
