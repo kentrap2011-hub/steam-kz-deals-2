@@ -8,6 +8,7 @@ import copy
 import json
 import tempfile
 import unittest
+from datetime import datetime, timezone
 
 from dossier_two_stage_async_buffer import (
     frozen_buffer, inspect_buffered_assembly_candidate, provisional_assembly_work,
@@ -15,6 +16,7 @@ from dossier_two_stage_async_buffer import (
 from dossier_two_stage_staging import receipt_paths
 from taste_steam_review_dossier_buffered import validate_buffer_artifact
 from taste_steam_review_dossier_daily import BUFFER_GROUP_SCHEMA
+from taste_steam_review_dossier_test_fixture import web_dossier
 from test_dossier_two_stage_async_buffer import AsyncFixture
 
 
@@ -206,6 +208,31 @@ class GitHubEventualChainAcceptanceQA(unittest.TestCase):
             r = x.research_submit(i)
             c = x.assembly_submit(i, r)
             self.assert_staged_only(x.inspect(i, c))
+
+    def test_valid_synthetic_strict_v2_item_stays_pending_group_and_deep(self):
+        x = self.fixture()
+        x.preauthorize_assembly()
+        r = x.research_submit(0)
+        dossier = web_dossier("12345", datetime.now(timezone.utc), title="Fixture Game")
+        c = x.assembly_submit(0, r, mutate=lambda d: d.update(
+            outcome="assembled_candidate_ready",
+            payload={"status": "assembled_candidate_ready", "dossier": dossier},
+        ))
+        self.assert_staged_only(
+            x.inspect(0, c), status="strict_item_valid_pending_existing_atomic_group_ingest")
+
+    def test_strict_v2_rejects_privacy_unsafe_synthetic_ready_dossier(self):
+        x = self.fixture()
+        x.preauthorize_assembly()
+        r = x.research_submit(0)
+        dossier = web_dossier("12345", datetime.now(timezone.utc), title="Fixture Game")
+        dossier["provenance"]["sources"][0]["username"] = "private-fixture"
+        c = x.assembly_submit(0, r, mutate=lambda d: d.update(
+            outcome="assembled_candidate_ready",
+            payload={"status": "assembled_candidate_ready", "dossier": dossier},
+        ))
+        with self.assertRaises(ValueError):
+            x.inspect(0, c)
 
     @unittest.expectedFailure
     def test_known_gap_conflicting_source_original_year_must_be_rejected(self):
