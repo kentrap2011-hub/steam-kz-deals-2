@@ -5,6 +5,13 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## MOST RECENT DIRECTOR DECISION — 2026-10-10
+
+- #181 (Research) merged at `8bba23fca6337e06504f819c8ccda298ffd8505a`; #182 (Assembly) merged at `4cca97a838e42b275259751010f339116d068adc`. Both passed branch CI and remain inactive/non-authoritative.
+- **NEW ЧАТ 1:** `WORKER_TASK_DOSSIER_ASYNC_END_TO_END_COMPATIBILITY_01.md` — offline Research→Assembly end-to-end compatibility proof.
+- **NEW ЧАТ 2:** `WORKER_TASK_DOSSIER_ASYNC_GITHUB_CHAIN_ACCEPTANCE_QA_01.md` — independent offline GitHub eventual-chain and atomic three-game final acceptance QA.
+- Older worker assignment sections below are historical snapshots. No production activation, no Scheduled Task changes, no Deep Stage 1 authorization (`mass_migration_authorized=false`), no early Fast removal.
+
 ## CURRENT DECISION / ASSIGNMENTS — 2026-10-09 (newer than historical snapshot below)
 
 - PR #179 and PR #178 have **already been merged** into main; checks were successful. Do not merge them again.
