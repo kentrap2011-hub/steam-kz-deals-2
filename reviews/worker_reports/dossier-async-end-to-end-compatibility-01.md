@@ -6,7 +6,7 @@
 - Source baseline: `17a4ee599452b9c98c3d04b06c623db8bd7325ee` (2026-10-10).
 - Implementation branch: `test/dossier-async-end-to-end-compatibility-01`
 - PR: https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/184 (OPEN, never self-merge)
-- Status: **pending CI verification**; no production activation.
+- Status: **qa_complete_ready_for_director_review**; PR-only CI green; no production activation.
 
 ## Canonical preflight and isolation
 
@@ -24,9 +24,23 @@ GitHub retains frozen scope, order, original Git provenance, item-state/strict v
 - No test fixture writes to this branch's production data; fixture Git histories reside inside temporary directories.
 - `.github/workflows/validate-dossier-async-end-to-end-compatibility.yml`: PR-only, credentials not persisted, `jsonschema`, new cross-helper suite, both existing helper suites, P1/P2/buffer suites, one-stage Dossier date / Deep release-year compatibility and execution-ownership guard.
 
-## CI outcomes
+## CI outcomes (verified)
 
-**Not yet confirmed at report creation.** CI logs/runs must be verified before the compatibility task can be called complete.
+GitHub Actions run **38072636759**, job **114273050184**, head **24a8299d9633e3c877bff86f00018c1924315db8**:
+https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/38072636759 — **success**, all required steps green.
+
+- Actual Research → Assembly 12-game cross-helper proof: **4/4 passed**.
+- Existing inactive Research worker: **12/12 passed**.
+- Existing inactive Assembly worker: **10/10 passed**.
+- P1 strict contract/schema tests: **15/15 passed**.
+- P2 GitHub staging/marker provenance: **25/25 passed**.
+- Fully async GitHub buffer: **12/12 passed**.
+- One-stage Dossier factual date: **9/9 passed**.
+- **Total: 87/87 unittest cases passed**.
+- Dossier → Deep release-year identity: `DOSSIER_DEEP_RELEASE_YEAR_IDENTITY_COMPATIBILITY=PASS`.
+- Execution ownership: `ARCHITECTURE_OWNERSHIP_VALID`.
+
+The first two pre-fix PR runs failed because the new test incorrectly supplied Assembly C's introduction commit when rechecking B. Test-only fix: retain each sibling's own immutable introduction commit; also avoid redundant suite discovery. No worker helper, shared validator, canonical control-plane, production or task plan was modified. The successful run above covers corrected source. This subsequent report-only commit does not change tested code.
 
 ## Risks / activation blockers
 
@@ -39,4 +53,4 @@ GitHub retains frozen scope, order, original Git provenance, item-state/strict v
 
 ## Worker handoff
 
-Director reviews PR #184 only after required CI is green. Do not self-merge. Any shared-control-plane incompatibility discovered by CI must become a separately scoped follow-up rather than an unapproved edit to shared validators/contracts.
+Director reviews green PR #184; successful offline compatibility does not authorize activation. Do not self-merge. Any shared-control-plane incompatibility discovered by CI must become a separately scoped follow-up rather than an unapproved edit to shared validators/contracts.
