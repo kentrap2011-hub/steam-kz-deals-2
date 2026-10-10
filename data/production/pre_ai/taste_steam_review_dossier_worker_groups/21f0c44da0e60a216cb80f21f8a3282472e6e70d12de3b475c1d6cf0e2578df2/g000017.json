@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "21f0c44da0e60a216cb80f21f8a3282472e6e70d12de3b475c1d6cf0e2578df2",
+  "prepared_required_sha256": "5c9e8639b5039925938a0c84a99dc376769a84b84797d61b5cc1bc0d402c38a3",
+  "group_plan_sha256": "ae5398191874956683f9baf0fcf1aa3f1dcb26d12758a2d3d8162b7dbb1ba21e",
+  "group_count": 72,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 17,
+  "start_index": 48,
+  "end_index_exclusive": 51,
+  "appids": [
+    "201810",
+    "203750",
+    "204100"
+  ],
+  "items_sha256": "8e994b81a2bec92af896c89f3e50378345815c20e50e119c0303cad95081b97f",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "03540bc01c72b7dfd48eef9fa259728d7e5037109cc8e18fad9aa5013e51e3ec",
+  "items": [
+    {
+      "key": "App_201810",
+      "appid": "201810",
+      "title": "Wolfenstein: The New Order",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_201810.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_203750",
+      "appid": "203750",
+      "title": "Binary Domain",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_203750.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_204100",
+      "appid": "204100",
+      "title": "Max Payne 3",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_204100.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "679e8a45ed216f60f80eff58358e1d6e4aaf3927581f1cf0e97c8a931ca51ff7"
+}
