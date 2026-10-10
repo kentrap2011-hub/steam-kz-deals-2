@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "63a9e9d4b84cc00072baa5e10ef417a1b8f0f2a8",
+  "run_start_authority_commit": "aef0de885dae5905df5bd030ac88dab13832779e",
+  "run_started_at_utc": "2026-10-10T17:24:16+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+  "work_id": "fca1c3ea5f3d85114ff90ead3305175acdfe6b85a780db06a7fde1f8298976cb",
+  "family_id": "game:1126320",
+  "taste_subject_key": "App_1126320",
+  "appid": "1126320",
+  "taste_fingerprint": "e0cfe9d25671d4f266aad45e42ded9872986ea073155842540fc4c30181327e7",
+  "candidate_context_sha256": "3d1daf61f68539c264f4aec7eb51ce17b0290d19279eda4aab6ac20a5767b88a",
+  "dossier_content_sha256": "56fdbba3cd3ceab8fbc9fa4f55674706880aa63439ba5d39ea65b9849cc6872e",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "c0ea2c6a0c1b9679459773b01444425d1f414af1017a7bce8e85e173da4d5f6b",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Выборы в диалогах меняют романтические линии и взаимоотношения, а персонажи, юмор и драматические события составляют заметную часть впечатления; это перекликается с ценностью сюжетных и персонажных крючков в закреплённом профиле.",
+    "Эпизодическая структура, исследуемые вставки и необязательные мини-игры добавляют формы активности к основным диалогам, хотя сами вставки не доказывают глубину механического освоения.",
+    "Альтернативные сюжетные маршруты дают повод к осмысленному повторному прохождению ради других решений и отношений; рутинные мини-игры и свободное перемещение могут, наоборот, мешать такому интересу."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 25,
+    "development_variety": 64,
+    "structure_pacing_direction": 59,
+    "identity_hooks": 77,
+    "breadth_of_match": 61
+  },
+  "base_support_compatible": null,
+  "score_findings": [
+    {
+      "finding_id": "character_choice_routes",
+      "text_ru": "Диалоговые решения меняют отношения и романтические линии, а характеры, юмор и драма становятся центральным крючком; это может удерживать интерес через выборы и привязанность к персонажам.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/сюжет/note",
+          "profile_value_sha256": "15ba2c92b96e2588caf57b0833025ed85f06fd0ded251d5f7d49bcc23bec0b3d",
+          "match_text_ru": "В закреплённом профиле сюжет особенно важен для игр типа Telltale и Until Dawn, где решения и история определяют опыт."
+        },
+        {
+          "json_pointer": "/factor_importance/персонажи/note",
+          "profile_value_sha256": "bc3718749990ae6d43822e549c943adecc7fe5269c309392ee90c5132afc3769",
+          "match_text_ru": "Эмоциональная связь с персонажами отдельно названа сильным условием вовлечённости."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 77
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 61
+        }
+      ]
+    },
+    {
+      "finding_id": "episodic_interludes",
+      "text_ru": "Между длинными диалоговыми сценами появляются исследуемые эпизоды и мини-игры, что вносит смену формата, но не гарантирует ровный темп.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/развитие_и_разнообразие/level",
+          "profile_value_sha256": "53cef86c139ac75703d153055fd8a263376851df604c77b702f8423e34cdeb29",
+          "match_text_ru": "Разнообразие и эволюция занятий критически важны, поэтому промежуточная активность имеет значение, но не заменяет полноценную динамику."
+        },
+        {
+          "json_pointer": "/factor_importance/сюжет/level",
+          "profile_value_sha256": "6118b2801e7712408e1f50d8d60573dc441e9588b723e71edf14a1c22db6ed04",
+          "match_text_ru": "Для повествовательной игры структура и движение истории особенно значимы."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 64
+        },
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 59
+        }
+      ]
+    },
+    {
+      "finding_id": "limited_mechanical_mastery",
+      "text_ru": "Основу составляют чтение сцен и выбор диалогов, а дополнительные мини-игры и повторяемые действия не показывают глубокой системы для тренировки механического мастерства.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/мастерство_и_глубина/level",
+          "profile_value_sha256": "195b15987bf17276847116c17f942bc8938b0f78a4fb900d82f45d4871a8e0fc",
+          "match_text_ru": "Освоение глубоких механик очень важно для профиля, но здесь оно вторично относительно сюжета."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "lowers",
+          "normalized_value": 25
+        }
+      ]
+    },
+    {
+      "finding_id": "replay_completion_friction",
+      "text_ru": "Альтернативные маршруты поддерживают интерес к перепрохождению, однако повтор мини-игр, свободные поручения и одноразовые задания ради достижений способны сделать повтор менее приятным.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/вариативность/level",
+          "profile_value_sha256": "885c31992dd07015b0a41d7b994045673e7130d01659b4425e377920f4f3e2d0",
+          "match_text_ru": "Вариативность для этого профиля полезна только тогда, когда новые варианты приносят содержательный опыт, а не механическую рутину."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 59
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 64
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Повторное исследование развилок может требовать заново проходить мини-игры и поручения; часть мини-игр разрешено отключить, поэтому это скорее управляемый компромисс, чем подтверждённая личная проблема.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Сравнивавший сезоны игрок отмечает менее проработанные анимации и визуал первого сезона; также упоминается отсутствие озвучки.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Некоторые необязательные задания и достижения могут потребовать заранее продуманных сохранений, иначе повторить упущенные моменты бывает трудно.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  }
+}
