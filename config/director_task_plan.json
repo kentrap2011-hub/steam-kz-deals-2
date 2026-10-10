@@ -680,7 +680,7 @@
       "id": "dossier-async-research-worker",
       "title": "Dossier: inactive Research semantic worker",
       "goal": "Построить inactive Research worker: точный frozen manifest, независимые immutable Research packages, без ожидания GitHub.",
-      "status": "planned",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Семантический prompt, immutable provenance, offline тестирование без production.",
       "urgency": "высокая",
@@ -691,16 +691,16 @@
       "depends_on": [
         "dossier-fully-async-pipeline"
       ],
-      "blocker": "Implementation inactive only; activation requires separate later authorization.",
-      "updated_on": "2026-10-09",
-      "updated_at_utc": "2026-10-09T15:07:02.661Z",
-      "recent_completion": false
+      "blocker": "Inactive implementation merged; not production enabled. Independent offline QA follows.",
+      "updated_on": "2026-10-10",
+      "updated_at_utc": "2026-10-10T17:31:33.438Z",
+      "recent_completion": true
     },
     {
       "id": "dossier-async-assembly-worker",
       "title": "Dossier: inactive Assembly semantic worker",
       "goal": "Построить inactive Assembly worker по submitted Research bytes без ожидания GitHub acceptance; строгая будущая chain validation.",
-      "status": "planned",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Семантический prompt, immutable provenance, offline тестирование без production.",
       "urgency": "высокая",
@@ -711,10 +711,10 @@
       "depends_on": [
         "dossier-fully-async-pipeline"
       ],
-      "blocker": "Implementation inactive only; activation requires separate later authorization.",
-      "updated_on": "2026-10-09",
-      "updated_at_utc": "2026-10-09T15:07:02.661Z",
-      "recent_completion": false
+      "blocker": "Inactive implementation merged; not production enabled. Independent offline QA follows.",
+      "updated_on": "2026-10-10",
+      "updated_at_utc": "2026-10-10T17:31:33.438Z",
+      "recent_completion": true
     },
     {
       "id": "deep-fast-production-off",
@@ -737,6 +737,48 @@
       "blocker": "MUST NOT run independently or early; only within the same atomic Deep cutover after real accepted Stage 1 + Stage 2 semantics and approved bootstrap anchors. mass_migration_authorized=false now.",
       "updated_on": "2026-10-09",
       "updated_at_utc": "2026-10-09T15:07:02.661Z",
+      "recent_completion": false
+    },
+    {
+      "id": "dossier-async-e2e-qa",
+      "title": "Dossier: совместимость Research → Assembly",
+      "goal": "Проверить точную передачу GitHub-frozen Research package в Assembly без ожидания принятия GitHub.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Новые offline disposable-Git регрессии и при необходимости узкие исправления.",
+      "urgency": "высокая",
+      "urgency_reason": "Нужны проверки перед отдельным решением об интеграции и качестве.",
+      "task_file": "WORKER_TASK_DOSSIER_ASYNC_END_TO_END_COMPATIBILITY_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-async-research-worker",
+        "dossier-async-assembly-worker"
+      ],
+      "blocker": "Only PR-tested inactive QA authorized; no real semantic execution or production activation.",
+      "updated_on": "2026-10-10",
+      "updated_at_utc": "2026-10-10T17:31:33.438Z",
+      "recent_completion": false
+    },
+    {
+      "id": "dossier-async-chain-qa",
+      "title": "Dossier: строгая GitHub chain acceptance",
+      "goal": "Проверить позднюю GitHub validation Research→Assembly и исходное атомарное принятие групп из 3 игр.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Новые offline disposable-Git регрессии и при необходимости узкие исправления.",
+      "urgency": "высокая",
+      "urgency_reason": "Нужны проверки перед отдельным решением об интеграции и качестве.",
+      "task_file": "WORKER_TASK_DOSSIER_ASYNC_GITHUB_CHAIN_ACCEPTANCE_QA_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-async-research-worker",
+        "dossier-async-assembly-worker"
+      ],
+      "blocker": "Only PR-tested inactive QA authorized; no real semantic execution or production activation.",
+      "updated_on": "2026-10-10",
+      "updated_at_utc": "2026-10-10T17:31:33.438Z",
       "recent_completion": false
     }
   ]
