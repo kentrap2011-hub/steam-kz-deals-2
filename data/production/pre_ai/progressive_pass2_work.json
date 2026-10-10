@@ -51,25 +51,25 @@
   },
   "scope": {
     "deep_total_current_coverage_target": 276,
-    "deep_first_pass_attempted_count": 62,
+    "deep_first_pass_attempted_count": 63,
     "deep_authoritative_completed_count": 50,
     "deep_completed_fit_count": 32,
     "deep_completed_not_fit_count": 18,
-    "deep_incomplete_or_recovery_count": 12,
+    "deep_incomplete_or_recovery_count": 13,
     "deep_waiting_for_dossier_count": 213,
-    "deep_ready_or_pending_count": 1,
-    "deep_normal_first_pass_remaining_count": 214,
+    "deep_ready_or_pending_count": 0,
+    "deep_normal_first_pass_remaining_count": 213,
     "deep_remaining_until_all_authoritative_count": 226,
     "deep_normal_first_pass_complete": false,
     "deep_all_current_authoritative_complete": false,
-    "recovery_owned_count": 12,
+    "recovery_owned_count": 13,
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 0,
     "dossier_waiting_count": 213,
-    "pass2_attempted_count": 62,
-    "pass2_eligible_count": 1,
-    "normal_pass2_eligible_count": 1,
+    "pass2_attempted_count": 63,
+    "pass2_eligible_count": 0,
+    "normal_pass2_eligible_count": 0,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -107,69 +107,5 @@
       "complete": true
     }
   },
-  "items": [
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:1126320",
-      "taste_subject_key": "App_1126320",
-      "appid": "1126320",
-      "taste_fingerprint": "e0cfe9d25671d4f266aad45e42ded9872986ea073155842540fc4c30181327e7",
-      "candidate_context_sha256": "3d1daf61f68539c264f4aec7eb51ce17b0290d19279eda4aab6ac20a5767b88a",
-      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
-      "work_id": "fca1c3ea5f3d85114ff90ead3305175acdfe6b85a780db06a7fde1f8298976cb",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Being a DIK - Season 1",
-        "short_description": "Being a DIK is a choice-driven adult Visual Novel focusing on the fun parts of college life. The game is packed with humor, sex, romance, drama and a rich story. Play as a young male attending college at B&R and guide him through the experience.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Choices Matter",
-          "Story Rich"
-        ],
-        "core_fit_count": 2,
-        "release_date": "13 Feb, 2020",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1126320"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1126320.json",
-      "dossier_content_sha256": "56fdbba3cd3ceab8fbc9fa4f55674706880aa63439ba5d39ea65b9849cc6872e",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-30T04:57:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "c0ea2c6a0c1b9679459773b01444425d1f414af1017a7bce8e85e173da4d5f6b",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--fca1c3ea5f3d85114ff90ead3305175acdfe6b85a780db06a7fde1f8298976cb--c0ea2c6a0c1b9679459773b01444425d1f414af1017a7bce8e85e173da4d5f6b.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--fca1c3ea5f3d85114ff90ead3305175acdfe6b85a780db06a7fde1f8298976cb--c0ea2c6a0c1b9679459773b01444425d1f414af1017a7bce8e85e173da4d5f6b.json",
-      "sequence": 1
-    }
-  ]
+  "items": []
 }
