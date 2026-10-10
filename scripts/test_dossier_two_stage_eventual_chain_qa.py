@@ -209,6 +209,27 @@ class GitHubEventualChainAcceptanceQA(unittest.TestCase):
             c = x.assembly_submit(i, r)
             self.assert_staged_only(x.inspect(i, c))
 
+    def test_original_strict_three_item_group_is_atomic_on_one_bad_dossier(self):
+        x = self.fixture()
+        descriptor = x.f.descriptor
+        base = {k: copy.deepcopy(descriptor[k]) for k in (
+            "snapshot_id", "prepared_required_sha256", "sequence",
+            "start_index", "end_index_exclusive", "items", "appids",
+            "items_sha256", "group_sha256", "scope_source", "source_queue_sha256")}
+        now = datetime.now(timezone.utc)
+        good = [
+            web_dossier(item["appid"], now, title=item["title"])
+            for item in descriptor["items"]
+        ]
+        artifact = {**base, "schema": BUFFER_GROUP_SCHEMA, "schema_version": 1,
+                    "dossiers": good}
+        self.assertEqual(
+            len(validate_buffer_artifact(artifact, descriptor, {"ttl_days": 20}, {})), 3)
+        bad = copy.deepcopy(artifact)
+        bad["dossiers"][1]["provenance"]["sources"][0]["username"] = "private-fixture"
+        with self.assertRaises(ValueError):
+            validate_buffer_artifact(bad, descriptor, {"ttl_days": 20}, {})
+
     def test_valid_synthetic_strict_v2_item_stays_pending_group_and_deep(self):
         x = self.fixture()
         x.preauthorize_assembly()
