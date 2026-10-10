@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 32,
     "deep_completed_not_fit_count": 18,
     "deep_incomplete_or_recovery_count": 13,
-    "deep_waiting_for_dossier_count": 213,
-    "deep_ready_or_pending_count": 0,
+    "deep_waiting_for_dossier_count": 210,
+    "deep_ready_or_pending_count": 3,
     "deep_normal_first_pass_remaining_count": 213,
     "deep_remaining_until_all_authoritative_count": 226,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 0,
-    "dossier_waiting_count": 213,
+    "dossier_waiting_count": 210,
     "pass2_attempted_count": 63,
-    "pass2_eligible_count": 0,
-    "normal_pass2_eligible_count": 0,
+    "pass2_eligible_count": 3,
+    "normal_pass2_eligible_count": 3,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -107,5 +107,195 @@
       "complete": true
     }
   },
-  "items": []
+  "items": [
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1413870",
+      "taste_subject_key": "App_1413870",
+      "appid": "1413870",
+      "taste_fingerprint": "107d3c1f5a7ca7b124adc1c6838f841552455e1437ad64304afdbdff9349eafb",
+      "candidate_context_sha256": "9f2b16440faa37745456fb5eb0c703a3cec293eb58d55eb49256a83d08d47ea2",
+      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+      "work_id": "4f1baebd695991ec8ec16d363d14e18568c3aca4053cd11ba98481bfcff1847c",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Shadow Man Remastered",
+        "short_description": "He is coming, stalking criminals in the spirit world and the real world. A possessed man is coming, a voodoo mask in his chest and lines of power in his back. Shadow Man is coming, trailing evil from Liveside to Deadside. To stop an apocalypse. To save your soul.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Action-Adventure",
+          "Adventure",
+          "Exploration",
+          "Horror"
+        ],
+        "core_fit_count": 2,
+        "release_date": "15 Apr, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1413870"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1413870.json",
+      "dossier_content_sha256": "b38ff97a6983f966927440a9c3a5f2a95ae6a66c17cc099cb785fb9f2ab14339",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-30T17:32:43.156Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "c05fcf4068109c425c168f8172149c462c61261918875a04a5c181d06d4eda95",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--4f1baebd695991ec8ec16d363d14e18568c3aca4053cd11ba98481bfcff1847c--c05fcf4068109c425c168f8172149c462c61261918875a04a5c181d06d4eda95.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--4f1baebd695991ec8ec16d363d14e18568c3aca4053cd11ba98481bfcff1847c--c05fcf4068109c425c168f8172149c462c61261918875a04a5c181d06d4eda95.json",
+      "sequence": 1
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1410710",
+      "taste_subject_key": "App_1410710",
+      "appid": "1410710",
+      "taste_fingerprint": "c8f4ced65ef115aacc3d52c1ceebe5cb2aa8418ee611a431d8b1fc2e5d074834",
+      "candidate_context_sha256": "ae2db9b1d74c2513c7187d18f1072c7fd10ff2670beadfb338006eea37ce52d1",
+      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+      "work_id": "1dc5a14c0a6872e73d5245002ccdd9dd1c28ea805041ca16865d8e1da6fb12eb",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Democracy 4",
+        "short_description": "Democracy 4 lets you take the role of President / Prime minister, govern the country (choosing its policies, laws and other actions), and both transform the country as you see fit, while trying to retain enough popularity to get re-elected...",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "13 Jan, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1410710"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1410710.json",
+      "dossier_content_sha256": "53ee11ff845bfe370e71cb217c2f994aaff43d0262fc0faefd266d5a9839c749",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-30T17:32:43.156Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "0998649601773d8fc6fd7dead316f76c69cdd963b23de7abbe602fdbe9259426",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--1dc5a14c0a6872e73d5245002ccdd9dd1c28ea805041ca16865d8e1da6fb12eb--0998649601773d8fc6fd7dead316f76c69cdd963b23de7abbe602fdbe9259426.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--1dc5a14c0a6872e73d5245002ccdd9dd1c28ea805041ca16865d8e1da6fb12eb--0998649601773d8fc6fd7dead316f76c69cdd963b23de7abbe602fdbe9259426.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1402120",
+      "taste_subject_key": "App_1402120",
+      "appid": "1402120",
+      "taste_fingerprint": "3fa4f856294f18cb797ad7422571de1a47ddc33ec5b679d6e8b932b19060117b",
+      "candidate_context_sha256": "717e4c0221bff0a65b5adb8432197ae3b49aafbc1291993bbc16bc74002b8840",
+      "profile_pin_sha256": "d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f",
+      "work_id": "70876378cb8ab88c82e175c361886ca567ae9c150797d5257ac40d0f040f3169",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "9 Years of Shadows",
+        "short_description": "Fight to bring beautiful colors back to a hand-crafted world of darkness and discover the story of Europa, a young warrior, and her ghostly childhood companion, Apino.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action RPG",
+          "Fantasy"
+        ],
+        "core_fit_count": 2,
+        "release_date": "27 Mar, 2023",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1402120"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1402120.json",
+      "dossier_content_sha256": "ad59758aa6fa4599e6f326be1343c84f9d2881664a64414375ff8873db8fe199",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-30T17:32:43.156Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "ebb3be756c3bcab8ca59ca0c20025884ed16fb5b9adcc96210bebaf0dfaddd2e",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--70876378cb8ab88c82e175c361886ca567ae9c150797d5257ac40d0f040f3169--ebb3be756c3bcab8ca59ca0c20025884ed16fb5b9adcc96210bebaf0dfaddd2e.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--70876378cb8ab88c82e175c361886ca567ae9c150797d5257ac40d0f040f3169--ebb3be756c3bcab8ca59ca0c20025884ed16fb5b9adcc96210bebaf0dfaddd2e.json",
+      "sequence": 3
+    }
+  ]
 }
