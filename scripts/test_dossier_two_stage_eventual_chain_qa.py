@@ -51,7 +51,7 @@ class GitHubEventualChainAcceptanceQA(unittest.TestCase):
     def test_original_research_commit_path_blob_raw_and_canonical_hash(self):
         for key, replacement in (
             ("research_package_git_commit", "a" * 40),
-            ("research_package_path", "data/ai_inbox/dossier_research/" + "a" * 64
+            ("research_package_path", "data/ai_inbox/dossier_research/" + "f" * 64
              + "/g000001/12345--research-fixture-0001.json"),
             ("research_package_blob_sha", "b" * 40),
             ("research_package_raw_sha256", "b" * 64),
