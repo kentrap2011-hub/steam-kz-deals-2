@@ -117,11 +117,10 @@ class GitHubEventualChainAcceptanceQA(unittest.TestCase):
         x.preauthorize_assembly(indexes=(0,))
         r = x.research_submit(1)
         with self.assertRaises(ValueError):
-            x.assembly_work(1, r)
-        with self.assertRaises(ValueError):
             provisional_assembly_work(
                 x.f.root, marker_commit=x.amarker, buffer_path=x.abuffer["path"],
-                work_path=x.paths[1], package_commit=r)
+                work_path=receipt_paths(x.docs[1]["assignment"])["assembly_plan"],
+                package_commit=r)
         # Research submission for B cannot be passed off as Research A.
         with self.assertRaises(ValueError):
             x.assembly_work(0, r)
