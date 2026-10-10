@@ -5,6 +5,14 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## CURRENT DIRECTOR WORKER ASSIGNMENTS — 2026-10-10
+
+- **PR #181 / ЧАТ 1 Research:** merged (squash `8bba23fca6337e06504f819c8ccda298ffd8505a`), offline checks passed. Prior physical conversation retired.
+- **PR #182 / ЧАТ 2 Assembly:** merged (squash `4cca97a838e42b275259751010f339116d068adc`), offline checks passed. Prior physical conversation retired.
+- **НОВЫЙ ЧАТ — ЧАТ 1:** `WORKER_TASK_DOSSIER_ASYNC_END_TO_END_COMPATIBILITY_01.md`, inactive Research→Assembly end-to-end **helper interoperability** on disposable Git fixtures.
+- **НОВЫЙ ЧАТ — ЧАТ 2:** `WORKER_TASK_DOSSIER_ASYNC_GITHUB_CHAIN_ACCEPTANCE_QA_01.md`, inactive **GitHub eventual chain / strict atomic three-game acceptance QA** on disposable Git fixtures.
+- Both tasks require separate implementation PRs and reports. Do not run real semantics, activate production or modify Scheduled Tasks. `mass_migration_authorized=false` still blocks Deep Stage 1 semantic migration, and Fast stays until final atomic Deep cutover.
+
 ## CURRENT DIRECTOR STATE — 2026-10-09
 
 - **Context discipline:** new Director must stay shallow. Use `DIRECTOR_HANDOFF_CURRENT.md` + this top section only; do not broadly inspect code/history. Deep implementation analysis belongs in worker chats.
