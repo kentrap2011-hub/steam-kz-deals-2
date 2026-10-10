@@ -1,0 +1,38 @@
+name: Validate inactive Dossier Research semantic worker
+
+on:
+  pull_request:
+    paths:
+      - "config/dossier_two_stage_research_semantic_worker_prompt.md"
+      - "scripts/dossier_two_stage_research_worker.py"
+      - "scripts/test_dossier_two_stage_research_worker.py"
+      - ".github/workflows/validate-dossier-two-stage-research-worker.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  offline-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out immutable PR code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install strict schema dependency only
+        run: python -m pip install "jsonschema>=4.21,<5"
+      - name: Inactive Research exact Git provenance and twelve-item traversal
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_research_worker.py' -v
+      - name: Existing P1 schema contracts
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_contract_schemas.py' -v
+      - name: Existing P2 frozen Git authority
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_staging.py' -v
+      - name: Existing fully async Research and Assembly P2 buffer
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_async_buffer.py' -v
+      - name: Current one-stage factual date regression
+        run: python -m unittest discover -s scripts -p 'test_taste_dossier_github_date_derivation.py' -v
+      - name: Existing Deep release-year compatibility regression
+        run: python scripts/test_dossier_deep_release_year_identity_compatibility.py
