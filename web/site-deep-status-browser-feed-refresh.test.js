@@ -8,7 +8,7 @@ const vm = require('node:vm');
 const {createFeedBootstrapResilience} = require('./feed-bootstrap.js');
 const progressive = require('./progressive-personalization-ui.js');
 const appSource=fs.readFileSync(path.join(__dirname,'app.js'),'utf8');
-const URL='https://example.test/steam-kz-deals-2/data/current.json';
+const DATA_ENDPOINT='https://example.test/steam-kz-deals-2/data/current.json';
 const STATUS_URL='https://example.test/steam-kz-deals-2/data/status.json';
 const ID='game:1574580';
 const stamp=(minute)=>`2026-10-11T12:${String(minute).padStart(2,'0')}:00Z`;
@@ -82,7 +82,7 @@ function createBrowser(cachedPayload, network, saved){
     if(target.endsWith('status.json')){
       return response({generated_at_utc:stamp(59),processing_status:{deep_completed_fit_count:99}});
     }
-    assert.equal(new URL(target,win.location.href).href,URL);
+    assert.equal(new URL(target,win.location.href).href,DATA_ENDPOINT);
     return network();
   };
   const controller=createFeedBootstrapResilience({
