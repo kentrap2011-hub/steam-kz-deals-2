@@ -49,7 +49,8 @@ class CohortPreviewSyntheticTests(unittest.TestCase):
     def test_deterministic_hash_has_pinned_complete_material(self):
         frame = synthetic_frame()
         a, _ = choose_cohort(frame, "synthetic-snapshot")
-        b, _ = choose_cohort(synthetic_frame(), "synthetic-snapshot")
+        second_frame = synthetic_frame()
+        b, _ = choose_cohort(second_frame, "synthetic-snapshot")
         self.assertEqual([x["sequence"] for x in a], [x["sequence"] for x in b])
         first = frame[0]
         material = "|".join((SEED, PIN, WORK_BLOB, "synthetic-snapshot",
@@ -58,7 +59,7 @@ class CohortPreviewSyntheticTests(unittest.TestCase):
                          hashlib.sha256(material.encode()).hexdigest())
         c, _ = choose_cohort(synthetic_frame(), "other-snapshot")
         hashes1 = [g["selection_sha256"] for g in frame]
-        hashes2 = [g["selection_sha256"] for g in synthetic_frame()]
+        hashes2 = [g["selection_sha256"] for g in second_frame]
         self.assertNotEqual(hashes1, [g["selection_sha256"] for g in c])
         self.assertEqual(len(set(hashes2)), 20)
 
