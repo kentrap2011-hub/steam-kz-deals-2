@@ -1,0 +1,272 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "89100b4dff037c9da97fedc51fb99bf263845757",
+  "run_start_authority_commit": "3288987bc620d26751d2523c7c374d6d3cf6fee2",
+  "run_started_at_utc": "2026-10-11T04:52:28+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "e4c0ca67d0a7abb8a0534d65d8756c4a8c1ced10f6afda6c94c7628e13f1ce0d",
+  "family_id": "game:10680",
+  "taste_subject_key": "App_10680",
+  "appid": "10680",
+  "taste_fingerprint": "a90eaedacf11ba90e99a90140392ff627c32c7d1ada456d2598dff6827079d7d",
+  "candidate_context_sha256": "e390ee167dd3641eacf6b7d1849c63b173e2f2974cc69ab4bbe62d42275d5f64",
+  "dossier_content_sha256": "69b8f2d9eaeda46974a46fe3324b71b5fb794b0658a3a8e711e1caec87b80970",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "29d0b8d525ddebc87df451436c9819b2597b9520afbf838f3cf6671b5141d428",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Три самостоятельных стиля игры — перестрелки морпеха, вертикальная охота Хищника и скрытное передвижение Чужого по стенам — заметно меняют механику и ситуацию, что соответствует интересу к освоению отличающихся подходов.",
+    "Напряжённая научно-фантастическая атмосфера, узнаваемые существа и звуковой дизайн дополняют активное прохождение, а короткие кампании дают сравнительно компактный игровой опыт.",
+    "Смена персонажей и перспектив знакомых мест создаёт новую ценность при возвращении, хотя часть маршрутов линейна, сюжет прост, а старые технические особенности и неодинаковое качество боёв могут мешать."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 82,
+    "development_variety": 85,
+    "structure_pacing_direction": 74,
+    "identity_hooks": 80,
+    "breadth_of_match": 83
+  },
+  "base_support_compatible": null,
+  "score_findings": [
+    {
+      "finding_id": "three_asymmetric_styles",
+      "text_ru": "Кампании морпеха, Хищника и Чужого требуют разных действий: перестрелок, вертикального выслеживания и скрытных атак со стен; это даёт смену навыков и разных игровых задач вместо единственной неизменной формулы.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/мастерство_и_глубина/note",
+          "profile_value_sha256": "a43efcc6ca12d86ef6b51409a596c0d2446a50253e4d8b8612e4bc6111bed82e",
+          "match_text_ru": "Важна возможность учиться отдельным приёмам и замечать улучшение собственного навыка."
+        },
+        {
+          "json_pointer": "/factor_importance/развитие_и_разнообразие/note",
+          "profile_value_sha256": "0580f077432002933245e702ef32d0a5e3ac046bc717580f70c7ebcc99027b7d",
+          "match_text_ru": "Разнообразие и развитие действий важны на протяжении игры."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 82
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 85
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 83
+        }
+      ]
+    },
+    {
+      "finding_id": "franchise_horror_atmosphere",
+      "text_ru": "Знакомые существа, анимации и фирменная научно-фантастическая звуковая среда придают трём кампаниям ярко выраженный образ; напряжение коридоров морпеха дополняет этот атмосферный крючок.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/атмосфера_и_арт_дирекшен/note",
+          "profile_value_sha256": "11c4e50bb902ad30b7931451ca92d1379a22e8794871e8033700c50f052ea878",
+          "match_text_ru": "Атмосфера и художественный образ играют важную самостоятельную роль в увлечённости."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 80
+        }
+      ]
+    },
+    {
+      "finding_id": "brief_clear_campaigns",
+      "text_ru": "Раздельные короткие кампании меняют тон и роль персонажа, а потому имеют понятные участки продвижения; сценарная линейность и ограниченная продолжительность некоторых маршрутов одновременно сужают размах развития.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/tемп/note",
+          "profile_value_sha256": "a79a54657031ce862cf6c6d317d9adbc854a447415cf166fe07efc3487e41761",
+          "match_text_ru": "Нужны регулярно возникающие причины продолжать прохождение, не обязательно постоянный экшен."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 74
+        }
+      ]
+    },
+    {
+      "finding_id": "uneven_faction_combat",
+      "text_ru": "Уникальные скрытные добивания и тактика сторон добавляют выразительности, однако ощущение ударов Хищника и общая ровность боевой системы оцениваются неодинаково.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/геймплей_и_ощущение_управления/note",
+          "profile_value_sha256": "cdc4a8d45692525173f04e1f0bfe3afd477568a93562f0582665213abc8525b2",
+          "match_text_ru": "Качество ощущений от основного управления способно быть важнее даже хорошего сюжета."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 82
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Перемещение Чужого по стенам и наведение Хищника требуют привыкания и могут дезориентировать; отдельно упоминаются неудобства старого движка и отображения, но нынешняя совместимость на конкретном ПК не установлена.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Часть общих уровней линейна и при повторных прохождениях может ощущаться знакомой без достаточных изменений; разные роли не полностью устраняют эту претензию.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Схватки не всегда одинаково хорошо воспринимаются за разные стороны; жалобы на слабое ощущение ударов Хищника соседствуют с похвалой разнообразию боёв.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Некоторые игроки сообщают о трудностях с поиском заполненных сетевых матчей, хотя одиночные кампании от сети не зависят.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  }
+}
