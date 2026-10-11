@@ -5,6 +5,15 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT WAVE — 2026-10-11: proof flag, future shadow plan, site counts
+
+- **PR #190 (ЧАТ 1)** merged as `44b1d8f54aa7692220439b82892999de7a75e1dd`: corrected Research original release year + Research→Assembly→GitHub final original three-game strict acceptance **joint offline** regression passed. An inactive bridge guard incorrectly couples `cross_pr_research_original_year_fix_verified=false` to offline fixture eligibility; previous worker retired.
+- **PR #191 (ЧАТ 2)** merged as `42919b50af4df6212a9d2ab7233635c438571a7f`: inactive shadow-quality evaluation harness and draft future real-evidence protocol. Real semantic parity not proven; previous worker retired.
+- **НОВЫЙ ЧАТ — ЧАТ 1:** `WORKER_TASK_DOSSIER_ASYNC_BRIDGE_PROOF_GATE_DECOUPLE_01.md`: narrowly decouple year-fix proof metadata from true inactive/activation gates; repeat joint regression, no production.
+- **НОВЫЙ ЧАТ — ЧАТ 2:** `WORKER_TASK_DOSSIER_SHADOW_TRIAL_PLAN_AND_SITE_DEEP_COUNT_QA_01.md`: (A) concrete future **not yet authorized** real-evidence shadow trial pre-registration and (B) **read-only** detailed diagnosis of user-reported UI `8 deep + 9 not deep` versus `14 suitable` statistic; do not change UI or run semantics.
+- **Preliminary verified published GitHub producer:** site `deep_completed_fit_count=14`; full 297-card producer contained **all 14** Deep-fit game cards, alongside 2 incomplete and 281 not analyzed. `14` is global Deep suitable, while user's `8+9` appears to be a smaller UI-visible set; cause of subset reduction is **not yet proven**. No blanket claim that six games were lost.
+- Both workers create separate PR/report and do not self-merge. Production, real semantic execution, Scheduled Tasks and Stage1 mass migration remain unchanged/forbidden; Fast stays until atomic Deep cutover.
+
 ## DIRECTOR NEXT WAVE — 2026-10-11: joint validation and quality readiness
 
 - User confirmed the newly translated Russian description of `Being a DIK - Season 1` is now displayed in the normal browser; the visual symptom is closed, no further cache fix needed.
