@@ -1569,3 +1569,11 @@
 - Tests: inactive PR-only Git-history scenarios plus unchanged P1/P2/one-stage compatibility checks; check PR actions for authoritative run result.
 - Report: `reviews/worker_reports/dossier-fully-async-pipeline-01.md`.
 - No new semantic worker, no production activation, no Scheduled Tasks, no Fast/Deep/ranking/UI changes. Other concurrent tasks above preserved.
+
+## COMPLETE — Inactive Dossier GitHub final acceptance integration 01 (ЧАТ 2)
+Статус: `implementation_complete_pr_only_nonactive_pending_director_review`.
+- task: `WORKER_TASK_DOSSIER_ASYNC_GITHUB_FINAL_ACCEPTANCE_INTEGRATION_01.md`; PR #188 OPEN; branch `implement/dossier-async-final-acceptance-integration-01`, no worker merge.
+- Exact immutable submitted Research→Assembly chain inspector + original complete ordered three-game strict V2 group assembly, separate gated disposable Git-only handoff to the **existing** `validate_buffer_artifact` and `drain_buffered_groups` writer; no second canonical writer, no active GitHub consumer.
+- Confirmed isolated offline CI: final integration run `38114595702` SUCCESS, existing chain QA `38114595700` SUCCESS, backlog dispositions `38114595706` SUCCESS on tested implementation head `b126cd8`.
+- Original Research year XFAIL remains a **required ЧАТ 1 cross-PR fix and joint retest**, followed by evidence parity, shadow quality and separate activation authority. Production/Deep/Fast and Scheduled Tasks remain unchanged.
+- report: `reviews/worker_reports/dossier-async-github-final-acceptance-integration-01.md`; worker stops; Director reviews PR separately.

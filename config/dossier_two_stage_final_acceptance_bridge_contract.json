@@ -1,0 +1,49 @@
+{
+  "schema": "DOSSIER-TWO-STAGE-FINAL-ACCEPTANCE-BRIDGE-V1",
+  "version": 1,
+  "owner": "github_actions_control_plane",
+  "implemented": "inactive_offline_fixture_adapter",
+  "active": false,
+  "authorized_for_canonical_ingest": false,
+  "executable_in_production": false,
+  "dependencies": [
+    "config/dossier_two_stage_interfaces_contract.json",
+    "config/dossier_two_stage_staging_contract.json",
+    "config/dossier_two_stage_async_buffer_contract.json",
+    "config/taste_steam_review_dossier_contract.json"
+  ],
+  "cross_pr_research_original_year_fix_verified": false,
+  "group_policy": {
+    "required_size": 3,
+    "ordering": "original_immutable_group_plan_only",
+    "item_inspector": "scripts/dossier_two_stage_async_buffer.py::inspect_buffered_assembly_candidate",
+    "strict_final_group_validator": "scripts/taste_steam_review_dossier_buffered.py::validate_buffer_artifact",
+    "canonical_drain": "scripts/taste_steam_review_dossier_buffered.py::drain_buffered_groups",
+    "inbox": "existing_data_ai_inbox_taste_steam_review_dossiers_only",
+    "staged_only_in_disposable_test_repo": true
+  },
+  "shared_writer": {
+    "concurrency_group": "taste-steam-review-dossier-canonical-writer",
+    "cancel_in_progress": false,
+    "existing_live_workflow": ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml",
+    "existing_atomic_commit": "scripts/stage_taste_dossier_canonical_writer.sh",
+    "new_live_workflow": false
+  },
+  "safety": {
+    "read_only_inspection_default_denied": true,
+    "offline_fixture_opt_in_required": true,
+    "no_semantic_tasks": true,
+    "no_retries": true,
+    "no_new_receipt_authority": true,
+    "no_new_canonical_cache": true,
+    "never_trust_semantic_readiness_as_acceptance": true,
+    "do_not_replace_one_stage": true,
+    "offline_fixture_only_writer": true
+  },
+  "activation_blockers": [
+    "separate_user_authorization_for_cutover",
+    "research_original_year_fix_green_without_xfail_and_joint_retest",
+    "real_evidence_parity_and_inactive_shadow_quality",
+    "shared_writer_integration_under_existing_concurrency_and_Git_commit_transaction"
+  ]
+}
