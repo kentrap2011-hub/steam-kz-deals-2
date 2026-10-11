@@ -36,32 +36,55 @@ function payload(minute,lit=false){
     ],
   };
 }
-function node(initialHidden=false){
+function node(initialHidden=false,bubble){
   const flags=new Set(initialHidden?['hidden']:[]);
   const listeners={};
   return {
-    textContent:'',innerHTML:'',value:'',style:{},dataset:{},disabled:false,attributes:{},
+    textContent:'',innerHTML:'',value:'',style:{},dataset:{},disabled:false,attributes:{},parentElement:null,focusCount:0,
     classList:{
       contains(k){return flags.has(k)},add(k){flags.add(k)},remove(k){flags.delete(k)},
       toggle(k,force){const next=force===undefined?!flags.has(k):!!force;if(next)flags.add(k);else flags.delete(k);return next},
     },
+    contains(target){for(let n=target;n;n=n.parentElement)if(n===this)return true;return false},
+    closest(){return null}, // Delegated app.js card handlers, unrelated to these tap tests.
     addEventListener(name,fn){listeners[name]=fn},
     removeEventListener(name,fn){if(listeners[name]===fn)delete listeners[name]},
-    dispatch(name,arg={}){listeners[name]?.(arg)},
-    setAttribute(k,v){this.attributes[k]=String(v)},getAttribute(k){return this.attributes[k]??null},removeAttribute(k){delete this.attributes[k]},querySelector(){return null},focus(){},
+    localDispatch(name,event){listeners[name]?.(event)},
+    dispatch(name,arg={}){
+      const event={target:this,...arg};
+      for(let n=this;n;n=n.parentElement)n.localDispatch(name,event);
+      if(name==='click')bubble('click',event); // Real DOM bubbles touch-generated and opener clicks.
+      return event;
+    },
+    setAttribute(k,v){this.attributes[k]=String(v)},getAttribute(k){return this.attributes[k]??null},removeAttribute(k){delete this.attributes[k]},querySelector(){return null},
+    focus(){this.focusCount++},
   };
 }
 function createBrowser(cachedPayload, network, saved){
   const nodes=new Map();
   const get=id=>{
-    if(!nodes.has(id))nodes.set(id,node(['gameCard','emptyFeed','feedSyncNotice'].includes(id)));
+    if(!nodes.has(id)){
+      const n=node(['gameCard','emptyFeed','feedSyncNotice'].includes(id),(name,event)=>document.emit(name,event));
+      nodes.set(id,n);
+      if(['feedSyncText','feedRefreshBtn'].includes(id))n.parentElement=get('feedSyncDetails');
+      if(id==='feedSyncSymbol')n.parentElement=get('feedStatusToggle');
+      if(['feedSyncDetails','feedStatusToggle','feedSyncLive'].includes(id))n.parentElement=get('feedSyncNotice');
+    }
     return nodes.get(id);
   };
   const docListeners={};const winListeners={};
   const document={
-    visibilityState:'visible',getElementById:get,querySelectorAll(){return []},
-    addEventListener(name,fn){docListeners[name]=fn},removeEventListener(name){delete docListeners[name]},
-    emit(name,arg){docListeners[name]?.(arg)},
+    visibilityState:'visible',getElementById:get,
+    querySelectorAll(selector){
+      if(selector!=='.tab')return [];
+      const feed=get('tabFeed'),giveaway=get('tabGiveaway');
+      feed.dataset.tab='feed';giveaway.dataset.tab='giveaway';
+      return [feed,giveaway];
+    },
+    addEventListener(name,fn){(docListeners[name]??=new Set()).add(fn)},
+    removeEventListener(name,fn){docListeners[name]?.delete(fn)},
+    emit(name,arg){for(const fn of [...(docListeners[name]||[])])fn(arg)},
+    listenerCount(name){return docListeners[name]?.size||0},
   };
   const stored=new Map(saved?[['steam-deals-visual-state-v1',JSON.stringify(saved)]]:[]);
   let cachePayload=cachedPayload&&clone(cachedPayload);
@@ -100,7 +123,7 @@ function createBrowser(cachedPayload, network, saved){
   vm.runInContext(appSource,context,{filename:'app.js',timeout:2000});
   win.init=()=>vm.runInContext('init()',context);
   const snapshot=()=>JSON.parse(vm.runInContext(`JSON.stringify({
-    item:byId.get('${ID}'),ids:state.queue.ids,cursor:state.queue.cursor,
+    item:byId.get('${ID}'),ids:state.queue.ids,cursor:state.queue.cursor,tab:currentTab,
     games:state.games,settings:state.settings,
     statistics:siteStatus?.processing_status,
   })`,context));
@@ -261,20 +284,78 @@ async function newlyGeneratedCacheVsOldProducer(){
   assert.match(aged.nodes('feedSyncText').textContent,/Снимок создан более суток назад/);
   assertSaved(aged);
 }
+function assertPopover(browser,expanded,reason){
+  assert.equal(browser.controller.state.statusExpanded,expanded,reason+' state');
+  assert.equal(browser.nodes('feedStatusToggle').getAttribute('aria-expanded'),String(expanded),reason+' aria');
+  assert.equal(browser.nodes('feedSyncDetails').classList.contains('hidden'),!expanded,reason+' visual');
+}
 async function equalNetworkAndInteractiveDetail(){
   const browser=createBrowser(payload(5,true),async()=>response(payload(5,true)),saved);
   await until(()=>browser.controller.state.refreshOutcome==='identical','verified equal');
   assert.equal(browser.controller.state.freshnessState,'network_verified');
   assert.equal(browser.controller.state.lastVerifiedAt,'2026-10-11T12:10:00.000Z');
   assert.match(browser.nodes('feedSyncText').textContent,/проверена по сети в/);
-  assert.equal(browser.nodes('feedStatusToggle').getAttribute('aria-expanded'),'false','collapsed by default');
-  assert.equal(browser.nodes('feedSyncDetails').classList.contains('hidden'),true);
+  assertPopover(browser,false,'initially collapsed');
   assert.match(browser.nodes('feedStatusToggle').getAttribute('aria-label'),/Показать подробности/);
-  browser.nodes('feedStatusToggle').dispatch('click');
-  assert.equal(browser.nodes('feedStatusToggle').getAttribute('aria-expanded'),'true');
-  assert.equal(browser.nodes('feedSyncDetails').classList.contains('hidden'),false);
-  browser.nodes('feedSyncDetails').dispatch('keydown',{key:'Escape'});
-  assert.equal(browser.nodes('feedStatusToggle').getAttribute('aria-expanded'),'false','Escape closes without a modal');
+  assert.equal(browser.document.listenerCount('click'),2,'app + one outside-dismiss listener');
+  browser.controller.install();
+  assert.equal(browser.document.listenerCount('click'),2,'repeated install does not duplicate handler');
+
+  const toggle=browser.nodes('feedStatusToggle'),details=browser.nodes('feedSyncDetails');
+  toggle.dispatch('click');
+  assertPopover(browser,true,'opener click bubbles without closing');
+  browser.nodes('feedSyncText').dispatch('click',{pointerType:'touch'});
+  assertPopover(browser,true,'reading panel text');
+  browser.nodes('feedRefreshBtn').dispatch('click',{pointerType:'touch'});
+  assertPopover(browser,true,'retry button stays inside panel');
+  await browser.controller.whenBackgroundIdle();
+  assert.equal(browser.controller.state.refreshOutcome,'identical','inside retry checks data');
+  assertPopover(browser,true,'refresh updates while open');
+  browser.nodes('feedSyncSymbol').dispatch('click',{pointerType:'touch'});
+  assertPopover(browser,false,'nested opener icon closes');
+
+  toggle.dispatch('click');
+  assertPopover(browser,true,'re-open');
+  const backdrop=browser.nodes('blankBackground');
+  const emptyTap=backdrop.dispatch('click',{pointerType:'touch'});
+  assertPopover(browser,false,'touch click on empty background');
+  assert.equal(emptyTap.defaultPrevented,undefined,'outside tap is not intercepted');
+  toggle.dispatch('click');
+  browser.nodes('gameCard').dispatch('click',{pointerType:'touch'});
+  assertPopover(browser,false,'game card click dismisses');
+  assertSaved(browser);
+
+  toggle.dispatch('click');
+  browser.nodes('tabGiveaway').dispatch('click',{pointerType:'touch'});
+  assertPopover(browser,false,'navigation tab dismisses');
+  assert.equal(browser.snapshot().tab,'giveaway','same click still navigates');
+  browser.nodes('tabFeed').dispatch('click');
+  toggle.dispatch('click');
+  browser.nodes('statisticsBtn').dispatch('click');
+  assertPopover(browser,false,'statistics navigation dismisses');
+  assert.equal(browser.snapshot().tab,'statistics','same click still activates statistics');
+
+  toggle.dispatch('click');
+  toggle.dispatch('click');
+  assertPopover(browser,false,'second toggle click closes');
+  toggle.dispatch('click');
+  const escape=details.dispatch('keydown',{key:'Escape',preventDefault(){this.defaultPrevented=true}});
+  assertPopover(browser,false,'Escape closes');
+  assert.equal(escape.defaultPrevented,true,'Escape prevents default');
+  assert.equal(toggle.focusCount,1,'Escape restores opener focus');
+
+  toggle.dispatch('click');
+  browser.controller.destroy();
+  assertPopover(browser,false,'destroy does not strand panel');
+  assert.equal(browser.document.listenerCount('click'),1,'destroy retains app listener only');
+  browser.controller.destroy();
+  assert.equal(browser.document.listenerCount('click'),1,'repeated destroy remains idempotent');
+  browser.controller.install();
+  assert.equal(browser.document.listenerCount('click'),2,'reinstall adds one handler');
+  toggle.dispatch('click');
+  assertPopover(browser,true,'reinstalled controller opens once');
+  backdrop.dispatch('click',{pointerType:'touch'});
+  assertPopover(browser,false,'reinstalled outside handler dismisses');
   assertSaved(browser);
 }
 function compactMobileContract(){
@@ -286,7 +367,7 @@ function compactMobileContract(){
   assert.match(html,/id="feedSyncDetails"[^>]*class="feed-sync-details hidden"/);
   assert.match(html,/id="feedRefreshBtn"[^>]*type="button"/);
   assert.ok(html.indexOf('id="feedSyncNotice"')<html.indexOf('<nav class="tabs"'),'header indicator');
-  assert.match(html,/feed-bootstrap.js\?v=compact-freshness-ux-01/);
+  assert.match(html,/feed-bootstrap.js\?v=popover-outside-dismiss-01/);
   assert.match(html,/feed-sync.css\?v=compact-freshness-ux-01/);
   assert.match(css,/width:44px;height:44px;min-width:44px;min-height:44px/,'touch target');
   assert.match(css,/\.feed-sync-details\{position:absolute;/,'detail never pushes cards down');
@@ -306,6 +387,6 @@ async function main(){
   assert.equal(direct.validatePayload({...payload(1),generated_at_utc:'wrong'}),false);
   assert.equal(direct.validatePayload({...payload(1),items:[{id:ID},{id:ID}]}),false);
   assert.equal(progressive.stageIndicators(payload(2,true).items.find(x=>x.id===ID))[2].lit,true);
-  console.log('PASS: Deep feed, compact truthful freshness, mobile CSS, accessible detail, state, retry/resume and init re-entry');
+  console.log('PASS: Deep feed, mobile outside-tap dismissal, bubbling, navigation, lifecycle, accessibility, state, retry/resume and init re-entry');
 }
 main().catch(error=>{console.error(error);process.exitCode=1});

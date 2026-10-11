@@ -158,14 +158,25 @@
       details.classList.toggle('hidden',!state.statusExpanded);
       toggle.setAttribute('aria-expanded',String(state.statusExpanded));
     }
-    function toggleStatusDetails(){
-      state.statusExpanded=!state.statusExpanded;
+    function setStatusDetailsExpanded(expanded){
+      state.statusExpanded=!!expanded;
       el('feedSyncDetails')?.classList.toggle('hidden',!state.statusExpanded);
       el('feedStatusToggle')?.setAttribute('aria-expanded',String(state.statusExpanded));
     }
+    function toggleStatusDetails(){
+      setStatusDetailsExpanded(!state.statusExpanded);
+    }
+    // A click is emitted for both taps and mouse/keyboard activation. Keep
+    // the opener's bubbled click and all interactions inside the panel intact.
+    function onStatusOutsideClick(event){
+      if(!state.statusExpanded)return;
+      const target=event?.target;
+      if(!target||el('feedSyncDetails')?.contains?.(target)||el('feedStatusToggle')?.contains?.(target))return;
+      setStatusDetailsExpanded(false);
+    }
     function onStatusEscape(event){
       if(event?.key!=='Escape'||!state.statusExpanded)return;
-      event.preventDefault?.();toggleStatusDetails();el('feedStatusToggle')?.focus?.();
+      event.preventDefault?.();setStatusDetailsExpanded(false);el('feedStatusToggle')?.focus?.();
     }
     function cachedFreshnessMode(){
       if(state.refreshOutcome==='failed')return 'verification_failed';
@@ -605,6 +616,7 @@
       state.installed=true;
       if(win)win.fetch=wrappedFetch;
       doc?.addEventListener?.('visibilitychange',onVisibility);
+      doc?.addEventListener?.('click',onStatusOutsideClick);
       el('feedRefreshBtn')?.addEventListener?.('click',onRetryClick);
       el('feedStatusToggle')?.addEventListener?.('click',toggleStatusDetails);
       el('feedStatusToggle')?.addEventListener?.('keydown',onStatusEscape);
@@ -617,6 +629,8 @@
       state.installed=false;
       if(win&&win.fetch===wrappedFetch)win.fetch=nativeFetch;
       doc?.removeEventListener?.('visibilitychange',onVisibility);
+      doc?.removeEventListener?.('click',onStatusOutsideClick);
+      setStatusDetailsExpanded(false);
       el('feedRefreshBtn')?.removeEventListener?.('click',onRetryClick);
       el('feedStatusToggle')?.removeEventListener?.('click',toggleStatusDetails);
       el('feedStatusToggle')?.removeEventListener?.('keydown',onStatusEscape);
