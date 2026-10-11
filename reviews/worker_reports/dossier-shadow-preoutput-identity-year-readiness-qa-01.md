@@ -73,3 +73,10 @@ The only workflow added is `.github/workflows/validate-dossier-shadow-preoutput-
 - **Source truth and rights:** GitHub retains scope/accepted Dossier/writer authority; this report is merely independent future decision input. No Steam credentials, player-source content, other repo, manual shell write, Scheduled Tasks or automations, Fast/Deep/visual/site/ranking, live production cache/queues/receipt state or Research/Assembly semantics modified.
 
 **Decision requested from Director:** reconcile the five positive historical-year corroborations, three same-work conflicts and five edition/EA flags against independent full-20-group safe player-source metadata from ЧАТ 1; separately preregister category coverage, exact cohort, immutable freeze, reviewers, source privacy and numeric stop/adjudication rules; do not approve the six now.
+
+## PR-only validation receipts (2026-10-11)
+
+- PR [#209](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/209) is **open and unmerged**; isolated branch `audit/dossier-shadow-preoutput-identity-year-readiness-qa-01`.
+- Initial PR-only Actions [run 38144771491](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/38144771491) **failed 2/12**, honestly preserved: a hand-transcribed group-7 group-SHA-256 literal in the **new test helper** missed one hex character (`PINNED_ORIGINAL_GROUP_BINDING`). The **source pinned manifest and data JSON were not altered** to force a pass. The exact helper constant was corrected in commit `2d177090dfb084904d80759fb17f19fb7ebdaef5`.
+- Follow-up PR-only Actions [run 38144812756](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/38144812756) **passed**: code compile, **12/12 isolated Python unittests**, and the separate full real **20 groups/60 games** frame and three conflict-count assertion. Test runs have no live web request; the only runtime diagnostic is under runner temporary directory.
+- This CI demonstrates completeness, explicit uncertainty, integrity and negative gates, **not** external truth of the remaining 55 unverified historical releases, real source/authorship quality, or prospective trial approval.
