@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "de897057ebf0878c2cf27fbbee862af4a7ad8283",
+  "run_start_authority_commit": "28c54445b8747489fb97f10da2744815684edfc0",
+  "run_started_at_utc": "2026-10-11T13:06:17+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "65c49a485b39664d41f8c0bec8611f3229fd7bae17654196522fd8cb66d56ccc",
+  "family_id": "game:2362090",
+  "taste_subject_key": "App_2362090",
+  "appid": "2362090",
+  "taste_fingerprint": "c6ef8ccc6c8316534614c329d045d9d56fd543543d3cc2065f1e569c5bd184a0",
+  "candidate_context_sha256": "8b6bf413e07ee89c246ac0ae060eb39b6240978353ea75f99871bde0594e6789",
+  "dossier_content_sha256": "daa1570e59eea0ad0139b58fbaf184c58d19c52093a62c6acb3b612caa378ee7",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "6f3d5a7fbd0345dd5ac23bfaa1862e2c51073d6af40052bfe0af09963a7dd800",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Нуарный мир животных, интрига и отношения главных детективов дают личностные и атмосферные крючки, но сама игра остаётся преимущественно разговорным расследованием без выраженного активного основного цикла.",
+    "Для ориентированной на сюжет игры несколько источников описывают ускоренную финальную часть, непроговорённые линии и недостаточно удовлетворительную развязку. При высокой ценности эмоционально завершённой истории это существенно ослабляет привлекательность.",
+    "Небольшие мини-игры помогают разнообразить диалоги, но игроки расходятся в том, хватает ли их; поэтому они не выглядят убедительной компенсацией риску слабой сюжетной отдачи."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "other_grounded_taste_risk",
+        "text_ru": "При упоре на детективную историю резко ускоряющиеся последние главы и недоведённые эмоциональные линии создают персональный риск разочарования именно в сюжетной развязке.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Небольшие мини-игры разнообразят расследование, но степень их достаточности спорна: между ними игра главным образом предлагает разговоры и поиск улик.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Восприятие финала неоднозначно: есть и защитники развязки, поэтому негативное впечатление от неё не гарантировано.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
