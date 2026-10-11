@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "5d5f22be092ba26386e43728024ce8518b85628e",
+  "run_start_authority_commit": "8af681fb0ae4f9544705a6cf3cc9410ec5da632f",
+  "run_started_at_utc": "2026-10-11T13:22:46+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "7f6d43de44c8a3c1935ef00c65089c2ec78c85bf3a8c5fc620a1a419bf9112da",
+  "family_id": "game:12150",
+  "taste_subject_key": "App_12150",
+  "appid": "12150",
+  "taste_fingerprint": "b4306f574fe0562a8a7ba1796b9afbb20a4fe05690b50c89855fd5f8984ae97f",
+  "candidate_context_sha256": "8144b35e8e483edb8a9cab6f793cfe3f55fd4c6fc106a59705939d2d1a85db4f",
+  "dossier_content_sha256": "256169d47eb24cd40ac8900edaac7bfed12407617948bcf5bd43e427d6310a31",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "20236694b73a3b55897b44ae7596183fe67d506cf3eddd4812d4f96d910ce36b",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "high",
+  "positive_evidence": [
+    "Замедление времени и динамичные перестрелки дают отзывчивый, более плавный по сравнению с первой игрой бой, дополненный физикой тел (наблюдения 0, 1).",
+    "Короткая линейная кампания почти без пустых отрезков удерживает высокий темп (наблюдения 2, 4).",
+    "Комиксовая нуарная подача и отношения героев сохраняют атмосферную идентичность серии (наблюдения 3, 8)."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 82,
+    "development_variety": 59,
+    "structure_pacing_direction": 86,
+    "identity_hooks": 78,
+    "breadth_of_match": 80
+  },
+  "score_findings": [
+    {
+      "finding_id": "fluid-bullet-time",
+      "text_ru": "Перестрелки строятся на замедлении времени, уходе от пуль и активном перемещении, а более отзывчивое управление и физика тел делают эти действия выразительнее, чем в оригинале.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/stopgame_cards/58/what_liked/1",
+          "profile_value_sha256": "44c730d8dcb79569404203b6340415730c7a46cd57d111093c593c352cb8a891",
+          "match_text_ru": "Пользователь прямо отмечал, что механически вторая часть, возможно, удобнее первой, и этот опыт уже знаком по прохождению."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 82
+        }
+      ]
+    },
+    {
+      "finding_id": "short-action-flow",
+      "text_ru": "Короткая линейная кампания быстро проводит через серию перестрелок почти без затянутого заполнения; при таком темпе отдельные уровни и сюжетные повороты могут закончиться неожиданно резко.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/play_pattern_and_length/weekly_gap_resilience_raises",
+          "profile_value_sha256": "20279c829b7d5524531d4d3696e48d2cb5409cda9edb489cf1f374e57051a5f7",
+          "match_text_ru": "Понятная последовательность событий и возвращение к знакомому управлению облегчают прохождение после перерывов; резкость концовки остаётся оговоркой."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 86
+        }
+      ]
+    },
+    {
+      "finding_id": "noir-identity",
+      "text_ru": "Комиксовые вставки, нуарный рассказ и напряжённые отношения героев сохраняют выразительную атмосферу серии, хотя романтический поворот вызывает споры и для этого профиля первый сюжет запомнился сильнее.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/stopgame_cards/58/what_disliked/0",
+          "profile_value_sha256": "0520079316b68bd4dae1228b6552b54098ae115ea0b44ab6a0685b5101313abf",
+          "match_text_ru": "Сам пользователь предпочитает оригинал по сюжету и стилистической первичности, поэтому нуарная подача второй части не означает превосходства над первой."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 78
+        }
+      ]
+    },
+    {
+      "finding_id": "sequel-improvements-not-overhaul",
+      "text_ru": "Более гладкая стрельба и физика делают знакомый Bullet Time приятнее, но продолжение предлагает меньше крупных новых механических идей, чем можно ожидать от эволюции серии.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/10/raises",
+          "profile_value_sha256": "fa3a16754012c31c00c98151e5df26a4f02643f72bfd0748fac0b4cc452994b5",
+          "match_text_ru": "Для продолжений особенно важны новые механики или заметный новый масштаб; тут улучшена отзывчивость, но основные системы знакомы."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 59
+        }
+      ]
+    },
+    {
+      "finding_id": "combined-familiar-strengths",
+      "text_ru": "Физические перестрелки с замедлением времени соединены с узнаваемой нуарной историей: именно сочетание ощущений от стрельбы и художественной подачи удерживает интерес, несмотря на знакомую формулу.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/stopgame_cards/58/why_this_rating",
+          "profile_value_sha256": "506910febaaaf6bca3996b894ee4be8bbcb2a8f217d6e3b71866e368e45961d1",
+          "match_text_ru": "Прямая оценка этой же игры — 3,5/5: механика нравится, а первая часть сильнее по сюжету и уникальности."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 80
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Сюжет развивается и заканчивается быстро, поэтому романтическая линия и её финал могут производить менее сильное впечатление, чем месть и художественная новизна первой части; пользователь уже отмечал такое различие.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "observation",
+            "index": 9
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Несмотря на более плавный бой, крупных новых механик по сравнению с оригиналом немного, что может уменьшать чувство развития знакомой формулы.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Оригинальный Windows-релиз иногда требует совместимых настроек или сторонних исправлений на современных ПК; необходимость этих действий зависит от конкретной системы.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
