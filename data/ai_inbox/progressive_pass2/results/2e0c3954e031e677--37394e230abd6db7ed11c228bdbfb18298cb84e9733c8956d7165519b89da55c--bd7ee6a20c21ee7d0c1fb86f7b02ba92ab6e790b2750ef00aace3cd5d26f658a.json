@@ -1,0 +1,322 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "0c85b8b9065373cd6e39a92c6b107b3a9f3d35cc",
+  "run_start_authority_commit": "ce45c220cc44f8a671f97a03e7d0c96c0fcb6b2b",
+  "run_started_at_utc": "2026-10-11T12:37:07+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "37394e230abd6db7ed11c228bdbfb18298cb84e9733c8956d7165519b89da55c",
+  "family_id": "game:1574240",
+  "taste_subject_key": "App_1574240",
+  "appid": "1574240",
+  "taste_fingerprint": "1e0c3091797e19a5b0fef384602a17bfef1a4da5ed489e310cc1ba2c8ccc1ec5",
+  "candidate_context_sha256": "fbf7f433295e7c155f2ee4710506b5bd26726aa9fc9420d2507922d53cd25370",
+  "dossier_content_sha256": "fe3f9e36d5e0136aa8bba69872bdcbbe6653de4d732cb8aaad0b891da2216b88",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "bd7ee6a20c21ee7d0c1fb86f7b02ba92ab6e790b2750ef00aace3cd5d26f658a",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Исследование необычных летающих островов, поселений и секретных маршрутов подкреплено побочными заданиями и находками.",
+    "Ретро-визуал, атмосферная музыка, мрачная фэнтезийная мифология и фракции создают сильную индивидуальность игрового мира.",
+    "Морально неоднозначные побочные квесты и выборы в диалогах обещают содержательные истории, хотя их последствия бывают ограничены."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 39,
+    "development_variety": 51,
+    "structure_pacing_direction": 62,
+    "identity_hooks": 85,
+    "breadth_of_match": 64
+  },
+  "score_findings": [
+    {
+      "finding_id": "f1",
+      "text_ru": "Странные парящие острова, города и скрытые истории превращают отклонения от основного маршрута в самостоятельный поиск побочных заданий и секретов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/4/raises",
+          "profile_value_sha256": "b32f2dff273125d646ee0e7b0132adb9d4502978580aaebe8546b284fda86ea7",
+          "match_text_ru": "Профиль ценит исследование ради побочных историй и ощущения живого мира."
+        },
+        {
+          "json_pointer": "/taste_profile/5/raises",
+          "profile_value_sha256": "f1997cf9d87235a0d984a3c5bceefb8aa566143fb2e8edddfb81312ba09aef35",
+          "match_text_ru": "Загадочные детали окружения дают мотив открывать новые места."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 62
+        }
+      ]
+    },
+    {
+      "finding_id": "f2",
+      "text_ru": "Низкополигональный облик, меланхоличная музыка и тревожная фантастическая мифология создают выразительную художественную индивидуальность, не зависящую от качества боя.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Необычная эстетика и атмосфера — устойчивый сильный интерес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 85
+        }
+      ]
+    },
+    {
+      "finding_id": "f3",
+      "text_ru": "Исследование необычных поселений, морально неоднозначные задания и атмосферные истории совпадают сразу с интересом к содержательному миру и яркой подаче.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/4/raises",
+          "profile_value_sha256": "b32f2dff273125d646ee0e7b0132adb9d4502978580aaebe8546b284fda86ea7",
+          "match_text_ru": "Побочные истории и исследование значимы независимо от масштаба мира."
+        },
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Эстетика способна дать игре узнаваемый личный крючок."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 64
+        }
+      ]
+    },
+    {
+      "finding_id": "f4",
+      "text_ru": "Ближний бой и заклинания описаны как простые и маловариативные, а противники — не слишком интересные; боевой процесс вряд ли будет давать столь же ощутимый рост мастерства, как исследование.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Освоение боевых паттернов и ощутимый прогресс собственного навыка — сильное предпочтение."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "lowers",
+          "normalized_value": 39
+        }
+      ]
+    },
+    {
+      "finding_id": "f5",
+      "text_ru": "Развитие строится на находках, проверках навыков и предметах; при этом ограниченные награды и ненадёжный баланс экипировки делают эффект прокачки менее последовательным.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/raises",
+          "profile_value_sha256": "14b5578fa690e75089e182953960601edf5593fe7c4b57ccdc49878c88fa672a",
+          "match_text_ru": "В профиле важен понятный результат улучшения героя и экипировки."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 51
+        }
+      ]
+    },
+    {
+      "finding_id": "f6",
+      "text_ru": "Открытое, насыщенное чтением приключение иногда теряет темп ближе к концу, а некоторые моральные решения имеют более узкие последствия, чем обещает устройство мира.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/lowers",
+          "profile_value_sha256": "9af4e57dc35172ff77fd80946c8385d99dff55971301a04cb17db942fe3c717c",
+          "match_text_ru": "Отсутствие эволюции игрового опыта и затянутые одинаковые этапы быстро снижают интерес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 62
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 64
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Сражения, поведение врагов и набор заклинаний часто оценивают как слишком простые: это существенный риск при высокой важности увлекательного базового геймплея и освоения механик.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Прокачка через находки и проверки навыков интересна, но награды и баланс снаряжения могут не давать ясного ощущения улучшения.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Разветвлённые диалоги и побочные решения не всегда сопровождаются столь же заметными последствиями.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Открытое исследование и большое количество чтения местами замедляют развитие, особенно ближе к финалу основной истории.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Официальная русская локализация отсутствует; наличие неофициальных переводов не гарантирует равнозначную поддержку.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
