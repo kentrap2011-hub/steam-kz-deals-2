@@ -1,8 +1,19 @@
-/* Visual-only sync status; never replaces producer-owned per-card verdicts. */
-.feed-sync{display:flex;flex-wrap:wrap;align-items:center;gap:7px;border:1px solid #746038;background:#2a261b;border-radius:10px;margin-top:7px;padding:7px 9px;color:#f3deb0;font-size:12px;line-height:1.35}
-.feed-sync[data-state="current"]{border-color:#376d59;background:#182b25;color:#c4f2d5}
-.feed-sync[data-state="older"]{border-color:#875456;background:#2d2022;color:#ffd1d1}
-.feed-sync span{flex:1 1 220px;min-width:0}
-.feed-sync button{flex:0 0 auto;min-height:36px;cursor:pointer}
-.feed-sync button:disabled{opacity:.7;cursor:progress}
-.feed-sync button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* Site-only feed verification affordance; card score, producer, and queue remain authoritative elsewhere. */
+.topline>div:first-child{min-width:0}
+.feed-source-line{display:flex;align-items:center;gap:1px;position:relative;min-width:0;min-height:17px}
+.feed-source-line #freshness{min-width:0;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.feed-sync{display:inline-flex;align-items:center;flex:0 0 auto;height:17px}
+.feed-status-toggle{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;min-width:44px;min-height:44px;margin:-14px -7px;padding:0;cursor:pointer;border:0;border-radius:11px;background:transparent;color:#9cabbf;font-size:15px;line-height:1}
+.feed-sync[data-state="checking"] .feed-status-toggle{color:#c9d9ea}
+.feed-sync[data-state="cached_unverified"] .feed-status-toggle{color:#b6bdcb}
+.feed-sync[data-state="verification_failed"] .feed-status-toggle{color:#f2c66d}
+.feed-sync[data-state="confirmed_older_or_conflict"] .feed-status-toggle,
+.feed-sync[data-state="no_feed"] .feed-status-toggle{color:#ffb0b0}
+.feed-sync[data-state="network_verified"] .feed-status-toggle{color:#9bcdb0}
+.feed-status-toggle:focus-visible,.feed-sync-details button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.feed-status-toggle:disabled{opacity:.65}
+.feed-sync-details{position:absolute;z-index:60;top:calc(100% + 16px);left:0;width:min(320px,calc(100vw - 22px));max-width:calc(100vw - 22px);padding:11px 12px;border:1px solid var(--border);border-radius:12px;background:#202631;color:var(--text);font-size:12px;line-height:1.45;white-space:normal;overflow-wrap:anywhere;box-shadow:0 12px 32px rgba(0,0,0,.55)}
+.feed-sync-details button{display:block;cursor:pointer;margin-top:9px;min-height:44px;width:100%;background:#26344b;border-color:#3c587a;font-size:12px}
+.feed-sync-details button:disabled{opacity:.68;cursor:progress}
+.feed-sync-sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:430px){.feed-sync-details{width:min(310px,calc(100vw - 18px));max-width:calc(100vw - 18px)}}
