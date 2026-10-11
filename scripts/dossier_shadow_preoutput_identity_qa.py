@@ -123,8 +123,8 @@ def compatibility_check(payload, candidate_sequences, later_source_categories=No
     proposed_games = [game for seq in candidate_sequences if seq in groups_by_id for game in groups_by_id[seq]["games"]]
     if len(proposed_games) != 18 or len({g["appid"] for g in proposed_games}) != 18:
         errors.append("EIGHTEEN_GAMES_OVERCLAIM")
-    if any(g["date_unknown"] or g["edition_or_work_identity_ambiguity"] or
-           g["disagrees_with_old_binding"] for g in proposed_games):
+    if any(g["date_unknown"] or g["edition_or_work_identity_ambiguity"] is not False or
+           g["disagrees_with_old_binding"] is not False for g in proposed_games):
         errors.append("UNKNOWN_OR_CONFLICT_NEEDS_INDEPENDENT_ADJUDICATION")
     if later_source_categories is None:
         errors.append("CHAT1_SOURCE_METADATA_NOT_INDEPENDENTLY_DELIVERED")
