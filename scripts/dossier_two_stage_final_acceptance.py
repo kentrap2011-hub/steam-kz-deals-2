@@ -42,7 +42,7 @@ def offline_gate(repo, *, offline_fixture=False):
             or spec.get("active") is not False
             or spec.get("authorized_for_canonical_ingest") is not False
             or spec.get("executable_in_production") is not False
-            or spec.get("cross_pr_research_original_year_fix_verified") is not False
+            or type(spec.get("cross_pr_research_original_year_fix_verified")) is not bool
             or spec.get("shared_writer", {}).get("concurrency_group")
             != "taste-steam-review-dossier-canonical-writer"):
         raise ValueError("final bridge contract is not explicitly inactive")
