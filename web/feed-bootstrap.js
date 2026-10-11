@@ -477,13 +477,18 @@
         return responseWithPayload(cached.response,cached.payload,{source:'cache',identity:cached.identity,url});
       }
       showLoading();
-      const fresh=await runBoundedNetwork(input,init,{blocking:true,phase:'bootstrap'});
-      return responseWithPayload(fresh.response,fresh.payload,{
-        source:'network',
-        identity:fresh.identity,
-        cacheCandidate:true,
-        url:fresh.url,
-      });
+      try{
+        const fresh=await runBoundedNetwork(input,init,{blocking:true,phase:'bootstrap'});
+        return responseWithPayload(fresh.response,fresh.payload,{
+          source:'network',
+          identity:fresh.identity,
+          cacheCandidate:true,
+          url:fresh.url,
+        });
+      }catch(error){
+        freshnessNotice('failed');
+        throw error;
+      }
     }
     function wrappedFetch(input,init){
       if(!isDataRequest(input))return nativeFetch(input,init);
