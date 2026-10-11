@@ -1,0 +1,42 @@
+name: Validate browser Deep feed refresh (PR only)
+
+on:
+  pull_request:
+    paths:
+      - 'web/feed-bootstrap.js'
+      - 'web/index.html'
+      - 'web/feed-sync.css'
+      - 'web/app.js'
+      - 'web/progressive-personalization-ui.js'
+      - 'web/site-deep-status-browser-feed-refresh.test.js'
+      - 'web/site-deep-count-queue.test.js'
+      - 'scripts/test_feed_bootstrap_cache_identity.js'
+      - '.github/workflows/validate-browser-deep-feed-refresh.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Strict JS syntax for changed site modules
+        run: |
+          node --check web/feed-bootstrap.js
+          node --check web/app.js
+          node --check web/site-deep-status-browser-feed-refresh.test.js
+      - name: Reproduce stale Deep and recover without resetting local queue
+        run: node web/site-deep-status-browser-feed-refresh.test.js
+      - name: Existing cache identity regression
+        run: node scripts/test_feed_bootstrap_cache_identity.js
+      - name: Existing local/manual Deep queue regression
+        run: node web/site-deep-count-queue.test.js
+      - name: Existing Progressive indicator/statistics regression
+        run: node web/progressive-personalization-ui.test.js
+      - name: Static version pin and safe-refresh UI accessibility
+        run: |
+          node -e "const fs=require('fs'),a=fs.readFileSync('web/index.html','utf8');for(const x of ['feed-bootstrap.js?v=deep-cache-refresh-01','feed-sync.css?v=deep-cache-refresh-01','id=\"feedRefreshBtn\"','aria-live=\"polite\"'])if(!a.includes(x))throw Error('Missing '+x)"
