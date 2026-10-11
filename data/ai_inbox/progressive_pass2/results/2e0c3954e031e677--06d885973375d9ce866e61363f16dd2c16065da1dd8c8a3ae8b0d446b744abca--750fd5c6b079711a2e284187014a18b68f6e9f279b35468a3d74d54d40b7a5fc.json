@@ -1,0 +1,299 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "8bce124a56c669d93ad5126461500dbdaa965e98",
+  "run_start_authority_commit": "31bc0b3bc59caafbe62c101ead501c2b503ee15d",
+  "run_started_at_utc": "2026-10-11T14:06:57+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "06d885973375d9ce866e61363f16dd2c16065da1dd8c8a3ae8b0d446b744abca",
+  "family_id": "game:248820",
+  "taste_subject_key": "App_248820",
+  "appid": "248820",
+  "taste_fingerprint": "9a3d5ce5c1a0b5110f73dea741a302a926f8a5065e7c9c3bbc415204832f6830",
+  "candidate_context_sha256": "96c4a6d882e74e9c52790a9c3ca21d99f13d12c5dd6cd0f6063282af54fec45b",
+  "dossier_content_sha256": "cd7320a1049e3bf9890d9c0beb6967d1b68808c91600a76fd6439f66d2dca950",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "750fd5c6b079711a2e284187014a18b68f6e9f279b35468a3d74d54d40b7a5fc",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "base_support_compatible": null,
+  "positive_evidence": [
+    "Быстрые бои в 2D, способности разных выживших и усиливающиеся со временем волны врагов дают возможность совершенствовать решения и исполнение (наблюдения 0, 1).",
+    "Открываемые персонажи, артефакты и комбинации предметов меняют свойства забегов и дают новые способы развития (наблюдение 2).",
+    "До четырёх игроков могут координировать действия в совместных прохождениях (наблюдение 4); пиксельные планеты и энергичная музыка добавляют характерную атмосферу (наблюдение 6)."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 73,
+    "development_variety": 72,
+    "structure_pacing_direction": 57,
+    "identity_hooks": 68,
+    "breadth_of_match": 63
+  },
+  "score_findings": [
+    {
+      "finding_id": "ror-01-urgent-combat",
+      "text_ru": "Подвижные схватки с нарастающими волнами врагов требуют выбирать способности персонажа, уклоняться и решать, когда покинуть уровень, несмотря на усиливающуюся со временем опасность.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "edeced74c18dc6f94ea4ae8882f30e2db8dfd546419d1cbcf6cfa274bfaca73a",
+          "match_text_ru": "Ценятся действия, в которых можно освоить тайминги, тактику и заметно улучшить собственное исполнение."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 73
+        }
+      ]
+    },
+    {
+      "finding_id": "ror-02-unlocks-builds",
+      "text_ru": "Новые выжившие, артефакты и сильные сочетания предметов позволяют пробовать разные тактики и превращать привычный забег в заметно иной билд.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "b584a23bde72bbcacc284a93f33e49bda9cde0b89c7d750aa3d954ed1fef2055",
+          "match_text_ru": "Особенно важны обновление опыта и возникающие по ходу игры новые возможности."
+        },
+        {
+          "json_pointer": "/taste_profile/2",
+          "profile_value_sha256": "57d7818e21d072f96e97cbb9e8494b36bd0b9cc02b183a1765fb09f67e6ea159",
+          "match_text_ru": "Улучшения должны иметь понятный и ощутимый эффект для игрового процесса."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 72
+        }
+      ]
+    },
+    {
+      "finding_id": "ror-03-repeated-teleporters",
+      "text_ru": "Случайные этапы не гарантируют новизну: ограниченный набор карт, поиски телепорта и отдельные длинные забеги способны повторяться, причём промежуточного сохранения в забеге нет.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 9
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8",
+          "profile_value_sha256": "0e6624dd4b0ea00e882eded98b52cbb23093fec7ba3c0ee0137b689a88a4e2f0",
+          "match_text_ru": "Базовый цикл может оправдывать повторение, но затянутое однообразие будет раздражать."
+        },
+        {
+          "json_pointer": "/play_pattern_and_length",
+          "profile_value_sha256": "8feb65b868ff41d014b3f6543c6f1db8fba66982c66b920e1ff9be811f4c6b35",
+          "match_text_ru": "При редких игровых вечерах важно понимать структуру сессии и не растягивать усталость от повтора."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 57
+        }
+      ]
+    },
+    {
+      "finding_id": "ror-04-retro-audio-identity",
+      "text_ru": "Пиксельные инопланетные пейзажи, фантастическая атмосфера и энергичный саундтрек делают происходящее узнаваемым, несмотря на простую графическую форму.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7",
+          "profile_value_sha256": "f94957e7f369714de6a70c9cdaa1b1bb625ccdf9a2bd19f5b4bde419ccfecf7a",
+          "match_text_ru": "Выразительная эстетика и собственное настроение игры — значимые крючки."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 68
+        }
+      ]
+    },
+    {
+      "finding_id": "ror-05-shared-play-tradeoff",
+      "text_ru": "Четверо игроков могут вместе принимать тактические решения, но распределение предметов и сбои синхронизации иногда мешают совместному прохождению; неловкость управления старой версии тоже сужает привлекательность.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9",
+          "profile_value_sha256": "1ad2abd19719f090124bf7822ca7d32dd06d8a5130555d16032c778fed3b25a5",
+          "match_text_ru": "Совместная тактика и распределение ролей привлекательны, но одно наличие кооператива недостаточно для личного плюса."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 63
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Небольшой пул карт и повторяющийся поиск телепорта могут постепенно перевесить удовольствие от новых предметов и персонажей, если забеги перестанут ощущаться различными.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Ошибки на высокой сложности бывают смертельными, а случайное выпадение предметов иногда влияет на успех сильнее, чем техническое исполнение; это не означает, что вся сложность здесь бессодержательна.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "В кооперативе бывают споры о распределении вещей и сообщения о проблемах синхронизации; в старой версии управление и интерфейс могут ощущаться неудобными.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "У забегов длительностью примерно 40–90 минут нет промежуточного сохранения; отдельное позднее сообщение о переключении окна не доказывает распространённую неисправность.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 8
+          },
+          {
+            "kind": "observation",
+            "index": 9
+          }
+        ]
+      }
+    ]
+  }
+}
