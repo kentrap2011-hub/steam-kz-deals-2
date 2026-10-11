@@ -198,7 +198,14 @@ async function downgradeRejectedAndBadData(){
   await until(()=>browser.controller.state.refreshOutcome==='older','older network rejected');
   assert.equal(browser.snapshot().item.deep_stage_state,'completed');
   assert.equal(browser.nodes('feedSyncNotice').dataset.state,'confirmed_older_or_conflict');
+  assert.equal(browser.nodes('feedRefreshBtn').disabled,false,'server-older conflict must retain an actionable retry');
   assertSaved(browser);
+  networkPayload=payload(3,false); // same timestamp, different Deep material: never downgrade
+  await browser.controller.retry();
+  assert.equal(browser.controller.state.refreshOutcome,'ambiguous');
+  assert.equal(browser.nodes('feedSyncNotice').dataset.state,'confirmed_older_or_conflict');
+  assert.equal(browser.nodes('feedRefreshBtn').disabled,false,'same-time conflict remains retryable');
+  assert.equal(browser.snapshot().item.deep_stage_state,'completed');
   networkPayload={...payload(4,true),items:[{...payload(4,true).items[0],id:''}]};
   await browser.controller.retry();
   assert.equal(browser.controller.state.refreshOutcome,'failed','invalid network shape rejected');
