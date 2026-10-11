@@ -159,7 +159,7 @@ def frozen_trial(repo, *, marker_commit, buffer_path):
     _three_by_six(decision, groups)
     require(frozen["groups"] == decision["scope"]["groups"],
             "shadow cannot modify or reorder the Director scope")
-    accepted = {x["sequence"] for x in original_plan(old)}
+    accepted = {group["sequence"] for group, _ in original_plan(old)}
     require(set(decision["scope"]["group_order"]).issubset(accepted),
             "baseline group not accepted at historical frozen head")
     receipts = writer_receipts(repo, pinned["head"], old["snapshot_id"])
