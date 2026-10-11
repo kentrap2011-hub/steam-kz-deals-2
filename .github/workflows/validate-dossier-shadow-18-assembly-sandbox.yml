@@ -37,4 +37,4 @@ jobs:
       - name: Existing independent A/B/C adjudication and negative source checks
         run: python -m unittest discover -s scripts -p 'test_dossier_shadow_quality_review_gate.py' -v
       - name: Existing one-stage strict Dossier compatibility
-        run: python -m unittest discover -s scripts -p 'test_taste_steam_review_dossier_strict.py' -v
+        run: python -m unittest discover -s scripts -p 'test_taste_steam_review_dossier_strict_recovery.py' -v
