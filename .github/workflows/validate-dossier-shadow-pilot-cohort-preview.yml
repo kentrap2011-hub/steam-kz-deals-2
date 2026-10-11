@@ -1,0 +1,63 @@
+name: Validate Dossier shadow cohort preview (PR only)
+
+on:
+  pull_request:
+    paths:
+      - "scripts/dossier_shadow_pilot_cohort_preview.py"
+      - "scripts/test_dossier_shadow_pilot_cohort_preview.py"
+      - "reviews/worker_reports/dossier-shadow-pilot-cohort-decision-packet-01.md"
+      - ".github/workflows/validate-dossier-shadow-pilot-cohort-preview.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-preview-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Synthetic-only adversarial tests
+        run: |
+          python -m py_compile scripts/dossier_shadow_pilot_cohort_preview.py scripts/test_dossier_shadow_pilot_cohort_preview.py
+          python -m unittest discover -s scripts -p 'test_dossier_shadow_pilot_cohort_preview.py' -v
+      - name: Pinned accepted frame, preview-only (zero semantics)
+        run: |
+          python scripts/dossier_shadow_pilot_cohort_preview.py \
+            --target-head 95a4bf4990a60082ecb3302da5bc7f23b618d93e \
+            --expected-work-blob ef40fc186aabc79dfd24c72864dbe43817a56039 \
+            --expected-audit-blob 8dbf4437d7ba439942f58a6f36d89d6a7ddeec7b \
+            --compare-ref origin/main \
+            --out "$RUNNER_TEMP/dossier-shadow-cohort-preview.json"
+      - name: Assert inert NOT_READY no quality claims or production readiness
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          x = json.loads((Path(os.environ["RUNNER_TEMP"]) / "dossier-shadow-cohort-preview.json").read_text())
+          assert x["approval_status"] == "NOT_READY_FOR_APPROVAL"
+          assert x["accounting"]["pinned_accepted_and_eligible_groups"] == 20
+          assert x["accounting"]["selected_appids"] == 18
+          assert x["selected_groups_original_order"] == [3, 8, 13, 15, 18, 20]
+          assert x["pilot_authorized"] is False
+          assert x["semantic_quality_not_evaluated"] is True
+          assert x["quality_verified"] is False
+          assert x["canonical_readiness"] is False and x["deep_readiness"] is False
+          assert all(g["state"] == "not_measured" and g["evaluated_groups"] == 0
+                     for g in x["unmeasured_dimensions"].values())
+          assert len(x["complete_frame_original_order"]) == 20
+          assert len({i["appid"] for g in x["complete_frame_original_order"]
+                      for i in g["games"]}) == 60
+          print("inert complete-frame pin/identity/selection assertions passed")
+          PY
+      - name: Optional short-lived metadata-only artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dossier-shadow-cohort-decision-preview-inert
+          path: ${{ runner.temp }}/dossier-shadow-cohort-preview.json
+          retention-days: 7
+          if-no-files-found: error
