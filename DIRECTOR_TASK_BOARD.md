@@ -5,6 +5,14 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT WAVE — 2026-10-11: two independent pilot decision prerequisites
+
+- **PR #201 (ЧАТ 1)** merged `d98966c64cf088fe28854a2f42408fd75f9daffd`. Pinned original old Dossier evidence: 20/20 accepted original 3-game groups = 60 games passed unmodified strict Git-local preflight and exact GitHub Actions writer provenance. This verifies old **writer baseline integrity**, not real source truth or new semantic quality; pilot remains not authorized.
+- **PR #203 (ЧАТ 2)** merged `a1f1c5fa2d38727f8ee8cd44d6a3464d25085dbb`. Compact status popover now has outside-click close and synthetic regressions; real Android acceptance has **not yet been reported**. No further frontend task until device feedback.
+- **НОВЫЙ ЧАТ 1:** `WORKER_TASK_DOSSIER_SHADOW_PILOT_COHORT_DECISION_PACKET_01.md` — metadata-only deterministic proposal of exactly 6 original whole groups / 18 games from verified old history, **not selection or freeze**. Report source/year/negative/Russian/identity gaps as not measured, independent reproducibility and an approval decision card. If defensible diversity cannot be proved, return NOT_READY_FOR_APPROVAL. No semantics.
+- **НОВЫЙ ЧАТ 2:** `WORKER_TASK_DOSSIER_SHADOW_QUALITY_REVIEW_GATE_01.md` — independent offline synthetic, fail-closed blinded two-reviewer + adjudicator quality gate for paired accepted one-stage vs future Research/Assembly, exact source anchors and negative-evidence omissions, no invented semantic parity. Separate files, synthetic PR-only CI, no actual games analyzed.
+- Both tasks run in independent new worker chats. Worker PR/report only; Director reviews/merges when green. User still must **separately approve exact trial groups, source/evidence policy, independent reviewers, stop rules and actual semantic work**. Neither task writes GitHub production or enables new two-stage Dossier, Deep/Fast changes, or Scheduled Tasks.
+
 ## DIRECTOR CURRENT SITE UX FOLLOW-UP — 2026-10-11: dismiss popover outside tap
 
 - **ЧАТ 2 completed PR #199**, squash merged `7683c94ce5736052e1e071593f58ab6bad4e7545`. Compact truthful freshness icon/popover works; user Android screenshot confirms visible icon and expanded details.
