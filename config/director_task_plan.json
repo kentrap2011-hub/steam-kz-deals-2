@@ -967,6 +967,26 @@
       "updated_on": "2026-10-11",
       "recent_completion": false,
       "updated_at_utc": "2026-10-11T11:15:42.256Z"
+    },
+    {
+      "id": "dossier-shadow-real-baseline-eligibility-audit-01",
+      "title": "Dossier: проверить настоящие принятые группы для первого испытания",
+      "goal": "На одном зафиксированном Git-снимке проверить все принятые старые группы Dossier и записи GitHub writer, установить точное число достоверных баз сравнения и возможность будущего отдельно разрешённого пилота 6 групп/18 игр, не запуская семантику.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Чтение реальной Git-истории writer, сверка приёмочных транзакций, безопасная метаданная ведомость и изолированные тесты; без семантической работы.",
+      "urgency": "высокая",
+      "urgency_reason": "Существующий префлайт проверен лишь на синтетике; для решения о реальном ограниченном пилоте нужна доказанная доступность исторических принятых Dossier.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_REAL_BASELINE_ELIGIBILITY_AUDIT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-shadow-pilot-preflight"
+      ],
+      "blocker": "Только read-only verification, не выбор/заморозка/запуск пилота; одобрение реальной семантики отдельно. ЧАТ 2 отвечает за UI свежести.",
+      "updated_on": "2026-10-11",
+      "updated_at_utc": "2026-10-11T11:26:15.143Z",
+      "recent_completion": false
     }
   ]
 }
