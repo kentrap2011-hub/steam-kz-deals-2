@@ -80,7 +80,9 @@ def _frozen_authority(repo, ref, decision):
     require(first_parent_contains(repo, commit, head)
             and blob(repo, commit, path) == sha and blob(repo, head, path) == sha,
             "stale, replaced or out-of-history sandbox authority")
-    # Historical staging.file_at intentionally limits data/config namespaces.\n    # This separately bounded review-only locator is read from immutable Git.\n    doc = strict_json(git(repo, "show", f"{commit}:{path}").stdout)
+    # Historical staging.file_at intentionally limits data/config namespaces.
+    # This separately bounded review-only locator is read from immutable Git.
+    doc = strict_json(git(repo, "show", f"{commit}:{path}").stdout)
     require(type(doc) is dict and set(doc) == {
         "schema", "trial_id", "director_decision_sha256", "group_order",
         "groups", "sandbox_only", "external_semantic_authorized",
