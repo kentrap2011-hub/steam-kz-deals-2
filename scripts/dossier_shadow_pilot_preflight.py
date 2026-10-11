@@ -11,8 +11,9 @@ import re
 from pathlib import Path
 
 from dossier_two_stage_final_acceptance import offline_gate
-from dossier_two_stage_shadow_quality import _baseline
 from dossier_two_stage_staging import blob, first_parent_contains, git, parent, strict_json
+from dossier_two_stage_contract_guard import canonical_sha256
+from taste_steam_review_dossier_strict import validate_dossier_strict
 from taste_steam_review_dossier_daily import validate_group_plan, validate_manifest
 from taste_steam_review_dossier_group_progress import ensure_group_progress
 
@@ -68,6 +69,40 @@ def _relative_manifest(repo, contract):
     root = Path(repo).resolve()
     require(configured.resolve().is_relative_to(root), "manifest escapes fixture")
     return _path(configured.resolve().relative_to(root).as_posix())
+
+
+def _cache_path(repo, contract, item):
+    appid = str(item["appid"])
+    configured = Path(contract["paths"]["dossier_store_dir"])
+    expected = configured / f"App_{appid}.json"
+    require(Path(item["dossier_path"]) == expected,
+            "group cache path differs from contract-owned canonical store")
+    target = expected if expected.is_absolute() else Path(repo) / expected
+    require(target.resolve().is_relative_to(Path(repo).resolve()),
+            "cache escapes disposable Git fixture")
+    return _path(target.resolve().relative_to(Path(repo).resolve()).as_posix())
+
+
+def _baseline_from_existing_strict(repo, contract, base, git_path, appid, writer, head):
+    require(type(base) is dict and set(base) == {
+        "appid", "commit", "path", "git_blob_sha", "canonical_sha256"},
+        "exact cache blob locator required")
+    require(base["appid"] == appid and base["commit"] == writer
+            and base["path"] == git_path
+            and _commit(base["git_blob_sha"], "legacy cache blob")
+            and isinstance(base["canonical_sha256"], str)
+            and H64.fullmatch(base["canonical_sha256"]),
+            "wrong canonical writer/cache locator")
+    require(blob(repo, writer, git_path) == base["git_blob_sha"]
+            and blob(repo, head, git_path) == base["git_blob_sha"],
+            "baseline cache bytes changed")
+    value = strict_json(_read(repo, writer, git_path))
+    require(canonical_sha256(value) == base["canonical_sha256"],
+            "baseline hash mismatch")
+    # Reuse the sole existing strict V2 validator, never an alternate gate.
+    validate_dossier_strict(value, contract, expected_appid=appid,
+                            require_fresh_at_acceptance=False)
+    return value
 
 
 def _inert_proposal(repo, head, hashes):
@@ -228,12 +263,14 @@ def verify_offline_preflight(repo, *, request, contract):
             and type(game["original_work_year"]) is int
             and game["original_work_year"] > 0,
             "wrong original game/AppID/work year identity")
+        cache_path = _cache_path(root, contract, item)
         require(type(base) is dict and base.get("appid") == appid
                 and base.get("commit") == writer
-                and base.get("path") == item["dossier_path"]
-                and changes.get(item["dossier_path"]) in ("A", "M"),
+                and base.get("path") == cache_path
+                and changes.get(cache_path) in ("A", "M"),
                 "legacy cache not persisted by exact writer transaction")
-        old = _baseline(root, appid, base, contract, head)
+        old = _baseline_from_existing_strict(
+            root, contract, base, cache_path, appid, writer, head)
         identity = old["game_identity"]
         require(identity.get("release_year") == game["original_work_year"]
                 and identity.get("work_title") == item["title"],
