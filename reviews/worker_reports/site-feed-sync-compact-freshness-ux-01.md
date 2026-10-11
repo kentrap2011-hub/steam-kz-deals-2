@@ -1,7 +1,7 @@
 # Worker report — compact, truthful site feed freshness (Chat 2)
 
 - Task: `WORKER_TASK_SITE_FEED_SYNC_COMPACT_FRESHNESS_UX_FIX_01.md`, ID `site-feed-sync-compact-freshness-ux-01`.
-- Source of truth: `main`; bounded branch `fix/site-feed-sync-compact-freshness-ux-01`; PR-only work; **not merged**.
+- Source of truth: `main`; bounded branch `fix/site-feed-sync-compact-freshness-ux-01`; [PR #199](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/199); PR-only work; **not merged**.
 - Authorization: read-only website bootstrap/UI and isolated PR regression. No scheduled tasks, production data, data writers, canonical Deep/Dossier/ranking, deployment, user storage clearance or semantic work touched.
 
 ## Source and authority preflight
@@ -43,7 +43,9 @@ The existing synthetic test still exercises real `web/app.js` queue/render and r
 ## Verification and release boundary
 
 - Focused PR-only workflow: `.github/workflows/validate-browser-deep-feed-refresh.yml` (Node 22, synthetic, PR-only).
-- CI status: **pending at report creation**; exact run/result should be recorded after PR checks.
+- **PASS** final code head `202dbe7e6f05c5003794a0d791465d77a518a0b6`: focused browser Deep/feed synthetic + syntax + accessibility + cache identity + manual queue + Progressive indicators, [run 38135656093](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/38135656093), success.
+- **PASS** other PR-only checks on same code head: site task registry `38135656070`, package purchase value `38135656076`, Deep site mirror `38135656074`, Progressive PASS 2 core `38135656078`, backlog dispositions `38135656092` — all success.
+- A prior focused run failed only on an old test expectation for changed first-visit outage wording; corrected, rerun successful.
 - No live browser/device measurement, Pages deployment, runtime freshness verification or user acceptance is claimed.
 - PR must remain unmerged for Director acceptance. After merge/deploy, user can inspect regular Android browser without deleting any personal state: icon next to source timestamp, tap for details/retry, verify Strange Horticulture Deep and saved queue.
 
