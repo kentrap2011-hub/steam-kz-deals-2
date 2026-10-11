@@ -204,5 +204,164 @@ class PostmergeJointResearchAssemblyAcceptanceQA(unittest.TestCase):
         self.assertIs(final["safety"]["do_not_replace_one_stage"], True)
 
 
+    def test_06_proof_metadata_is_boolean_only_and_cannot_open_any_live_gate(self):
+        """Both proof values permit only marked disposable Git; unsafe states fail closed."""
+        import tempfile
+        from pathlib import Path
+        from unittest.mock import patch
+
+        import dossier_two_stage_final_acceptance as final_bridge
+
+        builder, x, work, contract, path = self.fixture()
+        original = json.loads(final_bridge.CONTRACT_PATH.read_text(encoding="utf-8"))
+        self.assertIs(original["active"], False)
+        self.assertIs(original["authorized_for_canonical_ingest"], False)
+        self.assertIs(original["executable_in_production"], False)
+        self.assertIs(original["shared_writer"]["new_live_workflow"], False)
+        self.assertIs(original["safety"]["offline_fixture_only_writer"], True)
+
+        with tempfile.TemporaryDirectory(prefix="dossier-proof-gate-") as td:
+            isolated_spec = Path(td) / "bridge.json"
+            with patch.object(final_bridge, "CONTRACT_PATH", isolated_spec):
+                def check(spec, *, allowed):
+                    isolated_spec.write_text(json.dumps(spec), encoding="utf-8")
+                    if allowed:
+                        self.assertEqual(
+                            final_bridge.offline_gate(x.f.root, offline_fixture=True),
+                            x.f.root.resolve())
+                        # Neither the bridge nor its writer can be invoked as a live API.
+                        with self.assertRaisesRegex(ValueError, "disabled"):
+                            final_bridge.offline_gate(x.f.root)
+                        with self.assertRaisesRegex(ValueError, "disabled"):
+                            final_bridge.inspect_original_groups(
+                                x.f.root, manifest=work, contract=contract,
+                                item_locators=[])
+                        with self.assertRaisesRegex(ValueError, "disabled"):
+                            final_bridge.offline_existing_writer_handoff(
+                                x.f.root, inspection={}, manifest_path=path,
+                                contract=contract)
+                    else:
+                        with self.assertRaisesRegex(ValueError, "not explicitly inactive"):
+                            final_bridge.offline_gate(x.f.root, offline_fixture=True)
+
+                for proof in (False, True):
+                    with self.subTest(proof=proof, case="valid fixture and live denial"):
+                        spec = copy.deepcopy(original)
+                        spec["cross_pr_research_original_year_fix_verified"] = proof
+                        check(spec, allowed=True)
+                    for field in ("active", "authorized_for_canonical_ingest",
+                                  "executable_in_production"):
+                        for unsafe in (True, None, "false"):
+                            with self.subTest(proof=proof, field=field, unsafe=unsafe):
+                                spec = copy.deepcopy(original)
+                                spec["cross_pr_research_original_year_fix_verified"] = proof
+                                spec[field] = unsafe
+                                check(spec, allowed=False)
+                    with self.subTest(proof=proof, case="writer domain mismatch"):
+                        spec = copy.deepcopy(original)
+                        spec["cross_pr_research_original_year_fix_verified"] = proof
+                        spec["shared_writer"]["concurrency_group"] = "other-writer"
+                        check(spec, allowed=False)
+
+                for invalid in (None, 0, 1, "true", "false", [], {}):
+                    with self.subTest(case="invalid proof type", invalid=invalid):
+                        spec = copy.deepcopy(original)
+                        spec["cross_pr_research_original_year_fix_verified"] = invalid
+                        check(spec, allowed=False)
+                with self.subTest(case="missing proof key"):
+                    spec = copy.deepcopy(original)
+                    spec.pop("cross_pr_research_original_year_fix_verified")
+                    check(spec, allowed=False)
+
+                for proof in (False, True):
+                    spec = copy.deepcopy(original)
+                    spec["cross_pr_research_original_year_fix_verified"] = proof
+                    isolated_spec.write_text(json.dumps(spec), encoding="utf-8")
+                    with self.subTest(proof=proof, case="real checkout rejected"):
+                        with self.assertRaisesRegex(ValueError, "separate disposable"):
+                            final_bridge.offline_gate(Path.cwd(), offline_fixture=True)
+                    with self.subTest(proof=proof, case="fixture marker required"):
+                        marker = x.f.root / ".dossier-final-offline-fixture"
+                        saved = marker.read_bytes()
+                        marker.unlink()
+                        try:
+                            with self.assertRaisesRegex(ValueError, "separate disposable"):
+                                final_bridge.offline_gate(x.f.root, offline_fixture=True)
+                        finally:
+                            marker.write_bytes(saved)
+
+    def test_07_both_proof_values_preserve_full_year_rejection_and_strict_group_chain(self):
+        """Proof does not decide P1/P2/Assembly/GitHub decisions or writer authority."""
+        import tempfile
+        from pathlib import Path
+        from unittest.mock import patch
+
+        import dossier_two_stage_final_acceptance as final_bridge
+
+        original = json.loads(final_bridge.CONTRACT_PATH.read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory(prefix="dossier-proof-joint-") as td:
+            isolated_spec = Path(td) / "bridge.json"
+            with patch.object(final_bridge, "CONTRACT_PATH", isolated_spec):
+                for proof in (False, True):
+                    with self.subTest(proof=proof):
+                        spec = copy.deepcopy(original)
+                        spec["cross_pr_research_original_year_fix_verified"] = proof
+                        isolated_spec.write_text(json.dumps(spec), encoding="utf-8")
+                        builder, x, work, contract, path = self.fixture(six=True)
+                        refs = []
+                        for i in range(6):
+                            if i == 0:
+                                bad = copy.deepcopy(x.docs[i])
+                                self.incompatible_year(bad)
+                                with self.assertRaisesRegex(
+                                        ValueError, "rsource-002.*2021.*2020"):
+                                    validate_research(
+                                        bad, expected_assignment=x.docs[i]["assignment"])
+                                r = x.research_submit(i, tamper=self.incompatible_year)
+                            elif i == 1:
+                                good = copy.deepcopy(x.docs[i])
+                                self.later_steam_publication(good)
+                                validate_research(
+                                    good, expected_assignment=x.docs[i]["assignment"])
+                                r = x.research_submit(
+                                    i, tamper=self.later_steam_publication)
+                            else:
+                                r = x.research_submit(i)
+                            # Assembly is allowed to submit before Research receipt.
+                            refs.append(builder.locator(x, i, builder.ready(x, i, r)))
+                            receipt = x.research_receive(i, r)
+                            self.assertEqual(
+                                receipt["status"], "rejected_invalid" if i == 0
+                                else "accepted_structural_evidence")
+                            if i == 0:
+                                self.assertEqual(
+                                    receipt["files"][receipt["receipt_path"]]["reason_code"],
+                                    "invalid_binding")
+                        inspected = builder.inspect(x, work, contract, refs)
+                        self.assertEqual(
+                            [e["sequence"] for e in inspected["ready"]], [2])
+                        self.assertEqual(
+                            inspected["decisions"][0]["items"][0]["status"], STATUS_INVALID)
+                        self.assertEqual(
+                            inspected["decisions"][0]["status"], STATUS_GROUP_PENDING)
+                        self.assertEqual(
+                            inspected["decisions"][1]["status"], STATUS_GROUP_READY)
+                        self.assertIs(inspected["canonical_dossier_accepted"], False)
+                        self.assertIs(inspected["deep_ready_issued"], False)
+                        result = offline_existing_writer_handoff(
+                            x.f.root, inspection=inspected, manifest_path=path,
+                            contract=contract, offline_fixture=True)
+                        self.assertEqual(
+                            result["existing_writer_result"]["accepted_sequences"], [2])
+                        self.assertEqual(
+                            len(result["existing_writer_result"]["persisted"]), 3)
+                        self.assertEqual(
+                            [e["state"] for e in
+                             json.loads(path.read_text())["group_progress"]["groups"]],
+                            [PENDING, ACCEPTED])
+                        self.assertFalse(
+                            (x.f.root / "store" / "App_12345.json").exists())
+
+
 if __name__ == "__main__":
     unittest.main()
