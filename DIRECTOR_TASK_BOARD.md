@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT SITE UX FOLLOW-UP — 2026-10-11: dismiss popover outside tap
+
+- **ЧАТ 2 completed PR #199**, squash merged `7683c94ce5736052e1e071593f58ab6bad4e7545`. Compact truthful freshness icon/popover works; user Android screenshot confirms visible icon and expanded details.
+- **Confirmed UX defect:** tapping empty outside the expanded `#feedSyncDetails` window does **not reliably close** it, covering site feed. Director inspected actual `main` `web/feed-bootstrap.js`: toggle and Escape listeners exist, **no global outside-click listener**. This is a frontend interaction defect, not a Deep/cache freshness regression.
+- **НОВЫЙ ЧАТ 2:** `WORKER_TASK_SITE_FEED_SYNC_POPOVER_OUTSIDE_DISMISS_FIX_01.md` — narrowly fix outside tap/click and view transitions, no overlay interception, preserve inside clicks/retry, toggle, Escape/focus and aria, unregister listeners on destroy; actual synthetic mobile tests, worker PR/report and Director merge only.
+- **ЧАТ 1 independently has** `WORKER_TASK_DOSSIER_SHADOW_REAL_BASELINE_ELIGIBILITY_AUDIT_01.md`; preserve all its Dossier files and current PR work. No change to semantic/scheduler/canonical data, existing Deep feed, production writer, local queue or settings.
+
 ## DIRECTOR NEXT TASK — 2026-10-11: реальная проверка пригодности принятых Dossier для shadow-пилота
 
 - **НОВЫЙ ЧАТ 1:** `WORKER_TASK_DOSSIER_SHADOW_REAL_BASELINE_ELIGIBILITY_AUDIT_01.md` — в одном зафиксированном Git-снимке провести **read-only** строгую проверку всех реально принятых старых трёхигровых групп, сопоставить исторические GitHub writer-транзакции, frozen invocation acceptance audit, исходные AppID/year, три cache blob SHA и возможность применить принятый PR #197 preflight. Выдать по каждой группе статус `eligible/ineligible/not_verifiable`, доказательство/причину, отдельный статус GitHub Actions происхождения. Не запускать семантику и не выбирать реальные игры к запуску без отдельного одобрения.
