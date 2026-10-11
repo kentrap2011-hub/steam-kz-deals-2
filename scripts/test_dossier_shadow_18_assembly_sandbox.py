@@ -63,7 +63,7 @@ class Sandbox18AssemblyTests(unittest.TestCase):
         c = self.x.research_submit(2)
         decisions = self.inspect({self.x.apaths[1]: b, self.x.apaths[2]: c})
         self.assertEqual([x["status"] for x in decisions],
-                         ["research_not_submitted", "ready", "ready"])
+                         ["research_not_submitted", "ready", "ready"], str(decisions))
         self.assertFalse(any(x["attempt_consumed"] for x in decisions))
         for d in decisions[1:]:
             rt = d["work"]["research_transport"]
@@ -77,7 +77,7 @@ class Sandbox18AssemblyTests(unittest.TestCase):
         b = self.x.research_submit(1)
         decisions = self.inspect({self.x.apaths[0]: b, self.x.apaths[1]: b})
         self.assertEqual([d["status"] for d in decisions],
-                         ["research_transport_invalid", "ready", "research_not_submitted"])
+                         ["research_transport_invalid", "ready", "research_not_submitted"], str(decisions))
         self.assertTrue(all(d["attempt_consumed"] is False for d in decisions))
 
     def test_05_tampered_research_original_git_blob_rejected_without_rebind(self):
@@ -85,6 +85,7 @@ class Sandbox18AssemblyTests(unittest.TestCase):
         path = self.x.docs[0]["assignment"]
         from dossier_two_stage_staging import receipt_paths
         transport = receipt_paths(path)["candidate"]
+        original_blob = blob(self.root, r, transport)
         self.x.f.save(transport, {"changed": "do not rebind"})
         self.x.f.commit("Synthetic adversarial rewrite after original Research commit")
         d = self.inspect({self.x.apaths[0]: r})
