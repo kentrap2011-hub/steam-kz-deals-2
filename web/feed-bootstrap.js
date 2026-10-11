@@ -299,8 +299,8 @@
           state.currentGeneratedAt=payload.generated_at_utc;
           latestPayload=payload;
           if(response)latestResponse=reusableResponse(response,payload);
-          if(source!=='cache')freshnessNotice('current',payload);
-          else freshnessNotice(state.refreshActive?'checking':'stale',payload);
+          if(source!=='cache')freshnessNotice('network_verified',payload);
+          else freshnessNotice(cachedFreshnessMode(),payload);
         }else if(state.status!=='ready'){
           state.status='failed';
           state.retryable=false;
@@ -456,14 +456,14 @@
           if(generationTime(fresh.payload)<generationTime(baseline)){
             state.refreshOutcome='older';
             warn('refresh-older-rejected',{network:fresh.payload.generated_at_utc,current:baseline.generated_at_utc});
-            freshnessNotice('older',baseline);
+            freshnessNotice('confirmed_older_or_conflict',baseline);
             return;
           }
           if(samePayload(fresh.payload,baseline)){
             state.refreshOutcome='identical';
             state.source='network';
             log('refresh-identical',{identity:fresh.identity});
-            freshnessNotice('current',baseline);
+            freshnessNotice('network_verified',baseline);
             return;
           }
           if(generationTime(fresh.payload)===generationTime(baseline)){
@@ -475,7 +475,7 @@
             if(!sameItems||!changedGiveaway){
               state.refreshOutcome='ambiguous';
               warn('refresh-ambiguous-rejected',{identity:fresh.identity});
-              freshnessNotice('older',baseline);
+              freshnessNotice('confirmed_older_or_conflict',baseline);
               return;
             }
           }
@@ -483,11 +483,11 @@
         }catch(error){
           state.refreshOutcome='failed';
           warn('refresh-failed',{kind:error?.feedBootstrapKind||'network',message:String(error?.message||error)});
-          freshnessNotice('stale',latestPayload||cached.payload);
+          freshnessNotice('verification_failed',latestPayload||cached.payload);
         }finally{
           state.refreshActive=false;
-          if(state.refreshOutcome==='updated'||state.refreshOutcome==='identical')freshnessNotice('current',latestPayload||cached.payload);
-          else if(state.refreshOutcome==='failed')freshnessNotice('stale',latestPayload||cached.payload);
+          if(state.refreshOutcome==='updated'||state.refreshOutcome==='identical')freshnessNotice('network_verified',latestPayload||cached.payload);
+          else if(state.refreshOutcome==='failed')freshnessNotice('verification_failed',latestPayload||cached.payload);
           refreshPromise=null;
         }
       })();
@@ -505,7 +505,7 @@
         state.currentIdentity=cached.identity;
         state.currentGeneratedAt=cached.payload.generated_at_utc;
         state.status='loading';
-        freshnessNotice('checking',cached.payload);
+        freshnessNotice('cached_unverified',cached.payload);
         initialRenderPromise=new Promise(resolve=>{initialRenderResolve=resolve});
         startBackgroundRefresh(input,init,cached);
         return responseWithPayload(cached.response,cached.payload,{source:'cache',identity:cached.identity,url});
@@ -520,7 +520,7 @@
           url:fresh.url,
         });
       }catch(error){
-        freshnessNotice('failed');
+        freshnessNotice('no_feed');
         throw error;
       }
     }
@@ -591,7 +591,7 @@
       state.status='loading';
       freshnessNotice('checking');
       await win.init();
-      if(state.status!=='ready')freshnessNotice('failed');
+      if(state.status!=='ready')freshnessNotice('no_feed');
       return state.status==='ready';
     }
     function onRetryClick(){retry().catch(error=>warn('retry-failed',{message:String(error?.message||error)}))}
@@ -601,6 +601,9 @@
       if(win)win.fetch=wrappedFetch;
       doc?.addEventListener?.('visibilitychange',onVisibility);
       el('feedRefreshBtn')?.addEventListener?.('click',onRetryClick);
+      el('feedStatusToggle')?.addEventListener?.('click',toggleStatusDetails);
+      el('feedStatusToggle')?.addEventListener?.('keydown',onStatusEscape);
+      el('feedSyncDetails')?.addEventListener?.('keydown',onStatusEscape);
       win?.addEventListener?.('pageshow',onPageShow);
       log('installed',{timeoutMs,retryDelayMs,cacheName,cacheStorage:!!cacheStorage});
     }
@@ -610,6 +613,9 @@
       if(win&&win.fetch===wrappedFetch)win.fetch=nativeFetch;
       doc?.removeEventListener?.('visibilitychange',onVisibility);
       el('feedRefreshBtn')?.removeEventListener?.('click',onRetryClick);
+      el('feedStatusToggle')?.removeEventListener?.('click',toggleStatusDetails);
+      el('feedStatusToggle')?.removeEventListener?.('keydown',onStatusEscape);
+      el('feedSyncDetails')?.removeEventListener?.('keydown',onStatusEscape);
       win?.removeEventListener?.('pageshow',onPageShow);
       if(retryTimer!=null)cancel(retryTimer);
       try{currentController?.abort()}catch{}
