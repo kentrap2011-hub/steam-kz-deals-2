@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "fd1b98b970580cd7ea5e4523276962b5d513b9a8",
+  "run_start_authority_commit": "53cd41bd1b8ecb722f9242025d04df11d3d462ec",
+  "run_started_at_utc": "2026-10-11T16:13:36+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "8c4a5f783695151f323a07232178e2d2efe6cb5c9a5b6872adc8b1631babf526",
+  "family_id": "game:298630",
+  "taste_subject_key": "App_298630",
+  "appid": "298630",
+  "taste_fingerprint": "e51db021e1b7ceb4abd920be53a25ce0573bef0716068a8709d92e06f6fdcb00",
+  "candidate_context_sha256": "4e26675895d7ce6ceb649a946855cd47b27cea010a82c083ac44344562495167",
+  "dossier_content_sha256": "2706e1115496f69a59912dfa747a4dd225362573ff3c907f4b02e3688b919040",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "074ac6b9cec2c1a0ed4a0b81452064bde67cff8efc37c3a633a424c995b27b84",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "high",
+  "not_fit_basis": "confirmed_personal_negative",
+  "not_fit_evidence": [
+    "Планирование тайного побега, разные маршруты и удовольствие от удачно реализованного плана — реальные возможные плюсы для любителя локальных тактических задач (Dossier observations 0, 1, 6), но они требуют продолжительной подготовки.",
+    "Между попытками побега приходится снова и снова соблюдать переклички, распорядок и рабочие обязанности: повторяемость здесь не побочная, а центральная часть цикла (observations 3, 5; conflict 0).",
+    "Скрытые рецепты, поиск точных ингредиентов и слабая объяснённость правил превращают подготовку в непрозрачную системную нагрузку (observations 4, 8).",
+    "Неудача способна лишить собранных предметов и обернуться существенным повторением предыдущих действий (observations 4, 8).",
+    "Визуальный ретро-стиль и удовольствие от первого побега оцениваются неоднозначно; эти сигналы не устраняют личный риск длительной однообразной рутины (observations 7, 10; conflict 0)."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "observation",
+        "index": 10
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "management_routine",
+        "text_ru": "Успех побега требует многократно проходить одни и те же переклички, работу и приёмы пищи. Именно обязательная рутина между содержательными действиями конфликтует с предпочтением активного и развивающегося игрового процесса.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "felt_technical_burden",
+        "text_ru": "Нужные для побега комбинации крафта и ингредиенты часто неочевидны, а тюремные правила приходится осваивать экспериментами. Подготовка рискует восприниматься как разбор непрозрачной системы вместо понятной тактической задачи.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "difficulty_punishment",
+        "text_ru": "Попадание к охране или нарушение распорядка может уничтожить запасы контрабанды и потребовать повторной подготовки почти с нуля; такая цена ошибки усиливает именно нежелательные повторы, а не интересное освоение.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      }
+    ]
+  }
+}
