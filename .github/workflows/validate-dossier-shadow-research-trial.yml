@@ -77,7 +77,7 @@ jobs:
               mp.parent.mkdir(parents=True, exist_ok=True)
               mp.write_text(json.dumps({'schema':'DOSSIER-SHADOW-RESEARCH-RUN-START-V1',
                                        'schema_version':1,'trial_id':TRIAL,
-                                       'nonce':nonce}) + '\\n')
+                                       'nonce':nonce}) + chr(10))
               run(replica, 'add', marker_path)
               run(replica, 'commit', '-m', 'Disposable single-file Git marker only')
               anchor = run(replica, 'rev-parse', 'HEAD')
