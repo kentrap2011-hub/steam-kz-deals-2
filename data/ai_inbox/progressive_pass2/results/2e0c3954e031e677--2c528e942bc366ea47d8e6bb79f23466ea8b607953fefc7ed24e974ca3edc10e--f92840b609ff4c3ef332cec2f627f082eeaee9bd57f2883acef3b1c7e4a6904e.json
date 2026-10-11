@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "6ae5fa69b6d1dc69b95220b1c2f2da6ca70e2dff",
+  "run_start_authority_commit": "bee0861ab54e87f11c0feeac8b6f3f40e5e94fc5",
+  "run_started_at_utc": "2026-10-11T15:14:42+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "2c528e942bc366ea47d8e6bb79f23466ea8b607953fefc7ed24e974ca3edc10e",
+  "family_id": "game:2420660",
+  "taste_subject_key": "App_2420660",
+  "appid": "2420660",
+  "taste_fingerprint": "bbef2a9ca4023c5fd4e50c2dba15ab3f988777d0af308734b07a427797149b4e",
+  "candidate_context_sha256": "e420547a6959c3c16862a6f4d8f6aeed27623e604ec274ccf810df7d13824460",
+  "dossier_content_sha256": "8c221a182ede695c8ed672158f09b6a77fcec5b45251395dfaf686e4e6212806",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "f92840b609ff4c3ef332cec2f627f082eeaee9bd57f2883acef3b1c7e4a6904e",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Связь героини и взрослеющего волка, визуальный язык и музыка создают эмоциональную историю в небольшой цельной игре.",
+    "Развитие отношений с компаньоном и добавленные боевые эпизоды дают несколько изменений привычной атмосферной платформенной формулы."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 33,
+    "development_variety": 48,
+    "structure_pacing_direction": 64,
+    "identity_hooks": 84,
+    "breadth_of_match": 54
+  },
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Между выразительными сценами много простого перемещения и сравнительно мало насыщенного взаимодействия; это рискует снижать вовлечённость при важности активного процесса.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Простые сражения и платформа с мягкими контрольными точками могут казаться слишком лёгкими, хотя реакции игроков на сложность неодинаковы.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Не всем эмоциональная история кажется достаточно глубокой: отдельные игроки считают темы и развитие персонажей поверхностными.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      }
+    ]
+  },
+  "score_findings": [
+    {
+      "finding_id": "neva-wolf-bond",
+      "text_ru": "Жизнь и взросление волка, забота о нём и моменты утраты придают короткому путешествию эмоциональный центр.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/raises",
+          "profile_value_sha256": "ed0a875cc4592dd23024720a16501ff338383334780d7ef5078e6c3bd5da40a8",
+          "match_text_ru": "Близкие отношения персонажей и эмоциональный финал способны сильно заинтересовать."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 84
+        }
+      ]
+    },
+    {
+      "finding_id": "neva-art-scope",
+      "text_ru": "Акварельные ландшафты, выразительная анимация и музыка дают узнаваемый художественный облик, но не расширяют сами игровые механики.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Художественный стиль является самостоятельным положительным крючком."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 54
+        }
+      ]
+    },
+    {
+      "finding_id": "neva-wolf-combat",
+      "text_ru": "Появление взрослеющего спутника и боевых эпизодов обновляет некоторые ситуации, но игра остаётся небольшой линейной прогулкой без заметной механической глубины.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Развитие и новые элементы процесса поддерживают интерес на дистанции."
+        },
+        {
+          "json_pointer": "/taste_profile/0/lowers",
+          "profile_value_sha256": "9af4e57dc35172ff77fd80946c8385d99dff55971301a04cb17db942fe3c717c",
+          "match_text_ru": "Отсутствие дальнейших открытий снижает вовлечённость."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 48
+        }
+      ]
+    },
+    {
+      "finding_id": "neva-compact-linear",
+      "text_ru": "Линейная структура и небольшая продолжительность помогают пережить историю без затяжной кампании, хотя часть времени отдана ходьбе между редкими испытаниями.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/play_pattern_and_length/weekly_gap_resilience_raises/0",
+          "profile_value_sha256": "0cfd656a2fac8382356feb740034b80ec24f4e2d2697ff59a75f12cb75e735f8",
+          "match_text_ru": "Ясная последовательность эпизодов комфортнее при игре с перерывами."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 64
+        }
+      ]
+    },
+    {
+      "finding_id": "neva-simple-combat",
+      "text_ru": "Бои и платформинг сравнительно просты, а щадящие контрольные точки убирают наказание за ошибки; возможностей для любимого глубокого освоения приёмов мало.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Глубокое освоение точных приёмов и сложных ситуаций особенно привлекает."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "lowers",
+          "normalized_value": 33
+        }
+      ]
+    }
+  ]
+}
