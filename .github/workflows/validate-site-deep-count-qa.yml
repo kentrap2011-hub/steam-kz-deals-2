@@ -1,0 +1,23 @@
+name: Validate site Deep count queue diagnosis (PR only)
+
+on:
+  pull_request:
+    paths:
+      - 'web/site-deep-count-queue.test.js'
+      - 'web/app.js'
+      - 'web/progressive-personalization-ui.js'
+      - '.github/workflows/validate-site-deep-count-qa.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-ui-queue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Isolated synthetic local-queue regression (no network or production)
+        run: node web/site-deep-count-queue.test.js
