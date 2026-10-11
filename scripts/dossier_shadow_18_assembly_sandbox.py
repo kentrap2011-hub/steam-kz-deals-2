@@ -82,6 +82,7 @@ def _frozen_authority(repo, ref, decision):
             "stale, replaced or out-of-history sandbox authority")
     # Historical staging.file_at intentionally limits data/config namespaces.
     # This separately bounded review-only locator is read from immutable Git.
+    require_only_new(repo, commit, [path])
     doc = strict_json(git(repo, "show", f"{commit}:{path}").stdout)
     require(type(doc) is dict and set(doc) == {
         "schema", "trial_id", "director_decision_sha256", "group_order",
@@ -211,6 +212,8 @@ def inspect_offline_pilot(repo, *, authority_ref=None, submitted_commits=None,
     ready = 0
     for index, (expected, group) in enumerate(zip(decision["scope"]["groups"],
                                                    doc["groups"])):
+        require(first_parent_contains(group["assembly_marker_commit"], authority_ref["commit"]),
+                "sandbox integration file predates frozen Assembly marker")
         decisions = _inspect_group(repo, expected, group, submitted_commits.get(
             expected["sequence"], {}))
         for i, entry in enumerate(decisions):
