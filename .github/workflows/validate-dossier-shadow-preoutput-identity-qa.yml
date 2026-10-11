@@ -1,0 +1,35 @@
+name: Validate Dossier shadow preoutput identity QA (inert)
+on:
+  pull_request:
+    paths:
+      - 'reviews/dossier_shadow_preoutput/identity_year_20_groups_v1.json'
+      - 'reviews/worker_reports/dossier-shadow-preoutput-identity-year-readiness-qa-01.md'
+      - 'scripts/dossier_shadow_preoutput_identity_qa.py'
+      - 'scripts/test_dossier_shadow_preoutput_identity_qa.py'
+      - '.github/workflows/validate-dossier-shadow-preoutput-identity-qa.yml'
+permissions:
+  contents: read
+jobs:
+  frozen-identity-synthetic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Compile isolated offline gate
+        run: python -m py_compile scripts/dossier_shadow_preoutput_identity_qa.py scripts/test_dossier_shadow_preoutput_identity_qa.py
+      - name: Isolated synthetic tests (no network)
+        run: python -m unittest discover -s scripts -p 'test_dossier_shadow_preoutput_identity_qa.py' -v
+      - name: Produce decision-only diagnostic under runner temporary directory
+        run: |
+          python scripts/dossier_shadow_preoutput_identity_qa.py > "$RUNNER_TEMP/dossier-shadow-identity-readiness.json"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path("reviews/dossier_shadow_preoutput/identity_year_20_groups_v1.json").read_text(encoding="utf-8"))
+          assert len(p["groups"]) == 20
+          assert sum(len(x["games"]) for x in p["groups"]) == 60
+          assert p["metrics"]["old_year_binding_conflict_candidates"] == 3
+          assert p["pilot_authorized"] is False and p["semantic_execution"] is False
+          print("INERT_20x3_FRAME_AND_CONFLICT_DIAGNOSTIC_OK")
+          PY
