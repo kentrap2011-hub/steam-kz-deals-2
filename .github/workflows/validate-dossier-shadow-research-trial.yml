@@ -1,0 +1,104 @@
+name: Validate Dossier 18-game shadow Research sandbox (PR only)
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/dossier_shadow_research_trial.py'
+      - 'scripts/dossier_shadow_research_trial_prepare.py'
+      - 'scripts/test_dossier_shadow_research_trial.py'
+      - 'config/dossier_shadow_research_trial_contract_v1.json'
+      - 'config/dossier_shadow_research_trial_semantic_prompt.md'
+      - 'reviews/worker_reports/dossier-shadow-first-real-18-research-sandbox-authority-01.md'
+      - '.github/workflows/validate-dossier-shadow-research-trial.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  six-original-groups-disposable-git:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install original strict Research / V2 validator dependency
+        run: python -m pip install 'jsonschema>=4.21,<5'
+      - name: Compile and run isolated synthetic Git negative trials
+        run: |
+          python -m py_compile scripts/dossier_shadow_research_trial.py scripts/dossier_shadow_research_trial_prepare.py scripts/test_dossier_shadow_research_trial.py
+          python -m unittest discover -s scripts -p 'test_dossier_shadow_research_trial.py' -v
+      - name: Strict historic receipts ONLY for approved six 3-game groups
+        run: |
+          python scripts/dossier_shadow_research_trial_prepare.py --propose-buffer > "$RUNNER_TEMP/shadow-six-group-proposal.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p = Path(os.environ['RUNNER_TEMP']) / 'shadow-six-group-proposal.json'
+          b = json.loads(p.read_text())
+          assert b['schema'] == 'DOSSIER-SHADOW-RESEARCH-BUFFER-V1'
+          assert [g['sequence'] for g in b['groups']] == [3, 8, 13, 15, 18, 20]
+          assert len(b['items']) == 18
+          assert [len([i for i in b['items'] if i['group_sequence'] == x]) for x in [3,8,13,15,18,20]] == [3]*6
+          assert all(len(i['old_cache_blob_sha']) == 40 for i in b['items'])
+          print('SIX_GROUP_HISTORY_PROVEN_PROPOSAL_ONLY; NO MARKER, NO SEMANTICS')
+          PY
+      - name: Prove exact Git marker parent and real frozen 18-item buffer in OS-temp replica
+        run: |
+          python - <<'PY'
+          import json, os, subprocess, tempfile, sys
+          from pathlib import Path
+          sys.path.insert(0, str(Path('scripts').resolve()))
+          from dossier_shadow_research_trial import frozen_trial, PREFIX, TRIAL
+          def run(repo, *args):
+              r = subprocess.run(['git', '-C', str(repo), *args],
+                                 check=True, stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE)
+              return r.stdout.decode().strip()
+          with tempfile.TemporaryDirectory(prefix='six-group-git-authority-') as root:
+              replica = Path(root) / 'isolated'
+              original = Path.cwd()
+              subprocess.run(['git', 'clone', '--quiet', '--no-local',
+                              '--no-hardlinks', str(original), str(replica)], check=True)
+              run(replica, 'checkout', '--detach', run(original, 'rev-parse', 'HEAD'))
+              run(replica, 'config', 'user.email', 'fixture@example.invalid')
+              run(replica, 'config', 'user.name', 'Disposable Git fixture')
+              source = Path(os.environ['RUNNER_TEMP']) / 'shadow-six-group-proposal.json'
+              buffer = PREFIX + '/research_buffer.json'
+              bpath = replica / buffer
+              bpath.parent.mkdir(parents=True, exist_ok=True)
+              bpath.write_bytes(source.read_bytes())
+              run(replica, 'add', buffer)
+              run(replica, 'commit', '-m', 'Disposable Git scope freeze only')
+              nonce = 'e' * 32
+              marker_path = PREFIX + '/run_starts/' + nonce + '.json'
+              mp = replica / marker_path
+              mp.parent.mkdir(parents=True, exist_ok=True)
+              mp.write_text(json.dumps({'schema':'DOSSIER-SHADOW-RESEARCH-RUN-START-V1',
+                                       'schema_version':1,'trial_id':TRIAL,
+                                       'nonce':nonce}) + chr(10))
+              run(replica, 'add', marker_path)
+              run(replica, 'commit', '-m', 'Disposable single-file Git marker only')
+              anchor = run(replica, 'rev-parse', 'HEAD')
+              authority = frozen_trial(replica, marker_commit=anchor, buffer_path=buffer)
+              assert authority['marker_commit'] == anchor
+              assert len(authority['items']) == 18
+              assert [a['group_sequence'] for a in authority['items'][::3]] == [3,8,13,15,18,20]
+              assert authority['status'] == 'blocked'
+              assert authority['sandbox_semantics_authorized'] is False
+              assert authority['canonical_acceptance'] is False
+              print('DISPOSABLE_GIT_18_PROVEN; zero semantics; zero public marker')
+          PY
+      - name: Ensure real sandbox marker is absent and gate remains blocked
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c = json.loads(Path('config/dossier_shadow_research_trial_contract_v1.json').read_text())
+          assert c['standalone_sandbox_semantics_approved'] is False
+          assert c['production_execution'] is False
+          assert c['reviewer_roles_finalized'] is False
+          assert not Path('reviews/dossier_shadow_offline/trials/dossier-shadow-calibration-20261011-6x3/research_buffer.json').exists()
+          print('sandbox_research_invocation_ready=blocked')
+          PY
