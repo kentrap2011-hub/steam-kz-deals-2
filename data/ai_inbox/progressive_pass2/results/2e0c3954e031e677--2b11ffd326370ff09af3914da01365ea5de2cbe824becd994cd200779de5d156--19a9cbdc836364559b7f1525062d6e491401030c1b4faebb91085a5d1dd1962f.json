@@ -1,0 +1,283 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "8bce124a56c669d93ad5126461500dbdaa965e98",
+  "run_start_authority_commit": "31bc0b3bc59caafbe62c101ead501c2b503ee15d",
+  "run_started_at_utc": "2026-10-11T14:06:57+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "2b11ffd326370ff09af3914da01365ea5de2cbe824becd994cd200779de5d156",
+  "family_id": "game:262060",
+  "taste_subject_key": "App_262060",
+  "appid": "262060",
+  "taste_fingerprint": "3ce8110820ef8a37fd6ee184d9b669a7eb86fcb5861d3d46002e82f6fdc2b888",
+  "candidate_context_sha256": "7fbd04a05054388cdd701173daf68afa320861e140b1f80db723f19ee664eb0e",
+  "dossier_content_sha256": "af13a2de2812bc172e059127c11093d37815baae4bc05c20848bf9dfe6447f12",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "19a9cbdc836364559b7f1525062d6e491401030c1b4faebb91085a5d1dd1962f",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "base_support_compatible": null,
+  "positive_evidence": [
+    "Позиционная пошаговая тактика четырёх героев поощряет изучение классов, сочетаний умений и приоритетов целей (наблюдения 0 и 7).",
+    "Развитие поселения, подготовка отряда и улучшения между вылазками дают понятный эффект прогрессии (наблюдение 2).",
+    "Готический рисунок, музыка и рассказчик создают выразительную атмосферу (наблюдение 5)."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 68,
+    "development_variety": 55,
+    "structure_pacing_direction": 35,
+    "identity_hooks": 82,
+    "breadth_of_match": 55
+  },
+  "score_findings": [
+    {
+      "finding_id": "dd-01-grind-pacing",
+      "text_ru": "Повторные походы в подземелья, восстановление состава после потерь и затянутая финальная прокачка могут превратить продвижение в монотонное повторение, особенно при редких игровых вечерах.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "b584a23bde72bbcacc284a93f33e49bda9cde0b89c7d750aa3d954ed1fef2055",
+          "match_text_ru": "Необходимо развитие впечатлений, а длительное повторение раскрытой формулы быстро утомляет."
+        },
+        {
+          "json_pointer": "/play_pattern_and_length",
+          "profile_value_sha256": "8feb65b868ff41d014b3f6543c6f1db8fba66982c66b920e1ff9be811f4c6b35",
+          "match_text_ru": "При игре примерно раз в неделю затяжная кампания с повторными этапами создаёт дополнительную усталость."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 35
+        }
+      ]
+    },
+    {
+      "finding_id": "dd-02-tactical-mastery",
+      "text_ru": "Позиции четырёх бойцов, приоритет целей, сочетания классов и управление ресурсами позволяют совершенствовать тактические решения, хотя часть потерь не устраняется навыком полностью.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "edeced74c18dc6f94ea4ae8882f30e2db8dfd546419d1cbcf6cfa274bfaca73a",
+          "match_text_ru": "Нравится высокая сложность, если знание систем и освоение способов решения дают заметный результат."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 68
+        }
+      ]
+    },
+    {
+      "finding_id": "dd-03-gothic-identity",
+      "text_ru": "Готические рисованные образы, музыкальное оформление и выразительный рассказчик создают запоминающуюся художественную идентичность даже вне самой боевой системы.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7",
+          "profile_value_sha256": "f94957e7f369714de6a70c9cdaa1b1bb625ccdf9a2bd19f5b4bde419ccfecf7a",
+          "match_text_ru": "Узнаваемый художественный стиль и атмосфера — сильные личные крючки."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 82
+        }
+      ]
+    },
+    {
+      "finding_id": "dd-04-hamlet-growth",
+      "text_ru": "Добытые в вылазках ресурсы идут на развитие поселения, обучение героев и восстановление отряда, поэтому удачная подготовка имеет заметные последствия между экспедициями.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2",
+          "profile_value_sha256": "57d7818e21d072f96e97cbb9e8494b36bd0b9cc02b183a1765fb09f67e6ea159",
+          "match_text_ru": "Ценится прогрессия с понятной целью и ощутимым эффектом улучшений."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 55
+        }
+      ]
+    },
+    {
+      "finding_id": "dd-05-expedition-tradeoff",
+      "text_ru": "Выбор длины похода, света факелов, припасов и смены уставших героев добавляет решений, но такая отдельная подготовительная рутина не всегда даст желаемую частоту новых игровых ситуаций.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8",
+          "profile_value_sha256": "0e6624dd4b0ea00e882eded98b52cbb23093fec7ba3c0ee0137b689a88a4e2f0",
+          "match_text_ru": "Повторение допустимо при сильном базовом цикле, но его сочетание с отсутствием развития — минус."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 55
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "К повторным походам и затяжной прокачке добавляется необходимость восстанавливать отряд после гибели героев; для предпочтения постоянно развивающегося игрового опыта это значимый риск однообразия.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "difficulty_punishment",
+        "text_ru": "Случайные критические удары, стрессовые срывы и необратимые потери иногда сводят на нет качественные решения; личная любовь к освоению сложных механик не обязательно компенсирует наказание, которое нельзя полностью предотвратить навыком.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Планирование света, припасов и ротации уставших персонажей составляет отдельный неторопливый слой игры; оно может понравиться как тактика, но потребует терпения к управлению отрядом.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
