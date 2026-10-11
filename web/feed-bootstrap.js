@@ -489,6 +489,7 @@
           state.refreshActive=false;
           if(state.refreshOutcome==='updated'||state.refreshOutcome==='identical')freshnessNotice('network_verified',latestPayload||cached.payload);
           else if(state.refreshOutcome==='failed')freshnessNotice('verification_failed',latestPayload||cached.payload);
+          else if(state.refreshOutcome==='older'||state.refreshOutcome==='ambiguous')freshnessNotice('confirmed_older_or_conflict',latestPayload||cached.payload);
           refreshPromise=null;
         }
       })();
