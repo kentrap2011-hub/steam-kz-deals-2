@@ -44,6 +44,52 @@ jobs:
           assert all(len(i['old_cache_blob_sha']) == 40 for i in b['items'])
           print('SIX_GROUP_HISTORY_PROVEN_PROPOSAL_ONLY; NO MARKER, NO SEMANTICS')
           PY
+      - name: Prove exact Git marker parent and real frozen 18-item buffer in OS-temp replica
+        run: |
+          python - <<'PY'
+          import json, os, subprocess, tempfile, sys
+          from pathlib import Path
+          sys.path.insert(0, str(Path('scripts').resolve()))
+          from dossier_shadow_research_trial import frozen_trial, PREFIX, TRIAL
+          def run(repo, *args):
+              r = subprocess.run(['git', '-C', str(repo), *args],
+                                 check=True, stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE)
+              return r.stdout.decode().strip()
+          with tempfile.TemporaryDirectory(prefix='six-group-git-authority-') as root:
+              replica = Path(root) / 'isolated'
+              original = Path.cwd()
+              subprocess.run(['git', 'clone', '--quiet', '--no-local',
+                              '--no-hardlinks', str(original), str(replica)], check=True)
+              run(replica, 'checkout', '--detach', run(original, 'rev-parse', 'HEAD'))
+              run(replica, 'config', 'user.email', 'fixture@example.invalid')
+              run(replica, 'config', 'user.name', 'Disposable Git fixture')
+              source = Path(os.environ['RUNNER_TEMP']) / 'shadow-six-group-proposal.json'
+              buffer = PREFIX + '/research_buffer.json'
+              bpath = replica / buffer
+              bpath.parent.mkdir(parents=True, exist_ok=True)
+              bpath.write_bytes(source.read_bytes())
+              run(replica, 'add', buffer)
+              run(replica, 'commit', '-m', 'Disposable Git scope freeze only')
+              nonce = 'e' * 32
+              marker_path = PREFIX + '/run_starts/' + nonce + '.json'
+              mp = replica / marker_path
+              mp.parent.mkdir(parents=True, exist_ok=True)
+              mp.write_text(json.dumps({'schema':'DOSSIER-SHADOW-RESEARCH-RUN-START-V1',
+                                       'schema_version':1,'trial_id':TRIAL,
+                                       'nonce':nonce}) + '\\n')
+              run(replica, 'add', marker_path)
+              run(replica, 'commit', '-m', 'Disposable single-file Git marker only')
+              anchor = run(replica, 'rev-parse', 'HEAD')
+              authority = frozen_trial(replica, marker_commit=anchor, buffer_path=buffer)
+              assert authority['marker_commit'] == anchor
+              assert len(authority['items']) == 18
+              assert [a['group_sequence'] for a in authority['items'][::3]] == [3,8,13,15,18,20]
+              assert authority['status'] == 'blocked'
+              assert authority['sandbox_semantics_authorized'] is False
+              assert authority['canonical_acceptance'] is False
+              print('DISPOSABLE_GIT_18_PROVEN; zero semantics; zero public marker')
+          PY
       - name: Ensure real sandbox marker is absent and gate remains blocked
         run: |
           python - <<'PY'
