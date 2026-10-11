@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "0c85b8b9065373cd6e39a92c6b107b3a9f3d35cc",
+  "run_start_authority_commit": "ce45c220cc44f8a671f97a03e7d0c96c0fcb6b2b",
+  "run_started_at_utc": "2026-10-11T12:37:07+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "b397e3b5ccababd6ecd643f352bf211ec4c17ad2c9a4c28a7003240c3ef138c0",
+  "family_id": "game:1498740",
+  "taste_subject_key": "App_1498740",
+  "appid": "1498740",
+  "taste_fingerprint": "f365615bdd7ccedb0756093c1a2e49c63b66d2b43fceb54818a32322eee7518c",
+  "candidate_context_sha256": "870c6c9b93bd75259e7f322445d03e470c64a140378fd383fda343ca20928e57",
+  "dossier_content_sha256": "fcc9137ba1b84bebf3ea37881b630c5da51570acfbf897f95201959cc882a17d",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "8df26580e5743c82f7c8f3ef4c2f156b1e88b906a259fdd9e0d25bd1d08c255c",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Центральная система драк опирается на короткие схватки и спецприёмы, но качество управления, попаданий и парирования оценивается неоднозначно, что существенно для предпочтения выразительного, хорошо осваиваемого экшена.",
+    "Прокачка и боевая вариативность ограничены повторными схватками, а для этого вкуса важно заметное изменение опыта по мере прохождения.",
+    "Самобытные персонажи, школьная комедия, музыка и небольшие мини-игры дают игре индивидуальность, однако не компенсируют сомнения в основном действии и его развитии."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      },
+      {
+        "kind": "conflict",
+        "index": 1
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Базовые школьные драки используют контратаки, приёмы и предметы, но жалобы на жёсткость анимаций, неточное попадание и ненадёжный ввод ставят под вопрос удовольствие от освоения боя.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          },
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Слабая мотивация улучшать приёмы и повторные схватки с похожими противниками могут быстро исчерпать боевой цикл, хотя мини-игры и боссы добавляют отдельных ситуаций.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "conflict",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Индонезийская школьная комедия выделяется подачей, но избыток брани, неровный темп диалогов и актёрская озвучка отвлекают часть игроков.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          },
+          {
+            "kind": "conflict",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Исторические сообщения о вылетах, сбоях кат-сцен и частоте кадров не доказывают их нынешнюю распространённость, поэтому технический риск требует оговорки.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Магазин не заявляет русские тексты; вопрос о фанатском переводе сам по себе не доказывает качество или наличие пригодной локализации.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Энергичная музыка и двумерные портреты контрастируют с неровной трёхмерной анимацией; визуальная подача понравится не целиком.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 9
+          }
+        ]
+      }
+    ]
+  }
+}
