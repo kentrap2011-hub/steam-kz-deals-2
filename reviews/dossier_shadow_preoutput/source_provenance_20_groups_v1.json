@@ -255,7 +255,7 @@
       "source_claims": {
         "total_sources": 4,
         "claimed_player_source_rows": 3,
-        "claimed_distinct_physical_parents": 3,
+        "claimed_distinct_physical_parents": 2,
         "source_types": {
           "official_metadata": 1,
           "steam_community": 1,
@@ -337,7 +337,7 @@
             "domain": "steamcommunity.com",
             "locator_kind": "url",
             "player_feedback_claimed": true,
-            "physical_parent_local": "parent-002",
+            "physical_parent_local": "parent-001",
             "source_date_bucket": "unknown",
             "language_claim": "non_russian",
             "privacy_limited": false
@@ -348,7 +348,7 @@
             "domain": "steamcommunity.com",
             "locator_kind": "url",
             "player_feedback_claimed": true,
-            "physical_parent_local": "parent-003",
+            "physical_parent_local": "parent-002",
             "source_date_bucket": "unknown",
             "language_claim": "non_russian",
             "privacy_limited": false
@@ -357,13 +357,13 @@
       },
       "external_source_checks": {
         "cap": 2,
-        "eligible_distinct_claimed_parents": 3,
+        "eligible_distinct_claimed_parents": 2,
         "selected_for_probe": 2,
-        "skipped_due_to_cap": 1,
-        "attempted": 1,
-        "checked": 0,
-        "verified_distinct_parents": null,
-        "status": "not_verifiable",
+        "skipped_due_to_cap": 0,
+        "attempted": 2,
+        "checked": 1,
+        "verified_distinct_parents": 1,
+        "status": "partially_checked",
         "probes": [
           {
             "source_id": "source-002",
@@ -375,13 +375,14 @@
             "checked_on_utc": "2026-10-11"
           },
           {
-            "source_id": "source-003",
+            "source_id": "source-004",
             "physical_parent_local": "parent-002",
-            "source_type": "steam_reviews",
+            "source_type": "steam_community",
             "domain": "steamcommunity.com",
-            "status": "not_measured",
-            "reason": "BOUNDED_PUBLIC_RETRIEVAL_NOT_PERFORMED",
-            "checked_on_utc": null
+            "status": "checked",
+            "reason": "PUBLIC_EXACT_APP_DISCUSSION_PARENT_VISIBLE",
+            "checked_on_utc": "2026-10-11",
+            "page_date_metadata": "2020-02-06"
           }
         ]
       },
@@ -564,7 +565,7 @@
       "source_claims": {
         "total_sources": 4,
         "claimed_player_source_rows": 3,
-        "claimed_distinct_physical_parents": 3,
+        "claimed_distinct_physical_parents": 1,
         "source_types": {
           "official_metadata": 1,
           "steam_reviews": 3
@@ -652,7 +653,7 @@
             "domain": "steamcommunity.com",
             "locator_kind": "url",
             "player_feedback_claimed": true,
-            "physical_parent_local": "parent-002",
+            "physical_parent_local": "parent-001",
             "source_date_bucket": "unknown",
             "language_claim": "non_russian",
             "privacy_limited": false
@@ -663,7 +664,7 @@
             "domain": "steamcommunity.com",
             "locator_kind": "url",
             "player_feedback_claimed": true,
-            "physical_parent_local": "parent-003",
+            "physical_parent_local": "parent-001",
             "source_date_bucket": "unknown",
             "language_claim": "non_russian",
             "privacy_limited": false
@@ -672,9 +673,9 @@
       },
       "external_source_checks": {
         "cap": 2,
-        "eligible_distinct_claimed_parents": 3,
-        "selected_for_probe": 2,
-        "skipped_due_to_cap": 1,
+        "eligible_distinct_claimed_parents": 1,
+        "selected_for_probe": 1,
+        "skipped_due_to_cap": 0,
         "attempted": 0,
         "checked": 0,
         "verified_distinct_parents": null,
@@ -683,15 +684,6 @@
           {
             "source_id": "source-002",
             "physical_parent_local": "parent-001",
-            "source_type": "steam_reviews",
-            "domain": "steamcommunity.com",
-            "status": "not_measured",
-            "reason": "BOUNDED_PUBLIC_RETRIEVAL_NOT_PERFORMED",
-            "checked_on_utc": null
-          },
-          {
-            "source_id": "source-003",
-            "physical_parent_local": "parent-002",
             "source_type": "steam_reviews",
             "domain": "steamcommunity.com",
             "status": "not_measured",
@@ -714,7 +706,7 @@
       "source_claims": {
         "total_sources": 4,
         "claimed_player_source_rows": 3,
-        "claimed_distinct_physical_parents": 3,
+        "claimed_distinct_physical_parents": 2,
         "source_types": {
           "official_metadata": 1,
           "other_player_feedback": 1,
@@ -812,7 +804,7 @@
             "domain": "steamcommunity.com",
             "locator_kind": "url",
             "player_feedback_claimed": true,
-            "physical_parent_local": "parent-003",
+            "physical_parent_local": "parent-002",
             "source_date_bucket": "unknown",
             "language_claim": "non_russian",
             "privacy_limited": false
@@ -821,9 +813,9 @@
       },
       "external_source_checks": {
         "cap": 2,
-        "eligible_distinct_claimed_parents": 3,
+        "eligible_distinct_claimed_parents": 2,
         "selected_for_probe": 2,
-        "skipped_due_to_cap": 1,
+        "skipped_due_to_cap": 0,
         "attempted": 0,
         "checked": 0,
         "verified_distinct_parents": null,
