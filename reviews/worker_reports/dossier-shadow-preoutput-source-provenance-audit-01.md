@@ -64,3 +64,10 @@ node scripts/dossier_shadow_preoutput_source_audit.js "$PWD" reviews/dossier_sha
 The offline extractor verifies the **exact pinned** work and audit Git blobs, **20 original accepted group identities** and every game's fresh recomputed sanitized projection against the checked-in report; it has **no network calls, no helper scraping, no passwords and no write path**. The synthetic tests cover immutability, 365-day boundary, physical-parent aliases, privacy redaction, source versus verified status, duplicate/wrong AppIDs and incomplete frame. PR-only workflow `.github/workflows/validate-dossier-shadow-preoutput-source-provenance.yml` checks those plus exact real historical metadata; `contents:read`, no production hooks, no push credential persistence, no Scheduled Tasks. CI outcome must be confirmed on the opened PR; a file commit alone does not prove tests have passed.
 
 No mutable GitHub source/cache/audit/writer receipt, one-stage accepted dossier, Research/Assembly semantics, Fast/Deep, ranking, UI, publishing, control plane, deployment or Scheduled Task was changed; no `manual-shell-write.yml` invocation. Other concurrent tasks and `CURRENT_TASK.md` were left untouched to avoid overwriting separate workers' handoffs.
+
+## Verified PR-only CI (2026-10-11)
+
+- PR **#210** initial validated head `1b6560813f1b6bf543b8a70004a467efb8461259`.
+- PR-only workflow `Validate Dossier pre-output source provenance (offline)`, run **38144863524**, job **114485986057**: **success**. Isolated synthetic privacy/alias/date/exact-frame tests passed; the full original 60-game metadata projections recomputed from the pinned historic Git commit passed; false authorization/readiness assertion passed.
+- `Validate backlog dispositions`, run **38144863470**, job **114485986096**: **success**.
+- These successful checks verify metadata/code reproducibility and no scope mutation; **they do not** verify the remaining 114 real public source locators, player-review content, human source-authorship truth or semantic Research/Assembly parity. PR remains open and must not be merged by this worker.
