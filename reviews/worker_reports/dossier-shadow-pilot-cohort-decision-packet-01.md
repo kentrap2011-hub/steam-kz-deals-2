@@ -143,3 +143,11 @@ Workflow `.github/workflows/validate-dossier-shadow-pilot-cohort-preview.yml` is
 - **Proposed, not a final selection:** six original groups `3,8,13,15,18,20`; reversible proposal only until Director/user approves after resolving source-truth/stratification gaps.
 - **Unknown/not measured:** external real-source authenticity/independence, real first-release year vs storefront dates/editions, Russian material, review chronology, material negative preservation and semantic quality.
 - **Next bounded task (requires separate decision):** read-only pre-output verification of all 20 source-provenance and identity descriptors, with approved independent reviewer roles, then a revised fair cohort proposal/explicit authorization; do not initiate semantic trial yet.
+
+
+## Verified execution of the isolated PR checks (2026-10-11)
+
+- PR **#205** / `feat/dossier-shadow-pilot-cohort-decision-packet-01`. PR-only Actions run **38140924864**, job **114474459593**: **success**. Seven synthetic adversarial tests passed; pinned real 20-group/60-game metadata-only preview succeeded; the CI assertion step checked 6/18 exact candidate group IDs, full original AppID frame, the eight `not_measured` gaps, and `pilot_authorized=false`/`canonical_readiness=false`/`deep_readiness=false`. Its 7-day artifact contains metadata and Git hashes, not review text. Separate `Validate backlog dispositions` run **38140924861**: **success**.
+- Actual CI stdout: `approval_status=NOT_READY_FOR_APPROVAL`, `frame_groups=20`, `selected_groups=[3,8,13,15,18,20]`, `selected_appids=18`, `semantic_execution=false`; compare-ref `origin/main` at `83958d5307dd460408b447fd5a1225d02b88f749` had both work and audit blob changed from frozen source, correctly reported and **not** rebound.
+- Earlier PR-only runs exposed, and the branch corrected, one over-escaped metadata report row regex and two synthetic-test/compare-ref validation defects. Final run is the corrected complete success, **not** a claim that earlier failures passed. These corrections stayed inside the new preview and its tests.
+- No real Research/Assembly semantic evaluation, player-source inspection or canonical GitHub writer was invoked. No scheduled tasks, production state, site, Deep/Fast, Chat 2 files or task registry were altered. The open PR is **not merged**.
