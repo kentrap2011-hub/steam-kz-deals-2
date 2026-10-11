@@ -4800,6 +4800,982 @@
         "independent_russian_feedback_language": "unknown",
         "independent_negative_mixed_truth": "not_evaluated"
       }
+    },
+    {
+      "sequence": 11,
+      "appid": "1681430",
+      "dossier_git_blob_sha": "150560b96cc24275570359829e68243a566f8b14",
+      "source_claims": {
+        "total_sources": 4,
+        "claimed_player_source_rows": 3,
+        "claimed_distinct_physical_parents": 2,
+        "source_types": {
+          "official_metadata": 1,
+          "steam_community": 1,
+          "steam_reviews": 2
+        },
+        "source_link_kinds": {
+          "url": 4
+        },
+        "source_date_buckets": {
+          "older": 1,
+          "unknown": 3
+        },
+        "feedback_records": 7,
+        "feedback_date_buckets": {
+          "older": 7
+        },
+        "feedback_acquisition_modes": {
+          "inspected_collection_item": 7
+        },
+        "feedback_languages": {
+          "non_russian": 5,
+          "russian": 2
+        },
+        "russian_feedback_language": "claimed_present",
+        "negative_observations": 1,
+        "mixed_observations": 7,
+        "negative_mixed_observation_refs": [
+          {
+            "observation_index": 0,
+            "sentiment": "mixed",
+            "category": "mechanics"
+          },
+          {
+            "observation_index": 1,
+            "sentiment": "mixed",
+            "category": "progression"
+          },
+          {
+            "observation_index": 3,
+            "sentiment": "mixed",
+            "category": "pacing"
+          },
+          {
+            "observation_index": 5,
+            "sentiment": "mixed",
+            "category": "structure"
+          },
+          {
+            "observation_index": 6,
+            "sentiment": "mixed",
+            "category": "friction"
+          },
+          {
+            "observation_index": 7,
+            "sentiment": "mixed",
+            "category": "difficulty"
+          },
+          {
+            "observation_index": 8,
+            "sentiment": "mixed",
+            "category": "other"
+          },
+          {
+            "observation_index": 9,
+            "sentiment": "negative",
+            "category": "friction"
+          }
+        ],
+        "conflict_rows": 0,
+        "technical_or_localization_category_rows": 0,
+        "coverage_unknown_dimensions": 0,
+        "research_state_claim": "sufficient",
+        "russian_attempt_claim": "found_and_used",
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": false,
+            "physical_parent_local": null,
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-001",
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-001",
+            "source_date_bucket": "unknown",
+            "language_claim": "mixed",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-002",
+            "source_date_bucket": "older",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          }
+        ]
+      },
+      "external_source_checks": {
+        "cap": 2,
+        "eligible_distinct_claimed_parents": 2,
+        "selected_for_probe": 2,
+        "skipped_due_to_cap": 0,
+        "attempted": 0,
+        "checked": 0,
+        "verified_distinct_parents": null,
+        "status": "not_measured",
+        "probes": [
+          {
+            "source_id": "source-002",
+            "physical_parent_local": "parent-001",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "status": "not_measured",
+            "reason": "BOUNDED_PUBLIC_RETRIEVAL_NOT_PERFORMED",
+            "checked_on_utc": null
+          },
+          {
+            "source_id": "source-004",
+            "physical_parent_local": "parent-002",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "status": "not_measured",
+            "reason": "BOUNDED_PUBLIC_RETRIEVAL_NOT_PERFORMED",
+            "checked_on_utc": null
+          }
+        ]
+      },
+      "limits": {
+        "source_claims_are_not_independent_authenticity": true,
+        "semantic_contents_not_evaluated": true,
+        "independent_russian_feedback_language": "unknown",
+        "independent_negative_mixed_truth": "not_evaluated"
+      }
+    },
+    {
+      "sequence": 11,
+      "appid": "1740300",
+      "dossier_git_blob_sha": "8e0cc6d661139382737c02d21a5d54057e0d7a08",
+      "source_claims": {
+        "total_sources": 4,
+        "claimed_player_source_rows": 3,
+        "claimed_distinct_physical_parents": 2,
+        "source_types": {
+          "official_metadata": 1,
+          "reddit": 1,
+          "steam_reviews": 2
+        },
+        "source_link_kinds": {
+          "url": 4
+        },
+        "source_date_buckets": {
+          "unknown": 4
+        },
+        "feedback_records": 6,
+        "feedback_date_buckets": {
+          "older": 5,
+          "recent": 1
+        },
+        "feedback_acquisition_modes": {
+          "inspected_collection_item": 5,
+          "search_result_observation": 1
+        },
+        "feedback_languages": {
+          "non_russian": 3,
+          "russian": 3
+        },
+        "russian_feedback_language": "claimed_present",
+        "negative_observations": 0,
+        "mixed_observations": 4,
+        "negative_mixed_observation_refs": [
+          {
+            "observation_index": 2,
+            "sentiment": "mixed",
+            "category": "structure"
+          },
+          {
+            "observation_index": 4,
+            "sentiment": "mixed",
+            "category": "pacing"
+          },
+          {
+            "observation_index": 7,
+            "sentiment": "mixed",
+            "category": "repetition"
+          },
+          {
+            "observation_index": 8,
+            "sentiment": "mixed",
+            "category": "friction"
+          }
+        ],
+        "conflict_rows": 0,
+        "technical_or_localization_category_rows": 0,
+        "coverage_unknown_dimensions": 0,
+        "research_state_claim": "sufficient",
+        "russian_attempt_claim": "found_and_used",
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": false,
+            "physical_parent_local": null,
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-001",
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-001",
+            "source_date_bucket": "unknown",
+            "language_claim": "mixed",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-002",
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          }
+        ]
+      },
+      "external_source_checks": {
+        "cap": 2,
+        "eligible_distinct_claimed_parents": 2,
+        "selected_for_probe": 2,
+        "skipped_due_to_cap": 0,
+        "attempted": 0,
+        "checked": 0,
+        "verified_distinct_parents": null,
+        "status": "not_measured",
+        "probes": [
+          {
+            "source_id": "source-002",
+            "physical_parent_local": "parent-001",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "status": "not_measured",
+            "reason": "BOUNDED_PUBLIC_RETRIEVAL_NOT_PERFORMED",
+            "checked_on_utc": null
+          },
+          {
+            "source_id": "source-004",
+            "physical_parent_local": "parent-002",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "status": "not_measured",
+            "reason": "BOUNDED_PUBLIC_RETRIEVAL_NOT_PERFORMED",
+            "checked_on_utc": null
+          }
+        ]
+      },
+      "limits": {
+        "source_claims_are_not_independent_authenticity": true,
+        "semantic_contents_not_evaluated": true,
+        "independent_russian_feedback_language": "unknown",
+        "independent_negative_mixed_truth": "not_evaluated"
+      }
+    },
+    {
+      "sequence": 11,
+      "appid": "1808680",
+      "dossier_git_blob_sha": "53c43699ff058e70f445966cf43c897e1aa273e0",
+      "source_claims": {
+        "total_sources": 6,
+        "claimed_player_source_rows": 5,
+        "claimed_distinct_physical_parents": 4,
+        "source_types": {
+          "official_metadata": 1,
+          "reddit": 3,
+          "steam_reviews": 2
+        },
+        "source_link_kinds": {
+          "url": 6
+        },
+        "source_date_buckets": {
+          "unknown": 6
+        },
+        "feedback_records": 10,
+        "feedback_date_buckets": {
+          "older": 4,
+          "recent": 3,
+          "unknown": 3
+        },
+        "feedback_acquisition_modes": {
+          "inspected_collection_item": 8,
+          "search_result_observation": 2
+        },
+        "feedback_languages": {
+          "non_russian": 8,
+          "russian": 2
+        },
+        "russian_feedback_language": "claimed_present",
+        "negative_observations": 1,
+        "mixed_observations": 5,
+        "negative_mixed_observation_refs": [
+          {
+            "observation_index": 1,
+            "sentiment": "mixed",
+            "category": "difficulty"
+          },
+          {
+            "observation_index": 2,
+            "sentiment": "mixed",
+            "category": "structure"
+          },
+          {
+            "observation_index": 4,
+            "sentiment": "mixed",
+            "category": "pacing"
+          },
+          {
+            "observation_index": 5,
+            "sentiment": "mixed",
+            "category": "structure"
+          },
+          {
+            "observation_index": 6,
+            "sentiment": "negative",
+            "category": "friction"
+          },
+          {
+            "observation_index": 8,
+            "sentiment": "mixed",
+            "category": "friction"
+          }
+        ],
+        "conflict_rows": 0,
+        "technical_or_localization_category_rows": 0,
+        "coverage_unknown_dimensions": 0,
+        "research_state_claim": "sufficient",
+        "russian_attempt_claim": "found_and_used",
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": false,
+            "physical_parent_local": null,
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-001",
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-001",
+            "source_date_bucket": "unknown",
+            "language_claim": "mixed",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-002",
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-003",
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-006",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-004",
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          }
+        ]
+      },
+      "external_source_checks": {
+        "cap": 2,
+        "eligible_distinct_claimed_parents": 4,
+        "selected_for_probe": 2,
+        "skipped_due_to_cap": 2,
+        "attempted": 0,
+        "checked": 0,
+        "verified_distinct_parents": null,
+        "status": "not_measured",
+        "probes": [
+          {
+            "source_id": "source-002",
+            "physical_parent_local": "parent-001",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "status": "not_measured",
+            "reason": "BOUNDED_PUBLIC_RETRIEVAL_NOT_PERFORMED",
+            "checked_on_utc": null
+          },
+          {
+            "source_id": "source-004",
+            "physical_parent_local": "parent-002",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "status": "not_measured",
+            "reason": "BOUNDED_PUBLIC_RETRIEVAL_NOT_PERFORMED",
+            "checked_on_utc": null
+          }
+        ]
+      },
+      "limits": {
+        "source_claims_are_not_independent_authenticity": true,
+        "semantic_contents_not_evaluated": true,
+        "independent_russian_feedback_language": "unknown",
+        "independent_negative_mixed_truth": "not_evaluated"
+      }
+    },
+    {
+      "sequence": 12,
+      "appid": "1835240",
+      "dossier_git_blob_sha": "843eef6a6765dab81b4fd01ecba481476d10c3b1",
+      "source_claims": {
+        "total_sources": 5,
+        "claimed_player_source_rows": 4,
+        "claimed_distinct_physical_parents": 3,
+        "source_types": {
+          "official_metadata": 1,
+          "steam_community": 1,
+          "steam_reviews": 3
+        },
+        "source_link_kinds": {
+          "url": 5
+        },
+        "source_date_buckets": {
+          "older": 1,
+          "unknown": 4
+        },
+        "feedback_records": 7,
+        "feedback_date_buckets": {
+          "older": 6,
+          "unknown": 1
+        },
+        "feedback_acquisition_modes": {
+          "inspected_collection_item": 5,
+          "search_result_observation": 2
+        },
+        "feedback_languages": {
+          "non_russian": 6,
+          "russian": 1
+        },
+        "russian_feedback_language": "claimed_present",
+        "negative_observations": 0,
+        "mixed_observations": 4,
+        "negative_mixed_observation_refs": [
+          {
+            "observation_index": 2,
+            "sentiment": "mixed",
+            "category": "repetition"
+          },
+          {
+            "observation_index": 3,
+            "sentiment": "mixed",
+            "category": "difficulty"
+          },
+          {
+            "observation_index": 6,
+            "sentiment": "mixed",
+            "category": "structure"
+          },
+          {
+            "observation_index": 7,
+            "sentiment": "mixed",
+            "category": "friction"
+          }
+        ],
+        "conflict_rows": 0,
+        "technical_or_localization_category_rows": 1,
+        "coverage_unknown_dimensions": 0,
+        "research_state_claim": "sufficient",
+        "russian_attempt_claim": "found_and_used",
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": false,
+            "physical_parent_local": null,
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-001",
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "store.steampowered.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-002",
+            "source_date_bucket": "unknown",
+            "language_claim": "mixed",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-003",
+            "source_date_bucket": "older",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-001",
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          }
+        ]
+      },
+      "external_source_checks": {
+        "cap": 2,
+        "eligible_distinct_claimed_parents": 3,
+        "selected_for_probe": 2,
+        "skipped_due_to_cap": 1,
+        "attempted": 0,
+        "checked": 0,
+        "verified_distinct_parents": null,
+        "status": "not_measured",
+        "probes": [
+          {
+            "source_id": "source-002",
+            "physical_parent_local": "parent-001",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "status": "not_measured",
+            "reason": "BOUNDED_PUBLIC_RETRIEVAL_NOT_PERFORMED",
+            "checked_on_utc": null
+          },
+          {
+            "source_id": "source-003",
+            "physical_parent_local": "parent-002",
+            "source_type": "steam_reviews",
+            "domain": "store.steampowered.com",
+            "status": "not_measured",
+            "reason": "BOUNDED_PUBLIC_RETRIEVAL_NOT_PERFORMED",
+            "checked_on_utc": null
+          }
+        ]
+      },
+      "limits": {
+        "source_claims_are_not_independent_authenticity": true,
+        "semantic_contents_not_evaluated": true,
+        "independent_russian_feedback_language": "unknown",
+        "independent_negative_mixed_truth": "not_evaluated"
+      }
+    },
+    {
+      "sequence": 12,
+      "appid": "1836160",
+      "dossier_git_blob_sha": "13d44289df755002b159a3eb1f31a2c8aac7fcfa",
+      "source_claims": {
+        "total_sources": 4,
+        "claimed_player_source_rows": 3,
+        "claimed_distinct_physical_parents": 2,
+        "source_types": {
+          "official_metadata": 1,
+          "steam_community": 1,
+          "steam_reviews": 2
+        },
+        "source_link_kinds": {
+          "url": 4
+        },
+        "source_date_buckets": {
+          "unknown": 4
+        },
+        "feedback_records": 7,
+        "feedback_date_buckets": {
+          "older": 4,
+          "unknown": 3
+        },
+        "feedback_acquisition_modes": {
+          "inspected_collection_item": 6,
+          "search_result_observation": 1
+        },
+        "feedback_languages": {
+          "non_russian": 3,
+          "russian": 4
+        },
+        "russian_feedback_language": "claimed_present",
+        "negative_observations": 3,
+        "mixed_observations": 5,
+        "negative_mixed_observation_refs": [
+          {
+            "observation_index": 0,
+            "sentiment": "mixed",
+            "category": "mechanics"
+          },
+          {
+            "observation_index": 1,
+            "sentiment": "mixed",
+            "category": "structure"
+          },
+          {
+            "observation_index": 2,
+            "sentiment": "mixed",
+            "category": "repetition"
+          },
+          {
+            "observation_index": 3,
+            "sentiment": "negative",
+            "category": "progression"
+          },
+          {
+            "observation_index": 4,
+            "sentiment": "negative",
+            "category": "friction"
+          },
+          {
+            "observation_index": 5,
+            "sentiment": "mixed",
+            "category": "pacing"
+          },
+          {
+            "observation_index": 6,
+            "sentiment": "mixed",
+            "category": "other"
+          },
+          {
+            "observation_index": 7,
+            "sentiment": "negative",
+            "category": "friction"
+          }
+        ],
+        "conflict_rows": 0,
+        "technical_or_localization_category_rows": 0,
+        "coverage_unknown_dimensions": 0,
+        "research_state_claim": "sufficient",
+        "russian_attempt_claim": "found_and_used",
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": false,
+            "physical_parent_local": null,
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-001",
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-001",
+            "source_date_bucket": "unknown",
+            "language_claim": "mixed",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-002",
+            "source_date_bucket": "unknown",
+            "language_claim": "russian",
+            "privacy_limited": false
+          }
+        ]
+      },
+      "external_source_checks": {
+        "cap": 2,
+        "eligible_distinct_claimed_parents": 2,
+        "selected_for_probe": 2,
+        "skipped_due_to_cap": 0,
+        "attempted": 0,
+        "checked": 0,
+        "verified_distinct_parents": null,
+        "status": "not_measured",
+        "probes": [
+          {
+            "source_id": "source-002",
+            "physical_parent_local": "parent-001",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "status": "not_measured",
+            "reason": "BOUNDED_PUBLIC_RETRIEVAL_NOT_PERFORMED",
+            "checked_on_utc": null
+          },
+          {
+            "source_id": "source-004",
+            "physical_parent_local": "parent-002",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "status": "not_measured",
+            "reason": "BOUNDED_PUBLIC_RETRIEVAL_NOT_PERFORMED",
+            "checked_on_utc": null
+          }
+        ]
+      },
+      "limits": {
+        "source_claims_are_not_independent_authenticity": true,
+        "semantic_contents_not_evaluated": true,
+        "independent_russian_feedback_language": "unknown",
+        "independent_negative_mixed_truth": "not_evaluated"
+      }
+    },
+    {
+      "sequence": 12,
+      "appid": "1837330",
+      "dossier_git_blob_sha": "5092387cf6ca5c5d8eeee659dae134974cdbe4c5",
+      "source_claims": {
+        "total_sources": 4,
+        "claimed_player_source_rows": 3,
+        "claimed_distinct_physical_parents": 3,
+        "source_types": {
+          "official_metadata": 1,
+          "other_player_feedback": 1,
+          "steam_reviews": 2
+        },
+        "source_link_kinds": {
+          "url": 4
+        },
+        "source_date_buckets": {
+          "older": 1,
+          "unknown": 3
+        },
+        "feedback_records": 7,
+        "feedback_date_buckets": {
+          "older": 5,
+          "recent": 1,
+          "unknown": 1
+        },
+        "feedback_acquisition_modes": {
+          "inspected_collection_item": 7
+        },
+        "feedback_languages": {
+          "non_russian": 6,
+          "russian": 1
+        },
+        "russian_feedback_language": "claimed_present",
+        "negative_observations": 2,
+        "mixed_observations": 5,
+        "negative_mixed_observation_refs": [
+          {
+            "observation_index": 1,
+            "sentiment": "mixed",
+            "category": "difficulty"
+          },
+          {
+            "observation_index": 2,
+            "sentiment": "mixed",
+            "category": "structure"
+          },
+          {
+            "observation_index": 3,
+            "sentiment": "mixed",
+            "category": "structure"
+          },
+          {
+            "observation_index": 5,
+            "sentiment": "mixed",
+            "category": "pacing"
+          },
+          {
+            "observation_index": 6,
+            "sentiment": "negative",
+            "category": "friction"
+          },
+          {
+            "observation_index": 7,
+            "sentiment": "negative",
+            "category": "friction"
+          },
+          {
+            "observation_index": 8,
+            "sentiment": "mixed",
+            "category": "repetition"
+          }
+        ],
+        "conflict_rows": 0,
+        "technical_or_localization_category_rows": 0,
+        "coverage_unknown_dimensions": 0,
+        "research_state_claim": "sufficient",
+        "russian_attempt_claim": "found_and_used",
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": false,
+            "physical_parent_local": null,
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-001",
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-002",
+            "source_date_bucket": "unknown",
+            "language_claim": "non_russian",
+            "privacy_limited": false
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "other_player_feedback",
+            "domain": "other_public_domain",
+            "locator_kind": "url",
+            "player_feedback_claimed": true,
+            "physical_parent_local": "parent-003",
+            "source_date_bucket": "older",
+            "language_claim": "russian",
+            "privacy_limited": false
+          }
+        ]
+      },
+      "external_source_checks": {
+        "cap": 2,
+        "eligible_distinct_claimed_parents": 3,
+        "selected_for_probe": 2,
+        "skipped_due_to_cap": 1,
+        "attempted": 0,
+        "checked": 0,
+        "verified_distinct_parents": null,
+        "status": "not_measured",
+        "probes": [
+          {
+            "source_id": "source-002",
+            "physical_parent_local": "parent-001",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "status": "not_measured",
+            "reason": "BOUNDED_PUBLIC_RETRIEVAL_NOT_PERFORMED",
+            "checked_on_utc": null
+          },
+          {
+            "source_id": "source-003",
+            "physical_parent_local": "parent-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "status": "not_measured",
+            "reason": "BOUNDED_PUBLIC_RETRIEVAL_NOT_PERFORMED",
+            "checked_on_utc": null
+          }
+        ]
+      },
+      "limits": {
+        "source_claims_are_not_independent_authenticity": true,
+        "semantic_contents_not_evaluated": true,
+        "independent_russian_feedback_language": "unknown",
+        "independent_negative_mixed_truth": "not_evaluated"
+      }
     }
   ],
   "totals": null
