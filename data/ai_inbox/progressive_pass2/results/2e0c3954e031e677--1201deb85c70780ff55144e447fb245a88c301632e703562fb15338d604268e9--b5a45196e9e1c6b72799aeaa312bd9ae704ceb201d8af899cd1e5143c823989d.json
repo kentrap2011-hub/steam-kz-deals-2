@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "31bc0b3bc59caafbe62c101ead501c2b503ee15d",
+  "run_start_authority_commit": "f938103de0b0dd573bff73827d48601e931130fe",
+  "run_started_at_utc": "2026-10-11T14:06:43+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "1201deb85c70780ff55144e447fb245a88c301632e703562fb15338d604268e9",
+  "family_id": "game:272600",
+  "taste_subject_key": "App_272600",
+  "appid": "272600",
+  "taste_fingerprint": "8e877e05ccacc1707514622ed0fffbc34eb9acf430ba9b93b361d86c141f3e05",
+  "candidate_context_sha256": "b994661e9a71cb260b285109448d2316e9acc024386463e02dd3c5efeda128b6",
+  "dossier_content_sha256": "d26fc669849a597f93da7e4e6d1fd72b7da038f5c475167f5abaa34571d9267d",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "b5a45196e9e1c6b72799aeaa312bd9ae704ceb201d8af899cd1e5143c823989d",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Лёгкая детективная история с ясной целью строится вокруг улик и допросов персонажей.",
+    "Ироничный главный герой, забавные подозреваемые, выразительная анимация и озвучка создают запоминающийся характер игры.",
+    "Компактное расследование не растянуто на десятки часов и позволяет завершить историю без утомительного открытого мира."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 39,
+    "development_variety": 47,
+    "structure_pacing_direction": 81,
+    "identity_hooks": 85,
+    "breadth_of_match": 55
+  },
+  "score_findings": [
+    {
+      "finding_id": "grimoire-easy-deductions",
+      "text_ru": "Осмотр улик и беседы дают понятную структуру расследования, но почти все задачи просты, а итоговое умозаключение игроку отчасти подсказывают.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/tactical_problem_solving/summary",
+          "profile_value_sha256": "d66110f8516a5c017644fb3fa523677af7a64ec44c74bde423b9b8e400b87dc5",
+          "match_text_ru": "Любимая часть решения задач — самостоятельно понять условия и подобрать работающий ход, здесь глубины может не хватить."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "lowers",
+          "normalized_value": 39
+        }
+      ]
+    },
+    {
+      "finding_id": "grimoire-short-linear",
+      "text_ru": "Смена бесед, улик и небольших мини-головоломок поддерживает локальное разнообразие, однако дело проходит по преимущественно линейной схеме и почти не раскрывает новых возможностей.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Развитие формата задач важно даже для небольшой истории; линейность ограничивает глубину, но не отменяет разные действия."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 47
+        }
+      ]
+    },
+    {
+      "finding_id": "grimoire-clear-case",
+      "text_ru": "Место преступления, допросы подозреваемых и цепочка найденных улик ведут к определённой цели без большой карты или затянутых побочных занятий.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/raises",
+          "profile_value_sha256": "f1997cf9d87235a0d984a3c5bceefb8aa566143fb2e8edddfb81312ba09aef35",
+          "match_text_ru": "Нравятся тайна и понятные загадки, где известно, зачем изучать очередную деталь."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 81
+        }
+      ]
+    },
+    {
+      "finding_id": "grimoire-cast-art",
+      "text_ru": "Юмор Гримуара и странных свидетелей, рисованная анимация и озвученные диалоги придают короткому болотному детективу выразительный характер.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Самобытный визуальный язык и запоминающиеся персонажи увеличивают ценность истории."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 85
+        }
+      ]
+    },
+    {
+      "finding_id": "grimoire-flow-friction",
+      "text_ru": "Редкие поиски мелких объектов и повторные переходы между местами расспросов нарушают ритм, а слишком лёгкие загадки сокращают время активного разгадывания.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/active_core_loop_vs_low_stimulation_filler/summary",
+          "profile_value_sha256": "b4a73bd07d3acb93744f9800c2ccc182334128a573b98d020cc696b40af3ff44",
+          "match_text_ru": "Удерживает внимание частая осмысленная обратная связь от действий; лишние перемещения могут мешать."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 55
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Многие дедукции слишком просты, а финальный вывод частично подсказывается; это уменьшает удовольствие от самостоятельного решения сложной задачи.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Короткая история примерно на два–четыре часа и линейный сюжет оставляют мало причин возвращаться после раскрытия виновного.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Мелкие незаметные объекты и повторные походы между точками допроса иногда отвлекают от самой детективной задачи.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Русскоязычные отзывы прошлых лет упоминали отсутствие локализации, но по этим историческим сообщениям нельзя установить текущий статус перевода.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  },
+  "base_support_compatible": null
+}
