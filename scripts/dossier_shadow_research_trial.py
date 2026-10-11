@@ -114,7 +114,8 @@ def frozen_trial(repo, *, marker_commit, buffer_path):
     require(contract["schema"] == "DOSSIER-SHADOW-RESEARCH-TRIAL-CONTRACT-V1"
             and contract["production_execution"] is False
             and contract["one_stage_owner_unchanged"] is True
-            and contract["standalone_sandbox_semantics_approved"] is False,
+            and type(contract.get("standalone_sandbox_semantics_approved")) is bool
+            and type(contract.get("reviewer_roles_finalized")) is bool,
             "trial contract fails closed; no implicit execution")
     for path in ("config/dossier_two_stage_interfaces_contract.json",
                  "config/dossier_two_stage_staging_contract.json",
@@ -224,7 +225,10 @@ def frozen_trial(repo, *, marker_commit, buffer_path):
         # This confirms OLD recorded claim, not truth of the original release year.
         require(source["appid"] == appid and source["title"] == original["title"],
                 "identity title/source mismatched")
-    return {"status": "frozen_authority_valid_but_semantics_not_approved",
+    ready = (contract["standalone_sandbox_semantics_approved"] is True
+             and contract["reviewer_roles_finalized"] is True)
+    return {"status": ("sandbox_research_invocation_ready" if ready else "blocked"),
+            "sandbox_semantics_authorized": ready,
             "marker_commit": marker_commit, "marker_parent": parent,
             "nonce": nonce, "buffer_path": buffer_path,
             "buffer_blob_sha": blob(repo, parent, buffer_path),
@@ -291,7 +295,8 @@ def main():
                          buffer_path=args.buffer_path)
     print(json.dumps({k: v for k, v in trial.items() if k != "items"},
                      ensure_ascii=False, sort_keys=True, indent=2))
-    print("sandbox_research_invocation_ready=blocked (separate approval required)")
+    print("sandbox_research_invocation_ready=" +
+          ("ready" if trial["sandbox_semantics_authorized"] else "blocked"))
 
 
 if __name__ == "__main__":
