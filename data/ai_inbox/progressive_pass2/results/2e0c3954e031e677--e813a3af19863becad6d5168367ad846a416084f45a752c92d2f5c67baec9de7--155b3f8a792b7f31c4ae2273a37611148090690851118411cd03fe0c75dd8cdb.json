@@ -1,0 +1,277 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "e4cefcc50cb060f332894f83b4a26c56bd2511f9",
+  "run_start_authority_commit": "95a4bf4990a60082ecb3302da5bc7f23b618d93e",
+  "run_started_at_utc": "2026-10-11T11:33:46+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "e813a3af19863becad6d5168367ad846a416084f45a752c92d2f5c67baec9de7",
+  "family_id": "game:1438480",
+  "taste_subject_key": "App_1438480",
+  "appid": "1438480",
+  "taste_fingerprint": "79d4173867c2d7afce78761ccded4603d49dcfaf92488f8e16dda5c426dfefa2",
+  "candidate_context_sha256": "9826c899e6a1ae38d1b60f6608ff28402a65c7fce52e02f374f33330a17d01d1",
+  "dossier_content_sha256": "cd68029646b3d259fc2734e9da8afa9f0c08460394860a8210f95a38b19d1b00",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "155b3f8a792b7f31c4ae2273a37611148090690851118411cd03fe0c75dd8cdb",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "base_support_compatible": null,
+  "positive_evidence": [
+    "Нарисованные вручную мрачные фэнтезийные локации, выразительная анимация и тревожная музыка создают очень узнаваемую художественную атмосферу.",
+    "Смена уязвимого героя, боевой формы Спасителя и охотника позволяет чередовать осторожный платформинг, небольшие головоломки и короткие схватки.",
+    "Необычные острова и символическая история дают материал для интерпретации, если захочется разбираться в загадочном мире."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 62,
+    "development_variety": 67,
+    "structure_pacing_direction": 72,
+    "identity_hooks": 92,
+    "breadth_of_match": 68
+  },
+  "score_findings": [
+    {
+      "finding_id": "handpainted_dark_fantasy",
+      "text_ru": "Рисованные вручную тёмно-фэнтезийные пейзажи, анимация и тревожная музыка создают яркий самостоятельный образ мира, ради которого хочется продолжать путешествие.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7",
+          "profile_value_sha256": "f94957e7f369714de6a70c9cdaa1b1bb625ccdf9a2bd19f5b4bde419ccfecf7a",
+          "match_text_ru": "Яркая атмосфера и узнаваемый художественный почерк — важный самостоятельный источник интереса."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 92
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 68
+        }
+      ]
+    },
+    {
+      "finding_id": "alternating_forms",
+      "text_ru": "Три формы с разными ролями чередуют осторожные прыжки, уклонение, схватки и работу с окружением; к концу платформенные испытания становятся требовательнее.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "b584a23bde72bbcacc284a93f33e49bda9cde0b89c7d750aa3d954ed1fef2055",
+          "match_text_ru": "Для тебя важно, чтобы по ходу прохождения менялись ситуации и игровые механики."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 67
+        },
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 62
+        }
+      ]
+    },
+    {
+      "finding_id": "compact_adventure",
+      "text_ru": "Компактное линейное путешествие помогает удерживать направленность между головоломками и сценами, но некоторым игрокам финал кажется слишком резким.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5",
+          "profile_value_sha256": "08091731e0895f3d8e7f6b98b48da27ab8a9dc337e12dea3d74c1463b34252b1",
+          "match_text_ru": "Тебе нравится загадочность, но при этом нужна понятная основная цель."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 72
+        }
+      ]
+    },
+    {
+      "finding_id": "symbolic_islands",
+      "text_ru": "Странные Улыбающиеся острова и символическое повествование оставляют пространство для догадок, хотя разрозненная подача не гарантирует внятного эмоционального разрешения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5",
+          "profile_value_sha256": "08091731e0895f3d8e7f6b98b48da27ab8a9dc337e12dea3d74c1463b34252b1",
+          "match_text_ru": "Тебе интересна тайна, если за ней есть повод разбираться, а не просто потеряться."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "qualifies",
+          "normalized_value": 92
+        }
+      ]
+    },
+    {
+      "finding_id": "jumps_and_simple_combat",
+      "text_ru": "Некоторые поздние прыжки ощущаются медленными или требуют повторять участок после чекпойнта, а боевая форма в основном использует простые однотипные удары.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1",
+          "profile_value_sha256": "eea16e0b6b2de79dd07acac864c406860d99691433b9b2149e2b8492681fbcd8",
+          "match_text_ru": "Удовольствие от управления и отзывчивого движения особенно важно для твоих платформенных игр."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "lowers",
+          "normalized_value": 62
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 68
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Часть игроков описывает медленные или недостаточно отзывчивые прыжки и раздражающее возвращение к чекпойнтам; это чувствительный компромисс для человека, которому важна радость движения.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Схватки опираются на довольно простые повторяющиеся удары и могут ощущаться менее выразительными, чем рисованный мир вокруг них.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Путешествие короткое, а развязка и символический сюжет могут показаться обрывочными или недостаточно объяснёнными.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
