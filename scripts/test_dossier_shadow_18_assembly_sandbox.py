@@ -26,7 +26,7 @@ class Sandbox18AssemblyTests(unittest.TestCase):
         # Keep offline safety marker untracked and out of create-only Git commits.
         exclude = Path(self.root) / ".git/info/exclude"
         exclude.write_text(exclude.read_text(encoding="utf-8") +
-                           "\\n.dossier-final-offline-fixture\\n", encoding="utf-8")
+                           "\n.dossier-final-offline-fixture\n", encoding="utf-8")
         (Path(self.root) / ".dossier-final-offline-fixture").touch()
         desc = self.x.f.descriptor
         self.group = {"sequence": 1, "group_sha256": desc["group_sha256"],
