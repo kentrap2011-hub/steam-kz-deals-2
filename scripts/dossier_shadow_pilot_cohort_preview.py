@@ -153,7 +153,8 @@ def choose_cohort(groups, snapshot, seed=SEED):
 
 def source_differences(repo, compare_ref):
     """Pin always wins; surface moving-main differences without rebinding."""
-    if not re.fullmatch(r"[A-Za-z0-9_./-]+", compare_ref):
+    if (".." in compare_ref or compare_ref.startswith("/")
+            or not re.fullmatch(r"[A-Za-z0-9_./-]+", compare_ref)):
         raise ValueError("INVALID_COMPARE_REF")
     try:
         other = git(repo, "rev-parse", "--verify", compare_ref + "^{commit}").decode().strip()
