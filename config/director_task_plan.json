@@ -1048,6 +1048,47 @@
       "updated_on": "2026-10-11",
       "updated_at_utc": "2026-10-11T13:27:05.343Z",
       "recent_completion": true
+    },
+    {
+      "id": "dossier-shadow-preoutput-source-provenance-audit-01",
+      "title": "Dossier: проверить публичные источники для 20 старых групп",
+      "goal": "Проверить реальные публичные метаданные происхождения и независимости источников по всем 20 подтверждённым старым группам Dossier, честно отразить неизвестные языки, даты, отрицательные сведения и ограничения приватности без запуска нового семантического анализа.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_PREOUTPUT_SOURCE_PROVENANCE_AUDIT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "depends_on": [
+        "dossier-shadow-pilot-cohort-decision-packet-01"
+      ],
+      "effort_reason": "20 трёхигровых групп, ограниченная read-only проверка общедоступных атрибутов и машиночитаемый отчёт с офлайн-тестами.",
+      "urgency_reason": "Без фактического происхождения и охвата источников предлагаемые 18 игр нельзя считать разнообразной проверкой.",
+      "status": "planned",
+      "effort": "высокая",
+      "urgency": "высокая",
+      "order": null,
+      "blocker": "Read-only pre-output public metadata checks only. Semantic Research/Assembly, pilot choice/launch and Scheduled Tasks remain unauthorized.",
+      "updated_on": "2026-10-11",
+      "updated_at_utc": "2026-10-11T13:33:52.098Z",
+      "recent_completion": false
+    },
+    {
+      "id": "dossier-shadow-preoutput-identity-year-readiness-qa-01",
+      "title": "Dossier: независимо сверить оригинальные даты и версии 60 игр",
+      "goal": "Сверить для всех 60 исторически подтверждённых игр оригинальный год произведения, выпуск в Steam, переиздания и версии по независимым публичным источникам и подготовить критерии честного будущего решения по 18 играм без выбора или запуска пилота.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_PREOUTPUT_IDENTITY_YEAR_READINESS_QA_01.md",
+      "worker_slot": "ЧАТ 2",
+      "depends_on": [
+        "dossier-shadow-quality-review-gate-01",
+        "dossier-shadow-pilot-cohort-decision-packet-01"
+      ],
+      "effort_reason": "Верификация метаданных 60 точных AppID из публичных продуктовых источников, причин расхождений и изолированные отрицательные тесты.",
+      "urgency_reason": "Оригинальная версия и первая дата выпуска часто отличаются от Steam, что может исказить будущую проверку качества.",
+      "status": "planned",
+      "effort": "высокая",
+      "urgency": "высокая",
+      "order": null,
+      "blocker": "Read-only pre-output public metadata checks only. Semantic Research/Assembly, pilot choice/launch and Scheduled Tasks remain unauthorized.",
+      "updated_on": "2026-10-11",
+      "updated_at_utc": "2026-10-11T13:33:52.098Z",
+      "recent_completion": false
     }
   ]
 }

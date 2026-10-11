@@ -5,6 +5,14 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## LATEST DIRECTOR ASSIGNMENT — 2026-10-11: paired read-only public source metadata and original work-year checks
+
+- User approved the next preparation step after PR #205/#206: **read-only examination of provenance/identity for ALL 20 historically accepted old Dossier groups (60 exact games)**, not actual Research→Assembly semantic execution or any trial activation. The prior six groups 3,8,13,15,18,20 remain an inert illustration marked NOT_READY_FOR_APPROVAL.
+- **NEW CHAT 1:** `WORKER_TASK_DOSSIER_SHADOW_PREOUTPUT_SOURCE_PROVENANCE_AUDIT_01.md`, pinned old frame, bounded public player-source **metadata-only** verification of reachable exact sources/physical-parent independence, date/language/claimed negatives/gaps, safe exhaustive 60-game/20-group rows, unknown/not_measured if unsafe; no reading/conclusions from review prose.
+- **NEW CHAT 2:** `WORKER_TASK_DOSSIER_SHADOW_PREOUTPUT_IDENTITY_YEAR_READINESS_QA_01.md`, separate bounded public original work/year/Steam storefront/edition/version checks for same 60 AppIDs plus future decision checklist and missing categories. No Chat 1 result dependence or duplicated source-review work.
+- Preserve PR #201 immutable pin `95a4bf4990a60082ecb3302da5bc7f23b618d93e`, exact old manifest/audit blobs and per-game GitHub writer receipts. Both workers work independently in branches, PRs, isolated tests, reports and safe metadata only. Director must review/merge them separately and then decide whether to ask user for a separate concrete 6×3 trial authorization; no group selection or freeze now.
+- Production one-stage Dossier stays authoritative; two-stage inactive. No real semantic calls, source review synthesis, production/cache/writer/Deep/Fast/UI mutation, Scheduled Tasks or automations changes. Earlier handoff sections below are historical.
+
 ## LATEST DIRECTOR RESULT — 2026-10-11: PR #205/#206 completed, real shadow cohort not approved
 
 - PR #205 merged `063ed71826d60a7028906217c3cd327901ceb8d7`: strict historical 20 old one-stage groups baseline reused; deterministic **unapproved preview** original groups **3, 8, 13, 15, 18, 20** = 18 AppIDs; 14 in-frame nonselected groups transparently counted, future cohort `NOT_READY_FOR_APPROVAL` since external original-work/year/edition, language, source-parent independence, timing, negatives, risks and gaps are still unmeasured across the full 20-group frame.
