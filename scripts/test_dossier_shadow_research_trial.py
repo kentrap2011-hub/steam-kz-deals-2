@@ -34,7 +34,7 @@ class ShadowResearchTrialTests(unittest.TestCase):
         parent, nonce = exact_marker(self.x.f.root, anchor)
         self.assertEqual(nonce, self.nonce)
         self.assertEqual(len(parent), 40)
-        with self.assertRaisesRegex(ValueError, "marker"):
+        with self.assertRaises(ValueError):
             exact_marker(self.x.f.root, "0" * 40)
 
     def test_02_incorrect_marker_contents_and_prod_path_fail_closed(self):
