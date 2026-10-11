@@ -826,7 +826,7 @@
       "id": "dossier-async-postmerge-joint-qa",
       "title": "Dossier: совместная проверка Research → Assembly → GitHub",
       "goal": "Проверить после двух принятых исправлений всю неактивную цепочку на одних disposable Git данных; доказать что бывший XFAIL теперь настоящий PASS.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Изолированные fixture-тесты и PR-only инструменты без затрагивания production.",
       "urgency": "высокая",
@@ -838,16 +838,16 @@
         "dossier-research-original-year-fix",
         "dossier-async-github-final-integration"
       ],
-      "blocker": "No real semantic execution or production activation authorized; offline PRs only.",
+      "blocker": "Inactive offline QA accepted. Future real evidence trial and activation require separate authorization.",
       "updated_on": "2026-10-11",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-11T07:20:27.101Z"
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-11T09:28:26.923Z"
     },
     {
       "id": "dossier-async-shadow-quality-readiness",
       "title": "Dossier: подготовка проверки качества реальных свидетельств",
       "goal": "Сделать неактивный offline инструмент и критерии будущей shadow-проверки качества Dossier без запуска реальной семантики.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Изолированные fixture-тесты и PR-only инструменты без затрагивания production.",
       "urgency": "высокая",
@@ -859,10 +859,52 @@
         "dossier-research-original-year-fix",
         "dossier-async-github-final-integration"
       ],
-      "blocker": "No real semantic execution or production activation authorized; offline PRs only.",
+      "blocker": "Inactive offline QA accepted. Future real evidence trial and activation require separate authorization.",
+      "updated_on": "2026-10-11",
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-11T09:28:26.923Z"
+    },
+    {
+      "id": "dossier-bridge-proof-flag-fix",
+      "title": "Dossier: развязать флаг проверки года и offline gate",
+      "goal": "Исправить конфликт доказательного флага Research с исключительно неактивным offline режимом; повторить совместные тесты без изменения production authority.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Узкий offline proof-gate regression либо read-only QA с синтетическими тестами и отдельными отчётами.",
+      "urgency": "высокая",
+      "urgency_reason": "Предварительные проверки до будущей Dossier activation и необходимость объяснить текущее расхождение UI статистики.",
+      "task_file": "WORKER_TASK_DOSSIER_ASYNC_BRIDGE_PROOF_GATE_DECOUPLE_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-async-postmerge-joint-qa",
+        "dossier-async-shadow-quality-readiness"
+      ],
+      "blocker": "Offline-only PR work, no live semantic analysis, publication mutation or Scheduled Task changes.",
       "updated_on": "2026-10-11",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-11T07:20:27.101Z"
+      "updated_at_utc": "2026-10-11T09:28:26.923Z"
+    },
+    {
+      "id": "dossier-shadow-trial-site-count-qa",
+      "title": "Dossier: план будущей shadow проверки и сверка статистики сайта",
+      "goal": "Подготовить конкретный план будущего отдельно разрешаемого качества Dossier и read-only сверить 14 подходящих Deep с 8+9 в видимой очереди пользователя.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Узкий offline proof-gate regression либо read-only QA с синтетическими тестами и отдельными отчётами.",
+      "urgency": "высокая",
+      "urgency_reason": "Предварительные проверки до будущей Dossier activation и необходимость объяснить текущее расхождение UI статистики.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_TRIAL_PLAN_AND_SITE_DEEP_COUNT_QA_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-async-postmerge-joint-qa",
+        "dossier-async-shadow-quality-readiness"
+      ],
+      "blocker": "Offline-only PR work, no live semantic analysis, publication mutation or Scheduled Task changes.",
+      "updated_on": "2026-10-11",
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-11T09:28:26.923Z"
     }
   ]
 }

@@ -5,6 +5,14 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## MOST RECENT DIRECTOR ASSIGNMENT — 2026-10-11
+
+- PR #190 merged `44b1d8f54aa7692220439b82892999de7a75e1dd` (all joint Research/Assembly/GitHub strict offline tests passed; proof metadata/offline gate bug found). PR #191 merged `42919b50af4df6212a9d2ab7233635c438571a7f` (inactive shadow-quality readiness harness and draft trial protocol; no real evidence used). Prior physical workers retired.
+- **NEW ЧАТ 1:** `WORKER_TASK_DOSSIER_ASYNC_BRIDGE_PROOF_GATE_DECOUPLE_01.md`; narrow proof flag/offline gate decoupling and redo joint tests, no activation.
+- **NEW ЧАТ 2:** `WORKER_TASK_DOSSIER_SHADOW_TRIAL_PLAN_AND_SITE_DEEP_COUNT_QA_01.md`; future real-evidence shadow trial pre-registration **without running it**; additionally read-only detailed analysis of user question 8 Deep/9 not Deep in displayed UI versus 14 global suitable. Separate two reports, no UI code changes.
+- Canonical `data/production/site/current_status.json` on 2026-10-11 09:22 UTC reported 14 Deep-fit, 6 Deep-not-fit, 2 incomplete. Visual production payload had 297 cards including 14 `deep_fit`, 2 incomplete, 281 not analyzed. Therefore current full producer did not lose six suitable cards; exact user-visible subset/browser filter reason not yet proven. Do not guess.
+- No scheduled-task creation/modification, production activation or real semantic runs. Deep `mass_migration_authorized=false`; Fast remains authoritative until final atomic cutover. Older assignments are historical.
+
 ## NEWEST DIRECTOR HANDOFF — 2026-10-11
 
 - User confirms `Being a DIK - Season 1` translation now displays normally; no site cache incident remains.
