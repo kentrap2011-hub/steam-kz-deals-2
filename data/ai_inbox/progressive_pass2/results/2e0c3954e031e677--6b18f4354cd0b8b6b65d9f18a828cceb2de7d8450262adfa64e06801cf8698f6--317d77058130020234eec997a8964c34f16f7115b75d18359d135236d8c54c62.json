@@ -1,0 +1,354 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "0c85b8b9065373cd6e39a92c6b107b3a9f3d35cc",
+  "run_start_authority_commit": "ce45c220cc44f8a671f97a03e7d0c96c0fcb6b2b",
+  "run_started_at_utc": "2026-10-11T12:37:07+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "6b18f4354cd0b8b6b65d9f18a828cceb2de7d8450262adfa64e06801cf8698f6",
+  "family_id": "game:2289750",
+  "taste_subject_key": "App_2289750",
+  "appid": "2289750",
+  "taste_fingerprint": "f4c324b70c4b7f5c926fa2411b55238673e0e454a54d4e1b6f3cf8030a8db4f3",
+  "candidate_context_sha256": "2d5f1160f117b673336f59a61fb41ae5c78e283128ce3d6010d87feeb4d1300a",
+  "dossier_content_sha256": "644c98e3499506edf078b438f26bb088867f192c955f72363d92cffebdcec72c",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "317d77058130020234eec997a8964c34f16f7115b75d18359d135236d8c54c62",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Компактный цикл планирования деревни и подготовки защитников перед ночными волнами позволяет проверять тактические решения.",
+    "Постоянные разблокировки, новые маршруты и герои постепенно расширяют возможности после поражений.",
+    "Красочный пиксельный мир и музыка усиливают индивидуальность игры."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 66,
+    "development_variety": 61,
+    "structure_pacing_direction": 61,
+    "identity_hooks": 70,
+    "breadth_of_match": 62
+  },
+  "score_findings": [
+    {
+      "finding_id": "f1",
+      "text_ru": "Подготовка деревни днём требует распределять рабочих и ресурсы и подбирать героев против ночных волн; здесь есть конкретный тактический выбор, даже при автоматических сражениях.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/tactical_problem_solving/summary",
+          "profile_value_sha256": "d66110f8516a5c017644fb3fa523677af7a64ec44c74bde423b9b8e400b87dc5",
+          "match_text_ru": "Нравятся ограниченные ситуации с понятными условиями, в которых выбранная подготовка влияет на результат."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 66
+        }
+      ]
+    },
+    {
+      "finding_id": "f2",
+      "text_ru": "Постоянные разблокировки после поражений, новые маршруты и герои постепенно расширяют возможности следующих попыток, а не возвращают всё к началу.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Важно, чтобы игровые ситуации и доступные возможности менялись по ходу прохождения."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 61
+        }
+      ]
+    },
+    {
+      "finding_id": "f3",
+      "text_ru": "Понятный суточный цикл сбора, строительства и защиты задаёт конкретную ближайшую цель: подготовить хозяйство и защитников к новой ночной волне.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/tactical_problem_solving/summary",
+          "profile_value_sha256": "d66110f8516a5c017644fb3fa523677af7a64ec44c74bde423b9b8e400b87dc5",
+          "match_text_ru": "Нравится проверять конкретный план в ясной игровой задаче."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 61
+        }
+      ]
+    },
+    {
+      "finding_id": "f4",
+      "text_ru": "Красочный пиксельный мир, тёплая музыка и контраст разных королевств формируют самостоятельный облик игрового процесса.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Выразительная визуальная идентичность и музыкальная атмосфера заметно повышают интерес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 70
+        }
+      ]
+    },
+    {
+      "finding_id": "f5",
+      "text_ru": "Сбор ресурсов, распределение персонала, комбинации защитников и открываемые после неудач возможности объединяют планирование, прогрессию и уютную подачу.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/raises",
+          "profile_value_sha256": "14b5578fa690e75089e182953960601edf5593fe7c4b57ccdc49878c88fa672a",
+          "match_text_ru": "Полезна прокачка, которая заметно влияет на последующие решения."
+        },
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Самобытный мир дополняет удовольствие от систем."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 62
+        }
+      ]
+    },
+    {
+      "finding_id": "f6",
+      "text_ru": "Неудачи заставляют заново проживать знакомые начальные дни и строить похожие схемы, а постоянные открытия бывают медленными; на дистанции этот цикл способен превратиться в гринд.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/repetition_and_revisiting/negative_when/0",
+          "profile_value_sha256": "c3ad9dd0eb0805400f04ee3a4371bab5baecf21f66b317031fb345ee2db54610",
+          "match_text_ru": "Многократное прохождение одних и тех же мест без новых условий утомляет."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 61
+        },
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 61
+        }
+      ]
+    },
+    {
+      "finding_id": "f7",
+      "text_ru": "Сами ночные схватки почти полностью автоматические, а неясные статусы и внезапные поражения затрудняют оценку точного эффекта выбранной защиты.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/tactical_problem_solving/summary",
+          "profile_value_sha256": "d66110f8516a5c017644fb3fa523677af7a64ec44c74bde423b9b8e400b87dc5",
+          "match_text_ru": "Важно понимать, как выбранное решение привело к успеху или провалу."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 66
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 62
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Повторение первых дней после поражения и медленное открытие постоянных улучшений способны привести к утомительному гринду.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Распределение ресурсов и выбор состава защитников дают тактическую работу, но сама битва почти автоматическая: прямое влияние во время схватки ограничено.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Неочевидные эффекты статусов, жёсткие боссы и ограниченная гибкость построек иногда мешают понять причину провала попытки.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Апрельский отзыв отмечал незавершённость интерфейса и управления; это датированное наблюдение, не установленный дефект текущей версии.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Людское и нежитское королевства предлагают разные условия, однако разнообразие карт и состава персонажей на момент отзывов ограничено.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      }
+    ]
+  }
+}
