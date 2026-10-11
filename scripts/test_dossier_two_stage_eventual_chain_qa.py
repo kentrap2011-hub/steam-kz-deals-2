@@ -255,21 +255,31 @@ class GitHubEventualChainAcceptanceQA(unittest.TestCase):
         with self.assertRaises(ValueError):
             x.inspect(0, c)
 
-    @unittest.expectedFailure
     def test_known_gap_conflicting_source_original_year_must_be_rejected(self):
-        """Activation blocker: source exact-work year conflicts with Research identity.
-
-        Expected-failure tracks current Research validator weakness without
-        changing the shared helper owned outside this task. Never treat xfail as
-        a proof of safety or as authorization for live ingest.
-        """
+        """Former XFAIL: P1 and real P2 GitHub receipt must reject contradictions."""
         x = self.fixture()
+        x.preauthorize_assembly()
         r = x.research_submit(0, tamper=lambda d: [
             source["exact_product_binding"].update(original_work_release_year=2021)
             for source in d["sources"] if source["exact_product_binding"] is not None
         ])
+        # Assembly can already have submitted this exact Research transport.
+        c = x.assembly_submit(0, r)
         decision = x.research_receive(0, r)
-        self.assertNotEqual(decision["status"], "accepted_structural_evidence")
+        self.assertEqual(decision["status"], "rejected_invalid")
+        self.assertEqual(
+            decision["files"][decision["receipt_path"]]["reason_code"], "invalid_binding")
+        self.assert_staged_only(
+            x.inspect(0, c), status="research_rejected_item_chain_quarantined")
+        # Local rejection cannot block siblings, confer canonical acceptance or
+        # turn a partial three-game group into a Deep-ready dossier.
+        for i in (1, 2):
+            ri = x.research_submit(i)
+            other = x.research_receive(i, ri)
+            self.assertEqual(other["status"], "accepted_structural_evidence")
+            ci = x.assembly_submit(i, ri)
+            self.assert_staged_only(
+                x.inspect(i, ci), status="typed_assembly_item_pending_github_classification")
 
 
 if __name__ == "__main__":
