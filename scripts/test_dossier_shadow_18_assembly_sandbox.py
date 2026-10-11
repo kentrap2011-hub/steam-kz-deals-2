@@ -85,14 +85,12 @@ class Sandbox18AssemblyTests(unittest.TestCase):
         path = self.x.docs[0]["assignment"]
         from dossier_two_stage_staging import receipt_paths
         transport = receipt_paths(path)["candidate"]
-        original_blob = blob(self.root, r, transport)
         self.x.f.save(transport, {"changed": "do not rebind"})
         self.x.f.commit("Synthetic adversarial rewrite after original Research commit")
         d = self.inspect({self.x.apaths[0]: r})
-        self.assertEqual(d[0]["status"], "ready")  # Original Git object remains immutable.
-        self.assertEqual(d[0]["work"]["research_transport"]["research_package_blob_sha"],
-                         original_blob)
-        # Downstream strict final bridge separately rejects HEAD transport rewrite.
+        self.assertEqual(d[0]["status"], "research_transport_invalid")
+        self.assertFalse(d[0]["attempt_consumed"])
+        # Presemantic and downstream strict final bridge both reject HEAD rewrite.
         self.assertNotEqual(blob(self.root, "HEAD", transport), original_blob)
 
     def test_06_forged_marker_and_stale_group_sha_fail_closed(self):
