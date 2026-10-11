@@ -26,7 +26,7 @@ No changes to `web/app.js`, `web/feed-sync.css`, saved user data or Cache Storag
 - **PASS:** [Deep site mirror UI #38138807974](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/38138807974).
 - **PASS:** [Site task registry and page #38138807958](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/38138807958).
 - **PASS:** [Package purchase value #38138807962](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/38138807962).
-- **At report authoring:** [Progressive PASS 2 core #38138807966](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/38138807966) was still in progress; verify final status before Director acceptance. This worker did not change Deep/PASS 2.
+- **PASS:** [Progressive PASS 2 core #38138807966](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/38138807966); no Deep/PASS 2 source or semantics changed.
 - No Android physical-device testing, merge, deployment or real user acceptance is asserted.
 
 ## Post-merge Android browser acceptance
