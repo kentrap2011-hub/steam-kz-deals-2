@@ -1,0 +1,292 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "107e5c1a03b5c42e8e452d69faac33076b5797b2",
+  "run_start_authority_commit": "bfdd3572aa474cd20bde30aedc9f542019c51bb3",
+  "run_started_at_utc": "2026-10-11T13:23:22+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "7f6d43de44c8a3c1935ef00c65089c2ec78c85bf3a8c5fc620a1a419bf9112da",
+  "family_id": "game:12150",
+  "taste_subject_key": "App_12150",
+  "appid": "12150",
+  "taste_fingerprint": "b4306f574fe0562a8a7ba1796b9afbb20a4fe05690b50c89855fd5f8984ae97f",
+  "candidate_context_sha256": "8144b35e8e483edb8a9cab6f793cfe3f55fd4c6fc106a59705939d2d1a85db4f",
+  "dossier_content_sha256": "256169d47eb24cd40ac8900edaac7bfed12407617948bcf5bd43e427d6310a31",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "20236694b73a3b55897b44ae7596183fe67d506cf3eddd4812d4f96d910ce36b",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "high",
+  "taste_factors": {
+    "gameplay_mastery": 83,
+    "development_variety": 62,
+    "structure_pacing_direction": 89,
+    "identity_hooks": 90,
+    "breadth_of_match": 83
+  },
+  "positive_evidence": [
+    "Слоу-мо перестрелки, агрессивное перемещение между укрытиями, прыжки и физические реакции врагов создают отзывчивый кинематографичный боевой цикл, в котором можно совершенствовать исполнение.",
+    "Нуарная история с графически оформленными сценами и яркими отношениями персонажей, вместе с плотной линейной кампанией почти без заполнителей, дают узнаваемый стиль и удерживают темп."
+  ],
+  "score_findings": [
+    {
+      "finding_id": "bullet-time-mastery",
+      "text_ru": "Замедление времени, уклонения от пуль и быстрые переходы между оружием и укрытиями делают сами перестрелки выразительными; более отзывчивое движение и физика попаданий усиливают удовольствие от отработанного манёвра.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Игра раскрывает способность точнее исполнить знакомую боевую комбинацию, а не награждает одной лишь сложностью."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 83
+        }
+      ]
+    },
+    {
+      "finding_id": "noir-identity",
+      "text_ru": "Графически оформленные нуарные вставки, мрачная речь рассказчика и драматическая история Макса создают чёткий образ; физически выразительные перестрелки продолжают этот кинематографичный стиль в геймплее.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Запоминающийся художественный язык значительно усиливает личный интерес."
+        },
+        {
+          "json_pointer": "/taste_profile/13/pattern",
+          "profile_value_sha256": "8f815538f23c7c4151de010d40acbe09cd5db3af8a8ec1917060877048370be6",
+          "match_text_ru": "У игры есть собственные яркие герои, атмосфера и механический крючок, которые дают запоминаемость."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 90
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 83
+        }
+      ]
+    },
+    {
+      "finding_id": "compact-direction",
+      "text_ru": "Почти линейная череда боевых эпизодов редко разбавляется пустыми действиями и быстро ведёт историю вперёд; небольшая длительность соответствует концентрированному экшену, хотя некоторым концовка кажется резкой.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/pattern",
+          "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+          "match_text_ru": "Ясный следующий шаг важнее самостоятельного блуждания без цели."
+        },
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "История здесь подкреплена частыми игровыми эпизодами, а не заменяет их."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 89
+        }
+      ]
+    },
+    {
+      "finding_id": "sequel-limited-newness",
+      "text_ru": "Бои стали плавнее и удобнее, но крупных новшеств относительно первой части немного; разнообразие держится прежде всего на темпе и исполнении стрельбы, а не на постоянном открытии новых систем.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Для высокой оценки важно не только удачное начало, но и изменение впечатлений по ходу прохождения."
+        },
+        {
+          "json_pointer": "/taste_profile/8/pattern",
+          "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+          "match_text_ru": "Повторение допустимо, когда основной боевой процесс самостоятельно увлекателен."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 62
+        }
+      ]
+    },
+    {
+      "finding_id": "romance-tradeoff",
+      "text_ru": "Нуарная личная история остаётся сильным мотиватором, но романтический акцент продолжения спорен для поклонников более мстительного тона оригинала; этим ограничена универсальность сюжетного крючка.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "Сила персонажей и эмоционального сюжета зависит от того, насколько они зацепят на фоне игрового процесса."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 83
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Продолжение короче ожидаемого, отдельные сюжетные повороты могут показаться слишком быстрыми, а заметных новых боевых систем по сравнению с первой частью немного.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 9
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Романтическая линия разделила поклонников оригинала: она не всем заменяет его более мрачный мотив мести.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Старое издание для Windows иногда требует сторонних исправлений совместимости или настройки перед запуском на современном компьютере.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
