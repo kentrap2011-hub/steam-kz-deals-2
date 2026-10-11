@@ -1,0 +1,38 @@
+name: Validate inactive Dossier GitHub eventual chain acceptance QA
+
+on:
+  pull_request:
+    paths:
+      - "scripts/test_dossier_two_stage_eventual_chain_qa.py"
+      - "scripts/dossier_two_stage_async_buffer.py"
+      - "scripts/dossier_two_stage_staging.py"
+      - "scripts/dossier_two_stage_contract_guard.py"
+      - "config/dossier_*"
+      - ".github/workflows/validate-dossier-async-chain-acceptance-qa.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  offline-chain-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check out PR (fixture tests only)
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install offline validation dependency
+        run: python -m pip install "jsonschema>=4.21,<5"
+      - name: Independent GitHub eventual chain rejection and group QA
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_eventual_chain_qa.py' -v
+      - name: Existing async buffer regressions
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_async_buffer.py' -v
+      - name: Existing GitHub P2 staging and P1 schema regressions
+        run: |
+          python -m unittest discover -s scripts -p 'test_dossier_two_stage_staging.py' -v
+          python -m unittest discover -s scripts -p 'test_dossier_two_stage_contract_schemas.py' -v
+      - name: Existing strict one-stage Dossier fixture regression
+        run: python -m unittest discover -s scripts -p 'test_taste_dossier_github_date_derivation.py' -v
