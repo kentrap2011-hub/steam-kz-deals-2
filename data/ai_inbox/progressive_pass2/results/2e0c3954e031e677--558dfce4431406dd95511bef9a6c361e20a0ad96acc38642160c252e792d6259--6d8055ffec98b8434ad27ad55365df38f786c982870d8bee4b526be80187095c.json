@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "e4cefcc50cb060f332894f83b4a26c56bd2511f9",
+  "run_start_authority_commit": "95a4bf4990a60082ecb3302da5bc7f23b618d93e",
+  "run_started_at_utc": "2026-10-11T11:33:46+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "558dfce4431406dd95511bef9a6c361e20a0ad96acc38642160c252e792d6259",
+  "family_id": "game:2067050",
+  "taste_subject_key": "App_2067050",
+  "appid": "2067050",
+  "taste_fingerprint": "3dd26224d165a3a577cc76473a7aca5dfb0b18e5fe08ec195a3a5b8bc0da7f0c",
+  "candidate_context_sha256": "9b297b4222034804f90b12c871591353b568105e7497f575c3365555d91ff387",
+  "dossier_content_sha256": "914fc185f873402ed67c20de9a003fd0db0d77fa9af36e9a9e8d2023523b2334",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "6d8055ffec98b8434ad27ad55365df38f786c982870d8bee4b526be80187095c",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Отдача оружия позволяет менять траекторию прыжков и решать локальные платформенные задачи — это интересный стартовый крючок, но он не обеспечивает достаточную глубину всей игры.",
+    "По нескольким отзывам управление прыжками неточно или запаздывает, а столкновения с геометрией мешают именно той части процесса, где тебе важно удовольствие от движения.",
+    "Небольшие локации, повторяющиеся добивания и тонкие бои вместе с коллекционным гриндом могут быстро исчерпать новизну: это напрямую противоречит сильному предпочтению развивающегося, неоднообразного игрового опыта.",
+    "Необычный юмор и эпизодические боссы дают отдельные приятные моменты, но не компенсируют с достаточной уверенностью описанные проблемы игрового цикла."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Повторяющиеся добивания, неглубокие перестрелки и продолжительный сбор желудей, по описаниям игроков, быстро перестают давать новые ситуации; для тебя это выраженный риск потери интереса после первых необычных трюков.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Игроки описывают запаздывающее управление, неудобные прыжки и столкновения с геометрией: это особенно неприятный компромисс для игры, чья главная находка связана с перемещением через отдачу оружия.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Жалобы на выпадение за пределы уровня и потерю прогресса относятся к отзыву периода запуска 2024 года и не подтверждают состояние игры сейчас.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
