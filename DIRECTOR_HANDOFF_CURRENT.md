@@ -5,6 +5,15 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## LATEST DIRECTOR DECISION — 2026-10-11: first real 6×3 Research→Assembly test, sandbox authority first
+
+- User said **Делаем** after Director proposed stopping the 114-old-source/55-old-year pre-audit loop and advancing to an **actual limited semantic Dossier experiment**. Selected deterministic PR #205 six original groups **[3,8,13,15,18,20]** = 18 distinct AppIDs as **nonrepresentative calibration**. Frozen historical writer-proven parent at `95a4bf4990a60082ecb3302da5bc7f23b618d93e`; exact source/blobs and group hashes in `reviews/dossier_shadow_offline/dossier_shadow_calibration_20261011_6x3_director_decision_v1.json`. The user wants speed and quality evidence from NEW analysis, not more old-source audits.
+- **Current hard gate:** genuine production two-stage Research/Assembly contracts remain `active=false / authorized_for_semantic_execution=false`. No actual GitHub-owned trial marker/buffer/prompt assignment exists. Director decision **approves objective and exact proposed scope, NOT a direct runtime bypass or production activation**. Need distinct minimal sandbox-only GitHub authority and independent reviewer/stop rules before real data-plane starts; do not mistakenly run current inactive prompts or write live GitHub inbox.
+- **NEW ЧАТ 1:** `WORKER_TASK_DOSSIER_SHADOW_FIRST_REAL_18_RESEARCH_SANDBOX_AUTHORITY_01.md`; own stage-A exact immutable GitHub 6×3 sandbox preauthorization and manual one-shot worker entry, real evidence acquisition deferred until its safe pilot marker exists. PR-only isolated safety tests, no live production.
+- **NEW ЧАТ 2:** `WORKER_TASK_DOSSIER_SHADOW_FIRST_REAL_18_ASSEMBLY_COMPARE_SANDBOX_INTEGRATION_01.md`; independent stage-B exact submitted Research→Assembly sandbox handoff and historical accepted comparator / blinded reviewer structural gate; real execution only with actual authorized Research transport. Separate files/PR.
+- Year conflicts Sonic Adventure 2 AppID 213610 old original binding 2012 vs verified 2001; Sifu 2138710 old 2023 vs verified 2022; fail closed as typed comparison issues rather than silently rewriting baseline or suppressing results. No additional blanket source/year scans are prerequisite.
+- When both PRs accepted, Director checks the actual nonproduction execution authority and launches next finite semantic invocation if fully proved; otherwise identify exact missing gate, don't claim trial already run. Existing one-stage Dossier/Deep unchanged; no Scheduled Tasks, canonical queue/receipts/cache/writer changes. Older handoff below historical.
+
 ## LATEST DIRECTOR RESULT — 2026-10-11: both public pre-output worker audits merged, no real pilot authorized
 
 - ЧАТ 1 PR #210 merged `04a8eec3d8e851137248d30d807cdbcc03e628e0`, PR-only CI 2/2: 20 historical groups/60 Dossier safe source metadata ledger, 118 predeclared public parent candidates but 4 attempted/2 metadata-visible/2 inaccessible/**114 not measured**. Russian/negative/date counts are **old Dossier claims** only, not independently verified player-source truth; external quality still unproven.
