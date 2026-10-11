@@ -5,6 +5,13 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## LATEST DIRECTOR FOLLOW-UP — 2026-10-11: compact freshness popover dismiss
+
+- PR #199 merged `7683c94ce5736052e1e071593f58ab6bad4e7545`, user confirmed much improved small feed freshness status in normal Android browser. Newly reported: expanded status detail popover sometimes remains open when tapping outside (screenshot ~16:06). Director checked `web/feed-bootstrap.js`: status icon toggle + Escape listeners but **no document-level outside-click** handling.
+- **NEW ЧАТ 2:** `WORKER_TASK_SITE_FEED_SYNC_POPOVER_OUTSIDE_DISMISS_FIX_01.md` — minimal click-away/touch dismiss, preserve inside retry, aria/focus, ensure listener cleanup and nonblocking mobile feed interactions. PR-only tests/report, no worker self-merge.
+- **ЧАТ 1** independently assigned real baseline audit in `WORKER_TASK_DOSSIER_SHADOW_REAL_BASELINE_ELIGIBILITY_AUDIT_01.md`; no interference or pilot authorization.
+- No Scheduled Tasks changes, semantic execution, production writes, cache/user state reset or Deep cutover. Older handoff entries below historical.
+
 ## LATEST DIRECTOR ASSIGNMENT — 2026-10-11: audit real old Dossier writer baselines (no semantic run)
 
 - **NEW ЧАТ 1:** `WORKER_TASK_DOSSIER_SHADOW_REAL_BASELINE_ELIGIBILITY_AUDIT_01.md` — read-only audit **ALL currently accepted** original three-game groups using immutable main Git history, PR #197 writer preflight and source/cache/receipt provenance; per-group safe statuses and blockers, separate Actions attestation status. Do not authorize, freeze/select or run a real pilot; even 6 positive groups only justify a **new user approval step**.
