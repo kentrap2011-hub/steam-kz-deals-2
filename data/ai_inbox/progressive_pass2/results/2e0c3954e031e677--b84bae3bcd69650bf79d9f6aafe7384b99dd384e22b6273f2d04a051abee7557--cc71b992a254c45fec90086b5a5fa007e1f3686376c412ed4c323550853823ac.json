@@ -1,0 +1,387 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "3b1e61c601dfb9b08ab5a9828782330171300f0e",
+  "run_start_authority_commit": "4030f23ee655d691031b0940f85529acdb4317f2",
+  "run_started_at_utc": "2026-10-11T10:07:34+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "b84bae3bcd69650bf79d9f6aafe7384b99dd384e22b6273f2d04a051abee7557",
+  "family_id": "game:1681430",
+  "taste_subject_key": "App_1681430",
+  "appid": "1681430",
+  "taste_fingerprint": "cd0f729e287edb9eeb309ed7c9e0f246c356fe35508cb5efe9b3af775aee4d53",
+  "candidate_context_sha256": "68c6a5ed348eb9935d5f2969c245d85719c9f3d79ba7090d677cad8ae865fdb4",
+  "dossier_content_sha256": "31c9f5987ded34b1844cc66c8ff3700a367ac65835c66b95ebf0d0e31e612883",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "cc71b992a254c45fec90086b5a5fa007e1f3686376c412ed4c323550853823ac",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Сюжетные миссии чередуются с расследованиями, побочными поручениями и понятными по целям небольшими районами Детройта.",
+    "Атмосферу поддерживают узнаваемые декорации, индустриальный саундтрек, сатира и голос Питера Уэллера.",
+    "Тяжёлые перестрелки используют выбор приоритетных целей и тактических умений; дополнительно доступна настройка оружия и развитие навыков.",
+    "История личности Мёрфи сопровождается разговорами и решениями, влияющими на отношение граждан."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 56,
+    "development_variety": 50,
+    "structure_pacing_direction": 64,
+    "identity_hooks": 79,
+    "breadth_of_match": 68
+  },
+  "score_findings": [
+    {
+      "finding_id": "combat-tactical-tempo",
+      "text_ru": "В перестрелках Робокоп медленно продвигается под огнём, выбирает приоритетные цели и рассчитывает применение тактических умений; здесь есть пространство для освоения тактики, хотя не для скоростного перемещения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Интересны навыки, тайминги и осознанный выбор подхода в бою."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 56
+        }
+      ]
+    },
+    {
+      "finding_id": "slow-heavy-mobility",
+      "text_ru": "Тяжёлая походка и ограниченная скорость Робокопа не дают ощущения быстрого и выразительного перемещения, которое особенно ценно для этого игрового вкуса.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1/raises",
+          "profile_value_sha256": "c236ddc59b087a1720a7d5b39e0a1f821e95316c85515289f3877c8547face17",
+          "match_text_ru": "Быстрое выразительное движение — сильное предпочтение, тогда как ходьба здесь намеренно медленная."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 56
+        }
+      ]
+    },
+    {
+      "finding_id": "customization-limited",
+      "text_ru": "Прокачка навыков и настройка Auto-9 микросхемами позволяют менять боевые возможности, но свидетельства расходятся в оценке глубины этих систем.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/raises",
+          "profile_value_sha256": "14b5578fa690e75089e182953960601edf5593fe7c4b57ccdc49878c88fa672a",
+          "match_text_ru": "Нравится прокачка с заметным результатом; здесь её практическая глубина остаётся спорной."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 50
+        }
+      ]
+    },
+    {
+      "finding_id": "enemy-variety-caveat",
+      "text_ru": "В одном из свидетельств после нескольких часов отмечено ограниченное разнообразие противников; это уменьшает уверенность, что боевой цикл будет заметно развиваться до конца.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "По ходу игры важно регулярное появление новых ситуаций и механик."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 50
+        }
+      ]
+    },
+    {
+      "finding_id": "directed-district-missions",
+      "text_ru": "Сюжетные задания чередуются с небольшими районами Детройта, расследованиями и побочными поручениями; при этом цели миссий остаются достаточно понятными, без необходимости блуждать в поисках маршрута.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/lowers",
+          "profile_value_sha256": "0f2aa2fda309c8dd37cde3b1932c926c2b9113919040208f0c9c0acf1dcc9180",
+          "match_text_ru": "Не нравится потерянность без ясной задачи; здесь направления миссий понятны."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 64
+        }
+      ]
+    },
+    {
+      "finding_id": "investigative-pacing-cost",
+      "text_ru": "Сканирование улик, патрульные обязанности и долгие побочные поручения прерывают перестрелки, а медленное возвращение по районам может превратить промежутки между активными эпизодами в рутину.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/active_core_loop_vs_low_stimulation_filler/negative_when/1",
+          "profile_value_sha256": "f472ae059f7bc424f229e894883e6bacee93ea5fe7f4a036ceaa26fed3c1dc34",
+          "match_text_ru": "Повторяющиеся мелкие действия между содержательными эпизодами быстро снижают вовлечённость."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 64
+        }
+      ]
+    },
+    {
+      "finding_id": "old-detroit-audiovisual-identity",
+      "text_ru": "Индустриальный саундтрек, декорации старого Детройта, сатира и голос Питера Уэллера создают узнаваемую атмосферу экранизаций «Робокопа», а не безликое оформление очередного шутера.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Выразительный стиль и атмосфера заметно повышают интерес к игре."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 79
+        }
+      ]
+    },
+    {
+      "finding_id": "murphy-story-and-choices",
+      "text_ru": "История об идентичности Мёрфи и корпоративной полиции дополняется разговорами с горожанами и решениями, влияющими на отношение к герою; вместе с направленными миссиями это даёт несколько разных причин продолжать игру, хотя часть сюжетных линий неровная.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/raises",
+          "profile_value_sha256": "ed0a875cc4592dd23024720a16501ff338383334780d7ef5078e6c3bd5da40a8",
+          "match_text_ru": "Личная история и заметный главный герой усиливают интерес, а одной механики часто недостаточно."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 68
+        }
+      ]
+    }
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Рутинные патрульные действия, сканирование улик, длинные поручения и медленное перемещение могут надолго отодвигать насыщенные боевые эпизоды; для любителя активного игрового процесса это конкретный риск потери вовлечённости.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Стрельба намеренно тяжёлая и медленная: любителям отзывчивого скоростного движения такая манера может мешать, даже если бои тактически интересны.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Прокачка навыков и настройка оружия присутствуют, но не все свидетельства считают её глубокой; ожидать постоянного усложнения системы не следует.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Побочные сюжетные линии местами неровные, несмотря на интересную тему личности Мёрфи.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Один критик отметил живучих противников и сокращение разнообразия врагов через несколько часов; это возможное, но не всесторонне подтверждённое ограничение боевого цикла.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Мимика NPC, постановка некоторых диалогов и переходы между сценами местами заметно менее отполированы, чем окружение.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть старые сообщения о проблемах производительности, сбоях заданий и ограниченных автосохранениях; их состояние после обновлений из имеющихся сведений не установить.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 9
+          }
+        ]
+      }
+    ]
+  }
+}
