@@ -110,7 +110,7 @@ async function until(predicate,message){
     if(predicate())return;
     await new Promise(resolve=>setTimeout(resolve,10));
   }
-  throw new Error('Timed out: '+message);
+  throw new Error('Timed out: '+(typeof message==='function'?message():message));
 }
 const saved={
   games:{
@@ -140,7 +140,7 @@ async function cacheOldToFresh(){
   assert.equal(browser.snapshot().statistics.deep_completed_fit_count,99,'statistics is independently newer');
   assertSaved(browser);
   gate.resolve(response(payload(2,true)));
-  await until(()=>browser.controller.state.refreshOutcome==='updated','background update: '+JSON.stringify(browser.controller.state)+' / DOM '+browser.nodes('stageIndicators').innerHTML.slice(0,400));
+  await until(()=>browser.controller.state.refreshOutcome==='updated',()=>('background update: '+JSON.stringify(browser.controller.state)+' / DOM '+browser.nodes('stageIndicators').innerHTML.slice(0,400)));
   assert.match(browser.nodes('stageIndicators').innerHTML,/lit positive[^>]*title="Глубокий разбор: завершён — подходит"/);
   assert.equal(browser.controller.state.source,'refresh');
   assert.equal(browser.nodes('feedSyncNotice').dataset.state,'current');
