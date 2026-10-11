@@ -180,6 +180,13 @@ class DossierReviewGateTests(unittest.TestCase):
         self.assertEqual(x["unadjudicated_disagreements"], 0)
         self.assertEqual(x["offline_gate_ready"], 3)
 
+    def test_reused_game_review_or_wrong_trial_subject_rejected(self):
+        self.reviews["101"]["A"]["subject"]["appid"] = "102"
+        self.assertIn("review_record_invalid_or_unfrozen", self.reasons())
+        self.reviews["101"] = self.pair("101")
+        self.reviews["101"]["B"]["subject"]["trial_id"] = "foreign-trial"
+        self.assertIn("review_record_invalid_or_unfrozen", self.reasons())
+
     def test_original_group_membership_replacement_rejected(self):
         self.frame["groups"][0]["games"][0]["appid"] = "999"
         with self.assertRaisesRegex(ValueError, "resampled"):
