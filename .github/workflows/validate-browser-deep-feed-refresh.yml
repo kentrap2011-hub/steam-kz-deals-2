@@ -39,4 +39,4 @@ jobs:
         run: node web/progressive-personalization-ui.test.js
       - name: Static version pin and safe-refresh UI accessibility
         run: |
-          node -e "const fs=require('fs'),a=fs.readFileSync('web/index.html','utf8');for(const x of ['feed-bootstrap.js?v=compact-freshness-ux-01','feed-sync.css?v=compact-freshness-ux-01','id=\"feedStatusToggle\"','id=\"feedRefreshBtn\"','aria-live=\"polite\"','aria-controls=\"feedSyncDetails\"'])if(!a.includes(x))throw Error('Missing '+x)"
+          node -e "const fs=require('fs'),a=fs.readFileSync('web/index.html','utf8');for(const x of ['feed-bootstrap.js?v=popover-outside-dismiss-01','feed-sync.css?v=compact-freshness-ux-01','id=\"feedStatusToggle\"','id=\"feedRefreshBtn\"','aria-live=\"polite\"','aria-controls=\"feedSyncDetails\"'])if(!a.includes(x))throw Error('Missing '+x)"
