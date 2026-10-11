@@ -1,0 +1,1354 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "4d7be57c9a1a90482d948270ab034c49eca3dd84102d28fc67b6fbc1d33f8239",
+  "prepared_required_sha256": "824e3ca4afb741dfac707284cb82e5eb594d1180d6c7a84bc63cb827a6f4e4e8",
+  "group_plan_sha256": "c697dd3e54b1c7442ef44ffba4b562c396f0d013959c19590ef57c36d5e18a23",
+  "group_count": 76,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 9,
+  "start_index": 24,
+  "end_index_exclusive": 27,
+  "appids": [
+    "1620720",
+    "1627570",
+    "1638220"
+  ],
+  "items_sha256": "da58cec9c54afdc4c98055b7bff005e3ca3a9721231551a795cbf037e4e90e30",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "89b388ce407f9c4986f3c0b1286c9590fbfe75c706254792a2fdbdf3700b9db1",
+  "items": [
+    {
+      "key": "App_1620720",
+      "appid": "1620720",
+      "title": "The Forest Quartet",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1620720.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1627570",
+      "appid": "1627570",
+      "title": "The Plucky Squire",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1627570.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1638220",
+      "appid": "1638220",
+      "title": "Xuan-Yuan Sword: The Scar of Sky",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1638220.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "3e31472124818670fae658a3a923adacd0070c8ffec968931560c8a7c228db2a",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1620720",
+      "title": "The Forest Quartet",
+      "generated_at_utc": "2026-10-11T05:32:07.436Z",
+      "expires_at_utc": "2026-10-31T05:32:07.436Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "The Forest Quartet",
+        "release_year": 2022,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1620720"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 8 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Play as the spirit of a deceased jazz-band singer, gliding around compact symbolic forest areas to sing, activate mechanisms, gather elements, and transform into butterflies; the emphasis is interaction, not precision combat.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-004",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Three short musical episodes focus on remaining bandmates' emotional struggles before a shared finale; different environmental puzzles provide modest variation but their route remains mostly linear.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-004",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "The environmental puzzles are easy and intuitive for many, though one player describes some confusing interactions and opaque puzzle ordering; the game rarely demands sustained skill or deduction.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Expressive music and responsive environmental sound, luminous illustration and themes of grief and remembrance are widely praised as the central source of emotional impact.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "Completing the story usually takes about one to two hours, a focused evening-length memorial experience, and players disagree whether the short length is moving or leaves too little room for development.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Checkpoint-only saves, dim navigation in places and occasionally confusing controls or interactions can frustrate those looking primarily for mechanically polished puzzles.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "The mostly linear sequence, simple mechanics and single emotional arc offer little varied content for further replays, even if the score or finale encourages reliving it.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-004",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Some players enjoy the friends' reflections as a personal grief narrative; others feel the memorial to the absent singer focuses too much on the surviving bandmates and is emotionally underdeveloped.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-005",
+            "feedback-006"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "searched_no_existence_signal",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                5
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                6
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                4
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                7
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                5,
+                7
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1620720",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1620720/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1620720",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/IndieGaming/comments/1qowts0/what_the_forest_quartet_is_trying_to_tell_us/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "The Forest Quartet",
+              "release_year": 2022
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2023-04-24",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2023-02-23",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2023-01-13",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-002",
+            "publication_date": "2025-12-17",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-002",
+            "publication_date": "2022-12-08",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-003",
+            "publication_date": "2026-01-28",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1627570",
+      "title": "The Plucky Squire",
+      "generated_at_utc": "2026-10-11T05:32:07.436Z",
+      "expires_at_utc": "2026-10-31T05:32:07.436Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "The Plucky Squire",
+        "release_year": 2024,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1627570"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 8 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "The adventure moves between Zelda-like top-down storybook levels and three-dimensional desk environments, combining sword attacks, short platforming segments, word-replacement riddles and varied mini-games.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-007",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Manipulating text and moving into the outside world create inventive presentation and small puzzles, although the campaign is a highly directed progression through chapters with relatively little optional exploration.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-005",
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "Frequent narratorial interruptions, over-explanation and slow scripted animations frustrate adults wanting to solve and navigate freely, even as others enjoy the children's-book storytelling.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-005",
+            "feedback-006",
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Combat and most puzzles are easy, with very strong hints; reviews frequently regard the design as child-friendly, while adult players differ on whether that accessibility harms the experience.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-005",
+            "feedback-007",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Vivid book illustrations, delightful three-dimensional objects, playful characters and multiple stylistically distinct minigames are recurring points of enthusiasm.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-007",
+            "feedback-010"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "A short main quest, collectible hunting and chapter replays provide some extra tasks, but repeated dialogue and linearity limit replay appeal.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-005",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Reviews from launch include Steam Deck slowdowns, soft locks and collectible tracking problems; a later user reports some trophy defects were addressed, so the old complaints alone cannot establish a current PC issue.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "historical",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-004",
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Some find the whimsical narrative and accessible gameplay ideal for children and relaxed play; others see wasted potential in the novel two-world mechanic because of shallow puzzles and minimal player agency.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-005",
+            "feedback-008",
+            "feedback-009"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                5
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                4,
+                7
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                4
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3,
+                6
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                6
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1627570",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1627570/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1627570",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/CozyGamers/comments/1jh3w2v",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "The Plucky Squire",
+              "release_year": 2024
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "community_discussion",
+            "domain": "dtf.ru",
+            "url": "https://dtf.ru/trophyhunter/3045679-platinovyi-avgusto-sentyabr-2024-raznoobraznyi",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "historical",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "The Plucky Squire",
+              "release_year": 2024
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "forum",
+            "domain": "gamefaqs.gamespot.com",
+            "url": "https://gamefaqs.gamespot.com/boards/189706-nintendo-switch/80849434",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "The Plucky Squire",
+              "release_year": 2024
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2024-09-20",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2024-09-17",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2024-09-17",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-002",
+            "publication_date": "2024-09-21",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-002",
+            "publication_date": "2025-08-30",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-002",
+            "publication_date": "2024-09-23",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-003",
+            "publication_date": "2025-03-22",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-004",
+            "publication_date": "2024-09-30",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-005",
+            "publication_date": "2024-09-20",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-010",
+            "source_id": "source-005",
+            "publication_date": "2024-09-20",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1638220",
+      "title": "Xuan-Yuan Sword: The Scar of Sky",
+      "generated_at_utc": "2026-10-11T05:32:07.436Z",
+      "expires_at_utc": "2026-10-31T05:32:07.436Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Xuan-Yuan Sword: The Scar of Sky",
+        "release_year": 2000,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1638220"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 8 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "A classic turn-based Chinese fantasy RPG builds around party battles, story-focused dungeon traversal, supernatural artifacts and an optional hidden-item hunt; modern players sometimes find the older combat and mazes clumsy.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-005",
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Late-Sui-era travel blends mythic legends, historic settings and fairly directed dungeons, while optional hidden content, secrets and alternate resolutions reward thorough exploration.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-005",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "The central companions' friendship, sacrifices and bittersweet dual endings remain strongly memorable to many players, although others criticize abrupt motivations and plot twists based on poor communication.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 6,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004",
+            "feedback-006",
+            "feedback-008",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Ink-painting visual style, haunting instrumental motifs and recurring music themes are praised for linking the ancient Chinese setting to emotional scenes.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-005",
+            "feedback-006",
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Older encounter design, labyrinthine passages and limited signposting can hinder modern play, though some fans judge the mazes less demanding than comparable period RPGs.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-005",
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "A large selection of hidden items, secondary routes and two endings inspires enthusiastic repeat runs from some, while others return primarily for nostalgia and do not seek a new mechanical challenge.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "Narrative twists and tragic turns drive some emotional investment, yet players disagree whether late revelations are earned and whether prolonged misunderstandings create unnecessary frustration.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-004",
+            "feedback-006",
+            "feedback-007",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "The source material's old-fashioned combat, character decisions perceived as contrived and dated structure may be off-putting despite high regard for soundtrack and art.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-004",
+            "feedback-006",
+            "feedback-007"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "searched_no_existence_signal",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                4
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                5
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                6
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                6
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                4,
+                6,
+                7
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1638220",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1638220/positivereviews/?browsefilter=toprated&l=schinese",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1638220",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "community_discussion",
+            "domain": "bangumi.tv",
+            "url": "https://bangumi.tv/subject/1916/comments",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Xuan-Yuan Sword: The Scar of Sky",
+              "release_year": 2000
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2021-08-18",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2023-11-05",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2023-05-30",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": "2026-06-27",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
+            "publication_date": "2026-04-20",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-003",
+            "publication_date": "2025-12-20",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-003",
+            "publication_date": "2025-09-03",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-003",
+            "publication_date": "2026-02-25",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-003",
+            "publication_date": "2025-10-19",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    }
+  ],
+  "run_start_authority": {
+    "schema": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-REFERENCE-V1",
+    "schema_version": 1,
+    "run_start_anchor_commit": "377f3db391c08e422c7c85f722e10234357f6063",
+    "run_start_nonce": "9015ae6c8fe9dea2352cb661dd2f9033"
+  }
+}
