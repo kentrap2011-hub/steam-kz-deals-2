@@ -154,6 +154,26 @@ def _inspect_group(repo, expected, authority_group, commits):
         submitted_commits=commits)
     require([e["work_path"] for e in decisions] == [e["work_path"] for e in aitems],
             "worker traversal reordered original group")
+    # Strict final ingest also rechecks the live Git tree. Refuse stale or
+    # overwritten original submitted bytes *before* any future semantic work.
+    # Preserve B/C liveness when only A's submitted transport was rewritten.
+    for item_index, item in enumerate(decisions):
+        if item["status"] != "ready":
+            continue
+        rt = item["work"]["research_transport"]
+        try:
+            unchanged = (first_parent_contains(
+                repo, rt["research_package_git_commit"], "HEAD")
+                and blob(repo, "HEAD", rt["research_package_path"])
+                == rt["research_package_blob_sha"])
+        except (ValueError, KeyError):
+            unchanged = False
+        if not unchanged:
+            item.clear()
+            item.update({"work_path": aitems[item_index]["work_path"],
+                         "status": "research_transport_invalid",
+                         "attempt_consumed": False,
+                         "diagnostic_code": "research_original_blob_changed"})
     return decisions
 
 
