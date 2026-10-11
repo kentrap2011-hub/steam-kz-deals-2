@@ -56,6 +56,9 @@
       refreshActive:false,
       refreshOutcome:null,
       currentGeneratedAt:null,
+      freshnessState:null,
+      lastVerifiedAt:null,
+      statusExpanded:false,
     };
 
     let bootstrapPromise=null;
@@ -118,25 +121,56 @@
     }
     function generationTime(payload){return Date.parse(payload.generated_at_utc)}
     function samePayload(a,b){return JSON.stringify(a)===JSON.stringify(b)}
+    // Verification failure does not prove staleness. Generation and check times differ.
     function freshnessNotice(mode,payload){
-      const banner=el('feedSyncNotice'),message=el('feedSyncText'),button=el('feedRefreshBtn');
-      if(!banner||!message||!button)return;
-      const date=payload?.generated_at_utc;
-      const stamp=date&&Number.isFinite(Date.parse(date))
-        ?new Date(date).toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'})
-        :'время неизвестно';
+      const banner=el('feedSyncNotice'),toggle=el('feedStatusToggle'),icon=el('feedSyncSymbol');
+      const details=el('feedSyncDetails'),message=el('feedSyncText'),live=el('feedSyncLive'),button=el('feedRefreshBtn');
+      if(!banner||!toggle||!icon||!details||!message||!button)return;
+      const source=payload||latestPayload,g=source?.generated_at_utc;
+      const valid=typeof g==='string'&&Number.isFinite(Date.parse(g));
+      const stamp=valid?new Date(g).toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'}):'неизвестно';
+      // Daily cadence: age >36h is an informational hint, not verified divergence.
+      const age=valid&&Date.now()-Date.parse(g)>36*3600000?' Снимок создан более суток назад.':'';
+      if(mode==='network_verified')state.lastVerifiedAt=new Date().toISOString();
+      state.freshnessState=mode;
+      const verified=state.lastVerifiedAt?new Date(state.lastVerifiedAt).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):null;
       const labels={
-        checking:`Сохранённая копия ленты от ${stamp}. Проверяем обновления. Статистика может быть новее карточек.`,
-        stale:`Сохранённая копия ленты от ${stamp}. Не удалось проверить обновления; отметки Deep могут устареть. Статистика загружается отдельно.`,
-        older:`Свежесть не подтверждена: сервер вернул более старую или неоднозначную версию. Показана сохранённая лента от ${stamp}.`,
-        current:`Лента проверена по сети · ${stamp}. Отметки Deep соответствуют этому снимку.`,
-        failed:'Не удалось загрузить ленту. Повторная проверка не удалит вашу очередь и настройки.',
+        checking:source?`Сохранённая лента от ${stamp}. Проверяем обновления. Статистика загружается отдельно.`:'Проверяем ленту по сети.',
+        cached_unverified:`Сохранённая лента от ${stamp}. Проверка ещё не завершена; свежесть не подтверждена.${age} Статистика загружается отдельно.`,
+        verification_failed:`Сохранённая лента от ${stamp}. Проверка сети не удалась. Это не означает, что лента устарела.${age} Статистика загружается отдельно.`,
+        confirmed_older_or_conflict:`Сервер вернул более старую или неоднозначную версию. Сохранена надёжная лента от ${stamp}; отметки Deep не понижены. Статистика загружается отдельно.`,
+        network_verified:`Лента проверена по сети${verified?' в '+verified:''}. Снимок создан ${stamp}.${age} Время обновления скидок указано отдельно. Статистика загружается отдельно.`,
+        no_feed:'Лента недоступна: загрузка не удалась и подходящей сохранённой копии нет. Повторная проверка не удалит очередь или настройки.',
       };
+      const short={checking:'Проверка ленты',cached_unverified:'Сохранённая лента не проверена',verification_failed:'Не удалось проверить ленту',confirmed_older_or_conflict:'Версии ленты расходятся',network_verified:'Лента проверена',no_feed:'Лента недоступна'};
+      const icons={checking:'◌',cached_unverified:'ⓘ',verification_failed:'!',confirmed_older_or_conflict:'!',network_verified:'✓',no_feed:'!'};
+      const description=short[mode]||short.cached_unverified;
       banner.classList.remove('hidden');
       banner.dataset.state=mode;
-      message.textContent=labels[mode]||labels.stale;
+      if(icon.textContent!==icons[mode])icon.textContent=icons[mode]||'ⓘ';
+      toggle.setAttribute('aria-label',description+'. Показать подробности и повторить проверку.');
+      toggle.setAttribute('title',description+'. Подробности.');
+      if(message.textContent!==labels[mode])message.textContent=labels[mode]||labels.cached_unverified;
+      if(live&&live.textContent!==description)live.textContent=description;
       button.disabled=!!state.refreshActive;
-      button.textContent=state.refreshActive?'Проверяем…':'Проверить свежие данные';
+      button.textContent=state.refreshActive?'Проверяем…':'Повторить проверку ленты';
+      details.classList.toggle('hidden',!state.statusExpanded);
+      toggle.setAttribute('aria-expanded',String(state.statusExpanded));
+    }
+    function toggleStatusDetails(){
+      state.statusExpanded=!state.statusExpanded;
+      el('feedSyncDetails')?.classList.toggle('hidden',!state.statusExpanded);
+      el('feedStatusToggle')?.setAttribute('aria-expanded',String(state.statusExpanded));
+    }
+    function onStatusEscape(event){
+      if(event?.key!=='Escape'||!state.statusExpanded)return;
+      event.preventDefault?.();toggleStatusDetails();el('feedStatusToggle')?.focus?.();
+    }
+    function cachedFreshnessMode(){
+      if(state.refreshOutcome==='failed')return 'verification_failed';
+      if(state.refreshOutcome==='older'||state.refreshOutcome==='ambiguous')return 'confirmed_older_or_conflict';
+      if(state.refreshOutcome==='identical'||state.refreshOutcome==='updated')return 'network_verified';
+      return state.refreshActive?'checking':'cached_unverified';
     }
     function reusableResponse(response,payload){
       return new Proxy(response,{
