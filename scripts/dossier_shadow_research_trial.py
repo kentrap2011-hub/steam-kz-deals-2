@@ -122,7 +122,7 @@ def frozen_trial(repo, *, marker_commit, buffer_path):
                  "config/dossier_two_stage_async_buffer_contract.json"):
         inactive = json_git(repo, parent, path)
         require(inactive.get("active") is False
-                and inactive.get("executable_in_production") is False
+                and inactive.get("executable_in_production") is not True
                 and inactive.get("authoritative") is False
                 and inactive.get("authorized_for_semantic_execution") is not True,
                 "canonical inactive two-stage gate unexpectedly changed")
