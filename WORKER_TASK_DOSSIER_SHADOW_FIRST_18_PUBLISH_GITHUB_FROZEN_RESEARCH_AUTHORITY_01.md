@@ -3,7 +3,7 @@
 Repository: `kentrap2011-hub/steam-kz-deals-2`
 Base branch / source of truth: `main`
 Physical worker: **НОВЫЙ ЧАТ — ЧАТ 1** (new physical chat, NOT previously retired Chat 1)
-Task ID: `dossier-shadow-first-18-publish-github-frozen-research-authority-01`
+Task ID: `dossier-shadow-18-real-marker-publish-01`
 Mode: **IMPLEMENT + narrow acceptance**. This is the one missing concrete *operational* prerequisite for a first nonproduction semantic Research, not another old Dossier/source/year audit.
 
 ## START
