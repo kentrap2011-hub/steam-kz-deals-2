@@ -236,7 +236,7 @@ def verify_offline_preflight(repo, *, request, contract):
         old = _baseline(root, appid, base, contract, head)
         identity = old["game_identity"]
         require(identity.get("release_year") == game["original_work_year"]
-                and identity.get("title") == item["title"],
+                and identity.get("work_title") == item["title"],
                 "legacy original-work-year/title mismatch")
         require(action == {
             "appid": appid, "action": "persisted_current_group_dossier",
