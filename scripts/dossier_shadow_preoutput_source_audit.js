@@ -33,9 +33,10 @@ function parentKey(s) {
   // Used only transiently for claim-level alias collapse, never emitted or hashed as person ID.
   if(s.url) {
     try {
-      const u=new URL(s.url);
-      let host=u.hostname.toLowerCase().replace(/^www\./,"");
-      let path=u.pathname.toLowerCase().replace(/\/+$/,"");
+      const match=String(s.url).match(/^https:\/\/([^\/?#]+)(\/[^?#]*)?/i);
+      if(!match) return "invalid:"+s.source_id;
+      let host=match[1].toLowerCase().replace(/^www\./,"");
+      let path=(match[2]||"/").toLowerCase().replace(/\/+$/,"");
       if(host==="steamcommunity.com" && /^\/app\/\d+\/(?:positive|negative)?reviews$/.test(path))
         path=path.replace(/\/(?:positive|negative)?reviews$/,"/reviews");
       return host+path;
