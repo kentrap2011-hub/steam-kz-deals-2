@@ -5,6 +5,14 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## LATEST DIRECTOR RESULT — 2026-10-11: both public pre-output worker audits merged, no real pilot authorized
+
+- ЧАТ 1 PR #210 merged `04a8eec3d8e851137248d30d807cdbcc03e628e0`, PR-only CI 2/2: 20 historical groups/60 Dossier safe source metadata ledger, 118 predeclared public parent candidates but 4 attempted/2 metadata-visible/2 inaccessible/**114 not measured**. Russian/negative/date counts are **old Dossier claims** only, not independently verified player-source truth; external quality still unproven.
+- ЧАТ 2 PR #209 merged `a89540707e72f9d966c87995df4e47ee016bb14b`, PR-only CI 2/2: 60 old exact AppIDs retained, only **5 independently supported original-work release years**, 13 publicly evidenced Steam displayed dates, original years **55 unknown**; candidate old year conflicts AppID **1638220**, **213610** (Sonic Adventure 2), **2138710** (Sifu), plus five edition/EA ambiguities requiring adjudication. Exact source/edition fact kinds matter.
+- Both *bounded work products* complete; **substantive public evidence verification remains partial**. PR #205 illustrated groups [3,8,13,15,18,20] are still NOT_READY_FOR_APPROVAL / not chosen / not frozen. No actual new Research/Assembly semantics or human quality reviews.
+- No new assigned worker task. Director/user must decide whether to authorize additional bounded systematic source metadata checks on remaining **114** candidate source parents and stronger 55-game original-work date/edition verification before any fair 18-game trial selection. Source authenticity, privacy, reviewer roles and stopping gates need concrete plan.
+- Current one-stage Dossier remains canonical, two-stage inactive; no Scheduled Tasks, Deep/Fast/ranking, live caches/receipts/queues/writer/production or user data changes. Older handoff entries below are historical.
+
 ## LATEST DIRECTOR ASSIGNMENT — 2026-10-11: paired read-only public source metadata and original work-year checks
 
 - User approved the next preparation step after PR #205/#206: **read-only examination of provenance/identity for ALL 20 historically accepted old Dossier groups (60 exact games)**, not actual Research→Assembly semantic execution or any trial activation. The prior six groups 3,8,13,15,18,20 remain an inert illustration marked NOT_READY_FOR_APPROVAL.
