@@ -1,0 +1,30 @@
+name: Validate inactive Dossier shadow quality (PR only)
+
+on:
+  pull_request:
+    paths:
+      - "scripts/dossier_two_stage_shadow_quality.py"
+      - "scripts/test_dossier_two_stage_shadow_quality.py"
+      - "reviews/dossier_two_stage_shadow_trial_protocol.md"
+      - "reviews/worker_reports/dossier-async-shadow-quality-readiness-01.md"
+      - ".github/workflows/validate-dossier-async-shadow-quality.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-offline-parity:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install existing strict schema validation dependency
+        run: python -m pip install "jsonschema>=4.21,<5"
+      - name: Compile isolated inactive quality harness
+        run: python -m py_compile scripts/dossier_two_stage_shadow_quality.py scripts/test_dossier_two_stage_shadow_quality.py
+      - name: Compare synthetic Research/Assembly and one-stage V2 evidence in disposable Git only
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_shadow_quality.py' -v
