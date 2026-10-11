@@ -41,6 +41,12 @@ class FrozenIdentityAuditTests(unittest.TestCase):
         p["groups"].pop()
         self.assertIn("FRAME_NOT_EXACT_20_GROUPS", inspect(p))
 
+    def test_original_title_and_binding_claim_are_frozen(self):
+        p = copy.deepcopy(self.payload)
+        p["groups"][0]["games"][0]["work_title"] = "Different title, same AppID"
+        p["groups"][0]["games"][1]["original_work_year_binding_claim"] = 2025
+        self.assertIn("HISTORICAL_GAME_TITLE_OR_YEAR_BINDING_CHANGED", inspect(p))
+
     def test_swapped_or_split_group_rejected(self):
         p = copy.deepcopy(self.payload)
         p["groups"][0]["games"][0], p["groups"][1]["games"][0] = (
