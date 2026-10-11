@@ -1,0 +1,1667 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "4d7be57c9a1a90482d948270ab034c49eca3dd84102d28fc67b6fbc1d33f8239",
+  "prepared_required_sha256": "824e3ca4afb741dfac707284cb82e5eb594d1180d6c7a84bc63cb827a6f4e4e8",
+  "group_plan_sha256": "c697dd3e54b1c7442ef44ffba4b562c396f0d013959c19590ef57c36d5e18a23",
+  "group_count": 76,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 26,
+  "start_index": 75,
+  "end_index_exclusive": 78,
+  "appids": [
+    "239820",
+    "2420660",
+    "242860"
+  ],
+  "items_sha256": "823930b163ea8bc2a9f8d6966bfe27fefabc6eb40afe92d2ba888fdcd6049b3f",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "89b388ce407f9c4986f3c0b1286c9590fbfe75c706254792a2fdbdf3700b9db1",
+  "items": [
+    {
+      "key": "App_239820",
+      "appid": "239820",
+      "title": "Game Dev Tycoon",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_239820.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2420660",
+      "appid": "2420660",
+      "title": "Neva",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2420660.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_242860",
+      "appid": "242860",
+      "title": "Verdun",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_242860.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "a1cf55ba76f4d0e31402e08bffc74c55ee6007625662859d411e225f5d364ed0",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "239820",
+      "title": "Game Dev Tycoon",
+      "generated_at_utc": "2026-10-11T13:39:26.677Z",
+      "expires_at_utc": "2026-10-31T13:39:26.677Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Game Dev Tycoon",
+        "release_year": 2013,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "239820"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 9 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Players choose genre, topic, platform and development focus across game phases, then respond to sales, critic scores and changing market trends.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-006",
+            "feedback-007",
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "A solo garage studio expands into office teams, research, new game engines, marketing, consoles and high-budget or online projects as the gaming industry evolves.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Financial survival hinges on game-review results and matching design choices; unclear scoring formulas can make the difference between success and bankruptcy feel arbitrary.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-006",
+            "feedback-012",
+            "feedback-013"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "The alternate-history parade of consoles, industry jokes and recognizable technology generations evokes game-industry nostalgia and makes progression approachable.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-006",
+            "feedback-007",
+            "feedback-008",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "After an initial addictive learning arc, repeated game releases and predictable optimal combinations can feel formulaic, especially in a wealthy late-stage company.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-007",
+            "feedback-009",
+            "feedback-010",
+            "feedback-011",
+            "feedback-013"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "The abstract allocation of development sliders and relatively sparse postrelease diagnostics leave some players guessing what caused poor game reviews.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-012",
+            "feedback-013"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Simple interface and restrained visuals make the management loop accessible, while research choices, random events and mods supply replay opportunities.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-007",
+            "feedback-008",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "Moving through different office sizes and hardware generations gives a satisfying early arc; some find endgame development shallow or the campaign too short.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-007",
+            "feedback-009",
+            "feedback-010",
+            "feedback-013"
+          ]
+        },
+        {
+          "category": "localization",
+          "statement": "An older Russian player review specifically praised the Russian translation and Workshop mod support; the finding concerns the reported language experience, not a live service issue.",
+          "sentiment": "positive",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-003"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "The simplified scoring and choices create approachable game-development fantasy for many, but are judged opaque and overly deterministic by others.",
+          "recurrence": "moderate",
+          "mention_count": 6,
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-006",
+            "feedback-008",
+            "feedback-010",
+            "feedback-012",
+            "feedback-013"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                5,
+                6
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                4,
+                7
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                5
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                7
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                3,
+                6
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                4,
+                5
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                8
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/239820/GameDevTycoon/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/239820/reviews/?browsefilter=toprated&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "239820",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/239820/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "239820",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "other_player_feedback",
+            "domain": "metacritic.com",
+            "url": "https://www.metacritic.com/game/game-dev-tycoon/user-reviews/",
+            "publication_date": null,
+            "language": "mixed",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Game Dev Tycoon",
+              "release_year": 2013
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2013-11-25",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2015-06-17",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2013-12-21",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-002",
+            "publication_date": "2014-06-24",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-002",
+            "publication_date": "2021-06-24",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-003",
+            "publication_date": "2014-10-20",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-003",
+            "publication_date": "2014-11-10",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-004",
+            "publication_date": "2026-05-06",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-004",
+            "publication_date": "2025-12-24",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-010",
+            "source_id": "source-004",
+            "publication_date": "2025-11-06",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-011",
+            "source_id": "source-004",
+            "publication_date": "2025-11-13",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-012",
+            "source_id": "source-004",
+            "publication_date": "2013-12-13",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-013",
+            "source_id": "source-004",
+            "publication_date": "2024-03-16",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "2420660",
+      "title": "Neva",
+      "generated_at_utc": "2026-10-11T13:39:26.677Z",
+      "expires_at_utc": "2026-10-31T13:39:26.677Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Neva",
+        "release_year": 2024,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "2420660"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 9 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Neva is a short 2D action-platform adventure mixing jumping, light spatial puzzles, dodging and sword combat around a growing animal companion.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-006",
+            "feedback-007",
+            "feedback-009",
+            "feedback-013"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "The wolf companion matures through seasonal chapters and increasingly participates in combat and puzzles, creating modest changes to familiar moves.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-005",
+            "feedback-007",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Emotional word-light storytelling examines a young guardian's bond with the wolf, cycles of life, decay, care and loss.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 6,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004",
+            "feedback-005",
+            "feedback-009",
+            "feedback-010"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Hand-painted environmental art, color direction, animation and soundtrack are a widely praised strength and central to the game's appeal.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 6,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004",
+            "feedback-006",
+            "feedback-009",
+            "feedback-010"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Basic combat is approachable and sometimes satisfying, with a lower-pressure story option; some instead experience erratic timing, visibility or simple encounters.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 6,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-006",
+            "feedback-008",
+            "feedback-011",
+            "feedback-012",
+            "feedback-013"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "The game lasts only a few hours and follows a purposeful linear seasonal structure; some appreciate its concentrated emotion while others want more mechanical and story development.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-007",
+            "feedback-008",
+            "feedback-013",
+            "feedback-014"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Critics of the playable sections describe limited attack variety, rudimentary puzzles and a tendency toward long traversal stretches or repetitive fights.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-008",
+            "feedback-011",
+            "feedback-012",
+            "feedback-014"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "A minority of players describe hard-to-read foreground elements, frustrating navigation or checkpoints that force replay of long sections for missed collectibles.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-008",
+            "feedback-011",
+            "feedback-012"
+          ]
+        },
+        {
+          "category": "localization",
+          "statement": "A Russian review described Russian localization and an alternative story mode in the release-era version; no present-day service or performance claim is inferred.",
+          "sentiment": "positive",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "The added combat and companion interactions make Neva feel more playable to some than GRIS, while others see them as shallow interruptions to the visual storytelling.",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "source_ids": [
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-007",
+            "feedback-008",
+            "feedback-011",
+            "feedback-013"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                4,
+                7
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                6
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                4,
+                7
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                5,
+                6
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                7
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                4,
+                6,
+                7
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                8
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/2420660/Neva/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/2420660/reviews/?browsefilter=toprated&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "2420660",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/2420660/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "2420660",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/2420660/negativereviews/?browsefilter=toprated&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "2420660",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "other_player_feedback",
+            "domain": "metacritic.com",
+            "url": "https://www.metacritic.com/game/neva/user-reviews/?platform=pc",
+            "publication_date": null,
+            "language": "mixed",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Neva",
+              "release_year": 2024
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2025-10-03",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2024-12-08",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2025-06-06",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": "2024-10-20",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
+            "publication_date": "2024-12-13",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-003",
+            "publication_date": "2024-10-16",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-003",
+            "publication_date": "2024-10-18",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-004",
+            "publication_date": "2025-01-01",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-005",
+            "publication_date": "2026-05-24",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-010",
+            "source_id": "source-005",
+            "publication_date": "2026-04-28",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-011",
+            "source_id": "source-005",
+            "publication_date": "2026-03-21",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-012",
+            "source_id": "source-005",
+            "publication_date": "2026-03-08",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-013",
+            "source_id": "source-005",
+            "publication_date": "2026-03-11",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-014",
+            "source_id": "source-005",
+            "publication_date": "2026-01-15",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "242860",
+      "title": "Verdun",
+      "generated_at_utc": "2026-10-11T13:39:26.677Z",
+      "expires_at_utc": "2026-10-31T13:39:26.677Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Verdun",
+        "release_year": 2015,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "242860"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 9 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Squad-based Western Front shooting revolves around repeated attacks and defence of trenches, lethal bolt-action rifles, bayonets, grenades and suppressive fire.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 6,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-004",
+            "feedback-005",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Frequent one-shot deaths, exposed approach routes and punishing flanking make tactical patience and team positioning vital but harsh for newcomers.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004",
+            "feedback-005",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Historical WWI uniforms, equipment, maps and uncompromising battlefield danger produce strong atmosphere for enthusiasts of realistic period shooters.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-004",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Rounds can become prolonged struggles over small strips of territory, with trench pushes often failing or stalling even during extended cooperative combat.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "multiplayer",
+          "statement": "Online teams are central to the intended experience, with bots filling sparsely populated matches and available bot play mitigating but not replicating full human-team tactics.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-010",
+            "feedback-011"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "The repeating trench assault and defence loop creates satisfying breakthrough moments for enthusiasts yet can feel static or repetitive in long rounds.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "current_state",
+          "statement": "Dated September 2026 player reports describe very sparse human opposition and heavy reliance on bots; this is a time-bounded population concern, not a claim that online play is unavailable.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-007",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "A September 2026 player complaint notes constrained ammunition resupply and weapon handling, with replenishment sometimes feeling tied to respawning.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "multiplayer",
+          "statement": "Other participants report finding a usable active lobby at favorable times, so the multiplayer experience appears strongly time-dependent rather than universally empty.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-010",
+            "feedback-011",
+            "feedback-012"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "Players disagree over whether the remaining human-player population suffices for satisfying online squads; bots preserve matches but do not replace full multiplayer coordination.",
+          "recurrence": "limited",
+          "mention_count": 4,
+          "source_ids": [
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-007",
+            "feedback-009",
+            "feedback-010",
+            "feedback-011"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1,
+                7
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                5
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                3
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                3
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "covered",
+              "observation_indices": [
+                4,
+                6,
+                8
+              ]
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                5,
+                6,
+                7
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                6,
+                7
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/242860/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/242860/reviews/?browsefilter=toprated&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "242860",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/242860/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "242860",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "other_player_feedback",
+            "domain": "steamstat.io",
+            "url": "https://steamstat.io/app/242860",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "242860",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/242860/discussions/0/734749878368911611/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "242860",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2015-05-31",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2015-05-31",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2015-10-08",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": "2017-02-12",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
+            "publication_date": "2016-05-10",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-003",
+            "publication_date": "2015-04-27",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-004",
+            "publication_date": "2026-09-03",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-004",
+            "publication_date": "2026-09-02",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-004",
+            "publication_date": "2026-09-03",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-010",
+            "source_id": "source-005",
+            "publication_date": "2025-01-18",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-011",
+            "source_id": "source-005",
+            "publication_date": "2025-04-10",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-012",
+            "source_id": "source-005",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    }
+  ],
+  "run_start_authority": {
+    "schema": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-REFERENCE-V1",
+    "schema_version": 1,
+    "run_start_anchor_commit": "8c776e2bd0868d8fb4066d947298cd75eaf0d1b6",
+    "run_start_nonce": "217b7524516dd0cc68c4cc54c39fc401"
+  }
+}
