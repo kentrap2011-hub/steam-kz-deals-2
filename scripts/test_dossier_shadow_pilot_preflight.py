@@ -105,8 +105,9 @@ class PilotPreflightTests(unittest.TestCase):
         manifest_relative = self.manifest_file.resolve().relative_to(root).as_posix()
         baselines = [
             {"appid": item["appid"], "commit": writer,
-             "path": item["dossier_path"],
-             "git_blob_sha": blob(root, writer, item["dossier_path"]),
+             "path": Path(item["dossier_path"]).resolve().relative_to(root).as_posix(),
+             "git_blob_sha": blob(root, writer,
+                 Path(item["dossier_path"]).resolve().relative_to(root).as_posix()),
              "canonical_sha256": canonical_sha256(doc)}
             for item, doc in zip(group["items"], docs)
         ]
