@@ -7,6 +7,7 @@ The real repository is used as a clone source; no semantic work or live ingest.
 import argparse
 import hashlib
 import json
+import os
 import re
 import subprocess
 import tempfile
@@ -69,12 +70,12 @@ def writer_receipts(repo, target_head, snapshot_id):
     found = {}
     for writer in history:
         parents = git(repo, "rev-list", "--parents", "-n", "1", writer).decode().split()
-        if len(parents) < 2:
-            raise ValueError("AUDIT_WRITER_PARENT_MISSING")
-        parent = parents[1]
+        if not parents:
+            raise ValueError("AUDIT_HISTORY_UNAVAILABLE")
+        parent = parents[1] if len(parents) > 1 else None
         after = show(repo, writer, AUDIT)
         try:
-            before = show(repo, parent, AUDIT)
+            before = show(repo, parent, AUDIT) if parent else b""
         except ValueError:
             before = b""
         if not after.startswith(before):
@@ -233,9 +234,12 @@ def main():
             replica, args.target_head, args.expected_work_blob,
             args.expected_audit_blob, args.expected_accepted,
         )
-    temp = Path(tempfile.gettempdir()).resolve()
+    allowed_temps = {Path(tempfile.gettempdir()).resolve()}
+    if os.environ.get("RUNNER_TEMP"):
+        allowed_temps.add(Path(os.environ["RUNNER_TEMP"]).resolve())
     target = args.out.resolve()
-    if not target.is_relative_to(temp) or target == temp:
+    if not any(target.is_relative_to(temp) and target != temp
+               for temp in allowed_temps):
         raise SystemExit("OUTPUT_MUST_BE_IN_OS_TEMP")
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(result, sort_keys=True, indent=2) + "\n", encoding="utf-8")
