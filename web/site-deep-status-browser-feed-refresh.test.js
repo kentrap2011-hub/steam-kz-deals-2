@@ -103,7 +103,8 @@ function createBrowser(cachedPayload, network, saved){
     games:state.games,settings:state.settings,
     statistics:siteStatus?.processing_status,
   })`,context));
-  return {win,document,nodes:get,controller,cache:()=>cachePayload,stored,snapshot};
+  return {win,document,nodes:get,controller,cache:()=>cachePayload,stored,snapshot,
+    navigate:delta=>vm.runInContext('navigate('+Number(delta)+')',context)};
 }
 async function until(predicate,message){
   for(let i=0;i<90;i++){
@@ -149,6 +150,16 @@ async function cacheOldToFresh(){
   await browser.win.init();
   assert.match(browser.nodes('stageIndicators').innerHTML,/Глубокий разбор: завершён — подходит/,'init re-entry does not replay older bootstrap cache');
   assertSaved(browser);
+  // Simulate the mobile swipe navigation path after applying a newer producer.
+  browser.navigate(-1);
+  assert.equal(browser.snapshot().ids[browser.snapshot().cursor],'game:other');
+  browser.navigate(1);
+  assert.equal(browser.snapshot().ids[browser.snapshot().cursor],ID);
+  assert.equal(browser.snapshot().games[ID].manual_end_at,3000);
+  assert.equal(browser.snapshot().games[ID].status,'final');
+  assert.equal(browser.snapshot().games[ID].seen,8,'swipe-away marks seen once, never resets history');
+  assert.equal(browser.snapshot().settings.urgency_first,true);
+  assert.match(browser.nodes('stageIndicators').innerHTML,/Глубокий разбор: завершён — подходит/);
 }
 async function offlineRetryAndResume(){
   let offline=true;let calls=0;
