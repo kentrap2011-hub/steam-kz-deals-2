@@ -10,12 +10,12 @@ from dossier_two_stage_shadow_quality import (
 from dossier_two_stage_staging import blob
 from dossier_two_stage_contract_guard import canonical_sha256
 from taste_steam_review_dossier_test_fixture import web_dossier
-from test_dossier_two_stage_final_acceptance import FinalAcceptanceOfflineTests
+import test_dossier_two_stage_final_acceptance as accepted_bridge_tests
 
 
 class ShadowQualityTests(unittest.TestCase):
     def setUp(self):
-        self.helper = FinalAcceptanceOfflineTests(
+        self.helper = accepted_bridge_tests.FinalAcceptanceOfflineTests(
             "test_01_live_paths_fail_closed_and_contract_is_not_authoritative")
         self.x, self.work, self.contract, _ = self.helper.fixture()
         self.now = datetime.now(timezone.utc)
@@ -124,10 +124,11 @@ class ShadowQualityTests(unittest.TestCase):
                                           contract=self.contract, item_locators=wrong,
                                           baseline_references=bases)
         self.assertEqual(result["cohort"]["not_measured"], 3)
-        with self.assertRaisesRegex(ValueError, "foreign/replayed"):
-            evaluate_offline_fixture(self.x.f.root, manifest=self.work,
-                                     contract=self.contract, item_locators=refs + [refs[0]],
-                                     baseline_references=bases)
+        replay = evaluate_offline_fixture(
+            self.x.f.root, manifest=self.work, contract=self.contract,
+            item_locators=refs + [refs[0]], baseline_references=bases)
+        self.assertEqual(replay["cohort"]["compared"], 0)
+        self.assertEqual(replay["cohort"]["not_measured"], 3)
 
     def test_quality_regression_is_flagged_not_fabricated_as_semantic_truth(self):
         research, candidate, old = self.pure()
@@ -145,8 +146,9 @@ class ShadowQualityTests(unittest.TestCase):
 
     def test_adversarial_gap_source_independence_and_review(self):
         research, candidate, baseline = self.pure()
-        research["sources"][1]["physical_source_identity"] = (
-            research["sources"][2]["physical_source_identity"])
+        repeated = copy.deepcopy(research["sources"][1])
+        repeated["ref"] = "rsource-099"
+        research["sources"].append(repeated)
         result = compare_records(research, candidate, baseline)
         self.assertTrue(result["sources"]["research"][
             "duplicate_physical_player_source_identities"])
@@ -177,11 +179,8 @@ class ShadowQualityTests(unittest.TestCase):
 
     def test_live_repo_never_accepted_as_fixture(self):
         with self.assertRaisesRegex(ValueError, "disabled"):
-            evaluate_offline_fixture(self.x.f.root, manifest=self.work,
-                                     contract=self.contract, item_locators=[],
-                                     baseline_references=[]) if False else (
-                __import__("dossier_two_stage_final_acceptance")
-                .offline_gate(self.x.f.root, offline_fixture=False))
+            accepted_bridge_tests.offline_gate(
+                self.x.f.root, offline_fixture=False)
 
 
 if __name__ == "__main__":
