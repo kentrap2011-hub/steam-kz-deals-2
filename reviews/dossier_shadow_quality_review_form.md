@@ -21,8 +21,9 @@ Supply only frozen GitHub-owned Research/Assembly item locators in exact origina
 
 A and B review separately. They must not inspect one another's findings before BOTH first rounds are Git-frozen on divergent branches from the same initial cohort-freeze commit. Each reviewed Git JSON has its own immutable commit/path/blob_sha256, unchanged at fixture HEAD after merging. A third independent adjudicator acts only after both first-round commits and keeps all disagreements visible. Git ancestry enforces a mechanical separation, not proof of actual human blinding; that still needs procedural review.
 
-Each A/B document has exactly four top-level keys:
+Each A/B document has exactly five top-level keys:
 - role: A or B;
+- subject: exactly trial_id, group_sequence and appid, matching the frozen selected game (prevents cross-game source/review replay);
 - dimensions: exactly 13 required named findings;
 - negative_retention: one mapping for EVERY old negative/mixed observation;
 - unknown_resolution: one mapping for EVERY Research unresolved gap.
@@ -55,7 +56,7 @@ Never include a player name, handle, source author ID, email, profile, URL, past
 
 ## Separate adjudication
 
-Third-person adjudication JSON has exactly role (adjudicator), resolved and justifications. resolved keys match ALL A/B differences: dimension keys, negative:old:obs:<index> or gap:research:gap:<id>; values are A, B or unresolved. justifications has identical keys, each with a defined reason_code and >=1 existing bound anchor. Adjudicator commit must descend from BOTH independent first-round commits and must remain immutable. Preserve both original reviewer records; do not erase minority dissent or count unresolved as agreement.
+Third-person adjudication JSON has exactly role (adjudicator), subject (same exact trial_id, group_sequence and appid), resolved and justifications. resolved keys match ALL A/B differences: dimension keys, negative:old:obs:<index> or gap:research:gap:<id>; values are A, B or unresolved. justifications has identical keys, each with a defined reason_code and >=1 existing bound anchor. Adjudicator commit must descend from BOTH independent first-round commits and must remain immutable. Preserve both original reviewer records; do not erase minority dissent or count unresolved as agreement.
 
 ## Denominator and decision card
 
