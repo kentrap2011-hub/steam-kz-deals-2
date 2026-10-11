@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "dc5d763d9c7ce0c56acc994ac2083ae0f89951e8",
+  "run_start_authority_commit": "b93ea9118335f2e738784e08acd5df7ec446f715",
+  "run_started_at_utc": "2026-10-11T11:57:02+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "536dada87b312e2df8c20dc27a407bdf8be85e637fb6f502f99e9e1a6338c94b",
+  "family_id": "game:227600",
+  "taste_subject_key": "App_227600",
+  "appid": "227600",
+  "taste_fingerprint": "c6a48b9643dedc6ce0a7a42c077e801bcf94b6141627c485240cdb07bfd179ab",
+  "candidate_context_sha256": "8d41f70c7b33e153be0482cf00be144707b0425701920cbbeafbcbb5e79105fe",
+  "dossier_content_sha256": "5bbc3e9d0ad5e06b7ef9742c3c8c77bc72e9a4360a0bcaa5f89cced633d6181b",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "ed21955f846c32c71acc681e391a6ee142bd564d20850f1328379a9423b1a074",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Выразительные сказочные миры, мультяшная анимация и музыка формируют самостоятельный эстетический интерес.",
+    "Компактные уровни чередуют боковой платформинг, 3D-эпизоды и схватки с боссами.",
+    "Ясная история спасения Минни и короткая продолжительность снижают нагрузку на ориентацию в игре."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 53,
+    "development_variety": 46,
+    "structure_pacing_direction": 72,
+    "identity_hooks": 84,
+    "breadth_of_match": 62
+  },
+  "base_support_compatible": null,
+  "score_findings": [
+    {
+      "finding_id": "fairytale-presentation",
+      "text_ru": "Яркие мультяшные декорации, смена тематических миров, музыка и подача сказки о Микки создают узнаваемый художественный образ; это главный аргумент в пользу знакомства с игрой.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Профиль особенно положительно реагирует на выразительный стиль и атмосферу."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 84
+        }
+      ]
+    },
+    {
+      "finding_id": "compact-stage-variety",
+      "text_ru": "Компактная история чередует боковой платформинг с более свободными трёхмерными эпизодами и боссами, а понятная сказочная цель не требует долгого освоения запутанного мира.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Разные игровые ситуации и форматы помогают удерживать интерес в закреплённом профиле."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 72
+        }
+      ]
+    },
+    {
+      "finding_id": "limited-extra-progression",
+      "text_ru": "Основная история часто заканчивается за два-три часа, а коллекционные предметы и костюмы дают лишь небольшую дополнительную мотивацию: ожидать долгого развития механик не стоит.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Пользователь высоко ценит постепенно раскрывающиеся новые механики и ситуации."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 46
+        }
+      ]
+    },
+    {
+      "finding_id": "platforming-controls",
+      "text_ru": "Отдельные боссы требуют тайминга и точных прыжков, но жалобы на отзывчивость и чтение глубины между 2D- и 3D-сценами ограничивают удовольствие от освоения платформинга.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Профиль ценит понятное освоение таймингов и рост собственного мастерства."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 53
+        }
+      ]
+    },
+    {
+      "finding_id": "nostalgic-remake-scope",
+      "text_ru": "Игра бережно пересоздаёт старую сказочную поездку по уровням, и часть похвалы связана именно с ностальгией по оригиналу; для нового игрока сильнее проверяемы стиль и сама смена платформенных эпизодов, а не чужие воспоминания.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/12/lowers",
+          "profile_value_sha256": "eb094029be7a9d041d8cbb4c75ef764280b21bd416d64b94f6c9c1a94e3d3c52",
+          "match_text_ru": "Закреплённый профиль предупреждает, что ностальгия сама по себе не гарантирует современного удовольствия."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 62
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Часть игроков отмечает недостаточно отзывчивые прыжки и спорную читаемость глубины при переходах между боковыми и трёхмерными участками; это может мешать удовольствию от точного управления.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Основная история короткая, обычно примерно на два-три часа, а коллекционные предметы и костюмы добавляют лишь ограниченную глубину после финала.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть сообщения о сбоях и проблемах совместимости с некоторыми современными Windows-конфигурациями, но свидетельства не подтверждают неизбежную проблему на текущем компьютере.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
