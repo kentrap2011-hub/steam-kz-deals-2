@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="purchase-options.css?v=compact-purchase-options-1">
   <link rel="stylesheet" href="score-details.css?v=detailed-score-ui-fix-1">
   <link rel="stylesheet" href="deep-two-stage.css?v=deep-site-mirror-01">
-  <link rel="stylesheet" href="feed-sync.css?v=deep-cache-refresh-01">
+  <link rel="stylesheet" href="feed-sync.css?v=compact-freshness-ux-01">
 </head>
 <body>
   <div class="app-shell">
@@ -21,18 +21,26 @@
       <div class="topline">
         <div>
           <h1>Игры со скидками</h1>
-          <div id="freshness" class="muted small"></div>
+          <div class="feed-source-line">
+            <div id="freshness" class="muted small"></div>
+            <div id="feedSyncNotice" class="feed-sync hidden" data-state="checking">
+              <button id="feedStatusToggle" class="feed-status-toggle" type="button"
+                aria-label="Состояние ленты, показать подробности" aria-expanded="false" aria-controls="feedSyncDetails">
+                <span id="feedSyncSymbol" aria-hidden="true">ⓘ</span>
+              </button>
+              <span id="feedSyncLive" class="feed-sync-sr-only" role="status" aria-live="polite"></span>
+              <div id="feedSyncDetails" class="feed-sync-details hidden" role="group" aria-label="Обновление списка игр">
+                <div id="feedSyncText"></div>
+                <button id="feedRefreshBtn" class="small-btn" type="button">Повторить проверку ленты</button>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="top-actions">
           <a class="statistics-entry tasks-entry" href="tasks.html">Задачи</a>
           <button id="statisticsBtn" class="statistics-entry" type="button" aria-pressed="false">Статистика</button>
           <button id="searchBtn" class="icon-btn" type="button" aria-label="Поиск">⌕</button>
         </div>
-      </div>
-
-      <div id="feedSyncNotice" class="feed-sync hidden" role="status" aria-live="polite">
-        <span id="feedSyncText"></span>
-        <button id="feedRefreshBtn" class="small-btn" type="button" aria-label="Проверить свежесть списка игр, не сбрасывая настройки">Проверить свежие данные</button>
       </div>
 
       <nav class="tabs" aria-label="Разделы">
@@ -172,7 +180,7 @@
   </dialog>
 
   <div id="toast" class="toast" aria-live="polite"></div>
-  <script src="feed-bootstrap.js?v=deep-cache-refresh-01"></script>
+  <script src="feed-bootstrap.js?v=compact-freshness-ux-01"></script>
   <script src="giveaway-ui.js?v=giveaway-separate-view-fix-01"></script>
   <script src="progressive-personalization-ui.js?v=deep-site-mirror-01"></script>
   <script src="deep-two-stage-ui.js?v=deep-site-mirror-01"></script>
