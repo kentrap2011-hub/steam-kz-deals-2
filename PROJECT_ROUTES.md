@@ -238,6 +238,22 @@ Production validator проверяет:
 
 ---
 
+## Inactive asynchronous Dossier Research → Assembly → strict final group bridge
+
+**Последняя проверка:** 2026-10-11, PR #188 (`implement/dossier-async-final-acceptance-integration-01`; synthetic Git-only; non-production).
+
+**Быстрый маршрут:**
+1. `config/dossier_two_stage_final_acceptance_bridge_contract.json` — live/canonical acceptance **disabled** (`active=false`, `authorized_for_canonical_ingest=false`), Research-year cross-PR joint retest still required.
+2. `scripts/dossier_two_stage_final_acceptance.py::inspect_original_groups` — typed local chain dispositions and strict ready original ordered three-game group proof; frozen Assembly marker, original GitHub descriptor/index and Research+Assembly exact Git chain. `offline_existing_writer_handoff` rechecks original bytes at the writer boundary in a **marked disposable temp Git repo only**.
+3. Existing `scripts/dossier_two_stage_async_buffer.py::inspect_buffered_assembly_candidate` — single-item Research→Assembly validation, never canonical acceptance.
+4. Existing `scripts/taste_steam_review_dossier_buffered.py::validate_buffer_artifact` and `drain_buffered_groups` — only strict three-game group validator/final canonical writer (reused, not duplicated).
+5. Shared GitHub lock is still `taste-steam-review-dossier-canonical-writer` (`cancel-in-progress: false`); actual production transaction still belongs to `.github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml` + `scripts/stage_taste_dossier_canonical_writer.sh`. **No new live event hook**.
+6. Isolated proof `scripts/test_dossier_two_stage_final_acceptance.py`; PR-only `.github/workflows/validate-dossier-async-final-acceptance-integration.yml`; worker report `reviews/worker_reports/dossier-async-github-final-acceptance-integration-01.md`.
+
+**Gate:** this adapter cannot run on main/production; Research conflicting original-work-year XFAIL in separate ЧАТ 1 PR must be genuinely fixed and jointly retested, followed by real-evidence parity, shadow and separately authorized cutover inside the *existing* writer lock. Failed game may defer its **own** original group, never independent group or semantic sibling.
+
+---
+
 ## Progressive Fast / Dossier / Deep: stage architecture and Deep recomputation boundary
 
 **Что ищем:** canonical Fast/Dossier/Deep semantics, effective-result precedence, Deep first-pass/recovery ownership and the reusable GitHub recomputation hooks.
