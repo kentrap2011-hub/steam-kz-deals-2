@@ -1089,6 +1089,48 @@
       "updated_on": "2026-10-11",
       "updated_at_utc": "2026-10-11T14:10:21.832Z",
       "recent_completion": true
+    },
+    {
+      "id": "dossier-shadow-first-real-18-research-sandbox-authority-01",
+      "title": "Dossier: подготовить изолированный Research для реального теста 18 игр",
+      "goal": "Обеспечить строго закреплённый за GitHub, реально исполнимый одноразовый Research в изолированном испытании на шести исходных группах без доступа к production и без очередных аудитов старых источников.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_FIRST_REAL_18_RESEARCH_SANDBOX_AUTHORITY_01.md",
+      "worker_slot": "ЧАТ 1",
+      "depends_on": [
+        "dossier-shadow-pilot-cohort-decision-packet-01",
+        "dossier-shadow-preoutput-identity-year-readiness-qa-01"
+      ],
+      "effort_reason": "Реальное изолированное GitHub-фризование точных 18 работ, создание безопасного одноразового Research интерфейса и строгие регрессионные проверки.",
+      "urgency_reason": "Пользователь одобрил переход от предварительных аудитов к настоящему ограниченному испытанию скорости и качества.",
+      "status": "planned",
+      "effort": "высокая",
+      "urgency": "высокая",
+      "order": null,
+      "blocker": "До реальной семантики нужны подтверждённые GitHub-owned immutable pilot marker и sandbox-only execution authority; production two-stage остаётся неактивным. Никаких Scheduled Tasks.",
+      "updated_on": "2026-10-11",
+      "updated_at_utc": "2026-10-11T16:26:34.746Z",
+      "recent_completion": false
+    },
+    {
+      "id": "dossier-shadow-first-real-18-assembly-compare-sandbox-integration-01",
+      "title": "Dossier: изолированный Assembly и сравнение результатов 18 игр",
+      "goal": "Подготовить действительное sandbox-only Assembly, проверку исходных Research Git-байтов и сравнение с историческими принятыми Dossier в независимом офлайн-контуре, без утверждения недоказанного качества.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_FIRST_REAL_18_ASSEMBLY_COMPARE_SANDBOX_INTEGRATION_01.md",
+      "worker_slot": "ЧАТ 2",
+      "depends_on": [
+        "dossier-shadow-quality-review-gate-01",
+        "dossier-shadow-preoutput-source-provenance-audit-01"
+      ],
+      "effort_reason": "Совместимость с существующими валидаторами Research/Assembly, одноразовая stage-B обработка в изолированном Git и сравнение с контрольными строгими ограничениями.",
+      "urgency_reason": "Для первого реального испытания нужны настоящий безопасный stage-B маршрут и независимое измерение результатов.",
+      "status": "planned",
+      "effort": "высокая",
+      "urgency": "высокая",
+      "order": null,
+      "blocker": "До реальной семантики нужны подтверждённые GitHub-owned immutable pilot marker и sandbox-only execution authority; production two-stage остаётся неактивным. Никаких Scheduled Tasks.",
+      "updated_on": "2026-10-11",
+      "updated_at_utc": "2026-10-11T16:26:34.746Z",
+      "recent_completion": false
     }
   ]
 }
