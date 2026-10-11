@@ -208,7 +208,24 @@ async function freshNetworkAndMalformedCache(){
   assert.equal(repaired.snapshot().item.deep_stage_state,'completed');
   assertSaved(repaired);
 }
+async function firstVisitOutageRetry(){
+  let offline=true;
+  const browser=createBrowser(null,async()=>{
+    if(offline)throw Error('offline on first visit');
+    return response(payload(5,true));
+  },saved);
+  await until(()=>browser.controller.state.status==='failed','first visit offline');
+  assert.equal(browser.nodes('feedSyncNotice').dataset.state,'failed','offline-first visit must expose retry');
+  assert.match(browser.nodes('feedSyncText').textContent,/Не удалось загрузить ленту/);
+  offline=false;
+  await browser.controller.retry();
+  await until(()=>browser.controller.state.source==='network','first visit successful retry');
+  assert.equal(browser.nodes('feedSyncNotice').dataset.state,'current');
+  assert.equal(browser.snapshot().item.deep_stage_state,'completed');
+  assertSaved(browser);
+}
 async function main(){
+  await firstVisitOutageRetry();
   await cacheOldToFresh();
   await offlineRetryAndResume();
   await downgradeRejectedAndBadData();
