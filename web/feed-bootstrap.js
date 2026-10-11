@@ -33,6 +33,7 @@
     const schedule=options.setTimeout||setTimeout;
     const cancel=options.clearTimeout||clearTimeout;
     const logger=options.console||console;
+    const now=options.now||Date.now;
     const timeoutMs=Number.isFinite(options.timeoutMs)?options.timeoutMs:DEFAULT_TIMEOUT_MS;
     const retryDelayMs=Number.isFinite(options.retryDelayMs)?options.retryDelayMs:DEFAULT_RETRY_DELAY_MS;
     const cacheName=options.cacheName||CACHE_NAME;
@@ -56,6 +57,9 @@
       refreshActive:false,
       refreshOutcome:null,
       currentGeneratedAt:null,
+      freshnessState:null,
+      lastVerifiedAt:null,
+      statusExpanded:false,
     };
 
     let bootstrapPromise=null;
@@ -118,25 +122,56 @@
     }
     function generationTime(payload){return Date.parse(payload.generated_at_utc)}
     function samePayload(a,b){return JSON.stringify(a)===JSON.stringify(b)}
+    // Verification failure does not prove staleness. Generation and check times differ.
     function freshnessNotice(mode,payload){
-      const banner=el('feedSyncNotice'),message=el('feedSyncText'),button=el('feedRefreshBtn');
-      if(!banner||!message||!button)return;
-      const date=payload?.generated_at_utc;
-      const stamp=date&&Number.isFinite(Date.parse(date))
-        ?new Date(date).toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'})
-        :'время неизвестно';
+      const banner=el('feedSyncNotice'),toggle=el('feedStatusToggle'),icon=el('feedSyncSymbol');
+      const details=el('feedSyncDetails'),message=el('feedSyncText'),live=el('feedSyncLive'),button=el('feedRefreshBtn');
+      if(!banner||!toggle||!icon||!details||!message||!button)return;
+      const source=payload||latestPayload,g=source?.generated_at_utc;
+      const valid=typeof g==='string'&&Number.isFinite(Date.parse(g));
+      const stamp=valid?new Date(g).toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'}):'неизвестно';
+      // Daily cadence: age >36h is an informational hint, not verified divergence.
+      const age=valid&&now()-Date.parse(g)>36*3600000?' Снимок создан более суток назад.':'';
+      if(mode==='network_verified')state.lastVerifiedAt=new Date(now()).toISOString();
+      state.freshnessState=mode;
+      const verified=state.lastVerifiedAt?new Date(state.lastVerifiedAt).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):null;
       const labels={
-        checking:`Сохранённая копия ленты от ${stamp}. Проверяем обновления. Статистика может быть новее карточек.`,
-        stale:`Сохранённая копия ленты от ${stamp}. Не удалось проверить обновления; отметки Deep могут устареть. Статистика загружается отдельно.`,
-        older:`Свежесть не подтверждена: сервер вернул более старую или неоднозначную версию. Показана сохранённая лента от ${stamp}.`,
-        current:`Лента проверена по сети · ${stamp}. Отметки Deep соответствуют этому снимку.`,
-        failed:'Не удалось загрузить ленту. Повторная проверка не удалит вашу очередь и настройки.',
+        checking:source?`Сохранённая лента от ${stamp}. Проверяем обновления. Статистика загружается отдельно.`:'Проверяем ленту по сети.',
+        cached_unverified:`Сохранённая лента от ${stamp}. Проверка ещё не завершена; свежесть не подтверждена.${age} Статистика загружается отдельно.`,
+        verification_failed:`Сохранённая лента от ${stamp}. Проверка сети не удалась. Это не означает, что лента устарела.${age} Статистика загружается отдельно.`,
+        confirmed_older_or_conflict:`Сервер вернул более старую или неоднозначную версию. Сохранена надёжная лента от ${stamp}; отметки Deep не понижены. Статистика загружается отдельно.`,
+        network_verified:`Лента проверена по сети${verified?' в '+verified:''}. Снимок создан ${stamp}.${age} Время обновления скидок указано отдельно. Статистика загружается отдельно.`,
+        no_feed:'Лента недоступна: загрузка не удалась и подходящей сохранённой копии нет. Повторная проверка не удалит очередь или настройки.',
       };
+      const short={checking:'Проверка ленты',cached_unverified:'Сохранённая лента не проверена',verification_failed:'Не удалось проверить ленту',confirmed_older_or_conflict:'Версии ленты расходятся',network_verified:'Лента проверена',no_feed:'Лента недоступна'};
+      const icons={checking:'◌',cached_unverified:'ⓘ',verification_failed:'!',confirmed_older_or_conflict:'!',network_verified:'✓',no_feed:'!'};
+      const description=short[mode]||short.cached_unverified;
       banner.classList.remove('hidden');
       banner.dataset.state=mode;
-      message.textContent=labels[mode]||labels.stale;
+      if(icon.textContent!==icons[mode])icon.textContent=icons[mode]||'ⓘ';
+      toggle.setAttribute('aria-label',description+'. Показать подробности и повторить проверку.');
+      toggle.setAttribute('title',description+'. Подробности.');
+      if(message.textContent!==labels[mode])message.textContent=labels[mode]||labels.cached_unverified;
+      if(live&&live.textContent!==description)live.textContent=description;
       button.disabled=!!state.refreshActive;
-      button.textContent=state.refreshActive?'Проверяем…':'Проверить свежие данные';
+      button.textContent=state.refreshActive?'Проверяем…':'Повторить проверку ленты';
+      details.classList.toggle('hidden',!state.statusExpanded);
+      toggle.setAttribute('aria-expanded',String(state.statusExpanded));
+    }
+    function toggleStatusDetails(){
+      state.statusExpanded=!state.statusExpanded;
+      el('feedSyncDetails')?.classList.toggle('hidden',!state.statusExpanded);
+      el('feedStatusToggle')?.setAttribute('aria-expanded',String(state.statusExpanded));
+    }
+    function onStatusEscape(event){
+      if(event?.key!=='Escape'||!state.statusExpanded)return;
+      event.preventDefault?.();toggleStatusDetails();el('feedStatusToggle')?.focus?.();
+    }
+    function cachedFreshnessMode(){
+      if(state.refreshOutcome==='failed')return 'verification_failed';
+      if(state.refreshOutcome==='older'||state.refreshOutcome==='ambiguous')return 'confirmed_older_or_conflict';
+      if(state.refreshOutcome==='identical'||state.refreshOutcome==='updated')return 'network_verified';
+      return state.refreshActive?'checking':'cached_unverified';
     }
     function reusableResponse(response,payload){
       return new Proxy(response,{
@@ -265,8 +300,8 @@
           state.currentGeneratedAt=payload.generated_at_utc;
           latestPayload=payload;
           if(response)latestResponse=reusableResponse(response,payload);
-          if(source!=='cache')freshnessNotice('current',payload);
-          else freshnessNotice(state.refreshActive?'checking':'stale',payload);
+          if(source!=='cache')freshnessNotice('network_verified',payload);
+          else freshnessNotice(cachedFreshnessMode(),payload);
         }else if(state.status!=='ready'){
           state.status='failed';
           state.retryable=false;
@@ -422,14 +457,14 @@
           if(generationTime(fresh.payload)<generationTime(baseline)){
             state.refreshOutcome='older';
             warn('refresh-older-rejected',{network:fresh.payload.generated_at_utc,current:baseline.generated_at_utc});
-            freshnessNotice('older',baseline);
+            freshnessNotice('confirmed_older_or_conflict',baseline);
             return;
           }
           if(samePayload(fresh.payload,baseline)){
             state.refreshOutcome='identical';
             state.source='network';
             log('refresh-identical',{identity:fresh.identity});
-            freshnessNotice('current',baseline);
+            freshnessNotice('network_verified',baseline);
             return;
           }
           if(generationTime(fresh.payload)===generationTime(baseline)){
@@ -441,7 +476,7 @@
             if(!sameItems||!changedGiveaway){
               state.refreshOutcome='ambiguous';
               warn('refresh-ambiguous-rejected',{identity:fresh.identity});
-              freshnessNotice('older',baseline);
+              freshnessNotice('confirmed_older_or_conflict',baseline);
               return;
             }
           }
@@ -449,11 +484,12 @@
         }catch(error){
           state.refreshOutcome='failed';
           warn('refresh-failed',{kind:error?.feedBootstrapKind||'network',message:String(error?.message||error)});
-          freshnessNotice('stale',latestPayload||cached.payload);
+          freshnessNotice('verification_failed',latestPayload||cached.payload);
         }finally{
           state.refreshActive=false;
-          if(state.refreshOutcome==='updated'||state.refreshOutcome==='identical')freshnessNotice('current',latestPayload||cached.payload);
-          else if(state.refreshOutcome==='failed')freshnessNotice('stale',latestPayload||cached.payload);
+          if(state.refreshOutcome==='updated'||state.refreshOutcome==='identical')freshnessNotice('network_verified',latestPayload||cached.payload);
+          else if(state.refreshOutcome==='failed')freshnessNotice('verification_failed',latestPayload||cached.payload);
+          else if(state.refreshOutcome==='older'||state.refreshOutcome==='ambiguous')freshnessNotice('confirmed_older_or_conflict',latestPayload||cached.payload);
           refreshPromise=null;
         }
       })();
@@ -471,7 +507,7 @@
         state.currentIdentity=cached.identity;
         state.currentGeneratedAt=cached.payload.generated_at_utc;
         state.status='loading';
-        freshnessNotice('checking',cached.payload);
+        freshnessNotice('cached_unverified',cached.payload);
         initialRenderPromise=new Promise(resolve=>{initialRenderResolve=resolve});
         startBackgroundRefresh(input,init,cached);
         return responseWithPayload(cached.response,cached.payload,{source:'cache',identity:cached.identity,url});
@@ -486,7 +522,7 @@
           url:fresh.url,
         });
       }catch(error){
-        freshnessNotice('failed');
+        freshnessNotice('no_feed');
         throw error;
       }
     }
@@ -557,7 +593,10 @@
       state.status='loading';
       freshnessNotice('checking');
       await win.init();
-      if(state.status!=='ready')freshnessNotice('failed');
+      // app.init() can resolve before the deferred render status callback runs.
+      // Do not briefly report no feed after an accepted network response.
+      if(state.payloadDelivered&&state.status!=='ready')await new Promise(resolve=>schedule(resolve,0));
+      if(state.status!=='ready')freshnessNotice('no_feed');
       return state.status==='ready';
     }
     function onRetryClick(){retry().catch(error=>warn('retry-failed',{message:String(error?.message||error)}))}
@@ -567,6 +606,9 @@
       if(win)win.fetch=wrappedFetch;
       doc?.addEventListener?.('visibilitychange',onVisibility);
       el('feedRefreshBtn')?.addEventListener?.('click',onRetryClick);
+      el('feedStatusToggle')?.addEventListener?.('click',toggleStatusDetails);
+      el('feedStatusToggle')?.addEventListener?.('keydown',onStatusEscape);
+      el('feedSyncDetails')?.addEventListener?.('keydown',onStatusEscape);
       win?.addEventListener?.('pageshow',onPageShow);
       log('installed',{timeoutMs,retryDelayMs,cacheName,cacheStorage:!!cacheStorage});
     }
@@ -576,6 +618,9 @@
       if(win&&win.fetch===wrappedFetch)win.fetch=nativeFetch;
       doc?.removeEventListener?.('visibilitychange',onVisibility);
       el('feedRefreshBtn')?.removeEventListener?.('click',onRetryClick);
+      el('feedStatusToggle')?.removeEventListener?.('click',toggleStatusDetails);
+      el('feedStatusToggle')?.removeEventListener?.('keydown',onStatusEscape);
+      el('feedSyncDetails')?.removeEventListener?.('keydown',onStatusEscape);
       win?.removeEventListener?.('pageshow',onPageShow);
       if(retryTimer!=null)cancel(retryTimer);
       try{currentController?.abort()}catch{}
