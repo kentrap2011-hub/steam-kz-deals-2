@@ -1,0 +1,39 @@
+name: Validate Dossier pre-output source provenance (offline)
+on:
+  pull_request:
+    paths:
+      - 'scripts/dossier_shadow_preoutput_source_audit.js'
+      - 'scripts/test_dossier_shadow_preoutput_source_audit.js'
+      - 'reviews/dossier_shadow_preoutput/source_provenance_20_groups_v1.json'
+      - 'reviews/worker_reports/dossier-shadow-preoutput-source-provenance-audit-01.md'
+      - '.github/workflows/validate-dossier-shadow-preoutput-source-provenance.yml'
+permissions:
+  contents: read
+jobs:
+  provenance-offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Synthetic privacy, alias, dates and scope regressions
+        run: node --test scripts/test_dossier_shadow_preoutput_source_audit.js
+      - name: Recompute all 60 strictly pinned Git-local metadata projections
+        run: node scripts/dossier_shadow_preoutput_source_audit.js "$GITHUB_WORKSPACE" reviews/dossier_shadow_preoutput/source_provenance_20_groups_v1.json
+      - name: Assert no operational activation
+        run: |
+          node - <<'NODE'
+          const r=require('./reviews/dossier_shadow_preoutput/source_provenance_20_groups_v1.json');
+          if (r.games.length!==60 || r.groups.length!==20 ||
+              r.flags.pilot_authorized!==false ||
+              r.flags.semantic_quality_verified!==false ||
+              r.flags.trial_cohort_finalized!==false ||
+              r.totals.metadata_games_inspected!==60 ||
+              r.totals.semantically_verified_reviews!==0) throw Error('Unsafe scope or readiness');
+          console.log('PASS pre-output metadata only; pilot/quality/trial flags remain false');
+          NODE
