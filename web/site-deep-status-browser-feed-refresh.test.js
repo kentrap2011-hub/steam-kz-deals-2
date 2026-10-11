@@ -228,7 +228,7 @@ async function firstVisitOutageRetry(){
   },saved);
   await until(()=>browser.controller.state.status==='failed','first visit offline');
   assert.equal(browser.nodes('feedSyncNotice').dataset.state,'no_feed','offline-first visit must expose retry');
-  assert.match(browser.nodes('feedSyncText').textContent,/Не удалось загрузить ленту/);
+  assert.match(browser.nodes('feedSyncText').textContent,/Лента недоступна: загрузка не удалась/);
   offline=false;
   await browser.controller.retry();
   await until(()=>browser.controller.state.source==='network','first visit successful retry');
