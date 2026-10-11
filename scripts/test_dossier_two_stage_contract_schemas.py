@@ -403,5 +403,92 @@ class P1ContractSchemasTest(unittest.TestCase):
             validate_assembly_receipt(receipt, self.result, self.work)
 
 
+    def test_16_original_year_remains_distinct_from_steam_publication_and_ports(self):
+        # The same original work may get a Steam port years later. A source's
+        # publication_date is not original_work_release_year.
+        self.doc["identity"]["corroborators"].extend([
+            {"kind": "platform", "value": "Steam"},
+            {"kind": "version", "value": "Later Steam port"},
+        ])
+        self.doc["sources"][1]["publication_date"] = "2024-08-09"
+        self.doc["sources"][1]["temporal_kind_hint"] = "historical"
+        self.assertEqual(validate_research(self.doc), canonical_sha256(self.doc))
+        self.assertEqual(self.doc["identity"]["original_work_release_year"], 2020)
+        self.assertEqual(self.doc["sources"][1]["publication_date"], "2024-08-09")
+
+    def test_17_every_independent_original_work_year_must_match(self):
+        for source_index in (0, 1):
+            with self.subTest(source_index=source_index):
+                doc = research_fixture()
+                # The fixture intentionally shares the binding object; make
+                # each source independent to catch a single bad corroborator.
+                doc["sources"][1]["exact_product_binding"] = copy.deepcopy(
+                    doc["sources"][1]["exact_product_binding"])
+                doc["sources"][source_index]["exact_product_binding"][
+                    "original_work_release_year"] = 2021
+                ref = doc["sources"][source_index]["ref"]
+                with self.assertRaisesRegex(
+                        ValueError, f"source {ref}.*original work release year.*conflicts"):
+                    validate_research(doc)
+        doc = research_fixture()
+        doc["sources"][1]["exact_product_binding"] = copy.deepcopy(
+            doc["sources"][1]["exact_product_binding"])
+        self.assertEqual(validate_research(doc), canonical_sha256(doc))
+        doc["sources"][1]["exact_product_binding"]["original_work_release_year"] = 2019
+        with self.assertRaisesRegex(ValueError, "source rsource-002.*conflicts"):
+            validate_research(doc)
+
+    def test_18_unresolved_and_missing_original_years_fail_closed_without_invention(self):
+        doc = research_fixture()
+        doc["identity"].update({
+            "resolution": "unresolved", "resolved_title": None,
+            "original_work_release_year": None, "corroborators": [],
+            "identity_source_refs": [],
+            "ambiguity_notes": "The original work edition cannot be established.",
+        })
+        doc["research_audit"]["completeness"] = "research_incomplete"
+        for source in doc["sources"]:
+            source["exact_product_binding"]["original_work_release_year"] = None
+        before = copy.deepcopy(doc)
+        self.assertEqual(validate_research(doc), canonical_sha256(doc))
+        self.assertEqual(doc, before)
+        doc["sources"][0]["exact_product_binding"]["original_work_release_year"] = 2020
+        with self.assertRaisesRegex(ValueError, "unresolved Research identity year"):
+            validate_research(doc)
+        doc = research_fixture()
+        doc["identity"]["original_work_release_year"] = None
+        with self.assertRaisesRegex(ValueError, "resolved identity lacks factual"):
+            validate_research(doc)
+        doc = research_fixture()
+        doc["identity"].pop("original_work_release_year")
+        with self.assertRaisesRegex(ValueError, "schema error"):
+            validate_research(doc)
+
+    def test_19_source_year_unknown_is_not_coerced_or_a_false_mismatch(self):
+        doc = research_fixture()
+        doc["sources"][1]["exact_product_binding"] = copy.deepcopy(
+            doc["sources"][1]["exact_product_binding"])
+        doc["sources"][1]["exact_product_binding"]["original_work_release_year"] = None
+        before = copy.deepcopy(doc)
+        self.assertEqual(validate_research(doc), canonical_sha256(doc))
+        self.assertEqual(doc, before)
+        doc["sources"][1]["exact_product_binding"]["basis"] = "title_and_work_year"
+        with self.assertRaisesRegex(ValueError, "title-and-work-year binding lacks"):
+            validate_research(doc)
+        doc["sources"][1]["exact_product_binding"]["original_work_release_year"] = 2020
+        self.assertEqual(validate_research(doc), canonical_sha256(doc))
+
+    def test_20_original_identity_corroborators_do_not_rebind_appid(self):
+        doc = research_fixture()
+        doc["identity"]["corroborators"].append(
+            {"kind": "appid", "value": "99999"})
+        with self.assertRaisesRegex(ValueError, "identity AppID corroborator mismatch"):
+            validate_research(doc)
+        doc = research_fixture()
+        doc["identity"]["corroborators"].append(
+            {"kind": "version", "value": "Unrelated Steam version date 2024"})
+        self.assertEqual(validate_research(doc), canonical_sha256(doc))
+
+
 if __name__ == "__main__":
     unittest.main()
