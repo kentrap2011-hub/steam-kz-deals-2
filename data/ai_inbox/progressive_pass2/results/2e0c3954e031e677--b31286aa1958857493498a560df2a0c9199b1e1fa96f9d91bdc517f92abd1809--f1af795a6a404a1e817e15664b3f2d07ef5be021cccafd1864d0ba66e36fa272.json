@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "6ae5fa69b6d1dc69b95220b1c2f2da6ca70e2dff",
+  "run_start_authority_commit": "bee0861ab54e87f11c0feeac8b6f3f40e5e94fc5",
+  "run_started_at_utc": "2026-10-11T15:14:42+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "b31286aa1958857493498a560df2a0c9199b1e1fa96f9d91bdc517f92abd1809",
+  "family_id": "game:274520",
+  "taste_subject_key": "App_274520",
+  "appid": "274520",
+  "taste_fingerprint": "9cd63f02cc376adad3ba51c3db494980920b457daab8500b0f45579870e53df4",
+  "candidate_context_sha256": "f22f4222899f4e608bd89e7d3ac0544661b8c06af93ae7be4d420c8f44dd5e24",
+  "dossier_content_sha256": "9a460e0ebe5c8c54aaac9eb144ed37b4c009764e0d0a83eba8ef9bf5328f6bbc",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "f1af795a6a404a1e817e15664b3f2d07ef5be021cccafd1864d0ba66e36fa272",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Цикл разведки днём и обороны убежища ночью создаёт ясную задачу и позволяет учиться на ошибках.",
+    "Гнетущий лес, звуковое оформление и история, раскрываемая через находки и встречи, поддерживают загадочность и исследование."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 56,
+    "development_variety": 40,
+    "structure_pacing_direction": 43,
+    "identity_hooks": 83,
+    "breadth_of_match": 55
+  },
+  "base_support_compatible": null,
+  "score_findings": [
+    {
+      "finding_id": "darkwood-atmosphere-story",
+      "text_ru": "Давящая атмосфера леса, звук без частых скримеров и история через записки и необязательные встречи дают самостоятельный повод исследовать опасный мир.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/raises",
+          "profile_value_sha256": "f1997cf9d87235a0d984a3c5bceefb8aa566143fb2e8edddfb81312ba09aef35",
+          "match_text_ru": "Тайна и записки поддерживают интерес к исследованию."
+        },
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Узнаваемая атмосфера и подача имеют высокую ценность."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 83
+        }
+      ]
+    },
+    {
+      "finding_id": "darkwood-night-learning",
+      "text_ru": "Днём приходится собирать припасы и готовить укрытие, а ночью учиться переживать нападения: здесь есть понятная задача и пространство для освоения, хотя это не быстрый боевой экшен.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Нравится освоение испытаний и поиск работающего подхода."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 56
+        }
+      ]
+    },
+    {
+      "finding_id": "darkwood-repeat-loop",
+      "text_ru": "Суточный цикл сбора ресурсов и обороны может быстро повторяться без столь же заметной смены действий, поэтому развитие игрового опыта остаётся сомнительным.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/lowers",
+          "profile_value_sha256": "9af4e57dc35172ff77fd80946c8385d99dff55971301a04cb17db942fe3c717c",
+          "match_text_ru": "Повтор без развития мешает вовлечённости."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "lowers",
+          "normalized_value": 40
+        }
+      ]
+    },
+    {
+      "finding_id": "darkwood-slow-start",
+      "text_ru": "Медленные перемещения, долгий пролог и повторение подготовки между ночами способны растягивать путь к увлекательным событиям, несмотря на ясный ориентир выжить до утра.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/11/lowers",
+          "profile_value_sha256": "25c9bcfffc975cd79e5fc7e2d18a7934deaa32708258b5033f26b5f9bcac218e",
+          "match_text_ru": "Затянутые скучные первые часы повышают вероятность отказа от игры."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 43
+        }
+      ]
+    },
+    {
+      "finding_id": "darkwood-friction-tradeoff",
+      "text_ru": "Исследование леса и фрагментарный сюжет привлекательны, но тяжеловатое перемещение, инвентарь и неловкие повседневные действия конфликтуют с удовольствием от самого управления.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1/lowers",
+          "profile_value_sha256": "11b618a5d649c8797346f2ddad8cdca688f1e8a91013c8c5a220051aeec09f35",
+          "match_text_ru": "Неудобное движение без удовольствия или развития уменьшает интерес."
+        },
+        {
+          "json_pointer": "/taste_profile/5/raises",
+          "profile_value_sha256": "f1997cf9d87235a0d984a3c5bceefb8aa566143fb2e8edddfb81312ba09aef35",
+          "match_text_ru": "Исследование загадочного мира само по себе привлекает."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 55
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Нехватка ресурсов и суровые ночи требуют учиться на неудачах; сложность может поначалу отпугивать, но сама по себе не противоречит интересу к мастерству.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "management_routine",
+        "text_ru": "Медленные перемещения, работа с инвентарём и повторяющаяся дневная подготовка могут превращать путь к интересным эпизодам в утомительную бытовую рутину.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "История раскрывается постепенно; для части игроков пролог оказывается скучным ещё до появления сильных сюжетных крючков.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
