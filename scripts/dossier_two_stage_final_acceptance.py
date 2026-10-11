@@ -137,7 +137,7 @@ def _inspect_item(repo, descriptor, manifest, slot, ref):
                     "canonical_dossier_accepted": False}, None
         # Historical proof is insufficient if HEAD subsequently rewrote the
         # original create-only Research or Assembly transport.
-        head = git(repo, "rev-parse", "HEAD").decode().strip()
+        head = git(repo, "rev-parse", "HEAD").stdout.decode().strip()
         if not first_parent_contains(repo, ref["result_commit"], head):
             raise ValueError("Assembly submission not in current Git history")
         raw = file_at(repo, ref["result_commit"], checked["result_path"])
