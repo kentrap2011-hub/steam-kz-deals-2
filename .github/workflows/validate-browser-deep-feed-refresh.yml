@@ -29,7 +29,7 @@ jobs:
           node --check web/feed-bootstrap.js
           node --check web/app.js
           node --check web/site-deep-status-browser-feed-refresh.test.js
-      - name: Reproduce stale Deep and recover without resetting local queue
+      - name: Verify compact freshness states and Deep recovery without resetting local queue
         run: node web/site-deep-status-browser-feed-refresh.test.js
       - name: Existing cache identity regression
         run: node scripts/test_feed_bootstrap_cache_identity.js
@@ -39,4 +39,4 @@ jobs:
         run: node web/progressive-personalization-ui.test.js
       - name: Static version pin and safe-refresh UI accessibility
         run: |
-          node -e "const fs=require('fs'),a=fs.readFileSync('web/index.html','utf8');for(const x of ['feed-bootstrap.js?v=deep-cache-refresh-01','feed-sync.css?v=deep-cache-refresh-01','id=\"feedRefreshBtn\"','aria-live=\"polite\"'])if(!a.includes(x))throw Error('Missing '+x)"
+          node -e "const fs=require('fs'),a=fs.readFileSync('web/index.html','utf8');for(const x of ['feed-bootstrap.js?v=compact-freshness-ux-01','feed-sync.css?v=compact-freshness-ux-01','id=\"feedStatusToggle\"','id=\"feedRefreshBtn\"','aria-live=\"polite\"','aria-controls=\"feedSyncDetails\"'])if(!a.includes(x))throw Error('Missing '+x)"
