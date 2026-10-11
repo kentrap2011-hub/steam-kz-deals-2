@@ -743,7 +743,7 @@
       "id": "dossier-async-e2e-qa",
       "title": "Dossier: совместимость Research → Assembly",
       "goal": "Проверить точную передачу GitHub-frozen Research package в Assembly без ожидания принятия GitHub.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Новые offline disposable-Git регрессии и при необходимости узкие исправления.",
       "urgency": "высокая",
@@ -755,16 +755,16 @@
         "dossier-async-research-worker",
         "dossier-async-assembly-worker"
       ],
-      "blocker": "Only PR-tested inactive QA authorized; no real semantic execution or production activation.",
-      "updated_on": "2026-10-10",
-      "updated_at_utc": "2026-10-10T17:31:33.438Z",
-      "recent_completion": false
+      "blocker": "Merged inactive offline QA. Remaining: Research original-year known XFAIL and final GitHub three-game writer integration.",
+      "updated_on": "2026-10-11",
+      "updated_at_utc": "2026-10-11T05:01:53.482Z",
+      "recent_completion": true
     },
     {
       "id": "dossier-async-chain-qa",
       "title": "Dossier: строгая GitHub chain acceptance",
       "goal": "Проверить позднюю GitHub validation Research→Assembly и исходное атомарное принятие групп из 3 игр.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Новые offline disposable-Git регрессии и при необходимости узкие исправления.",
       "urgency": "высокая",
@@ -776,10 +776,51 @@
         "dossier-async-research-worker",
         "dossier-async-assembly-worker"
       ],
-      "blocker": "Only PR-tested inactive QA authorized; no real semantic execution or production activation.",
-      "updated_on": "2026-10-10",
-      "updated_at_utc": "2026-10-10T17:31:33.438Z",
-      "recent_completion": false
+      "blocker": "Merged inactive offline QA. Remaining: Research original-year known XFAIL and final GitHub three-game writer integration.",
+      "updated_on": "2026-10-11",
+      "updated_at_utc": "2026-10-11T05:01:53.482Z",
+      "recent_completion": true
+    },
+    {
+      "id": "dossier-research-original-year-fix",
+      "title": "Dossier: исправить исходный год Research",
+      "goal": "Fail-closed Research source original-year and identity original-year consistency; preserve different storefront release year.",
+      "status": "planned",
+      "effort": "высокая",
+      "effort_reason": "Offline fail-closed tests and inactive GitHub control-plane adapter.",
+      "urgency": "высокая",
+      "urgency_reason": "Pre-activation blockers identified by merged QA.",
+      "task_file": "WORKER_TASK_DOSSIER_RESEARCH_ORIGINAL_YEAR_BINDING_FIX_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-async-chain-qa"
+      ],
+      "blocker": "Only offline PR implementation authorized; production and Scheduled Tasks inactive.",
+      "updated_on": "2026-10-11",
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-11T05:01:53.482Z"
+    },
+    {
+      "id": "dossier-async-github-final-integration",
+      "title": "Dossier: неактивный GitHub final acceptance bridge",
+      "goal": "Implement inactive GitHub-owned original ordered three-game grouping and strict final validation without activation.",
+      "status": "planned",
+      "effort": "высокая",
+      "effort_reason": "Offline fail-closed tests and inactive GitHub control-plane adapter.",
+      "urgency": "высокая",
+      "urgency_reason": "Pre-activation blockers identified by merged QA.",
+      "task_file": "WORKER_TASK_DOSSIER_ASYNC_GITHUB_FINAL_ACCEPTANCE_INTEGRATION_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-async-e2e-qa",
+        "dossier-async-chain-qa"
+      ],
+      "blocker": "Only offline PR implementation authorized; production and Scheduled Tasks inactive.",
+      "updated_on": "2026-10-11",
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-11T05:01:53.482Z"
     }
   ]
 }
