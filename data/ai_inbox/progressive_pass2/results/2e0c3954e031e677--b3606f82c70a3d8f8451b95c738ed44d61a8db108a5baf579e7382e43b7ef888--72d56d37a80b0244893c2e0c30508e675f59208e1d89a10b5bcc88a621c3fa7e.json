@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "31bc0b3bc59caafbe62c101ead501c2b503ee15d",
+  "run_start_authority_commit": "f938103de0b0dd573bff73827d48601e931130fe",
+  "run_started_at_utc": "2026-10-11T14:06:43+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "b3606f82c70a3d8f8451b95c738ed44d61a8db108a5baf579e7382e43b7ef888",
+  "family_id": "game:2367820",
+  "taste_subject_key": "App_2367820",
+  "appid": "2367820",
+  "taste_fingerprint": "853406d7e87f382ee6b735148c58a1c6fab6484e70fa29bcca2aa7eab54e43bc",
+  "candidate_context_sha256": "e67bf075913dd55be9eddb272e44d7f300da9052e42f206f45b0e3bdd7c3beec",
+  "dossier_content_sha256": "189161368b08e08311d2c369ba804647eaad3d0eee6c11e026dd2f1c88d61087",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "72d56d37a80b0244893c2e0c30508e675f59208e1d89a10b5bcc88a621c3fa7e",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Автобиографические воспоминания о детстве, футболе и улицах Кито обладают самостоятельным художественным языком и культурной выразительностью.",
+    "Игровые действия в основном ограничены ударами по мячу, неспешным перемещением и редкими простыми мини-эпизодами, то есть сильная художественная подача поддержана сравнительно слабой активной механикой.",
+    "Отзывы о повторных ударах, ожидании и отсутствии ясной цели совпадают с закреплёнными причинами потери интереса; компактная продолжительность лишь частично смягчает эту проблему."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Долгое ожидание, повторяющиеся удары по мячу и малое число осмысленных действий могут снижать вовлечённость даже при выразительных воспоминаниях и городской атмосфере.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "У отдельных игроков непонятные цели и не всегда точное перемещение затрудняют освоение коротких игровых сцен.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Двухчасовая форма и фрагментарная история некоторым кажутся недостаточно развитыми, а отдельная футбольная мини-игра ощущается менее удобной, чем свободная прогулка.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 9
+          }
+        ]
+      }
+    ]
+  }
+}
