@@ -1,0 +1,54 @@
+name: Validate Dossier async postmerge joint integration (offline)
+
+on:
+  pull_request:
+    paths:
+      - "scripts/test_dossier_two_stage_postmerge_joint.py"
+      - ".github/workflows/validate-dossier-async-postmerge-joint.yml"
+      - "scripts/dossier_two_stage_contract_guard.py"
+      - "scripts/dossier_two_stage_async_buffer.py"
+      - "scripts/dossier_two_stage_final_acceptance.py"
+      - "scripts/test_dossier_two_stage_eventual_chain_qa.py"
+      - "scripts/test_dossier_two_stage_final_acceptance.py"
+      - "config/dossier_two_stage_final_acceptance_bridge_contract.json"
+
+permissions:
+  contents: read
+
+jobs:
+  joint-offline-research-assembly-github:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout PR-only code without production execution
+        uses: actions/checkout@v4
+      - name: Use Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install strict schema validator
+        run: python -m pip install "jsonschema>=4.21,<5"
+      - name: Compile joint and merged interfaces
+        run: |
+          python -m py_compile scripts/test_dossier_two_stage_postmerge_joint.py \
+            scripts/dossier_two_stage_contract_guard.py \
+            scripts/dossier_two_stage_async_buffer.py \
+            scripts/dossier_two_stage_final_acceptance.py
+      - name: Joint frozen Research, eventual P2, Assembly, original three-game V2 writer
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_postmerge_joint.py' -v
+      - name: Former XFAIL now ordinary negative P1/P2 and immutable chain regression
+        run: |
+          python -m unittest discover -s scripts -p 'test_dossier_two_stage_eventual_chain_qa.py' -v 2>&1 | tee /tmp/dossier-eventual-chain.txt
+          ! grep -q 'expected failures=' /tmp/dossier-eventual-chain.txt
+      - name: Pre-existing final bridge adversarial + exact existing writer regression
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_final_acceptance.py' -v
+      - name: P1 strict Research schema and original-work year regression
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_contract_schemas.py' -v
+      - name: P2 Git marker, immutability and fully asynchronous buffer regressions
+        run: |
+          python -m unittest discover -s scripts -p 'test_dossier_two_stage_staging.py' -v
+          python -m unittest discover -s scripts -p 'test_dossier_two_stage_async_buffer.py' -v
+      - name: Existing authoritative one-stage strict buffered Dossier acceptance
+        run: python -m unittest discover -s scripts -p 'test_taste_steam_review_dossier_buffered_submission.py' -v
+      - name: Existing GitHub control-plane ownership and no new scheduler
+        run: python scripts/validate_execution_ownership.py
