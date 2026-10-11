@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "5d5f22be092ba26386e43728024ce8518b85628e",
+  "run_start_authority_commit": "8af681fb0ae4f9544705a6cf3cc9410ec5da632f",
+  "run_started_at_utc": "2026-10-11T13:22:46+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "b20a6cb346b1ecbebcd40064d168fdd8b12ced5b2a27ca0e6187e210ff9b8993",
+  "family_id": "game:1857090",
+  "taste_subject_key": "App_1857090",
+  "appid": "1857090",
+  "taste_fingerprint": "19543a400ba04ce34e65ee6b736d3104fbbfa17ccf72d9eed93884a0d32a6d26",
+  "candidate_context_sha256": "f100bd26e078df95326a100a361584c589dd73f1592fc1b1584c478f6ac52134",
+  "dossier_content_sha256": "ad2ce2218e21b0803b4e2b541049b57b223ddd1b8ee72d936bc808b263127154",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "ebe2fae98e4a65354a70818ff3422c1c50dbafe28ff63003b3d2a04b52127ec4",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Управление производством и торговлей соединено с развитием семьи аристократов, а не ограничивается строительством поселения (наблюдение 0).",
+    "Браки, конфликты династий и наследование создают меняющиеся истории и заметную политическую индивидуальность кампании (наблюдение 2).",
+    "Союзы, претензии на владения и войны задают более долгую цель за пределами одного поселения (наблюдение 5)."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 46,
+    "development_variety": 60,
+    "structure_pacing_direction": 57,
+    "identity_hooks": 73,
+    "breadth_of_match": 51
+  },
+  "score_findings": [
+    {
+      "finding_id": "dynastic-emergence",
+      "text_ru": "Браки, наследование, семейные интриги и смена правителей порождают собственные истории внутри развития поселения; политические последствия придают этой средневековой стратегии заметную индивидуальность.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Запоминающийся облик и выразительная подача усиливают интерес; здесь узнаваемый крючок создаёт не графика, а династическая драма."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 73
+        }
+      ]
+    },
+    {
+      "finding_id": "political-expansion",
+      "text_ru": "Карта королевств с союзами, претензиями и войнами задаёт долгосрочную цель помимо обслуживания города, но ограниченное управление дипломатией и отрядами ослабляет чувство контроля над этим направлением.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/lowers",
+          "profile_value_sha256": "0f2aa2fda309c8dd37cde3b1932c926c2b9113919040208f0c9c0acf1dcc9180",
+          "match_text_ru": "Нужен ясный вектор действий и развития; цель объединения земель заметна, но инструментов управления иногда не хватает."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 57
+        }
+      ]
+    },
+    {
+      "finding_id": "learned-systems",
+      "text_ru": "Книги и обучение дают лордам новые умения, от которых зависят строительные решения; развитие заметно связано с управлением поселением, хотя уход или смерть персонажа могут лишить его накопленных знаний.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/raises",
+          "profile_value_sha256": "14b5578fa690e75089e182953960601edf5593fe7c4b57ccdc49878c88fa672a",
+          "match_text_ru": "Ценится развитие с понятным практическим эффектом; знания лордов открывают конкретные действия, но прогресс уязвим."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 60
+        }
+      ]
+    },
+    {
+      "finding_id": "indirect-mastery",
+      "text_ru": "Производство, торговля, налоги и отношения лордов требуют стратегических решений, однако бой и политика дают меньше прямого контроля, чем системы, где можно оттачивать личное исполнение приёмов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Сильная мотивация возникает от освоения собственных действий; здесь мастерство скорее планировочное, чем исполнительское."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 46
+        }
+      ]
+    },
+    {
+      "finding_id": "social-upkeep-loop",
+      "text_ru": "Повторное поддержание отношений между лордами и однотипные разрешения сражений способны вытеснить новые события рутинным обслуживанием, хотя династические ситуации добавляют вариации.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8/lowers",
+          "profile_value_sha256": "0190267bc95b26d6a6c3d6c7ec4a3e9c3dc45950de5ac94ebaff3b97b434b73b",
+          "match_text_ru": "Повторы особенно мешают, когда вместе с ними перестают появляться новые игровые впечатления."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 51
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "management_routine",
+        "text_ru": "Отношения лордов и супругов способны требовать повторяющегося внимания, а поздняя игра — сводиться к социальной рутине и похожим военным эпизодам; это пересекается с выраженной усталостью от неизменного игрового цикла.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Ранние кризисы из-за голода, налогов, разбойников и дипломатии могут ощущаться карательными, но высокая сложность сама по себе не свидетельствует о несоответствии вкусу.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Смена или смерть лорда может обнулить важные знания, а ограниченность дипломатического управления и боевого контроля усложняет реализацию долгосрочных планов.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Жалобы на задержки ИИ, просадки кадров и бездействующие войска относятся преимущественно к более ранним версиям; их актуальность для сборок 2026 года не подтверждена.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
