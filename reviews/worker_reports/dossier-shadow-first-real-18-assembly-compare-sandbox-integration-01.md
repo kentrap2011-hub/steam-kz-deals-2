@@ -3,7 +3,7 @@
 **Task:** `WORKER_TASK_DOSSIER_SHADOW_FIRST_REAL_18_ASSEMBLY_COMPARE_SANDBOX_INTEGRATION_01.md`.  
 **Physical worker:** НОВЫЙ ЧАТ — ЧАТ 2.  
 **Repository/base:** `kentrap2011-hub/steam-kz-deals-2` / `main`.  
-**Branch:** `implement/dossier-shadow-first-real-18-assembly-sandbox-01`.  
+**Branch:** `implement/dossier-shadow-first-real-18-assembly-sandbox-01`. **PR:** #214 (draft/open, not merged).  
 **Disposition:** `implementation_inactive_waiting_for_authorized_research_and_director_integration`; PR-only, **no real semantic Research or Assembly performed**.
 
 ## START, scope and architecture preflight
@@ -47,5 +47,5 @@ Future **reviewer A** checks original identity/year/edition and independent phys
 
 Synthetic tests only; they cannot substitute for real semantic outputs, historical evidence on each selected game, Steam/public review verification or blind reviewer attestation. **No real Research/Assembly result exists from this ЧАТ 2 task.** Exact new stage-A frozen marker/transport, integrated authority, independent A/B/C roles and actual historical same-game quality comparison are still missing. `waiting_for_authorized_research` is the correct real current outcome; any synthetic `sandbox_assembly_invocation_ready` is not runtime activation.
 
-**GitHub CI:** PR-only workflow added; see PR checks for actual result (do not infer a pass from commit creation). Director must integrate both independent PRs and separately authorize sandbox execution. This worker must **not merge** its PR.
+**GitHub CI:** the full PR-only sandbox suite **passed** at implementation commit `26829fd93ec1bdd2b9a99bbce8b4446d04744621`, Actions run **38158060458**, including new 10 fixed-cohort/disposable-Git cases and the unchanged existing Assembly, original atomic three-game final acceptance, historical writer receipt, shadow quality comparison, separate A/B/C adjudication and one-stage strict Dossier recovery tests. The same PR's backlog-disposition workflow also ran. Earlier PR-only attempts failed for synthetic fixture contamination by an untracked safety marker, review-only Git path restrictions, a misplaced Git helper argument and disposable Git background cleanup flake; these were corrected before the successful run, without weakening strict production validators. A later documentation-only commit may retrigger equivalent PR checks, so refer to exact test head/run above instead of assuming success transfers to another head. No real source or semantic execution occurred. Director must integrate both independent PRs and separately authorize sandbox execution. This worker must **not merge** its PR.
 
