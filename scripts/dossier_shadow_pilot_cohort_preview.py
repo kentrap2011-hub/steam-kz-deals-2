@@ -24,12 +24,6 @@ SEED = "dossier-shadow-6x3-calibration-proposal-v1"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 # A metadata-only group row: no review excerpts, author identities or URLs.
-ROW = re.compile(
-    r"^\\| (\\d+) \\| ([0-9, ]+) \\| accepted \\| yes \\| "
-    r"\\[[^]]+\\]\\(https://github\\.com/[^)]+/commit/([0-9a-f]{40})\\) "
-    r"\\| \\[([0-9]+)\\]\\(https://github\\.com/[^)]+/actions/runs/\\4\\) "
-    r"\\| pass[^|]*\\| eligible[^|]*\\| \\x60NONE\\x60 \\|$", re.M
-)
 UNKNOWN_CATEGORIES = (
     "original_vs_storefront_year_mismatch",
     "independently_confirmed_original_remaster_dlc_identity",
@@ -66,14 +60,33 @@ def blob(repo, ref, path):
 
 
 def attested_rows(text):
+    """Read only exact report-table rows; reject incomplete or altered evidence."""
     rows = {}
-    for match in ROW.finditer(text):
-        seq = int(match[1])
-        ids = match[2].replace(" ", "").split(",")
-        if seq in rows or len(ids) != 3 or len(set(ids)) != 3:
+    for line in text.splitlines():
+        columns = [p.strip() for p in line.strip().strip("|").split("|")]
+        if (len(columns) != 9 or not columns[0].isdigit()
+                or columns[2:4] != ["accepted", "yes"]):
+            continue
+        seq = int(columns[0])
+        ids = columns[1].replace(" ", "").split(",")
+        commit_cell, action_cell = columns[4:6]
+        if ("/commit/" not in commit_cell or "/actions/runs/" not in action_cell
+                or "github.com/" not in commit_cell
+                or "github.com/" not in action_cell
+                or not columns[6].startswith("pass")
+                or not columns[7].startswith("eligible")
+                or columns[8] != "`NONE`"):
+            raise ValueError("ATTESTED_STRICT_STATUS_OR_PROVENANCE_MISSING")
+        writer = commit_cell.split("/commit/", 1)[1].rstrip(")")
+        run = action_cell.split("/actions/runs/", 1)[1].rstrip(")")
+        if (not HEX40.fullmatch(writer) or not run.isdigit()
+                or not action_cell.startswith("[" + run + "](")
+                or seq in rows or len(ids) != 3
+                or len(set(ids)) != 3
+                or not all(x.isdigit() for x in ids)):
             raise ValueError("DUPLICATE_OR_MALFORMED_ATTESTED_GROUP")
-        rows[seq] = {"appids": ids, "writer_commit": match[3],
-                     "verified_actions_run": match[4]}
+        rows[seq] = {"appids": ids, "writer_commit": writer,
+                     "verified_actions_run": run}
     if len(rows) != 20:
         raise ValueError("ATTESTATION_MUST_LIST_EXACTLY_20_STRICT_GROUPS")
     return rows
