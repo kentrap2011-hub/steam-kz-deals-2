@@ -5,7 +5,7 @@
 - Repository/base: `kentrap2011-hub/steam-kz-deals-2` / `main`.
 - Starting verified main SHA: `ae94dd2fe3216ce4847ab84c60c2cd718b7a7f03`.
 - Prerequisites: PR #187 merged as `aec7701dfb484bbe3d0165e3dc75875c4d2e2c23`; PR #188 merged as `0549dc00b4a96833f747707f92c000bf44f443fc`. Both were confirmed via current GitHub metadata.
-- Worker branch: `qa/dossier-async-postmerge-joint-01`; PR: to be opened, **worker does not merge**.
+- Worker branch: `qa/dossier-async-postmerge-joint-01`; PR: **#190** — https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/190 — **open, clean, not merged**.
 - Mode: **offline, synthetic, disposable Git repositories only**. No semantic execution, production write, workflow dispatch, scheduled-task change or source-web query.
 
 ## START and scope
@@ -36,6 +36,6 @@ This worker does **not** edit the other chat's merged bridge implementation or c
 ## CI and final outcome
 
 - CI workflow: `Validate Dossier async postmerge joint integration (offline)`.
-- Current status: **awaiting independent PR Actions results**; do not interpret creation of test files as successful execution.
-- If the new joint suite exposes an integrity defect, preserve the failure evidence, stop and request a bounded follow-up; do not activate production.
+- **SUCCESS** — dedicated joint Actions run **38121480191** on implementation/report head `c9459a9441935532c7970f4a261113138fd79e8a`. Every step succeeded: compilation; five newly added genuine joint disposable-Git tests; former-XFAIL now ordinary negative eventual chain suite; existing strict final bridge; strict P1 year/schema suite; P2 frozen marker/staging and full async buffer; one-stage strict buffered acceptance; GitHub execution ownership validation.\n- **SUCCESS** — independent PR backlog dispositions run **38121480201** on the same head.\n- GitHub raw pull request metadata: `mergeable=true`, `mergeable_state=clean`. Worker does **not** merge the PR.
+- Joint P1/P2/Assembly/final three-game strict acceptance proof **passed offline**. No test-failure integrity defect was observed in this bounded fixture. The already documented proof-flag/offline-gate coupling is a separate narrow blocker: do not silently flip the flag or authorize production.
 - All production acceptance, two-stage activation and semantic worker flags remain **false**.
