@@ -40,7 +40,7 @@ function node(initialHidden=false){
   const flags=new Set(initialHidden?['hidden']:[]);
   const listeners={};
   return {
-    textContent:'',innerHTML:'',value:'',style:{},dataset:{},disabled:false,
+    textContent:'',innerHTML:'',value:'',style:{},dataset:{},disabled:false,attributes:{},
     classList:{
       contains(k){return flags.has(k)},add(k){flags.add(k)},remove(k){flags.delete(k)},
       toggle(k,force){const next=force===undefined?!flags.has(k):!!force;if(next)flags.add(k);else flags.delete(k);return next},
@@ -48,7 +48,7 @@ function node(initialHidden=false){
     addEventListener(name,fn){listeners[name]=fn},
     removeEventListener(name,fn){if(listeners[name]===fn)delete listeners[name]},
     dispatch(name,arg={}){listeners[name]?.(arg)},
-    setAttribute(){},removeAttribute(){},querySelector(){return null},focus(){},
+    setAttribute(k,v){this.attributes[k]=String(v)},getAttribute(k){return this.attributes[k]??null},removeAttribute(k){delete this.attributes[k]},querySelector(){return null},focus(){},
   };
 }
 function createBrowser(cachedPayload, network, saved){
@@ -88,6 +88,7 @@ function createBrowser(cachedPayload, network, saved){
   const controller=createFeedBootstrapResilience({
     window:win,document,fetch:nativeFetch,caches:{async open(){return cache}},
     AbortController,retryDelayMs:0,timeoutMs:1500,
+    now:()=>Date.parse('2026-10-11T12:10:00Z'),
     console:{info(){},warn(...args){console.error('[synthetic bootstrap warning]',...args)},log(){}},
   });
   controller.install();
@@ -137,14 +138,14 @@ async function cacheOldToFresh(){
   await until(()=>browser.controller.state.source==='cache'&&browser.nodes('stageIndicators').innerHTML.includes('Глубокий разбор:'),'cached render');
   assert.match(browser.nodes('stageIndicators').innerHTML,/stage-indicator unlit/);
   assert.equal(browser.nodes('feedSyncNotice').dataset.state,'checking');
-  assert.match(browser.nodes('feedSyncText').textContent,/Статистика может быть новее/);
+  assert.match(browser.nodes('feedSyncText').textContent,/Статистика загружается отдельно/);
   assert.equal(browser.snapshot().statistics.deep_completed_fit_count,99,'statistics is independently newer');
   assertSaved(browser);
   gate.resolve(response(payload(2,true)));
   await until(()=>browser.controller.state.refreshOutcome==='updated',()=>('background update: '+JSON.stringify(browser.controller.state)+' / DOM '+browser.nodes('stageIndicators').innerHTML.slice(0,400)));
   assert.match(browser.nodes('stageIndicators').innerHTML,/lit positive[^>]*title="Глубокий разбор: завершён — подходит"/);
   assert.equal(browser.controller.state.source,'refresh');
-  assert.equal(browser.nodes('feedSyncNotice').dataset.state,'current');
+  assert.equal(browser.nodes('feedSyncNotice').dataset.state,'network_verified');
   assertSaved(browser);
   assert.equal(browser.cache().items.find(x=>x.id===ID).deep_stage_state,'completed');
   await browser.win.init();
@@ -167,8 +168,8 @@ async function offlineRetryAndResume(){
     calls++;if(offline)throw Error('offline');return response(payload(2,true));
   },saved);
   await until(()=>browser.controller.state.refreshOutcome==='failed','offline refresh exhausted');
-  assert.equal(browser.nodes('feedSyncNotice').dataset.state,'stale');
-  assert.match(browser.nodes('feedSyncText').textContent,/отметки Deep могут устареть/);
+  assert.equal(browser.nodes('feedSyncNotice').dataset.state,'verification_failed');
+  assert.match(browser.nodes('feedSyncText').textContent,/Проверка сети не удалась. Это не означает/);
   assert.equal(browser.snapshot().item.deep_stage_state,'eligible_or_pending');
   assertSaved(browser);
   offline=false;
@@ -196,7 +197,7 @@ async function downgradeRejectedAndBadData(){
   const browser=createBrowser(payload(3,true),async()=>response(networkPayload),saved);
   await until(()=>browser.controller.state.refreshOutcome==='older','older network rejected');
   assert.equal(browser.snapshot().item.deep_stage_state,'completed');
-  assert.equal(browser.nodes('feedSyncNotice').dataset.state,'older');
+  assert.equal(browser.nodes('feedSyncNotice').dataset.state,'confirmed_older_or_conflict');
   assertSaved(browser);
   networkPayload={...payload(4,true),items:[{...payload(4,true).items[0],id:''}]};
   await browser.controller.retry();
@@ -211,7 +212,7 @@ async function freshNetworkAndMalformedCache(){
   const browser=createBrowser(null,async()=>response(payload(4,true)),saved);
   await until(()=>browser.controller.state.source==='network','fresh network');
   assert.equal(browser.snapshot().item.deep_stage_state,'completed');
-  assert.equal(browser.nodes('feedSyncNotice').dataset.state,'current');
+  assert.equal(browser.nodes('feedSyncNotice').dataset.state,'network_verified');
   assertSaved(browser);
   const corrupt={...payload(1,false),generated_at_utc:'unknown'};
   const repaired=createBrowser(corrupt,async()=>response(payload(4,true)),saved);
@@ -226,16 +227,69 @@ async function firstVisitOutageRetry(){
     return response(payload(5,true));
   },saved);
   await until(()=>browser.controller.state.status==='failed','first visit offline');
-  assert.equal(browser.nodes('feedSyncNotice').dataset.state,'failed','offline-first visit must expose retry');
+  assert.equal(browser.nodes('feedSyncNotice').dataset.state,'no_feed','offline-first visit must expose retry');
   assert.match(browser.nodes('feedSyncText').textContent,/Не удалось загрузить ленту/);
   offline=false;
   await browser.controller.retry();
   await until(()=>browser.controller.state.source==='network','first visit successful retry');
-  assert.equal(browser.nodes('feedSyncNotice').dataset.state,'current');
+  assert.equal(browser.nodes('feedSyncNotice').dataset.state,'network_verified');
   assert.equal(browser.snapshot().item.deep_stage_state,'completed');
   assertSaved(browser);
 }
+// Regression: a just-generated snapshot never becomes "outdated" on offline alone.
+async function newlyGeneratedCacheVsOldProducer(){
+  const recent=createBrowser(payload(9,false),async()=>{throw Error('network unavailable')},saved);
+  await until(()=>recent.controller.state.refreshOutcome==='failed','recent cache verification failed');
+  assert.equal(recent.controller.state.freshnessState,'verification_failed');
+  assert.equal(recent.controller.state.lastVerifiedAt,null,'offline is not network verification');
+  assert.match(recent.nodes('feedSyncText').textContent,/Это не означает, что лента устарела/);
+  assert.doesNotMatch(recent.nodes('feedSyncText').textContent,/более суток/,'minutes-old cache is not aged');
+  assertSaved(recent);
+
+  const agedPayload=payload(9,false);
+  agedPayload.generated_at_utc='2026-10-08T12:09:00Z';
+  const aged=createBrowser(agedPayload,async()=>{throw Error('network unavailable')},saved);
+  await until(()=>aged.controller.state.refreshOutcome==='failed','old cache verification failed');
+  assert.equal(aged.controller.state.freshnessState,'verification_failed','age is not server-confirmed mismatch');
+  assert.match(aged.nodes('feedSyncText').textContent,/Снимок создан более суток назад/);
+  assertSaved(aged);
+}
+async function equalNetworkAndInteractiveDetail(){
+  const browser=createBrowser(payload(5,true),async()=>response(payload(5,true)),saved);
+  await until(()=>browser.controller.state.refreshOutcome==='identical','verified equal');
+  assert.equal(browser.controller.state.freshnessState,'network_verified');
+  assert.equal(browser.controller.state.lastVerifiedAt,'2026-10-11T12:10:00.000Z');
+  assert.match(browser.nodes('feedSyncText').textContent,/проверена по сети в/);
+  assert.equal(browser.nodes('feedStatusToggle').getAttribute('aria-expanded'),'false','collapsed by default');
+  assert.equal(browser.nodes('feedSyncDetails').classList.contains('hidden'),true);
+  assert.match(browser.nodes('feedStatusToggle').getAttribute('aria-label'),/Показать подробности/);
+  browser.nodes('feedStatusToggle').dispatch('click');
+  assert.equal(browser.nodes('feedStatusToggle').getAttribute('aria-expanded'),'true');
+  assert.equal(browser.nodes('feedSyncDetails').classList.contains('hidden'),false);
+  browser.nodes('feedSyncDetails').dispatch('keydown',{key:'Escape'});
+  assert.equal(browser.nodes('feedStatusToggle').getAttribute('aria-expanded'),'false','Escape closes without a modal');
+  assertSaved(browser);
+}
+function compactMobileContract(){
+  const html=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
+  const css=fs.readFileSync(path.join(__dirname,'feed-sync.css'),'utf8');
+  assert.match(html,/<meta name="viewport" content="width=device-width, initial-scale=1/);
+  assert.match(html,/id="feedStatusToggle"[^>]*type="button"[\s\S]*?aria-expanded="false" aria-controls="feedSyncDetails"/);
+  assert.match(html,/id="feedSyncLive"[^>]*role="status" aria-live="polite"/);
+  assert.match(html,/id="feedSyncDetails"[^>]*class="feed-sync-details hidden"/);
+  assert.match(html,/id="feedRefreshBtn"[^>]*type="button"/);
+  assert.ok(html.indexOf('id="feedSyncNotice"')<html.indexOf('<nav class="tabs"'),'header indicator');
+  assert.match(html,/feed-bootstrap.js\?v=compact-freshness-ux-01/);
+  assert.match(html,/feed-sync.css\?v=compact-freshness-ux-01/);
+  assert.match(css,/width:44px;height:44px;min-width:44px;min-height:44px/,'touch target');
+  assert.match(css,/\.feed-sync-details\{position:absolute;/,'detail never pushes cards down');
+  assert.match(css,/@media\(max-width:430px\)/,'small screen incl. 350px');
+  assert.doesNotMatch(css,/\.feed-sync\{[^}]*padding:7px/,'no persistent amber full-width card');
+}
 async function main(){
+  compactMobileContract();
+  await newlyGeneratedCacheVsOldProducer();
+  await equalNetworkAndInteractiveDetail();
   await firstVisitOutageRetry();
   await cacheOldToFresh();
   await offlineRetryAndResume();
@@ -245,6 +299,6 @@ async function main(){
   assert.equal(direct.validatePayload({...payload(1),generated_at_utc:'wrong'}),false);
   assert.equal(direct.validatePayload({...payload(1),items:[{id:ID},{id:ID}]}),false);
   assert.equal(progressive.stageIndicators(payload(2,true).items.find(x=>x.id===ID))[2].lit,true);
-  console.log('PASS: stale Deep feed, user saved state, retry/resume, freshness/identity and init re-entry');
+  console.log('PASS: Deep feed, compact truthful freshness, mobile CSS, accessible detail, state, retry/resume and init re-entry');
 }
 main().catch(error=>{console.error(error);process.exitCode=1});
