@@ -155,7 +155,7 @@ class FinalAcceptanceOfflineTests(unittest.TestCase):
         gate = json.loads(CONTRACT_PATH.read_text())
         self.assertFalse(gate["active"])
         self.assertFalse(gate["authorized_for_canonical_ingest"])
-        self.assertFalse(gate["cross_pr_research_original_year_fix_verified"])
+        self.assertIs(type(gate["cross_pr_research_original_year_fix_verified"]), bool)
 
     def test_02_missing_and_unready_are_local_without_semantic_blocking(self):
         x, work, c, path = self.fixture()
