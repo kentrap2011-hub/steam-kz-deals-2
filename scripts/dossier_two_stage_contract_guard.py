@@ -177,6 +177,30 @@ def validate_research(document, *, expected_assignment=None):
             _fail("resolved title mismatches descriptor")
         if not ident["identity_source_refs"]:
             _fail("resolved identity lacks actual source")
+    # Both fields describe the ORIGINAL work, not the Steam release or a
+    # platform/port publication date. Explicit claims must agree; an unknown
+    # source year remains unknown and must not be inferred from identity.
+    for corroborator in ident["corroborators"]:
+        if (corroborator["kind"] == "appid"
+                and corroborator["value"] != a["appid"]):
+            _fail("identity AppID corroborator mismatch")
+    original_year = ident["original_work_release_year"]
+    for ref, row in source.items():
+        binding = row["exact_product_binding"]
+        if binding is None:
+            continue
+        source_year = binding["original_work_release_year"]
+        if binding["basis"] == "title_and_work_year" and source_year is None:
+            _fail(f"source {ref} title-and-work-year binding lacks original work release year")
+        if source_year is not None:
+            if original_year is None:
+                _fail(f"source {ref} original work release year has unresolved Research identity year")
+            if source_year != original_year:
+                _fail(
+                    f"source {ref} exact-product binding original work release year "
+                    f"{source_year} conflicts with Research identity original work "
+                    f"release year {original_year}"
+                )
     for ref in ident["identity_source_refs"]:
         if ref not in source or source[ref]["evidence_role_hint"] != "identity":
             _fail("broken/nonidentity source reference")
