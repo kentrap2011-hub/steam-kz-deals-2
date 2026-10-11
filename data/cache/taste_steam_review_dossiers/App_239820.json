@@ -1,0 +1,365 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "appid": "239820",
+  "title": "Game Dev Tycoon",
+  "generated_at_utc": "2026-10-11T14:20:23.603Z",
+  "expires_at_utc": "2026-10-31T14:20:23.603Z",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "Game Dev Tycoon",
+    "release_year": 2013,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "239820"
+      },
+      {
+        "kind": "developer",
+        "value": "Greenheart Games"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 7 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The central player fantasy is naming and building imaginary game releases; choosing subjects, genres, platform opportunities and design emphasis makes it easy for players to invent their own studio history.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "mechanics",
+      "statement": "Players describe the actual management loop as comparatively simple, with checkboxes, topic/genre matches and sliders rather than a detailed simulation of how a real development team operates.",
+      "sentiment": "mixed",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Studio growth and game-industry milestones motivate the first career playthrough, while familiarity with recognizable platform history can make later commercial choices more predictable.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-004",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "Repeated runs risk settling into familiar winning combinations and predetermined console-market choices, reducing the incentive to experiment once the underlying patterns are learned.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-004",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Some development scoring and design-slider trade-offs feel opaque, so knowing that a discipline matters does not always tell a player where to put scarce effort.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-006"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "The idea of creating games and established blockbuster-like franchises is reported as appealing in Russian-language player reviews, even without complex underlying management mechanics.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "The simple choices and steady release cycle support a lightweight, accessible management rhythm, but the modest decision complexity may leave experienced simulation players wanting more.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-004",
+        "feedback-002"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1,
+            5
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            4
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            2
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            4
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            6
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            5,
+            6
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            3,
+            4
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/239820/Game_Dev_Tycoon/",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "identity",
+        "player_feedback": false,
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/239820/reviews/?filterLanguage=russian",
+        "publication_date": null,
+        "language": "russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "239820",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/patientgamers/comments/12ua4cd/game_dev_tycoon_is_a_super_simple_game_kept/",
+        "publication_date": "2023-04-21",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-003",
+        "publication_date": "2023-04-21",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item",
+        "url": "https://www.reddit.com/r/patientgamers/comments/12ua4cd/game_dev_tycoon_is_a_super_simple_game_kept/"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-003",
+        "publication_date": null,
+        "language": "non_russian",
+        "acquisition_mode": "stable_item",
+        "url": "https://www.reddit.com/r/patientgamers/comments/12ua4cd/comment/jh62yw3/"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-003",
+        "publication_date": null,
+        "language": "non_russian",
+        "acquisition_mode": "stable_item",
+        "url": "https://www.reddit.com/r/patientgamers/comments/12ua4cd/comment/jh6n0vc/"
+      }
+    ]
+  }
+}

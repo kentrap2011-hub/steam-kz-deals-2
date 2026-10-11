@@ -1,0 +1,393 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "appid": "242860",
+  "title": "Verdun",
+  "generated_at_utc": "2026-10-11T14:20:23.603Z",
+  "expires_at_utc": "2026-10-31T14:20:23.603Z",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "Verdun",
+    "release_year": 2015,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "242860"
+      },
+      {
+        "kind": "developer",
+        "value": "BlackMill Games"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 7 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The distinguishing mode is a cycle of attacking, defending and counterattacking successive trench lines; holding fields of fire and advancing together matters more than individual run-and-gun aggression.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Rifle lethality, exposed approaches, bayonets, gas and bombardment make survival unforgiving; poorly timed advances or bunching together can wipe out a push quickly.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "coop",
+      "statement": "Squad positioning and role selection affect whether assaults work, while uneven coordination and predictable clustering create tactical frustration for defenders and attackers alike.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Players value the First World War western-front setting, trench layouts, historical-looking equipment and the tense back-and-forth momentum as the most distinctive elements of play.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "A player asking for a remaster praises the frontline mode but criticizes aging graphics, awkward squad/loadout arrangements and some handling of deployed weapons.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "multiplayer",
+      "statement": "A late-2025 player account reports difficulty finding other people online immediately after purchase; this is a dated population concern, not proof that every platform or region is empty now.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "Match rhythm alternates patient holding of trenches with sudden, high-lethality charges and reversals, which can be atmospheric but punishes careless movement.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "Strong appreciation for Verdun's distinctive frontline trench mode coexists with criticism of its aged systems, while availability of human opponents varies by time, server and platform.",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "source_ids": [
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-004",
+        "feedback-005"
+      ]
+    }
+  ],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1,
+            6
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            4
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            2
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            6
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            4
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            6
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            5
+          ]
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            3
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            4,
+            5
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "covered",
+          "observation_indices": [
+            5
+          ]
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/242860/Verdun/",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "identity",
+        "player_feedback": false,
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/242860/reviews/?browsefilter=toprated&l=russian&snr=1_5_9_",
+        "publication_date": null,
+        "language": "mixed",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "242860",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/VerdunGame/comments/1d3oyl2",
+        "publication_date": "2024-05-29",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/VerdunGame/comments/1ow8h2i/anybody_out_there/",
+        "publication_date": "2025-11-13",
+        "language": "non_russian",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "freshness": "recent"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "publication_date": "2015-05-31",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": "2015-05-31",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-002",
+        "publication_date": "2015-10-08",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-003",
+        "publication_date": "2024-05-29",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item",
+        "url": "https://www.reddit.com/r/VerdunGame/comments/1d3oyl2"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-004",
+        "publication_date": "2025-11-13",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item",
+        "url": "https://www.reddit.com/r/VerdunGame/comments/1ow8h2i/anybody_out_there/"
+      }
+    ]
+  }
+}
