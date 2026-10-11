@@ -1,0 +1,293 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "5c942e89636e1dc93ebbfe4900a8f3c31bbec91e",
+  "run_start_authority_commit": "4d45c76cf5e0b4d84bd1bf9ef05662458d4658b9",
+  "run_started_at_utc": "2026-10-11T07:20:59+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "c17f8fb5dc87b55fa4ca8dc02e36191ae1093dc6e686730b9d2c410ba8adc7be",
+  "family_id": "game:1599600",
+  "taste_subject_key": "App_1599600",
+  "appid": "1599600",
+  "taste_fingerprint": "5d9a1722c2b538fa828b7042b06b5fd8c8ad006144681c3c14d516bf8b3531c3",
+  "candidate_context_sha256": "3c58fec9a6e14f16ee610f318d28e560c34636f33392c406c7773c0f155f5337",
+  "dossier_content_sha256": "4960f3c168cb1519a4bbc15bf47efe76862cfb8fafe0902de79a4fcd59db94ac",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "e39a313028eac85d11d2101bc96fbe5eb79178b7abdc8cc3b53470219b8ebf93",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Непрерывная работа кухни — готовка, выдача заказов и перестройка маршрутов — требует активных решений и быстрой обратной связи; это соответствует интересу к насыщенному игровому процессу.",
+    "Возрастающий поток посетителей, организация кухни и использование автоматизации дают понятные задачи для освоения; кооператив позволяет осмысленно распределять роли."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 76,
+    "development_variety": 57,
+    "structure_pacing_direction": 73,
+    "identity_hooks": 49,
+    "breadth_of_match": 66
+  },
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Соло-режим возможен, но рост числа заказов превращает длинные смены в заметно более жёсткое испытание; особенно привлекательный для этого профиля совместный тактический процесс не гарантирован при одиночной игре.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "В поздних сменах автоматизация и оптимизация могут вытеснять свободную перестановку и оформление кухни: если новые решения сведутся к обязательной рутине, это будет противоречить запросу на развитие игрового опыта. Сообщение о таком смещении пока единично.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "В отдельных русскоязычных отзывах упоминаются неудобства управления и небольшие ошибки; сведений недостаточно, чтобы считать их устойчивым личным препятствием.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  },
+  "score_findings": [
+    {
+      "finding_id": "kitchen-decisions-and-mastery",
+      "text_ru": "Поток заказов заставляет одновременно готовить, обслуживать клиентов и оптимизировать передвижение по кухне; растущая нагрузка даёт пространство для освоения собственных маршрутов и приоритетов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Ценны практические задачи, в которых улучшение собственных действий заметно повышает результат."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 76
+        }
+      ]
+    },
+    {
+      "finding_id": "escalation-and-automation-tradeoff",
+      "text_ru": "После первых ресторанных дней появляются новые ограничения, оборудование и автоматизация, но часть отзывов описывает поздние смены как вытеснение свободной игры обязательной оптимизацией; разнообразие может оказаться уже, чем рост сложности.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Важны новые ситуации и механики по ходу игры, а не только усложнение прежнего цикла."
+        },
+        {
+          "json_pointer": "/taste_profile/8/lowers",
+          "profile_value_sha256": "0190267bc95b26d6a6c3d6c7ec4a3e9c3dc45950de5ac94ebaff3b97b434b73b",
+          "match_text_ru": "Однообразная работа без содержательного развития снижает интерес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 57
+        }
+      ]
+    },
+    {
+      "finding_id": "clear-daily-service-loop",
+      "text_ru": "Каждый день задаёт прямую цель — обслужить гостей, а затем изменить кухню под растущий спрос. Это сохраняет ясный вектор и быстрый цикл действий без долгих пустых переходов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/active_core_loop_vs_low_stimulation_filler/summary",
+          "profile_value_sha256": "b4a73bd07d3acb93744f9800c2ccc182334128a573b98d020cc696b40af3ff44",
+          "match_text_ru": "Удерживает внимание активная задача с частой обратной связью; затянутые промежутки без действий его снижают."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 73
+        }
+      ]
+    },
+    {
+      "finding_id": "identity-in-the-working-kitchen",
+      "text_ru": "Узнаваемый акцент здесь — организация собственной кухни и напряжённая ресторанная смена, а не сюжет или герои; новые карточки для более спокойной игры могут менять характер этого центрального напряжения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/13/raises",
+          "profile_value_sha256": "fd0e5a051cdf972884f0bfccd7dfd2c3cd50ec876ee4cd2ee491d416f2707058",
+          "match_text_ru": "Нужен выраженный индивидуальный крючок в механике или подаче; в этой игре он главным образом механический."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "qualifies",
+          "normalized_value": 49
+        }
+      ]
+    },
+    {
+      "finding_id": "cooperative-role-specialization",
+      "text_ru": "Совместная готовка становится задачей распределения кухонных ролей и согласования действий; однако часть отзывов предупреждает, что одиночная игра ощутимо напряжённее, поэтому социальное преимущество зависит от способа прохождения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9/raises",
+          "profile_value_sha256": "36b637056006eec4d8f770215639f59d7ccbc3bd78413fc61dd852f0486dfea8",
+          "match_text_ru": "Профилю особенно близка совместная тактика с осмысленным распределением ролей."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 66
+        }
+      ]
+    }
+  ]
+}
