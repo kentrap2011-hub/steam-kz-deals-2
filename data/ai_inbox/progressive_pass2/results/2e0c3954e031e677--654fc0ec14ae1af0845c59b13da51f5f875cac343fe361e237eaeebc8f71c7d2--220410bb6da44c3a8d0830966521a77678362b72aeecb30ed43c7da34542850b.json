@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "ddef4315c4e7231f4cf2217603614703f887732b",
+  "run_start_authority_commit": "83116357e4b612fc7280c8185412d73fba336ba7",
+  "run_started_at_utc": "2026-10-11T11:21:19+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "654fc0ec14ae1af0845c59b13da51f5f875cac343fe361e237eaeebc8f71c7d2",
+  "family_id": "game:220440",
+  "taste_subject_key": "App_220440",
+  "appid": "220440",
+  "taste_fingerprint": "42974764d1d74d0ddece700610aa84b724f898db192ea2c19de50d407fc5d051",
+  "candidate_context_sha256": "672d94e3a6c5e430a55160e759cf7abf43fd390cd728068b985dc283142debad",
+  "dossier_content_sha256": "1f2f664e15a372501e1b6c1f87a1941d52dc07d18bcfd862e426008f4ec9923f",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "220410bb6da44c3a8d0830966521a77678362b72aeecb30ed43c7da34542850b",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "medium",
+  "base_support_compatible": null,
+  "positive_evidence": [
+    "Быстрый отзывчивый слэшер с переключением между мечами, огнестрельным оружием и ангельскими/демоническими стойками поддерживает длинные комбинации и развитие мастерства.",
+    "По ходу прохождения открываются новые приёмы и оружие, а бои чередуются с платформингом на сюрреалистических меняющихся улицах города.",
+    "Короткая по меркам больших кампаний история с оценкой стиля в бою и высокими сложностями позволяет осваивать новые тактики и переигрывать уровни ради качества исполнения."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 80,
+    "development_variety": 73,
+    "structure_pacing_direction": 72,
+    "identity_hooks": 58,
+    "breadth_of_match": 66
+  },
+  "score_findings": [
+    {
+      "finding_id": "dmc-reboot-01-combat",
+      "text_ru": "Связки меча, огнестрельного оружия и двух боевых стоек дают быструю комбинационную систему с возможностью доводить серии ударов до автоматизма.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile",
+          "profile_value_sha256": "dcb42fc9b1482b18c85c66c45bf4e15a6c38ee5408b48398fb316ddc1c6d95a2",
+          "match_text_ru": "Профиль особо выделяет удовольствие от освоения сложных приёмов и заметного роста собственного навыка."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 80
+        }
+      ]
+    },
+    {
+      "finding_id": "dmc-reboot-02-new-tools",
+      "text_ru": "Новые способности и виды оружия постепенно расширяют комбинации, а испытания на качество боя придают освоению дополнительных техник практический смысл.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "b584a23bde72bbcacc284a93f33e49bda9cde0b89c7d750aa3d954ed1fef2055",
+          "match_text_ru": "Профилю особенно подходит регулярное расширение доступных действий, а не повтор одной стартовой формулы."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 73
+        }
+      ]
+    },
+    {
+      "finding_id": "dmc-reboot-03-traversal-pacing",
+      "text_ru": "Боевые эпизоды чередуются с платформингом по меняющимся улицам Лимбо; относительно короткая кампания снижает риск растянуть прохождение на месяцы, хотя отдельные схватки к концу утомляют.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/play_pattern_and_length",
+          "profile_value_sha256": "8feb65b868ff41d014b3f6543c6f1db8fba66982c66b920e1ff9be811f4c6b35",
+          "match_text_ru": "При редких игровых вечерах компактная структура и переключение между видами задач помогают сохранять интерес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 72
+        }
+      ]
+    },
+    {
+      "finding_id": "dmc-reboot-04-reimagined-dante",
+      "text_ru": "Сюрреалистические превращения города и энергичная электронная музыка придают игре собственное лицо, но грубоватый новый Данте может не заменить запомнившиеся отношения героев ранних частей.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/stopgame_cards/25",
+          "profile_value_sha256": "e0597176f8c1f9a4f5977bf8630f6d7b26707b8154109e37d6d363c12c3a55d5",
+          "match_text_ru": "В личной оценке DMC3 особо ценились Данте, Вергилий и отношения братьев, не только зрелищный бой."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "qualifies",
+          "normalized_value": 58
+        }
+      ]
+    },
+    {
+      "finding_id": "dmc-reboot-05-depth-story-balance",
+      "text_ru": "Доступный зрелищный бой остаётся сильной стороной, но часть игроков указывает на более простых боссов и слабые диалоги — существенный компромисс на фоне любимых ранних частей.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/stopgame_cards/27",
+          "profile_value_sha256": "0a40fb210b8a6d61bd7b2185d6ec37a372141d3ecb4e86e2c46c02969666c45b",
+          "match_text_ru": "В DMC5 пользователь отдельно отметил работающий геймплей, но снизил оценку за менее яркую историю и недостаток новизны."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 66
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "other_grounded_taste_risk",
+        "text_ru": "Перезапуск иначе показывает Данте и его историю: если привлекательность DMC3 была связана с отношениями братьев и характером героев, более резкая и спорная трактовка может заметно ослабить вовлечённость.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Облегчённые комбинации, ограничения оружия против отдельных врагов и менее требовательные боссы могут мешать именно глубокому освоению боевой системы; степень помехи зависит от выбранной сложности.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "К концу кампании некоторые повторные схватки воспринимаются утомительными, хотя короткая продолжительность и возможность улучшать боевое исполнение частично компенсируют повтор.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
