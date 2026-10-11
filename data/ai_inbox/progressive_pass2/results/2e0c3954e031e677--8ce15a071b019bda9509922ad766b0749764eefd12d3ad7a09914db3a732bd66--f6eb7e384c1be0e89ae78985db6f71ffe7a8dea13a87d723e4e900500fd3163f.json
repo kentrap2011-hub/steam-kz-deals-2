@@ -1,0 +1,319 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "2314dfd897f841c86dd8f9ff637239e8ced387bd",
+  "run_start_authority_commit": "142754f4137414e4085867a5b58fcab244c3e3da",
+  "run_started_at_utc": "2026-10-11T12:12:32+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "8ce15a071b019bda9509922ad766b0749764eefd12d3ad7a09914db3a732bd66",
+  "family_id": "game:230190",
+  "taste_subject_key": "App_230190",
+  "appid": "230190",
+  "taste_fingerprint": "4629240731b82240437c4e8fe83abca24512607108e775305a86db7a7e9bafaa",
+  "candidate_context_sha256": "18b821c8cacb5572935bf7b82d09eee5865fa657bf48c40a0e37dc25b071dd1f",
+  "dossier_content_sha256": "319e989572e8696ef33557821412af99b5f78253aad5a76c2c773c950ce6db91",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "f6eb7e384c1be0e89ae78985db6f71ffe7a8dea13a87d723e4e900500fd3163f",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Кампания постепенно вводит новые постройки, существ, ритуалы и оборонительные возможности, позволяя менять способы решения стратегических задач (наблюдения 0–1).",
+    "Ясные цели и давление по территории дают конкретный игровой вектор, а альтернативные режимы расширяют возможности после кампании (наблюдение 2).",
+    "Злодейская атмосфера, чёрный юмор и озвучивание придают строительству подземелий запоминающуюся индивидуальность (наблюдение 4)."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 61,
+    "development_variety": 78,
+    "structure_pacing_direction": 72,
+    "identity_hooks": 70,
+    "breadth_of_match": 65
+  },
+  "score_findings": [
+    {
+      "finding_id": "variety-unlocks",
+      "text_ru": "В кампании открываются новые комнаты, существа, ритуалы и оборонительные приёмы: строительство подземелья не ограничивается одним и тем же набором действий с начала игры.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Очень важен рост разнообразия возможностей по ходу прохождения."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 78
+        }
+      ]
+    },
+    {
+      "finding_id": "goals-and-choices",
+      "text_ru": "Кампания предлагает явные цели, захват территории и защиту владений, поэтому есть конкретные задачи, ради которых нужно сочетать экономику, ловушки и войска.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/pattern",
+          "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+          "match_text_ru": "Ориентиры в задачах снижают типичный риск потерянности, хотя здесь важен собственный план."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 72
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 65
+        }
+      ]
+    },
+    {
+      "finding_id": "tactical-mastery",
+      "text_ru": "Тактическое развитие подземелья, расстановка ловушек, обучение существ и применение заклинаний дают пространство для освоения комбинаций, хотя это не экшен с непосредственным управлением героем.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Ценно совершенствовать навыки и находить работающие тактические решения, но не сама высокая сложность."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 61
+        }
+      ]
+    },
+    {
+      "finding_id": "villain-identity",
+      "text_ru": "Злодейская перспектива, чёрный юмор и выразительное голосовое сопровождение делают строительство подземелья узнаваемым по настроению, а не только по механическим системам.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Выраженная стилистическая индивидуальность повышает интерес, если игровой цикл удерживает сам по себе."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 70
+        }
+      ]
+    },
+    {
+      "finding_id": "routine-combat",
+      "text_ru": "В поздних сражениях игроки описывают однообразные приказы и победу числом; это может ослабить удовольствие от новых комнат и построек после освоения базовых тактик.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8/pattern",
+          "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+          "match_text_ru": "Повторение становится существенным минусом, если интересные изменения заканчиваются."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "lowers",
+          "normalized_value": 78
+        },
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 61
+        }
+      ]
+    },
+    {
+      "finding_id": "time-pressure-friction",
+      "text_ru": "Ограниченные карты, требовательное управление существами и спешка в отдельных заданиях могут мешать спокойно экспериментировать, даже если цели миссии понятны.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 9
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/14/pattern",
+          "profile_value_sha256": "7809459a648399d754663a4c4c191bbf107a3aa5def57eead9a4102deb33de0b",
+          "match_text_ru": "Множество опций полезно, если решения понятны без избыточной подготовки и напряжённого контроля."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 72
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 65
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Бои могут свестись к численному перевесу и привычным приказам, а длинные миссии — к повторяющемуся циклу: особенно неприятно, если развитие опыта перестаёт приносить новые ситуации.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Нажим миссий, частое микроуправление и спорное удобство команд существам способны мешать вдумчивой стройке и стратегическим экспериментам, хотя динамичный темп не всегда минус.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 9
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Единичная жалоба на вылеты не доказывает частую техническую проблему; возможный дискомфорт стоит учитывать без вывода о неисправности игры на конкретной системе.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "В отношении дизайна существ и выразительности их поведения мнения игроков расходятся: узнаваемая злодейская атмосфера не гарантирует одинакового интереса к монстрам.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      }
+    ]
+  }
+}
