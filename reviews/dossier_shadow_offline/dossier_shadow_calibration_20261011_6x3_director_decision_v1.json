@@ -1,0 +1,133 @@
+{
+  "schema": "DOSSIER-SHADOW-CALIBRATION-DIRECTOR-DECISION-V1",
+  "trial_id": "dossier-shadow-calibration-20261011-6x3",
+  "decision_date_utc": "2026-10-11",
+  "source_of_user_authorization": "current_Director_conversation_2026-10-11_user_agreed_to_first_real_18_game_isolated_trial",
+  "objective": "Measure real Research->Assembly speed and compare source-grounded Dossier accuracy/negative-retention against old GitHub-accepted same-game dossiers",
+  "mode": "BOUNDED_NONPRODUCTION_REAL_SEMANTIC_SHADOW_PROPOSED_AND_USER_REQUESTED",
+  "historical_reference": {
+    "repo": "kentrap2011-hub/steam-kz-deals-2",
+    "head": "95a4bf4990a60082ecb3302da5bc7f23b618d93e",
+    "work_blob": "ef40fc186aabc79dfd24c72864dbe43817a56039",
+    "audit_blob": "8dbf4437d7ba439942f58a6f36d89d6a7ddeec7b",
+    "strict_receipts_pr": 201,
+    "cohort_preview_pr": 205,
+    "quality_gate_pr": 206,
+    "source_metadata_pr": 210,
+    "year_metadata_pr": 209
+  },
+  "scope": {
+    "group_unit": "original_indivisible_three_game_group",
+    "group_order": [
+      3,
+      8,
+      13,
+      15,
+      18,
+      20
+    ],
+    "groups": [
+      {
+        "sequence": 3,
+        "group_sha256": "f5c600719f68970cff87f5623cae9120f23b01de6b61e4e7f028485ffecd1d18",
+        "appids": [
+          "1508750",
+          "1517180",
+          "1533420"
+        ]
+      },
+      {
+        "sequence": 8,
+        "group_sha256": "4884c6ebcf1740d707e81290d735ba672f5cb5b2d2b582dcf46ce5e2f5ec4d3f",
+        "appids": [
+          "1590230",
+          "1599600",
+          "1607130"
+        ]
+      },
+      {
+        "sequence": 13,
+        "group_sha256": "dea2dd46e0b65fa8db54e5a4f814144f27190bb99085b1c6493ea3c519f07995",
+        "appids": [
+          "1849000",
+          "1857090",
+          "1868140"
+        ]
+      },
+      {
+        "sequence": 15,
+        "group_sha256": "7d4e60accd77c948e8b9dacd98278ba3754fb6f4827b0cbd84a8aefab64ff27f",
+        "appids": [
+          "1999170",
+          "1999360",
+          "2009010"
+        ]
+      },
+      {
+        "sequence": 18,
+        "group_sha256": "90b8b2fe89477ae02a3a7f91764979949d0a418200ba155c9ef05383d246f763",
+        "appids": [
+          "206420",
+          "2067050",
+          "2076140"
+        ]
+      },
+      {
+        "sequence": 20,
+        "group_sha256": "d1eaa93cbf9c51851a12069d3b34506b09c39f304c1aac1ee3b7888bde395c99",
+        "appids": [
+          "2124120",
+          "213610",
+          "2138710"
+        ]
+      }
+    ],
+    "total_groups": 6,
+    "total_games": 18,
+    "source_selection": "precommitted_SHA256_3_per_original_year_claim_stratum_from_PR205",
+    "sampling_bias": "not_representative; historical_binding_year_strata_not_independently_accurate"
+  },
+  "known_risks": {
+    "old_year_claim_edition_conflicts_in_scope": [
+      "213610",
+      "2138710"
+    ],
+    "old_year_first_release_truth_unknown_for_many_games": true,
+    "public_source_metadata_partial": "2/118 probes independently visible metadata",
+    "comparative_year_rule": "do_not_force_new_Research_to_copy_incorrect_old_year; treat same-work original historical mismatch as explicit diagnostic and require adjudication"
+  },
+  "operator_authority": {
+    "user_directed_isolated_trial": true,
+    "github_owned_exact_scope_required": true,
+    "github_prepared_snapshot_marker_and_transport": false,
+    "source_protocol_and_independent_reviewer_roles_finalized": false,
+    "actual_semantic_execution_permitted_now": false,
+    "required_before_execution": [
+      "separately validated sandbox-only GitHub-frozen marker+manifest/transport with exact bindings",
+      "explicit nonproduction semantic gate compatible with canonical inactive contracts",
+      "independent reviewer A/B and separate C roles with source privacy rules fixed",
+      "bounded operator invocation on approved exact marker and no old cache write"
+    ],
+    "no_Scheduled_Tasks": true
+  },
+  "metrics": {
+    "processing_time_measured_per_game_stage": true,
+    "real_quality_verdict_requires_independent_source_checks": true,
+    "quality_thresholds_approved": false,
+    "quality_stop_rules": [
+      "identity/work year/edition confusion",
+      "fabricated_or_unverifiable_source_used_as_fact",
+      "privacy_or_raw_player_content_leak",
+      "material_negative_omission",
+      "production_writer_cache_or_Deep_mutation"
+    ],
+    "no_hard_numeric_pass_rate_approved": true,
+    "no_replacement_or_resampling": true
+  },
+  "allowed_production_writes": [],
+  "old_one_stage_dossier_remains_authoritative": true,
+  "two_stage_production_active": false,
+  "deep_migration_authorized": false,
+  "automatic_trial_launch": false,
+  "planned_live_trial_state": "AWAITING_GITHUB_OWNED_SANDBOX_AUTHORITY_AND_INDEPENDENT_EXECUTION_REVIEW"
+}
