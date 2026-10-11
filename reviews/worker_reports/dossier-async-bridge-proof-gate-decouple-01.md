@@ -45,9 +45,9 @@ After the existing real cross-PR direct joint tests passed on the new guard whil
 - Both the new direct joint step and the old ordinary negative Research-year regression completed successfully **before** changing the proof bit to true.
 
 **Phase 2 (proof=true):** implementation head `6c0c3df1851c1d3ef5af9c7d86a70fce0d191dc3`.
-- PR-only joint workflow **38130006101**: PENDING FINAL RESULT.
-- PR-only final bridge workflow **38130006057**: PENDING FINAL RESULT.
-- PR-only eventual chain workflow **38130006093**: PENDING FINAL RESULT.
+- PR-only joint workflow **38130006101: SUCCESS**. The new two-boolean Research→Assembly→GitHub tests and all merged PR #190, P1/P2, final bridge, async, one-stage and execution ownership regressions passed.
+- PR-only final bridge workflow **38130006057: SUCCESS**.
+- PR-only eventual chain workflow **38130006093: SUCCESS**.
 
 ## Explicit gate states and limits
 
@@ -59,4 +59,4 @@ After the existing real cross-PR direct joint tests passed on the new guard whil
 - No real-evidence semantic parity/shadow acceptance or end-to-end production cutover is proven or authorized by this metadata. Future separate user/Director approval and writer integration under existing shared lock remain mandatory.
 - `CURRENT_TASK.md` and Chat 2's independent planning, report, quality harness, site UI/metrics and Director plan remain unchanged to avoid cross-chat concurrent writes.
 
-**Status:** offline implementation complete; final proof=true CI must be verified before final worker handoff. No PR merge.
+**Status:** offline correction and proof=true code CI complete and green; independent final review/merge remains with Director, and production/shadow/cutover remain blocked. The worker does not merge the PR.
