@@ -212,7 +212,7 @@ def inspect_offline_pilot(repo, *, authority_ref=None, submitted_commits=None,
     ready = 0
     for index, (expected, group) in enumerate(zip(decision["scope"]["groups"],
                                                    doc["groups"])):
-        require(first_parent_contains(group["assembly_marker_commit"], authority_ref["commit"]),
+        require(first_parent_contains(repo, group["assembly_marker_commit"], authority_ref["commit"]),
                 "sandbox integration file predates frozen Assembly marker")
         decisions = _inspect_group(repo, expected, group, submitted_commits.get(
             expected["sequence"], {}))
