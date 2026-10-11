@@ -592,6 +592,9 @@
       state.status='loading';
       freshnessNotice('checking');
       await win.init();
+      // app.init() can resolve before the deferred render status callback runs.
+      // Do not briefly report no feed after an accepted network response.
+      if(state.payloadDelivered&&state.status!=='ready')await new Promise(resolve=>schedule(resolve,0));
       if(state.status!=='ready')freshnessNotice('no_feed');
       return state.status==='ready';
     }
