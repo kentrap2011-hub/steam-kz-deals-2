@@ -972,7 +972,7 @@
       "id": "dossier-shadow-real-baseline-eligibility-audit-01",
       "title": "Dossier: проверить настоящие принятые группы для первого испытания",
       "goal": "На одном зафиксированном Git-снимке проверить все принятые старые группы Dossier и записи GitHub writer, установить точное число достоверных баз сравнения и возможность будущего отдельно разрешённого пилота 6 групп/18 игр, не запуская семантику.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Чтение реальной Git-истории writer, сверка приёмочных транзакций, безопасная метаданная ведомость и изолированные тесты; без семантической работы.",
       "urgency": "высокая",
@@ -983,16 +983,16 @@
       "depends_on": [
         "dossier-shadow-pilot-preflight"
       ],
-      "blocker": "Только read-only verification, не выбор/заморозка/запуск пилота; одобрение реальной семантики отдельно. ЧАТ 2 отвечает за UI свежести.",
+      "blocker": "Инструменты и PR-only проверки приняты в main; реальное Dossier испытание требует отдельного разрешения пользователя, сайт ждёт проверки на телефоне.",
       "updated_on": "2026-10-11",
-      "updated_at_utc": "2026-10-11T11:26:15.143Z",
-      "recent_completion": false
+      "updated_at_utc": "2026-10-11T12:36:29.300Z",
+      "recent_completion": true
     },
     {
       "id": "site-feed-sync-popover-outside-dismiss-01",
       "title": "Сайт: закрывать окно сведений о ленте нажатием вне него",
       "goal": "Исправить закрытие компактного окна состояния обновления: нажатие вне панели закрывает её и не блокирует карточки или переходы, внутри и повторная проверка работают; сохранить правильные Deep статусы и настройки.",
-      "status": "planned",
+      "status": "complete",
       "effort": "низкая",
       "effort_reason": "Один обработчик кликов вне всплывающей панели, безопасное снятие слушателя и существующие синтетические браузерные регрессии.",
       "urgency": "обычная",
@@ -1003,9 +1003,50 @@
       "depends_on": [
         "site-feed-sync-compact-freshness-ux-01"
       ],
-      "blocker": "UI PR-only. No semantic, production, Scheduled Tasks or browsing data mutation.",
+      "blocker": "Инструменты и PR-only проверки приняты в main; реальное Dossier испытание требует отдельного разрешения пользователя, сайт ждёт проверки на телефоне.",
       "updated_on": "2026-10-11",
-      "updated_at_utc": "2026-10-11T12:09:39.131Z",
+      "updated_at_utc": "2026-10-11T12:36:29.300Z",
+      "recent_completion": true
+    },
+    {
+      "id": "dossier-shadow-pilot-cohort-decision-packet-01",
+      "title": "Dossier: предлагаемые 18 игр и пакет решения о пилоте",
+      "goal": "По 20 исторически подтверждённым группам сформировать воспроизводимый предварительный набор из шести исходных групп, честно обозначить неизвестную разнородность и собрать пакет отдельного решения без выбора и запуска реального анализа.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Небольшой изолированный read-only алгоритм предварительной выборки, синтетические проверки и точная ведомость авторизации без семантики.",
+      "urgency": "высокая",
+      "urgency_reason": "Подтверждены 20 исторических групп; необходим проверяемый предмет отдельного пользовательского решения об испытании на 18 играх.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_PILOT_COHORT_DECISION_PACKET_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-shadow-real-baseline-eligibility-audit-01"
+      ],
+      "blocker": "PR-only подготовка без real semantic Research/Assembly, выбора или фиксации настоящего trial и без Scheduled Tasks.",
+      "updated_on": "2026-10-11",
+      "updated_at_utc": "2026-10-11T12:36:29.300Z",
+      "recent_completion": false
+    },
+    {
+      "id": "dossier-shadow-quality-review-gate-01",
+      "title": "Dossier: независимая оценка качества для будущего пилота",
+      "goal": "Разработать изолированную офлайн-проверку парных досье и независимого ослеплённого оценивания, учёт критичных потерь и разногласий, не выдавая синтетические результаты за реальное качество.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Отдельный offline reviewer/adjudication gate и регрессии строгой проверки источников и исторической приёмки в синтетических тестах.",
+      "urgency": "высокая",
+      "urgency_reason": "До будущего сравнения Research и Assembly необходим независимый механизм проверки потерь отрицательных фактов и достоверности решений.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_QUALITY_REVIEW_GATE_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-async-shadow-quality-readiness",
+        "dossier-shadow-real-baseline-eligibility-audit-01"
+      ],
+      "blocker": "PR-only подготовка без real semantic Research/Assembly, выбора или фиксации настоящего trial и без Scheduled Tasks.",
+      "updated_on": "2026-10-11",
+      "updated_at_utc": "2026-10-11T12:36:29.300Z",
       "recent_completion": false
     }
   ]
