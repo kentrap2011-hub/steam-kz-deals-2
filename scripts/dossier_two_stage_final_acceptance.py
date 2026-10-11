@@ -14,7 +14,9 @@ from dossier_two_stage_async_buffer import (
     frozen_buffer, inspect_buffered_assembly_candidate,
 )
 from dossier_two_stage_contract_guard import CONFIG, canonical_sha256
-from dossier_two_stage_staging import json_at, marker_context, strict_json, file_at
+from dossier_two_stage_staging import (
+    blob, file_at, first_parent_contains, git, json_at, marker_context, strict_json,
+)
 from taste_steam_review_dossier_buffered import (
     drain_buffered_groups, expected_buffer_path, validate_buffer_artifact,
 )
@@ -133,8 +135,19 @@ def _inspect_item(repo, descriptor, manifest, slot, ref):
                         "canonical_dossier_accepted": False}, None
             return {"status": STATUS_GAP, "reason": checked["status"],
                     "canonical_dossier_accepted": False}, None
+        # Historical proof is insufficient if HEAD subsequently rewrote the
+        # original create-only Research or Assembly transport.
+        head = git(repo, "rev-parse", "HEAD").decode().strip()
+        if not first_parent_contains(repo, ref["result_commit"], head):
+            raise ValueError("Assembly submission not in current Git history")
         raw = file_at(repo, ref["result_commit"], checked["result_path"])
+        if blob(repo, head, checked["result_path"]) != blob(
+                repo, ref["result_commit"], checked["result_path"]):
+            raise ValueError("Assembly transport changed since its original commit")
         result = strict_json(raw)
+        rt = result["research_transport"]
+        if blob(repo, head, rt["research_package_path"]) != rt["research_package_blob_sha"]:
+            raise ValueError("Research transport changed since its original commit")
         dossier = result["payload"]["dossier"]
         return {"status": STATUS_VALID, "canonical_dossier_accepted": False,
                 "result_commit": ref["result_commit"],
@@ -215,7 +228,9 @@ def inspect_original_groups(repo, *, manifest, contract, item_locators,
     return {"schema": "DOSSIER-TWO-STAGE-OFFLINE-HANDOFF-V1",
             "snapshot_id": current["snapshot_id"],
             "manifest_sha256": canonical_sha256(current),
-            "decisions": decisions, "ready": ready, "unmatched_locators": invalid_locators,
+            "decisions": decisions, "ready": ready,
+            "item_locators": copy.deepcopy(item_locators),
+            "unmatched_locators": invalid_locators,
             "canonical_dossier_accepted": False, "deep_ready_issued": False}
 
 
@@ -240,6 +255,14 @@ def offline_existing_writer_handoff(repo, *, inspection, manifest_path, contract
     if (inspection.get("snapshot_id") != manifest["snapshot_id"]
             or inspection.get("manifest_sha256") != canonical_sha256(manifest)):
         raise ValueError("stale canonical manifest between inspection and writer")
+    # An inspector verdict is never an accepted receipt: rerun all immutable
+    # Git and strict V2 validations immediately at the offline writer boundary.
+    reviewed = inspect_original_groups(
+        root, manifest=manifest, contract=contract,
+        item_locators=inspection.get("item_locators"), offline_fixture=True)
+    if (reviewed["ready"] != inspection.get("ready")
+            or reviewed["manifest_sha256"] != inspection["manifest_sha256"]):
+        raise ValueError("untrusted, forged or stale final group handoff")
     groups = validate_group_plan(manifest, contract, required=True)["groups"]
     pending = {e["sequence"] for e in manifest["group_progress"]["groups"]
                if e["state"] == "pending"}
