@@ -6,7 +6,7 @@
 - Branch: `implement/dossier-async-final-acceptance-integration-01`.
 - PR: **#188** — https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/188 (OPEN; worker must not merge).
 - Mode: **INACTIVE / synthetic disposable Git only / PR-only**.
-- Status: **inactive integration implemented; CI recheck pending; NOT authorized for production or canonical live acceptance**.
+- Status: **inactive integration implemented; latest code CI green on head b126cd8; NOT authorized for production or canonical live acceptance**.
 
 ## START and architecture preflight
 
@@ -64,7 +64,9 @@ The test-only bridge does not publish GitHub accepted receipts and never derives
 
 PR-only tests cover nonready Research A and subsequent Assembly A, exact three-chain ready group, strict real group writer accept, bad Research A with independently accepted next three-game group, group collision without overwrite, duplicate/foreign item, tampered Research and Assembly commit bindings, altered original order, fake GitHub receipt, stale manifest and replay.
 
-Initial run `38114383516` **failed** due to a *test-fixture-only* mistake: fixture canonical work file was added in the same Git commit as a create-only Research transport. It was corrected by committing the synthetic fixture manifest separately. Further hardening revalidates original submitted Git bytes and current HEAD at final writer handoff instead of trusting an earlier local inspection object. No live data were touched. Latest run confirmation and exact status must be recorded only from subsequent GitHub CI evidence.
+Initial run `38114383516` **failed** due to a *test-fixture-only* mistake: fixture canonical work file was added in the same Git commit as a create-only Research transport. It was corrected by committing the synthetic fixture manifest separately. Further hardening revalidates original submitted Git bytes and current HEAD at final writer handoff instead of trusting an earlier local inspection object. New adversarial regression rejects a forged complete handoff and an overwritten Research source after initially passing chain inspection. No live data were touched.
+
+**Confirmed GitHub CI on implementation+route head `b126cd814c31d57be7ad548197cfd68de2df007b`:** run `38114595702` — **SUCCESS** (compilation, seven isolated disposable-Git integration tests, preceding eventual chain QA, existing async buffer and strict one-stage buffered submission regressions); run `38114595700` — **SUCCESS** (existing eventual Research→Assembly chain QA, including explicitly known Research-year XFAIL); run `38114595706` — **SUCCESS** (backlog dispositions). The known XFAIL is still an unresolved blocker and was not counted as proof of Research original-year safety. Only report updates follow this tested implementation head.
 
 **Research original release year blocker (ЧАТ 1):** preceding PR #185 documented `test_known_gap_conflicting_source_original_year_must_be_rejected` as XFAIL. This adapter does not edit `validate_research`, cross-kind original-work vs Steam-storefront year compatibility or Research tests. `cross_pr_research_original_year_fix_verified=false` and the live gate remains false. Before any activation: merge/test the independent ЧАТ 1 correction; require the XFAIL to become genuine green; jointly rerun entire P1/P2/async/final writer fixture matrix without regression. Synthetic acceptance tests are **not** production semantic/evidence quality proof.
 
