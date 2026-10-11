@@ -55,7 +55,7 @@ function freshProductionPayload() {
       accepted_offer_count_at_build: 1,
       games: [{ source: 'epic', title: 'Alone With You' }],
     },
-    items: [{ appid: 1, name: 'Cached game' }],
+    items: [{ id: 'game:1', appid: 1, title: 'Cached game' }],
   };
 }
 
