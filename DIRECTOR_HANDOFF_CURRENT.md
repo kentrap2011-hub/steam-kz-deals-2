@@ -5,6 +5,14 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## LATEST DIRECTOR ASSIGNMENT — 2026-10-11: compact mobile feed sync UI
+
+- PR #197 merged `a216807f95cfa71bb28435142af10605c5c1aa60` (ЧАТ 1 historical Dossier writer receipt preflight, synthetic only; real candidate eligibility not established, some accepted legacy groups lack audit). PR #196 merged `d75c60d8d1a7eb2bc3dfd1f83051cdb27781b431` (ЧАТ 2 browser cache/Deep refresh).
+- User confirmed **site is now updated** in ordinary Android browser: Strange Horticulture #26 with Deep lit. However screenshot shows large permanent amber freshness banner + button and immediate "saved copy / could be out of date" even though cache timestamp only ~1 minute old. Exact code uses `freshnessNotice('stale')` for *network verification failure*, not measured age.
+- **NEXT: НОВЫЙ ЧАТ 2** `WORKER_TASK_SITE_FEED_SYNC_COMPACT_FRESHNESS_UX_FIX_01.md`: compact status in/near header, no permanent multiline/button, small accessible retry/details and truthful network-verified vs cached-unverified vs confirmed outdated semantics; retain quick cache-first feed and all persistent user state. PR-only QA, no direct deploy.
+- **ЧАТ 1** has completed #197; no new assignment until Director/user explicitly decides next Dossier real-evidence trial / writer-receipt coverage. Do not start semantics or freeze live groups.
+- No Scheduled Tasks changes, production or semantic writes/activation, Deep/Fast migration. Older handoff assignments below are historical.
+
 ## LATEST DIRECTOR ASSIGNMENT — 2026-10-11: feed freshness and shadow pilot preflight
 
 - PR #193 merged `f6718dafe3267d926e72e4070e134e011d2187a7`: bridge proof flag `cross_pr_research_original_year_fix_verified=true` now independent of real authority, CI green, inactive. PR #194 merged `85e320eb8bc88310f75a3c0a28cefb722c7c1850`: shadow trial prospective plan and Deep site count read-only QA; prior worker chats retired.

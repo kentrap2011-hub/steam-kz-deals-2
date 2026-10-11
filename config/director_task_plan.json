@@ -910,7 +910,7 @@
       "id": "dossier-shadow-pilot-preflight",
       "title": "Dossier: техническая подготовка безопасного shadow-пилота",
       "goal": "Проверить точную связку неизменяемых исходных групп и исторически принятых старых Dossier по GitHub writer receipts; подготовить offline gate и синтетические проверки без реального анализа.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Изолированная техническая проверка с синтетическими тестами или узкая правка UI загрузки ленты.",
       "urgency": "высокая",
@@ -922,16 +922,16 @@
         "dossier-bridge-proof-flag-fix",
         "dossier-shadow-trial-site-count-qa"
       ],
-      "blocker": "PR-only work. No live semantic execution, trial selection, production data writes, activation or Scheduled Task change.",
+      "blocker": "Merged inactive PR, green tests; real Dossier trial is separately authorized and site has a small freshness UX refinement follow-up.",
       "updated_on": "2026-10-11",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-11T10:44:26.083Z"
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-11T11:15:42.256Z"
     },
     {
       "id": "site-deep-status-cache-refresh-fix",
       "title": "Сайт: устранить устаревшие Deep-статусы в обычном браузере",
       "goal": "Исправить безопасное обновление Cache Storage LKG/feed bootstrap: свежий Deep всегда обновляет карточку; кеш явно помечен, при ошибке есть безразрушительное обновление; очередь/настройки сохраняются.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Изолированная техническая проверка с синтетическими тестами или узкая правка UI загрузки ленты.",
       "urgency": "высокая",
@@ -943,10 +943,30 @@
         "dossier-bridge-proof-flag-fix",
         "dossier-shadow-trial-site-count-qa"
       ],
-      "blocker": "PR-only work. No live semantic execution, trial selection, production data writes, activation or Scheduled Task change.",
+      "blocker": "Merged inactive PR, green tests; real Dossier trial is separately authorized and site has a small freshness UX refinement follow-up.",
+      "updated_on": "2026-10-11",
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-11T11:15:42.256Z"
+    },
+    {
+      "id": "site-feed-sync-compact-freshness-ux-01",
+      "title": "Сайт: компактное и честное уведомление об обновлении ленты",
+      "goal": "Убрать массивный баннер и постоянную ложную тревогу об устаревании сразу после загрузки: маленький мобильный индикатор, точное различие сохранённых и действительно устаревших данных и безопасное повторное обновление без сброса очереди.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Точечная UI/CSS и state-machine правка с синтетическими PR-only браузерными тестами.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь подтвердил работающее исправление Deep, но текущий баннер занимает значительную часть экрана телефона и сообщает про устаревание через секунды без оснований.",
+      "task_file": "WORKER_TASK_SITE_FEED_SYNC_COMPACT_FRESHNESS_UX_FIX_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "site-deep-status-cache-refresh-fix"
+      ],
+      "blocker": "No product-data or semantic changes; require focused PR + report + green UI regression.",
       "updated_on": "2026-10-11",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-11T10:44:26.083Z"
+      "updated_at_utc": "2026-10-11T11:15:42.256Z"
     }
   ]
 }
