@@ -3,7 +3,7 @@
 **Worker:** НОВЫЙ ЧАТ — ЧАТ 2  
 **Repository/base:** `kentrap2011-hub/steam-kz-deals-2` / `main`  
 **Task:** `WORKER_TASK_DOSSIER_ASYNC_SHADOW_QUALITY_READINESS_01.md`  
-**Status:** `implementation_inactive_pending_isolated_ci_and_director_review`  
+**Status:** `implementation_complete_isolated_ci_green_pending_director_review`  
 **Branch:** `implement/dossier-async-shadow-quality-readiness-01`
 
 ## Scope and approach
@@ -22,11 +22,19 @@ Changed **only** independently owned shadow-readiness paths:
 
 ## Proved vs not proved
 
-**Tested/structural (when PR CI passes):** code loads; disposable Git lineage and strict final V2 group inspector are mandatory for actual comparison; immutable original one-stage cache path/blob/hash checks are enforced; nonexistent or invalid chain is not counted as compared; original work year contradiction is flagged; twelve dimensions, gaps, source aliases and negative/mixed evidence are preserved; unsupported semantic equivalence cannot be inferred from mismatched wording; diagnostic cohort and per-game records never become canonical Dossier or Deep readiness.
+**Tested/structural (PR CI passed):** code loads; disposable Git lineage and strict final V2 group inspector are mandatory for actual comparison; immutable original one-stage cache path/blob/hash checks are enforced; nonexistent or invalid chain is not counted as compared; original work year contradiction is flagged; twelve dimensions, gaps, source aliases and negative/mixed evidence are preserved; unsupported semantic equivalence cannot be inferred from mismatched wording; diagnostic cohort and per-game records never become canonical Dossier or Deep readiness.
 
 **Not proved:** real Research/source citations actually exist, source content meaning, independent semantic fidelity to the existing accepted one-stage benchmark, historical baseline accepted-writer receipt, cohort failure rate, human judgments or stakeholder-approved thresholds. The harness reports these as unknown/unverified and never returns authorization.
 
 No live Research/Assembly/Dossier semantic invocation, canonical cache/persistence, production activation, Fast/Deep/ranking/UI/Steam/translation/other-repo edits, Scheduled Task or manual-shell-write workflow occurred.
+
+## Verified isolated execution
+
+- PR-only workflow `Validate inactive Dossier shadow quality (PR only)`, run `38121638162` — **success** on head `0a589173257f0a61ec7f9b22c98f04b5e7b4160c`.
+- **8 isolated synthetic/adversarial unittest cases passed** (including disposable Git Research/Assembly/strict V2 three-game proof, baseline tampering, conflicting original years, missing/duplicate submissions, gap/revisit and quality-report uncertainty).
+- Existing repository `Validate backlog dispositions`, run `38121638217` — **success**.
+- First PR-only test run `38121560614` exposed two **test fixture expectation errors**, not evidence of a production defect: a nonexistent third synthetic Research source and a duplicate group locator correctly handled by existing bridge as item-local non-ready rather than throwing. The fixture/expectations were corrected on the same isolated branch and the second run passed. Final head includes these corrections.
+- No tests claim real-source semantic parity; baseline accepted-writer history remains deliberately unverified.
 
 ## Remaining requirements and bounded handoff
 
