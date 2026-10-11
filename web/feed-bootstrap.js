@@ -55,6 +55,7 @@
       currentIdentity:null,
       refreshActive:false,
       refreshOutcome:null,
+      currentGeneratedAt:null,
     };
 
     let bootstrapPromise=null;
@@ -68,6 +69,10 @@
     let activeBlocking=false;
     let initialRenderResolve=null;
     let initialRenderPromise=null;
+    let latestPayload=null;
+    let latestResponse=null;
+    let lastInput=null;
+    let lastInit=null;
 
     function el(id){return doc&&typeof doc.getElementById==='function'?doc.getElementById(id):null}
     function hidden(node){return !node||node.classList?.contains('hidden')}
@@ -99,8 +104,48 @@
       const url=resolvedUrl(input);
       try{return new URL(url).pathname.endsWith(dataUrlSuffix)}catch{return String(url).split(/[?#]/,1)[0].endsWith(dataUrlSuffix)}
     }
+    // A cached object without a parseable producer timestamp or stable item keys
+    // cannot safely be ordered against a newer producer. Fail closed.
     function validatePayload(payload){
-      return !!payload&&typeof payload==='object'&&!Array.isArray(payload)&&Array.isArray(payload.items);
+      if(!payload||typeof payload!=='object'||Array.isArray(payload)||!Array.isArray(payload.items))return false;
+      if(typeof payload.generated_at_utc!=='string'||!Number.isFinite(Date.parse(payload.generated_at_utc)))return false;
+      const ids=new Set();
+      for(const item of payload.items){
+        if(!item||typeof item!=='object'||typeof item.id!=='string'||!item.id.trim()||ids.has(item.id))return false;
+        ids.add(item.id);
+      }
+      return true;
+    }
+    function generationTime(payload){return Date.parse(payload.generated_at_utc)}
+    function samePayload(a,b){return JSON.stringify(a)===JSON.stringify(b)}
+    function freshnessNotice(mode,payload){
+      const banner=el('feedSyncNotice'),message=el('feedSyncText'),button=el('feedRefreshBtn');
+      if(!banner||!message||!button)return;
+      const date=payload?.generated_at_utc;
+      const stamp=date&&Number.isFinite(Date.parse(date))
+        ?new Date(date).toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'})
+        :'время неизвестно';
+      const labels={
+        checking:`Сохранённая копия ленты от ${stamp}. Проверяем обновления. Статистика может быть новее карточек.`,
+        stale:`Сохранённая копия ленты от ${stamp}. Не удалось проверить обновления; отметки Deep могут устареть. Статистика загружается отдельно.`,
+        older:`Свежесть не подтверждена: сервер вернул более старую или неоднозначную версию. Показана сохранённая лента от ${stamp}.`,
+        current:`Лента проверена по сети · ${stamp}. Отметки Deep соответствуют этому снимку.`,
+        failed:'Не удалось загрузить ленту. Повторная проверка не удалит вашу очередь и настройки.',
+      };
+      banner.classList.remove('hidden');
+      banner.dataset.state=mode;
+      message.textContent=labels[mode]||labels.stale;
+      button.disabled=!!state.refreshActive;
+      button.textContent=state.refreshActive?'Проверяем…':'Проверить свежие данные';
+    }
+    function reusableResponse(response,payload){
+      return new Proxy(response,{
+        get(target,prop){
+          if(prop==='json')return async()=>payload;
+          const value=Reflect.get(target,prop,target);
+          return typeof value==='function'?value.bind(target):value;
+        },
+      });
     }
     function payloadIdentity(payload){
       const generatedAt=typeof payload?.generated_at_utc==='string'?payload.generated_at_utc.trim():'';
@@ -217,6 +262,11 @@
           state.retryable=false;
           state.source=source||state.source;
           state.currentIdentity=identity||state.currentIdentity;
+          state.currentGeneratedAt=payload.generated_at_utc;
+          latestPayload=payload;
+          if(response)latestResponse=reusableResponse(response,payload);
+          if(source!=='cache')freshnessNotice('current',payload);
+          else freshnessNotice(state.refreshActive?'checking':'stale',payload);
         }else if(state.status!=='ready'){
           state.status='failed';
           state.retryable=false;
@@ -358,32 +408,53 @@
       if(refreshPromise)return refreshPromise;
       state.refreshActive=true;
       state.refreshOutcome='pending';
+      freshnessNotice('checking',latestPayload||cached.payload);
       refreshPromise=(async()=>{
         try{
           const fresh=await runBoundedNetwork(input,init,{blocking:false,phase:'refresh'});
-          if(fresh.identity&&cached.identity&&fresh.identity===cached.identity){
-            state.refreshOutcome='identical';
-            log('refresh-identical',{identity:fresh.identity});
-            return;
-          }
-          if(!fresh.identity&&JSON.stringify(fresh.payload)===JSON.stringify(cached.payload)){
-            state.refreshOutcome='identical';
-            log('refresh-identical',{identity:null});
-            return;
-          }
           if(initialRenderPromise){
-            const initial=await initialRenderPromise;
-            if(!initial?.renderable){
-              warn('refresh-apply-skipped',{reason:'cached-render-not-ready'});
+            const pending=initialRenderPromise;
+            const initial=await pending;
+            initialRenderPromise=null;
+            if(!initial?.renderable)throw makeError('render','cached render unavailable');
+          }
+          const baseline=latestPayload||cached.payload;
+          if(generationTime(fresh.payload)<generationTime(baseline)){
+            state.refreshOutcome='older';
+            warn('refresh-older-rejected',{network:fresh.payload.generated_at_utc,current:baseline.generated_at_utc});
+            freshnessNotice('older',baseline);
+            return;
+          }
+          if(samePayload(fresh.payload,baseline)){
+            state.refreshOutcome='identical';
+            state.source='network';
+            log('refresh-identical',{identity:fresh.identity});
+            freshnessNotice('current',baseline);
+            return;
+          }
+          if(generationTime(fresh.payload)===generationTime(baseline)){
+            // A giveaway-only republish can retain feed generated_at_utc.
+            // Unknown same-time changes are not ordered: reject instead of downgrading Deep.
+            const sameItems=samePayload(fresh.payload.items,baseline.items);
+            const changedGiveaway=String(fresh.payload.production_contract?.source_giveaway_snapshot_blob_sha||'')
+              !==String(baseline.production_contract?.source_giveaway_snapshot_blob_sha||'');
+            if(!sameItems||!changedGiveaway){
+              state.refreshOutcome='ambiguous';
+              warn('refresh-ambiguous-rejected',{identity:fresh.identity});
+              freshnessNotice('older',baseline);
               return;
             }
           }
-          await applyBackgroundPayload(fresh);
+          if(!await applyBackgroundPayload(fresh))throw makeError('render','fresh feed render failed');
         }catch(error){
           state.refreshOutcome='failed';
           warn('refresh-failed',{kind:error?.feedBootstrapKind||'network',message:String(error?.message||error)});
+          freshnessNotice('stale',latestPayload||cached.payload);
         }finally{
           state.refreshActive=false;
+          if(state.refreshOutcome==='updated'||state.refreshOutcome==='identical')freshnessNotice('current',latestPayload||cached.payload);
+          else if(state.refreshOutcome==='failed')freshnessNotice('stale',latestPayload||cached.payload);
+          refreshPromise=null;
         }
       })();
       return refreshPromise;
@@ -391,12 +462,16 @@
 
     async function runInitial(input,init){
       const url=resolvedUrl(input);
+      lastInput=input;
+      lastInit=init;
       log('bootstrap-start',{url});
       const cached=await readLastGood(url);
       if(cached){
         state.source='cache';
         state.currentIdentity=cached.identity;
+        state.currentGeneratedAt=cached.payload.generated_at_utc;
         state.status='loading';
+        freshnessNotice('checking',cached.payload);
         initialRenderPromise=new Promise(resolve=>{initialRenderResolve=resolve});
         startBackgroundRefresh(input,init,cached);
         return responseWithPayload(cached.response,cached.payload,{source:'cache',identity:cached.identity,url});
@@ -417,12 +492,18 @@
         injectedResponse=null;
         return Promise.resolve(response);
       }
+      if(latestResponse)return Promise.resolve(latestResponse);
       if(bootstrapPromise)return bootstrapPromise;
       bootstrapPromise=runInitial(input,init);
       return bootstrapPromise;
     }
 
     function recover(source){
+      if(latestPayload&&state.source==='cache'&&!state.refreshActive){
+        log('lifecycle-recovery',{source,action:'refresh-stale-cache'});
+        retry();
+        return;
+      }
       if(state.status==='ready'||state.source==='cache'||state.payloadDelivered){
         log('lifecycle-recovery-skip',{source,reason:'visible-feed-ready-or-delivered'});
         return;
@@ -459,11 +540,28 @@
     function onPageShow(event){
       if(event&&event.persisted)recover('pageshow');
     }
+    async function retry(){
+      if(refreshPromise)return refreshPromise;
+      if(lastInput&&latestPayload){
+        return startBackgroundRefresh(lastInput,lastInit,{payload:latestPayload,identity:state.currentIdentity});
+      }
+      // Nothing usable was cached: re-run ordinary init with the same saved localStorage.
+      if(!lastInput||typeof win?.init!=='function')return false;
+      bootstrapPromise=null;
+      state.payloadDelivered=false;
+      state.status='loading';
+      freshnessNotice('checking');
+      await win.init();
+      if(state.status!=='ready')freshnessNotice('failed');
+      return state.status==='ready';
+    }
+    function onRetryClick(){retry().catch(error=>warn('retry-failed',{message:String(error?.message||error)}))}
     function install(){
       if(state.installed)return;
       state.installed=true;
       if(win)win.fetch=wrappedFetch;
       doc?.addEventListener?.('visibilitychange',onVisibility);
+      el('feedRefreshBtn')?.addEventListener?.('click',onRetryClick);
       win?.addEventListener?.('pageshow',onPageShow);
       log('installed',{timeoutMs,retryDelayMs,cacheName,cacheStorage:!!cacheStorage});
     }
@@ -472,6 +570,7 @@
       state.installed=false;
       if(win&&win.fetch===wrappedFetch)win.fetch=nativeFetch;
       doc?.removeEventListener?.('visibilitychange',onVisibility);
+      el('feedRefreshBtn')?.removeEventListener?.('click',onRetryClick);
       win?.removeEventListener?.('pageshow',onPageShow);
       if(retryTimer!=null)cancel(retryTimer);
       try{currentController?.abort()}catch{}
@@ -479,7 +578,7 @@
     function whenBackgroundIdle(){return refreshPromise||Promise.resolve()}
 
     return {
-      install,destroy,fetch:wrappedFetch,recover,state,whenBackgroundIdle,
+      install,destroy,fetch:wrappedFetch,recover,retry,state,whenBackgroundIdle,
       constants:{LOADING_TEXT,RETRY_TEXT,EMPTY_TEXT,ERROR_TEXT,DEFAULT_TIMEOUT_MS,CACHE_NAME},
       validatePayload,payloadIdentity,
     };
