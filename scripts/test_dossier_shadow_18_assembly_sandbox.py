@@ -18,11 +18,13 @@ from test_dossier_two_stage_async_buffer import AsyncFixture
 
 class Sandbox18AssemblyTests(unittest.TestCase):
     def setUp(self):
-        temp = tempfile.TemporaryDirectory()
+        temp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         self.addCleanup(temp.cleanup)
         self.x = AsyncFixture(temp.name)
         self.x.preauthorize_assembly()
         self.root = self.x.f.root
+        git(self.root, "config", "gc.auto", "0")
+        git(self.root, "config", "maintenance.auto", "false")
         # Keep offline safety marker untracked and out of create-only Git commits.
         exclude = Path(self.root) / ".git/info/exclude"
         exclude.write_text(exclude.read_text(encoding="utf-8") +
