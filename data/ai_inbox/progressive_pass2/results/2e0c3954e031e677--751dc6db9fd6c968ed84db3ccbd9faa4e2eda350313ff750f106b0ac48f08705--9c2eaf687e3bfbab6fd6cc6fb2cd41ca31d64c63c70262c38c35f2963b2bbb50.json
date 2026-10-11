@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "3b1e61c601dfb9b08ab5a9828782330171300f0e",
+  "run_start_authority_commit": "4030f23ee655d691031b0940f85529acdb4317f2",
+  "run_started_at_utc": "2026-10-11T10:07:34+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "751dc6db9fd6c968ed84db3ccbd9faa4e2eda350313ff750f106b0ac48f08705",
+  "family_id": "game:1849000",
+  "taste_subject_key": "App_1849000",
+  "appid": "1849000",
+  "taste_fingerprint": "9087deadf08756181bea327507f0509f9b7857e954b5f56dd24cbd3753415598",
+  "candidate_context_sha256": "0bc102f8daf550b7c9e775882094bb8bded5ce92625e504090db282cc5629371",
+  "dossier_content_sha256": "ee23976d3335545cd80360c5692860631d1fdd38572b6ab1f27e02d494bf6de0",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "9c2eaf687e3bfbab6fd6cc6fb2cd41ca31d64c63c70262c38c35f2963b2bbb50",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "not_fit_basis": "confirmed_personal_negative",
+  "confidence": "high",
+  "not_fit_evidence": [
+    "Свидетельства описывают короткие однотипные перестрелки и повторяющиеся карты, при этом продолжительного развития персонажа или механик практически нет.",
+    "Отмечены примитивное поведение противников, неотзывчивая стрельба и небольшой набор боевых действий; именно ощущение управления и развитие игрового процесса особенно важны по данному профилю.",
+    "Основной интерес отзывов сосредоточен на абсурдной провокационной шутке, а не на сильной истории, героях или механическом мастерстве. Даже положительные реакции не доказывают долговременной игровой глубины."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Короткие однотипные миссии, повторяющиеся схемы уровней и практически отсутствие развития способностей расходятся с важнейшим предпочтением — постоянным обновлением игрового опыта.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          },
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Неотзывчивая стрельба и простейшие враги дают мало требовательных решений и удовольствия от управления, даже несмотря на наличие реальных стрелковых этапов.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          },
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Многочисленные юмористические отзывы оценивают провокационный абсурд предпосылки, но не подтверждают качество шутера или визуальной новеллы; необычная тема сама по себе не равна сильному игровому крючку.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Сообщается об опечатках английского текста и непоследовательном воспроизведении звука во время стрельбы; сохранение проблем в актуальной версии не подтверждено.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
