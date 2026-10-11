@@ -5,6 +5,14 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR NEXT TASK — 2026-10-11: реальная проверка пригодности принятых Dossier для shadow-пилота
+
+- **НОВЫЙ ЧАТ 1:** `WORKER_TASK_DOSSIER_SHADOW_REAL_BASELINE_ELIGIBILITY_AUDIT_01.md` — в одном зафиксированном Git-снимке провести **read-only** строгую проверку всех реально принятых старых трёхигровых групп, сопоставить исторические GitHub writer-транзакции, frozen invocation acceptance audit, исходные AppID/year, три cache blob SHA и возможность применить принятый PR #197 preflight. Выдать по каждой группе статус `eligible/ineligible/not_verifiable`, доказательство/причину, отдельный статус GitHub Actions происхождения. Не запускать семантику и не выбирать реальные игры к запуску без отдельного одобрения.
+- **Evidence before assignment:** current `data/production/pre_ai/taste_steam_review_dossier_work.json` snapshot `4d7be57c9a1a90482d948270ab034c49eca3dd84102d28fc67b6fbc1d33f8239` has **76 immutable original three-game groups, 19 accepted, 57 pending**. Tracked frozen-invocation audit has **19** `dossier_candidate_accepted_current_snapshot` records with unique sequences for that snapshot. **Count match does not prove true history/cache/writer receipts.** Worker must pin exact real Git HEAD and report changed-snapshot drift, if any.
+- **Decision sought:** are there at least **6 strictly verified original groups / 18 games** for the separately authorized calibration shadow trial? If yes, propose only a diverse deterministic not-yet-approved candidate plan, not a freeze. If no, identify precise missing authority/run provenance and minimum future safe fix, no history backfill.
+- **ЧАТ 2 remains independently assigned** `WORKER_TASK_SITE_FEED_SYNC_COMPACT_FRESHNESS_UX_FIX_01.md` after PR #198; do not change that task or its site files. Both are independent PR/report worker tasks and must not self-merge.
+- No live Research/Assembly, canonical writer/Deep/Fast/scheduler/production writes or Scheduled Tasks changes. Existing one-stage Dossier and production gates unchanged; real pilot still requires separate explicit user/Director authorization.
+
 ## DIRECTOR CURRENT TASK — 2026-10-11: compact/truthful visual feed freshness
 
 - **PR #197 (ЧАТ 1)** merged `a216807f95cfa71bb28435142af10605c5c1aa60`: inactive historical writer receipt/shadow pilot preflight implemented with synthetic QA; some old accepted one-stage groups lack frozen audit receipts, so real pilot/eligible cohort NOT authorized. ЧАТ 1 completed and remains idle until separate user decision.
