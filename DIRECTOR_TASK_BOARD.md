@@ -5,6 +5,15 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR NEXT WAVE — 2026-10-11: joint validation and quality readiness
+
+- User confirmed the newly translated Russian description of `Being a DIK - Season 1` is now displayed in the normal browser; the visual symptom is closed, no further cache fix needed.
+- **PR #187 — Research original-year correction** merged `aec7701dfb484bbe3d0165e3dc75875c4d2e2c23`. Previously known Research XFAIL is now a passing negative test. Original ЧАТ 1 retired.
+- **PR #188 — inactive Dossier final GitHub bridge** merged `0549dc00b4a96833f747707f92c000bf44f443fc`. Tests only, current one-stage production authority unchanged. Original ЧАТ 2 retired.
+- **Куда отправить: НОВЫЙ ЧАТ — ЧАТ 1** `WORKER_TASK_DOSSIER_ASYNC_POSTMERGE_JOINT_INTEGRATION_QA_01.md`: one isolated actual Research→Assembly→final-bridge joint regression including original-year contradiction and exact original groups; PR-only.
+- **Куда отправить: НОВЫЙ ЧАТ — ЧАТ 2** `WORKER_TASK_DOSSIER_ASYNC_SHADOW_QUALITY_READINESS_01.md`: independent offline semantic-evidence quality/parity harness and protocol for a future separately authorized real-evidence trial; PR-only.
+- Inactive flags stay false; no real semantic execution, no Scheduled Tasks or production changes, no Deep Stage 1 authorization. Fast remains until final atomic Deep cutover.
+
 ## LATEST DIRECTOR ASSIGNMENT — 2026-10-11
 
 - **PR #184 (ЧАТ 1 offline Research→Assembly E2E QA)** merged as `2a5f0fe0173848b8e5baf6b488bb923be8cb4efd`. 87 unit tests passed; prior physical worker chat retired.
