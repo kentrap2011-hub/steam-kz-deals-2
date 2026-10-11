@@ -868,7 +868,7 @@
       "id": "dossier-bridge-proof-flag-fix",
       "title": "Dossier: развязать флаг проверки года и offline gate",
       "goal": "Исправить конфликт доказательного флага Research с исключительно неактивным offline режимом; повторить совместные тесты без изменения production authority.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Узкий offline proof-gate regression либо read-only QA с синтетическими тестами и отдельными отчётами.",
       "urgency": "высокая",
@@ -880,16 +880,16 @@
         "dossier-async-postmerge-joint-qa",
         "dossier-async-shadow-quality-readiness"
       ],
-      "blocker": "Offline-only PR work, no live semantic analysis, publication mutation or Scheduled Task changes.",
+      "blocker": "Accepted into main as inactive proof correction or prospective/diagnostic QA. Subsequent site freshness fix and separate real-evidence trial authorization remain.",
       "updated_on": "2026-10-11",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-11T09:28:26.923Z"
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-11T10:44:26.083Z"
     },
     {
       "id": "dossier-shadow-trial-site-count-qa",
       "title": "Dossier: план будущей shadow проверки и сверка статистики сайта",
       "goal": "Подготовить конкретный план будущего отдельно разрешаемого качества Dossier и read-only сверить 14 подходящих Deep с 8+9 в видимой очереди пользователя.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Узкий offline proof-gate regression либо read-only QA с синтетическими тестами и отдельными отчётами.",
       "urgency": "высокая",
@@ -901,10 +901,52 @@
         "dossier-async-postmerge-joint-qa",
         "dossier-async-shadow-quality-readiness"
       ],
-      "blocker": "Offline-only PR work, no live semantic analysis, publication mutation or Scheduled Task changes.",
+      "blocker": "Accepted into main as inactive proof correction or prospective/diagnostic QA. Subsequent site freshness fix and separate real-evidence trial authorization remain.",
+      "updated_on": "2026-10-11",
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-11T10:44:26.083Z"
+    },
+    {
+      "id": "dossier-shadow-pilot-preflight",
+      "title": "Dossier: техническая подготовка безопасного shadow-пилота",
+      "goal": "Проверить точную связку неизменяемых исходных групп и исторически принятых старых Dossier по GitHub writer receipts; подготовить offline gate и синтетические проверки без реального анализа.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Изолированная техническая проверка с синтетическими тестами или узкая правка UI загрузки ленты.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь подтвердил неверный статус Deep в обычном браузере, а пробный запуск Dossier требует доказанной исходной базы.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_PILOT_PREFLIGHT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-bridge-proof-flag-fix",
+        "dossier-shadow-trial-site-count-qa"
+      ],
+      "blocker": "PR-only work. No live semantic execution, trial selection, production data writes, activation or Scheduled Task change.",
       "updated_on": "2026-10-11",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-11T09:28:26.923Z"
+      "updated_at_utc": "2026-10-11T10:44:26.083Z"
+    },
+    {
+      "id": "site-deep-status-cache-refresh-fix",
+      "title": "Сайт: устранить устаревшие Deep-статусы в обычном браузере",
+      "goal": "Исправить безопасное обновление Cache Storage LKG/feed bootstrap: свежий Deep всегда обновляет карточку; кеш явно помечен, при ошибке есть безразрушительное обновление; очередь/настройки сохраняются.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Изолированная техническая проверка с синтетическими тестами или узкая правка UI загрузки ленты.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь подтвердил неверный статус Deep в обычном браузере, а пробный запуск Dossier требует доказанной исходной базы.",
+      "task_file": "WORKER_TASK_SITE_DEEP_STATUS_BROWSER_FEED_REFRESH_FIX_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-bridge-proof-flag-fix",
+        "dossier-shadow-trial-site-count-qa"
+      ],
+      "blocker": "PR-only work. No live semantic execution, trial selection, production data writes, activation or Scheduled Task change.",
+      "updated_on": "2026-10-11",
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-11T10:44:26.083Z"
     }
   ]
 }
