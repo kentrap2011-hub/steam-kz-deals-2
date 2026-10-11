@@ -5,6 +5,13 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## LATEST DIRECTOR ASSIGNMENT — 2026-10-11: audit real old Dossier writer baselines (no semantic run)
+
+- **NEW ЧАТ 1:** `WORKER_TASK_DOSSIER_SHADOW_REAL_BASELINE_ELIGIBILITY_AUDIT_01.md` — read-only audit **ALL currently accepted** original three-game groups using immutable main Git history, PR #197 writer preflight and source/cache/receipt provenance; per-group safe statuses and blockers, separate Actions attestation status. Do not authorize, freeze/select or run a real pilot; even 6 positive groups only justify a **new user approval step**.
+- Director checked current Dossier snapshot `4d7be57c9a1a90482d948270ab034c49eca3dd84102d28fc67b6fbc1d33f8239` on main: 76 original three-item groups, 19 accepted/57 pending, 19 matching snapshot `dossier_candidate_accepted_current_snapshot` audit records. This is a promising one-to-one count, **NOT strict historical proof**; worker must pin head and check every binding and historical writer commit.
+- **NEW ЧАТ 2 still assigned:** `WORKER_TASK_SITE_FEED_SYNC_COMPACT_FRESHNESS_UX_FIX_01.md`, compact truthful feed refresh UI; do not modify its scope. Prior #196 resolved missing Deep marker; user confirmed Strange Horticulture position #26 lit.
+- Both workers separate independent branches/PR+reports, do not self-merge. No Scheduled Tasks/automations changes, live semantics, real shadow run, production activation, existing writer/cache or Deep/Fast migration. Older handoff sections below are historical.
+
 ## LATEST DIRECTOR ASSIGNMENT — 2026-10-11: compact mobile feed sync UI
 
 - PR #197 merged `a216807f95cfa71bb28435142af10605c5c1aa60` (ЧАТ 1 historical Dossier writer receipt preflight, synthetic only; real candidate eligibility not established, some accepted legacy groups lack audit). PR #196 merged `d75c60d8d1a7eb2bc3dfd1f83051cdb27781b431` (ЧАТ 2 browser cache/Deep refresh).
