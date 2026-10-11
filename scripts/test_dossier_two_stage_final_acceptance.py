@@ -115,6 +115,7 @@ class FinalAcceptanceOfflineTests(unittest.TestCase):
         x.preauthorize_assembly(indexes=tuple(range(len(appids))))
         work_path = root / "canonical-work.json"
         work_path.write_text(json.dumps(work), encoding="utf-8")
+        x.f.commit("Fixture-only canonical manifest; avoid mixed Git introductions")
         return x, work, contract, work_path
 
     def locator(self, x, i, c):
