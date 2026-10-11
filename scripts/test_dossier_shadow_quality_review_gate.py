@@ -22,7 +22,7 @@ class DossierReviewGateTests(unittest.TestCase):
         self.comps = {str(x): self.comparison(str(x)) for x in (101, 102, 103)}
         self.accepted = {"101", "102", "103"}
         self.strict = {1}
-        self.reviews = {x: self.pair() for x in self.accepted}
+        self.reviews = {x: self.pair(x) for x in self.accepted}
 
     @staticmethod
     def comparison(appid):
@@ -51,7 +51,7 @@ class DossierReviewGateTests(unittest.TestCase):
         }
 
     @staticmethod
-    def review(role):
+    def review(role, appid):
         dimensions = {
             key: {"state": "confirmed_no_issue", "severity": "none",
                   "reason_code": "evidence_supported", "anchors": ["new:obs:0"]}
@@ -59,15 +59,17 @@ class DossierReviewGateTests(unittest.TestCase):
         }
         dimensions["source_independence"]["anchors"] = [
             "research:source:rsource-001", "research:source:rsource-002"]
-        return {"role": role, "dimensions": dimensions,
+        return {"role": role, "subject": {"trial_id": "synthetic-01",
+                                        "group_sequence": 1, "appid": appid},
+                "dimensions": dimensions,
                 "negative_retention": {
                     "old:obs:0": {"disposition": "preserved", "anchors": ["new:obs:0"]}},
                 "unknown_resolution": {
                     "research:gap:gap-001": {
                         "disposition": "still_unknown", "anchors": ["research:gap:gap-001"]}}}
 
-    def pair(self):
-        return {"A": self.review("A"), "B": self.review("B"),
+    def pair(self, appid):
+        return {"A": self.review("A", appid), "B": self.review("B", appid),
                 "adjudication": None}
 
     def evaluate(self):
@@ -114,7 +116,7 @@ class DossierReviewGateTests(unittest.TestCase):
         field = self.reviews["101"]["A"]["dimensions"]["supported_claims"]
         field["anchors"] = ["research:source:invented"]
         self.assertIn("fake_or_reused_source_anchor", self.reasons())
-        self.reviews["101"] = self.pair()
+        self.reviews["101"] = self.pair("101")
         self.reviews["101"]["A"]["dimensions"]["supported_claims"]["anchors"] *= 2
         self.assertIn("fake_or_reused_source_anchor", self.reasons())
 
@@ -125,11 +127,11 @@ class DossierReviewGateTests(unittest.TestCase):
     def test_negative_observation_not_silently_dropped(self):
         self.reviews["101"]["A"]["negative_retention"] = {}
         self.assertIn("review_record_invalid_or_unfrozen", self.reasons())
-        self.reviews["101"] = self.pair()
+        self.reviews["101"] = self.pair("101")
         self.comps["101"]["comparison_evidence"]["two_stage_statements"][0]["sentiment"] = "neutral"
         self.assertIn("review_record_invalid_or_unfrozen", self.reasons())
         self.comps["101"]["comparison_evidence"]["two_stage_statements"][0]["sentiment"] = "mixed"
-        self.reviews["101"] = self.pair()
+        self.reviews["101"] = self.pair("101")
         self.reviews["101"]["A"]["negative_retention"]["old:obs:0"]["disposition"] = "missing"
         self.assertIn("substantive_negative_not_proven_preserved", self.reasons())
 
@@ -137,7 +139,7 @@ class DossierReviewGateTests(unittest.TestCase):
         self.reviews["101"]["A"]["unknown_resolution"]["research:gap:gap-001"] = {
             "disposition": "confirmed_with_source", "anchors": ["new:obs:0"]}
         self.assertIn("review_record_invalid_or_unfrozen", self.reasons())
-        self.reviews["101"] = self.pair()
+        self.reviews["101"] = self.pair("101")
         self.reviews["101"]["A"]["unknown_resolution"]["research:gap:gap-001"] = {
             "disposition": "omitted", "anchors": []}
         self.assertIn("unknown_omitted_or_overstated", self.reasons())
@@ -167,7 +169,9 @@ class DossierReviewGateTests(unittest.TestCase):
     def test_separately_anchored_adjudicator_records_difference(self):
         self.reviews["101"]["A"]["dimensions"]["supported_claims"]["anchors"] = ["old:obs:0"]
         self.reviews["101"]["adjudication"] = {
-            "role": "adjudicator", "resolved": {"supported_claims": "B"},
+            "role": "adjudicator", "subject": {"trial_id": "synthetic-01",
+                                               "group_sequence": 1, "appid": "101"},
+            "resolved": {"supported_claims": "B"},
             "justifications": {
                 "supported_claims": {
                     "reason_code": "reviewer_difference", "anchors": ["old:obs:0"]}}}
