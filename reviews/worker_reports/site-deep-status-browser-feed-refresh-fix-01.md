@@ -38,3 +38,7 @@ CI workflow `.github/workflows/validate-browser-deep-feed-refresh.yml` is **pull
 3. Confirm existing `Интересно`/`Финал`, seen progress, manual postponement and urgency setting remain. Compare the regular browser against incognito. If old indicator persists while notice states network verified, capture the notice timestamp, visible card and browser console `FeedBootstrapResilience.state`, and check whether a legacy Service Worker still controls the persistent profile; this is a separate device evidence boundary.
 
 No `localStorage.clear()`, Cache Storage mass deletion, SW unregistration, forced reordering or production writes are required.
+
+## Completion boundary and working-tree ownership
+
+PR **#196** opened against `main` and intentionally **not merged**. Only the targeted website files, synthetic tests/PR workflow, and this worker report were changed. Shared `CURRENT_TASK.md` / `PROJECT_ROUTES.md` were not rewritten because Chat 1 is executing an independent parallel worker in the same repository and may also modify shared handoff files; this task-specific report is the durable completion handoff. The source-of-truth production site will change **only** if Director reviews/merges the PR and the existing Pages deploy publishes it. No runtime verification is claimed before that.
