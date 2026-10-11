@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "e4cefcc50cb060f332894f83b4a26c56bd2511f9",
+  "run_start_authority_commit": "95a4bf4990a60082ecb3302da5bc7f23b618d93e",
+  "run_started_at_utc": "2026-10-11T11:33:46+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "21353f5ca48b541b80c8df4e6396cd5c8ac163892a0a79f2ad764b558d1ec3c5",
+  "family_id": "game:204300",
+  "taste_subject_key": "App_204300",
+  "appid": "204300",
+  "taste_fingerprint": "65a0625144cc3e5fa72d469024f588c0f539b0de3bd34c7107a41c9c0664f22d",
+  "candidate_context_sha256": "4d49ca9cac581bd454bccbafd75e99418c403c3805772f00d8406c6026b702a1",
+  "dossier_content_sha256": "b380a5e82772f1b5837e7acd0a69544f11bbc563939bdf70cab834f90f944632",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "70d30700f2dc01fd470331486cd762ca0642be1681e920982771aeae52e18cbb",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "base_support_compatible": null,
+  "positive_evidence": [
+    "Герои с разными умениями и внутриматчевая настройка способностей требуют комбинировать роли, позиционирование и контрмеры против соперников.",
+    "Быстрые командные 3-на-3 матчи создают локальные тактические задачи: защищать дорожки, согласовывать атаки и искать контрпики.",
+    "Яркие мультяшные персонажи, собственный стиль и музыка формируют запоминающуюся атмосферу."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 79,
+    "development_variety": 68,
+    "structure_pacing_direction": 62,
+    "identity_hooks": 82,
+    "breadth_of_match": 65
+  },
+  "score_findings": [
+    {
+      "finding_id": "team_hero_counterplay",
+      "text_ru": "Разные герои, покупки улучшений в ходе матча и контрпики требуют разбираться в возможностях противника и подбирать командную тактику, а не просто повторять одну атаку.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/tactical_problem_solving",
+          "profile_value_sha256": "1c2855e92114f62124c256431e2bf883866821d3754de144171ae6b4cdfb39e6",
+          "match_text_ru": "Тебе нравятся короткие конкретные задачи, где успех зависит от выбора работающей тактики."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 79
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 68
+        }
+      ]
+    },
+    {
+      "finding_id": "team_coordination",
+      "text_ru": "Координация дорожек, взаимная защита и распределение ролей с друзьями создают социальный игровой опыт, который для тебя может быть самостоятельным преимуществом.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9",
+          "profile_value_sha256": "1ad2abd19719f090124bf7822ca7d32dd06d8a5130555d16032c778fed3b25a5",
+          "match_text_ru": "Содержательное совместное прохождение и взаимодействие нравятся больше, чем мультиплеер ради самого мультиплеера."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 65
+        }
+      ]
+    },
+    {
+      "finding_id": "cartoon_identity",
+      "text_ru": "Выразительные мультяшные герои с узнаваемым характером и музыкальное оформление придают соревновательным схваткам собственную эстетику.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7",
+          "profile_value_sha256": "f94957e7f369714de6a70c9cdaa1b1bb625ccdf9a2bd19f5b4bde419ccfecf7a",
+          "match_text_ru": "Самобытные герои и яркий художественный стиль часто повышают вовлечённость."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 82
+        }
+      ]
+    },
+    {
+      "finding_id": "snowball_matches",
+      "text_ru": "Стремительные убийства и общекомандное преимущество в уровне иногда делают исход слишком зависимым от ранних ошибок союзников, уменьшая пространство для осмысленного отыгрыша.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "edeced74c18dc6f94ea4ae8882f30e2db8dfd546419d1cbcf6cfa274bfaca73a",
+          "match_text_ru": "Ты любишь осваивать сложные системы, но особенно ценишь ясную связь между личным мастерством и результатом."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 62
+        }
+      ]
+    },
+    {
+      "finding_id": "small_online_community",
+      "text_ru": "В матчах есть глубокое позиционирование и взаимодействие героев, но небольшая активная аудитория может сводить новичка с опытными сыгранными командами; качество соревнования зависит от состава участников.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "edeced74c18dc6f94ea4ae8882f30e2db8dfd546419d1cbcf6cfa274bfaca73a",
+          "match_text_ru": "Освоение навыков привлекательно, когда проигрыши дают понятную возможность улучшить собственную игру."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 79
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 65
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Ветеранские сыгранные команды и неравный подбор могут создавать неприятный порог входа для новичка; при этом сама высокая сложность не является для тебя минусом.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Небольшая активная аудитория и жалобы 2025–2026 годов на ожидание матчей означают зависимость опыта от региона и времени игры; наличие подходящего матча нельзя гарантировать.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Дисбаланс отдельных сочетаний героев и быстрый эффект снежного кома могут лишать матч возможности отыграться после ошибок партнёров, хотя знание контрпиков частично помогает.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Командное взаимодействие может быть содержательным, но отключение союзника или присоединение в середине матча ломает согласованность ролей.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
