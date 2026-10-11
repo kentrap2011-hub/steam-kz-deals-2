@@ -5,6 +5,14 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## LATEST DIRECTOR ASSIGNMENT — 2026-10-11: feed freshness and shadow pilot preflight
+
+- PR #193 merged `f6718dafe3267d926e72e4070e134e011d2187a7`: bridge proof flag `cross_pr_research_original_year_fix_verified=true` now independent of real authority, CI green, inactive. PR #194 merged `85e320eb8bc88310f75a3c0a28cefb722c7c1850`: shadow trial prospective plan and Deep site count read-only QA; prior worker chats retired.
+- User verified `Strange Horticulture` Deep indicator OFF in persistent browser (position 45) and ON in incognito; GitHub visual producer `game:1574580` has `deep_stage_state=completed,deep_stage_outcome=fit`. This rules out manual queue deferral as sufficient Deep-indicator explanation and supports stale local feed/bootstrap.
+- **NEW ЧАТ 1:** `WORKER_TASK_DOSSIER_SHADOW_PILOT_PREFLIGHT_01.md`: technical writer-receipt/immutable group preflight to prepare later separately approved real-source Dossier shadow pilot, no semantic work, selection or authorization.
+- **NEW ЧАТ 2:** `WORKER_TASK_SITE_DEEP_STATUS_BROWSER_FEED_REFRESH_FIX_01.md`: bounded site stale feed/cache-first/background refresh repair, stale data signaling, non-destructive retry and preservation of `manual_end_at` / user queue and settings. PR only, no direct deploy.
+- Distinct PRs/reports and file ownership; worker never self-merges. No Scheduled Tasks, live semantic tasks, production writes or activation. Deep `mass_migration_authorized=false`; Fast stays until separately approved atomic cutover. Earlier assignments below historical.
+
 ## MOST RECENT DIRECTOR ASSIGNMENT — 2026-10-11
 
 - PR #190 merged `44b1d8f54aa7692220439b82892999de7a75e1dd` (all joint Research/Assembly/GitHub strict offline tests passed; proof metadata/offline gate bug found). PR #191 merged `42919b50af4df6212a9d2ab7233635c438571a7f` (inactive shadow-quality readiness harness and draft trial protocol; no real evidence used). Prior physical workers retired.
