@@ -282,5 +282,35 @@ class FinalAcceptanceOfflineTests(unittest.TestCase):
         self.assertEqual(output["existing_writer_result"]["retryable_transport_rejection_count_this_run"], 1)
 
 
+    def test_07_final_writer_rechecks_forged_handoff_and_later_transport_rewrite(self):
+        x, work, c, path = self.fixture()
+        refs = []
+        for i in range(3):
+            r = x.research_submit(i)
+            refs.append(self.locator(x, i, self.ready(x, i, r)))
+        inspected = self.inspect(x, work, c, refs)
+        self.assertEqual([e["sequence"] for e in inspected["ready"]], [1])
+        forged = copy.deepcopy(inspected)
+        forged["ready"][0]["artifact"]["dossiers"][0]["game_identity"]["title"] = (
+            "Unverified replacement")
+        with self.assertRaisesRegex(ValueError, "untrusted, forged or stale"):
+            offline_existing_writer_handoff(
+                x.f.root, inspection=forged, manifest_path=path, contract=c,
+                offline_fixture=True)
+        # Old introducing Git SHA remains valid, but HEAD no longer carries the
+        # immutable Research raw blob. Reinspection MUST fail before any write.
+        research_path = receipt_paths(x.docs[0]["assignment"])["candidate"]
+        x.f.save(research_path, {"tamper": "after introduction"})
+        x.f.commit("Adversarial rewrite of previously create-only Research bytes")
+        after = self.inspect(x, work, c, refs)
+        self.assertEqual(after["decisions"][0]["items"][0]["status"], STATUS_INVALID)
+        self.assertFalse(after["ready"])
+        with self.assertRaisesRegex(ValueError, "untrusted, forged or stale"):
+            offline_existing_writer_handoff(
+                x.f.root, inspection=inspected, manifest_path=path, contract=c,
+                offline_fixture=True)
+        self.assertFalse((x.f.root / "store" / "App_12345.json").exists())
+
+
 if __name__ == "__main__":
     unittest.main()
