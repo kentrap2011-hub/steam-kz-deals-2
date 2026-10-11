@@ -1,0 +1,1420 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "4d7be57c9a1a90482d948270ab034c49eca3dd84102d28fc67b6fbc1d33f8239",
+  "prepared_required_sha256": "824e3ca4afb741dfac707284cb82e5eb594d1180d6c7a84bc63cb827a6f4e4e8",
+  "group_plan_sha256": "c697dd3e54b1c7442ef44ffba4b562c396f0d013959c19590ef57c36d5e18a23",
+  "group_count": 76,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 18,
+  "start_index": 51,
+  "end_index_exclusive": 54,
+  "appids": [
+    "206420",
+    "2067050",
+    "2076140"
+  ],
+  "items_sha256": "1de8531ed9f16a03865607cbe1cef15ca366819c1849308060a5ac19f15bcfa9",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "89b388ce407f9c4986f3c0b1286c9590fbfe75c706254792a2fdbdf3700b9db1",
+  "items": [
+    {
+      "key": "App_206420",
+      "appid": "206420",
+      "title": "Saints Row IV: Re-Elected",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_206420.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2067050",
+      "appid": "2067050",
+      "title": "Squirrel with a Gun",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2067050.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2076140",
+      "appid": "2076140",
+      "title": "Tavern Talk - A Cozy Visual Novel",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2076140.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "90b8b2fe89477ae02a3a7f91764979949d0a418200ba155c9ef05383d246f763",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "206420",
+      "title": "Saints Row IV: Re-Elected",
+      "generated_at_utc": "2026-10-11T11:04:56.582Z",
+      "expires_at_utc": "2026-10-31T11:04:56.582Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Saints Row IV: Re-Elected",
+        "release_year": 2013,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "206420"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 9 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Players praise the deliberately exaggerated sandbox combat, fast superpowered traversal and extravagant weapons; the ability to overpower enemies makes realistic challenge secondary to spectacle.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-009",
+            "feedback-010"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "Unlocking and improving superpowers relies on gathering many upgrade clusters; several players find the extended collectible hunt laborious.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Comedy-focused missions parody science-fiction films and other games, with a large arsenal and some memorable set-piece activities; enjoyment of the absurd narrative varies.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-010"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Optional missions and prolonged cluster collection lose freshness for some players, while others enjoy many hours of sandbox experimentation.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "mechanics",
+          "statement": "The superhero movement and attacks tend to make conventional cars and much of the ordinary gunplay redundant; some see this as exhilarating and others as a loss of the older gangster-sandbox feel.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-010"
+          ]
+        },
+        {
+          "category": "coop",
+          "statement": "A number of players particularly enjoy cooperative play with friends, but an older co-op player account also reports repeated session crashes.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Several Russian player accounts appreciate the chaotic humor, parody-heavy story, soundtrack, styling and extensive character customization.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Reviews following the December 2022 Re-Elected update report Epic Online Services integration, lost or incompatible saves, broken display features and crashes, with use of a legacy branch suggested by affected players; these historical accounts do not establish current behavior.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "uncertain",
+          "source_ids": [
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Players who preferred the grounded tone of earlier entries criticize the increasingly self-parodic story, lack of challenge and reduced role for vehicles.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-009",
+            "feedback-010"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "Some players find the near-limitless superhero spectacle delightfully liberating, while others find it trivializes traditional driving and action challenges.",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-009",
+            "feedback-010"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                4
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                4
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                8
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                6
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                6
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                3,
+                8
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                7
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/206420/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "other_player_feedback",
+            "domain": "vgtimes.ru",
+            "url": "https://vgtimes.ru/games/saints-row-4/usersreviews/",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/206420/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "206420",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2018-04-21",
+            "language": "russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://vgtimes.ru/games/saints-row-4/usersreviews/2196/"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2014-08-29",
+            "language": "russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://vgtimes.ru/games/saints-row-4/usersreviews/200/"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2020-02-01",
+            "language": "russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://vgtimes.ru/games/saints-row-4/usersreviews/8242/"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-002",
+            "publication_date": "2019-04-12",
+            "language": "russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://vgtimes.ru/games/saints-row-4/usersreviews/3549/"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-002",
+            "publication_date": "2026-06-14",
+            "language": "russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://vgtimes.ru/games/saints-row-4/usersreviews/57073/"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-003",
+            "publication_date": "2022-12-08",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-003",
+            "publication_date": "2024-01-18",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-003",
+            "publication_date": "2017-05-30",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-003",
+            "publication_date": "2015-12-25",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-010",
+            "source_id": "source-003",
+            "publication_date": "2017-11-23",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "2067050",
+      "title": "Squirrel with a Gun",
+      "generated_at_utc": "2026-10-11T11:04:56.582Z",
+      "expires_at_utc": "2026-10-31T11:04:56.582Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Squirrel with a Gun",
+        "release_year": 2024,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "2067050"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 7 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Players report a playful combination of cartoon squirrel mayhem, firearm combat, recoil-assisted jumps, platforming and puzzle-solving, often comparing the tone with physics-driven comedy sandboxes.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Unusual gun-based combat, animated takedowns and silly emergent interactions are the central sources of humor and surprise.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Progress alternates between open-neighborhood exploration, platforming and golden-acorn collection, agent fights and short boss encounters rather than a long directed narrative.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-005",
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Several players cite awkward aiming, inconsistent camera response and controller handling as obstacles, especially for platforming and boss sequences.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-004",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-005",
+            "feedback-006",
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "The adventure can be fully explored or completed in relatively few hours; some appreciate its concise absurdity and others are disappointed by limited post-completion variety.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-005",
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Russian reviews show sharply divided reactions: one long-session player enjoys the improbable arsenal and goofy premise while another finds few merits beyond the novelty of an armed squirrel.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Players with extended time in the game report intermittent glitches affecting activity progress, although this does not establish that the same bugs remain in later builds.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "uncertain",
+          "source_ids": [
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-008"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "The comic setup and short campaign appeal to players who value novelty, but the same compactness and imprecise controls make others dismiss it as an underdeveloped joke.",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-004",
+            "feedback-005",
+            "feedback-007"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                3
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                6
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/2067050/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/2067050/reviews?browsefilter=toprated&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "2067050",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/2067050/reviews?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "2067050",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/gaming/comments/1f4ghk0",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/squirrelwithagun/comments/1hi77io",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-006",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/Trophies/comments/1t04rbi",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2024-09-05",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2024-11-29",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-003",
+            "publication_date": "2024-08-29",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": "2024-08-29",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-004",
+            "publication_date": "2024-09-08",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/gaming/comments/1f4ghk0"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-004",
+            "publication_date": "2024-09-21",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/gaming/comments/1f4ghk0"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-005",
+            "publication_date": "2024-12-20",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/squirrelwithagun/comments/1hi77io"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-006",
+            "publication_date": "2026-04-30",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/Trophies/comments/1t04rbi"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "2076140",
+      "title": "Tavern Talk - A Cozy Visual Novel",
+      "generated_at_utc": "2026-10-11T11:04:56.582Z",
+      "expires_at_utc": "2026-10-31T11:04:56.582Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Tavern Talk - A Cozy Visual Novel",
+        "release_year": 2024,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "2076140"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 8 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "This is principally a text-driven tavern visual novel: the player listens to adventurer stories, prepares prescribed magical drinks and collects rumors to assemble quest requests.",
+          "sentiment": "neutral",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-006",
+            "feedback-007"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "Drinks and quest recommendations can influence character outcomes and endings, but recipes and rumor matching restrict improvisation and many choices converge.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Several players criticize enforced recipes, largely automatic rumor assembly and limited consequences for ordinary drink mistakes as shallow, low-agency systems.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Repeated potion preparation and verbose conversations eventually feel monotonous to some, though others find the pace soothing and well suited to long storytelling sessions.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-004",
+            "feedback-006"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Hand-drawn fantasy characters, expressive art, gentle music and tabletop-roleplaying references are repeatedly praised for a warm tavern atmosphere.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-004",
+            "feedback-008",
+            "feedback-009"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Player accounts diverge over the writing: some form strong attachments to the ensemble and its emotional outcomes, whereas others find the dialogue too chatty, trope-driven or tonally heavy.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-005",
+            "feedback-006",
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "A substantial narrative with several endings rewards attentive readers; trying alternate branches requires rereading long passages and the choices can be more limited than the initial framing suggests.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-006",
+            "feedback-008"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "A player near launch reported the first release ran smoothly on Steam Deck and allowed font resizing; this is historical platform-specific testimony, not verification of the current build.",
+          "sentiment": "positive",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "uncertain",
+          "source_ids": [
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-009"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "Readers disagree whether the light drink-and-quest mechanics enhance the cozy visual novel or merely interrupt long, lightly interactive dialogue sequences.",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-006",
+            "feedback-007"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "searched_no_existence_signal",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                6
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                6
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                5,
+                6
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                4,
+                5
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3,
+                5
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                7
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/2076140/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/2076140/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "2076140",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/CoffeeTalkGame/comments/1dnv2bm",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/CozyGamers/comments/1q4n0md",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/CozyGamers/comments/1dl96ge",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2024-06-21",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2024-11-21",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2024-06-23",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-002",
+            "publication_date": "2024-06-27",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-002",
+            "publication_date": "2025-03-20",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-002",
+            "publication_date": "2024-11-04",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-003",
+            "publication_date": "2024-06-25",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/CoffeeTalkGame/comments/1dnv2bm"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-004",
+            "publication_date": "2026-01-05",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/CozyGamers/comments/1q4n0md"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-005",
+            "publication_date": "2024-06-21",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/CozyGamers/comments/1dl96ge"
+          }
+        ]
+      }
+    }
+  ],
+  "run_start_authority": {
+    "schema": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-REFERENCE-V1",
+    "schema_version": 1,
+    "run_start_anchor_commit": "84eee0ae23ace999ae815eccb3646e5d870095d1",
+    "run_start_nonce": "f5c8acace96f185777e723e9b970d514"
+  }
+}
