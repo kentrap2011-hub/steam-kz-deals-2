@@ -66,10 +66,11 @@ def _anchor_set(c):
     return anchors
 
 
-def _review(record, role, anchors, comparison):
+def _review(record, role, anchors, comparison, subject):
     guard(type(record) is dict and set(record) ==
-          {"role", "dimensions", "negative_retention", "unknown_resolution"}
-          and record["role"] == role, "missing independent reviewer/unsafe fields")
+          {"role", "subject", "dimensions", "negative_retention", "unknown_resolution"}
+          and record["role"] == role and record["subject"] == subject,
+          "missing independent reviewer/unsafe fields or wrong game subject")
     dimensions = record["dimensions"]
     guard(type(dimensions) is dict and set(dimensions) == set(DIMENSIONS),
           "incomplete quality dimensions")
@@ -138,7 +139,7 @@ def _review(record, role, anchors, comparison):
     return record
 
 
-def _adjudicate(a, b, result, anchors):
+def _adjudicate(a, b, result, anchors, subject):
     conflicts = sorted(x for x in DIMENSIONS if a["dimensions"][x] != b["dimensions"][x])
     conflicts += sorted("negative:" + k for k in a["negative_retention"]
                         if a["negative_retention"][k] != b["negative_retention"][k])
@@ -146,8 +147,8 @@ def _adjudicate(a, b, result, anchors):
                         if a["unknown_resolution"][k] != b["unknown_resolution"][k])
     if result is None:
         return conflicts, False, bool(conflicts)
-    guard(type(result) is dict and set(result) == {"role", "resolved", "justifications"}
-          and result["role"] == "adjudicator" and type(result["resolved"]) is dict
+    guard(type(result) is dict and set(result) == {"role", "subject", "resolved", "justifications"}
+          and result["role"] == "adjudicator" and result["subject"] == subject and type(result["resolved"]) is dict
           and type(result["justifications"]) is dict
           and set(result["resolved"]) == set(conflicts)
           and set(result["justifications"]) == set(conflicts),
@@ -219,10 +220,11 @@ def _evaluate_rows(frame, comparisons, baseline_proven, strict_groups, reviews):
                 data = reviews.get(appid)
                 guard(type(data) is dict and set(data) ==
                       {"A", "B", "adjudication"}, "missing independent reviewer")
-                a = _review(data["A"], "A", refs, c)
-                b = _review(data["B"], "B", refs, c)
+                subject = {"trial_id": frame["trial_id"], "group_sequence": seq, "appid": appid}
+                a = _review(data["A"], "A", refs, c, subject)
+                b = _review(data["B"], "B", refs, c, subject)
                 disagreements, adjudicated, unresolved = _adjudicate(
-                    a, b, data["adjudication"], refs)
+                    a, b, data["adjudication"], refs, subject)
                 if unresolved:
                     reasons.append("adjudication_missing_or_unresolved")
                 for r in (a, b):
@@ -382,6 +384,16 @@ def evaluate_offline_fixture(repo, *, frozen, manifest, contract,
         except (ValueError, KeyError, TypeError):
             continue
     reviews = {}
+    # Exactly one immutable reviewer file per role and game; no cross-game
+    # replay of the same citation/review artifact, even if local IDs coincide.
+    all_round_refs = []
+    for locator in review_locators.values():
+        if isinstance(locator, dict):
+            for role in ("A", "B"):
+                ref = locator.get(role)
+                if isinstance(ref, dict):
+                    all_round_refs.append((ref.get("commit"), ref.get("path")))
+    _unique(all_round_refs, "cross-game frozen reviewer file")
     for appid, locator in review_locators.items():
         try:
             guard(type(locator) is dict and set(locator) == {"A", "B", "adjudication"},
