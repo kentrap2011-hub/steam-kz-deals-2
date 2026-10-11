@@ -5,6 +5,15 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT WAVE — 2026-10-11: site stale Deep fix and Dossier pilot preflight
+
+- PR #193 ЧАТ 1 merged `f6718dafe3267d926e72e4070e134e011d2187a7`: corrected inert `cross_pr_research_original_year_fix_verified=true` guard, actual production activation false, all joint/bridge tests green. Previous physical worker retired.
+- PR #194 ЧАТ 2 merged `85e320eb8bc88310f75a3c0a28cefb722c7c1850`: proposed future shadow pilot and investigated browser deep-count difference. Prior physical worker retired; no real semantic trial.
+- **New strong user evidence:** `Strange Horticulture` (`game:1574580`) appears standard browser position **45** with **Deep indicator OFF**, but the identical card in incognito has **Deep indicator ON**. Canonical current producer has `deep_stage_state=completed,deep_stage_outcome=fit` for this exact card. Manual queue deferral can affect position but **cannot suppress Deep indicator**; stale local visual payload/refresh path is the leading explanation, device cause not yet proven.
+- **НОВЫЙ ЧАТ — ЧАТ 1:** `WORKER_TASK_DOSSIER_SHADOW_PILOT_PREFLIGHT_01.md` — technical read-only historical one-stage writer-receipt and immutable group provenance preflight for a **future separately authorized** small real-evidence Dossier shadow pilot. Synthetic tests and PR-only QA; no real semantic run/selection/scope freeze/approval.
+- **НОВЫЙ ЧАТ — ЧАТ 2:** `WORKER_TASK_SITE_DEEP_STATUS_BROWSER_FEED_REFRESH_FIX_01.md` — fix reproducible site stale-feed bootstrap/revalidation so accepted Deep statuses render in persistent browsers, visibly mark stale fallback and preserve `manual_end_at`, queue and all user settings. PR-only UI fixes/tests; no direct deploy.
+- Each worker independent branch/PR+report; do not self-merge. No Scheduled Tasks, real semantic runs, canonical writes or production activation. Deep Stage1 migration remains unauthorized and Fast authority unchanged.
+
 ## DIRECTOR CURRENT WAVE — 2026-10-11: proof flag, future shadow plan, site counts
 
 - **PR #190 (ЧАТ 1)** merged as `44b1d8f54aa7692220439b82892999de7a75e1dd`: corrected Research original release year + Research→Assembly→GitHub final original three-game strict acceptance **joint offline** regression passed. An inactive bridge guard incorrectly couples `cross_pr_research_original_year_fix_verified=false` to offline fixture eligibility; previous worker retired.
