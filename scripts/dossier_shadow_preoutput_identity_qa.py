@@ -29,6 +29,249 @@ EXPECTED = {
   20: ("d1eaa93cbf9c51851a12069d3b34506b09c39f304c1aac1ee3b7888bde395c99", "2124120 213610 2138710"),
   21: ("a94fb22ee386faaac05aa311dcee4dc338d90ead030195633772ed200730bf6b", "2140020 214950 220440"),
 }
+EXPECTED_IDENTITIES = {
+  "201810": [
+    "Wolfenstein: The New Order",
+    2014
+  ],
+  "203750": [
+    "Binary Domain",
+    2012
+  ],
+  "204100": [
+    "Max Payne 3",
+    2012
+  ],
+  "204300": [
+    "Awesomenauts",
+    2012
+  ],
+  "206420": [
+    "Saints Row IV: Re-Elected",
+    2013
+  ],
+  "213610": [
+    "Sonic Adventure 2",
+    2012
+  ],
+  "214950": [
+    "Total War: ROME II - Emperor Edition",
+    2013
+  ],
+  "220440": [
+    "DmC: Devil May Cry",
+    2013
+  ],
+  "1119710": [
+    "looK INside - Chapter 1",
+    2020
+  ],
+  "1202690": [
+    "Sex with the Devil",
+    2021
+  ],
+  "1409740": [
+    "Cybernetic Fault",
+    2020
+  ],
+  "1430680": [
+    "Clash: Artifacts of Chaos",
+    2023
+  ],
+  "1438480": [
+    "Saviorless",
+    2024
+  ],
+  "1507190": [
+    "Machinika: Museum",
+    2021
+  ],
+  "1508750": [
+    "Xuan-Yuan Sword: Dance of the Maple Leaves",
+    1995
+  ],
+  "1517180": [
+    "Mindcop",
+    2024
+  ],
+  "1533420": [
+    "Neon White",
+    2022
+  ],
+  "1536090": [
+    "Echoes of the Plum Grove",
+    2024
+  ],
+  "1545560": [
+    "Shadow Gambit: The Cursed Crew",
+    2023
+  ],
+  "1557740": [
+    "ROUNDS",
+    2021
+  ],
+  "1562430": [
+    "DREDGE",
+    2023
+  ],
+  "1574240": [
+    "Dread Delusion",
+    2024
+  ],
+  "1574580": [
+    "Strange Horticulture",
+    2022
+  ],
+  "1574820": [
+    "Until Then",
+    2024
+  ],
+  "1578220": [
+    "Mister Furry: Hot Muscles",
+    2024
+  ],
+  "1578650": [
+    "Citizen Sleeper",
+    2022
+  ],
+  "1582650": [
+    "Caravan SandWitch",
+    2024
+  ],
+  "1583230": [
+    "High On Life",
+    2022
+  ],
+  "1583850": [
+    "Asleep: Act 1",
+    2024
+  ],
+  "1590230": [
+    "Tyrion Cuthbert: Attorney of the Arcane",
+    2023
+  ],
+  "1599600": [
+    "PlateUp!",
+    2022
+  ],
+  "1607130": [
+    "Lust Theory - Season 1",
+    2022
+  ],
+  "1620720": [
+    "The Forest Quartet",
+    2022
+  ],
+  "1627570": [
+    "The Plucky Squire",
+    2024
+  ],
+  "1638220": [
+    "Xuan-Yuan Sword: The Scar of Sky",
+    2021
+  ],
+  "1649080": [
+    "Two Point Campus",
+    2022
+  ],
+  "1651560": [
+    "Fabledom",
+    2024
+  ],
+  "1658150": [
+    "Moonstone Island",
+    2023
+  ],
+  "1681430": [
+    "RoboCop: Rogue City",
+    2023
+  ],
+  "1740300": [
+    "Smushi Come Home",
+    2023
+  ],
+  "1808680": [
+    "Snufkin: Melody of Moominvalley",
+    2024
+  ],
+  "1835240": [
+    "Spiritfall",
+    2024
+  ],
+  "1836160": [
+    "PANELKI",
+    2022
+  ],
+  "1837330": [
+    "Gibbon: Beyond the Trees",
+    2022
+  ],
+  "1849000": [
+    "SEX with HITLER",
+    2022
+  ],
+  "1857090": [
+    "Norland",
+    2024
+  ],
+  "1868140": [
+    "DAVE THE DIVER",
+    2023
+  ],
+  "1898500": [
+    "Worldless",
+    2023
+  ],
+  "1939970": [
+    "Nobody Wants to Die",
+    2024
+  ],
+  "1948280": [
+    "Stacklands",
+    2022
+  ],
+  "1999170": [
+    "Insect Swarm",
+    2024
+  ],
+  "1999360": [
+    "Placid Plastic Duck Simulator",
+    2022
+  ],
+  "2009010": [
+    "My Furry Protogen 🐾",
+    2023
+  ],
+  "2015240": [
+    "Dwarven Realms",
+    2024
+  ],
+  "2060130": [
+    "Return to Monkey Island",
+    2022
+  ],
+  "2067050": [
+    "Squirrel with a Gun",
+    2024
+  ],
+  "2076140": [
+    "Tavern Talk - A Cozy Visual Novel",
+    2024
+  ],
+  "2124120": [
+    "SULFUR",
+    2024
+  ],
+  "2138710": [
+    "Sifu",
+    2023
+  ],
+  "2140020": [
+    "Stronghold: Definitive Edition",
+    2023
+  ]
+}
+
 PRODUCT_DOMAINS = (
     "https://store.steampowered.com/app/",
     "https://sonic.sega.jp/",
@@ -78,6 +321,8 @@ def inspect(payload):
                     or not 1970 <= game["original_work_year_binding_claim"] <= 2100
                     or game.get("steam_product_url") != "https://store.steampowered.com/app/" + str(appid) + "/"):
                 errors.append("ORIGINAL_WORK_CLAIM_OR_APPID_INVALID")
+            if game.get("work_title") != EXPECTED_IDENTITIES.get(appid, [None, None])[0] or game.get("original_work_year_binding_claim") != EXPECTED_IDENTITIES.get(appid, [None, None])[1]:
+                errors.append("HISTORICAL_GAME_TITLE_OR_YEAR_BINDING_CHANGED")
             original = game.get("verified_original_work_year")
             store = game.get("verified_storefront_date")
             if original is not None and (type(original) is not int or not 1970 <= original <= 2100):
