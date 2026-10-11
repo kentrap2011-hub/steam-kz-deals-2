@@ -33,6 +33,7 @@
     const schedule=options.setTimeout||setTimeout;
     const cancel=options.clearTimeout||clearTimeout;
     const logger=options.console||console;
+    const now=options.now||Date.now;
     const timeoutMs=Number.isFinite(options.timeoutMs)?options.timeoutMs:DEFAULT_TIMEOUT_MS;
     const retryDelayMs=Number.isFinite(options.retryDelayMs)?options.retryDelayMs:DEFAULT_RETRY_DELAY_MS;
     const cacheName=options.cacheName||CACHE_NAME;
@@ -130,8 +131,8 @@
       const valid=typeof g==='string'&&Number.isFinite(Date.parse(g));
       const stamp=valid?new Date(g).toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'}):'неизвестно';
       // Daily cadence: age >36h is an informational hint, not verified divergence.
-      const age=valid&&Date.now()-Date.parse(g)>36*3600000?' Снимок создан более суток назад.':'';
-      if(mode==='network_verified')state.lastVerifiedAt=new Date().toISOString();
+      const age=valid&&now()-Date.parse(g)>36*3600000?' Снимок создан более суток назад.':'';
+      if(mode==='network_verified')state.lastVerifiedAt=new Date(now()).toISOString();
       state.freshnessState=mode;
       const verified=state.lastVerifiedAt?new Date(state.lastVerifiedAt).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):null;
       const labels={
