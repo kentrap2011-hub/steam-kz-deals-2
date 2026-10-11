@@ -3,7 +3,7 @@
 Repository: `kentrap2011-hub/steam-kz-deals-2`
 Base branch / source of truth: `main`
 Physical worker: **НОВЫЙ ЧАТ — ЧАТ 2**
-Task ID: `dossier-shadow-first-real-18-assembly-compare-sandbox-integration-01`
+Task ID: `dossier-shadow-18-assembly-compare-sandbox-01`
 MODE: **IMPLEMENT** exact nonproduction Assembly stage and strict historical comparator for the **same already user-requested pilot**; PR-only isolated regressions. **No real semantic source work before Director integrates/pins valid GitHub sandbox authority.**
 
 ## User decision and source
