@@ -30,3 +30,10 @@ Do NOT interpret any passing synthetic fixture as a real player-source check, hu
 ## Remaining blockers
 
 Separate user/Director approval: exact 6 original groups/18 games, full initial eligible frame and prospective selection/freeze, matched immutable writer and Research/Assembly hashes, external Steam/public source authenticity and work-year truth, completed A/B independent source access, blind first-round submissions, impartial anchored adjudication, pre-approved numeric failure/stop criteria and privacy, explicit go/no-go. Even after future quality approval, production cutover needs another dedicated authorization and existing canonical writer lock/Deep guard. No Scheduled Task creation/update, production activation, Fast/Deep/ranking/UI/cache/stats/ingest change, manual real semantic run, CHАТ 1 write, or PR merge occurred.
+
+## Verified PR-only GitHub Actions
+
+- New offline review gate workflow run **38141369900** completed **SUCCESS**, including compilation, all focused synthetic/adversarial review tests, existing strict historical writer-receipt tests and existing strict three-game shadow comparison compatibility tests.
+- Existing **Validate backlog dispositions** run **38141369843** completed **SUCCESS** on the PR head.
+- These are isolated PR checks only. Neither run performs actual Research/Assembly semantic analysis, external player-source authentication, production ingest, publication or Scheduled Task mutation.
+- Tested head: **671d71c4e9d6d36a036d05a4709a1e80fbdaaf8a** (code and documentation before this report-only update). The resulting report-only commit does not alter executable gate logic; further Actions checks on updated head should still be confirmed before merge.
