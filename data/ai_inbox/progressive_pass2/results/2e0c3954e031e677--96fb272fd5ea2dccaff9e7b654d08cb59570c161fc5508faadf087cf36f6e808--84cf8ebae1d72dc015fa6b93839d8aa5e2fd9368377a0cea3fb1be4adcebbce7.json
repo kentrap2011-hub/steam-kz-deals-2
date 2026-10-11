@@ -1,0 +1,304 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "89100b4dff037c9da97fedc51fb99bf263845757",
+  "run_start_authority_commit": "3288987bc620d26751d2523c7c374d6d3cf6fee2",
+  "run_started_at_utc": "2026-10-11T04:52:28+00:00",
+  "semantic_generation_id": "2e0c3954e031e677386b03248a616b907bad76c698444c10d49efa67b0643aa7",
+  "profile_pin_sha256": "9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21",
+  "work_id": "96fb272fd5ea2dccaff9e7b654d08cb59570c161fc5508faadf087cf36f6e808",
+  "family_id": "game:1492680",
+  "taste_subject_key": "App_1492680",
+  "appid": "1492680",
+  "taste_fingerprint": "af145e69289dc07ff8a6a897eb2a4720089a851fbf15eeea621bc1e70a37bf67",
+  "candidate_context_sha256": "d6c41f6fc269fcccc1bdf7687ec17cb1a71d46909736fb2216e8e16bfce7b759",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "dossier_content_sha256": "f7e63dfb48e66e185bba344d3365b26d2a734da1ea058e80de02aacb385ab1ae",
+  "authorization_id": "84cf8ebae1d72dc015fa6b93839d8aa5e2fd9368377a0cea3fb1be4adcebbce7",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Стремительное перемещение строится на стрельбе по талисманам для сохранения скорости, беге и парении с орлом; само движение становится выразительным занятием, что хорошо совпадает с одним из устойчивых предпочтений пользователя.",
+    "Яркие просторные локации, оркестровая музыка и спутник-птица создают запоминающуюся атмосферу, а поиск храмов и освобождение земель дают путь через несколько областей.",
+    "Однако области часто повторяют похожие задачи с кольцами, факелами и переключателями; автоматизированное прицеливание и однотипные боссы ограничивают глубину и развитие процесса после впечатляющего начала."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 79,
+    "development_variety": 44,
+    "structure_pacing_direction": 55,
+    "identity_hooks": 78,
+    "breadth_of_match": 69
+  },
+  "base_support_compatible": null,
+  "score_findings": [
+    {
+      "finding_id": "talisman_eagle_movement",
+      "text_ru": "Прыжки, бег, выстрелы по талисманам для ускорения и парение с орлом сливаются в непрерывное перемещение по открытым пространствам, делая само движение главной игровой наградой.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/геймплей_и_ощущение_управления/note",
+          "profile_value_sha256": "cdc4a8d45692525173f04e1f0bfe3afd477568a93562f0582665213abc8525b2",
+          "match_text_ru": "Удовольствие от движения и управления может быть самостоятельным источником интереса."
+        },
+        {
+          "json_pointer": "/factor_importance/мастерство_и_глубина/note",
+          "profile_value_sha256": "a43efcc6ca12d86ef6b51409a596c0d2446a50253e4d8b8612e4bc6111bed82e",
+          "match_text_ru": "Приятно овладевать способами перемещения, даже когда сам бой несложен."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 79
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 69
+        }
+      ]
+    },
+    {
+      "finding_id": "eagle_world_atmosphere",
+      "text_ru": "Широкие цветовые поля, оркестровая музыка и спутник-орёл создают созерцательную атмосферу путешествия; образы руин и мифов усиливают ощущение загадочного мира.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/атмосфера_и_арт_дирекшен/note",
+          "profile_value_sha256": "11c4e50bb902ad30b7931451ca92d1379a22e8794871e8033700c50f052ea878",
+          "match_text_ru": "Запоминающийся художественный стиль и звуковая атмосфера важны наряду с игровыми действиями."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 78
+        }
+      ]
+    },
+    {
+      "finding_id": "restoration_objectives_repeated",
+      "text_ru": "В областях есть ясная общая задача восстановить храмы и освободить духов, но близкие по устройству загадки с кольцами и переключателями повторяются, уменьшая эффект открытия в следующих регионах.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/развитие_и_разнообразие/note",
+          "profile_value_sha256": "0580f077432002933245e702ef32d0a5e3ac046bc717580f70c7ebcc99027b7d",
+          "match_text_ru": "Повторы без новых условий и механик заметно снижают увлечённость."
+        },
+        {
+          "json_pointer": "/factor_importance/tемп/note",
+          "profile_value_sha256": "a79a54657031ce862cf6c6d317d9adbc854a447415cf166fe07efc3487e41761",
+          "match_text_ru": "Путь должен регулярно давать новую причину двигаться дальше, не только одинаковые награды."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "lowers",
+          "normalized_value": 44
+        },
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 55
+        }
+      ]
+    },
+    {
+      "finding_id": "automated_talisman_aim",
+      "text_ru": "Автоматическое наведение на талисманы делает бег плавнее, но снижает ощущение точного прицеливания и осваиваемого контроля; отношение игроков к такой автоматизации расходится.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/мастерство_и_глубина/note",
+          "profile_value_sha256": "a43efcc6ca12d86ef6b51409a596c0d2446a50253e4d8b8612e4bc6111bed82e",
+          "match_text_ru": "Важна возможность улучшать исполнение, а не только получать эффект без усилий."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 79
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      },
+      {
+        "kind": "conflict",
+        "index": 1
+      },
+      {
+        "kind": "conflict",
+        "index": 2
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Разные регионы снова требуют похожих задач с кольцами, факелами и переключателями; после сильного впечатления от движения однообразие очистки областей может ослабить интерес.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          },
+          {
+            "kind": "conflict",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Погоня за боссами выглядит эффектно, но арены и задания повторяются, а невысокая требовательность не всем даёт чувство роста мастерства.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "conflict",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Автонаведение при беге нравится одним как источник плавности, но другие видят в нём нехватку контроля; скрытые объекты иногда трудно обнаружить по слабым подсказкам.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Мифологическая история подаётся скупо и может показаться слишком тонкой для игрока, которому важны раскрытые персонажи.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Исторические отзывы упоминают визуальные подёргивания, но нынешняя распространённость технических проблем неизвестна.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      }
+    ]
+  }
+}
