@@ -291,7 +291,7 @@ class FinalAcceptanceOfflineTests(unittest.TestCase):
         inspected = self.inspect(x, work, c, refs)
         self.assertEqual([e["sequence"] for e in inspected["ready"]], [1])
         forged = copy.deepcopy(inspected)
-        forged["ready"][0]["artifact"]["dossiers"][0]["game_identity"]["title"] = (
+        forged["ready"][0]["artifact"]["dossiers"][0]["game_identity"]["work_title"] = (
             "Unverified replacement")
         with self.assertRaisesRegex(ValueError, "untrusted, forged or stale"):
             offline_existing_writer_handoff(
