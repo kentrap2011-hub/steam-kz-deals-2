@@ -27,9 +27,10 @@ New `web/site-deep-status-browser-feed-refresh.test.js` exercises real bootstrap
 2. Cache-first failure exposes stale notice; direct refresh succeeds without data removal; mobile tab hidden→visible restores background check.
 3. Newer cached producer cannot be downgraded by older network; malformed network payload is rejected until a valid retry; corrupt cached identity rejected.
 4. Network-fresh first visit; independently newer Statistics do not certify a cached game as fresh.
-5. Original `scripts/test_feed_bootstrap_cache_identity.js`, `web/site-deep-count-queue.test.js` and `web/progressive-personalization-ui.test.js` remain in the PR-only workflow. Asset version and refresh UI accessibility have a static guard.
+5. First-visit outage without a cached feed exposes the same safe retry; reconnection works without storage reset. Mobile swipe navigation after refresh retains the lit Deep indicator, manual deferral and settings while incrementing seen only through ordinary navigation.
+6. Original `scripts/test_feed_bootstrap_cache_identity.js`, `web/site-deep-count-queue.test.js` and `web/progressive-personalization-ui.test.js` remain in the PR-only workflow. Asset version and refresh UI accessibility have a static guard.
 
-CI workflow `.github/workflows/validate-browser-deep-feed-refresh.yml` is **pull_request only**, Node 22, isolated inputs. Initial report recorded before CI outcome; append verified test/check status after run.
+CI workflow `.github/workflows/validate-browser-deep-feed-refresh.yml` is **pull_request only**, Node 22, isolated inputs. **PASS:** [GitHub Actions run 38134051565](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/38134051565), code head `907c2ea5f355e46902c98c5a488ba92548f74dcd`. The real synthetic app+bootstrap test, giveaway identity, manual Deep queue, Progressive UI, asset-version/accessibility guards and JS syntax succeeded. Earlier runs exposed a faulty synthetic URL-constructor shadow, corrected in the test; they are not implementation failures. Other relevant PR validations previously passed, and complete final PR CI should be reviewed before merge.
 
 ## Immediate user-safe verification after merge and Pages deployment
 
