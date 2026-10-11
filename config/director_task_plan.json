@@ -952,7 +952,7 @@
       "id": "site-feed-sync-compact-freshness-ux-01",
       "title": "Сайт: компактное и честное уведомление об обновлении ленты",
       "goal": "Убрать массивный баннер и постоянную ложную тревогу об устаревании сразу после загрузки: маленький мобильный индикатор, точное различие сохранённых и действительно устаревших данных и безопасное повторное обновление без сброса очереди.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Точечная UI/CSS и state-machine правка с синтетическими PR-only браузерными тестами.",
       "urgency": "высокая",
@@ -963,10 +963,10 @@
       "depends_on": [
         "site-deep-status-cache-refresh-fix"
       ],
-      "blocker": "No product-data or semantic changes; require focused PR + report + green UI regression.",
+      "blocker": "Accepted compact truthful freshness UX in main; separate outside-tap dismissal defect assigned.",
       "updated_on": "2026-10-11",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-11T11:15:42.256Z"
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-11T12:09:39.131Z"
     },
     {
       "id": "dossier-shadow-real-baseline-eligibility-audit-01",
@@ -986,6 +986,26 @@
       "blocker": "Только read-only verification, не выбор/заморозка/запуск пилота; одобрение реальной семантики отдельно. ЧАТ 2 отвечает за UI свежести.",
       "updated_on": "2026-10-11",
       "updated_at_utc": "2026-10-11T11:26:15.143Z",
+      "recent_completion": false
+    },
+    {
+      "id": "site-feed-sync-popover-outside-dismiss-01",
+      "title": "Сайт: закрывать окно сведений о ленте нажатием вне него",
+      "goal": "Исправить закрытие компактного окна состояния обновления: нажатие вне панели закрывает её и не блокирует карточки или переходы, внутри и повторная проверка работают; сохранить правильные Deep статусы и настройки.",
+      "status": "planned",
+      "effort": "низкая",
+      "effort_reason": "Один обработчик кликов вне всплывающей панели, безопасное снятие слушателя и существующие синтетические браузерные регрессии.",
+      "urgency": "средняя",
+      "urgency_reason": "Реальный мобильный пользователь подтвердил, что окно перекрывает ленту и не закрывается обычным касанием вне панели.",
+      "task_file": "WORKER_TASK_SITE_FEED_SYNC_POPOVER_OUTSIDE_DISMISS_FIX_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "site-feed-sync-compact-freshness-ux-01"
+      ],
+      "blocker": "UI PR-only. No semantic, production, Scheduled Tasks or browsing data mutation.",
+      "updated_on": "2026-10-11",
+      "updated_at_utc": "2026-10-11T12:09:39.131Z",
       "recent_completion": false
     }
   ]
