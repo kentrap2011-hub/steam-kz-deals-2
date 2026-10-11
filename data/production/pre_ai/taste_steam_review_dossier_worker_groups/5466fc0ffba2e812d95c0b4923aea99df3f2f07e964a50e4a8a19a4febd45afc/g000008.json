@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "5466fc0ffba2e812d95c0b4923aea99df3f2f07e964a50e4a8a19a4febd45afc",
+  "prepared_required_sha256": "2aea945e7dc2e9875afb68c03046f0e50c78038c94bc92655761f3d2813a5258",
+  "group_plan_sha256": "76028eec4c7ee9d3fb384c12cc2c99d002669012a84f4ad11675781ca47d1ca4",
+  "group_count": 40,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 8,
+  "start_index": 21,
+  "end_index_exclusive": 24,
+  "appids": [
+    "40700",
+    "423230",
+    "426790"
+  ],
+  "items_sha256": "ecbb384fdc0e39f2aca31d36d2eaac939fca4749d522b18e57f4d9e1f24c8056",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "629dba3edb9d4ce247de1b2c9f93540e61accc6b75cbf59dc92fc09cbc0b5151",
+  "items": [
+    {
+      "key": "App_40700",
+      "appid": "40700",
+      "title": "Machinarium",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_40700.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_423230",
+      "appid": "423230",
+      "title": "Furi",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_423230.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_426790",
+      "appid": "426790",
+      "title": "Grow Up",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_426790.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "bf2651caefc34820104ff39c80364635e424ac028c102288613476c369a91337"
+}
