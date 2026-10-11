@@ -88,7 +88,7 @@ function createBrowser(cachedPayload, network, saved){
   const controller=createFeedBootstrapResilience({
     window:win,document,fetch:nativeFetch,caches:{async open(){return cache}},
     AbortController,retryDelayMs:0,timeoutMs:1500,
-    console:{info(){},warn(){},log(){}},
+    console:{info(){},warn(...args){console.error('[synthetic bootstrap warning]',...args)},log(){}},
   });
   controller.install();
   const context=vm.createContext({
