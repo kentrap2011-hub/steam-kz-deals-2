@@ -785,7 +785,7 @@
       "id": "dossier-research-original-year-fix",
       "title": "Dossier: исправить исходный год Research",
       "goal": "Fail-closed Research source original-year and identity original-year consistency; preserve different storefront release year.",
-      "status": "planned",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Offline fail-closed tests and inactive GitHub control-plane adapter.",
       "urgency": "высокая",
@@ -796,16 +796,16 @@
       "depends_on": [
         "dossier-async-chain-qa"
       ],
-      "blocker": "Only offline PR implementation authorized; production and Scheduled Tasks inactive.",
+      "blocker": "Accepted in main as inactive code via двух принятых исправлений; joint QA and real evidence parity remain outstanding.",
       "updated_on": "2026-10-11",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-11T05:01:53.482Z"
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-11T07:20:27.101Z"
     },
     {
       "id": "dossier-async-github-final-integration",
       "title": "Dossier: неактивный GitHub final acceptance bridge",
       "goal": "Implement inactive GitHub-owned original ordered three-game grouping and strict final validation without activation.",
-      "status": "planned",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Offline fail-closed tests and inactive GitHub control-plane adapter.",
       "urgency": "высокая",
@@ -817,10 +817,52 @@
         "dossier-async-e2e-qa",
         "dossier-async-chain-qa"
       ],
-      "blocker": "Only offline PR implementation authorized; production and Scheduled Tasks inactive.",
+      "blocker": "Accepted in main as inactive code via двух принятых исправлений; joint QA and real evidence parity remain outstanding.",
+      "updated_on": "2026-10-11",
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-11T07:20:27.101Z"
+    },
+    {
+      "id": "dossier-async-postmerge-joint-qa",
+      "title": "Dossier: совместная проверка Research → Assembly → GitHub",
+      "goal": "Проверить после двух принятых исправлений всю неактивную цепочку на одних disposable Git данных; доказать что бывший XFAIL теперь настоящий PASS.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Изолированные fixture-тесты и PR-only инструменты без затрагивания production.",
+      "urgency": "высокая",
+      "urgency_reason": "Следующие обязательные проверки до отдельного решения о живом shadow/активации.",
+      "task_file": "WORKER_TASK_DOSSIER_ASYNC_POSTMERGE_JOINT_INTEGRATION_QA_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-research-original-year-fix",
+        "dossier-async-github-final-integration"
+      ],
+      "blocker": "No real semantic execution or production activation authorized; offline PRs only.",
       "updated_on": "2026-10-11",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-11T05:01:53.482Z"
+      "updated_at_utc": "2026-10-11T07:20:27.101Z"
+    },
+    {
+      "id": "dossier-async-shadow-quality-readiness",
+      "title": "Dossier: подготовка проверки качества реальных свидетельств",
+      "goal": "Сделать неактивный offline инструмент и критерии будущей shadow-проверки качества Dossier без запуска реальной семантики.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Изолированные fixture-тесты и PR-only инструменты без затрагивания production.",
+      "urgency": "высокая",
+      "urgency_reason": "Следующие обязательные проверки до отдельного решения о живом shadow/активации.",
+      "task_file": "WORKER_TASK_DOSSIER_ASYNC_SHADOW_QUALITY_READINESS_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-research-original-year-fix",
+        "dossier-async-github-final-integration"
+      ],
+      "blocker": "No real semantic execution or production activation authorized; offline PRs only.",
+      "updated_on": "2026-10-11",
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-11T07:20:27.101Z"
     }
   ]
 }

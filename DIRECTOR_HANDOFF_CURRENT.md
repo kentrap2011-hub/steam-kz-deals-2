@@ -5,6 +5,14 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## NEWEST DIRECTOR HANDOFF — 2026-10-11
+
+- User confirms `Being a DIK - Season 1` translation now displays normally; no site cache incident remains.
+- PR #187 Research year validator merged `aec7701dfb484bbe3d0165e3dc75875c4d2e2c23`; PR #188 inactive final group bridge merged `0549dc00b4a96833f747707f92c000bf44f443fc`. Previous physical worker chats retired.
+- **NEW ЧАТ 1:** `WORKER_TASK_DOSSIER_ASYNC_POSTMERGE_JOINT_INTEGRATION_QA_01.md`, actual joint Research/Assembly/GitHub bridge offline regression, original-year formerly-XFAIL check.
+- **NEW ЧАТ 2:** `WORKER_TASK_DOSSIER_ASYNC_SHADOW_QUALITY_READINESS_01.md`, inactive evidence-quality/parity harness and future real-evidence trial criteria only.
+- Separate PRs, no production semantic work, Scheduled Task changes or activation. Deep `mass_migration_authorized=false`; Fast remains production authority until final atomic Deep cutover. Earlier assignments below are historical.
+
 ## LATEST DIRECTOR TASKS — 2026-10-11
 
 - PR #184 Research→Assembly offline E2E QA merged `2a5f0fe0173848b8e5baf6b488bb923be8cb4efd` (87 passing unit tests).
