@@ -1012,7 +1012,7 @@
       "id": "dossier-shadow-pilot-cohort-decision-packet-01",
       "title": "Dossier: предлагаемые 18 игр и пакет решения о пилоте",
       "goal": "По 20 исторически подтверждённым группам сформировать воспроизводимый предварительный набор из шести исходных групп, честно обозначить неизвестную разнородность и собрать пакет отдельного решения без выбора и запуска реального анализа.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Небольшой изолированный read-only алгоритм предварительной выборки, синтетические проверки и точная ведомость авторизации без семантики.",
       "urgency": "высокая",
@@ -1023,16 +1023,16 @@
       "depends_on": [
         "dossier-shadow-real-baseline-eligibility-audit-01"
       ],
-      "blocker": "PR-only подготовка без real semantic Research/Assembly, выбора или фиксации настоящего trial и без Scheduled Tasks.",
+      "blocker": "PR принят, офлайн подготовка завершена. Реальный пилот НЕ одобрен: предварительная когорта NOT_READY_FOR_APPROVAL, независимые сведения о первоисточниках и strata отсутствуют.",
       "updated_on": "2026-10-11",
-      "updated_at_utc": "2026-10-11T12:36:29.300Z",
-      "recent_completion": false
+      "updated_at_utc": "2026-10-11T13:27:05.343Z",
+      "recent_completion": true
     },
     {
       "id": "dossier-shadow-quality-review-gate-01",
       "title": "Dossier: независимая оценка качества для будущего пилота",
       "goal": "Разработать изолированную офлайн-проверку парных досье и независимого ослеплённого оценивания, учёт критичных потерь и разногласий, не выдавая синтетические результаты за реальное качество.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Отдельный offline reviewer/adjudication gate и регрессии строгой проверки источников и исторической приёмки в синтетических тестах.",
       "urgency": "высокая",
@@ -1044,10 +1044,10 @@
         "dossier-async-shadow-quality-readiness",
         "dossier-shadow-real-baseline-eligibility-audit-01"
       ],
-      "blocker": "PR-only подготовка без real semantic Research/Assembly, выбора или фиксации настоящего trial и без Scheduled Tasks.",
+      "blocker": "PR принят, офлайн подготовка завершена. Реальный пилот НЕ одобрен: предварительная когорта NOT_READY_FOR_APPROVAL, независимые сведения о первоисточниках и strata отсутствуют.",
       "updated_on": "2026-10-11",
-      "updated_at_utc": "2026-10-11T12:36:29.300Z",
-      "recent_completion": false
+      "updated_at_utc": "2026-10-11T13:27:05.343Z",
+      "recent_completion": true
     }
   ]
 }

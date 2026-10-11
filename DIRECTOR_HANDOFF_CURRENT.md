@@ -5,6 +5,13 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## LATEST DIRECTOR RESULT — 2026-10-11: PR #205/#206 completed, real shadow cohort not approved
+
+- PR #205 merged `063ed71826d60a7028906217c3cd327901ceb8d7`: strict historical 20 old one-stage groups baseline reused; deterministic **unapproved preview** original groups **3, 8, 13, 15, 18, 20** = 18 AppIDs; 14 in-frame nonselected groups transparently counted, future cohort `NOT_READY_FOR_APPROVAL` since external original-work/year/edition, language, source-parent independence, timing, negatives, risks and gaps are still unmeasured across the full 20-group frame.
+- PR #206 merged `c3f766730e81e9316d1b80a77279b46a5dc99f24`: independent inactive synthetic strict writer-proof and Research→Assembly chain review gate, blinded A/B mechanical first-round Git freeze and third-party adjudication rubric, 13 dimensions; zero actual semantic work or externally verified source quality.
+- Both workers' PRs and reports reviewed, CI green, and accepted; Chat 1 and Chat 2 can be retired. **No active worker task assigned.** If user approves next read-only evidence step, create a NEW Director task: independent pre-output source metadata/original year and truthful strata for all 20 old groups before selecting a representative/fair 6×3 real semantic pilot. The six from PR #205 are only a sample illustration, not user-approved scope.
+- No live semantic trial, production activation, Scheduled Tasks, Deep/Fast/ranking/cache/writer/website changes. Existing one-stage Dossier remains production truth. Earlier assignments below are historical.
+
 ## LATEST DIRECTOR ASSIGNMENT — 2026-10-11: dual Dossier pilot decision preparation (inactive)
 
 - PR #201 merged `d98966c64cf088fe28854a2f42408fd75f9daffd`: pinned historical accepted one-stage Dossier 20/20 exact groups (60 games) proved strict Git baseline and independently matched GitHub Actions writer jobs; external source trust and new two-stage quality still unevaluated. PR #203 merged `a1f1c5fa2d38727f8ee8cd44d6a3464d25085dbb`: compact popover outside tap repair, synthetic CI green, awaiting user Android acceptance.
