@@ -5,6 +5,13 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## LATEST DIRECTOR RESULT / ASSIGNMENT — 2026-10-11: Stage A/B sandbox PRs done, real GitHub marker next
+
+- PR #215 (ЧАТ 1) merged `25f6ca93bbcf8a95176ee0c519298962f684e261`, all **3** latest PR checks green: real reusable Research sandbox validation/proposal/one-shot future prompt; `sandbox_research_invocation_ready=blocked`, **zero semantic runs**, missing real immutable GitHub marker and buffer plus independent A/B/C review signoff.
+- PR #214 (ЧАТ 2) merged `55cffacc3e234ff0424e49c566b9593e094bf4f2`, **2** PR checks green, converted draft to ready by Director: real offline Assembly Git transport strict bridge/review adapter, **zero Assembly semantics**, waiting on actual Research. Both are isolated, production gates unchanged and old one-stage Dossier authoritative.
+- **NEW ЧАТ 1**: `WORKER_TASK_DOSSIER_SHADOW_FIRST_18_PUBLISH_GITHUB_FROZEN_RESEARCH_AUTHORITY_01.md`. Build/publish an actual GitHub-controlled durable sandbox Research buffer and its one-parent marker-only commit for exact **6 groups [3,8,13,15,18,20] / 18 AppIDs**, using existing PR #215 strict writer validation. No further 114-source/55-year pre-audit, no semantically researching a game from implementation chat. Publish real authority or one precise blocked reason, PR and report, never self-merge.
+- **ЧАТ 2 unassigned** (wait for Research output). After accepted real frozen marker, Director chooses separate review A/B/C roles, formally approves nonproduction semantic gate and issues a NEW bounded one-shot Research invocation. Contract `active=false` production flags are never to be flipped for this sandbox. No Scheduled Tasks, canonical cache/writer/Deep/Fast/UI/production changes. Previous assignments below historical.
+
 ## LATEST DIRECTOR DECISION — 2026-10-11: first real 6×3 Research→Assembly test, sandbox authority first
 
 - User said **Делаем** after Director proposed stopping the 114-old-source/55-old-year pre-audit loop and advancing to an **actual limited semantic Dossier experiment**. Selected deterministic PR #205 six original groups **[3,8,13,15,18,20]** = 18 distinct AppIDs as **nonrepresentative calibration**. Frozen historical writer-proven parent at `95a4bf4990a60082ecb3302da5bc7f23b618d93e`; exact source/blobs and group hashes in `reviews/dossier_shadow_offline/dossier_shadow_calibration_20261011_6x3_director_decision_v1.json`. The user wants speed and quality evidence from NEW analysis, not more old-source audits.
