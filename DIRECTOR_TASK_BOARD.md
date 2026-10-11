@@ -5,6 +5,14 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT TASK — 2026-10-11: compact/truthful visual feed freshness
+
+- **PR #197 (ЧАТ 1)** merged `a216807f95cfa71bb28435142af10605c5c1aa60`: inactive historical writer receipt/shadow pilot preflight implemented with synthetic QA; some old accepted one-stage groups lack frozen audit receipts, so real pilot/eligible cohort NOT authorized. ЧАТ 1 completed and remains idle until separate user decision.
+- **PR #196 (ЧАТ 2)** merged `d75c60d8d1a7eb2bc3dfd1f83051cdb27781b431`: normal browser now shows `Strange Horticulture` position #26 with correct lit Deep status; user directly confirmed after new UI appeared. Cache/feed fix has worked.
+- **New user UX defect confirmed via screenshot:** large amber `feedSyncNotice` under header with full-size `Проверить свежие данные` button crowds mobile page; at ~15:09 notice claims saved copy from ~15:08 and `Не удалось проверить обновления; отметки Deep могут устареть`. In merged code `freshnessNotice('stale')` runs for **any** failed network revalidation, regardless of producer-cache age. `verification_failed` must not be equated with `proven_outdated`, and user settings must remain untouched.
+- **НОВЫЙ ЧАТ — ЧАТ 2:** `WORKER_TASK_SITE_FEED_SYNC_COMPACT_FRESHNESS_UX_FIX_01.md`: change to compact contextual status + accessible minimal retry/details, distinguish current/cached-unverified/confirmed old/error; PR-only mobile/Deep regression. No need to reassign ЧАТ 1 for site issue.
+- No direct production deploy or new Scheduled Tasks, no semantic execution, no Dossier cutover, no cancellation of cache-first resilience, no loss of local queue. Chat 2 opens PR+report; Director separately reviews/merges after green checks.
+
 ## DIRECTOR CURRENT WAVE — 2026-10-11: site stale Deep fix and Dossier pilot preflight
 
 - PR #193 ЧАТ 1 merged `f6718dafe3267d926e72e4070e134e011d2187a7`: corrected inert `cross_pr_research_original_year_fix_verified=true` guard, actual production activation false, all joint/bridge tests green. Previous physical worker retired.
