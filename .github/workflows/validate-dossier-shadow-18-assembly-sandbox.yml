@@ -1,0 +1,40 @@
+name: Validate 18-game Dossier sandbox Assembly and comparison (PR only)
+
+on:
+  pull_request:
+    paths:
+      - "scripts/dossier_shadow_18_assembly_sandbox.py"
+      - "scripts/test_dossier_shadow_18_assembly_sandbox.py"
+      - "reviews/worker_reports/dossier-shadow-first-real-18-assembly-compare-sandbox-integration-01.md"
+      - ".github/workflows/validate-dossier-shadow-18-assembly-sandbox.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  disposable-git-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Existing V2 schema dependency
+        run: python -m pip install 'jsonschema>=4.21,<5'
+      - name: Compile isolated operator and tests
+        run: python -m py_compile scripts/dossier_shadow_18_assembly_sandbox.py scripts/test_dossier_shadow_18_assembly_sandbox.py
+      - name: Fixed 18-game original-group nonproduction adapter
+        run: python -m unittest discover -s scripts -p 'test_dossier_shadow_18_assembly_sandbox.py' -v
+      - name: Existing strict async Assembly and Research Git transport
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_assembly_semantic_worker.py' -v
+      - name: Existing strict final atomic three-game handoff
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_final_acceptance.py' -v
+      - name: Existing historical original Git writer receipt
+        run: python -m unittest discover -s scripts -p 'test_dossier_shadow_pilot_preflight.py' -v
+      - name: Existing old/new source-safe quality comparisons
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_shadow_quality.py' -v
+      - name: Existing independent A/B/C adjudication and negative source checks
+        run: python -m unittest discover -s scripts -p 'test_dossier_shadow_quality_review_gate.py' -v
+      - name: Existing one-stage strict Dossier compatibility
+        run: python -m unittest discover -s scripts -p 'test_taste_steam_review_dossier_strict.py' -v
