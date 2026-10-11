@@ -5,6 +5,15 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## LATEST DIRECTOR ASSIGNMENT — 2026-10-11
+
+- **PR #184 (ЧАТ 1 offline Research→Assembly E2E QA)** merged as `2a5f0fe0173848b8e5baf6b488bb923be8cb4efd`. 87 unit tests passed; prior physical worker chat retired.
+- **PR #185 (ЧАТ 2 offline GitHub eventual chain QA)** merged as `6bbfadeeada12f46955fa60bc3b26f820bd7a429`. Found **known XFAIL**: Research source original release year may contradict identity original year. Also found **no inactive GitHub final three-game assembler/ingest bridge**. Prior physical worker chat retired.
+- **Куда отправить: НОВЫЙ ЧАТ — ЧАТ 1.** `WORKER_TASK_DOSSIER_RESEARCH_ORIGINAL_YEAR_BINDING_FIX_01.md` — repair Research P1 original-work-year inconsistency; turn known XFAIL into strict passing negative regression. Offline only.
+- **Куда отправить: НОВЫЙ ЧАТ — ЧАТ 2.** `WORKER_TASK_DOSSIER_ASYNC_GITHUB_FINAL_ACCEPTANCE_INTEGRATION_01.md` — implement only inactive, strictly GitHub-owned original three-game group acceptance adapter/bridge with disposable-Git QA. Offline only; production writer and scheduled workflows must not be changed.
+- Different file ownership; both workers create independent PR + report, do **not** self-merge. Joint revalidation requires both PRs. No production activation or real semantics, no Scheduled Tasks.
+- Deep Stage 1 migration remains blocked (`mass_migration_authorized=false`). Fast production authority remains until final atomic Deep cutover after real accepted new Stage 1/2 and approved Stage 2 anchors.
+
 ## CURRENT DIRECTOR WORKER ASSIGNMENTS — 2026-10-10
 
 - **PR #181 / ЧАТ 1 Research:** merged (squash `8bba23fca6337e06504f819c8ccda298ffd8505a`), offline checks passed. Prior physical conversation retired.
