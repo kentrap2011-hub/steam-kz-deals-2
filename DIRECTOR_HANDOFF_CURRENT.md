@@ -5,6 +5,14 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## LATEST DIRECTOR ASSIGNMENT — 2026-10-11: dual Dossier pilot decision preparation (inactive)
+
+- PR #201 merged `d98966c64cf088fe28854a2f42408fd75f9daffd`: pinned historical accepted one-stage Dossier 20/20 exact groups (60 games) proved strict Git baseline and independently matched GitHub Actions writer jobs; external source trust and new two-stage quality still unevaluated. PR #203 merged `a1f1c5fa2d38727f8ee8cd44d6a3464d25085dbb`: compact popover outside tap repair, synthetic CI green, awaiting user Android acceptance.
+- **NEW ЧАТ 1**: `WORKER_TASK_DOSSIER_SHADOW_PILOT_COHORT_DECISION_PACKET_01.md` — deterministic, metadata-only prospective **6 whole groups × 3 games** approval packet, strictly from verified historical 20-group frame; do not cherry-pick/freeze/authorize a live trial, note genuinely unknown category diversity, no real semantics.
+- **NEW ЧАТ 2**: `WORKER_TASK_DOSSIER_SHADOW_QUALITY_REVIEW_GATE_01.md` — separate offline reviewer A/B + adjudicator and quality-difference gate, synthetic fixtures only, source-anchor/negative-evidence/identity fail closed. No Chat 1 scripts touched.
+- Both create independent PR and worker report, never self-merge. Separate user approval still required before any real semantic Research→Assembly pilot. Never change Scheduled Tasks, production cache/receipts/writer/Deep/Fast, two-stage active flags or real-stage scope.
+- Older assignments below historical.
+
 ## LATEST DIRECTOR FOLLOW-UP — 2026-10-11: compact freshness popover dismiss
 
 - PR #199 merged `7683c94ce5736052e1e071593f58ab6bad4e7545`, user confirmed much improved small feed freshness status in normal Android browser. Newly reported: expanded status detail popover sometimes remains open when tapping outside (screenshot ~16:06). Director checked `web/feed-bootstrap.js`: status icon toggle + Escape listeners but **no document-level outside-click** handling.
