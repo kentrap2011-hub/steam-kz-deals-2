@@ -5,6 +5,15 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## LATEST DIRECTOR TASKS — 2026-10-11
+
+- PR #184 Research→Assembly offline E2E QA merged `2a5f0fe0173848b8e5baf6b488bb923be8cb4efd` (87 passing unit tests).
+- PR #185 GitHub chain offline QA merged `6bbfadeeada12f46955fa60bc3b26f820bd7a429`. A Research original-release-year contradiction remains an explicit XFAIL, **not** fixed. No final GitHub three-game writer adapter exists yet.
+- **НОВЫЙ ЧАТ 1:** `WORKER_TASK_DOSSIER_RESEARCH_ORIGINAL_YEAR_BINDING_FIX_01.md`, bounded Research fail-closed year-consistency fix.
+- **НОВЫЙ ЧАТ 2:** `WORKER_TASK_DOSSIER_ASYNC_GITHUB_FINAL_ACCEPTANCE_INTEGRATION_01.md`, inactive GitHub-owned final group strict acceptance bridge.
+- Independent developer PRs. No real semantic work, production activation, canonical writes or Scheduled Task changes.
+- Deep `mass_migration_authorized=false`; no early production Fast removal. Historical assignments below are superseded.
+
 ## MOST RECENT DIRECTOR DECISION — 2026-10-10
 
 - #181 (Research) merged at `8bba23fca6337e06504f819c8ccda298ffd8505a`; #182 (Assembly) merged at `4cca97a838e42b275259751010f339116d068adc`. Both passed branch CI and remain inactive/non-authoritative.
