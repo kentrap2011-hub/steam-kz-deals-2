@@ -230,7 +230,7 @@ async function firstVisitOutageRetry(){
   assert.equal(browser.nodes('feedSyncNotice').dataset.state,'no_feed','offline-first visit must expose retry');
   assert.match(browser.nodes('feedSyncText').textContent,/Лента недоступна: загрузка не удалась/);
   offline=false;
-  await browser.controller.retry();
+  assert.equal(await browser.controller.retry(),true,'manual no-cache retry reports accepted render');
   await until(()=>browser.controller.state.source==='network','first visit successful retry');
   assert.equal(browser.nodes('feedSyncNotice').dataset.state,'network_verified');
   assert.equal(browser.snapshot().item.deep_stage_state,'completed');
