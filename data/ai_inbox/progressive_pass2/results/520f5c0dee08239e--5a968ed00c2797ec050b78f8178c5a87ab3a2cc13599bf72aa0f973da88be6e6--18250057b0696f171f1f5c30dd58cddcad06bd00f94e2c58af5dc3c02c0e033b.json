@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "30073bd5c8a52b3c1513c872a21c8aeaa2f8d885",
+  "run_start_authority_commit": "0e17eb8f1c8371e68abe2adb48f46592e3c2e8d9",
+  "run_started_at_utc": "2026-10-12T03:48:22+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "02873cd73be3f673db7c516da956ffcf13ea8b315216dbe4eaae9523716bf88a",
+  "work_id": "5a968ed00c2797ec050b78f8178c5a87ab3a2cc13599bf72aa0f973da88be6e6",
+  "family_id": "game:285310",
+  "taste_subject_key": "App_285310",
+  "appid": "285310",
+  "taste_fingerprint": "588a6bd436e6bdcad63f02652104af887bf29535df9c675268e4c36a050d823a",
+  "candidate_context_sha256": "76f48c5fe222e649efa97f47ba7b01b24ba98ff46ba750ce971f0d5a00465e50",
+  "dossier_content_sha256": "2917602c6d5e0252a3709ce630cb8ffec6a0883da2d10e01e3b2fef122e3ba2e",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "18250057b0696f171f1f5c30dd58cddcad06bd00f94e2c58af5dc3c02c0e033b",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Игроки описывают взаимосвязанное управление экономикой, очередями, персоналом и удовлетворённостью посетителей с наглядными результатами решений.",
+    "Разные цели сценариев и подробное проектирование аттракционов создают как структурированные задачи, так и пространство для эксперимента с парком."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 60,
+    "development_variety": 58,
+    "structure_pacing_direction": 63,
+    "identity_hooks": 48,
+    "breadth_of_match": 49
+  },
+  "score_findings": [
+    {
+      "finding_id": "m01",
+      "text_ru": "Управление ценами, персоналом, очередями и прибыльностью аттракционов даёт понятные задачи, где можно изменить устройство парка и увидеть последствия решений.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/tactical_problem_solving/summary",
+          "profile_value_sha256": "d66110f8516a5c017644fb3fa523677af7a64ec44c74bde423b9b8e400b87dc5",
+          "match_text_ru": "Интересен цикл понять условия, подобрать способ и проверить его; здесь решения касаются экономики и гостей."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 60
+        }
+      ]
+    },
+    {
+      "finding_id": "m02",
+      "text_ru": "Сценарии меняют цели по посещаемости, рейтингу и финансам, поэтому парковое строительство не сводится к одной непрерывной песочнице.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Для удержания внимания важно обновление задач, а не только удачный первый час."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 58
+        }
+      ]
+    },
+    {
+      "finding_id": "m03",
+      "text_ru": "Показатели посещаемости, денег и рейтинга дают ясный вектор развития каждого сценария; можно видеть, к какой цели ведут решения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/play_pattern_and_length/weekly_gap_resilience_raises",
+          "profile_value_sha256": "20279c829b7d5524531d4d3696e48d2cb5409cda9edb489cf1f374e57051a5f7",
+          "match_text_ru": "Ясные цели облегчают возвращение к игре после перерыва между игровыми вечерами."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 63
+        }
+      ]
+    },
+    {
+      "finding_id": "m04",
+      "text_ru": "Настройка трасс американских горок, рельефа и декора позволяет придавать своему парку узнаваемый облик; здесь творческий результат создаёт сам игрок.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Важен заметный эстетический или механический крючок; индивидуальная планировка даёт такой шанс."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 48
+        }
+      ]
+    },
+    {
+      "finding_id": "m05",
+      "text_ru": "Когда выгодные стратегии освоены, задания могут стать предсказуемыми, а длительные серии похожих решений ослабляют разнообразие несмотря на число сценариев.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8/pattern",
+          "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+          "match_text_ru": "Повторы допустимы, пока они добавляют опыт; одинаковая формула без развития утомляет."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 49
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 58
+        }
+      ]
+    },
+    {
+      "finding_id": "m06",
+      "text_ru": "Отсутствие удобной перемотки времени вынуждает ждать окончания уже решённого сценария; это снижает плотность осмысленных действий между задачами.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/геймплей_и_ощущение_управления/note",
+          "profile_value_sha256": "cdc4a8d45692525173f04e1f0bfe3afd477568a93562f0582665213abc8525b2",
+          "match_text_ru": "Пустые или скучные отрезки основного цикла могут перевесить достоинства игры."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 63
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "В сценариях с фиксированной датой окончания после достижения целей может оставаться много ожидания без удобного ускорения времени.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Освоенные схемы прибыльного парка иногда делают дальнейшие сценарии предсказуемыми и однообразными; это особенно важно при предпочтении развития игрового опыта.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "На некоторых современных системах сообщают о сбоях запуска и неудобном масштабировании интерфейса; сторонний OpenRCT2 помогает не всем и может менять вид пикселей.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
