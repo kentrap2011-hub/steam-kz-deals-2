@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "9116c8233c1caf9e7d99fd4f6819bf0c7b2d5ced",
+  "run_start_authority_commit": "6bb514e7b3d5f5919c6f068d87492cb40bf7c265",
+  "run_started_at_utc": "2026-10-12T03:36:43+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "02873cd73be3f673db7c516da956ffcf13ea8b315216dbe4eaae9523716bf88a",
+  "work_id": "eb091be4db2920a50a671ddc662cc6147fc25ae72ef04d2de85a319859ec7ef9",
+  "family_id": "game:305620",
+  "taste_subject_key": "App_305620",
+  "appid": "305620",
+  "taste_fingerprint": "6ec75269ceaad0db5a8bd1687c11faf68395cb84d0ee8f8a0244b1f860a49a84",
+  "candidate_context_sha256": "9d2f85869df94fa6be7d0bdb7aa85b1d29e0335a74d26529e201486c9b07efee",
+  "dossier_content_sha256": "f2ef5d554c2e3c9c7af8489cf66e0220101ccba61071c51339817e70d2e2241f",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "bc7fba8ea2485b87a827f015f99031388c7cce97477227af3af32eb67e9a69d6",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Постоянные заботы о еде, воде, тепле и усталости, медленные переходы и повторяющиеся действия по добыче ресурсов создают основной цикл, близкий к подтверждённой нелюбви к длинным малостимулирующим промежуткам между интересными решениями.",
+    "В открытом режиме прогресс прежде всего выражен ростом знаний игрока и самоорганизацией; не хватает привычного наглядного развития способностей, а требование самостоятельно задавать цель сочетается с риском потерянности.",
+    "Атмосфера снежного одиночества и освоение опасного ландшафта являются реальными плюсами, но неоднозначная история, длинные сценарные переходы и потеря запасов между эпизодами уменьшают общий шанс устойчивого интереса."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      },
+      {
+        "kind": "observation",
+        "index": 10
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Долгие переходы между событиями и повторяющиеся походы за водой или едой могут давать именно тот низкостимулирующий промежуток без разнообразных действий, из-за которого интерес обычно быстро падает.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "management_routine",
+        "text_ru": "Частое пополнение еды, воды, тепла и состояния одежды может превратить выживание в обслуживание убывающих показателей вместо новых игровых задач; это одна из повторяющихся претензий игроков.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Свободная песочница заставляет самому выбирать направление и задачи; это может не понравиться при потребности в ясном следующем шаге, хотя отдельный сюжетный режим направляет игрока.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Жёсткое выживание с необратимой смертью требует изучения маршрутов и управления рисками. Этот вызов может быть интересен любителю мастерства, но потеря длинной попытки — отдельный компромисс, а не автоматический минус сложности.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 10
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "О сюжетном режиме мнения расходятся: есть эмоциональные сцены, но встречаются затянутые диалоги, scripted-переходы и сброс собранных припасов при смене эпизода.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          },
+          {
+            "kind": "observation",
+            "index": 9
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      }
+    ]
+  }
+}
