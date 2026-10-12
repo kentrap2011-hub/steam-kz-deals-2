@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR PARALLEL ASSIGNMENT — 2026-10-12: replace website favicon/PWA icon from user's exact ZIP
+
+- **НОВЫЙ ЧАТ — ЧАТ 2:** `WORKER_TASK_SITE_GAMEPAD_ICON_PACK_REPLACEMENT_01.md`, mode IMPLEMENT, user expressly supplies `steam_icon_pack.zip` in Director conversation; archive SHA-256 `c73d3d1a36de580f3dc7318dbc3cd410cdfd0826bd62cb19887bb9d514efe2c4`, 3,281,824 bytes. **User must reattach original ZIP when launching worker chat**: this Director conversation attachment is not guaranteed to cross physical chats. Worker must verify actual ZIP bytes and not invent a replacement icon.
+- Current `web/index.html` uses `icon.svg?v=shortcut-icon-1`, `web/manifest.webmanifest` uses old `icon.svg` and `icon-maskable.svg`. Worker replaces actual browser favicon + relevant Android PWA normal/maskable + Apple (and Windows where used) using user-supplied PNG/ICO variants, updates targeted manifest/HTML/PWA cache-busting, proves references and binary assets, PR + worker report without self-merge. Scope is static site icon only; no redesign, no schema/data/ranking changes.
+- **ЧАТ 1 retains the independent Dossier sandbox marker-publication assignment** from prior Director wave. Its task is NOT replaced or cancelled, and this icon task requires no Dossier interaction. No Scheduled Tasks, semantic execution, production cache/queues/ranking modification by Chat 2.
+- Director review/merge happens after one isolated worker PR with test evidence; do not describe this task as already replacing the deployed icon.
+
 ## DIRECTOR CURRENT RESULT / NEXT BLOCKER — 2026-10-11: both sandbox implementation PRs merged, publish real frozen Research authority next
 
 - **ЧАТ 1 PR #215** merged `25f6ca93bbcf8a95176ee0c519298962f684e261` after **3/3 green PR-only checks**. Real reusable sandbox Research strict marker/buffer validator, proposal tool, bounded semantic prompt and 8 disposable-Git tests; exact original groups **3,8,13,15,18,20 (18 games)** and historic accepted writer receipts. **Zero real Research calls**; `sandbox_research_invocation_ready=blocked` since no durable GitHub-owned public sandbox buffer/marker, no finalized A/B/C reviewer assignment and semantic activation contract. No change to production two-stage inactive flags.
