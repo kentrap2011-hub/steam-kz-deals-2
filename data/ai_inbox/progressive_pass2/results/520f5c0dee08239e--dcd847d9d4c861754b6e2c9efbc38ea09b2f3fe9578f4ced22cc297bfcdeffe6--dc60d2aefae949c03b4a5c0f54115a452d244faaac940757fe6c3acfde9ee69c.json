@@ -1,0 +1,291 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "30073bd5c8a52b3c1513c872a21c8aeaa2f8d885",
+  "run_start_authority_commit": "0e17eb8f1c8371e68abe2adb48f46592e3c2e8d9",
+  "run_started_at_utc": "2026-10-12T03:48:22+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "02873cd73be3f673db7c516da956ffcf13ea8b315216dbe4eaae9523716bf88a",
+  "work_id": "dcd847d9d4c861754b6e2c9efbc38ea09b2f3fe9578f4ced22cc297bfcdeffe6",
+  "family_id": "game:227600",
+  "taste_subject_key": "App_227600",
+  "appid": "227600",
+  "taste_fingerprint": "c6a48b9643dedc6ce0a7a42c077e801bcf94b6141627c485240cdb07bfd179ab",
+  "candidate_context_sha256": "8d41f70c7b33e153be0482cf00be144707b0425701920cbbeafbcbb5e79105fe",
+  "dossier_content_sha256": "5bbc3e9d0ad5e06b7ef9742c3c8c77bc72e9a4360a0bcaa5f89cced633d6181b",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "dc60d2aefae949c03b4a5c0f54115a452d244faaac940757fe6c3acfde9ee69c",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Боковой платформинг с отскоками, отдельными объёмными боссами и ясным коротким сказочным маршрутом даёт доступное активное приключение.",
+    "Смена ярких тематических миров, анимационная подача и музыка обеспечивают отличительную художественную атмосферу, особенно в формате совместного просмотра или игры рядом."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 61,
+    "development_variety": 57,
+    "structure_pacing_direction": 72,
+    "identity_hooks": 81,
+    "breadth_of_match": 62
+  },
+  "score_findings": [
+    {
+      "finding_id": "c01",
+      "text_ru": "Прыжки по платформам, отскоки от врагов и отдельные пространственные схватки с боссами дают непосредственные действия с узнаваемым навыком тайминга.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Интересен видимый рост умения, когда успех связан со своевременным действием."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 61
+        }
+      ]
+    },
+    {
+      "finding_id": "c02",
+      "text_ru": "Сказочные локации и тематически разные этапы меняют окружение и препятствия, но короткая кампания почти не оставляет пространства для долгой эволюции механик.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Меняющиеся игровые ситуации важны, а короткое повторение одного приёма снижает интерес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 57
+        }
+      ]
+    },
+    {
+      "finding_id": "c03",
+      "text_ru": "Путешествие Микки к спасению Минни выстроено как компактная череда этапов и боссов с ясной целью, без необходимости блуждать по огромному миру.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/play_pattern_and_length/weekly_gap_resilience_raises",
+          "profile_value_sha256": "20279c829b7d5524531d4d3696e48d2cb5409cda9edb489cf1f374e57051a5f7",
+          "match_text_ru": "Понятные цели и простая структура удобны для возобновления игры после перерыва."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 72
+        }
+      ]
+    },
+    {
+      "finding_id": "c04",
+      "text_ru": "Яркая рисованная стилистика, смена сказочных миров и музыка делают приключение визуально узнаваемым; именно подача составляет отдельную сильную сторону игры.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Выразительный художественный язык и атмосфера способны усилить интерес даже в простой игре."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 81
+        }
+      ]
+    },
+    {
+      "finding_id": "c05",
+      "text_ru": "Доступные платформенные этапы и отдельные требовательные боссы могут дать лёгкое совместное семейное приключение, если играть рядом; одних коллекционных предметов мало для повторного полноценного прохождения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9/pattern",
+          "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+          "match_text_ru": "Семейное участие может быть плюсом и в одиночной игре, если есть общий интерес к происходящему."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 62
+        }
+      ]
+    },
+    {
+      "finding_id": "c06",
+      "text_ru": "На переходах между боковыми и объёмными участками некоторым мешают неточная глубина прыжка и запоздалый отклик управления, что ограничивает удовольствие от точного платформинга.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/геймплей_и_ощущение_управления/note",
+          "profile_value_sha256": "cdc4a8d45692525173f04e1f0bfe3afd477568a93562f0582665213abc8525b2",
+          "match_text_ru": "Комфорт управления критичен, поэтому визуальная привлекательность не снимает риск неприятных прыжков."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 61
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Основное приключение занимает примерно два–три часа, а дополнительные коллекционные вещи и костюмы дают лишь ограниченную причину возвращаться.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Часть игроков отмечает промахи и неуверенный отклик прыжка, особенно при смене 2D и 3D, что может раздражать при освоении точных действий.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Начальные этапы доступны, но отдельные боссы требуют более точного тайминга, который не всегда поддерживается безупречным управлением.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть отдельные сообщения о зависаниях, сбоях загрузки, неверном разрешении и проблемах запуска на новых Windows; всеобщая неисправность не подтверждена.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
