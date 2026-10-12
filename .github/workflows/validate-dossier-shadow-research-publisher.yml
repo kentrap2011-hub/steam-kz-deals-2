@@ -1,0 +1,73 @@
+name: Validate Dossier shadow GitHub-frozen Research publisher (PR only)
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/dossier_shadow_research_trial_publish.py'
+      - 'scripts/test_dossier_shadow_research_trial_publish.py'
+      - '.github/workflows/publish-dossier-shadow-research-freeze.yml'
+      - '.github/workflows/validate-dossier-shadow-research-publisher.yml'
+      - 'reviews/worker_reports/dossier-shadow-first-18-publish-github-frozen-research-authority-01.md'
+
+permissions:
+  contents: read
+
+jobs:
+  offline-real-source-and-disposable-git:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install existing Research validator
+        run: python -m pip install 'jsonschema>=4.21,<5'
+      - name: Compile plus run negative and independent marker tests (no GitHub writes)
+        run: |
+          python -m py_compile scripts/dossier_shadow_research_trial_publish.py scripts/test_dossier_shadow_research_trial_publish.py
+          python -m unittest discover -s scripts -p 'test_dossier_shadow_research_trial_publish.py' -v
+          python -m unittest discover -s scripts -p 'test_dossier_shadow_research_trial.py' -v
+      - name: Prove original strict six-group proposal and immutable Git freeze in temp clone
+        run: |
+          python - <<'PY'
+          import json, os, subprocess, sys, tempfile
+          from pathlib import Path
+          sys.path.insert(0, str(Path('scripts').resolve()))
+          from dossier_shadow_research_trial_publish import (
+              BUFFER, EXPECTED_APPIDS, ORDER, strict_proposal, local_two_commit_freeze,
+              assert_one_new_path,
+          )
+          from dossier_shadow_research_trial import frozen_trial, exact_marker
+          def git(repo, *a):
+              return subprocess.run(['git', '-C', str(repo), *a],
+                                    check=True, stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE).stdout.decode().strip()
+          with tempfile.TemporaryDirectory(prefix='gh-real-six-group-freeze-test-') as root:
+              replica = Path(root) / 'test-only-repo'
+              subprocess.run(['git', 'clone', '--quiet', '--no-local',
+                              '--no-hardlinks', str(Path.cwd()), str(replica)], check=True)
+              source = git(replica, 'rev-parse', 'HEAD')
+              proposal = strict_proposal(replica)  # existing PR201 ORIGINAL receipts, no source audit
+              obj = json.loads(proposal)
+              assert [x['group_sequence'] for x in obj['items']] == [x for x in ORDER for _ in range(3)]
+              assert [x['appid'] for x in obj['items']] == EXPECTED_APPIDS
+              assert all(x['old_writer_commit'] and len(x['old_receipt_line_sha256']) == 64
+                         for x in obj['items'])
+              # Known historical original-year differences remain in scope.
+              assert {'213610','2138710'}.issubset(x['appid'] for x in obj['items'])
+              p = local_two_commit_freeze(replica, proposal, 'e' * 32)
+              assert_one_new_path(replica, source, p['buffer_commit'], BUFFER)
+              assert_one_new_path(replica, p['buffer_commit'], p['marker_commit'], p['marker_path'])
+              assert exact_marker(replica, p['marker_commit']) == (p['buffer_commit'], 'e'*32)
+              result = frozen_trial(replica, marker_commit=p['marker_commit'], buffer_path=BUFFER)
+              assert len(result['items']) == 18
+              assert result['buffer_blob_sha'] == git(replica, 'rev-parse', 'HEAD:' + BUFFER)
+              assert result['status'] == 'blocked'
+              assert result['sandbox_semantics_authorized'] is False
+              assert result['canonical_acceptance'] is False
+              assert result['research_calls'] == 0
+              assert git(replica, 'diff', '--name-only', source, p['marker_commit']).splitlines() == [
+                  BUFFER, p['marker_path']]
+              print('PR_ONLY_DISPOSABLE_REAL_SIX_GROUP_GIT_PROOF; NO PUBLIC MARKER; ZERO SEMANTICS')
+          PY
