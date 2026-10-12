@@ -5,6 +5,12 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## LATEST DIRECTOR PARALLEL ASSIGNMENT — 2026-10-12: site gamepad icon pack
+
+- User requests **ЧАТ 2** to replace website icons from attached `steam_icon_pack.zip`. Prepare **NEW physical worker Chat 2** with `WORKER_TASK_SITE_GAMEPAD_ICON_PACK_REPLACEMENT_01.md` from main. Actual Director ZIP SHA-256 `c73d3d1a36de580f3dc7318dbc3cd410cdfd0826bd62cb19887bb9d514efe2c4`, 3,281,824 bytes. User **must attach same ZIP to Chat 2** because Director attachments do not automatically transfer. Worker verifies binary inputs and changes only actual favicon/HTML/PWA manifest/Apple/maskable/targeted cache and tests; PR and report, no self-merge.
+- Current main website: `web/index.html` old `icon.svg?v=shortcut-icon-1`; `web/manifest.webmanifest` still `icon.svg` and `icon-maskable.svg`. The user-provided package includes PNG sizes 16,32,48,64,128,180,192,256,512,1024; ICO, maskable and master. Do not create new imagery instead of using supplied asset.
+- **ЧАТ 1 separate outstanding marker assignment remains unchanged** (`WORKER_TASK_DOSSIER_SHADOW_FIRST_18_PUBLISH_GITHUB_FROZEN_RESEARCH_AUTHORITY_01.md`); no implicit approval of Dossier semantics. Scheduled Tasks and production control plane unchanged.
+
 ## LATEST DIRECTOR RESULT / ASSIGNMENT — 2026-10-11: Stage A/B sandbox PRs done, real GitHub marker next
 
 - PR #215 (ЧАТ 1) merged `25f6ca93bbcf8a95176ee0c519298962f684e261`, all **3** latest PR checks green: real reusable Research sandbox validation/proposal/one-shot future prompt; `sandbox_research_invocation_ready=blocked`, **zero semantic runs**, missing real immutable GitHub marker and buffer plus independent A/B/C review signoff.

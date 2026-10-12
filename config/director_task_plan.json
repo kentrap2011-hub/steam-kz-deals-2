@@ -1152,6 +1152,24 @@
       "updated_on": "2026-10-11",
       "updated_at_utc": "2026-10-11T17:20:33.613Z",
       "recent_completion": false
+    },
+    {
+      "id": "site-gamepad-icon-pack-replacement-01",
+      "title": "Сайт: заменить иконки на утверждённый геймпад",
+      "goal": "Установить предоставленный пользователем пакет игровых иконок на сайт, favicon браузера, Apple Touch и PWA/Android, проверив размеры, manifest и кеширование без изменений бизнес-логики.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Нужны безопасная загрузка предоставленных PNG/ICO в Git, корректные ссылки HTML/manifest, PWA-кеш и узкие регрессионные тесты.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь явно запросил замену видимой иконки сайта и приложил готовый набор изображений.",
+      "task_file": "WORKER_TASK_SITE_GAMEPAD_ICON_PACK_REPLACEMENT_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Новый worker-чат должен получить приложенный ZIP-архив от пользователя; оригинал доступен в директорском чате, но не автоматически в worker-чате. ЧАТ 1 занят отдельной задачей Dossier.",
+      "updated_on": "2026-10-12",
+      "updated_at_utc": "2026-10-12T03:43:09.253Z",
+      "recent_completion": false
     }
   ]
 }
