@@ -233,7 +233,7 @@ def main():
                         "marker_commit", "buffer_path", "buffer_blob_sha",
                         "status", "sandbox_research_invocation_ready",
                         "semantic_calls", "production_mutations"):
-                handle.write("- " + key + ": \`" + str(output[key]) + "\`\n")
+                handle.write("- " + key + ": " + chr(96) + str(output[key]) + chr(96) + "\n")
 
 
 if __name__ == "__main__":
