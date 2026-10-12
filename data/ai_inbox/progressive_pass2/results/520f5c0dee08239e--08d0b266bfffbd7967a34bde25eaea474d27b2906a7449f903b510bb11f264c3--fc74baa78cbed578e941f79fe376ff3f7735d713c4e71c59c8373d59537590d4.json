@@ -1,0 +1,306 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "30073bd5c8a52b3c1513c872a21c8aeaa2f8d885",
+  "run_start_authority_commit": "0e17eb8f1c8371e68abe2adb48f46592e3c2e8d9",
+  "run_started_at_utc": "2026-10-12T03:48:22+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "02873cd73be3f673db7c516da956ffcf13ea8b315216dbe4eaae9523716bf88a",
+  "work_id": "08d0b266bfffbd7967a34bde25eaea474d27b2906a7449f903b510bb11f264c3",
+  "family_id": "game:204100",
+  "taste_subject_key": "App_204100",
+  "appid": "204100",
+  "taste_fingerprint": "f64938cd7d88f1aa3f042aa0fdcf103218a63f6b42e15b13ae4f30abae522ac0",
+  "candidate_context_sha256": "9964c35210c4c16be9ce6b0e8f36e4ea8eb856c25a73ce515b1fd863e4a24532",
+  "dossier_content_sha256": "6be6915cb0ddbc3e712e3045d74402fa66fd12751ceedbbc332b1a2a233a3e93",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "fc74baa78cbed578e941f79fe376ff3f7735d713c4e71c59c8373d59537590d4",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "high",
+  "positive_evidence": [
+    "Кинематографичные перестрелки с замедлением времени, прыжками и реактивной анимацией требуют точности, освоения темпа и позиционирования.",
+    "В личном закреплённом профиле эта конкретная игра уже оценена на 3,5/5: качественная и в целом неплохая, но не оставившая яркого собственного следа."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 72,
+    "development_variety": 48,
+    "structure_pacing_direction": 54,
+    "identity_hooks": 38,
+    "breadth_of_match": 68
+  },
+  "score_findings": [
+    {
+      "finding_id": "mp01",
+      "text_ru": "Перестрелки с Bullet Time, прыжками с уклонением и реакцией противников дают точные активные действия, где важно освоить прицеливание и позиционирование.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Сильный интерес к владению механикой и заметному росту собственного навыка."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 72
+        }
+      ]
+    },
+    {
+      "finding_id": "mp02",
+      "text_ru": "Рукоподобные волны врагов и повторяющийся переход от перестрелки к ролику могут ощущаться одинаково, несмотря на качество отдельной сцены стрельбы.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8/pattern",
+          "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+          "match_text_ru": "Повторение допустимо только когда добавляет ситуацию и новые возможности, а не одинаковый цикл."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 48
+        }
+      ]
+    },
+    {
+      "finding_id": "mp03",
+      "text_ru": "Линейные боевые арены задают понятное направление, но долгие монтажные сцены и ограниченный пропуск заставок прерывают увлекательные перестрелки.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/геймплей_и_ощущение_управления/note",
+          "profile_value_sha256": "cdc4a8d45692525173f04e1f0bfe3afd477568a93562f0582665213abc8525b2",
+          "match_text_ru": "Скучные промежутки между интересными механиками могут снижать ценность общего прохождения."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 54
+        }
+      ]
+    },
+    {
+      "finding_id": "mp04",
+      "text_ru": "Перенос истории Макса из привычного нуара в Бразилию расколол поклонников; в закреплённом личном опыте эта часть уже оценена как неплохая, но почти ничем не запомнившаяся.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/stopgame_cards/59/why_this_rating",
+          "profile_value_sha256": "f0416b100889e4917e68a98beab8737a219c173ec24b0488e9fbe5768c9cc6fe",
+          "match_text_ru": "По прямой личной оценке игра качественная, но не оставила достаточно яркого индивидуального следа."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "qualifies",
+          "normalized_value": 38
+        }
+      ]
+    },
+    {
+      "finding_id": "mp05",
+      "text_ru": "Весомая анимация оружия, звук выстрелов и эмоциональная актёрская подача делают перестрелки выразительными, но личная оценка этой конкретной игры всё же умеренная, а не восторженная.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/stopgame_cards/59/rating",
+          "profile_value_sha256": "8a199b120cf400d69c300e1dd6eacdc8b0002353e3044bbab21e0125b32c9fd6",
+          "match_text_ru": "Зафиксирован собственный положительный, но умеренный опыт прохождения этой игры."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 68
+        }
+      ]
+    },
+    {
+      "finding_id": "mp06",
+      "text_ru": "На повышенной сложности перестрелки требуют точности и поиска позиции, однако усиленные враги ближе к финалу способны превращать вызов в многократные повторы.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Сложность нравится через понятное освоение; одинаковые безрезультатные повторения утомляют."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 72
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Некоторые поздние бронированные противники и плотный обстрел могут вести к повторным попыткам, даже когда сама точная стрельба нравится.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Длинные кинематографические вставки и резкий монтаж прерывают бои и не всегда удобно пропускаются.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Переезд действия в Бразилию и новое настроение Макса разделяют поклонников старой нуарной атмосферы; закреплённая личная оценка также говорит о слабом запоминающемся крючке.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "По сообщениям игроков для запуска версии Steam иногда мешает внешний Rockstar Launcher; это не означает неисправность на каждом компьютере.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Несколько похожих волн врагов между заставками могут делать ритм повторяемым даже при детально поставленной стрельбе.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  }
+}
