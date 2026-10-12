@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "30073bd5c8a52b3c1513c872a21c8aeaa2f8d885",
+  "run_start_authority_commit": "0e17eb8f1c8371e68abe2adb48f46592e3c2e8d9",
+  "run_started_at_utc": "2026-10-12T03:48:22+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "02873cd73be3f673db7c516da956ffcf13ea8b315216dbe4eaae9523716bf88a",
+  "work_id": "9292a89ad134d00a986fab3897dab7984a1d2bae8a675c2a26eb9b8c1e9d76d4",
+  "family_id": "game:242860",
+  "taste_subject_key": "App_242860",
+  "appid": "242860",
+  "taste_fingerprint": "ee54d0e8f25521b4fedf1fb41310efa6fc55c1190665cf14270b1fe6172ac377",
+  "candidate_context_sha256": "6fcdc642126f5014bb6bd99dd85583d086ac2601b9fe7067848273483fd94b8b",
+  "dossier_content_sha256": "ed9891d810d29eec8d240f710aa5808d39324d06655a5981040ef6e125d524dc",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "1125a66d4b9f7c23314065814c5e666c79d00a010318b73ba0ba9b6be3a1bbdb",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Попеременное наступление и удержание окопов требуют тактики по секторам обстрела, позициям отряда и моменту атаки, что даёт пространство для освоения мастерства.",
+    "Военная атмосфера Первой мировой и напряжённый темп фронтовых контратак создают узнаваемый формат, хотя он сильно зависит от слаженности игроков."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 73,
+    "development_variety": 44,
+    "structure_pacing_direction": 68,
+    "identity_hooks": 65,
+    "breadth_of_match": 42
+  },
+  "score_findings": [
+    {
+      "finding_id": "v01",
+      "text_ru": "Захват окопных рубежей требует выбирать момент наступления, держать сектора обстрела и продвигаться вместе; победа зависит от понимания позиции, а не только быстрой стрельбы.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Особенно привлекает возможность совершенствовать собственную тактику и видеть рост мастерства."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 73
+        }
+      ]
+    },
+    {
+      "finding_id": "v02",
+      "text_ru": "Наступления, удержание позиций и контратаки меняют напряжение внутри матча, но остаются вариациями одной окопной структуры, а не серией новых типов деятельности.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Для длительного интереса желательно развитие игровых ситуаций, а не только повтор узнаваемой формулы."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 44
+        }
+      ]
+    },
+    {
+      "finding_id": "v03",
+      "text_ru": "Фронтальная линия постоянно задаёт конкретную задачу — защитить рубеж или взять следующий; направление боя легче считывать, чем в бесцельной песочнице.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/pattern",
+          "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+          "match_text_ru": "Понятная цель и вектор продвижения помогают не чувствовать потерянность."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 68
+        }
+      ]
+    },
+    {
+      "finding_id": "v04",
+      "text_ru": "Исторический облик западного фронта, траншеи, газ и артиллерийское давление создают узнаваемую напряжённую атмосферу Первой мировой, отличную от обычных шутерных арен.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Выразительная атмосфера и художественная индивидуальность повышают интерес к механикам."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 65
+        }
+      ]
+    },
+    {
+      "finding_id": "v05",
+      "text_ru": "Слаженность отряда способна давать настоящие тактические решения, но эффективность штурма зависит от действий других игроков, поэтому сам по себе мультиплеер не обеспечивает нужного опыта.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/multiplayer_and_gacha/multiplayer",
+          "profile_value_sha256": "800a6ae24f76c87d0b12535f0628caf0e2f4f99322a7ef9ad0dfd505e99327e1",
+          "match_text_ru": "Сетевая игра ценна только если даёт интересные решения или содержательное взаимодействие."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 42
+        }
+      ]
+    },
+    {
+      "finding_id": "v06",
+      "text_ru": "Один из отзывов конца 2025 года сообщает о поиске живых соперников, поэтому полноценность матчей зависит от текущих серверов и времени; это отдельная неопределённость игрового опыта.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/multiplayer_and_gacha/multiplayer",
+          "profile_value_sha256": "800a6ae24f76c87d0b12535f0628caf0e2f4f99322a7ef9ad0dfd505e99327e1",
+          "match_text_ru": "Наличие сетевого режима без гарантии насыщенного взаимодействия не считается самостоятельным достоинством."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "lowers",
+          "normalized_value": 42
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Высокая летальность, газ и артиллерия на открытых подступах часто наказывают за ошибки; это испытание на выбор момента и позиции, но не самостоятельное основание считать игру неподходящей.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Успех штурма зависит от согласованности команды, а несогласованные позиции могут создавать фрустрацию даже при понятной личной тактике.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "По отдельным отзывам заметен возраст графики и неудобства выбора снаряжения и обращения с установленным оружием.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "В отзыве конца 2025 года упоминались трудности с поиском людей в онлайне; число соперников зависит от региона, сервера и времени и не подтверждено как повсеместная текущая проблема.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Ритм меняется от терпеливого удержания позиции к внезапным смертельным атакам; тем, кто ждёт постоянной динамики, отдельные фазы могут показаться медленными.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
