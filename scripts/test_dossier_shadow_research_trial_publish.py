@@ -121,6 +121,8 @@ class PublisherDisposableTests(unittest.TestCase):
         git(self.gitdir, "push", "--force-with-lease=" + ref + ":",
             "origin", "HEAD:" + ref)
         self.assertEqual(remote_sha(self.gitdir, ref), proof["marker_commit"])
+        (self.gitdir / "README.txt").write_text("unauthorized second write\n")
+        git(self.gitdir, "commit", "-qam", "Attempt changed-content replay")
         second = subprocess.run(
             ["git", "-C", str(self.gitdir), "push",
              "--force-with-lease=" + ref + ":", "origin", "HEAD:" + ref],
