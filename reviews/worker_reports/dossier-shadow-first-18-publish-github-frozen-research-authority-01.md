@@ -31,7 +31,7 @@ New \`scripts/test_dossier_shadow_research_trial_publish.py\` uses only disposab
 
 New \`.github/workflows/validate-dossier-shadow-research-publisher.yml\` is PR-only, \`contents:read\`, with full history and \`persist-credentials:false\`. It executes both new negative tests and existing strict Research isolated tests, invokes **the genuine PR #201 six-group writer verifier** via \`strict_proposal\`, then in a temporary cloned Git repo builds a real proposal buffer + distinct marker commits and runs the true \`frozen_trial\` Git ancestry/binding checks. Assertions require the trial stays \`blocked\` and \`research_calls=0\` even after those test-only commits; no external game-site/source lookups, semantic work, GitHub pushes or actual trial publication occur in CI.
 
-At report creation, the new PR validation run has **not been observed passing**; the Director must review its final head's Actions checks before merging. The real original buffer/marker Git SHA and live publish run ID are intentionally **not** supplied or fabricated before the post-merge GitHub-owned workflow actually succeeds.
+**PR-only GitHub CI passed** at implementation head `020924a353d662b13ba9523ef60537e90b7afae7`: isolated original strict six-group/Git marker proof and synthetic negative suite, Actions run `38201074647` (success); the independent backlog-dispositions run `38201074641` also succeeded. This report-only update may cause another PR validation at its new head; Director must review the final head's own Actions checks before merging. The real original buffer/marker Git SHA and live publish run ID are intentionally **not** supplied or fabricated before the post-merge GitHub-owned workflow actually succeeds.
 
 ## Exact Director handoff after PR acceptance
 
