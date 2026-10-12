@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "9116c8233c1caf9e7d99fd4f6819bf0c7b2d5ced",
+  "run_start_authority_commit": "6bb514e7b3d5f5919c6f068d87492cb40bf7c265",
+  "run_started_at_utc": "2026-10-12T03:36:43+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "02873cd73be3f673db7c516da956ffcf13ea8b315216dbe4eaae9523716bf88a",
+  "work_id": "5a968ed00c2797ec050b78f8178c5a87ab3a2cc13599bf72aa0f973da88be6e6",
+  "family_id": "game:285310",
+  "taste_subject_key": "App_285310",
+  "appid": "285310",
+  "taste_fingerprint": "6ec75269ceaad0db5a8bd1687c11faf68395cb84d0ee8f8a0244b1f860a49a84",
+  "candidate_context_sha256": "9d2f85869df94fa6be7d0bdb7aa85b1d29e0335a74d26529e201486c9b07efee",
+  "dossier_content_sha256": "2917602c6d5e0252a3709ce630cb8ffec6a0883da2d10e01e3b2fef122e3ba2e",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "18250057b0696f171f1f5c30dd58cddcad06bd00f94e2c58af5dc3c02c0e033b",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Основа игры — экономическая оптимизация парка: цены, персонал, очереди, чистота и удовлетворённость посетителей, а не активное управление персонажем или постоянно меняющиеся игровые навыки.",
+    "Положительные стороны реальны: цели сценариев, строительство собственных горок и творческая планировка дают понятные задачи. Но повторяемая успешная хозяйственная стратегия уменьшает разнообразие решений при долгой игре.",
+    "Некоторые сценарии требуют ждать до заранее заданной даты без удобного ускорения времени, что усиливает подтверждённую утомляемость от рутинного или малостимулирующего процесса."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Сценарии иногда требуют пассивно ждать календарной даты даже после достижения работоспособности парка; отсутствие удобного ускорения заметно противоречит потребности в частых игровых решениях.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "management_routine",
+        "text_ru": "Устойчивый цикл контроля зарплат, цен, очередей, чистоты и экономики парка может стать обслуживанием показателей вместо новых ситуаций; освоенная выгодная стратегия дополнительно делает процесс предсказуемым.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Повторное применение прибыльных схем снижает сложность следующих сценариев; творческое конструирование горок и разные условия парков частично компенсируют этот недостаток.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Оригинальная версия может запускаться или масштабироваться неудобно в современных Windows; OpenRCT2 помогает не во всех описанных сценариях и может не понравиться визуальным масштабированием.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
