@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-10-09",
+  "last_curated_on": "2026-10-13",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -1170,6 +1170,42 @@
       "updated_on": "2026-10-13",
       "updated_at_utc": "2026-10-13T09:14:53.304Z",
       "recent_completion": false
+    },
+    {
+      "id": "deep-versioned-history-first-core-01",
+      "title": "Deep: версионное хранение выполненных анализов и честная очередь",
+      "goal": "Не терять прежние завершённые Deep при любой новой версии профиля; очередь: никогда не разобранные, затем самые старые разборы; подготовить producer-поля и доказуемую историю для отдельного UI этапа.",
+      "status": "planned",
+      "effort": "высокая",
+      "effort_reason": "Сохранение старого Deep с проверенной историей, версиями и безопасной совместимостью, миграционные регрессии и новая очередность без фальшивого текущего авторитета.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь сообщает, что уже обработанные игры снова отображаются как неразобранные в карточках; требует немедленно прекратить потерю истории.",
+      "task_file": "WORKER_TASK_DEEP_VERSIONED_HISTORY_FIRST_CORE_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Безопасный producer/history-слой и очередность сначала, отдельный UI-этап после принятого PR; без автоматического перекрашивания старых результатов в актуальные.",
+      "updated_on": "2026-10-13",
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-13T13:01:48.916Z"
+    },
+    {
+      "id": "site-gamepad-svg-text-conversion-01",
+      "title": "Сайт: перевести утверждённую иконку в SVG и заменить через GitHub",
+      "goal": "Использовать тот же готовый пользовательский геймпад, преобразовав исходные бинарные изображения в коммитабельный текстовый SVG; обновить favicon/manifest, честно учесть Apple/Android ограничения.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Проверка исходного архива, корректное сохранение изображения SVG, размеры/маска, HTML/manifest ссылки, кеш и регрессионные тесты; Apple PNG может потребовать отдельный бинарный шаг.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь явно предложил формат-конвертацию как обход бинарной блокировки прежнего чата.",
+      "task_file": "WORKER_TASK_SITE_GAMEPAD_SVG_TEXT_CONVERSION_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Оригинальный архив должен быть приложен к новому рабочему чату. SVG поддержит браузер и часть PWA; если требуется Apple touch PNG, нужен фактический двоичный upload в GitHub.",
+      "updated_on": "2026-10-13",
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-13T13:01:48.916Z"
     }
   ]
 }
