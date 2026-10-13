@@ -1,0 +1,15 @@
+# CHAT 2 — convert provided gamepad icons to GitHub-text SVG and install where supported
+Repository: kentrap2011-hub/steam-kz-deals-2; base: main.
+Worker: NEW physical CHAT 2; task ID: site-gamepad-svg-text-conversion-01.
+Report: reviews/worker_reports/site-gamepad-svg-text-conversion-01.md.
+Mode: IMPLEMENT, bounded independent PR, no self-merge.
+
+START: read CHAT_PROTOCOL.md from latest main fully, execute START gate, CHAT_CONTEXT.md, website/PWA routes in PROJECT_ROUTES.md, prior WORKER_TASK_SITE_GAMEPAD_ICON_PACK_REPLACEMENT_01.md and blocked report in implement/site-gamepad-icon-pack-replacement-01. Inspect current web/index.html, web/tasks.html, web/manifest.webmanifest and actual deployment.
+
+WHY: old web/icon.svg and web/icon-maskable.svg were successfully committed because SVG is UTF-8 text. Prior Chat2 inspected the user-provided steam_icon_pack.zip, SHA256 c73d3d1a36de580f3dc7318dbc3cd410cdfd0826bd62cb19887bb9d514efe2c4, size 3,281,824, but lacked cross-tool binary upload to GitHub. That worker's branch has only a blocked report and no icon PR. The user now explicitly requests conversion to a format that's easy to commit.
+
+Implement conversion of the SAME approved graphics from the original supplied ZIP to UTF-8 SVG, e.g. faithful traced paths or valid SVG with embedded raster if necessary, which can be sent to GitHub create_file/update_file as plain text. Do not invent another controller design; do not save base64 text with .png/.ico extension. Reattach original ZIP to new Chat2 if needed; verify original SHA256 first. Use real text SVG browser favicon and PWA icon/maskable where supported; preserve accurate colors and centering; test visual fidelity at 16/32/192/512 and maskable safe-zone. Provided maskable 512 PNG and ordinary 512 PNG were identical, so maskability must be independently demonstrated rather than assumed.
+
+Update both website entry points and manifest references/version URLs; preserve existing start_url, scope, display and theme. Avoid unrelated cache resets. IMPORTANT: Apple Touch icon and some mobile launchers require real PNG; SVG-only implementation cannot be described as full Apple/Android success. If actual PNG binary upload still unavailable, submit a safe tested SVG-only PR with clearly PARTIAL platform support plus a minimal exact manual GitHub binary-upload instruction using already extracted PNG assets; do not claim full completion. If a safe exact-bytes binary upload becomes available, use and verify it, not approximate it.
+
+Run isolated HTML/manifest/path, SVG rendering and site tests; audit update after deployment but don't claim device tested unless tested. Do not edit Deep/Fast/Dossier/Research, ranking, site content beyond icons, live production state, workflows unrelated to static publishing, or Scheduled Tasks. Make PR and worker report; do not merge; stop after one final report.
