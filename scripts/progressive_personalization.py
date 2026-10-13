@@ -233,9 +233,11 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
         historical = progressive_deep_history.latest_completed(
             pass2_state_doc, family_id, binding
         ) if binding else None
-        current_profile_content = (
-            generation['profile_pin']['profile_identity']['content_sha256']
+        profile_identity = (
+            ((generation.get('profile_pin') or {}).get('profile_identity') or {})
+            or (projection_doc.get('current_profile') or {})
         )
+        current_profile_content = profile_identity.get('content_sha256')
         old_profile = (historical or {}).get('profile_version') or {}
         if not historical:
             history_freshness = 'never_completed'
@@ -257,7 +259,7 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
             'reason': history_reason,
             'current_compatible': deep_authoritative is not None,
             'current_profile_content_version_id': current_profile_content,
-            'current_profile_source_commit_sha': generation['profile_pin']['profile_identity']['resolved_commit_sha'],
+            'current_profile_source_commit_sha': profile_identity.get('resolved_commit_sha'),
             # The pinned profile contract contains no Git commit timestamp.
             'current_profile_version_at_utc': None,
             'last_completed_revision_id': (historical or {}).get('revision_id'),
