@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "61c33aa4a37f1792a82981a48ca465f6e1204510d23a5f4e087b6477146dabc9",
+  "prepared_required_sha256": "dfd83e1a723cee6e3a1b2861091baad91ba8f3700b53270282b34ebb38edf50e",
+  "group_plan_sha256": "fe26cc6010399f4df8dafa519e2dad85c8f7d93253f3218789f87ca532295cf0",
+  "group_count": 70,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 9,
+  "start_index": 24,
+  "end_index_exclusive": 27,
+  "appids": [
+    "251110",
+    "251730",
+    "252610"
+  ],
+  "items_sha256": "c69b794cc16a54ab81984825d7d0475392b58f3794bc80f6e65e13e001312b47",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "1cc6413b6678b87ab2ee88368ff8ddefd254f0b87c7eaf06d5bdcc8cd5c110be",
+  "items": [
+    {
+      "key": "App_251110",
+      "appid": "251110",
+      "title": "INFRA",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_251110.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_251730",
+      "appid": "251730",
+      "title": "Legend of Grimrock 2",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_251730.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_252610",
+      "appid": "252610",
+      "title": "Death Road to Canada",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_252610.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "20a5873d673e0d9fc22afc3fcf4ca38e2270c4022a084934bb77408e20131014"
+}

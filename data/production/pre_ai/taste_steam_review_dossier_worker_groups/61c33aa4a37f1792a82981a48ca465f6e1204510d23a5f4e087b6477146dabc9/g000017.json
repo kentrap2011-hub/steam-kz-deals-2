@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "61c33aa4a37f1792a82981a48ca465f6e1204510d23a5f4e087b6477146dabc9",
+  "prepared_required_sha256": "dfd83e1a723cee6e3a1b2861091baad91ba8f3700b53270282b34ebb38edf50e",
+  "group_plan_sha256": "fe26cc6010399f4df8dafa519e2dad85c8f7d93253f3218789f87ca532295cf0",
+  "group_count": 70,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 17,
+  "start_index": 48,
+  "end_index_exclusive": 51,
+  "appids": [
+    "327220",
+    "331870",
+    "3379650"
+  ],
+  "items_sha256": "0ab0597858373948de0e0d511d8477c39d8cd52fc2917c8b1425ac3d7e37eae1",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "1cc6413b6678b87ab2ee88368ff8ddefd254f0b87c7eaf06d5bdcc8cd5c110be",
+  "items": [
+    {
+      "key": "App_327220",
+      "appid": "327220",
+      "title": "Anna's Quest",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_327220.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_331870",
+      "appid": "331870",
+      "title": "AER Memories of Old",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_331870.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_3379650",
+      "appid": "3379650",
+      "title": "Dark PGT",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_3379650.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "c0c6e3c0adc0e3a9aa1c965bf533387f7a0fdb99ec9aa531aff6e546953c8a9d"
+}
