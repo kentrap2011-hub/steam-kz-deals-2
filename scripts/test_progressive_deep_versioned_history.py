@@ -103,8 +103,8 @@ def main():
         'dossier_content_sha256': 'digest',
         'dossier_compatibility_binding': {'binding': True},
     }
-    with patch.object(deep, 'matching_state_entry', return_value=None), \\
-         patch.object(deep, '_identity_matches', return_value=True), \\
+    with patch.object(deep, 'matching_state_entry', return_value=None), \
+         patch.object(deep, '_identity_matches', return_value=True), \
          patch.object(deep, 'normalize_result', return_value=attempt):
         state, receipts = deep.process_result_documents(
             {'items': [row], 'profile_pin': new_pin},
@@ -118,7 +118,6 @@ def main():
     assert state['entries']['game:one']['normal_first_pass_attempted'] is True
 
     # 06: no cross-release/appid history; exact game tie break, never first.
-    high = builder.semantic_queue_priority
     from test_semantic_queue_priority import context, item, CONTRACT
     items = [item('game:oldest'), item('game:newest'), item('game:never')]
     for row in items:
