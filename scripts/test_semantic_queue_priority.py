@@ -44,6 +44,8 @@ def priority(row):
 def item(family_id, work_id=None):
     return {
         'family_id': family_id,
+        'appid': 'appid:' + family_id,
+        'taste_subject_key': family_id,
         'work_id': work_id or ('work:' + family_id),
         'work_mode': 'normal_first_pass',
         'authorization_id': 'auth:' + family_id,
@@ -53,7 +55,7 @@ def item(family_id, work_id=None):
 def main():
     ordering = CONTRACT['ordering']
     assert ordering['owner'] == 'github'
-    assert ordering['policy_id'] == 'semantic_queue_priority_v1'
+    assert ordering['policy_id'] == 'deep_history_first_oldest_success_v1'
     assert ordering['changes_eligibility_or_scope'] is False
     assert ordering['hard_top_n'] is False
     assert ordering['sale_expiry_used_for_priority'] is False
@@ -117,6 +119,10 @@ def main():
             },
         },
     }
+    for fid, entry in history_state['entries'].items():
+        entry.update(family_id=fid, taste_subject_key=fid, appid='appid:' + fid)
+        for revision in entry.get('revision_history') or []:
+            revision['state'].update(family_id=fid, taste_subject_key=fid, appid='appid:' + fid)
     assert producer.has_authoritative_deep_history(history_state, 'game:seen-fit') is True
     assert producer.has_authoritative_deep_history(history_state, 'game:seen-not-fit') is True
     assert producer.has_authoritative_deep_history(history_state, 'game:legacy-revision') is True

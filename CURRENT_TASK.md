@@ -1,5 +1,14 @@
 # CURRENT TASK
 
+## COMPLETE — Deep versioned history first core + PR #222 acceptance closeout (ЧАТ 1)
+Status: `independently_accepted_producer_only_ready_for_director_merge_review`.
+- Tasks: `WORKER_TASK_DEEP_VERSIONED_HISTORY_FIRST_CORE_01.md`, `WORKER_TASK_DEEP_VERSIONED_HISTORY_PR222_CLOSEOUT_01.md`; existing PR #222, branch `implement/deep-versioned-history-first-core-01`, **not merged**.
+- Historic accepted per-game Deep revisions persist across profile-content changes and incomplete attempts; priority is never completed first then oldest last successful Deep UTC; current scoring and stale historical fallback are strictly separate.
+- Closeout fix: V1 history rejects contradictory duplicate revisions, unbound version pin and mismatched stored completion timestamp; legitimate immutable-root profile attestation preserved.
+- Tested implementation head `a235108e7bc17eda3308ec5af0b94a74f0eeaec2`: PASS2 core `38451997073`, site resilience `38451997144`, Stage1 migration `38451997056`, backlog `38451997420` all passed; PR mergeability clean when checked.
+- Acceptance report: `reviews/worker_reports/deep-versioned-history-pr222-closeout-01.md`; implementation report: `reviews/worker_reports/deep-versioned-history-first-core-01.md`.
+- Deferred: truthful Git-attested profile source-update dates and separately assigned UI cards/Statistics; no live-state update, semantic execution, web change, Scheduled Task or self-merge. Director next action: review/merge PR #222 once final green checks verified.
+
 ## COMPLETE — Inactive fully async Dossier Assembly semantic worker 01 (ЧАТ 2)
 Статус: `implementation_complete_ready_for_director_review_inactive`.
 - task: `WORKER_TASK_DOSSIER_ASYNC_ASSEMBLY_SEMANTIC_WORKER_IMPLEMENT_01.md`; PR #182 open, not merged; branch `implement/dossier-async-assembly-semantic-worker-01`.

@@ -6,6 +6,7 @@ from pathlib import Path
 import priority_ranking
 import progressive_pass1
 import progressive_pass2
+import progressive_deep_history
 
 
 OUT = Path('data/production/pre_ai/progressive_pass2_work.json')
@@ -100,21 +101,33 @@ def entry_has_authoritative_deep_completion(entry):
     )
 
 
-def has_authoritative_deep_history(state_doc, family_id):
+def has_authoritative_deep_history(state_doc, family_id, binding=None):
     entry = ((state_doc.get('entries') or {}).get(str(family_id))) if isinstance(state_doc, dict) else None
-    if entry_has_authoritative_deep_completion(entry):
-        return True
     if not isinstance(entry, dict):
         return False
+    def exact(snapshot):
+        if binding is None:
+            return True
+        return all(
+            str(snapshot.get(key) or '') == str(binding.get(key) or '')
+            and str(binding.get(key) or '')
+            for key in ('family_id', 'taste_subject_key', 'appid')
+        )
+    if entry_has_authoritative_deep_completion(entry) and exact(entry):
+        return True
+    for record in progressive_deep_history.completed_versions(entry):
+        if exact(record['result']):
+            return True
     for revision in entry.get('revision_history') or []:
-        if isinstance(revision, dict) and entry_has_authoritative_deep_completion(revision.get('state')):
+        snapshot = (revision or {}).get('state') if isinstance(revision, dict) else None
+        if entry_has_authoritative_deep_completion(snapshot) and exact(snapshot):
             return True
     return False
 
 
 def order_normal_items(items, context_by_family, pass2_state, contract):
     ordering = contract.get('ordering') or {}
-    if ordering.get('owner') != 'github' or ordering.get('policy_id') != 'semantic_queue_priority_v1':
+    if ordering.get('owner') != 'github' or ordering.get('policy_id') != 'deep_history_first_oldest_success_v1':
         raise ValueError('canonical semantic queue ordering policy is missing')
     if ordering.get('changes_eligibility_or_scope') is not False:
         raise ValueError('semantic queue ordering must not change eligibility or scope')
@@ -129,20 +142,29 @@ def order_normal_items(items, context_by_family, pass2_state, contract):
         family_id = str(item.get('family_id') or '')
         context = context_by_family.get(family_id) or {}
         priority = semantic_queue_priority(context, ordering)
-        item['_authoritative_deep_history_sort'] = (
-            1 if has_authoritative_deep_history(pass2_state, family_id) else 0
+        seen = has_authoritative_deep_history(pass2_state, family_id, item)
+        last = progressive_deep_history.latest_completed(pass2_state, family_id, item)
+        last_at = progressive_pass2.parse_utc(last['accepted_at_utc']) if last else None
+        item['_authoritative_deep_history_sort'] = int(seen)
+        # Undated legacy evidence is history, not a licence to claim oldest.
+        item['_last_completed_sort'] = (
+            last_at.isoformat() if last_at else '9999-12-31T23:59:59+00:00'
         )
         item['_semantic_queue_priority_score'] = float(priority['score'])
         ordered.append(item)
 
     ordered.sort(key=lambda row: (
         int(row['_authoritative_deep_history_sort']),
-        -float(row['_semantic_queue_priority_score']),
+        -float(row['_semantic_queue_priority_score']) if not row['_authoritative_deep_history_sort'] else 0.0,
+        row['_last_completed_sort'] if row['_authoritative_deep_history_sort'] else '',
+        str(row.get('appid') or ''),
+        str(row.get('taste_subject_key') or ''),
         str(row.get('family_id') or ''),
     ))
     for sequence, item in enumerate(ordered, 1):
         item['sequence'] = sequence
         item.pop('_authoritative_deep_history_sort', None)
+        item.pop('_last_completed_sort', None)
         item.pop('_semantic_queue_priority_score', None)
     return ordered
 
@@ -234,6 +256,17 @@ def build_work_document(now=None):
         projection_status = 'current_github_owned_fast_dossier_deep_v1_projection'
 
     counts = dict(recomputed['counts'])
+    _, current_bindings, _ = progressive_pass1.current_bindings(contexts, projection, queue_rows)
+    current_authoritative = {
+        fid for fid, current in current_bindings.items()
+        if progressive_pass2.authoritative_completion_entry(current, pass2_state) is not None
+    }
+    counts.update(progressive_deep_history.version_counts(
+        pass2_state,
+        current_bindings,
+        (projection.get('current_profile') or {}).get('content_sha256'),
+        current_authoritative_families=current_authoritative,
+    ))
     counts['normal_pass2_eligible_count'] = counts['pass2_eligible_count']
     counts['pass2_eligible_count'] = len(items)
     counts['deep_normal_work_paused_for_legacy_reanalysis'] = migration_active
