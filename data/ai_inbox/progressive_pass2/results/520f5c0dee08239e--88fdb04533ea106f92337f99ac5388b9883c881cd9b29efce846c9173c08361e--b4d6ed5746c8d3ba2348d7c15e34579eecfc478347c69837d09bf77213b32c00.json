@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "8e40553c7e965e00de5b3d2428f494f232e92f4e",
+  "run_start_authority_commit": "5ffd40ce03f3fa0f328e6c9f82cb1a476c18d385",
+  "run_started_at_utc": "2026-10-13T14:26:48+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "02873cd73be3f673db7c516da956ffcf13ea8b315216dbe4eaae9523716bf88a",
+  "work_id": "88fdb04533ea106f92337f99ac5388b9883c881cd9b29efce846c9173c08361e",
+  "family_id": "game:1108590",
+  "taste_subject_key": "App_1108590",
+  "appid": "1108590",
+  "taste_fingerprint": "84158a43933c9417c6ed563105e3194fb2087027be467cb4a225b6bcb5c860cd",
+  "candidate_context_sha256": "62b4ee0e6d795e68ec23592248e1961517d6be8b4ce51ec7a5100f8c6d8739a1",
+  "dossier_content_sha256": "5a2c157d7e2cd8fcab7ed3184bd65daa8b97bf8e9f77790bad437da50f84298b",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "b4d6ed5746c8d3ba2348d7c15e34579eecfc478347c69837d09bf77213b32c00",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Последовательность сложных боссов делает чтение атак, уклонения и личное повышение точности действий основной частью игрового процесса, близкой к любимым профильным challenge-ситуациям.",
+    "Несколько схем сборки и поздние изменения эффективности тяжёлых атак дают тактические решения, а пиксельные боссы создают заметную визуальную индивидуальность.",
+    "Небольшое число отвлекающих обычных боёв и исследовательских задач помогает сосредоточиться на схватках и развитии собственного мастерства."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 82,
+    "development_variety": 69,
+    "structure_pacing_direction": 77,
+    "identity_hooks": 74,
+    "breadth_of_match": 72
+  },
+  "score_findings": [
+    {
+      "finding_id": "f1_pattern_mastery",
+      "text_ru": "Череда боссов ставит акцент на чтении паттернов и точных уклонениях: удовольствие потенциально рождается из заметного улучшения собственных действий, а не из простой победы над слабым врагом.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Освоение таймингов и рост собственного навыка — один из самых сильных положительных признаков вкуса."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 82
+        }
+      ]
+    },
+    {
+      "finding_id": "f2_readability",
+      "text_ru": "Жалобы на неточные границы попаданий, столкновения и непонятные движения делают освоение отдельных атак менее честно читаемым, снижая ценность этого вида сложности.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Освоение таймингов и рост собственного навыка — один из самых сильных положительных признаков вкуса."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "lowers",
+          "normalized_value": 82
+        }
+      ]
+    },
+    {
+      "finding_id": "f3_build_and_boss_variety",
+      "text_ru": "Разные встречи с боссами и изменения полезности тяжёлых атак по мере развития сборки вносят вариативность, но длительного расширения набора обычных занятий здесь нет.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Важно, чтобы игра меняла задачи и постепенно раскрывала новые ситуации."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 69
+        }
+      ]
+    },
+    {
+      "finding_id": "f4_boss_focus",
+      "text_ru": "Понятная последовательность крупных сражений создаёт регулярные цели, хотя поиск следующей арены после победы может выбивать из боевого ритма.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/lowers",
+          "profile_value_sha256": "0f2aa2fda309c8dd37cde3b1932c926c2b9113919040208f0c9c0acf1dcc9180",
+          "match_text_ru": "Отсутствие понятного маршрута к следующей цели снижает интерес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 77
+        }
+      ]
+    },
+    {
+      "finding_id": "f5_pixel_bosses",
+      "text_ru": "Пиксельная графика и выразительные образы боссов дают художественный крючок, хотя отношение к музыке в некоторых боях различается.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Узнаваемый визуальный стиль и атмосфера увеличивают ценность игрового опыта."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 74
+        }
+      ]
+    },
+    {
+      "finding_id": "f6_combat_first",
+      "text_ru": "Вместо большого мира и полноценной личной истории основное удовольствие сосредоточено в боссе и отработке приёмов; препятствия с навигацией и частыми неудачами сужают круг положительных элементов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/lowers",
+          "profile_value_sha256": "49a4996bc5fecbe2cf2415de53ff9ada697a68afd99c708f13f9f1fe37f772a8",
+          "match_text_ru": "В экшене хороший геймплей способен частично компенсировать недостаток сюжета."
+        },
+        {
+          "json_pointer": "/taste_profile/5/lowers",
+          "profile_value_sha256": "0f2aa2fda309c8dd37cde3b1932c926c2b9113919040208f0c9c0acf1dcc9180",
+          "match_text_ru": "Отсутствие понятного маршрута к следующей цели снижает интерес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 72
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "other_grounded_taste_risk",
+        "text_ru": "Сообщения о несовпадении анимации ударов с хитбоксами, столкновениях и неудобном рывке угрожают ощущению честного обучения, которое здесь важнее просто высокой сложности.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Многофазный босс Eos даёт резкий скачок сложности: часть игроков считает его обучаемым, другие жалуются на случайность и чтение ударов.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Поиск следующей арены и многочисленные повторы после смертей могут разрывать ритм между содержательными боями.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Отдельные тяжёлые приёмы кажутся слабыми на старте и начинают работать лучше только после развития сборки.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Визуальные образы боссов хвалят, но некоторым игрокам музыка во время схваток мешает сосредоточиться.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  }
+}
