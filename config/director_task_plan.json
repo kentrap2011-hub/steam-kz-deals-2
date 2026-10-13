@@ -1175,7 +1175,7 @@
       "id": "deep-versioned-history-first-core-01",
       "title": "Deep: версионное хранение выполненных анализов и честная очередь",
       "goal": "Не терять прежние завершённые Deep при любой новой версии профиля; очередь: никогда не разобранные, затем самые старые разборы; подготовить producer-поля и доказуемую историю для отдельного UI этапа.",
-      "status": "planned",
+      "status": "blocked",
       "effort": "высокая",
       "effort_reason": "Сохранение старого Deep с проверенной историей, версиями и безопасной совместимостью, миграционные регрессии и новая очередность без фальшивого текущего авторитета.",
       "urgency": "высокая",
@@ -1184,16 +1184,16 @@
       "worker_slot": "ЧАТ 1",
       "order": null,
       "depends_on": [],
-      "blocker": "Безопасный producer/history-слой и очередность сначала, отдельный UI-этап после принятого PR; без автоматического перекрашивания старых результатов в актуальные.",
+      "blocker": "Реализация в draft PR #222, не слита; требуется независимая приёмка и проверка mergeable=false.",
       "updated_on": "2026-10-13",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-13T13:01:48.916Z"
+      "updated_at_utc": "2026-10-13T18:53:56.137Z"
     },
     {
       "id": "site-gamepad-svg-text-conversion-01",
       "title": "Сайт: перевести утверждённую иконку в SVG и заменить через GitHub",
       "goal": "Использовать тот же готовый пользовательский геймпад, преобразовав исходные бинарные изображения в коммитабельный текстовый SVG; обновить favicon/manifest, честно учесть Apple/Android ограничения.",
-      "status": "planned",
+      "status": "blocked",
       "effort": "средняя",
       "effort_reason": "Проверка исходного архива, корректное сохранение изображения SVG, размеры/маска, HTML/manifest ссылки, кеш и регрессионные тесты; Apple PNG может потребовать отдельный бинарный шаг.",
       "urgency": "высокая",
@@ -1202,10 +1202,46 @@
       "worker_slot": "ЧАТ 2",
       "order": null,
       "depends_on": [],
-      "blocker": "Оригинальный архив должен быть приложен к новому рабочему чату. SVG поддержит браузер и часть PWA; если требуется Apple touch PNG, нужен фактический двоичный upload в GitHub.",
+      "blocker": "Реализация в PR #223 не слита, частичная поддержка SVG/WebP; требуется closeout мобильных ограничений и mergeable=false.",
       "updated_on": "2026-10-13",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-13T13:01:48.916Z"
+      "updated_at_utc": "2026-10-13T18:53:56.137Z"
+    },
+    {
+      "id": "deep-versioned-history-pr222-closeout-01",
+      "title": "Deep: завершить независимую приёмку PR #222",
+      "goal": "Проверить версионную историю, очередь и совместимость Deep, устранить реальные препятствия существующего PR и подготовить Director merge.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Готовый producer PR; проверяем mergeability, регрессии и точечные ошибки.",
+      "urgency": "высокая",
+      "urgency_reason": "Блокирует пользовательское исправление старых карточек.",
+      "task_file": "WORKER_TASK_DEEP_VERSIONED_HISTORY_PR222_CLOSEOUT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "blocker": "Отдельный UI этап только после принятого PR #222.",
+      "updated_on": "2026-10-13",
+      "updated_at_utc": "2026-10-13T18:53:56.137Z",
+      "recent_completion": false,
+      "order": null,
+      "depends_on": []
+    },
+    {
+      "id": "site-gamepad-pr223-closeout-01",
+      "title": "Иконка: довести PR #223 до проверяемой поддержки платформ",
+      "goal": "Завершить проверку оригинального геймпада, SVG/WebP совместимости, возможного точного PNG/ICO импорта или честного частичного результата.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "SVG установлен в PR; остаются поддержка launcher/iOS и реальные бинарные файлы.",
+      "urgency": "обычная",
+      "urgency_reason": "Визуальная независимая задача, не задерживает Deep.",
+      "task_file": "WORKER_TASK_SITE_GAMEPAD_PR223_CLOSEOUT_01.md",
+      "worker_slot": "ЧАТ 2",
+      "blocker": "Без реального PNG и устройства нельзя заявлять полную мобильную поддержку.",
+      "updated_on": "2026-10-13",
+      "updated_at_utc": "2026-10-13T18:53:56.137Z",
+      "recent_completion": false,
+      "order": null,
+      "depends_on": []
     }
   ]
 }
