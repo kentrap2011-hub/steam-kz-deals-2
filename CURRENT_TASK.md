@@ -1,10 +1,13 @@
 # CURRENT TASK
 
-## IN PROGRESS — Deep versioned history first core 01 (ЧАТ 1)
-- Owner: independent worker; task: `WORKER_TASK_DEEP_VERSIONED_HISTORY_FIRST_CORE_01.md`.
-- Branch: `implement/deep-versioned-history-first-core-01`; no merge / no production writes.
-- Scope: immutable completed Deep history, never-first/oldest-next queue, producer-only historical fallback and per-version statistics.
-- Current step: isolated regression and GitHub PR validation; website UI belongs to a following phase.
+## COMPLETE — Deep versioned history first core 01 (ЧАТ 1)
+Status: `implementation_complete_ready_for_director_review_producer_only`.
+- Task: `WORKER_TASK_DEEP_VERSIONED_HISTORY_FIRST_CORE_01.md`; PR #222 open draft, not merged; branch `implement/deep-versioned-history-first-core-01`.
+- Preserves immutable accepted Deep completion history on profile change/incomplete; eligible ordering never-completed first then oldest last success; produces history/current-compatibility and per-profile counts without stale scoring.
+- Final PASS2 core CI `38416472494` passed; site resilience `38416077090`, Stage1 migration `38416077052`, backlog `38416077228` passed.
+- Report: `reviews/worker_reports/deep-versioned-history-first-core-01.md`.
+- Deferred: site presentation and verified source-profile Git timestamp provisioning; no web change, bulk reanalysis, Scheduled Task, activation or self-merge.
+- This worker stopped; director reviews PR #222 before any follow-up.
 
 ## COMPLETE — Inactive fully async Dossier Assembly semantic worker 01 (ЧАТ 2)
 Статус: `implementation_complete_ready_for_director_review_inactive`.
