@@ -5,6 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## CURRENT DIRECTOR ASSIGNMENT — 2026-10-13: paired independent PR closeout
+
+- **НОВЫЙ ЧАТ — ЧАТ 1**: `WORKER_TASK_DEEP_VERSIONED_HISTORY_PR222_CLOSEOUT_01.md` — acceptance and minimal fixes of PR #222, actual mergeability/CI and Deep history correctness; producer only, no web/**; cards/Statistics assigned only after Director accepts PR.
+- **НОВЫЙ ЧАТ — ЧАТ 2**: `WORKER_TASK_SITE_GAMEPAD_PR223_CLOSEOUT_01.md` — fix/review PR #223 SVG gamepad compatibility, original exact ZIP, potential real PNG/ICO Git upload or truthful PARTIAL; no Deep.
+- Both PRs open, `mergeable=false` requires verification; green workflows are not publication proof. Workers make no merges, production-semantic runs or Scheduled Task changes.
+
 ## NEXT DIRECTOR WAVE — 2026-10-13: user approves Deep versioning + icon SVG conversion
 
 - **NEW ЧАТ 1**: `WORKER_TASK_DEEP_VERSIONED_HISTORY_FIRST_CORE_01.md` — implement **producer-side** permanent per-game old-version Deep history and stale/current compatibility, source/analysis dates, never analyzed first → oldest last completed next queue. Store all accepted prior results; no forcing recomputation due punctuation; no old result silently becomes current score. No `web/**` overlap. Later separate UI/statistics phase.
