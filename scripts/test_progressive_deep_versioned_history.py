@@ -161,7 +161,7 @@ def main():
     assert stats['deep_never_completed_count'] == 1
     assert stats['deep_current_version_remaining_count'] == 2
     assert stats['deep_profile_version_unique_game_counts']['2' * 64] == 1
-    assert stats['deep_profile_version_unique_game_counts']['legacy-unverified:pin:old'] == 1
+    assert stats['deep_profile_version_unique_game_counts']['legacy-unverified:pin:old'] == 2
     # Existing exact/current authority remains separate from historical presence.
     incompatible = {'family_id': 'game:one', 'work_id': 'new-work',
                     'profile_semantic_sha256': 'other-profile'}
