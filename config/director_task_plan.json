@@ -1136,7 +1136,7 @@
       "id": "dossier-shadow-18-real-marker-publish-01",
       "title": "Dossier: опубликовать настоящий изолированный GitHub Research marker для 18 игр",
       "goal": "Подготовить под полномочиями GitHub реальный неизменяемый буфер и marker для точных шести групп/18 игр и строгие проверки перед одноразовым семантическим запуском, не активируя production.",
-      "status": "planned",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Точная GitHub-авторизация и публикация реальных immutable commits, защита от подмены и негативные тесты, без повторного аудита источников или самовольной семантики.",
       "urgency": "высокая",
@@ -1148,16 +1148,16 @@
         "dossier-shadow-first-real-18-research-sandbox-authority-01",
         "dossier-shadow-18-assembly-compare-sandbox-01"
       ],
-      "blocker": "Нет настоящего GitHub-owned durable sandbox Research marker/buffer. Даже после их подготовки real semantic run ждёт утверждения независимых A/B/C reviewer и явного sandbox semantic execution gate. Никаких Scheduled Tasks.",
-      "updated_on": "2026-10-11",
-      "updated_at_utc": "2026-10-11T17:20:33.613Z",
-      "recent_completion": false
+      "blocker": "Реализован и принят отдельный вручную запускаемый GitHub publisher для настоящего изолированного маркера; реальная публикация маркера и запуск семантики еще не выполнялись. Нужны точный ручной запуск GitHub Actions, независимые проверяющие и отдельный semantic gate.",
+      "updated_on": "2026-10-13",
+      "updated_at_utc": "2026-10-13T09:14:53.304Z",
+      "recent_completion": true
     },
     {
       "id": "site-gamepad-icon-pack-replacement-01",
       "title": "Сайт: заменить иконки на утверждённый геймпад",
       "goal": "Установить предоставленный пользователем пакет игровых иконок на сайт, favicon браузера, Apple Touch и PWA/Android, проверив размеры, manifest и кеширование без изменений бизнес-логики.",
-      "status": "planned",
+      "status": "blocked",
       "effort": "средняя",
       "effort_reason": "Нужны безопасная загрузка предоставленных PNG/ICO в Git, корректные ссылки HTML/manifest, PWA-кеш и узкие регрессионные тесты.",
       "urgency": "высокая",
@@ -1166,9 +1166,9 @@
       "worker_slot": "ЧАТ 2",
       "order": null,
       "depends_on": [],
-      "blocker": "Новый worker-чат должен получить приложенный ZIP-архив от пользователя; оригинал доступен в директорском чате, но не автоматически в worker-чате. ЧАТ 1 занят отдельной задачей Dossier.",
-      "updated_on": "2026-10-12",
-      "updated_at_utc": "2026-10-12T03:43:09.253Z",
+      "blocker": "Исполнитель проверил оригинальный архив и подготовил отчет в отдельной ветке, но текущие инструменты не передают бинарные PNG и ICO из sandbox напрямую в GitHub. Нет PR и файлов сайта. Нужна настоящая бинарная загрузка восьми файлов в web на рабочую ветку или другой подтвержденный upload-путь.",
+      "updated_on": "2026-10-13",
+      "updated_at_utc": "2026-10-13T09:14:53.304Z",
       "recent_completion": false
     }
   ]
