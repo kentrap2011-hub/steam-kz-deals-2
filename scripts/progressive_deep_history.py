@@ -139,8 +139,15 @@ def preserve_completion(previous, updated, work_item, attempt, profile_pin=None)
         if current is None:
             raise ValueError('accepted Deep completion needs a timestamp and canonical state')
         prior = versions.get(current['revision_id'])
-        if prior is not None and prior != current:
+        if prior is not None and (
+            prior['result'] != current['result']
+            or (prior['profile_version'].get('content_version_id') is not None
+                and prior != current)
+        ):
             raise ValueError('attempted to replace immutable Deep completed revision')
+        # The just-accepted V2 root is included by completed_versions(updated)
+        # without an attested profile; replace that temporary projection with
+        # the exact pinned version of the SAME accepted immutable result.
         versions[current['revision_id']] = current
     updated['history_contract'] = HISTORY_CONTRACT
     updated['completed_versions'] = sorted(
