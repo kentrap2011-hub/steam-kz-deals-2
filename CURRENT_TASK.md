@@ -1,5 +1,11 @@
 # CURRENT TASK
 
+## IN PROGRESS — Deep versioned history first core 01 (ЧАТ 1)
+- Owner: independent worker; task: `WORKER_TASK_DEEP_VERSIONED_HISTORY_FIRST_CORE_01.md`.
+- Branch: `implement/deep-versioned-history-first-core-01`; no merge / no production writes.
+- Scope: immutable completed Deep history, never-first/oldest-next queue, producer-only historical fallback and per-version statistics.
+- Current step: isolated regression and GitHub PR validation; website UI belongs to a following phase.
+
 ## COMPLETE — Inactive fully async Dossier Assembly semantic worker 01 (ЧАТ 2)
 Статус: `implementation_complete_ready_for_director_review_inactive`.
 - task: `WORKER_TASK_DOSSIER_ASYNC_ASSEMBLY_SEMANTIC_WORKER_IMPLEMENT_01.md`; PR #182 open, not merged; branch `implement/dossier-async-assembly-semantic-worker-01`.
