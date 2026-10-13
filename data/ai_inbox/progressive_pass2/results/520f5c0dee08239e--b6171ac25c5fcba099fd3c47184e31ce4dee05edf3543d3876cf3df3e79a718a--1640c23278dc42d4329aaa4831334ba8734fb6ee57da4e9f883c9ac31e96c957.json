@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "511b1085fb6e40319408d6780966d1fb3525e170",
+  "run_start_authority_commit": "84c0a7719f7257e2ef0fcb373b286013d809cf0a",
+  "run_started_at_utc": "2026-10-13T19:16:33+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "02873cd73be3f673db7c516da956ffcf13ea8b315216dbe4eaae9523716bf88a",
+  "work_id": "b6171ac25c5fcba099fd3c47184e31ce4dee05edf3543d3876cf3df3e79a718a",
+  "family_id": "game:1556980",
+  "taste_subject_key": "App_1556980",
+  "appid": "1556980",
+  "taste_fingerprint": "0cffddbedcc4294fa22334f80b5be82466dc184a3a066a6ad43cfd4c0dc5fb1f",
+  "candidate_context_sha256": "48ba9f24b52101ea1e40173a2f740208256175379ada3d1ff54107169cae50f0",
+  "dossier_content_sha256": "4e2aa7060bd262553cec6dfc36db1c6565e508d9fe55c3fb56e8db501d785ced",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "1640c23278dc42d4329aaa4831334ba8734fb6ee57da4e9f883c9ac31e96c957",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Двухмерные драки с разными приёмами, новым набором врагов и ситуаций по ходу кампании могут давать поводы совершенствовать стиль боя.",
+    "Нарисованный пиксельный стиль, энергичная музыка и история интернет-сообщества формируют узнаваемую идентичность."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 64,
+    "development_variety": 65,
+    "structure_pacing_direction": 48,
+    "identity_hooks": 80,
+    "breadth_of_match": 62
+  },
+  "score_findings": [
+    {
+      "finding_id": "internetgen-combat",
+      "text_ru": "У двухмерной боевой системы широкий набор приёмов, но часть игроков ощущает неровную отзывчивость ввода — глубина освоения есть потенциально, хотя управление может мешать её раскрытию.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/active_core_loop_vs_low_stimulation_filler/summary",
+          "profile_value_sha256": "b4a73bd07d3acb93744f9800c2ccc182334128a573b98d020cc696b40af3ff44",
+          "match_text_ru": "Активные действия с постоянной обратной связью обычно удерживают внимание сильнее пассивных отрезков."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 64
+        }
+      ]
+    },
+    {
+      "finding_id": "internetgen-evolving-stages",
+      "text_ru": "На пути появляются новые удары, разновидности противников и тематические ситуации; эта перемена боевых задач способна поддерживать интерес даже при спорном качестве поздних схваток.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Игровой опыт особенно ценен, когда по ходу кампании заметно меняются способы действия."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 65
+        }
+      ]
+    },
+    {
+      "finding_id": "internetgen-online-culture",
+      "text_ru": "Пиксельная рисовка, ритмичная музыка и шутки об интернет-чатах создают самостоятельный визуальный и звуковой характер приключения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Яркий художественный язык и необычная подача делают игру запоминающейся."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 80
+        }
+      ]
+    },
+    {
+      "finding_id": "internetgen-late-repetition",
+      "text_ru": "Поздние бои местами превращаются в затянутое повторение, а отдельный босс прерывает ритм; это угрожает ощущению развития, несмотря на новые темы уровней.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Однообразное повторение без нового опыта быстро снижает вовлечённость."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 48
+        }
+      ]
+    },
+    {
+      "finding_id": "internetgen-chat-story",
+      "text_ru": "История дружбы и конфликта вокруг умирающего чат-сервера добавляет боям человеческий сюжетный контекст, а не только череду поединков.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "Выразительные отношения персонажей способны повысить ценность игры наряду с механиками."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 62
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Несмотря на многообразие приёмов, управление в драках называют неровным, а воздушные атаки — неудобными; это может мешать удовольствию от точного выполнения комбинаций.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Отдельные сражения затянуты, а босс с тематикой сапёра может раздражать и ломать темп.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "На высокой сложности не все приёмы оказываются практически полезными; также описан способ обходить боссов повторением атак в воздухе, что может обесценить освоение боевой системы.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "После многообещающих первых уровней сюжет и оформление локаций, по одному отзыву, становятся менее цельными.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Сообщения о загромождённых аренах и спорном балансе частично относятся к ранним версиям; один из недостатков, по словам игрока, уже исправлялся патчем.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Новые враги и приёмы продолжают появляться, но некоторые поздние встречи всё равно воспринимаются как механическое повторение боёв без прежней изобретательности.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      }
+    ]
+  }
+}
