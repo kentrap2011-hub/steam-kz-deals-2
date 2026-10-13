@@ -68,6 +68,7 @@ def main():
     current = completed('game:one', '2026-10-13T13:07:00+00:00', 'new', work='w2',
                         verdict='analyzed_not_fit')
     new_pin = pin('2' * 64, 'b' * 40)
+    current['profile_pin_sha256'] = new_pin['pin_sha256']
     updated = history.preserve_completion(
         prior, copy.deepcopy(current),
         {'profile_pin_sha256': new_pin['pin_sha256']},
