@@ -107,8 +107,14 @@ def completed_versions(entry):
         if not isinstance(row, dict) or row.get('history_contract') != HISTORY_CONTRACT:
             raise ValueError('invalid Deep completed history contract')
         actual = _record(row.get('result'), row.get('profile_version'))
-        if actual is None or actual['revision_id'] != row.get('revision_id'):
+        if (actual is None or actual['revision_id'] != row.get('revision_id')
+                or row.get('accepted_at_utc') != actual['accepted_at_utc']
+                or not isinstance(row.get('profile_version'), dict)
+                or row['profile_version'].get('pin_sha256') != (row.get('result') or {}).get('profile_pin_sha256')):
             raise ValueError('corrupt Deep completed history revision')
+        prior = versions.get(actual['revision_id'])
+        if prior is not None and prior != row:
+            raise ValueError('conflicting immutable Deep completed history revision')
         versions[actual['revision_id']] = deepcopy(row)
     for revision in entry.get('revision_history') or []:
         if not isinstance(revision, dict):
@@ -132,6 +138,9 @@ def preserve_completion(previous, updated, work_item, attempt, profile_pin=None)
         current = _record(updated, content_profile_version(profile_pin, work_item))
         if current is None:
             raise ValueError('accepted Deep completion needs a timestamp and canonical state')
+        prior = versions.get(current['revision_id'])
+        if prior is not None and prior != current:
+            raise ValueError('attempted to replace immutable Deep completed revision')
         versions[current['revision_id']] = current
     updated['history_contract'] = HISTORY_CONTRACT
     updated['completed_versions'] = sorted(
