@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PASS2-V1",
-  "version": 14,
+  "version": 15,
   "status": "production_active",
   "phase": "phase_c_pass2",
   "purpose": "GitHub-owned eventual authoritative Deep analysis for every current eligible Progressive game after an exact-compatible canonically accepted Dossier is ready, with one normal first pass and separately authorized recovery; completed Deep results include a separately grounded balanced negative assessment, and Fast/PASS 1 is never an eligibility prerequisite.",
@@ -61,15 +61,15 @@
   },
   "ordering": {
     "owner": "github",
-    "policy_id": "semantic_queue_priority_v1",
+    "policy_id": "deep_history_first_oldest_success_v1",
     "precedence": [
-      "no_authoritative_deep_history_first",
-      "semantic_queue_priority_score_desc",
-      "stable_family_id_asc"
+      "never_authoritatively_completed_under_any_profile_first",
+      "previously_completed_oldest_last_success_at_utc_first",
+      "stable_exact_appid_taste_subject_family_identity"
     ],
     "never_deep_analyzed_definition": {
       "source": "data/cache/progressive_pass2_state.json",
-      "rule": "The family's current canonical Deep state contains no root entry or revision_history[].state with authoritative_completed=true and outcome analyzed_fit/analyzed_not_fit.",
+      "rule": "No accepted completed result in completed_versions V1, root V2 or revision_history[].state; incomplete results never imply a successful analysis.",
       "authoritative_outcomes": [
         "analyzed_fit",
         "analyzed_not_fit"
@@ -115,7 +115,18 @@
     "changes_eligibility_or_scope": false,
     "operational_only": true,
     "changes_site_ranking": false,
-    "invalid_or_failed_item_blocks_siblings": false
+    "invalid_or_failed_item_blocks_siblings": false,
+    "previous_policy_id": "semantic_queue_priority_v1",
+    "oldest_success_definition": {
+      "source": "completed_versions V1 plus backwards-compatible root/revision_history historical successes",
+      "field": "accepted_at_utc of latest successful Deep revision for exact family/game",
+      "direction": "oldest_success_first_for_previously_analyzed_cohort",
+      "undated_legacy_rule": "sort_last_within_analyzed_cohort_and_mark_unverified_not_an_oldest_timestamp",
+      "tie_breaker": "exact_appid_then_taste_subject_key_then_family_id",
+      "never_first_priority": "existing semantic_queue_priority_v1 for never-successfully-analyzed cohort only",
+      "last_success_not_last_attempt": true,
+      "changes_retry_or_eligibility": false
+    }
   },
   "attempt_budget": {
     "maximum_automatic_attempts_per_semantic_generation_and_work_id": 1,
@@ -352,6 +363,22 @@
       "original_provenance_rewritten": false,
       "new_attempt_consumed": false,
       "arbitrary_historical_revival": "forbidden_fail_closed"
+    },
+    "completed_history": {
+      "contract": "PROGRESSIVE-DEEP-COMPLETED-HISTORY-V1",
+      "field": "entries[family_id].completed_versions",
+      "schema_version": 1,
+      "migration": "lazy_backwards_compatible_V2_root_revision_history_only_with_exact_accepted_state_provenance",
+      "immutable_revision_identity": "hash(exact_family_appid_taste_subject_work_authorization_accepted_timestamp_outcome)",
+      "copy_on_new_semantic_generation": true,
+      "incomplete_cannot_displace_success": true,
+      "legacy_unknown_profile_version": "null_never_backfill_without_immutable_Git_profile_pin_proof",
+      "profile_content_version": "content_sha256_of_exact_pinned_gaming_taste_live_json",
+      "equal_bytes_new_commit_creates_new_content_version": false,
+      "original_source_commit_provenance_preserved": true,
+      "profile_source_commit_date": "null_until_independently_Git_verified_no_fabricated_date",
+      "current_authority": "existing_exact_semantic_matching_only",
+      "historical_stale_score_can_be_used_for_ranking": false
     }
   },
   "outcomes": {
