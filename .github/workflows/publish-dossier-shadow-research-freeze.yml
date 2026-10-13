@@ -1,0 +1,46 @@
+name: Publish frozen Dossier 18 Research trial (manual, once)
+
+# GitHub Actions is the ONLY actor allowed to publish this nonproduction
+# buffer/marker. This workflow is deliberately absent from push/PR/schedule.
+on:
+  workflow_dispatch:
+    inputs:
+      expected_main_sha:
+        description: 'Exact 40-hex main SHA AFTER this publisher PR has merged'
+        type: string
+        required: true
+      confirmation:
+        description: 'Type PUBLISH_DOSSIER_SHADOW_18_ONCE (does NOT authorize semantics)'
+        type: string
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dossier-shadow-calibration-20261011-6x3-single-use-publisher
+  cancel-in-progress: false
+
+jobs:
+  create-original-sandbox-buffer-then-marker:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Install existing strict Research validator dependency
+        run: python -m pip install 'jsonschema>=4.21,<5'
+      - name: Publish exact create-only nonproduction Git buffer and marker
+        env:
+          EXPECTED_MAIN_SHA: ${{ inputs.expected_main_sha }}
+          EXPLICIT_CONFIRMATION: ${{ inputs.confirmation }}
+        run: |
+          set -euo pipefail
+          python scripts/dossier_shadow_research_trial_publish.py \
+            --expected-main-sha "$EXPECTED_MAIN_SHA" \
+            --approval "$EXPLICIT_CONFIRMATION"
+      - name: Confirm checkout's working tree is clean
+        run: test -z "$(git status --porcelain --untracked-files=all)"
