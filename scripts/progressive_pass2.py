@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import progressive_pass1
+import progressive_deep_history
 import progressive_work_authority
 from taste_cache_common import validate_taste_factors
 from taste_negative_contract import NEGATIVE_FINDING_CATALOG
@@ -2252,6 +2253,10 @@ def process_result_documents(work_doc, state_doc, documents, accepted_at_utc=Non
                 })
                 receipts.append(receipt)
                 continue
+            entry = progressive_deep_history.preserve_completion(
+                state['entries'].get(work_item['family_id']), entry, work_item,
+                failure_attempt, profile_pin=work_doc.get('profile_pin'),
+            )
             state['entries'][work_item['family_id']] = entry
             receipt.update({
                 'status': 'rejected_semantic_contract_result_attempt_consumed',
@@ -2279,6 +2284,10 @@ def process_result_documents(work_doc, state_doc, documents, accepted_at_utc=Non
             receipts.append(receipt)
             continue
 
+        entry = progressive_deep_history.preserve_completion(
+            state['entries'].get(work_item['family_id']), entry, work_item,
+            attempt, profile_pin=work_doc.get('profile_pin'),
+        )
         state['entries'][work_item['family_id']] = entry
         receipt.update({
             'status': 'accepted',
@@ -2365,6 +2374,10 @@ def process_terminal_execution_documents(
             receipts.append(receipt)
             continue
 
+        entry = progressive_deep_history.preserve_completion(
+            state['entries'].get(work_item['family_id']), entry, work_item,
+            attempt, profile_pin=work_doc.get('profile_pin'),
+        )
         state['entries'][work_item['family_id']] = entry
         canonical_path = (
             CANONICAL_EXECUTION_RECEIPTS
