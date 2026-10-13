@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "05f1c490084f0e2a3cc45f6c3adc25ec2912cc03",
+  "run_start_authority_commit": "ad6cf2f2a7709df6effbcbd4288f37386ea3f3f8",
+  "run_started_at_utc": "2026-10-13T09:08:03+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "02873cd73be3f673db7c516da956ffcf13ea8b315216dbe4eaae9523716bf88a",
+  "work_id": "4a4a14a503c2aa54b28e4cb9638010d83f23218882b9b8b2091238179bff3df7",
+  "family_id": "game:2772750",
+  "taste_subject_key": "App_2772750",
+  "appid": "2772750",
+  "taste_fingerprint": "3e4beecf662ec2bdbbbeae171fb8e3fbfc42fbaffe5e3d8139f972de58123a19",
+  "candidate_context_sha256": "2f1624ee35601ad5aadc041f8557a78d7c13affb5004611daf56eb47608d844f",
+  "dossier_content_sha256": "47b3a951dbfae374b2711d6ec4d5b3f20930196007d297f0c214404d3a7b09fc",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "17cf3a8dbd050203ca85c5527438bbe6ce0eb0271515e308a6e00545e6e51270",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Быстрое изменение исторической карты и сценарии альтернативных завоеваний могут быть интересны в начале, но отзывы указывают на малую вариативность дальнейшей дипломатии, экономики и войн — именно потеря развития опыта регулярно снижает интерес в закреплённом профиле.",
+    "Хотя технологии, инвестиции в провинции и усиление войск дают видимый прогресс, эти решения местами сводятся к накоплению ресурсов, а победы зависят от численности сильнее, чем от разнообразной тактики; это слабее соответствует предпочтению осмысленно осваивать разные способы прохождения.",
+    "Гибкость песочницы и доступный темп — реальные достоинства для любителей расширять карту, но они не компенсируют для данного профиля риск однообразного долгого цикла без убедительного изменения задач."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "После первых быстрых завоеваний расширение границ рискует превратиться в повторяющийся цикл с однообразной дипломатией, экономикой и войнами. Это особенно существенно при выраженном интересе к развитию игровых ситуаций, а не к многократному повтору одной схемы.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Лёгкий вход делает управление картой доступным, однако у части игроков войны решаются преимущественно численностью и технологиями, а экономика и дипломатия выглядят неглубокими. Это ограничивает пространство для поиска новых тактических решений.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Игра в основном рассчитана на одиночную партию; отсутствующий мультиплеер ограничивает возможность совместно обсуждать тактику и разыгрывать стратегию с друзьями, но сам по себе не делает игру неподходящей.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
