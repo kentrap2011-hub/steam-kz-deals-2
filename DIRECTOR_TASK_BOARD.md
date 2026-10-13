@@ -5,6 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR ACCEPTANCE — 2026-10-13: Deep core merged; gamepad remains partial
+
+- ЧАТ 1 closeout `WORKER_TASK_DEEP_VERSIONED_HISTORY_PR222_CLOSEOUT_01.md`: independently verified history tamper guards and exact ordering; 4/4 final PR CI passed. PR #222 merged to main as `d273e707fa00087fe2d36d1383cb39431c0747c0`. **Producer-only:** historic-card and Statistics UI, verified profile version commit dates, and any Git-proven missing older rows are separate follow-up tasks. No bulk Deep rerun authorized.
+- ЧАТ 2 closeout `WORKER_TASK_SITE_GAMEPAD_PR223_CLOSEOUT_01.md`: SVG-from-original tests and off-device headless Chromium verified, but PR #223 remains open: no real PNG/ICO, not iOS/Android launcher validated. One unrelated site tasks CI failed because Director registry improperly exposed historical `PR #` wording. Director corrected public registry wording directly in `config/director_task_plan.json` (commit `1328032f43733371806896c4937bfa81290287b3`); PR branch CI must still be rerun/confirmed. No claim of complete icon installation or merge.
+- Old paired closeout worker chats are finished. Next priority: separately scope the user-visible Deep cards/Statistics phase after the accepted producer PR. No Scheduled Task changes.
+
 ## CURRENT DIRECTOR ASSIGNMENT — 2026-10-13: paired independent PR closeout
 
 - **НОВЫЙ ЧАТ — ЧАТ 1**: `WORKER_TASK_DEEP_VERSIONED_HISTORY_PR222_CLOSEOUT_01.md` — acceptance and minimal fixes of PR #222, actual mergeability/CI and Deep history correctness; producer only, no web/**; cards/Statistics assigned only after Director accepts PR.
