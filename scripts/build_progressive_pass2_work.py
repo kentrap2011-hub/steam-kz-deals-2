@@ -101,16 +101,26 @@ def entry_has_authoritative_deep_completion(entry):
     )
 
 
-def has_authoritative_deep_history(state_doc, family_id):
+def has_authoritative_deep_history(state_doc, family_id, binding=None):
     entry = ((state_doc.get('entries') or {}).get(str(family_id))) if isinstance(state_doc, dict) else None
-    if entry_has_authoritative_deep_completion(entry):
-        return True
     if not isinstance(entry, dict):
         return False
-    if progressive_deep_history.completed_versions(entry):
+    def exact(snapshot):
+        if binding is None:
+            return True
+        return all(
+            str(snapshot.get(key) or '') == str(binding.get(key) or '')
+            and str(binding.get(key) or '')
+            for key in ('family_id', 'taste_subject_key', 'appid')
+        )
+    if entry_has_authoritative_deep_completion(entry) and exact(entry):
         return True
+    for record in progressive_deep_history.completed_versions(entry):
+        if exact(record['result']):
+            return True
     for revision in entry.get('revision_history') or []:
-        if isinstance(revision, dict) and entry_has_authoritative_deep_completion(revision.get('state')):
+        snapshot = (revision or {}).get('state') if isinstance(revision, dict) else None
+        if entry_has_authoritative_deep_completion(snapshot) and exact(snapshot):
             return True
     return False
 
@@ -132,7 +142,7 @@ def order_normal_items(items, context_by_family, pass2_state, contract):
         family_id = str(item.get('family_id') or '')
         context = context_by_family.get(family_id) or {}
         priority = semantic_queue_priority(context, ordering)
-        seen = has_authoritative_deep_history(pass2_state, family_id)
+        seen = has_authoritative_deep_history(pass2_state, family_id, item)
         last = progressive_deep_history.latest_completed(pass2_state, family_id, item)
         last_at = progressive_pass2.parse_utc(last['accepted_at_utc']) if last else None
         item['_authoritative_deep_history_sort'] = int(seen)
