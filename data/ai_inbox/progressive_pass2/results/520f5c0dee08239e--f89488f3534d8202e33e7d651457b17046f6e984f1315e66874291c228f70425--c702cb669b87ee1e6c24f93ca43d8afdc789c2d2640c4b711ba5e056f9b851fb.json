@@ -1,0 +1,285 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "05f1c490084f0e2a3cc45f6c3adc25ec2912cc03",
+  "run_start_authority_commit": "ad6cf2f2a7709df6effbcbd4288f37386ea3f3f8",
+  "run_started_at_utc": "2026-10-13T09:08:03+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "02873cd73be3f673db7c516da956ffcf13ea8b315216dbe4eaae9523716bf88a",
+  "work_id": "f89488f3534d8202e33e7d651457b17046f6e984f1315e66874291c228f70425",
+  "family_id": "game:350080",
+  "taste_subject_key": "App_350080",
+  "appid": "350080",
+  "taste_fingerprint": "14771b7203fb82551904eccd9f5c4104e20920d0e78d259f52f1f97a72d21782",
+  "candidate_context_sha256": "8d267c4d054aaa8657524f643da00ed2110a8b455068cef2a1d7b13e7accfd3a",
+  "dossier_content_sha256": "e03cab8a64b599aa90083ebf74b4aa0fe5a514ff698222e5c5fc1903ddd52fc4",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "c702cb669b87ee1e6c24f93ca43d8afdc789c2d2640c4b711ba5e056f9b851fb",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Быстрая и плотная стрельба с выбором между скрытностью и открытым боем обеспечивает частое активное взаимодействие.",
+    "Короткая линейная кампания и отдельные боевые испытания дают ясные задачи и не требуют многомесячного прохождения.",
+    "Знакомая атмосфера Wolfenstein поддерживается выразительными врагами и стилизацией замка."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 87,
+    "development_variety": 66,
+    "structure_pacing_direction": 81,
+    "identity_hooks": 76,
+    "breadth_of_match": 79
+  },
+  "base_support_compatible": null,
+  "score_findings": [
+    {
+      "finding_id": "wolf-fast-fps",
+      "text_ru": "Тяжёлая стрельба в быстром темпе, разные виды оружия и переключение между скрытным устранением и прямой атакой постоянно требуют активных решений прямо в бою.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/active_core_loop_vs_low_stimulation_filler/summary",
+          "profile_value_sha256": "b4a73bd07d3acb93744f9800c2ccc182334128a573b98d020cc696b40af3ff44",
+          "match_text_ru": "Нравится активный игровой процесс с частой обратной связью и решениями, а не затянутая рутина."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 87
+        }
+      ]
+    },
+    {
+      "finding_id": "wolf-paced-campaign",
+      "text_ru": "Линейная, сконцентрированная кампания на несколько вечеров быстро возвращает к насыщенным перестрелкам; выбор сложности и дополнительные испытания дают понятные боевые цели без огромного открытого мира.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/tемп/note",
+          "profile_value_sha256": "a79a54657031ce862cf6c6d317d9adbc854a447415cf166fe07efc3487e41761",
+          "match_text_ru": "Темп важен: игра должна регулярно давать содержательную причину продолжать."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 81
+        }
+      ]
+    },
+    {
+      "finding_id": "wolf-visual-world",
+      "text_ru": "Замок, стилизация эпохи, характерный дизайн врагов и узнаваемая атмосфера Wolfenstein придают короткому боевику собственное лицо даже без столь же сильной истории.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Запоминающийся визуальный стиль и атмосфера существенно усиливают впечатление."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 76
+        }
+      ]
+    },
+    {
+      "finding_id": "wolf-familiar-archetypes",
+      "text_ru": "Хотя короткая длина и смена локаций снижают усталость, по ходу игры вновь встречаются знакомые типы противников и оружие; заметного расширения основной боевой системы немного.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Для сохранения интереса важны новые игровые ситуации и механические задачи."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 66
+        }
+      ]
+    },
+    {
+      "finding_id": "wolf-stealth-and-story",
+      "text_ru": "Вынужденные осторожные эпизоды с командирами и более тонкий, местами резко меняющий тон сюжет создают трение, несмотря на сильную стрельбу и выразительные окружения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 9
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/factor_importance/сюжет/note",
+          "profile_value_sha256": "15ba2c92b96e2588caf57b0833025ed85f06fd0ded251d5f7d49bcc23bec0b3d",
+          "match_text_ru": "В динамичном экшене хорошая механика может частично компенсировать слабый сюжет, но он не становится совсем неважным."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 79
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      },
+      {
+        "kind": "observation",
+        "index": 10
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Эпизоды со скрытным устранением командиров могут вынуждать несколько раз пробовать осторожный маршрут перед перестрелкой; в финале некоторые отмечают резкий рост плотности боёв и спорного босса.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "По сравнению с The New Order история короче и проще; внезапный поворот к сверхъестественному и зомби во второй половине нравится не всем, хотя концентрация на экшене остаётся достоинством.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 9
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Некоторые пушки и типы врагов возвращаются без существенного изменения, но смена мест и небольшая продолжительность частично защищают короткую кампанию от утомительной повторяемости.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть отдельные сообщения о заиканиях и ограничениях частоты кадров на конкретных ПК; этого недостаточно для вывода о проблемах на любом современном компьютере.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 10
+          }
+        ]
+      }
+    ]
+  }
+}
