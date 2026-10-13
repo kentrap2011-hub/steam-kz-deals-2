@@ -7,6 +7,7 @@ from pathlib import Path
 import priority_ranking
 import progressive_pass1
 import progressive_pass2
+import progressive_deep_history
 
 ROOT = Path('.')
 CONTRACT = ROOT / 'config/progressive_personalization_contract.json'
@@ -227,6 +228,51 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
             progressive_pass2.authoritative_completion_entry(binding, pass2_state_doc)
             if binding else None
         )
+        # Historical completion is independent from current semantic authority.
+        # It is never fed into ranking, personalized scores or taste_entry.
+        historical = progressive_deep_history.latest_completed(
+            pass2_state_doc, family_id, binding
+        ) if binding else None
+        current_profile_content = (
+            generation['profile_pin']['profile_identity']['content_sha256']
+        )
+        old_profile = (historical or {}).get('profile_version') or {}
+        if not historical:
+            history_freshness = 'never_completed'
+            history_reason = 'no_accepted_completed_deep_revision'
+        elif deep_authoritative is not None:
+            history_freshness = 'current'
+            history_reason = 'exact_current_semantic_deep_authority'
+        else:
+            history_freshness = 'outdated'
+            if old_profile.get('content_version_id') is None:
+                history_reason = 'historical_profile_content_version_unattested'
+            elif old_profile['content_version_id'] != current_profile_content:
+                history_reason = 'profile_content_version_changed'
+            else:
+                history_reason = 'semantic_or_candidate_context_not_current_compatible'
+        old_result = (historical or {}).get('result') or {}
+        history_projection = {
+            'status': history_freshness,
+            'reason': history_reason,
+            'current_compatible': deep_authoritative is not None,
+            'current_profile_content_version_id': current_profile_content,
+            'current_profile_source_commit_sha': generation['profile_pin']['profile_identity']['resolved_commit_sha'],
+            # The pinned profile contract contains no Git commit timestamp.
+            'current_profile_version_at_utc': None,
+            'last_completed_revision_id': (historical or {}).get('revision_id'),
+            'last_completed_at_utc': (historical or {}).get('accepted_at_utc'),
+            'last_completed_profile_content_version_id': old_profile.get('content_version_id'),
+            'last_completed_profile_source_commit_sha': old_profile.get('source_commit_sha'),
+            'last_completed_profile_version_at_utc': old_profile.get('source_commit_at_utc'),
+            'last_completed_outcome': old_result.get('outcome'),
+            'last_completed_appid': old_result.get('appid'),
+            'last_completed_taste_subject_key': old_result.get('taste_subject_key'),
+            'last_completed_positive_evidence': deepcopy(old_result.get('positive_evidence') or []),
+            'last_completed_not_fit_evidence': deepcopy(old_result.get('not_fit_evidence') or []),
+            'last_completed_negative_assessment': deepcopy(old_result.get('negative_assessment')),
+            'last_completed_score_findings': deepcopy(old_result.get('score_findings') or []),
+        }
 
         # Fast remains the provisional current result when no compatible reusable
         # cache already resolved the identity.
@@ -318,6 +364,17 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
         state['effective_analysis_source'] = effective_source
         state['deep_authoritative_completed'] = deep_authoritative is not None
         state['deep_first_pass_attempted'] = deep_entry is not None
+        state['deep_history'] = history_projection
+        state['_deep_completed_profile_versions'] = sorted({
+            (v.get('profile_version') or {}).get('content_version_id')
+            or ('legacy-unverified:' + str((v.get('profile_version') or {}).get('pin_sha256') or 'unknown'))
+            for v in progressive_deep_history.completed_versions(
+                ((pass2_state_doc.get('entries') or {}).get(family_id))
+            )
+            if isinstance(v, dict) and
+            all(str(v['result'].get(k) or '') == str(binding.get(k) or '') and str(binding.get(k) or '')
+                for k in ('family_id', 'taste_subject_key', 'appid'))
+        }) if binding else []
         state['fast_scope_eligible'] = bool(binding) and cache_state.get('analysis_semantic_source') != 'compatible_cache'
         state['deep_scope_eligible'] = bool(binding)
 
@@ -415,6 +472,7 @@ def apply_state_fields(game, state):
     else:
         game.pop('analysis_resolution_pass', None)
 
+    game['deep_history'] = deepcopy(state.get('deep_history') or {})
     for field in (
         'fast_stage_state',
         'fast_stage_outcome',
@@ -792,6 +850,9 @@ def build_processing_status(state_index, visible_items, business_excluded_family
     deep_total = deep_first_pass_attempted = deep_authoritative = 0
     deep_write_times = []
     deep_fit = deep_not_fit = deep_incomplete = deep_waiting = deep_ready = 0
+    historical_only = never_completed = 0
+    per_profile_games = {}
+    current_profile_version = None
 
     for family_id, state in state_index.items():
         if family_id in business_excluded:
@@ -834,6 +895,18 @@ def build_processing_status(state_index, visible_items, business_excluded_family
 
         if state.get('deep_scope_eligible'):
             deep_total += 1
+            history_projection = state.get('deep_history') or {}
+            version_name = history_projection.get('current_profile_content_version_id')
+            if version_name:
+                if current_profile_version is not None and current_profile_version != version_name:
+                    raise ValueError('mixed current profile content versions in Deep scope')
+                current_profile_version = version_name
+            for profile_version in set(state.get('_deep_completed_profile_versions') or []):
+                per_profile_games[profile_version] = per_profile_games.get(profile_version, 0) + 1
+            if history_projection.get('last_completed_revision_id') is None:
+                never_completed += 1
+            elif not state.get('deep_authoritative_completed'):
+                historical_only += 1
             deep_written = _normalize_utc_timestamp(state.get('_deep_last_write_at_utc'))
             if deep_written is not None:
                 deep_write_times.append(deep_written)
@@ -875,6 +948,8 @@ def build_processing_status(state_index, visible_items, business_excluded_family
     if fast_total != fast_attempted + fast_skipped_deep + fast_remaining:
         raise ValueError('Fast stage arithmetic mismatch')
 
+    if deep_total != deep_authoritative + historical_only + never_completed:
+        raise ValueError('Deep history/current partition mismatch')
     deep_normal_remaining = deep_total - deep_first_pass_attempted
     deep_authoritative_remaining = deep_total - deep_authoritative
     if deep_normal_remaining < 0 or deep_authoritative_remaining < 0:
@@ -953,6 +1028,14 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         'deep_all_current_authoritative_complete': deep_authoritative_remaining == 0,
         'deep_last_write_at_utc': max(deep_write_times) if deep_write_times else None,
         'deep_legacy_full_reanalysis': legacy_reanalysis,
+        'deep_completed_history_contract': progressive_deep_history.HISTORY_CONTRACT,
+        'deep_current_profile_content_version_id': current_profile_version,
+        'deep_current_profile_version_at_utc': None,
+        'deep_profile_version_unique_game_counts': dict(sorted(per_profile_games.items())),
+        'deep_current_version_completed_count': deep_authoritative,
+        'deep_historical_only_not_current_compatible_count': historical_only,
+        'deep_never_completed_count': never_completed,
+        'deep_current_version_remaining_count': deep_total - deep_authoritative,
 
         'fast_stage_counts': {
             'total_current_scope': fast_total,
