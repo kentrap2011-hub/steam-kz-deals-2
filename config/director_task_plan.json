@@ -1182,11 +1182,12 @@
       "urgency_reason": "Пользователь сообщает, что уже обработанные игры снова отображаются как неразобранные в карточках; требует немедленно прекратить потерю истории.",
       "task_file": "WORKER_TASK_DEEP_VERSIONED_HISTORY_FIRST_CORE_01.md",
       "worker_slot": "ЧАТ 1",
-      "order": 1,
+      "order": null,
       "depends_on": [],
       "blocker": "Безопасный producer/history-слой и очередность сначала, отдельный UI-этап после принятого PR; без автоматического перекрашивания старых результатов в актуальные.",
       "updated_on": "2026-10-13",
-      "recent_completion": false
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-13T13:01:48.916Z"
     },
     {
       "id": "site-gamepad-svg-text-conversion-01",
@@ -1199,11 +1200,12 @@
       "urgency_reason": "Пользователь явно предложил формат-конвертацию как обход бинарной блокировки прежнего чата.",
       "task_file": "WORKER_TASK_SITE_GAMEPAD_SVG_TEXT_CONVERSION_01.md",
       "worker_slot": "ЧАТ 2",
-      "order": 2,
+      "order": null,
       "depends_on": [],
       "blocker": "Оригинальный архив должен быть приложен к новому рабочему чату. SVG поддержит браузер и часть PWA; если требуется Apple touch PNG, нужен фактический двоичный upload в GitHub.",
       "updated_on": "2026-10-13",
-      "recent_completion": false
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-13T13:01:48.916Z"
     }
   ]
 }
