@@ -29,7 +29,7 @@ Read latest `CHAT_PROTOCOL.md` (START), `CHAT_CONTEXT.md`, task file, relevant `
 - Site publication resilience `38416077090` — **passed** after correcting compatibility with isolated projection fixtures.
 - Deep Stage1 migration preparation `38416077052` — **passed**.
 - Validate backlog dispositions `38416077228` — **passed**.
-- Final added bounded real-state test triggered a subsequent CI run; use latest workflow check on PR #222 for final status.
+- Final PASS2 core run `38416472494` — **passed** (includes the byte-level punctuation regression, bounded actual persisted-state smoke, all PASS2 regressions and recompute checks).
 
 ## Historical observations and bounded limitations
 
