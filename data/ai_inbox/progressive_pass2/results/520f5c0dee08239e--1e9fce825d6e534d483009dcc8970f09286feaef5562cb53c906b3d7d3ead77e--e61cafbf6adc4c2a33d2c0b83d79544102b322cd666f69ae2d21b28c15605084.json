@@ -1,0 +1,345 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "85286737196fa1fcc5094878b4ba6786ad38abff",
+  "run_start_authority_commit": "e9c966c4e680da9d8adba8b2b904fd62a44ef082",
+  "run_started_at_utc": "2026-10-13T19:01:38+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "02873cd73be3f673db7c516da956ffcf13ea8b315216dbe4eaae9523716bf88a",
+  "work_id": "1e9fce825d6e534d483009dcc8970f09286feaef5562cb53c906b3d7d3ead77e",
+  "family_id": "game:1701520",
+  "taste_subject_key": "App_1701520",
+  "appid": "1701520",
+  "taste_fingerprint": "0a5c30aacccab620fb80da99f4d26db59edea6c6287e1f9c080c29183c34a502",
+  "candidate_context_sha256": "d45b2e571f64bcbb5d92f603a317a620c536dbef1825f8da8ff66c161c2ae351",
+  "dossier_content_sha256": "b9660d8f8e749180c8066ff99a7e1ed25cbfeaf00ad543547c1da4bb808da16f",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "e61cafbf6adc4c2a33d2c0b83d79544102b322cd666f69ae2d21b28c15605084",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Сражения с несколькими классами оружия и способностями мобильности дают пространство для освоения приёмов.",
+    "Рисованная эстетика, биомы, музыка и многочисленные секреты поддерживают желание исследовать мир.",
+    "Разнообразное снаряжение предлагает эксперименты с боевыми подходами."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 78,
+    "development_variety": 62,
+    "structure_pacing_direction": 48,
+    "identity_hooks": 79,
+    "breadth_of_match": 64
+  },
+  "score_findings": [
+    {
+      "finding_id": "combat-mobility",
+      "text_ru": "Быстрый двухмерный бой, разные типы оружия и способности передвижения дают варианты атаки и контроля пространства; такой активный цикл потенциально вознаграждает освоение приёмов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Сильный интерес к оттачиванию таймингов и применению боевых приёмов."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 78
+        }
+      ]
+    },
+    {
+      "finding_id": "orientation-cost",
+      "text_ru": "Разнообразные биомы и секреты делают исследование насыщенным, однако размеры связного мира, длинные возвраты и плохо обозначенные требования отдельных концовок могут превращать поиск пути в потерянность.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/lowers",
+          "profile_value_sha256": "0f2aa2fda309c8dd37cde3b1932c926c2b9113919040208f0c9c0acf1dcc9180",
+          "match_text_ru": "Неопределённость маршрута и целей резко снижает интерес к исследованию."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 48
+        }
+      ]
+    },
+    {
+      "finding_id": "distinctive-world",
+      "text_ru": "Рисованные ландшафты с насыщенной палитрой и музыка формируют самостоятельную атмосферу, которую отмечают игроки; узнаваемая эстетика способна поддерживать интерес вне сражений.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Индивидуальная художественная идентичность — устойчивый плюс."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 79
+        }
+      ]
+    },
+    {
+      "finding_id": "upgrade-limits",
+      "text_ru": "Выбор снаряжения расширяет боевые возможности, но часть усилений сводится к небольшим изменениям характеристик; разнообразие прокачки здесь менее убедительно, чем разнообразие оружия и движений.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/raises",
+          "profile_value_sha256": "14b5578fa690e75089e182953960601edf5593fe7c4b57ccdc49878c88fa672a",
+          "match_text_ru": "Важно ощущать заметный эффект прокачки, а не только небольшие числа."
+        },
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Смена задач и новых способов действия важна для сохранения интереса."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 62
+        }
+      ]
+    },
+    {
+      "finding_id": "scale-tradeoff",
+      "text_ru": "Большая карта и необязательные ответвления позволяют долго раскрывать секреты, но неоднократное прохождение знакомых участков может растянуть опыт без достаточного обновления впечатлений.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/play_pattern_and_length/main_risk",
+          "profile_value_sha256": "b0d2cc206631be415399913ae32aace226eae68020f4e3a6ce843ab52590a5ce",
+          "match_text_ru": "Долгую игру труднее удерживать в памяти при редких игровых вечерах."
+        },
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Смена задач и новых способов действия важна для сохранения интереса."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 64
+        }
+      ]
+    },
+    {
+      "finding_id": "movement-interruptions",
+      "text_ru": "Часть заклинаний и атакующих анимаций прерывает движение, поэтому не все инструменты поддерживают ту же отзывчивость, что быстрый бой оружием и уклонения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 7
+        },
+        {
+          "kind": "observation",
+          "index": 10
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Сильный интерес к оттачиванию таймингов и применению боевых приёмов."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 78
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      },
+      {
+        "kind": "observation",
+        "index": 10
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "directionlessness",
+        "text_ru": "Огромная карта, долгие возвраты и непрозрачные требования некоторых развязок создают риск потерять ясную цель исследования — именно такое блуждание пользователь особенно не любит.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Не вся прокачка ощущается содержательной: среди многочисленных предметов и характеристик встречаются преимущественно небольшие численные прибавки.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Некоторые заклинания и анимации мешают плавности движений; сами рядовые бои и боссы для опытного игрока могут показаться проще ожидаемого, хотя это зависит от сложности и сборки.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          },
+          {
+            "kind": "observation",
+            "index": 10
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Подробная мифология не гарантирует ясного основного сюжета и удовлетворительного понимания альтернативных концовок.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть противоречащие друг другу замечания о понятности переводов на разных языках; по этим отзывам нельзя установить актуальное качество локализации.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 9
+          }
+        ]
+      }
+    ]
+  }
+}
