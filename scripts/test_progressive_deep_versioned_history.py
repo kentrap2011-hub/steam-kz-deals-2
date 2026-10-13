@@ -1,5 +1,6 @@
 """Bounded regression for durable Deep profile-version history and oldest-first work."""
 import copy
+import hashlib
 from unittest.mock import patch
 
 import build_progressive_pass2_work as builder
@@ -44,9 +45,14 @@ def pin(content_sha, source_commit):
 
 def main():
     # 01: even one punctuation change changes profile-content version.
-    p1 = pin('1' * 64, 'a' * 40)
-    punct = pin('2' * 64, 'b' * 40)
-    same_bytes_new_commit = pin('1' * 64, 'c' * 40)
+    first_bytes = b'{"note": "hello"}'
+    punct_bytes = b'{"note": "hello."}'
+    first_sha = hashlib.sha256(first_bytes).hexdigest()
+    punct_sha = hashlib.sha256(punct_bytes).hexdigest()
+    assert first_sha != punct_sha
+    p1 = pin(first_sha, 'a' * 40)
+    punct = pin(punct_sha, 'b' * 40)
+    same_bytes_new_commit = pin(first_sha, 'c' * 40)
     a = history.content_profile_version(p1, {'profile_pin_sha256': p1['pin_sha256']})
     b = history.content_profile_version(punct, {'profile_pin_sha256': punct['pin_sha256']})
     c = history.content_profile_version(same_bytes_new_commit, {'profile_pin_sha256': same_bytes_new_commit['pin_sha256']})
@@ -168,7 +174,24 @@ def main():
     assert deep.authoritative_completion_entry(incompatible, {
         'entries': {'game:one': prior}
     }) is None
-    print('Deep versioned history: punctuation, provenance, preservation, ordering, identity, overlap: OK')
+    # 09: a bounded real-state smoke checks original GitHub-accepted records
+    # without choosing / rewriting any production work or reading all games.
+    persisted_state = deep.load_state()
+    persisted_entries = persisted_state.get('entries') or {}
+    sampled = 0
+    for fid in sorted(persisted_entries)[:3]:
+        old = persisted_entries[fid]
+        if (
+            isinstance(old, dict)
+            and old.get('authoritative_completed') is True
+            and old.get('outcome') in deep.AUTHORITATIVE_OUTCOMES
+            and deep.parse_utc(old.get('accepted_at_utc')) is not None
+        ):
+            found = history.latest_completed(persisted_state, fid)
+            assert found and found['result']['outcome'] == old['outcome']
+            assert found['result']['accepted_at_utc'] == old['accepted_at_utc']
+            sampled += 1
+    print(f'Deep versioned history: punctuation, provenance, preservation, ordering, identity, overlap; bounded real successes={sampled}: OK')
 
 
 if __name__ == '__main__':
