@@ -1,0 +1,292 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "8e40553c7e965e00de5b3d2428f494f232e92f4e",
+  "run_start_authority_commit": "5ffd40ce03f3fa0f328e6c9f82cb1a476c18d385",
+  "run_started_at_utc": "2026-10-13T14:26:48+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "02873cd73be3f673db7c516da956ffcf13ea8b315216dbe4eaae9523716bf88a",
+  "work_id": "e28fcc4bee266e28cae7898bca7ba201a9c84a03dc479b6c7b5403de09f30cc7",
+  "family_id": "game:243800",
+  "taste_subject_key": "App_243800",
+  "appid": "243800",
+  "taste_fingerprint": "e11b410612e554601b2828f88495635a7302944497684f8d14ee3fdc7968ecda",
+  "candidate_context_sha256": "18e15e33c2ca5e03b8befe5741b6a14317d81c830a4f1e5a563e1f60e28b2d31",
+  "dossier_content_sha256": "636bd1c235a742fa8cab3f9fd3f3bb6fffd0cbeb89bcdde985e6ac283f38933f",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "7ffb986f9fe9e7ea982fa51292190ea7c32004bf8e3097db7f67335806845b52",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Аркадные гонки со стрельбой, таранами и минами дают активный необычный игровой цикл с выбором между чистой скоростью и уничтожением соперников.",
+    "Последовательность турниров открывает новые машины, классы, оборудование и улучшения, создавая ясное продвижение с заметными результатами.",
+    "Разрушения и энергичный саундтрек усиливают запоминаемость автомобильных сражений."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 73,
+    "development_variety": 76,
+    "structure_pacing_direction": 82,
+    "identity_hooks": 79,
+    "breadth_of_match": 73
+  },
+  "score_findings": [
+    {
+      "finding_id": "f1_car_combat",
+      "text_ru": "Гонки позволяют менять тактику между скоростью, таранами, стрельбой и минами, поэтому непосредственный процесс требует контроля автомобиля и реакции.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1/raises",
+          "profile_value_sha256": "c236ddc59b087a1720a7d5b39e0a1f821e95316c85515289f3877c8547face17",
+          "match_text_ru": "Ощущение контроля и динамичного движения само по себе ценно в игровом процессе."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 73
+        }
+      ]
+    },
+    {
+      "finding_id": "f2_handling_limit",
+      "text_ru": "Однако жалобы на скользкую физику поворотов и неудобное прицеливание ограничивают удовольствие именно от управления боевой машиной.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1/raises",
+          "profile_value_sha256": "c236ddc59b087a1720a7d5b39e0a1f821e95316c85515289f3877c8547face17",
+          "match_text_ru": "Ощущение контроля и динамичного движения само по себе ценно в игровом процессе."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "lowers",
+          "normalized_value": 73
+        }
+      ]
+    },
+    {
+      "finding_id": "f3_unlocks",
+      "text_ru": "За турниры открываются новые классы машин, вооружение и модификации — продвижение даёт ощутимое расширение возможностей автомобиля.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/raises",
+          "profile_value_sha256": "14b5578fa690e75089e182953960601edf5593fe7c4b57ccdc49878c88fa672a",
+          "match_text_ru": "Пользователю нравится заметная прокачка машин и оборудования с понятным эффектом."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 76
+        }
+      ]
+    },
+    {
+      "finding_id": "f4_clear_tournaments",
+      "text_ru": "Последовательность соревнований и заработок очков задают понятные цели; открытие машин и классов служит опорой между игровыми сессиями.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/play_pattern_and_length/weekly_gap_resilience_raises/0",
+          "profile_value_sha256": "0cfd656a2fac8382356feb740034b80ec24f4e2d2697ff59a75f12cb75e735f8",
+          "match_text_ru": "Ясные промежуточные цели облегчают редкое возвращение к игре."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 82
+        }
+      ]
+    },
+    {
+      "finding_id": "f5_memorable_mix",
+      "text_ru": "Сочетание разрушительных гонок, оружия и бодрого саундтрека выделяет игру среди обычных автогонок за счёт самого основного действия.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/13/raises",
+          "profile_value_sha256": "fd0e5a051cdf972884f0bfccd7dfd2c3cd50ec876ee4cd2ee491d416f2707058",
+          "match_text_ru": "Для вовлечения нужен собственный запоминающийся стиль или игровой крючок."
+        },
+        {
+          "json_pointer": "/factor_importance/музыка/note",
+          "profile_value_sha256": "c89560b91191de5d0b2531094cb786ba74cbcc41992803148b7df919e3242d44",
+          "match_text_ru": "В профиле прямо отмечен интерес к саундтрекам автогонок."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 79
+        }
+      ]
+    },
+    {
+      "finding_id": "f6_repeat_limit",
+      "text_ru": "Раннее появление разных режимов и автомобилей не отменяет частых повторов трасс, событий и реплик; это ограничивает разнообразие на длинной дистанции.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 9
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Для интереса важна смена игровых задач и ситуаций."
+        },
+        {
+          "json_pointer": "/taste_profile/8/lowers",
+          "profile_value_sha256": "0190267bc95b26d6a6c3d6c7ec4a3e9c3dc45950de5ac94ebaff3b97b434b73b",
+          "match_text_ru": "Повторяемость в сочетании с отсутствием развития снижает интерес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 73
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 76
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Некоторые игроки жалуются на неудобное прицеливание и скользкие повороты: удовольствие от вождения и стрельбы может зависеть от того, насколько понравится конкретная физика.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "При длительных чемпионатах начинают повторяться карты, задания и звуковые реплики; без достаточного обновления этот боевой гоночный цикл рискует надоесть.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 9
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "В отзыве 2024 года отмечали мало игроков в онлайне; это не подтверждает сегодняшнюю активность и не отменяет одиночные турниры.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
