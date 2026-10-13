@@ -153,10 +153,12 @@ def latest_completed(state_doc, family_id, binding=None):
     return deepcopy(candidates[-1]) if candidates else None
 
 
-def version_counts(state_doc, current_bindings, current_profile_content_sha256):
+def version_counts(state_doc, current_bindings, current_profile_content_sha256, current_authoritative_families=None):
     """Unique-game totals; migrations overlap by game and must not be added."""
     per_version = {}
     current = older_only = never = 0
+    current_authoritative_families = set(current_authoritative_families or [])
+    same_profile_historical = 0
     for family_id, binding in current_bindings.items():
         entry = ((state_doc or {}).get('entries') or {}).get(str(family_id))
         revisions = [
@@ -176,6 +178,8 @@ def version_counts(state_doc, current_bindings, current_profile_content_sha256):
         for name in versions_for_game:
             per_version[name] = per_version.get(name, 0) + 1
         if current_profile_content_sha256 in versions_for_game:
+            same_profile_historical += 1
+        if family_id in current_authoritative_families:
             current += 1
         elif revisions:
             older_only += 1
@@ -188,6 +192,8 @@ def version_counts(state_doc, current_bindings, current_profile_content_sha256):
         'deep_current_profile_content_version_id': current_profile_content_sha256,
         'deep_current_version_target': target,
         'deep_current_version_completed_count': current,
+        'deep_same_profile_historical_completed_count': same_profile_historical,
+        'deep_historical_only_not_current_compatible_count': older_only,
         'deep_older_version_only_count': older_only,
         'deep_never_completed_count': never,
         'deep_current_version_remaining_count': target - current,
