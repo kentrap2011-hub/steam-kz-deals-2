@@ -1,0 +1,277 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "138cd2df2e5559aedb5c6b19c47cee43d639a9ff",
+  "run_start_authority_commit": "5f6975235b105eaaf609219b12bfc88ff4c4d4ac",
+  "run_started_at_utc": "2026-10-13T18:35:17+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "02873cd73be3f673db7c516da956ffcf13ea8b315216dbe4eaae9523716bf88a",
+  "work_id": "01506e070e7e999e811a64edb4fe3f8e80c678cc71e405239f08dbcb55d898b7",
+  "family_id": "game:1438480",
+  "taste_subject_key": "App_1438480",
+  "appid": "1438480",
+  "taste_fingerprint": "79d4173867c2d7afce78761ccded4603d49dcfaf92488f8e16dda5c426dfefa2",
+  "candidate_context_sha256": "9826c899e6a1ae38d1b60f6608ff28402a65c7fce52e02f374f33330a17d01d1",
+  "dossier_content_sha256": "cd68029646b3d259fc2734e9da8afa9f0c08460394860a8210f95a38b19d1b00",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "08dba2db6ad423cc4cee62c3bdab8cd6e09fd532b4ed45090dd66960e12d853f",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Нарисованный вручную мрачный фэнтезийный мир, анимация и музыка — устойчиво отмечаемые сильные стороны Saviorless.",
+    "Структура сочетает платформинг, загадки окружения и короткие боевые эпизоды с переключением ролей.",
+    "Странный мир и символическая история дают самостоятельный сюжетный крючок, хотя часть смысла остаётся недосказанной."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 47,
+    "development_variety": 62,
+    "structure_pacing_direction": 67,
+    "identity_hooks": 85,
+    "breadth_of_match": 67
+  },
+  "score_findings": [
+    {
+      "finding_id": "saviorless-art",
+      "text_ru": "Нарисованные вручную мрачные пейзажи, выразительная анимация и тревожная музыка создают цельную запоминающуюся сказочную атмосферу.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/raises",
+          "profile_value_sha256": "5f7e8e297bd91779855718c446c11c91a8b4b72bdb214f522ff93dc047c0c4d7",
+          "match_text_ru": "Выразительная художественная стилистика — заметный плюс к впечатлению."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 85
+        }
+      ]
+    },
+    {
+      "finding_id": "saviorless-mystery",
+      "text_ru": "Необычные Улыбающиеся острова и символическая история предлагают загадку для интерпретации, но не гарантируют однозначных объяснений.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/raises",
+          "profile_value_sha256": "f1997cf9d87235a0d984a3c5bceefb8aa566143fb2e8edddfb81312ba09aef35",
+          "match_text_ru": "Привлекает загадочный мир, если в нём есть интересные загадки и цель."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 67
+        }
+      ]
+    },
+    {
+      "finding_id": "saviorless-roles",
+      "text_ru": "Путешествие чередует уязвимого героя-платформера, боевую форму Спасителя и охотника; при этом сами схватки часто сводятся к простым повторяющимся ударам.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/raises",
+          "profile_value_sha256": "e7552613ce2b0a33532769c9e45e86f0f5c16dba7da170ca71fce2d9fd02e004",
+          "match_text_ru": "Важно, чтобы ситуация и игровые действия развивались по ходу игры."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 62
+        }
+      ]
+    },
+    {
+      "finding_id": "saviorless-short",
+      "text_ru": "Линейное путешествие по отдельным уровням обычно укладывается в несколько часов и не требует месяцами возвращаться к запутанному открытому миру, хотя некоторым финал кажется поспешным.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/play_pattern_and_length/typical_frequency",
+          "profile_value_sha256": "f752e7818342fd3ffbe4b583b7e1e649f15ce2e9745771571d4732edb9e04cae",
+          "match_text_ru": "Игры запускаются примерно раз в неделю, поэтому целостный компактный маршрут проще удержать."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 67
+        }
+      ]
+    },
+    {
+      "finding_id": "saviorless-controls",
+      "text_ru": "Прыжки становятся требовательнее, но часть игроков ощущает медлительность движений и необходимость повторять участки с контрольных точек; простой бой также может не дать желаемого ощущения освоения приёмов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1/raises",
+          "profile_value_sha256": "c236ddc59b087a1720a7d5b39e0a1f821e95316c85515289f3877c8547face17",
+          "match_text_ru": "Само удовольствие от управления и перемещения может определять впечатление."
+        },
+        {
+          "json_pointer": "/taste_profile/6/raises",
+          "profile_value_sha256": "cd94056fda3cce55550c8198b511ed4e853106a155bcc73c1ce5aa18f1f23cf1",
+          "match_text_ru": "Важны содержательные испытания с понятным обучением, а не однообразные неотзывчивые повторы."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "lowers",
+          "normalized_value": 47
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Поздние прыжки и платформенные отрезки могут потребовать повторения после ошибок, а управление некоторым игрокам кажется замедленным; отзывы о его отзывчивости противоречивы.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Боевые столкновения относительно просты и могут свестись к повторным атакам без большой глубины, хотя из-за краткости эпизодов часть игроков не считает это проблемой.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Короткий хронометраж помогает не растягивать прохождение, но финал некоторыми воспринимается слишком резким и оставляет мало времени на развитие истории.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Символическую историю и мотивы мира приходится домысливать: загадочность может заинтересовать, но часть событий останется фрагментарной.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
