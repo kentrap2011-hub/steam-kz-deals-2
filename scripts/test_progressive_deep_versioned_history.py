@@ -110,7 +110,7 @@ def main():
             {'items': [row], 'profile_pin': new_pin},
             {'schema_version': 2, 'contract': 'PROGRESSIVE-PASS2-STATE-V2',
              'entries': {'game:one': prior}},
-            [('test/new.json', {'outcome': 'analysis_incomplete'}, None)],
+            [('new.json', {'outcome': 'analysis_incomplete'}, None)],
         )
     assert receipts[0]['status'] == 'accepted'
     assert state['entries']['game:one']['outcome'] == 'analysis_incomplete'
