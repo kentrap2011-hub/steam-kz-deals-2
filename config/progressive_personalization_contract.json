@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
-  "version": 10,
+  "version": 11,
   "status": "canonical",
   "phase": "phase_b",
   "purpose": "Publish the current deterministic-eligible Steam KZ catalogue while three independent GitHub-owned stages progress: provisional Fast analysis (PASS 1), neutral Dossier preparation, and eventual authoritative Deep analysis (technical PASS 2) for every current eligible game.",
@@ -369,6 +369,33 @@
           null
         ],
         "rule": "Producer-owned compatibility/presentation state. Browser must not infer it from empty risks or historical Deep completion."
+      },
+      "deep_history": {
+        "contract": "PROGRESSIVE-DEEP-COMPLETED-HISTORY-V1",
+        "status": [
+          "current",
+          "outdated",
+          "never_completed"
+        ],
+        "freshness_reason_field": "reason",
+        "last_completed_at_field": "last_completed_at_utc",
+        "last_completed_profile_content_version": "last_completed_profile_content_version_id",
+        "last_completed_profile_version_at": "last_completed_profile_version_at_utc",
+        "current_profile_content_version": "current_profile_content_version_id",
+        "current_profile_version_at": "current_profile_version_at_utc",
+        "exact_game_identity": [
+          "last_completed_appid",
+          "last_completed_taste_subject_key"
+        ],
+        "evidence_fields": [
+          "last_completed_positive_evidence",
+          "last_completed_not_fit_evidence",
+          "last_completed_negative_assessment",
+          "last_completed_score_findings"
+        ],
+        "current_compatibility_separate": true,
+        "historical_stale_scores_rankable": false,
+        "missing_historical_profile_commit_date": "null_do_not_guess"
       }
     },
     "labels_ru": {
@@ -453,7 +480,24 @@
         "deep_authoritative_completed_count = deep_completed_fit_count + deep_completed_not_fit_count",
         "deep_remaining_until_all_authoritative_count = deep_total_current_coverage_target - deep_authoritative_completed_count",
         "deep_normal_first_pass_complete and deep_all_current_authoritative_complete are distinct metrics and may differ while recovery-owned items remain"
-      ]
+      ],
+      "versioned_history": {
+        "contract": "PROGRESSIVE-DEEP-COMPLETED-HISTORY-V1",
+        "fields": [
+          "deep_completed_history_contract",
+          "deep_current_profile_content_version_id",
+          "deep_current_profile_version_at_utc",
+          "deep_profile_version_unique_game_counts",
+          "deep_current_version_completed_count",
+          "deep_historical_only_not_current_compatible_count",
+          "deep_never_completed_count",
+          "deep_current_version_remaining_count"
+        ],
+        "denominator": "deep_total_current_coverage_target",
+        "migration_overlap": "Do not sum legacy 30 and score-explainability 43; count distinct current game identities once in each profile version.",
+        "invariant": "current_compatible + historical_only + never_completed = current Deep target",
+        "publication_scope": "producer_fields_first_site_UI_separate_next_phase"
+      }
     },
     "translation": {
       "denominator": "untranslated_game_count",
@@ -485,7 +529,10 @@
     "positive_evidence": "legacy migration fit reuses exact accepted prior positive_evidence",
     "observability": "separate finite migration counters are producer-owned",
     "scoring": "existing ranking and risk-code policy only",
-    "profile_provenance_refresh": "PPD-012 may keep a completed immutable revision current across commit-only byte-identical profile provenance refresh after exact GitHub equivalence proof; original revision provenance remains unchanged."
+    "profile_provenance_refresh": "PPD-012 may keep a completed immutable revision current across commit-only byte-identical profile provenance refresh after exact GitHub equivalence proof; original revision provenance remains unchanged.",
+    "completed_history_contract": "PROGRESSIVE-DEEP-COMPLETED-HISTORY-V1",
+    "new_generation_preserves_prior_completed_revisions": true,
+    "last_completed_can_be_outdated_without_becoming_current_authority": true
   },
   "profile_identity_model": {
     "decision": "PPD-012",
@@ -493,7 +540,10 @@
     "execution_provenance": "exact immutable profile source commit/ref/blob/content hash frozen for the prepared invocation",
     "provenance_only_commit_refresh_invalidates_semantics": false,
     "real_profile_content_change_invalidates_semantics": true,
-    "historical_result_reconciliation": "GitHub-owned exact immutable-manifest semantic-equivalence proof; no result rewrite or new semantic attempt"
+    "historical_result_reconciliation": "GitHub-owned exact immutable-manifest semantic-equivalence proof; no result rewrite or new semantic attempt",
+    "profile_content_version_id": "exact_pinned_profile_content_sha256",
+    "commit_only_equal_bytes": "same_content_version_keep_original_provenance",
+    "commit_timestamp": "nullable_until_independently_proven_from_original_Git_commit"
   },
   "ranking_stage_model": {
     "decision": "RANK-013",
