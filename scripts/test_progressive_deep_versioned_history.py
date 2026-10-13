@@ -85,6 +85,32 @@ def main():
         updated, copy.deepcopy(updated), {'profile_pin_sha256': new_pin['pin_sha256']},
         {'outcome': 'analysis_incomplete'}, new_pin,
     ))) == 2
+    # An immutable accepted revision cannot silently change identity/provenance
+    # or be replaced by a second V1 row carrying conflicting evidence.
+    tampered_time = copy.deepcopy(updated)
+    tampered_time['completed_versions'][0]['accepted_at_utc'] = '2026-10-01T00:00:00Z'
+    try:
+        history.completed_versions(tampered_time)
+        raise AssertionError('tampered accepted timestamp was accepted')
+    except ValueError:
+        pass
+    tampered_profile = copy.deepcopy(updated)
+    tampered_profile['completed_versions'][-1]['profile_version']['pin_sha256'] = 'other-pin'
+    try:
+        history.completed_versions(tampered_profile)
+        raise AssertionError('unbound historical profile was accepted')
+    except ValueError:
+        pass
+    duplicated = copy.deepcopy(updated)
+    collision = copy.deepcopy(updated['completed_versions'][0])
+    collision['result']['positive_evidence'] = ['Conflicting replacement evidence']
+    duplicated['completed_versions'].append(collision)
+    try:
+        history.completed_versions(duplicated)
+        raise AssertionError('conflicting duplicate accepted history was silently overwritten')
+    except ValueError:
+        pass
+
     failed_root = dict(updated, authoritative_completed=False, outcome='analysis_incomplete')
     failed_root['completed_versions'] = copy.deepcopy(updated['completed_versions'])
     assert history.latest_completed({'entries': {'game:one': failed_root}}, 'game:one')['revision_id'] == records[-1]['revision_id']
