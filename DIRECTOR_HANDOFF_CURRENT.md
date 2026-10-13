@@ -5,6 +5,12 @@ Source of truth: `main`
 
 This is the compact transfer point for the next Director chat.
 
+## LATEST DIRECTOR CHECK — 2026-10-13: Chat 1 implemented, Chat 2 blocked on GitHub binary upload
+
+- **ЧАТ 1 PR #218 merged `c23d952418edca8adbc8e6db0a69ba89698830b4`**, 2 green CI, only manual-once isolated GH publisher + read-only PR-only tests + report; no durable freeze marker/buffer published yet; no 18-game semantic Research or Assembly run. To publish original GitHub authority, launch `Publish frozen Dossier 18 Research trial (manual, once)` via Actions selecting main and using exact current main SHA plus `PUBLISH_DOSSIER_SHADOW_18_ONCE`, only after verifying expected main SHA and no prior sandbox branch. The separate actual semantic execution and A/B/C reviewer gate stays blocked.
+- **ЧАТ 2 no implementation PR**. Branch `implement/site-gamepad-icon-pack-replacement-01` contains only blocked report `reviews/worker_reports/site-gamepad-icon-pack-replacement-01.md`. Original ZIP verified SHA-256 `c73d3d1a36de580f3dc7318dbc3cd410cdfd0826bd62cb19887bb9d514efe2c4`; supplied binary bytes are correct, but Chat2 cannot upload binary PNG/ICO Git blobs with available cross-tool transport (sandbox ↔ GitHub). Current main site still references old SVG favicon/manifest. Next needs real GitHub binary file upload of eight extracted assets, then newly authorized Chat2 worker continuation, targeted tests/PR. No fake PNG, no site/Scheduled Task/production/Deep/Fast changes.
+- Both physical worker chats should stop after their reports. This is an implementation status update, not authorization for new semantic Research, restart of other jobs, or icon placeholder commit.
+
 ## LATEST DIRECTOR PARALLEL ASSIGNMENT — 2026-10-12: site gamepad icon pack
 
 - User requests **ЧАТ 2** to replace website icons from attached `steam_icon_pack.zip`. Prepare **NEW physical worker Chat 2** with `WORKER_TASK_SITE_GAMEPAD_ICON_PACK_REPLACEMENT_01.md` from main. Actual Director ZIP SHA-256 `c73d3d1a36de580f3dc7318dbc3cd410cdfd0826bd62cb19887bb9d514efe2c4`, 3,281,824 bytes. User **must attach same ZIP to Chat 2** because Director attachments do not automatically transfer. Worker verifies binary inputs and changes only actual favicon/HTML/PWA manifest/Apple/maskable/targeted cache and tests; PR and report, no self-merge.
