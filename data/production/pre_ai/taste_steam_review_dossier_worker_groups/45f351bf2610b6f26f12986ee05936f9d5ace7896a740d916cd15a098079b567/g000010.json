@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "45f351bf2610b6f26f12986ee05936f9d5ace7896a740d916cd15a098079b567",
+  "prepared_required_sha256": "83e865f67fa66cb913f2da2b884ffcb49b597cc41a05e355dc06ed39606c724c",
+  "group_plan_sha256": "c5f6b1e1de1ab49d4aa1114588d65f31acd174efcefa71a5c1d4731df33a166e",
+  "group_count": 71,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 10,
+  "start_index": 27,
+  "end_index_exclusive": 30,
+  "appids": [
+    "274170",
+    "275670",
+    "2763670"
+  ],
+  "items_sha256": "f9fd473d7f07cef6436c92296dab0a8f60f1c7bf335e5433ec7ae8c45e8fc465",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "57572b6e172d67cab29d50fe4b11b2a6693190be1be8835c25f68acf8c2f95fe",
+  "items": [
+    {
+      "key": "App_274170",
+      "appid": "274170",
+      "title": "Hotline Miami 2: Wrong Number",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_274170.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_275670",
+      "appid": "275670",
+      "title": "Space Run",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_275670.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2763670",
+      "appid": "2763670",
+      "title": "Arctic Eggs",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2763670.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "b0291239d48cc7f98af5b4aa40011f7801820ff238129700c8196a3f7a0f3f8e"
+}
