@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "8a2364e4f6d23416a02ff47dc65d794a37b3896c",
+  "run_start_authority_commit": "b617807b2d6809b0fca688b793e36098817f041a",
+  "run_started_at_utc": "2026-10-14T18:34:53+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "6b8496db72174998b724ea1f542568ce18b58c788ef84dd49210c622ae8c07d4",
+  "work_id": "856681b8cc42105964dfa070430eb1bb1f5efe9aa9306ea593c03b146cf34304",
+  "family_id": "game:1038280",
+  "taste_subject_key": "App_1038280",
+  "appid": "1038280",
+  "taste_fingerprint": "abe939e9200c3531c2f601430a974f5ac504284d0919dff023bdb52995622e3e",
+  "candidate_context_sha256": "b70d72e21beb03d539435fcb8d94b5a8f0f214daa65098898a1e7b35486c5521",
+  "dossier_content_sha256": "15b45548624fb00a68693aa7260df1c482c08cf20c4734efacaca1f224727f31",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "a8f6aff4314d8a32c55bd26a7893d036955836f15c2c04319c870bdcd2c8504a",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "confidence": "medium",
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "directionlessness",
+        "text_ru": "Некоторые поздние предметные комбинации воспринимаются как нелогичные, заставляя перебором проверять варианты или открывать подсказки.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Неудобное повторное применение предметов превращает отдельные шаги уборки в механическую рутину.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Короткая история и ограниченный набор миссий дают ясный объём, но попытки закрывать достижения могут продлевать уже решённые действия.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Рисованные сцены и чёрный юмор выделяются, а сквозную историю часть игроков считает слишком тонкой.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  },
+  "fit_level": "moderate",
+  "positive_evidence": [
+    "Каждый самостоятельный эпизод требует убрать тело, убрать следы и осмысленно взаимодействовать с предметами в окружении.",
+    "Непривычная роль ликвидатора улик придаёт отдельным головоломкам выразительную идентичность.",
+    "Компактные уровни с оценками за идеальную уборку дают конкретные законченные задачи."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 60,
+    "development_variety": 61,
+    "structure_pacing_direction": 64,
+    "identity_hooks": 77,
+    "breadth_of_match": 59
+  },
+  "score_findings": [
+    {
+      "finding_id": "crime-scene-logic",
+      "text_ru": "Каждая задача требует осмотреть место происшествия, осмысленно комбинировать предметы и восстановить исходное состояние, чтобы не осталось улик.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Нравится искать локально правильный подход и улучшать точность собственных решений."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 60
+        }
+      ]
+    },
+    {
+      "finding_id": "new-cleanups",
+      "text_ru": "Самостоятельные операции меняют обстановку и способы избавления от улик, хотя общий цикл подбора предметов остаётся похожим.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Смена реальных игровых задач позволяет дольше сохранять интерес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 61
+        }
+      ]
+    },
+    {
+      "finding_id": "mission-goals",
+      "text_ru": "Чёткая цель каждого уровня — восстановить место преступления — помогает понимать направление, однако непредсказуемые сочетания предметов способны остановить прогресс.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/4/pattern",
+          "profile_value_sha256": "b78024665ef842b6b94422838313a1573b0871a6f69180097befb4078ecc5a50",
+          "match_text_ru": "Загадка должна оставаться решаемой и направленной, а не превращаться в потерянность."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 64
+        }
+      ]
+    },
+    {
+      "finding_id": "cleaner-premise",
+      "text_ru": "Необычная роль человека, заметающего следы убийств, и мрачный рисованный комизм создают яркую индивидуальность головоломок.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Сильная узнаваемая идея и визуальная подача ценнее безликого набора уровней."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 77
+        }
+      ]
+    },
+    {
+      "finding_id": "short-planning-puzzles",
+      "text_ru": "Игра соединяет цепочки предметных решений с короткими миссиями, где важны детали окружения и аккуратное завершение, а не повтор силового экшена.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Интерес к понятным задачам можно реализовать и вне экшена, если решения требуют внимания."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 59
+        }
+      ]
+    }
+  ]
+}
