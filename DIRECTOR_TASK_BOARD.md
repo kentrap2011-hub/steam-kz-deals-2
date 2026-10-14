@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## CURRENT DIRECTOR NEXT STEP — 2026-10-14: finish Deep history site PR and preserve Dossier launch gate
+
+- **СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1:** `WORKER_TASK_DEEP_HISTORY_SITE_CARDS_STATS_PR224_CLOSEOUT_01.md`. Its existing PR #224 has 7/8 PR CI success and stale main ancestry; the failed `Validate site task registry and page` originated in invalid Director registry enum `небольшая` on two independent tasks. Director corrected both to `низкая` in main (`3f2cbc7f3c6746c339482cda64eb68a2b7f66f97`), but PR must be safely refreshed and **new** CI/mergeability demonstrated before Director merge. No scheduled tasks, production semantics or source Deep work.
+- **Dossier ЧАТ 2 review:** report-only PR #225 independently accepted/merged at `00084f6727d6c6779ba98072063d3929c8bbe9db`, without any real trial publication or semantics. The exact 18-game nonproduction Research freeze may be performed only as a separately approved single manual GitHub Action after the current main is stable and the original sandbox ref is confirmed absent. The report establishes GO for publication readiness, NO-GO for Research/Assembly semantic execution until A/B reviewers, C adjudicator and separate sandbox approval.
+- Manual one-shot Deep PR #226 already merged; canonical launcher can be used as a **new user-launched semantic invocation**, not in this developer closeout. Deep producer unchanged. Do not mutate Scheduled Tasks.
+- After PR #224 accepts, verify Pages deployment and real user-visible Deep history/stats; then plan evidence-backed missing legacy revisions and 18-game shadow trial independently.
+
 ## DIRECTOR ACCEPTANCE — 2026-10-14: manual one-shot Deep canonical
 
 - Worker task `WORKER_TASK_PROGRESSIVE_DEEP_MANUAL_ONE_SHOT_AUTHORIZATION_01.md`, report `reviews/worker_reports/progressive-deep-manual-one-shot-authorization-01.md`: independently checked only 5 files in PR #226 (two contracts, reusable launcher, ownership validator, report); required PR CI **4/4 success** on final head `b71c008f8a3c74c829607fa00e25b451e74c16d5`.
