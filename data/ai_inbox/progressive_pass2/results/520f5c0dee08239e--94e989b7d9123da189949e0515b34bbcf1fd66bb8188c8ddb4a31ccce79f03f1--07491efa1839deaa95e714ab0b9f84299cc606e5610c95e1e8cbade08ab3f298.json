@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "5fae921b4319131b7bd5cefb0e4cfdcc32a1bccc",
+  "run_start_authority_commit": "b5cf1269517b9121bd1c7854b430dddb2fe0636a",
+  "run_started_at_utc": "2026-10-14T17:52:02+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "6b8496db72174998b724ea1f542568ce18b58c788ef84dd49210c622ae8c07d4",
+  "work_id": "94e989b7d9123da189949e0515b34bbcf1fd66bb8188c8ddb4a31ccce79f03f1",
+  "family_id": "game:209370",
+  "taste_subject_key": "App_209370",
+  "appid": "209370",
+  "taste_fingerprint": "3f770d6330be7b42b38f74607a55e7c80fa6fc45777f7daa1cf25b872f333bd3",
+  "candidate_context_sha256": "7a3048002b906b8c4b31f22723e2255a5703e0ad8a912ad26c6658d4a86054fd",
+  "dossier_content_sha256": "80bf9bf6a3c90797d5377980f7f83c26b53c3f40d00b342c0a26cb25e99e7e7d",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "07491efa1839deaa95e714ab0b9f84299cc606e5610c95e1e8cbade08ab3f298",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Основа игры — чтение больших архивов переписки и диалоги с ИИ; интерактивность терминала и логические операции ограничены, а привычного активного игрового цикла почти нет.",
+    "Сильная загадка и эмоциональные персонажи потенциально интересны, но почти полностью текстовый формат, медленный старт и слабое механическое развитие не дают достаточно оснований для устойчивого игрового вовлечения именно при этом профиле.",
+    "Варианты концовок требуют повторного чтения документов, при этом новые игровые действия почти не появляются; риск повторяемости сочетается с невысокой активностью, а не компенсируется выразительным управлением."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      },
+      {
+        "kind": "conflict",
+        "index": 1
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Сюжетная археология по записям может дать сильную историю и загадку, но узкие терминальные взаимодействия оставляют слишком мало возможностей практически проверять собственные решения.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          },
+          {
+            "kind": "conflict",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Повторное чтение логов ради других концовок почти не меняет игровой процесс, а длительное текстовое погружение и пропускаемые реплики повышают риск утомления.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          },
+          {
+            "kind": "conflict",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Дополнительные семейные линии и второстепенные персонажи раскрыты неравномерно по части отзывов; это возможное, но не универсальное ограничение силы истории.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
