@@ -1,5 +1,13 @@
 # CURRENT TASK
 
+## COMPLETE — Deep history on site cards and Statistics (ЧАТ 1)
+Status: `implementation_proposed_PR224_unmerged_independent_CI_gate`.
+- Task: `WORKER_TASK_DEEP_HISTORY_SITE_CARDS_STATS_01.md`; branch `implement/deep-history-site-cards-stats-01`; PR #224 **open, not merged**.
+- GitHub producer projects latest accepted exact-identity Deep history in cards, independent of stale Deep current-score authority. On-page read-only history labels current/outdated/never, shows preserved verdict/evidence, Deep accepted UTC date, verified current/previous profile revision date or explicit unknown.
+- Statistics from the same visual snapshot displays current-compatible, historical-only and never completed unique current-scope games plus per-profile-version unique counts; no overlap of legacy migrations, no stale ranking promotion.
+- Bounded regression and existing GitHub CI on head `1321475a68054446d985d1d46620f733ac21dad6`: PASS2 `38509873194`, site publication `38509873197`, Deep mirror `38509873912`, browser feed `38509873173`, Deep count queue `38509873205`, package purchase `38509873165` all successful. Site task registry `38509873174` red for unrelated existing invalid state/effort/urgency `dossier-shadow-18-first-real-launch-gate-01`; does not modify site-task registry here.
+- Report: `reviews/worker_reports/deep-history-site-cards-stats-01.md`. No canonical Deep/Dossier/Fast state writes, production payload rewrite, schedule, favicon/PWA, migration or semantic execution; Director review/decides PR #224 after independent site-task issue is resolved. No site deployment is claimed.
+
 ## COMPLETE — Deep versioned history first core + PR #222 acceptance closeout (ЧАТ 1)
 Status: `independently_accepted_producer_only_ready_for_director_merge_review`.
 - Tasks: `WORKER_TASK_DEEP_VERSIONED_HISTORY_FIRST_CORE_01.md`, `WORKER_TASK_DEEP_VERSIONED_HISTORY_PR222_CLOSEOUT_01.md`; existing PR #222, branch `implement/deep-versioned-history-first-core-01`, **not merged**.

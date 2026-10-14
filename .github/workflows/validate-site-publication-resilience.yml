@@ -24,6 +24,9 @@ on:
       - "web/app.js"
       - "web/progressive-personalization-ui.js"
       - "web/progressive-personalization-ui.test.js"
+      - "web/deep-history-ui.js"
+      - "web/deep-history-ui.test.js"
+      - "web/deep-history.css"
       - ".github/workflows/build-site-current-status.yml"
       - ".github/workflows/build-daily-visual-payload.yml"
       - ".github/workflows/deploy-visual.yml"
@@ -39,6 +42,9 @@ on:
       - "web/app.js"
       - "web/progressive-personalization-ui.js"
       - "web/progressive-personalization-ui.test.js"
+      - "web/deep-history-ui.js"
+      - "web/deep-history-ui.test.js"
+      - "web/deep-history.css"
       - ".github/workflows/validate-site-publication-resilience.yml"
 
 permissions:
@@ -70,6 +76,8 @@ jobs:
           python scripts/test_giveaway_visual_handoff.py
           python scripts/test_progressive_personalization.py
           node web/progressive-personalization-ui.test.js
+          node web/deep-history-ui.test.js
+          python scripts/test_progressive_profile_content_dates.py
 
       - name: Validate current canonical status projection
         run: |

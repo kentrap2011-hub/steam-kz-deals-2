@@ -8,6 +8,7 @@ import priority_ranking
 import progressive_pass1
 import progressive_pass2
 import progressive_deep_history
+import progressive_profile_content_dates
 
 ROOT = Path('.')
 CONTRACT = ROOT / 'config/progressive_personalization_contract.json'
@@ -207,6 +208,10 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
         current_dossier_binding = {}
     dossier_work_doc = progressive_pass2.load_json(progressive_pass2.DOSSIER_WORK)
     deep_work_doc = progressive_pass2.load_json(progressive_pass2.WORK)
+    current_pin_identity = ((generation.get('profile_pin') or {}).get('profile_identity') or {})
+    current_profile_version_date = progressive_profile_content_dates.profile_version_date(
+        current_pin_identity
+    )
 
     index = {}
     for row in context_rows:
@@ -261,12 +266,15 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
             'current_profile_content_version_id': current_profile_content,
             'current_profile_source_commit_sha': profile_identity.get('resolved_commit_sha'),
             # The pinned profile contract contains no Git commit timestamp.
-            'current_profile_version_at_utc': None,
+            'current_profile_version_at_utc': current_profile_version_date,
             'last_completed_revision_id': (historical or {}).get('revision_id'),
             'last_completed_at_utc': (historical or {}).get('accepted_at_utc'),
             'last_completed_profile_content_version_id': old_profile.get('content_version_id'),
             'last_completed_profile_source_commit_sha': old_profile.get('source_commit_sha'),
-            'last_completed_profile_version_at_utc': old_profile.get('source_commit_at_utc'),
+            'last_completed_profile_version_at_utc': (
+                progressive_profile_content_dates.historical_profile_date(old_profile)
+                if historical else None
+            ),
             'last_completed_outcome': old_result.get('outcome'),
             'last_completed_appid': old_result.get('appid'),
             'last_completed_taste_subject_key': old_result.get('taste_subject_key'),
@@ -367,6 +375,7 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
         state['deep_authoritative_completed'] = deep_authoritative is not None
         state['deep_first_pass_attempted'] = deep_entry is not None
         state['deep_history'] = history_projection
+        state['_current_profile_version_at_utc'] = current_profile_version_date
         state['_deep_completed_profile_versions'] = sorted({
             (v.get('profile_version') or {}).get('content_version_id')
             or ('legacy-unverified:' + str((v.get('profile_version') or {}).get('pin_sha256') or 'unknown'))
@@ -855,6 +864,7 @@ def build_processing_status(state_index, visible_items, business_excluded_family
     historical_only = never_completed = 0
     per_profile_games = {}
     current_profile_version = None
+    current_profile_version_date = None
 
     for family_id, state in state_index.items():
         if family_id in business_excluded:
@@ -903,6 +913,11 @@ def build_processing_status(state_index, visible_items, business_excluded_family
                 if current_profile_version is not None and current_profile_version != version_name:
                     raise ValueError('mixed current profile content versions in Deep scope')
                 current_profile_version = version_name
+            dated = history_projection.get('current_profile_version_at_utc')
+            if dated is not None:
+                if current_profile_version_date is not None and current_profile_version_date != dated:
+                    raise ValueError('mixed current profile content-change dates')
+                current_profile_version_date = dated
             for profile_version in set(state.get('_deep_completed_profile_versions') or []):
                 per_profile_games[profile_version] = per_profile_games.get(profile_version, 0) + 1
             if history_projection.get('last_completed_revision_id') is None:
@@ -952,6 +967,8 @@ def build_processing_status(state_index, visible_items, business_excluded_family
 
     if deep_total != deep_authoritative + historical_only + never_completed:
         raise ValueError('Deep history/current partition mismatch')
+    if sum(per_profile_games.values()) < 0:
+        raise ValueError('invalid per-profile Deep counts')
     deep_normal_remaining = deep_total - deep_first_pass_attempted
     deep_authoritative_remaining = deep_total - deep_authoritative
     if deep_normal_remaining < 0 or deep_authoritative_remaining < 0:
@@ -1032,8 +1049,9 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         'deep_legacy_full_reanalysis': legacy_reanalysis,
         'deep_completed_history_contract': progressive_deep_history.HISTORY_CONTRACT,
         'deep_current_profile_content_version_id': current_profile_version,
-        'deep_current_profile_version_at_utc': None,
+        'deep_current_profile_version_at_utc': current_profile_version_date,
         'deep_profile_version_unique_game_counts': dict(sorted(per_profile_games.items())),
+        'deep_current_version_target': deep_total,
         'deep_current_version_completed_count': deep_authoritative,
         'deep_historical_only_not_current_compatible_count': historical_only,
         'deep_never_completed_count': never_completed,
@@ -1153,6 +1171,9 @@ def validate_processing_status(status):
         'dossier_pending_count', 'dossier_failed_or_recovery_count',
         'dossier_normal_first_pass_complete', 'dossier_all_accepted_or_recovered_complete',
         'deep_total_current_coverage_target', 'deep_first_pass_attempted_count',
+        'deep_current_version_target', 'deep_current_version_completed_count',
+        'deep_historical_only_not_current_compatible_count',
+        'deep_never_completed_count', 'deep_current_version_remaining_count',
         'deep_authoritative_completed_count', 'deep_completed_fit_count',
         'deep_completed_not_fit_count', 'deep_incomplete_or_recovery_count',
         'deep_waiting_for_dossier_count', 'deep_ready_or_pending_count',
@@ -1225,6 +1246,22 @@ def validate_processing_status(status):
             raise ValueError('Dossier scope invariant failed')
 
     deep_total = int(status['deep_total_current_coverage_target'])
+    if deep_total != (
+        int(status['deep_current_version_completed_count'])
+        + int(status['deep_historical_only_not_current_compatible_count'])
+        + int(status['deep_never_completed_count'])
+    ) or deep_total != int(status['deep_current_version_target']):
+        raise ValueError('Deep history partition invariant failed')
+    if int(status['deep_current_version_remaining_count']) != (
+        deep_total - int(status['deep_current_version_completed_count'])
+    ):
+        raise ValueError('Deep current version remaining invariant failed')
+    date = status.get('deep_current_profile_version_at_utc')
+    if date is not None and _normalize_utc_timestamp(date) is None:
+        raise ValueError('Deep content version date must be Git-attested UTC or null')
+    for name, count in (status.get('deep_profile_version_unique_game_counts') or {}).items():
+        if not isinstance(name, str) or int(count) < 0 or int(count) > deep_total:
+            raise ValueError('Deep per-profile unique games invariant failed')
     deep_first = int(status['deep_first_pass_attempted_count'])
     deep_authoritative = int(status['deep_authoritative_completed_count'])
     if deep_first + int(status['deep_normal_first_pass_remaining_count']) != deep_total:

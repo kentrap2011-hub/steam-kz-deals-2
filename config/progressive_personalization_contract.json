@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
-  "version": 11,
+  "version": 12,
   "status": "canonical",
   "phase": "phase_b",
   "purpose": "Publish the current deterministic-eligible Steam KZ catalogue while three independent GitHub-owned stages progress: provisional Fast analysis (PASS 1), neutral Dossier preparation, and eventual authoritative Deep analysis (technical PASS 2) for every current eligible game.",
@@ -491,12 +491,36 @@
           "deep_current_version_completed_count",
           "deep_historical_only_not_current_compatible_count",
           "deep_never_completed_count",
-          "deep_current_version_remaining_count"
+          "deep_current_version_remaining_count",
+          "deep_current_version_target"
         ],
         "denominator": "deep_total_current_coverage_target",
         "migration_overlap": "Do not sum legacy 30 and score-explainability 43; count distinct current game identities once in each profile version.",
         "invariant": "current_compatible + historical_only + never_completed = current Deep target",
-        "publication_scope": "producer_fields_first_site_UI_separate_next_phase"
+        "publication_scope": "github_producer_projection_and_read_only_site_cards_statistics",
+        "profile_content_revision_date": {
+          "owner": "github_visual_producer",
+          "source_repo": "kentrap2011-hub/stopgame-ratings-data",
+          "source_file": "gaming_taste_live.json",
+          "rule": "Date is the most recent actual Git path-content change in exact pinned commit ancestry, verified against both raw SHA256 and Git blob SHA and a different first-parent blob.",
+          "commit_only_equal_bytes": "must_not_reset_date",
+          "unverifiable": "explicit_null_and_user_visible_unknown",
+          "no_inference_from": "analysis_time_build_time_deployment_time_work_at_or_latest_unrelated_commit",
+          "historic_legacy_unpinned": "unknown_until_independently_proven"
+        },
+        "site_rendering": {
+          "producer_history_field": "game.deep_history",
+          "statuses": [
+            "current",
+            "outdated",
+            "never_completed"
+          ],
+          "old_success_after_new_incomplete": "continue_showing_last_accepted_success",
+          "historical_scoring_authority": false,
+          "browser": "read_only",
+          "partition": "current_compatible_completed+outdated_history_only+never_completed=current_target",
+          "per_version_counts": "unique_identity_once_per_profile_version_legacy_overlap_dedup"
+        }
       }
     },
     "translation": {
