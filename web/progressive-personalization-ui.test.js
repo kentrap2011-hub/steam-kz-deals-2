@@ -259,7 +259,9 @@ assert(app.includes("progressiveUi().cursorForVisibleIds(oldIds,oldCursor,ids)")
 assert(app.includes("if(Number.isNaN(d.getTime()))return 'Срок скидки неизвестен';"));
 assert(app.indexOf("items=progressiveUi().filterActiveSaleItems(payloadItems(),nowMs);")<app.indexOf("const activeIds=new Set(items.map(x=>x.id));"),'expiry filtering must happen before queue/manual-end reconciliation');
 assert(app.includes("const STATUS_URL='data/status.json';"));
-assert(app.includes("(siteStatus&&siteStatus.processing_status)||data.processing_status||{}"));
+assert(app.includes("(siteStatus&&siteStatus.processing_status)||visualStatus"));
+assert(app.includes("visualStatus.deep_completed_history_contract==='PROGRESSIVE-DEEP-COMPLETED-HISTORY-V1'"));
+assert(app.includes("const historyHtml=!twoStage&&window.DeepHistoryUI?window.DeepHistoryUI.detailHtml(g):''"));
 assert(app.includes("fetch(STATUS_URL,{cache:'no-store'})"));
 assert(app.includes("progressiveUi().statisticsSections"));
 assert(app.includes("progressiveUi().formatLastWriteAt(section.lastWriteAtUtc)"));
