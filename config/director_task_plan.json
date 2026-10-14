@@ -1338,9 +1338,50 @@
         "dossier-shadow-18-first-real-launch-gate-01",
         "dossier-shadow-quality-review-gate-01"
       ],
-      "blocker": "Поручение ЧАТУ 2 не отправлялось. Трёхролевой A/B/C handoff приостановлен до переоценки необходимости для предварительного изолированного пилота. Не запускать как актуальное задание.",
+      "blocker": "Отложено как избыточное до первого изолированного испытания на 18 играх. Формальная A/B/C оценка сохраняется перед production-принятием; старое поручение НЕ отправлять.",
       "updated_on": "2026-10-14",
-      "updated_at_utc": "2026-10-14T18:15:44.834Z",
+      "updated_at_utc": "2026-10-14T18:46:02.092Z",
+      "recent_completion": false
+    },
+    {
+      "id": "dossier-shadow-18-real-research-feasibility-gate-01",
+      "title": "Dossier: разрешить настоящее изолированное Research на 18 играх",
+      "goal": "Устранить только обязательный A/B/C до начала предварительного испытания, создать исполнимый GitHub-подтверждаемый sandbox-only semantic gate, сохранив настоящий freeze и запрет production.",
+      "status": "active",
+      "effort": "высокая",
+      "effort_reason": "Требуется согласовать frozen marker parent, отдельную семантическую авторизацию и канонический Research one-shot без ослабления GitHub publisher.",
+      "urgency": "высокая",
+      "urgency_reason": "Прямой блокер первого реального испытания, несмотря на готовый publisher.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_REAL_RESEARCH_FEASIBILITY_GATE_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-shadow-18-real-marker-publish-01"
+      ],
+      "blocker": "Пока нельзя проводить Research на реальных играх: immutable GitHub marker и отдельно подтверждённый sandbox-only semantic gate отсутствуют.",
+      "updated_on": "2026-10-14",
+      "updated_at_utc": "2026-10-14T18:46:02.092Z",
+      "recent_completion": false
+    },
+    {
+      "id": "dossier-shadow-18-real-assembly-sandbox-execution-01",
+      "title": "Dossier: создать исполнимый изолированный Assembly после Research",
+      "goal": "Выполнить минимальные реальные GitHub-only pinned stage-B marker/plan/transport и one-shot Assembly для тех же 18 игр, без нового продакшен-кэша, очереди и трёхролевой рецензии до feasibility.",
+      "status": "active",
+      "effort": "высокая",
+      "effort_reason": "Текущий Assembly валидатор только offline; нужна настоящая неproduction marker/plan authority и строгий create-only транспорт после Research.",
+      "urgency": "высокая",
+      "urgency_reason": "Второй прямой блокер получения реальных Research→Assembly результатов.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_REAL_ASSEMBLY_SANDBOX_EXECUTION_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-shadow-18-assembly-compare-sandbox-01",
+        "dossier-shadow-18-real-marker-publish-01"
+      ],
+      "blocker": "Для живого этапа Assembly нужен настоящий GitHub Research marker/buffer и исходные подтверждённые Research transport commits; текущая задача реализации не запускает семантику.",
+      "updated_on": "2026-10-14",
+      "updated_at_utc": "2026-10-14T18:46:02.092Z",
       "recent_completion": false
     }
   ]
