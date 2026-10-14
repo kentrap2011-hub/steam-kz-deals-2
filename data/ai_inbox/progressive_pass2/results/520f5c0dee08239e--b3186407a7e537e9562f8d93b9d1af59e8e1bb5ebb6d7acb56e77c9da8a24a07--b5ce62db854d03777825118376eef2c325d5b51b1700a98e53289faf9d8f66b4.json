@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "8a2364e4f6d23416a02ff47dc65d794a37b3896c",
+  "run_start_authority_commit": "b617807b2d6809b0fca688b793e36098817f041a",
+  "run_started_at_utc": "2026-10-14T18:34:53+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "6b8496db72174998b724ea1f542568ce18b58c788ef84dd49210c622ae8c07d4",
+  "work_id": "b3186407a7e537e9562f8d93b9d1af59e8e1bb5ebb6d7acb56e77c9da8a24a07",
+  "family_id": "game:1286580",
+  "taste_subject_key": "App_1286580",
+  "appid": "1286580",
+  "taste_fingerprint": "3af6d078020bb86ac274b88dfc40e24f268841d4131ff9ee48683dda49afc7cd",
+  "candidate_context_sha256": "66c5502a578b21c074ca05c12ddceafc17d38788d1d73700c39168178c8778a1",
+  "dossier_content_sha256": "845ba9e3fa2612fe0c715b500cec624f10b4d1f24ab14d86fea6ab18ca88bf12",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "b5ce62db854d03777825118376eef2c325d5b51b1700a98e53289faf9d8f66b4",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Вдвоём участники распределяют пушки, ремонт, защиту и снабжение на движущемся корабле; это создаёт содержательную совместную активность.",
+    "Быстрое переключение ролей между обороной и орудиями даёт постоянную обратную связь и тактическую координацию."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 66,
+    "development_variety": 36,
+    "structure_pacing_direction": 73,
+    "identity_hooks": 64,
+    "breadth_of_match": 83
+  },
+  "score_findings": [
+    {
+      "finding_id": "ship-coordination",
+      "text_ru": "Смена между стрельбой, починкой и защитой корабля требует согласованных действий двух участников и позволяет оттачивать быструю командную реакцию.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Освоение активных механик и тактики ценно сильнее механической сложности самой по себе."
+        },
+        {
+          "json_pointer": "/taste_profile/9/pattern",
+          "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+          "match_text_ru": "Совместная координация, распределение ролей и тактика — подтверждённый сильный плюс."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 66
+        }
+      ]
+    },
+    {
+      "finding_id": "late-run-repetition",
+      "text_ru": "Повторяющиеся боссы и знакомый рисунок заходов ограничивают обновление опыта после первых совместных плаваний.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Постоянное обновление игровых ситуаций важно для удержания интереса."
+        },
+        {
+          "json_pointer": "/taste_profile/8/pattern",
+          "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+          "match_text_ru": "Повторяемость терпима при сильном основном цикле, но без развития становится риском."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "lowers",
+          "normalized_value": 36
+        }
+      ]
+    },
+    {
+      "finding_id": "roles-and-pacing",
+      "text_ru": "Распределение обязанностей по пушкам, ремонту и ресурсам постоянно задаёт небольшие ясные задачи вместо длительных переходов между содержательными эпизодами.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9/pattern",
+          "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+          "match_text_ru": "Совместная координация, распределение ролей и тактика — подтверждённый сильный плюс."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 73
+        }
+      ]
+    },
+    {
+      "finding_id": "ship-identity",
+      "text_ru": "Игровая особенность не в обычной стрельбе, а в роли общего боевого судна, где важна одновременная работа у орудий и бортовой обороны.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Узнаваемый игровой образ и отличающаяся механика добавляют интерес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 64
+        }
+      ]
+    },
+    {
+      "finding_id": "shared-tactics",
+      "text_ru": "Совместное принятие решений и оперативное распределение ролей составляют саму основу Ship of Fools, а не являются поверхностным дополнительным режимом.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9/pattern",
+          "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+          "match_text_ru": "Совместная координация, распределение ролей и тактика — подтверждённый сильный плюс."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 83
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "По мере повторения забегов недостаток новых боссов и ситуаций может быстро уменьшить интерес, особенно после освоения основной схемы обороны корабля.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Высокие уровни маяка и одиночный режим могут давать резко возросшее давление, хотя раннее совместное развитие оценивают мягче.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Для локального кооператива на ПК есть сообщения о нераспознавании второго контроллера даже в 2026 году; проблема не доказана для любого оборудования.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      }
+    ]
+  }
+}
