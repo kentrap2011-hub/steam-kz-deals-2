@@ -1,0 +1,292 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "8a2364e4f6d23416a02ff47dc65d794a37b3896c",
+  "run_start_authority_commit": "b617807b2d6809b0fca688b793e36098817f041a",
+  "run_started_at_utc": "2026-10-14T18:34:53+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "6b8496db72174998b724ea1f542568ce18b58c788ef84dd49210c622ae8c07d4",
+  "work_id": "93fc8f56353af27fd33cb3588ea9aa9cad3a21a091e7ab40c9f08e3d4703fd23",
+  "family_id": "game:105600",
+  "taste_subject_key": "App_105600",
+  "appid": "105600",
+  "taste_fingerprint": "1f22912aa4b572f740839d8d54345b3698ce99deda34d62ec3fee2aa17cee3d3",
+  "candidate_context_sha256": "78923e8344760f2a446807662bcf0da42d7d53e74e321e04c0486b90413297fe",
+  "dossier_content_sha256": "e5e1794f90c3b33b4e2295b2d75af6d0ebf628d57bf52619556857e558259eba",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "4913fa85f7abce0e4d98d48e75a96d27f20d2804890b7ed62e96ebae2e72dc83",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "confidence": "high",
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Отдельные боссы и сложности требуют хорошей подготовки, но высокая сложность не считается недостатком без оценки честности освоения.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Многократное выбивание редких предметов может перерасти в однообразную добычу, не добавляющую новых игровых ситуаций.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "directionlessness",
+        "text_ru": "Неочевидные рецепты, правила домов и порядок продвижения к боссам могут заставлять новичка постоянно обращаться к справочникам.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Один опытный игрок считает часть позднего пути после Плантеры слишком сжатой последовательностью боссов, но это не общий консенсус.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  },
+  "fit_level": "strong",
+  "positive_evidence": [
+    "Развитие героя последовательно открывает новые биомы, вооружение, экипировку и всё более сложных боссов, поддерживая долгосрочную эволюцию опыта.",
+    "Большое число разных боёв и экспериментальных билдов даёт пространство для освоения собственных способов прохождения.",
+    "Совместное исследование, подготовка к боссам и строительство обеспечивают содержательный игровой опыт с близкими."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 90,
+    "development_variety": 92,
+    "structure_pacing_direction": 65,
+    "identity_hooks": 79,
+    "breadth_of_match": 88
+  },
+  "score_findings": [
+    {
+      "finding_id": "boss-skill",
+      "text_ru": "Последовательность боссов требует готовить экипировку, разбирать атаки и находить подход к всё новым условиям, что даёт измеримый рост мастерства.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Особенно интересна сложность, которая раскрывается через освоение приёмов и правильной тактики."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 90
+        }
+      ]
+    },
+    {
+      "finding_id": "biomes-and-hardmode",
+      "text_ru": "От стартовой добычи руды приключение развивается к новым биомам, серьёзным боссам и Hardmode, регулярно меняя возможности и цели.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Необходима долговременная эволюция опыта, а не одна сильная механика на старте."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 92
+        }
+      ]
+    },
+    {
+      "finding_id": "crafting-discovery-risk",
+      "text_ru": "Мир даёт разные пути между строительством и боссами, но новичку не всегда понятны рецепты, требования к домам и порядок прогрессии.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/4/pattern",
+          "profile_value_sha256": "b78024665ef842b6b94422838313a1573b0871a6f69180097befb4078ecc5a50",
+          "match_text_ru": "Исследование нравится, пока неопределённость не превращается в непонимание следующей цели."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 65
+        }
+      ]
+    },
+    {
+      "finding_id": "world-identity",
+      "text_ru": "Множество необычных биомов, монстров, декоративных блоков и тематическая музыка создают своеобразный двухмерный мир для исследования и творчества.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        },
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Узнаваемая эстетика и особый мир заметно усиливают привязанность к игре."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 79
+        }
+      ]
+    },
+    {
+      "finding_id": "cooperative-boss-progression",
+      "text_ru": "Напарники могут вместе исследовать подземелья, добывать материалы, готовиться к боссам и продолжать бой, пока другой возвращается после поражения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9/pattern",
+          "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+          "match_text_ru": "Совместное обсуждение тактики и помощь друг другу составляют сильный положительный опыт."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 88
+        }
+      ]
+    },
+    {
+      "finding_id": "rare-farm-caveat",
+      "text_ru": "Долгая добыча редких предметов и сжатый поздний ряд боссов могут сделать отдельные этапы монотонными, даже при большом выборе классов и занятий.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8/pattern",
+          "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+          "match_text_ru": "Повторение оправданно при значимом развитии, иначе оно способно утомлять."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 92
+        }
+      ]
+    }
+  ]
+}
