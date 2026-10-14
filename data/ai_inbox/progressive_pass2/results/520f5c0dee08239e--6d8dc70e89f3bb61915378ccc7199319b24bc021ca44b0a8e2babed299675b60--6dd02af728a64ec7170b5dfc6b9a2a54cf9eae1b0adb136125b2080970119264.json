@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "8a2364e4f6d23416a02ff47dc65d794a37b3896c",
+  "run_start_authority_commit": "b617807b2d6809b0fca688b793e36098817f041a",
+  "run_started_at_utc": "2026-10-14T18:34:53+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "6b8496db72174998b724ea1f542568ce18b58c788ef84dd49210c622ae8c07d4",
+  "work_id": "6d8dc70e89f3bb61915378ccc7199319b24bc021ca44b0a8e2babed299675b60",
+  "family_id": "game:1335790",
+  "taste_subject_key": "App_1335790",
+  "appid": "1335790",
+  "taste_fingerprint": "59a8820680d44dbb078349fbd07908ecaff7a1d7613c587b7eec9f7149fde0c3",
+  "candidate_context_sha256": "50b9e099d7c22c05cffee1dfd07739ee30119765c37b6055036ebb7a200d1730",
+  "dossier_content_sha256": "67dd517891190347bcbf68e7dfa62ef075a913606e0afdd125eb13addc9e70c9",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "6dd02af728a64ec7170b5dfc6b9a2a54cf9eae1b0adb136125b2080970119264",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "confidence": "medium",
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Без партнёра игру нельзя рассматривать как полноценное одиночное приключение; качество сильно зависит от готовности пары общаться.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "После раскрытия решений повторное прохождение с обменом ролями даёт меньше неожиданности.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "При слабой коммуникации описание форм, направлений и кодов может превращаться из весёлой задачи в раздражающий барьер.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Русскоязычные отзывы указывают на заметные ошибки и неловкие переводы интерфейса и подсказок.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть сообщения 2026 года о рассинхронизации и зависании пятой миссии у отдельных пар, вплоть до блокировки продвижения.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  },
+  "fit_level": "strong",
+  "positive_evidence": [
+    "Агент и Хакер видят разные данные и должны содержательно обсуждать их друг с другом, а не просто играть рядом.",
+    "Короткие миссии меняют задачи, интерфейсы и способы командного решения головоломок.",
+    "Стилизованная шпионская подача создаёт особую атмосферу для совместной игры."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 75,
+    "development_variety": 73,
+    "structure_pacing_direction": 86,
+    "identity_hooks": 84,
+    "breadth_of_match": 91
+  },
+  "score_findings": [
+    {
+      "finding_id": "information-coordination",
+      "text_ru": "В роли Агента и Хакера каждый видит лишь часть данных, поэтому успех зависит от точных объяснений и проверки совместных догадок.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9/pattern",
+          "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+          "match_text_ru": "Совместное принятие решений и распределение ролей имеют самостоятельную большую ценность."
+        },
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Отточенная коммуникация и совместное решение задач дают ощущение роста навыка."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 75
+        }
+      ]
+    },
+    {
+      "finding_id": "asymmetric-missions",
+      "text_ru": "Миссии чередуют разные асимметричные интерфейсы, направления и головоломки; небольшая кампания успевает менять типы задач.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Игра должна регулярно давать новые ситуации вместо повторения раскрытой формулы."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 73
+        }
+      ]
+    },
+    {
+      "finding_id": "compact-stages",
+      "text_ru": "Короткая кампания позволяет проходить отдельные задания без многонедельного возвращения к знакомым правилам, а смена ролей добавляет другой взгляд на решённую задачу.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Регулярная смена заданий и содержания удерживает желание продолжать."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 86
+        }
+      ]
+    },
+    {
+      "finding_id": "spy-mission-presentation",
+      "text_ru": "Ясное разделение на работу полевого агента и удалённого взломщика внутри стилизованной шпионской истории создаёт собственную игровую идентичность.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Необычная подача и узнаваемый игровой крючок высоко ценятся."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 84
+        }
+      ]
+    },
+    {
+      "finding_id": "real-teamwork",
+      "text_ru": "Головоломки требуют обмена неполными сведениями между двумя людьми; это именно содержательная совместная деятельность, которую нельзя заменить простым наличием кооператива.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9/pattern",
+          "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+          "match_text_ru": "Именно общие решения и взаимопомощь составляют ценность совместных игр."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 91
+        }
+      ]
+    }
+  ]
+}
