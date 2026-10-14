@@ -271,7 +271,8 @@
       "scheduled_chatgpt_role": "bounded_deep_semantic_data_plane_only"
     },
     "profile_handoff_rule": "Deep creates the V2 marker before choosing its authoritative frozen view. The marker commit's actual Git parent is the GitHub-selected authority; Deep then freezes the exact PASS 2 contract/work Git blobs and profile/work/Dossier/recovery inputs from that parent. Repository changes after that boundary apply only to the next invocation, while changes that land before the marker are naturally included in the parent. ChatGPT cannot nominate a historical V2 authority.",
-    "invalid_transport_rule": "Invalid exact authorized Deep transport consumes zero semantic attempts; GitHub persists the rejection receipt then removes the bad active inbox candidate in the same canonical writer transaction. A later retry exists only if a later GitHub run-start view authorizes it."
+    "invalid_transport_rule": "Invalid exact authorized Deep transport consumes zero semantic attempts; GitHub persists the rejection receipt then removes the bad active inbox candidate in the same canonical writer transaction. A later retry exists only if a later GitHub run-start view authorizes it.",
+    "explicit_manual_one_shot_semantic_data_plane": "config/execution_ownership_contract.json#explicit_manual_semantic_worker_chats.progressive_deep_one_shot"
   },
   "explicit_manual_semantic_worker_chats": {
     "owner": "GitHub control plane with explicit external user launch",
@@ -308,6 +309,45 @@
         "continuing from a stale queue after an accepted checkpoint without rereading current main",
         "creating, editing, enabling, disabling, pausing, resuming or emulating any Scheduled Task",
         "creating a recurring scheduler, second queue, retry loop or backlog manager"
+      ]
+    },
+    "progressive_deep_one_shot": {
+      "allowed": true,
+      "authorization_source": "WORKER_TASK_PROGRESSIVE_DEEP_MANUAL_ONE_SHOT_AUTHORIZATION_01.md",
+      "canonical_launcher_prompt": "config/progressive_pass2_manual_one_shot_prompt.md",
+      "canonical_worker_prompt": "config/progressive_pass2_worker_prompt.md",
+      "canonical_contract": "config/progressive_pass2_contract.json",
+      "requires_fresh_explicit_user_launch_every_run": true,
+      "recurring_schedule_allowed": false,
+      "may_create_or_modify_scheduled_task": false,
+      "role": "isolated_user_launched_progressive_deep_semantic_data_plane_only",
+      "activation_requires": [
+        "config/progressive_pass2_contract.json#implemented == true",
+        "config/progressive_pass2_contract.json#active == true",
+        "one explicitly user-launched invocation following the full canonical worker prompt"
+      ],
+      "github_owns": [
+        "exact scope, queue and item ordering from data/production/pre_ai/progressive_pass2_work.json",
+        "V2 nonce-only marker and actual Git-parent frozen run-start authority confirmation",
+        "immutable pinned profile, Dossier, migration, recovery and score-evidence bindings",
+        "result and terminal receipt path authorization, validation and canonical acceptance",
+        "persistence, semantic attempt accounting, recovery authorization, completeness and downstream publication"
+      ],
+      "worker_may": [
+        "create one nonce-only V2 run-start marker after advisory active/nonempty preflight",
+        "freeze exact contract/work/profile/Dossier/recovery evidence at the actual marker parent and immutable migration authority when applicable",
+        "compute provisional semantics only under that frozen view and publish nothing before GitHub-confirmed receipt",
+        "submit exact create-only Deep results or authorized terminal execution receipts for frozen ordered work while budget permits",
+        "report submitted versus canonically accepted without inferring acceptance"
+      ],
+      "forbidden": [
+        "turn an ordinary developer/operator chat into a general Deep backlog executor",
+        "choose or rebuild scope/order, mutable bindings, work identity, recovery permission or retry",
+        "reread mutable main between games after marker-parent freeze to rebind work or Dossier",
+        "publish a result or terminal execution receipt before exact confirmed GitHub run-start receipt",
+        "write directly to canonical Deep state or bypass canonical ingest",
+        "create, edit, enable, disable, reschedule or emulate Scheduled Tasks or automations",
+        "create a recurring scheduler, quota, second queue, retry daemon or backlog manager"
       ]
     }
   },
