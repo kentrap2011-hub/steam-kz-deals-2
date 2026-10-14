@@ -36,7 +36,7 @@ def _get(url):
 
 
 def _blob_sha(data):
-    return hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\\0' + data).hexdigest()
+    return hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\x00' + data).hexdigest()
 
 
 def _source(commit):
