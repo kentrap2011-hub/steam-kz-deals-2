@@ -1,0 +1,331 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "a41cf369d8fc180681c7891c2f477bcc41ec5dac",
+  "run_start_authority_commit": "09ec665d6cc9fcfecfbc0303802034af58fc3f9a",
+  "run_started_at_utc": "2026-10-14T18:09:50+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "6b8496db72174998b724ea1f542568ce18b58c788ef84dd49210c622ae8c07d4",
+  "work_id": "3fd21abe70e3b9b78c9d1bcc4e9eca66e4b53f8ed6b03b810a4896feeb0d4968",
+  "family_id": "game:226840",
+  "taste_subject_key": "App_226840",
+  "appid": "226840",
+  "taste_fingerprint": "b7ff3ec814fe234c21341c390f4c4528d1a9dc95fc85e2148107831a393e827b",
+  "candidate_context_sha256": "e86bac3b91802f093e348f42d2fe0e19617f14cb23b9c4563f9662ddd37644a2",
+  "dossier_content_sha256": "1d9e76529a927cdf22e362cec4413ed970b378fb38545585e178723bc3010cdf",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "ae4d7e02a308ce8b1d959fce8d8ed15438af3782a9d4df266973a537f9b4f6b1",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Развитие городов, героев и армии соединено с пошаговыми тактическими боями, где важны размещение отрядов, магия и самостоятельное освоение возможностей.",
+    "Исследование карты, прокачка классов и смена между управлением империей и боем близки к уже понравившейся механике Heroes of Might and Magic V."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 86,
+    "development_variety": 76,
+    "structure_pacing_direction": 58,
+    "identity_hooks": 62,
+    "breadth_of_match": 83
+  },
+  "score_findings": [
+    {
+      "finding_id": "hex_tactics",
+      "text_ru": "Бои на гексах требуют продуманного размещения бойцов, обходов с фланга и сохранения армии; успех опирается на освоение решений, а не только на численность войск.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Рост тактического мастерства и понимание правил — сильный подтверждённый плюс."
+        },
+        {
+          "json_pointer": "/stopgame_cards/47/what_liked/0",
+          "profile_value_sha256": "9f83d8ab74e64a80854141bf69ceb9a740e58fff57876f6d3f16870f251e151f",
+          "match_text_ru": "Похожий пошаговый стратегический цикл уже нравился в Heroes V."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 86
+        }
+      ]
+    },
+    {
+      "finding_id": "cities_research_armies",
+      "text_ru": "Развитие городов и армий сопровождается исследованием заклинаний и выбором класса героя; эта смена задач добавляет прогрессию, хотя различия рас не всегда существенны.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/stopgame_cards/47/what_liked/1",
+          "profile_value_sha256": "030a07a089d7bf2826bac1ab1fc35a562df1da0d85cbcc66a57abea50a62a2e6",
+          "match_text_ru": "Пользователю нравится развивать города в стратегиях."
+        },
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Нужно заметное развитие игрового опыта на протяжении кампании."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 76
+        }
+      ]
+    },
+    {
+      "finding_id": "slow_late_scenarios",
+      "text_ru": "Долгие сценарии с захватом городов и повторяющимися осадами могут терять темп; дополнительные задания и давление времени не всегда делают маршрут понятнее.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Сильная затянутость и одинаковые действия ослабляют интерес к игре."
+        },
+        {
+          "json_pointer": "/taste_profile/5/pattern",
+          "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+          "match_text_ru": "Игре важно сохранять ясный вектор движения к следующей цели."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 58
+        }
+      ]
+    },
+    {
+      "finding_id": "fantasy_hero_roles",
+      "text_ru": "Классы героев и магические специализации придают фэнтезийному противостоянию характер, но отзывы указывают на слабую различимость некоторых рас и дисбаланс ролей.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "Увлекательные персонажи и идентичность усиливают игру, но глубина боя тоже важна."
+        },
+        {
+          "json_pointer": "/stopgame_cards/105/what_liked/2",
+          "profile_value_sha256": "7b978948433058f5cb209b11432a27000453a9038c37221066e1aa1e615fafaa",
+          "match_text_ru": "Пользователь ценит ярко запоминающихся героев; здесь об их силе данных меньше, чем о классах."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "qualifies",
+          "normalized_value": 62
+        }
+      ]
+    },
+    {
+      "finding_id": "empire_battle_exploration",
+      "text_ru": "Постройка поселений, исследование руин и отдельные тактические сражения дают несколько содержательных занятий в рамках одной стратегии, сходных с тем, что привлекало в Heroes V.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/stopgame_cards/47/what_liked/2",
+          "profile_value_sha256": "060c6432beb0ef1c1a0ff1f68148d47408a968ce053a65217af7dcd579d2c1ab",
+          "match_text_ru": "Создание армии и движение по стратегической карте уже подтверждены как интересная деятельность."
+        },
+        {
+          "json_pointer": "/stopgame_cards/105/what_liked/4",
+          "profile_value_sha256": "c798785eec2babf6041bdb23ce1174224656f22551b7f16f420f61698239b675",
+          "match_text_ru": "Смена формата задач внутри стратегии была важным достоинством Warcraft III."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 83
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Большие карты со временем превращаются в череду похожих осад и ручных битв; для игрока, быстро устающего от неизменной формулы, это существенный риск даже при увлекательной тактике.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Некоторые миссии давят таймерами и поведением ИИ, из-за чего сценарий может ощущаться то спешным, то чрезмерно долгим.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Не сразу ясные стартовые сведения и неодинаково выразительные расы или классы могут осложнить освоение стратегии.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Баланс классов вызывает споры в соревновательной игре; это не обязательно мешает одиночной кампании.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Имеется старый русскоязычный отзыв с претензиями к переводу терминов; актуальность проблемы для нынешней версии не доказана.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      }
+    ]
+  }
+}
