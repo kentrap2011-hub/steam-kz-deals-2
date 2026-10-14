@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## CURRENT PARALLEL ASSIGNMENT — 2026-10-14: Dossier A/B/C reviewer handoffs alongside Deep UI
+
+- **СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1** remains exclusively on `WORKER_TASK_DEEP_HISTORY_SITE_CARDS_STATS_PR224_CLOSEOUT_01.md`: close out existing Deep website PR #224 with current-main compatibility and green full checks. Nothing about Dossier is added to this worker.
+- **НОВЫЙ ЧАТ — ЧАТ 2:** `WORKER_TASK_DOSSIER_SHADOW_18_REVIEWER_HANDOFFS_REAL_TRIAL_01.md` creates three independent, copy-ready A/B/C source-safe review instructions and a narrow Director operations/quality-sign-off packet for the ALREADY-FIXED six 3-game Dossier shadow cohort. It reuses the existing review form, offline gate and Research/Assembly sandbox; **no duplicate broad source/year audit**. Only `reviews/dossier_shadow_offline/reviewer_handoffs/**`, targeted tests, report and isolated PR.
+- **Why concurrent work is safe:** Deep ЧАТ 1 touches website/current producer and isolated Deep contracts; Dossier ЧАТ 2 does NOT edit `web/**`, `CURRENT_TASK.md`, `PROJECT_ROUTES.md`, Deep control/manifest/contracts/CI, producer, registry/Board or any canonical production state. No Scheduled Tasks, semantic work, GitHub frozen-publisher dispatch or publication authority is delegated by this assignment.
+- Existing Dossier review gate (`reviews/dossier_shadow_quality_review_form.md`, `scripts/dossier_shadow_quality_review_gate.py`) is implemented already; the missing deliverable is independent runnable role handoffs, not another evaluator. Real Research freeze/semantics and A/B/C decisions still await separate Director/user authorization and GitHub immutable marker. The six fixed groups are [3,8,13,15,18,20] = 18 games. Never self-assign a real reviewer or numeric parity threshold.
+
 ## CURRENT DIRECTOR NEXT STEP — 2026-10-14: finish Deep history site PR and preserve Dossier launch gate
 
 - **СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1:** `WORKER_TASK_DEEP_HISTORY_SITE_CARDS_STATS_PR224_CLOSEOUT_01.md`. Its existing PR #224 has 7/8 PR CI success and stale main ancestry; the failed `Validate site task registry and page` originated in invalid Director registry enum `небольшая` on two independent tasks. Director corrected both to `низкая` in main (`3f2cbc7f3c6746c339482cda64eb68a2b7f66f97`), but PR must be safely refreshed and **new** CI/mergeability demonstrated before Director merge. No scheduled tasks, production semantics or source Deep work.
