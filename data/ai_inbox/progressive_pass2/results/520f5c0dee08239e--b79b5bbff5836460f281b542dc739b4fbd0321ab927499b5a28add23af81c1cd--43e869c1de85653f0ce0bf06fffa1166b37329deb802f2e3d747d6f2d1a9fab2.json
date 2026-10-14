@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "a41cf369d8fc180681c7891c2f477bcc41ec5dac",
+  "run_start_authority_commit": "09ec665d6cc9fcfecfbc0303802034af58fc3f9a",
+  "run_started_at_utc": "2026-10-14T18:09:50+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "6b8496db72174998b724ea1f542568ce18b58c788ef84dd49210c622ae8c07d4",
+  "work_id": "b79b5bbff5836460f281b542dc739b4fbd0321ab927499b5a28add23af81c1cd",
+  "family_id": "game:1001270",
+  "taste_subject_key": "App_1001270",
+  "appid": "1001270",
+  "taste_fingerprint": "4a79c597f53847e5bdd70ff74008ad9979bed299a155a3024d4f7bd838531aa6",
+  "candidate_context_sha256": "221754e1de994ac762472e77efa25a3a6d0ceb4349857a90da2c0a1fc2c848d9",
+  "dossier_content_sha256": "153ede34104958e45e3e2ffcb2d54ff36287c5e6e7a2b1729a8f025b2e47cdac",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "43e869c1de85653f0ce0bf06fffa1166b37329deb802f2e3d747d6f2d1a9fab2",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Приготовление разных блюд и распределение кухонных задач между игроками создают активную кооперацию, где приходится договариваться и координировать действия.",
+    "Кухонное обслуживание задаёт конкретные короткие цели, а разные рецепты и роли могут менять привычный игровой процесс, хотя уровень технической стабильности по историческим отзывам неодинаков."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 70,
+    "development_variety": 63,
+    "structure_pacing_direction": 70,
+    "identity_hooks": 74,
+    "breadth_of_match": 59
+  },
+  "score_findings": [
+    {
+      "finding_id": "hands_on_kitchen",
+      "text_ru": "Нужно вручную готовить ингредиенты и блюда, контролируя несколько этапов обслуживания; взаимодействие на кухне даёт заметную обратную связь от действий.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Осваивать сложные системы и улучшать навык — личный сильный плюс."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 70
+        }
+      ]
+    },
+    {
+      "finding_id": "recipes_and_bakery",
+      "text_ru": "Разные блюда и пекарные занятия расширяют набор задач, но отзывы о новых режимах и декоре отмечают ограничения и ошибки.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Важно развитие новых ситуаций и механик в ходе игры."
+        },
+        {
+          "json_pointer": "/taste_profile/2/pattern",
+          "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+          "match_text_ru": "Прогрессия ценна, когда новые возможности ощутимо меняют действия."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 63
+        }
+      ]
+    },
+    {
+      "finding_id": "service_objectives",
+      "text_ru": "Заказанные блюда и текущая работа кухни задают ясную цель каждого цикла, вместо поиска скрытых глобальных указаний.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/pattern",
+          "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+          "match_text_ru": "Чёткие текущие цели сохраняют интерес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 70
+        }
+      ]
+    },
+    {
+      "finding_id": "kitchen_team_roles",
+      "text_ru": "Согласованное разделение обязанностей на кухне — самостоятельный социальный крючок, особенно для игры с близкими, а не просто формальный сетевой режим.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9/pattern",
+          "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+          "match_text_ru": "Совместная координация ролей особенно нравится."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 74
+        }
+      ]
+    },
+    {
+      "finding_id": "coop_sync_disruptions",
+      "text_ru": "Роли и рецепты дают вариативность, но отзывы о рассинхронизации еды, посуды и предметов показывают, что совместный процесс иногда превращается в исправление ошибок.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Важно развитие новых ситуаций и механик в ходе игры."
+        },
+        {
+          "json_pointer": "/taste_profile/14/pattern",
+          "profile_value_sha256": "7809459a648399d754663a4c4c191bbf107a3aa5def57eead9a4102deb33de0b",
+          "match_text_ru": "Разнообразие должно быть полезным и естественным, а не бесцельным."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 59
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Ранние совместные сессии сопровождались разным состоянием еды и объектов у участников, вынуждая переделывать блюда или искать обходные пути; текущая распространённость неизвестна.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "В старых отзывах встречались повторно заблокированные рецепты, проблемы с наймом сотрудников и исчезающими ингредиентами; это не доказательство дефекта сегодняшней версии.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Пекарные занятия интересны некоторым игрокам, однако сообщались ограничения украшения ресторана и сбои с предметами.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      }
+    ]
+  }
+}
