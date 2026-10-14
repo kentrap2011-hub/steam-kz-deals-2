@@ -1263,6 +1263,26 @@
       "updated_on": "2026-10-14",
       "recent_completion": false,
       "updated_at_utc": "2026-10-14T03:56:19.026Z"
+    },
+    {
+      "id": "dossier-shadow-18-first-real-launch-gate-01",
+      "title": "Dossier: подготовка первого реального пилота Research/Assembly на 18 играх",
+      "goal": "Изолированно проверить точную готовность одноразовой GitHub-публикации замороженного Research и подготовить директорскую GO/NO-GO инструкцию, без семантики и production-записи.",
+      "status": "active",
+      "effort": "небольшая",
+      "effort_reason": "Путь одноразового GitHub publisher уже принят; нужна текущая проверка actual marker/ref, permissions, exact dispatch bindings и reviewer/execution gate без повторных прошлых аудитов.",
+      "urgency": "высокая",
+      "urgency_reason": "Позволяет приблизить реальный 18-игровой Dossier Research→Assembly trial параллельно независимому Deep UI.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_FIRST_REAL_LAUNCH_GATE_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-shadow-18-real-marker-publish-01"
+      ],
+      "blocker": "Manual publisher и реальные семантические Research/Assembly требуют отдельных будущих полномочий; данный чат готовит только проверяемый launch gate.",
+      "updated_on": "2026-10-14",
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-14T04:01:59.978Z"
     }
   ]
 }
