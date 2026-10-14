@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "8a2364e4f6d23416a02ff47dc65d794a37b3896c",
+  "run_start_authority_commit": "b617807b2d6809b0fca688b793e36098817f041a",
+  "run_started_at_utc": "2026-10-14T18:34:53+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "6b8496db72174998b724ea1f542568ce18b58c788ef84dd49210c622ae8c07d4",
+  "work_id": "e9e64b60129f44876727f83bb2de33bbfdf85689b0e5ce3d402f3273108d7d1e",
+  "family_id": "game:1234190",
+  "taste_subject_key": "App_1234190",
+  "appid": "1234190",
+  "taste_fingerprint": "510471b7944b24e5d8d9472db1d5aeb03186bf461201556bf5231304f172646a",
+  "candidate_context_sha256": "b7d858d39f92d4bf932de4955f65fe4ef7a7d317cd408c7d8d227b8720a97a85",
+  "dossier_content_sha256": "9b1d626966b646ceb06cd214739f61d67a43e8a1f4f3b4879140f2f6fc4d1442",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "aeb5164d8c25a8bedf97a5d1ca19cf1b2d3df325620a8f4ee1d907e10ecd2d99",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Похоже на короткий шутер со стрельбой и отдельными элементами стелса, но три карты и небольшой выбор игровых ситуаций слабо отвечают важной для профиля потребности в развитии и разнообразии.",
+    "Отдельный отзыв о тесных боевых пространствах и недостаточной отзывчивости управления уменьшает привлекательность основного боевого процесса.",
+    "Звуковое оформление, голоса и несколько типов оружия — реальные достоинства, однако не компенсируют слабую засвидетельствованную глубину и отсутствие сильного самостоятельного крючка."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Малое число карт и краткая последовательность заданий ограничивают развитие формулы — для этого профиля такой повторяемый цикл быстро рискует наскучить.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Встречаются жалобы на тесные площадки, отзывчивость боя и ограниченное взаимодействие со стелсом; это небольшая выборка, не универсальный технический диагноз.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Запрос одного игрока на сетевую игру не означает, что отсутствие мультиплеера здесь персонально критично.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Оценка визуала как набора повторно использованных ресурсов остаётся субъективным восприятием без независимого подтверждения происхождения.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Сложный эпизод с самолётом может раздражать, но отдельная высокая сложность без анализа её обучаемости не является общим минусом.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Упоминание спидран-маршрутов и пропуска обучения нельзя превращать в достоверную оценку времени первого прохождения.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
