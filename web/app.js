@@ -294,7 +294,8 @@ function renderFeed(){
   const gp=(g.gameplay_points||[]).filter(Boolean);$('gameplaySection').classList.toggle('hidden',!gp.length);$('gameplay').innerHTML=gp.map(x=>`<li>${escapeHtml(x)}</li>`).join('');
   $('deepTwoStageDetail').classList.toggle('hidden',!twoStage);
   $('deepTwoStageDetail').innerHTML=twoStage?window.DeepTwoStageUI.detailHtml(g):'';
-  const historyHtml=!twoStage&&window.DeepHistoryUI?window.DeepHistoryUI.detailHtml(g):'';
+  // The accepted Deep archive remains visible alongside future two-stage detail; neither owns the other's score.
+  const historyHtml=window.DeepHistoryUI?window.DeepHistoryUI.detailHtml(g):'';
   $('deepHistoryDetail').classList.toggle('hidden',!historyHtml);
   $('deepHistoryDetail').innerHTML=historyHtml;
   $('personalizationSection').classList.toggle('hidden',!personalized);
