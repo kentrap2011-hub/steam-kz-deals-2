@@ -1247,7 +1247,7 @@
       "id": "deep-history-site-cards-stats-01",
       "title": "Deep: вернуть предыдущие разборы в карточки и статистику",
       "goal": "Показывать последний реально завершённый Deep, даже устаревший, его дату, статус и проверяемую дату текущего профиля; статистику по версиям и текущую очередь без выдачи старых оценок за актуальные.",
-      "status": "blocked",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Нужно согласовать producer Deep-history поля, два UI-представления, дату Git-профиля и regression/Pages цепочку.",
       "urgency": "высокая",
@@ -1259,10 +1259,10 @@
         "deep-versioned-history-first-core-01",
         "deep-versioned-history-pr222-closeout-01"
       ],
-      "blocker": "Реализация представлена в открытом запросе на слияние 224. Нужны синхронизация с актуальным main, новая зелёная проверка реестра задач и финальная приёмка.",
+      "blocker": "",
       "updated_on": "2026-10-14",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-14T17:55:03.245Z"
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-14T18:15:44.834Z"
     },
     {
       "id": "dossier-shadow-18-first-real-launch-gate-01",
@@ -1306,7 +1306,7 @@
       "id": "deep-history-site-cards-stats-pr224-closeout-01",
       "title": "Deep: завершить публикационный PR истории на сайте",
       "goal": "Довести существующий PR исторических Deep-карточек и статистики до зелёной полной CI/совместимости с текущим main для директорской приёмки.",
-      "status": "active",
+      "status": "complete",
       "effort": "низкая",
       "effort_reason": "Готовая реализация; требуется синхронизация ветки, проверка исправленного директорского реестра и финальные регрессии.",
       "urgency": "высокая",
@@ -1317,30 +1317,30 @@
       "depends_on": [
         "deep-history-site-cards-stats-01"
       ],
-      "blocker": "Старый CI из PR на предыдущей базе красный; принять только после нового подтверждения.",
+      "blocker": "",
       "updated_on": "2026-10-14",
-      "updated_at_utc": "2026-10-14T17:55:03.245Z",
-      "recent_completion": false
+      "updated_at_utc": "2026-10-14T18:15:44.834Z",
+      "recent_completion": true
     },
     {
       "id": "dossier-shadow-18-reviewer-handoffs-real-trial-01",
       "title": "Dossier: независимые A/B/C-рецензии для испытания на 18 играх",
       "goal": "Подготовить три независимые запускаемые инструкции для A/B и C и точный пакет условий реальной проверки качества 18 игр, сохраняя существующий GitHub freeze, без запуска семантики.",
-      "status": "active",
+      "status": "blocked",
       "effort": "средняя",
       "effort_reason": "Операционные инструкции для трёх независимых оценщиков с привязкой к уже принятой offline-форме и gate; не требует изменений production.",
       "urgency": "высокая",
       "urgency_reason": "Перед началом реального двухэтапного Dossier необходимы самостоятельные A/B/C и согласованные условия проверки качества.",
       "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_REVIEWER_HANDOFFS_REAL_TRIAL_01.md",
-      "worker_slot": "ЧАТ 2",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "dossier-shadow-18-first-real-launch-gate-01",
         "dossier-shadow-quality-review-gate-01"
       ],
-      "blocker": "Без публикации настоящего GitHub-маркера, назначения независимых A/B/C и отдельного разрешения нельзя выполнять семантику и реальную рецензию.",
+      "blocker": "Поручение ЧАТУ 2 не отправлялось. Трёхролевой A/B/C handoff приостановлен до переоценки необходимости для предварительного изолированного пилота. Не запускать как актуальное задание.",
       "updated_on": "2026-10-14",
-      "updated_at_utc": "2026-10-14T18:03:52.744Z",
+      "updated_at_utc": "2026-10-14T18:15:44.834Z",
       "recent_completion": false
     }
   ]
