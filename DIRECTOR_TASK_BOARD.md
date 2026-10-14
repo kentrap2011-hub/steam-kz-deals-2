@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR PRODUCT DECISION — 2026-10-14: icon format is not a requirement
+
+- User clarified: **only replace the site's icon with the approved gamepad artwork**; PNG/ICO binaries and full Apple/Android/Windows launcher deployment are **not** acceptance requirements. Previous binary-upload blocker was an over-scoped interpretation.
+- Existing verified SVG-with-embedded-WebP from the approved archive meets this scoped website favicon goal. Browser Chromium and 16/32/192/512 raster checks confirmed artwork; web/index.html, web/tasks.html and PWA manifest references in main are updated. Device-level launcher compatibility remains unverified and must not be claimed.
+- PR #223 merged to main as `5948767c536a8f7eef1f97f171c2819d8da7d861` after explicit user clarification; no PNG/ICO upload required. Prior single failing PR site-tasks validation was a Director public-registry `PR #` leak, already corrected in main; current publication and live browser cache still require ordinary deployment/user check before claiming displayed on all devices.
+- Close prior blocked PNG task as superseded by SVG, mark SVG delivery complete. Primary next priority remains showing historic Deep results in cards/Statistics after the accepted producer PR #222.
+
 ## DIRECTOR ACCEPTANCE — 2026-10-13: Deep core merged; gamepad remains partial
 
 - ЧАТ 1 closeout `WORKER_TASK_DEEP_VERSIONED_HISTORY_PR222_CLOSEOUT_01.md`: independently verified history tamper guards and exact ordering; 4/4 final PR CI passed. PR #222 merged to main as `d273e707fa00087fe2d36d1383cb39431c0747c0`. **Producer-only:** historic-card and Statistics UI, verified profile version commit dates, and any Git-proven missing older rows are separate follow-up tasks. No bulk Deep rerun authorized.
