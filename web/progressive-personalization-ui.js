@@ -205,6 +205,48 @@
     if(Number.isNaN(date.getTime()))return 'ещё не было записей';
     return date.toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'});
   }
+  function profileVersionDate(value){
+    if(!value||typeof value!=='string')return 'Дата версии профиля неизвестна';
+    const date=new Date(value);
+    if(Number.isNaN(date.getTime()))return 'Дата версии профиля неизвестна';
+    return date.toLocaleString('ru-RU',{timeZone:'UTC',dateStyle:'short',timeStyle:'short'})+' UTC';
+  }
+  function deepHistoryStatisticsSection(status){
+    if(status.deep_completed_history_contract!=='PROGRESSIVE-DEEP-COMPLETED-HISTORY-V1')return [];
+    const current=status.deep_current_profile_content_version_id;
+    const dates=profileVersionDate(status.deep_current_profile_version_at_utc);
+    const versions=status.deep_profile_version_unique_game_counts||{};
+    const versionRows=Object.entries(versions).sort(([a],[b])=>a.localeCompare(b)).map(([name,value],i)=>{
+      const isCurrent=name===current;
+      const known=/^[a-f0-9]{64}$/.test(name);
+      return {
+        key:'deep_profile_version_'+i,
+        label:isCurrent?'Текущая версия · '+name.slice(0,10):
+          known?'Прошлая версия · '+name.slice(0,10):
+          'Историческая версия · привязка профиля не подтверждена ('+(i+1)+')',
+        value:field(versions,name),
+      };
+    });
+    const rows=[
+      ['Всего игр в текущей области','deep_current_version_target'],
+      ['Актуальный успешный Deep','deep_current_version_completed_count'],
+      ['Есть только устаревший успешный Deep','deep_historical_only_not_current_compatible_count'],
+      ['Никогда не было успешного Deep','deep_never_completed_count'],
+      ['Осталось до актуального Deep','deep_current_version_remaining_count'],
+    ].map(([label,key])=>({label,key,value:field(status,key)}));
+    rows.push({label:'Дата изменения текущего профиля',key:'deep_current_profile_version_at_utc',
+      value:dates});
+    return [{
+      key:'deep_history',title:'История глубоких разборов',
+      scopeLabel:'Игр в текущем Deep-охвате',
+      denominator:field(status,'deep_current_version_target'),
+      showLastWrite:false,lastWriteAtUtc:null,
+      rows:rows.concat(versionRows),
+      note:'Устаревший разбор можно прочитать в карточке, но он не заменяет актуальный и не участвует в баллах или рейтинге. '+
+        'Каждая версия учитывает уникальные игры; одна игра может быть в нескольких версиях, поэтому суммировать строки версий нельзя. '+
+        'Историческая версия без подтверждённого содержания профиля не считается текущей. Даты берутся только из проверенной Git-истории; без подтверждения показывается «Дата версии профиля неизвестна».',
+    }];
+  }
   function quarantineCategoryLabel(key){
     const labels={
       card_explanation:'Текст персонального объяснения',
@@ -281,6 +323,7 @@
         ].map(([label,key])=>({label,key,value:field(status,key)})),
         note:'«Окончательно разобрано» — глубокий разбор завершён с итогом «подходит» или «не подходит».',
       },
+      ...deepHistoryStatisticsSection(status),
       {
         key:'translation',
         title:'Переводы описаний',
