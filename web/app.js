@@ -158,9 +158,12 @@ function stageIndicatorsHtml(g){
 function renderStatisticsView(){
   const root=$('stageStatistics');if(!root)return;
   // After explicit cutover, published stage metrics outrank an older site-status cache.
+  const visualStatus=data.processing_status||{};
+  // History counts must describe the SAME published snapshot as card history.
   const status=data.deep_two_stage_site_contract==='DEEP-TWO-STAGE-SITE-PROJECTION-V1'
-    ?(data.processing_status||{})
-    :((siteStatus&&siteStatus.processing_status)||data.processing_status||{});
+    ||visualStatus.deep_completed_history_contract==='PROGRESSIVE-DEEP-COMPLETED-HISTORY-V1'
+    ?visualStatus
+    :((siteStatus&&siteStatus.processing_status)||visualStatus);
   const sections=progressiveUi().statisticsSections(status);
   root.innerHTML=sections.map(section=>`<section class="statistics-stage statistics-stage-${escapeHtml(section.key)}"><div class="statistics-stage-head"><h3>${escapeHtml(section.title)}</h3><div class="statistics-scope"><span>${escapeHtml(section.scopeLabel)}</span><b>${escapeHtml(statisticsValue(section.denominator))}</b></div></div>${section.showLastWrite===false?'':`<div class="statistics-last-write">Последняя запись: <b>${escapeHtml(progressiveUi().formatLastWriteAt(section.lastWriteAtUtc))}</b></div>`}<div class="statistics-metrics">${section.rows.map(row=>`<div class="statistics-metric" data-stat-field="${escapeHtml(row.key)}"><span>${escapeHtml(row.label)}</span><b>${escapeHtml(statisticsValue(row.value))}</b></div>`).join('')}</div>${section.lastSuccessAtUtc===undefined?'':`<div class="statistics-last-write">Последний успешный результат: <b>${escapeHtml(progressiveUi().formatLastWriteAt(section.lastSuccessAtUtc))}</b></div>`}${section.note?`<p class="statistics-note">${escapeHtml(section.note)}</p>`:''}</section>`).join('');
 }
@@ -291,6 +294,9 @@ function renderFeed(){
   const gp=(g.gameplay_points||[]).filter(Boolean);$('gameplaySection').classList.toggle('hidden',!gp.length);$('gameplay').innerHTML=gp.map(x=>`<li>${escapeHtml(x)}</li>`).join('');
   $('deepTwoStageDetail').classList.toggle('hidden',!twoStage);
   $('deepTwoStageDetail').innerHTML=twoStage?window.DeepTwoStageUI.detailHtml(g):'';
+  const historyHtml=!twoStage&&window.DeepHistoryUI?window.DeepHistoryUI.detailHtml(g):'';
+  $('deepHistoryDetail').classList.toggle('hidden',!historyHtml);
+  $('deepHistoryDetail').innerHTML=historyHtml;
   $('personalizationSection').classList.toggle('hidden',!personalized);
   if(personalized){textList($('whyFit'),g.why_fit,'Персональная причина пока не подготовлена.');renderRisk(g);renderPriority(g)}
   else if(twoStage){renderPriority(g);$('riskStatus').classList.add('hidden');$('whyFit').textContent='';$('risks').textContent='';$('cautions').textContent=''}
