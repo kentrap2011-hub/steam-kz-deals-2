@@ -1321,6 +1321,27 @@
       "updated_on": "2026-10-14",
       "updated_at_utc": "2026-10-14T17:55:03.245Z",
       "recent_completion": false
+    },
+    {
+      "id": "dossier-shadow-18-reviewer-handoffs-real-trial-01",
+      "title": "Dossier: независимые A/B/C-рецензии для испытания на 18 играх",
+      "goal": "Подготовить три независимые запускаемые инструкции для A/B и C и точный пакет условий реальной проверки качества 18 игр, сохраняя существующий GitHub freeze, без запуска семантики.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Операционные инструкции для трёх независимых оценщиков с привязкой к уже принятой offline-форме и gate; не требует изменений production.",
+      "urgency": "высокая",
+      "urgency_reason": "Перед началом реального двухэтапного Dossier необходимы самостоятельные A/B/C и согласованные условия проверки качества.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_REVIEWER_HANDOFFS_REAL_TRIAL_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-shadow-18-first-real-launch-gate-01",
+        "dossier-shadow-quality-review-gate-01"
+      ],
+      "blocker": "Без публикации настоящего GitHub-маркера, назначения независимых A/B/C и отдельного разрешения нельзя выполнять семантику и реальную рецензию.",
+      "updated_on": "2026-10-14",
+      "updated_at_utc": "2026-10-14T18:03:52.744Z",
+      "recent_completion": false
     }
   ]
 }
