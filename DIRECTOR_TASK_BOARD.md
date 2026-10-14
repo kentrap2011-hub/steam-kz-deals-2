@@ -5,6 +5,41 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## CURRENT PARALLEL ASSIGNMENT — 2026-10-14: Dossier A/B/C reviewer handoffs alongside Deep UI
+
+- **СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1** remains exclusively on `WORKER_TASK_DEEP_HISTORY_SITE_CARDS_STATS_PR224_CLOSEOUT_01.md`: close out existing Deep website PR #224 with current-main compatibility and green full checks. Nothing about Dossier is added to this worker.
+- **НОВЫЙ ЧАТ — ЧАТ 2:** `WORKER_TASK_DOSSIER_SHADOW_18_REVIEWER_HANDOFFS_REAL_TRIAL_01.md` creates three independent, copy-ready A/B/C source-safe review instructions and a narrow Director operations/quality-sign-off packet for the ALREADY-FIXED six 3-game Dossier shadow cohort. It reuses the existing review form, offline gate and Research/Assembly sandbox; **no duplicate broad source/year audit**. Only `reviews/dossier_shadow_offline/reviewer_handoffs/**`, targeted tests, report and isolated PR.
+- **Why concurrent work is safe:** Deep ЧАТ 1 touches website/current producer and isolated Deep contracts; Dossier ЧАТ 2 does NOT edit `web/**`, `CURRENT_TASK.md`, `PROJECT_ROUTES.md`, Deep control/manifest/contracts/CI, producer, registry/Board or any canonical production state. No Scheduled Tasks, semantic work, GitHub frozen-publisher dispatch or publication authority is delegated by this assignment.
+- Existing Dossier review gate (`reviews/dossier_shadow_quality_review_form.md`, `scripts/dossier_shadow_quality_review_gate.py`) is implemented already; the missing deliverable is independent runnable role handoffs, not another evaluator. Real Research freeze/semantics and A/B/C decisions still await separate Director/user authorization and GitHub immutable marker. The six fixed groups are [3,8,13,15,18,20] = 18 games. Never self-assign a real reviewer or numeric parity threshold.
+
+## CURRENT DIRECTOR NEXT STEP — 2026-10-14: finish Deep history site PR and preserve Dossier launch gate
+
+- **СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1:** `WORKER_TASK_DEEP_HISTORY_SITE_CARDS_STATS_PR224_CLOSEOUT_01.md`. Its existing PR #224 has 7/8 PR CI success and stale main ancestry; the failed `Validate site task registry and page` originated in invalid Director registry enum `небольшая` on two independent tasks. Director corrected both to `низкая` in main (`3f2cbc7f3c6746c339482cda64eb68a2b7f66f97`), but PR must be safely refreshed and **new** CI/mergeability demonstrated before Director merge. No scheduled tasks, production semantics or source Deep work.
+- **Dossier ЧАТ 2 review:** report-only PR #225 independently accepted/merged at `00084f6727d6c6779ba98072063d3929c8bbe9db`, without any real trial publication or semantics. The exact 18-game nonproduction Research freeze may be performed only as a separately approved single manual GitHub Action after the current main is stable and the original sandbox ref is confirmed absent. The report establishes GO for publication readiness, NO-GO for Research/Assembly semantic execution until A/B reviewers, C adjudicator and separate sandbox approval.
+- Manual one-shot Deep PR #226 already merged; canonical launcher can be used as a **new user-launched semantic invocation**, not in this developer closeout. Deep producer unchanged. Do not mutate Scheduled Tasks.
+- After PR #224 accepts, verify Pages deployment and real user-visible Deep history/stats; then plan evidence-backed missing legacy revisions and 18-game shadow trial independently.
+
+## DIRECTOR ACCEPTANCE — 2026-10-14: manual one-shot Deep canonical
+
+- Worker task `WORKER_TASK_PROGRESSIVE_DEEP_MANUAL_ONE_SHOT_AUTHORIZATION_01.md`, report `reviews/worker_reports/progressive-deep-manual-one-shot-authorization-01.md`: independently checked only 5 files in PR #226 (two contracts, reusable launcher, ownership validator, report); required PR CI **4/4 success** on final head `b71c008f8a3c74c829607fa00e25b451e74c16d5`.
+- Director **merged PR #226** into main, merge commit `3a1b6eceece36d3d15ec457bf6a60ebc28fc4f20`. Manual one-shot Progressive Deep is officially authorized as **explicitly user-launched** isolated worker via `config/progressive_pass2_manual_one_shot_prompt.md`. The FULL canonical `config/progressive_pass2_worker_prompt.md` remains unchanged. Deep production runtime, immutable run-start authority/confirmation, work/order/recovery and Russian translation one-shot unchanged.
+- No semantic run was launched, no Scheduled Task or automation changed, no Deep production state/manifest modified. User reports manual-only is the mode operating for several weeks; external task configuration was not inspected. Each future invocation requires a new explicit user request.
+- Physical worker ЧАТ 2 finished and may be retired. Separate Deep website PR #224 and Dossier launch-gate report PR #225 remain independent Director decisions.
+
+## ACTIVE DIRECTOR DECISION — 2026-10-14: authorize manual Deep without scheduler
+
+- **User decision:** explicitly authorizes existing manual one-shot Progressive Deep semantic execution; states manual mode has been the only operating Deep mode for weeks. Do not infer or change the actual external Scheduled Task status. Same GitHub-owned work/order/pins, run-start V2 marker and confirmed receipt, normal/recovery attempts and canonical writes; no second executor or queue.
+- **НОВЫЙ ЧАТ — ЧАТ 2:** `WORKER_TASK_PROGRESSIVE_DEEP_MANUAL_ONE_SHOT_AUTHORIZATION_01.md`, bounded independent IMPLEMENT: align `config/execution_ownership_contract.json` and `config/progressive_pass2_contract.json`, add short canonical user-launched Deep one-shot launcher and checks. No semantic execution or Scheduled Task editing. The prior Dossier ЧАТ 2 worker completed report-only PR #225 and is retired; that review remains independent.
+- **ЧАТ 1:** finished implementation PR #224 for historical Deep cards/statistics, under separate Director acceptance. New ЧАТ 2 does NOT edit Deep UI, `config/progressive_personalization_contract.json`, common `CURRENT_TASK.md`, Fast, Dossier or site.
+- User must explicitly start each manual Deep invocation; new authorization becomes canonical after this PR is reviewed and merged. Existing worker prompt remains the source of execution rules and frozen marker-parent logic.
+
+## ACTIVE DIRECTOR PARALLEL ASSIGNMENT — 2026-10-14: Dossier isolation alongside Deep UI
+
+- **ЧАТ 1 (unchanged):** `WORKER_TASK_DEEP_HISTORY_SITE_CARDS_STATS_01.md` implements historic Deep display/cards/versioned Statistics and optional attested profile date; writes may affect `web/**`, producer presentation. Do not interrupt or hand it Dossier work.
+- **НОВЫЙ ЧАТ — ЧАТ 2:** `WORKER_TASK_DOSSIER_SHADOW_18_FIRST_REAL_LAUNCH_GATE_01.md` — independent READ-ONLY/ACCEPTANCE verification of already implemented one-time Dossier 18-game GitHub Research publisher and real sandbox-marker existence; produce exact Director GO/NO-GO manual launch packet, one report-only PR. No new past game/source/year audits; no semantics, dispatch, production writes, shared `CURRENT_TASK.md`, site, Deep, Scheduled Tasks or auto-activation.
+- Fixed trial groups [3,8,13,15,18,20] = exact 18 games. As checked before this assignment, isolated real frozen sandbox branch is not present, but worker must independently recheck at execution. Main SHA may advance because Chat 1 and CI work; publisher input must be current only at actual dispatch.
+- After report Director decides **separately** whether to authorize one-time frozen Github publishing; semantically running Research/Assembly and A/B/C independent review gate need separate approval. This does not change existing production Dossier.
+
 ## ACTIVE DIRECTOR WORK — 2026-10-14: restore Deep history visibility on website
 
 - **User Android acceptance:** after PR #223 merge, user independently confirmed the new gamepad icon now appears on Android home screen. Icon task is **fully accepted for user's SVG-only goal**; do not reopen PNG/ICO work.

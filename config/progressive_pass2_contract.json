@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PASS2-V1",
-  "version": 15,
+  "version": 16,
   "status": "production_active",
   "phase": "phase_c_pass2",
   "purpose": "GitHub-owned eventual authoritative Deep analysis for every current eligible Progressive game after an exact-compatible canonically accepted Dossier is ready, with one normal first pass and separately authorized recovery; completed Deep results include a separately grounded balanced negative assessment, and Fast/PASS 1 is never an eligibility prerequisite.",
@@ -16,7 +16,20 @@
     "terminal_execution_receipt": "github",
     "visual_projection": "github",
     "scheduled_chatgpt": "bounded_semantic_data_plane_only",
-    "interactive_chat": "development_only_not_production_worker"
+    "interactive_chat": "development_only_not_production_worker",
+    "explicit_manual_one_shot_chatgpt_data_plane": {
+      "allowed": true,
+      "authorization_source": "config/execution_ownership_contract.json#explicit_manual_semantic_worker_chats.progressive_deep_one_shot",
+      "canonical_launcher_prompt": "config/progressive_pass2_manual_one_shot_prompt.md",
+      "canonical_worker_prompt": "config/progressive_pass2_worker_prompt.md",
+      "requires_fresh_explicit_user_launch_every_run": true,
+      "ordinary_interactive_developer_chat_role_unchanged": true,
+      "uses_same_existing_v2_marker_parent_freeze_and_confirmed_receipt": true,
+      "github_only_scope_order_recovery_attempts_validation_and_persistence": true,
+      "per_item_mutable_main_refresh_after_freeze_allowed": false,
+      "new_recurring_schedule_or_second_queue_allowed": false,
+      "may_create_or_modify_scheduled_task": false
+    }
   },
   "eligibility": {
     "source_state": "all_current_eligible_progressive_items_without_current_authoritative_deep_completion",

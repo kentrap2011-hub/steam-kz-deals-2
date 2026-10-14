@@ -1247,7 +1247,7 @@
       "id": "deep-history-site-cards-stats-01",
       "title": "Deep: вернуть предыдущие разборы в карточки и статистику",
       "goal": "Показывать последний реально завершённый Deep, даже устаревший, его дату, статус и проверяемую дату текущего профиля; статистику по версиям и текущую очередь без выдачи старых оценок за актуальные.",
-      "status": "active",
+      "status": "blocked",
       "effort": "высокая",
       "effort_reason": "Нужно согласовать producer Deep-history поля, два UI-представления, дату Git-профиля и regression/Pages цепочку.",
       "urgency": "высокая",
@@ -1259,10 +1259,68 @@
         "deep-versioned-history-first-core-01",
         "deep-versioned-history-pr222-closeout-01"
       ],
-      "blocker": "Старые отсутствующие в подтверждённом canonical Deep state ревизии нельзя придумывать; даты профиля только из доказанного Git provenance.",
+      "blocker": "Реализация представлена в открытом запросе на слияние 224. Нужны синхронизация с актуальным main, новая зелёная проверка реестра задач и финальная приёмка.",
       "updated_on": "2026-10-14",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-14T03:56:19.026Z"
+      "updated_at_utc": "2026-10-14T17:55:03.245Z"
+    },
+    {
+      "id": "dossier-shadow-18-first-real-launch-gate-01",
+      "title": "Dossier: подготовка первого реального пилота Research/Assembly на 18 играх",
+      "goal": "Изолированно проверить точную готовность одноразовой GitHub-публикации замороженного Research и подготовить директорскую GO/NO-GO инструкцию, без семантики и production-записи.",
+      "status": "complete",
+      "effort": "низкая",
+      "effort_reason": "Путь одноразового GitHub publisher уже принят; нужна текущая проверка actual marker/ref, permissions, exact dispatch bindings и reviewer/execution gate без повторных прошлых аудитов.",
+      "urgency": "высокая",
+      "urgency_reason": "Позволяет приблизить реальный 18-игровой Dossier Research→Assembly trial параллельно независимому Deep UI.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_FIRST_REAL_LAUNCH_GATE_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-shadow-18-real-marker-publish-01"
+      ],
+      "blocker": "",
+      "updated_on": "2026-10-14",
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-14T17:55:03.245Z"
+    },
+    {
+      "id": "progressive-deep-manual-one-shot-authorization-01",
+      "title": "Deep: разрешить ручной одноразовый запуск",
+      "goal": "Официально разрешён user-launched one-shot Deep: прежний GitHub worker, замороженный marker/receipt, контроль ingest и короткий canonical launcher, без каких-либо Scheduled Tasks.",
+      "status": "complete",
+      "effort": "низкая",
+      "effort_reason": "Узкая корректировка ownership/Deep contract и reusable manual launcher, без изменений логики Deep.",
+      "urgency": "высокая",
+      "urgency_reason": "Ручной Deep сейчас единственный работающий пользовательский режим; текущий ownership запрещает его как обычный interactive chat.",
+      "task_file": "WORKER_TASK_PROGRESSIVE_DEEP_MANUAL_ONE_SHOT_AUTHORIZATION_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [],
+      "blocker": "",
+      "updated_on": "2026-10-14",
+      "updated_at_utc": "2026-10-14T17:42:47.052Z",
+      "recent_completion": true
+    },
+    {
+      "id": "deep-history-site-cards-stats-pr224-closeout-01",
+      "title": "Deep: завершить публикационный PR истории на сайте",
+      "goal": "Довести существующий PR исторических Deep-карточек и статистики до зелёной полной CI/совместимости с текущим main для директорской приёмки.",
+      "status": "active",
+      "effort": "низкая",
+      "effort_reason": "Готовая реализация; требуется синхронизация ветки, проверка исправленного директорского реестра и финальные регрессии.",
+      "urgency": "высокая",
+      "urgency_reason": "Без принятия UI пользователь не увидит старые Deep-разборы.",
+      "task_file": "WORKER_TASK_DEEP_HISTORY_SITE_CARDS_STATS_PR224_CLOSEOUT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "deep-history-site-cards-stats-01"
+      ],
+      "blocker": "Старый CI из PR на предыдущей базе красный; принять только после нового подтверждения.",
+      "updated_on": "2026-10-14",
+      "updated_at_utc": "2026-10-14T17:55:03.245Z",
+      "recent_completion": false
     }
   ]
 }
