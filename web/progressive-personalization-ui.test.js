@@ -261,7 +261,8 @@ assert(app.indexOf("items=progressiveUi().filterActiveSaleItems(payloadItems(),n
 assert(app.includes("const STATUS_URL='data/status.json';"));
 assert(app.includes("(siteStatus&&siteStatus.processing_status)||visualStatus"));
 assert(app.includes("visualStatus.deep_completed_history_contract==='PROGRESSIVE-DEEP-COMPLETED-HISTORY-V1'"));
-assert(app.includes("const historyHtml=!twoStage&&window.DeepHistoryUI?window.DeepHistoryUI.detailHtml(g):''"));
+assert(app.includes("const historyHtml=window.DeepHistoryUI?window.DeepHistoryUI.detailHtml(g):''"));
+assert(app.includes("$('deepTwoStageDetail').innerHTML=twoStage?window.DeepTwoStageUI.detailHtml(g):''"));
 assert(app.includes("fetch(STATUS_URL,{cache:'no-store'})"));
 assert(app.includes("progressiveUi().statisticsSections"));
 assert(app.includes("progressiveUi().formatLastWriteAt(section.lastWriteAtUtc)"));
