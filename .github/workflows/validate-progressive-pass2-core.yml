@@ -34,6 +34,8 @@ on:
       - "scripts/progressive_pass1.py"
       - "scripts/progressive_pass2.py"
       - "scripts/progressive_deep_history.py"
+      - "scripts/progressive_profile_content_dates.py"
+      - "scripts/test_progressive_profile_content_dates.py"
       - "scripts/test_progressive_deep_versioned_history.py"
       - "scripts/test_deep_balanced_negative_assessment.py"
       - "scripts/test_deep_legacy_full_reanalysis.py"
@@ -106,6 +108,8 @@ on:
       - "scripts/progressive_pass1.py"
       - "scripts/progressive_pass2.py"
       - "scripts/progressive_deep_history.py"
+      - "scripts/progressive_profile_content_dates.py"
+      - "scripts/test_progressive_profile_content_dates.py"
       - "scripts/test_progressive_deep_versioned_history.py"
       - "scripts/test_deep_balanced_negative_assessment.py"
       - "scripts/test_deep_legacy_full_reanalysis.py"
@@ -183,6 +187,8 @@ jobs:
             scripts/progressive_pass2.py \
             scripts/progressive_deep_history.py \
             scripts/test_progressive_deep_versioned_history.py \
+            scripts/progressive_profile_content_dates.py \
+            scripts/test_progressive_profile_content_dates.py \
             scripts/test_deep_balanced_negative_assessment.py \
             scripts/test_deep_legacy_full_reanalysis.py \
             scripts/test_deep_score_evidence_explainability.py \
@@ -226,7 +232,10 @@ jobs:
       - name: Deep parallel frozen-start regression
         run: python scripts/test_progressive_deep_parallel_frozen_start.py
       - name: Deep versioned history regression
-        run: python scripts/test_progressive_deep_versioned_history.py
+        run: |
+          python scripts/test_progressive_deep_versioned_history.py
+          python scripts/test_progressive_profile_content_dates.py
+          node web/deep-history-ui.test.js
       - name: Semantic queue priority regression
         run: python scripts/test_semantic_queue_priority.py
       - name: Progressive profile semantic identity stability regression
