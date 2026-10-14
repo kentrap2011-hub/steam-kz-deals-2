@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## ACTIVE DIRECTOR WORK — 2026-10-14: restore Deep history visibility on website
+
+- **User Android acceptance:** after PR #223 merge, user independently confirmed the new gamepad icon now appears on Android home screen. Icon task is **fully accepted for user's SVG-only goal**; do not reopen PNG/ICO work.
+- **НОВЫЙ ЧАТ — ЧАТ 1:** `WORKER_TASK_DEEP_HISTORY_SITE_CARDS_STATS_01.md` — after merged Deep producer PR #222, implement user-facing last completed Deep history on cards, clearly outdated/current, accepted analysis date and honest Git-proven current profile-version date (or explicit unknown), versioned unique-game Statistics. Current scores/ranking must never treat stale Deep as current. One isolated PR, no self-merge.
+- **ЧАТ 2:** no parallel assignment. Original icon worker is retired after successful user device confirmation. Do not launch another large same-area task until Deep website changes are reviewed.
+- Following waves: if absent old accepted Deep need Git proof, separately reconstruct exact provenance without silent replay; then return to 18-game Research→Assembly Dossier shadow validation and controlled production rollout. No Scheduled Task changes.
+
 ## DIRECTOR PRODUCT DECISION — 2026-10-14: icon format is not a requirement
 
 - User clarified: **only replace the site's icon with the approved gamepad artwork**; PNG/ICO binaries and full Apple/Android/Windows launcher deployment are **not** acceptance requirements. Previous binary-upload blocker was an over-scoped interpretation.
