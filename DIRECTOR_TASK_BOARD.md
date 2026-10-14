@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## ACTIVE DIRECTOR PARALLEL ASSIGNMENT — 2026-10-14: Dossier isolation alongside Deep UI
+
+- **ЧАТ 1 (unchanged):** `WORKER_TASK_DEEP_HISTORY_SITE_CARDS_STATS_01.md` implements historic Deep display/cards/versioned Statistics and optional attested profile date; writes may affect `web/**`, producer presentation. Do not interrupt or hand it Dossier work.
+- **НОВЫЙ ЧАТ — ЧАТ 2:** `WORKER_TASK_DOSSIER_SHADOW_18_FIRST_REAL_LAUNCH_GATE_01.md` — independent READ-ONLY/ACCEPTANCE verification of already implemented one-time Dossier 18-game GitHub Research publisher and real sandbox-marker existence; produce exact Director GO/NO-GO manual launch packet, one report-only PR. No new past game/source/year audits; no semantics, dispatch, production writes, shared `CURRENT_TASK.md`, site, Deep, Scheduled Tasks or auto-activation.
+- Fixed trial groups [3,8,13,15,18,20] = exact 18 games. As checked before this assignment, isolated real frozen sandbox branch is not present, but worker must independently recheck at execution. Main SHA may advance because Chat 1 and CI work; publisher input must be current only at actual dispatch.
+- After report Director decides **separately** whether to authorize one-time frozen Github publishing; semantically running Research/Assembly and A/B/C independent review gate need separate approval. This does not change existing production Dossier.
+
 ## ACTIVE DIRECTOR WORK — 2026-10-14: restore Deep history visibility on website
 
 - **User Android acceptance:** after PR #223 merge, user independently confirmed the new gamepad icon now appears on Android home screen. Icon task is **fully accepted for user's SVG-only goal**; do not reopen PNG/ICO work.
