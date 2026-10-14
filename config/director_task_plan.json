@@ -1268,7 +1268,7 @@
       "id": "dossier-shadow-18-first-real-launch-gate-01",
       "title": "Dossier: подготовка первого реального пилота Research/Assembly на 18 играх",
       "goal": "Изолированно проверить точную готовность одноразовой GitHub-публикации замороженного Research и подготовить директорскую GO/NO-GO инструкцию, без семантики и production-записи.",
-      "status": "active",
+      "status": "complete",
       "effort": "небольшая",
       "effort_reason": "Путь одноразового GitHub publisher уже принят; нужна текущая проверка actual marker/ref, permissions, exact dispatch bindings и reviewer/execution gate без повторных прошлых аудитов.",
       "urgency": "высокая",
@@ -1279,10 +1279,28 @@
       "depends_on": [
         "dossier-shadow-18-real-marker-publish-01"
       ],
-      "blocker": "Manual publisher и реальные семантические Research/Assembly требуют отдельных будущих полномочий; данный чат готовит только проверяемый launch gate.",
+      "blocker": "Отчёт о проверке реального запуска опубликован в отдельном запросе на слияние 225; директорская приёмка впереди. Реальная публикация Research и семантика не выполнялись.",
       "updated_on": "2026-10-14",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-14T04:01:59.978Z"
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-14T04:17:31.478Z"
+    },
+    {
+      "id": "progressive-deep-manual-one-shot-authorization-01",
+      "title": "Deep: разрешить ручной одноразовый запуск",
+      "goal": "Официально согласовать существующий ручной способ запуска Deep с canonical ownership и сделать короткий one-shot launcher при неизменной GitHub-очереди/валидации.",
+      "status": "active",
+      "effort": "небольшая",
+      "effort_reason": "Узкая корректировка ownership/Deep contract и reusable manual launcher, без изменений логики Deep.",
+      "urgency": "высокая",
+      "urgency_reason": "Ручной Deep сейчас единственный работающий пользовательский режим; текущий ownership запрещает его как обычный interactive chat.",
+      "task_file": "WORKER_TASK_PROGRESSIVE_DEEP_MANUAL_ONE_SHOT_AUTHORIZATION_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Явная контрактная авторизация вступит в силу после worker PR, тестов и директорской приёмки; Scheduled Tasks не менять.",
+      "updated_on": "2026-10-14",
+      "updated_at_utc": "2026-10-14T04:17:31.478Z",
+      "recent_completion": false
     }
   ]
 }
