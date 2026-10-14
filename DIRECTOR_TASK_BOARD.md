@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## ACTIVE DIRECTOR DECISION — 2026-10-14: authorize manual Deep without scheduler
+
+- **User decision:** explicitly authorizes existing manual one-shot Progressive Deep semantic execution; states manual mode has been the only operating Deep mode for weeks. Do not infer or change the actual external Scheduled Task status. Same GitHub-owned work/order/pins, run-start V2 marker and confirmed receipt, normal/recovery attempts and canonical writes; no second executor or queue.
+- **НОВЫЙ ЧАТ — ЧАТ 2:** `WORKER_TASK_PROGRESSIVE_DEEP_MANUAL_ONE_SHOT_AUTHORIZATION_01.md`, bounded independent IMPLEMENT: align `config/execution_ownership_contract.json` and `config/progressive_pass2_contract.json`, add short canonical user-launched Deep one-shot launcher and checks. No semantic execution or Scheduled Task editing. The prior Dossier ЧАТ 2 worker completed report-only PR #225 and is retired; that review remains independent.
+- **ЧАТ 1:** finished implementation PR #224 for historical Deep cards/statistics, under separate Director acceptance. New ЧАТ 2 does NOT edit Deep UI, `config/progressive_personalization_contract.json`, common `CURRENT_TASK.md`, Fast, Dossier or site.
+- User must explicitly start each manual Deep invocation; new authorization becomes canonical after this PR is reviewed and merged. Existing worker prompt remains the source of execution rules and frozen marker-parent logic.
+
 ## ACTIVE DIRECTOR PARALLEL ASSIGNMENT — 2026-10-14: Dossier isolation alongside Deep UI
 
 - **ЧАТ 1 (unchanged):** `WORKER_TASK_DEEP_HISTORY_SITE_CARDS_STATS_01.md` implements historic Deep display/cards/versioned Statistics and optional attested profile date; writes may affect `web/**`, producer presentation. Do not interrupt or hand it Dossier work.
