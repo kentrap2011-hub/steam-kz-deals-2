@@ -1287,8 +1287,8 @@
     {
       "id": "progressive-deep-manual-one-shot-authorization-01",
       "title": "Deep: разрешить ручной одноразовый запуск",
-      "goal": "Официально согласовать существующий ручной способ запуска Deep с canonical ownership и сделать короткий one-shot launcher при неизменной GitHub-очереди/валидации.",
-      "status": "active",
+      "goal": "Официально разрешён user-launched one-shot Deep: прежний GitHub worker, замороженный marker/receipt, контроль ingest и короткий canonical launcher, без каких-либо Scheduled Tasks.",
+      "status": "complete",
       "effort": "небольшая",
       "effort_reason": "Узкая корректировка ownership/Deep contract и reusable manual launcher, без изменений логики Deep.",
       "urgency": "высокая",
@@ -1297,10 +1297,10 @@
       "worker_slot": "ЧАТ 2",
       "order": null,
       "depends_on": [],
-      "blocker": "Явная контрактная авторизация вступит в силу после worker PR, тестов и директорской приёмки; Scheduled Tasks не менять.",
+      "blocker": "",
       "updated_on": "2026-10-14",
-      "updated_at_utc": "2026-10-14T04:17:31.478Z",
-      "recent_completion": false
+      "updated_at_utc": "2026-10-14T17:42:47.052Z",
+      "recent_completion": true
     }
   ]
 }
