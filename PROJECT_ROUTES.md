@@ -10,6 +10,14 @@
 - Если во время задачи пришлось заметно разбираться, где находится нужная логика или кто ею владеет, найденный путь нужно сохранить или уточнить здесь до завершения подзадачи.
 - Не дублировать здесь канонические business rules: при конфликте contract/policy имеет приоритет.
 
+## Исторические Deep-разборы на карточках и в статистике (PR #224)
+
+- Каноническая история: `scripts/progressive_deep_history.py::completed_versions/latest_completed`; источник — только принятые `data/cache/progressive_pass2_state.json` V1/V2/revision_history; строгое совпадение family_id + taste_subject_key + appid, история не является scoring authority.
+- Producer projection: `scripts/progressive_personalization.py::build_state_index` → `game.deep_history` → `apply_state_fields` → `scripts/build_final_visual_payload.py` → visual `items`. `build_processing_status` → `processing_status.deep_*history/version*` (current/old/never partition and per-profile unique games); source-of-truth dates are null unless independently Git-attested.
+- Источник даты изменения содержания профиля: `scripts/progressive_profile_content_dates.py` проверяет `PROGRESSIVE-PROFILE-PIN-V1` из generation, исходные байты + Git blob SHA + SHA256 в указанном commit и последнюю действительно меняющую blob правку по `gaming_taste_live.json` в `kentrap2011-hub/stopgame-ratings-data`; только read-only. Same-content новый commit не обновляет дату; недоказуемое = null.
+- UI: `web/deep-history-ui.js` + `web/deep-history.css` в карточке (`web/index.html`/`web/app.js`); статистика — `web/progressive-personalization-ui.js::deepHistoryStatisticsSection`; для совпадения со снимком карточек при наличии V1 history contract статистика берётся из **visual** `processing_status`, а не более старого `status.json`.
+- Тесты: `scripts/test_progressive_deep_versioned_history.py`, `scripts/test_progressive_profile_content_dates.py`, `web/deep-history-ui.test.js`, `web/progressive-personalization-ui.test.js`; GitHub CI PASS2/site publication + Deep mirror/feed. Worker-report: `reviews/worker_reports/deep-history-site-cards-stats-01.md`. Продакшен не затрагивается до merge/deploy; Scheduled Tasks, Fast, Dossier, Deep канонические state и ranking не изменяются.
+
 ---
 
 ## Исторический минимум SteamDB (KZ / KZT)
