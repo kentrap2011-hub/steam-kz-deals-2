@@ -1,0 +1,256 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "8a2364e4f6d23416a02ff47dc65d794a37b3896c",
+  "run_start_authority_commit": "b617807b2d6809b0fca688b793e36098817f041a",
+  "run_started_at_utc": "2026-10-14T18:34:53+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "6b8496db72174998b724ea1f542568ce18b58c788ef84dd49210c622ae8c07d4",
+  "work_id": "5d24f2b73410c9225bf55530ff6d8f0a221164897ac7c4ca4ed93028b6d10aae",
+  "family_id": "game:10500",
+  "taste_subject_key": "App_10500",
+  "appid": "10500",
+  "taste_fingerprint": "6ac7446fcd780d373a619529f59a8a6abfd73047ba92d21a9aaab173acc31316",
+  "candidate_context_sha256": "d987268995562a4ccd9ad64a8f16619e09b86de4857501109dddbe7e1afc582d",
+  "dossier_content_sha256": "feb550f64b922354d71215e7760ae0eac3a1ff112cf3d313baff029c7bf64180",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "53d92028992cadb7b985477404d7bf84db7bc1d4a9020edd8053e0af05ed04c6",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "confidence": "medium",
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "ИИ может плохо исполнять приказы и вести себя нелогично; это снижает ощущение честного тактического контроля.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Огромная стратегия включает сложную экономику и дипломатию, в то время как поведение противника со временем может стать предсказуемым.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "В осадах некоторые войска плохо выбирают путь, а враги неудачно размещаются у укреплений.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Боевая атмосфера остаётся привлекательной, но старомодные элементы управления и технические ограничения могут раздражать.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  },
+  "fit_level": "moderate",
+  "positive_evidence": [
+    "Линейные построения мушкетёров, артиллерия, позиционирование и корабельные битвы создают конкретные тактические задачи.",
+    "Кампания соединяет глобальную дипломатию и экономику с сухопутными и морскими сражениями.",
+    "Историческая атмосфера XVIII века и масштаб держав дают игре собственный узнаваемый образ."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 73,
+    "development_variety": 62,
+    "structure_pacing_direction": 42,
+    "identity_hooks": 78,
+    "breadth_of_match": 61
+  },
+  "score_findings": [
+    {
+      "finding_id": "musket-formations",
+      "text_ru": "Пехотные залпы, постановка артиллерии и построения XVIII века создают конкретные задачи позиционирования с понятными последствиями приказов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Интересны боевые задачи, где от освоения тактики заметно меняется результат."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 73
+        }
+      ]
+    },
+    {
+      "finding_id": "land-navy-strategy",
+      "text_ru": "Дипломатические и экономические решения сменяются наземными и морскими сражениями, позволяя переходить между масштабами военных задач.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Смена содержательных задач и способов действия удерживает интерес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 62
+        }
+      ]
+    },
+    {
+      "finding_id": "grand-strategy-burden",
+      "text_ru": "Объёмная дипломатия и экономика соединяют несколько театров войны, но сложные процессы и непоследовательный ИИ могут растягивать путь к осмысленным боям.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/4/pattern",
+          "profile_value_sha256": "b78024665ef842b6b94422838313a1573b0871a6f69180097befb4078ecc5a50",
+          "match_text_ru": "В большом мире ценится плотность интересных действий, а не размер и длительность сами по себе."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 42
+        }
+      ]
+    },
+    {
+      "finding_id": "historical-battle-setting",
+      "text_ru": "Атмосфера эпохи линейной пехоты, пушек и морских войн даёт отличимую историческую идентичность, несмотря на старые технические ограничения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Ярко выраженная игровая эпоха и художественный стиль могут стать сильным крючком."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 78
+        }
+      ]
+    },
+    {
+      "finding_id": "strategy-and-battle",
+      "text_ru": "Смена планирования державы, артиллерийской тактики и флота расширяет возможные формы вовлечения, если сложные хозяйственные системы не подавят интерес.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Понятная тактика и поиск подхода важны вне зависимости от конкретного жанра."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 61
+        }
+      ]
+    }
+  ]
+}
