@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-10-13",
+  "last_curated_on": "2026-10-14",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -1156,8 +1156,8 @@
     {
       "id": "site-gamepad-icon-pack-replacement-01",
       "title": "Сайт: заменить иконки на утверждённый геймпад",
-      "goal": "Установить предоставленный пользователем пакет игровых иконок на сайт, favicon браузера, Apple Touch и PWA/Android, проверив размеры, manifest и кеширование без изменений бизнес-логики.",
-      "status": "blocked",
+      "goal": "Выполнено другим способом: пользователь одобрил SVG как достаточный для замены значка сайта. Отдельная установка оригинальных PNG/ICO, iOS Apple Touch и Android-launcher больше не является требованием.",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Нужны безопасная загрузка предоставленных PNG/ICO в Git, корректные ссылки HTML/manifest, PWA-кеш и узкие регрессионные тесты.",
       "urgency": "высокая",
@@ -1166,9 +1166,9 @@
       "worker_slot": "ЧАТ 2",
       "order": null,
       "depends_on": [],
-      "blocker": "Исполнитель проверил оригинальный архив и подготовил отчет в отдельной ветке, но текущие инструменты не передают бинарные PNG и ICO из sandbox напрямую в GitHub. Нет PR и файлов сайта. Нужна настоящая бинарная загрузка восьми файлов в web на рабочую ветку или другой подтвержденный upload-путь.",
-      "updated_on": "2026-10-13",
-      "updated_at_utc": "2026-10-13T09:14:53.304Z",
+      "blocker": "",
+      "updated_on": "2026-10-14",
+      "updated_at_utc": "2026-10-14T03:40:56.502Z",
       "recent_completion": false
     },
     {
@@ -1192,8 +1192,8 @@
     {
       "id": "site-gamepad-svg-text-conversion-01",
       "title": "Сайт: перевести утверждённую иконку в SVG и заменить через GitHub",
-      "goal": "Использовать тот же готовый пользовательский геймпад, преобразовав исходные бинарные изображения в коммитабельный текстовый SVG; обновить favicon/manifest, честно учесть Apple/Android ограничения.",
-      "status": "blocked",
+      "goal": "Замена favicon и PWA manifest на утверждённый геймпад в SVG из оригинального архива, без обязательной установки PNG/ICO; сайт использует версионированные ссылки на SVG.",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Проверка исходного архива, корректное сохранение изображения SVG, размеры/маска, HTML/manifest ссылки, кеш и регрессионные тесты; Apple PNG может потребовать отдельный бинарный шаг.",
       "urgency": "высокая",
@@ -1202,10 +1202,10 @@
       "worker_slot": "ЧАТ 2",
       "order": null,
       "depends_on": [],
-      "blocker": "SVG-вариант проверен, но исходные PNG/ICO не установлены. Поддержка iPhone/Android PWA на устройстве не доказана; результат ещё не принят.",
-      "updated_on": "2026-10-13",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-13T19:19:41.543Z"
+      "blocker": "",
+      "updated_on": "2026-10-14",
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-14T03:40:56.502Z"
     },
     {
       "id": "deep-versioned-history-pr222-closeout-01",
@@ -1228,7 +1228,7 @@
     {
       "id": "site-gamepad-pr223-closeout-01",
       "title": "Иконка: проверка поддержки браузеров и мобильных платформ",
-      "goal": "Завершить проверку оригинального геймпада, SVG/WebP совместимости, возможного точного PNG/ICO импорта или честного частичного результата.",
+      "goal": "Независимо проверено соответствие оригинальной иконке и базовая SVG-совместимость в Chromium. Пользователь явно не требует PNG/ICO и полной мобильной платформенной поддержки.",
       "status": "complete",
       "effort": "средняя",
       "effort_reason": "SVG установлен в PR; остаются поддержка launcher/iOS и реальные бинарные файлы.",
@@ -1237,9 +1237,9 @@
       "task_file": "WORKER_TASK_SITE_GAMEPAD_PR223_CLOSEOUT_01.md",
       "worker_slot": "ЧАТ 2",
       "blocker": "",
-      "updated_on": "2026-10-13",
-      "updated_at_utc": "2026-10-13T19:19:41.543Z",
-      "recent_completion": true,
+      "updated_on": "2026-10-14",
+      "updated_at_utc": "2026-10-14T03:40:56.502Z",
+      "recent_completion": false,
       "order": null,
       "depends_on": []
     }
