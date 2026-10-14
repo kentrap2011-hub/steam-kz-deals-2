@@ -1,0 +1,1627 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "61c33aa4a37f1792a82981a48ca465f6e1204510d23a5f4e087b6477146dabc9",
+  "prepared_required_sha256": "dfd83e1a723cee6e3a1b2861091baad91ba8f3700b53270282b34ebb38edf50e",
+  "group_plan_sha256": "fe26cc6010399f4df8dafa519e2dad85c8f7d93253f3218789f87ca532295cf0",
+  "group_count": 70,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 7,
+  "start_index": 18,
+  "end_index_exclusive": 21,
+  "appids": [
+    "235540",
+    "239700",
+    "240720"
+  ],
+  "items_sha256": "ccd2b29879d244c2a5502ab06255267f2663e9ab59af97d9e54b456ecc216405",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "1cc6413b6678b87ab2ee88368ff8ddefd254f0b87c7eaf06d5bdcc8cd5c110be",
+  "items": [
+    {
+      "key": "App_235540",
+      "appid": "235540",
+      "title": "Warhammer: End Times - Vermintide",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_235540.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_239700",
+      "appid": "239700",
+      "title": "Hate Plus",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_239700.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_240720",
+      "appid": "240720",
+      "title": "Getting Over It with Bennett Foddy",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_240720.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "a7c1457c19b1cdeff7f8a6e4101f17c4cdf35f28cac8aeceba1dfe345071f77a",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "235540",
+      "title": "Warhammer: End Times - Vermintide",
+      "generated_at_utc": "2026-10-14T18:58:00Z",
+      "expires_at_utc": "2026-11-03T18:58:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Warhammer: End Times - Vermintide",
+        "release_year": 2015,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "235540"
+          }
+        ]
+      },
+      "summary": "Independent player feedback indicates 10 identified gameplay and experience themes. The detailed observations and conflicts separate recurring strengths, trade-offs and dated issues.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Players repeatedly describe four-hero first-person missions against Skaven swarms, emphasizing melee blocking, dodging, heavy attacks and timely limited-use ranged weapons.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004",
+            "feedback-006",
+            "feedback-008"
+          ],
+          "mention_count": 5
+        },
+        {
+          "category": "multiplayer",
+          "statement": "Coordinating a party with friends is a central attraction and often essential on higher difficulties; solo runs using AI teammates are possible but can require additional babysitting.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-005",
+            "feedback-006",
+            "feedback-009"
+          ],
+          "mention_count": 5
+        },
+        {
+          "category": "difficulty",
+          "statement": "Special enemies isolate heroes, and the combination of sudden hordes, mission hazards and friendly fire at higher difficulties rewards practiced positioning and communication.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004",
+            "feedback-006",
+            "feedback-009"
+          ],
+          "mention_count": 5
+        },
+        {
+          "category": "progression",
+          "statement": "Completing runs awards chance-based equipment, and weapons can be upgraded, crafted or broken down; collecting books adds loot rewards at the expense of healing and safety.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-006",
+            "feedback-008"
+          ],
+          "mention_count": 4
+        },
+        {
+          "category": "repetition",
+          "statement": "Some veterans enjoy mastering repeated maps and harder runs, while others say the limited mission structures and random-loot grind eventually reduce variety.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-006",
+            "feedback-008"
+          ],
+          "mention_count": 3
+        },
+        {
+          "category": "structure",
+          "statement": "Missions use linear-to-branching routes through the besieged town and its surroundings, with optional collectibles and escalating encounters rather than open-world exploration.",
+          "sentiment": "neutral",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-006"
+          ],
+          "mention_count": 3
+        },
+        {
+          "category": "other",
+          "statement": "Warhammer's dark-fantasy atmosphere, gothic streets, distinct hero personalities and reactive banter give the otherwise combat-focused campaign a recognizable identity.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-007",
+            "feedback-008"
+          ],
+          "mention_count": 4
+        },
+        {
+          "category": "friction",
+          "statement": "Older reviews complain about loot randomness, occasionally frustrating public matchmaking, reduced campaign length without extra content and dated technical rough edges.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "evidence_status": "historical",
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-005",
+            "feedback-006",
+            "feedback-008"
+          ],
+          "mention_count": 4
+        },
+        {
+          "category": "mechanics",
+          "statement": "Experienced players praise precise high-skill melee combat, the rhythm of protecting teammates and the satisfaction of turning a near-wipe into a successful cooperative extraction.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-007",
+            "feedback-008",
+            "feedback-009"
+          ],
+          "mention_count": 4
+        },
+        {
+          "category": "friction",
+          "statement": "A Russian reviewer observed low combat frame rates on a particular laptop in October 2015; this dated hardware-specific anecdote is not evidence of unresolved 2026 performance issues.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "evidence_status": "historical",
+          "evidence_languages": [
+            "russian"
+          ],
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-005"
+          ],
+          "mention_count": 1
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "Some players value the loot grind as a reason to master maps repeatedly, while others consider randomness and limited mission modes an obstacle to long-term variety.",
+          "recurrence": "moderate",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-004",
+            "feedback-006",
+            "feedback-008"
+          ],
+          "mention_count": 3
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                8
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                8
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                6
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                6,
+                8
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                4,
+                7
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                9
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/235540/Warhammer_End_Times__Vermintide/",
+            "publication_date": null,
+            "language": "mixed",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/235540/reviews/?browsefilter=toprated&filterLanguage=russian&p=1",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "235540",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/235540/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "235540",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2019-04-09",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2021-12-18",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2017-07-01",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-002",
+            "publication_date": "2015-10-25",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-002",
+            "publication_date": "2015-10-22",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-003",
+            "publication_date": "2015-10-23",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-003",
+            "publication_date": "2021-04-10",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-003",
+            "publication_date": "2017-06-26",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-003",
+            "publication_date": "2017-08-31",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "239700",
+      "title": "Hate Plus",
+      "generated_at_utc": "2026-10-14T18:58:00Z",
+      "expires_at_utc": "2026-11-03T18:58:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Hate Plus",
+        "release_year": 2013,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "239700"
+          }
+        ]
+      },
+      "summary": "Independent player feedback indicates 11 identified gameplay and experience themes. The detailed observations and conflicts separate recurring strengths, trade-offs and dated issues.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Most player activity consists of reading ship data logs and discussing discovered events with an AI companion, making this a largely kinetic, low-interaction visual novel.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004",
+            "feedback-009"
+          ],
+          "mention_count": 4
+        },
+        {
+          "category": "structure",
+          "statement": "Returning players can import Analogue: A Hate Story saves, with interactions taking different emphases depending on which AI companion accompanies the investigation.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004"
+          ],
+          "mention_count": 3
+        },
+        {
+          "category": "pacing",
+          "statement": "The story intentionally limits how many logs can be recovered per session and asks players to wait roughly twelve real hours, which some find thematically meaningful and others call frustratingly artificial.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-009"
+          ],
+          "mention_count": 3
+        },
+        {
+          "category": "repetition",
+          "statement": "The structured release of documents gradually clarifies an earlier social and political collapse; some players praise how scattered testimony assembles into a full narrative while others find it too text-heavy.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004",
+            "feedback-009"
+          ],
+          "mention_count": 4
+        },
+        {
+          "category": "difficulty",
+          "statement": "The interface focuses on reading and interpreting character testimony rather than complex puzzles or reflex demands; the main challenge is sustaining attention to the layered documents.",
+          "sentiment": "neutral",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-009"
+          ],
+          "mention_count": 3
+        },
+        {
+          "category": "other",
+          "statement": "The story's themes of authoritarian social change, historical testimony and the troubled lives of ship residents engage some players emotionally and feel more intense than a conventional romance plot.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-004"
+          ],
+          "mention_count": 3
+        },
+        {
+          "category": "other",
+          "statement": "Player accounts consistently mention the AI characters and their changing relationship with the investigator as the main emotional connection, with one storyline considered lighter than the darker central mystery.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003"
+          ],
+          "mention_count": 3
+        },
+        {
+          "category": "friction",
+          "statement": "Some reviewers find the twelve-hour gate, restricted branching and comparatively limited player decisions frustrating even while valuing the narrative.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-009"
+          ],
+          "mention_count": 3
+        },
+        {
+          "category": "translation",
+          "statement": "Russian-speaking participants in a 2016-2017 Steam discussion requested a Russian translation and reported a community patch becoming available in August 2017; one found a compatibility issue with old saves.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "evidence_status": "historical",
+          "evidence_languages": [
+            "russian"
+          ],
+          "source_ids": [
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-005",
+            "feedback-006",
+            "feedback-007",
+            "feedback-008"
+          ],
+          "mention_count": 4
+        },
+        {
+          "category": "other",
+          "statement": "Multiple reviews praise the prose, cross-linked character records and soundtrack, though reactions are divided on the extent of direct agency and the balance between AI relationship scenes and politics.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-004",
+            "feedback-009"
+          ],
+          "mention_count": 5
+        },
+        {
+          "category": "friction",
+          "statement": "A player reviewing a Korean-language experience objected that the dense exposition and obligatory wait diminished enjoyment compared with the predecessor; opinions on narrative pacing differ.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-009"
+          ],
+          "mention_count": 1
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "A multi-hour real-time pause between story-log sessions is praised as a tool for reflection and condemned as an unnecessary restriction on playing when convenient.",
+          "recurrence": "moderate",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-009"
+          ],
+          "mention_count": 3
+        },
+        {
+          "statement": "The writing and political testimony feel more emotionally complex to some readers, while others view this sequel as more boring and less engaging than Analogue.",
+          "recurrence": "limited",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-009",
+            "feedback-010"
+          ],
+          "mention_count": 3
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                5,
+                6
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                5,
+                6,
+                9
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                7,
+                10
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                8
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/239700/Hate_Plus/",
+            "publication_date": null,
+            "language": "mixed",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/239700/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "239700",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/239700/discussions/0/360670708792591338/?l=english",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "historical",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "239700",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/239700/reviews/?browsefilter=toprated&filterLanguage=koreana",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "239700",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2013-11-26",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2014-05-28",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2013-09-07",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-002",
+            "publication_date": "2014-09-19",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
+            "publication_date": "2016-09-11",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-003",
+            "publication_date": "2016-10-17",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-003",
+            "publication_date": "2017-08-30",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-003",
+            "publication_date": "2017-09-16",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-004",
+            "publication_date": "2015-01-15",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-010",
+            "source_id": "source-004",
+            "publication_date": "2015-01-04",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "240720",
+      "title": "Getting Over It with Bennett Foddy",
+      "generated_at_utc": "2026-10-14T18:58:00Z",
+      "expires_at_utc": "2026-11-03T18:58:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Getting Over It with Bennett Foddy",
+        "release_year": 2017,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "240720"
+          }
+        ]
+      },
+      "summary": "Independent player feedback indicates 11 identified gameplay and experience themes. The detailed observations and conflicts separate recurring strengths, trade-offs and dated issues.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "The player climbs a stack of obstacles while sitting in a cauldron, manipulating one physics-driven hammer with a mouse to pull, push, swing or propel the character.",
+          "sentiment": "neutral",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-008"
+          ],
+          "mention_count": 3
+        },
+        {
+          "category": "controls_game_feel",
+          "statement": "Players disagree about whether difficult hammer motion reflects deliberate mastery or sensitivity/acceleration problems, with reports of unexpectedly strong or weak movement on some setups.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "uncertain",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-006",
+            "feedback-007",
+            "feedback-008",
+            "feedback-009"
+          ],
+          "mention_count": 5
+        },
+        {
+          "category": "difficulty",
+          "statement": "Falling can undo long stretches of climbing and return the player to lower sections, making the challenge chiefly about patience, precise momentum and recovering from mistakes.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-008",
+            "feedback-009"
+          ],
+          "mention_count": 4
+        },
+        {
+          "category": "progression",
+          "statement": "There are no conventional character upgrades or checkpoints; improvement comes from player-learned movements, shortcuts and steadily better control of earlier obstacles.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-009"
+          ],
+          "mention_count": 3
+        },
+        {
+          "category": "repetition",
+          "statement": "Repeated failures revisit the same climb; players may turn this into gratifying mastery or find the loss of progress emotionally exhausting.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004",
+            "feedback-005"
+          ],
+          "mention_count": 4
+        },
+        {
+          "category": "pacing",
+          "statement": "Each attempt is self-directed and nonlinear in duration, with devastating falls interrupting progress even near advanced parts of the mountain.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-008"
+          ],
+          "mention_count": 3
+        },
+        {
+          "category": "structure",
+          "statement": "The game presents a continuous obstacle mountain and demands traversal and careful use of environmental surfaces, not a campaign of missions or distinct levels.",
+          "sentiment": "neutral",
+          "recurrence": "limited",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-009"
+          ],
+          "mention_count": 2
+        },
+        {
+          "category": "other",
+          "statement": "Bennett Foddy's reflective voice-over about effort, failure and persistence is cited by players as a meaningful counterpoint to frustrating physics.",
+          "sentiment": "positive",
+          "recurrence": "limited",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ],
+          "mention_count": 2
+        },
+        {
+          "category": "mechanics",
+          "statement": "Players who persist describe great satisfaction when previously difficult climbs become routine, while newcomers often perceive controls as awkward or hostile.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-002",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-008",
+            "feedback-009"
+          ],
+          "mention_count": 4
+        },
+        {
+          "category": "friction",
+          "statement": "Historical and later reports mention mouse acceleration or sudden apparent sensitivity changes, yet other players suggest tuning and practice solve their difficulties; no broad current regression is established.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "evidence_status": "uncertain",
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "source_ids": [
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-007",
+            "feedback-008",
+            "feedback-009"
+          ],
+          "mention_count": 4
+        },
+        {
+          "category": "other",
+          "statement": "A brief Russian-speaking Steam review praises the game's contradictory appeal despite irritation, echoing English reactions that frustration and reward coexist.",
+          "sentiment": "mixed",
+          "recurrence": "anecdotal",
+          "evidence_status": "uncertain",
+          "evidence_languages": [
+            "russian"
+          ],
+          "source_ids": [
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-004"
+          ],
+          "mention_count": 1
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "Players see the single-hammer physics controls either as a fair skill test rewarding practice or as unnaturally unresponsive, with sensitivity settings affecting reports.",
+          "recurrence": "moderate",
+          "source_ids": [
+            "source-002",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-006",
+            "feedback-007",
+            "feedback-008",
+            "feedback-009"
+          ],
+          "mention_count": 5
+        },
+        {
+          "statement": "Falls can create a powerful eventual sense of mastery but also make players reject the whole game as a frustrating waste of time.",
+          "recurrence": "moderate",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004",
+            "feedback-005"
+          ],
+          "mention_count": 4
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                9
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                6
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                7
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                7,
+                8
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                4,
+                9
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                9
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/240720/Getting_Over_It_with_Bennett_Foddy/",
+            "publication_date": null,
+            "language": "mixed",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/240720/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "240720",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/240720/reviews/",
+            "publication_date": null,
+            "language": "mixed",
+            "evidence_role": "uncertain",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "240720",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/240720/discussions/0/1499000547472105350/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "uncertain",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "240720",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/240720/discussions/0/2970650017905868061/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "240720",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2017-12-20",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2021-05-27",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2017-12-16",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-004",
+            "publication_date": "2025-01-23",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-004",
+            "publication_date": "2025-08-25",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-005",
+            "publication_date": "2021-02-13",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-005",
+            "publication_date": "2021-02-16",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    }
+  ],
+  "run_start_authority": {
+    "schema": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-REFERENCE-V1",
+    "schema_version": 1,
+    "run_start_anchor_commit": "dc2f5f9be675737263d031a162cb6c8ed4398b1f",
+    "run_start_nonce": "430c35dc40435bd43ab6c3151c260868"
+  }
+}
