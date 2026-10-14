@@ -1,0 +1,288 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "8a2364e4f6d23416a02ff47dc65d794a37b3896c",
+  "run_start_authority_commit": "b617807b2d6809b0fca688b793e36098817f041a",
+  "run_started_at_utc": "2026-10-14T18:34:53+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "6b8496db72174998b724ea1f542568ce18b58c788ef84dd49210c622ae8c07d4",
+  "work_id": "a80e4796f64c390f832ad1655db6018a3ca1d67aebe122fb205cce1430af75e2",
+  "family_id": "game:1016920",
+  "taste_subject_key": "App_1016920",
+  "appid": "1016920",
+  "taste_fingerprint": "725ef10ec9c94aa0ef83e5543dbeb19c327499f95961726ded2e2568a6c2d311",
+  "candidate_context_sha256": "5eddb6f5dd6fec14e9899e136f92536cf3e18bb4c28774201ea884888903f972",
+  "dossier_content_sha256": "305847fcc1f1a6d197da3e78dcc0c2e15c818e2755b09730ace370776296f01a",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "36c99b0f9058e3a6effdf333873620cd9fe5fcccdb594d71465aa80a8b2261ea",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "confidence": "medium",
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Долгие серии процедурных прохождений могут начать повторять одну задачу прокладки путей без существенного развития, если нет сильного совместного драйва.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "В одиночку или с неразговорчивой случайной командой та же зависимость от распределения ролей превращается в источник раздражения.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Экстренные ситуации требуют быстрых коллективных решений; без согласованности паника может ощущаться наказанием, а не интересной сложностью.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Управление некоторым игрокам кажется неточным; есть отдельное сообщение 2026 года о неработающем контроллере.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Короткий формат и отсутствие развёрнутой кампании могут оставлять меньше причин продолжать в одиночку.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  },
+  "fit_level": "strong",
+  "positive_evidence": [
+    "Совместное строительство рельсов на ходу требует делить роли, добывать ресурсы и согласованно поддерживать движение поезда.",
+    "Нарастающее давление постоянно создаёт конкретные тактические задачи для совместного решения.",
+    "Короткие заходы позволяют играть вместе эпизодически, без обязанности возвращаться к длинной сюжетной кампании."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 76,
+    "development_variety": 49,
+    "structure_pacing_direction": 79,
+    "identity_hooks": 75,
+    "breadth_of_match": 87
+  },
+  "score_findings": [
+    {
+      "finding_id": "railway-role-division",
+      "text_ru": "Партнёры должны быстро разделять добычу ресурсов, укладку путей и поддержку движения поезда; хорошая координация сразу меняет исход очередной ситуации.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9/pattern",
+          "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+          "match_text_ru": "Распределение содержательных ролей в совместной игре — сильный источник удовольствия."
+        },
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Совместное освоение трудных задач ценно как процесс, а не только как победа."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 76
+        }
+      ]
+    },
+    {
+      "finding_id": "procedural-ceiling",
+      "text_ru": "Процедурные карты вносят новые аварийные ситуации, но игроки замечают повторение одного бесконечного цикла без авторских сюжетных этапов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Смена декораций не заменяет настоящее развитие механик или сюжетных событий."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 49
+        }
+      ]
+    },
+    {
+      "finding_id": "immediate-objectives",
+      "text_ru": "Поезд движется постоянно, а препятствия быстро превращаются в ясные краткосрочные задачи по рельсам и снабжению, сохраняя напряжённый темп сессии.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Вовлечённость поддерживают ясные действия с немедленной обратной связью."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 79
+        }
+      ]
+    },
+    {
+      "finding_id": "train-as-teamwork",
+      "text_ru": "Постоянная необходимость строить путь перед движущимся поездом создаёт узнаваемый кооперативный игровой образ, а не набор разрозненных мини-игр.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Запоминающийся механический крючок особенно ценен."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 75
+        }
+      ]
+    },
+    {
+      "finding_id": "repeatable-social",
+      "text_ru": "Короткие коллективные заходы и возрастающие катастрофы особенно хорошо подходят для семейного или дружеского прохождения с реальным обсуждением решений.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9/pattern",
+          "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+          "match_text_ru": "Совместное прохождение запоминается благодаря коммуникации и взаимной помощи."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 87
+        }
+      ]
+    }
+  ]
+}
