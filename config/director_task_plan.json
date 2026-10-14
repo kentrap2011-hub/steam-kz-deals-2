@@ -1242,6 +1242,27 @@
       "recent_completion": false,
       "order": null,
       "depends_on": []
+    },
+    {
+      "id": "deep-history-site-cards-stats-01",
+      "title": "Deep: вернуть предыдущие разборы в карточки и статистику",
+      "goal": "Показывать последний реально завершённый Deep, даже устаревший, его дату, статус и проверяемую дату текущего профиля; статистику по версиям и текущую очередь без выдачи старых оценок за актуальные.",
+      "status": "active",
+      "effort": "высокая",
+      "effort_reason": "Нужно согласовать producer Deep-history поля, два UI-представления, дату Git-профиля и regression/Pages цепочку.",
+      "urgency": "высокая",
+      "urgency_reason": "Пока сайт скрывает завершённые старые Deep после обновления профиля, пользователь не видит ценность выполненного анализа.",
+      "task_file": "WORKER_TASK_DEEP_HISTORY_SITE_CARDS_STATS_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "deep-versioned-history-first-core-01",
+        "deep-versioned-history-pr222-closeout-01"
+      ],
+      "blocker": "Старые отсутствующие в подтверждённом canonical Deep state ревизии нельзя придумывать; даты профиля только из доказанного Git provenance.",
+      "updated_on": "2026-10-14",
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-14T03:56:19.026Z"
     }
   ]
 }
