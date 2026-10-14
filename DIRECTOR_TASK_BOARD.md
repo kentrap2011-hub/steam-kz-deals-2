@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR ACCEPTANCE — 2026-10-14: manual one-shot Deep canonical
+
+- Worker task `WORKER_TASK_PROGRESSIVE_DEEP_MANUAL_ONE_SHOT_AUTHORIZATION_01.md`, report `reviews/worker_reports/progressive-deep-manual-one-shot-authorization-01.md`: independently checked only 5 files in PR #226 (two contracts, reusable launcher, ownership validator, report); required PR CI **4/4 success** on final head `b71c008f8a3c74c829607fa00e25b451e74c16d5`.
+- Director **merged PR #226** into main, merge commit `3a1b6eceece36d3d15ec457bf6a60ebc28fc4f20`. Manual one-shot Progressive Deep is officially authorized as **explicitly user-launched** isolated worker via `config/progressive_pass2_manual_one_shot_prompt.md`. The FULL canonical `config/progressive_pass2_worker_prompt.md` remains unchanged. Deep production runtime, immutable run-start authority/confirmation, work/order/recovery and Russian translation one-shot unchanged.
+- No semantic run was launched, no Scheduled Task or automation changed, no Deep production state/manifest modified. User reports manual-only is the mode operating for several weeks; external task configuration was not inspected. Each future invocation requires a new explicit user request.
+- Physical worker ЧАТ 2 finished and may be retired. Separate Deep website PR #224 and Dossier launch-gate report PR #225 remain independent Director decisions.
+
 ## ACTIVE DIRECTOR DECISION — 2026-10-14: authorize manual Deep without scheduler
 
 - **User decision:** explicitly authorizes existing manual one-shot Progressive Deep semantic execution; states manual mode has been the only operating Deep mode for weeks. Do not infer or change the actual external Scheduled Task status. Same GitHub-owned work/order/pins, run-start V2 marker and confirmed receipt, normal/recovery attempts and canonical writes; no second executor or queue.
