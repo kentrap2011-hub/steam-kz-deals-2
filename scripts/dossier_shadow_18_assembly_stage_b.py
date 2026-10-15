@@ -90,6 +90,9 @@ def prepare(repo, *, research_marker_commit, research_authorization_commit):
             and first_parent_contains(repo, research_authorization_commit, head(repo)),
             "separate GitHub Research feasibility authority missing or invalid")
     fixed_group_order(trial["items"])
+    require(_pin(repo, research_authorization_commit, AUTH_PATH) ==
+            _pin(repo, head(repo), AUTH_PATH),
+            "Research feasibility authorization path overwritten")
     parent = trial["marker_parent"]
     for path in (trial["buffer_path"],):
         require(_pin(repo, parent, path) == _pin(repo, head(repo), path),
