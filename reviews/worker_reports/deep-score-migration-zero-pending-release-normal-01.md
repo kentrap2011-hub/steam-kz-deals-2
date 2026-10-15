@@ -6,7 +6,7 @@
 - Repository: `kentrap2011-hub/steam-kz-deals-2`
 - Base: `main`
 - Branch: `fix/deep-score-migration-exhausted-release-normal-01`
-- Status: implementation proposed; CI and main producer rerun must be checked independently.
+- Status: implementation and focused PR CI verified; production recomputation/deployment not performed; separate Stage-1 preview check remains blocked by the current committed empty Deep queue.
 
 ## Verified cause and authority
 
@@ -30,9 +30,11 @@ No edits to `data/production/**`, `data/cache/**`, migration manifest, legacy De
 
 - Producer prediction after merge and next successful canonical recomputation of an unchanged eligible snapshot: **158 ordinary Deep items** rather than zero, with original current-work order. This is a calculation from the verified prior normal eligible count, **not** a claim that production was recomputed/deployed.
 - Isolated regression is added to existing PASS 2 core workflow test, and the previous score evidence validation remains active.
-- CI: pending check; see PR checks.
-- Other PASS 2 / Deep-history / priority coverage: pending PR CI.
-- One specific frozen target is still `stale_or_missing_prior`; CI diagnostics identify its exact family/current AppID and authorization from state and frozen snapshot without rewriting that state. No assumption of acceptance or semantic reprocessing is made.
+- **PASS**: `Validate Progressive PASS 2 core` run `38775881249`, including Deep legacy full reanalysis, score-evidence regression (synthetic 43/42/1/0 and submitted pending/complete cases), PASS2 producer/core, history and non-consuming recompute. Its read-only producer recompute logged `ready=158` and `PROGRESSIVE_PASS2_ACTIVE_PROJECTION=PASS` on the PR head.
+- **PASS**: `Validate backlog dispositions` run `38775881091`.
+- **BLOCKED (separate existing Stage-1 preview input)**: `Validate Deep Stage 1 migration preparation` run `38775881105`; the isolated six Stage-1 unit tests passed, but `scripts/prepare_deep_stage1_migration_work.py` rejected the **committed production PASS2 work file** with `PreparationError: current canonical one-stage Deep work not available`. That source file still has `items=[]`, `projection_status=score_explainability_migration_active` and is intentionally not rewritten in this PR. This check does not prove a post-merge fresh producer cycle. No Stage1/2 source or cutover was modified to mask it.
+- **Exact unresolved frozen target identity (PASS2 CI read-only diagnosis):** `family_id=game:1556790`, `frozen_appid=1556790`, `current_appid=1556790`, `current_taste_subject_key=App_1556790`. `disposition=stale_or_missing_prior`, `frozen_prior_authorization_id=5c33e8bbb941530691cd9b2e324e8935871d9c1a125fe217c9f0fa21477bf16c`, `current_authorization_id=c9cfe21b3080ed74806d89bb1ad410f116b8af2de7c021571d65cda2e2f44bbb`. The present product AppID and frozen AppID agree, but **the authoritative prior authorization does not match**. This is not a valid frozen migration target to rebind or count as accepted; existing state/history remains intact.
+- PR checks at tested head `fffdad46a5ec20abae7bbf5f8936deb46c1c58d5`: PASS2 core success, backlog success, Stage1 preparation failure on unregenerated committed work. The PR is not merged.
 
 ## Next action
 
