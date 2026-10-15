@@ -8,6 +8,7 @@ from unittest.mock import patch
 import build_progressive_pass2_work
 import card_explanation_policy
 import priority_ranking
+import progressive_pass1
 import progressive_pass2
 import progressive_work_authority
 import refine_visual_ranking
