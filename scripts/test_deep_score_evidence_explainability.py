@@ -1,7 +1,9 @@
 import copy
 import hashlib
 import json
+from contextlib import ExitStack
 from pathlib import Path
+from unittest.mock import patch
 
 import build_progressive_pass2_work
 import card_explanation_policy
@@ -190,6 +192,136 @@ ORIGINAL_STATE = progressive_pass2._json_at_commit(
 )
 
 
+
+def assert_score_migration_release_builder_regressions():
+    # Isolated producer scenarios do not mutate cache, production or the frozen
+    # manifest. They exercise the actual GitHub queue builder (not a second queue).
+    normal_items = [
+        {
+            'family_id': f'game:normal:{n}',
+            'appid': str(n),
+            'taste_subject_key': f'App_{n}',
+            'work_mode': 'normal_first_pass',
+            'sequence': n,
+            'authorization_id': f'normal-auth-{n}',
+        }
+        for n in range(1, 159)
+    ]
+    migration_item = {
+        'family_id': 'game:frozen-target',
+        'appid': '1498570',
+        'taste_subject_key': 'App_1498570',
+        'work_mode': progressive_pass2.SCORE_EXPLAINABILITY_MODE,
+        'migration_sequence': 1,
+        'authorization_id': 'frozen-score-auth',
+    }
+    frozen = {
+        'semantic_generation_id': 'frozen-generation',
+        'semantic_bindings': {'owner': 'frozen'},
+        'profile_pin': {'owner': 'frozen'},
+        'dossier_compatibility_binding': {'owner': 'frozen'},
+    }
+    recomputed = {
+        'items': copy.deepcopy(normal_items),
+        'counts': {'pass2_eligible_count': 158},
+        'semantic_generation_id': 'current-generation',
+        'semantic_bindings': {'owner': 'current'},
+        'profile_pin': {'owner': 'current'},
+    }
+    patches = [
+        (progressive_pass2, 'load_contract', {'active': True}),
+        (progressive_pass1, 'load_jsonl', []),
+        (progressive_pass2, 'load_json', {}),
+        (progressive_pass1, 'load_state', {}),
+        (progressive_pass2, 'load_state', {'entries': {}}),
+        (progressive_pass2, 'current_dossier_binding', {'owner': 'current'}),
+        (progressive_pass2, 'recompute_eligibility', recomputed),
+        (build_progressive_pass2_work, 'order_normal_items', normal_items),
+        (progressive_pass2, 'load_legacy_reanalysis_manifest', {}),
+        (progressive_pass2, 'legacy_reanalysis_work_and_metrics', ([], {'complete': True})),
+        (progressive_pass2, 'load_score_explainability_manifest', {'migration_id': 'one-off-score'}),
+        (progressive_pass1, 'current_bindings', ({}, {}, {})),
+        (build_progressive_pass2_work.progressive_deep_history, 'version_counts', {}),
+    ]
+    with ExitStack() as stack:
+        for module, name, value in patches:
+            stack.enter_context(patch.object(module, name, return_value=value))
+        score_stub = stack.enter_context(
+            patch.object(progressive_pass2, 'score_explainability_work_and_metrics')
+        )
+
+        def scenario(*, accepted, stale, pending, submitted=0, complete=False):
+            assert accepted + stale + pending == 43
+            assert 0 <= submitted <= pending
+            exhausted = not complete and pending == 0 and stale > 0
+            score_stub.return_value = (
+                [copy.deepcopy(migration_item)] * pending,
+                {
+                    'migration_id': 'one-off-score',
+                    'total_count': 43,
+                    'accepted_count': accepted,
+                    'accepted_completed_count': accepted,
+                    'stale_or_missing_prior_count': stale,
+                    'pending_count': pending,
+                    'submitted_count': submitted,
+                    'complete': complete,
+                    'exhausted': exhausted,
+                },
+                frozen,
+            )
+            return build_progressive_pass2_work.build_work_document()
+
+        # 43 frozen / 42 accepted / 1 stale / 0 runnable / 158 eligible:
+        # the migration remains incomplete, but normal Deep can make progress.
+        released = scenario(accepted=42, stale=1, pending=0)
+        assert released['projection_status'] == 'current_github_owned_fast_dossier_deep_v1_projection'
+        assert released['items'] == normal_items
+        assert released['scope']['normal_pass2_eligible_count'] == 158
+        assert released['scope']['pass2_eligible_count'] == 158
+        assert released['scope']['deep_normal_work_paused_for_score_explainability_migration'] is False
+        assert released['scope']['score_explainability_migration']['complete'] is False
+        assert released['scope']['score_explainability_migration']['exhausted'] is True
+        assert released['scope']['score_explainability_migration']['stale_or_missing_prior_count'] == 1
+        assert released['semantic_generation_id'] == 'current-generation'
+        assert released['profile_pin'] == {'owner': 'current'}
+
+        # A frozen pending item retains strict priority, including when it has a
+        # submitted-but-unresolved transport (submission is NOT acceptance).
+        for submitted in (0, 1):
+            prioritized = scenario(accepted=41, stale=1, pending=1, submitted=submitted)
+            assert prioritized['projection_status'] == 'score_explainability_migration_active'
+            assert prioritized['scope']['deep_normal_work_paused_for_score_explainability_migration'] is True
+            assert prioritized['scope']['normal_pass2_eligible_count'] == 158
+            assert prioritized['scope']['pass2_eligible_count'] == 1
+            assert prioritized['scope']['score_explainability_migration']['submitted_count'] == submitted
+            assert prioritized['items'][0]['work_mode'] == progressive_pass2.SCORE_EXPLAINABILITY_MODE
+            assert prioritized['items'][0]['authorization_id'] == 'frozen-score-auth'
+            assert prioritized['semantic_generation_id'] == 'frozen-generation'
+
+        # All 43 accepted is truly complete (not merely exhausted).
+        completed = scenario(accepted=43, stale=0, pending=0, complete=True)
+        assert completed['scope']['score_explainability_migration']['complete'] is True
+        assert completed['scope']['score_explainability_migration']['exhausted'] is False
+        assert completed['items'] == normal_items
+        assert completed['scope']['deep_normal_work_paused_for_score_explainability_migration'] is False
+
+        # Inconsistent producer work/count must never silently release work.
+        score_stub.return_value = (
+            [],
+            {
+                'total_count': 43, 'accepted_count': 41, 'stale_or_missing_prior_count': 1,
+                'pending_count': 1, 'submitted_count': 0, 'complete': False,
+                'exhausted': False,
+            },
+            frozen,
+        )
+        try:
+            build_progressive_pass2_work.build_work_document()
+            raise AssertionError('inconsistent frozen migration work was silently released')
+        except ValueError as exc:
+            assert 'runnable work/count mismatch' in str(exc)
+
+
 def run():
     manifest = MANIFEST
     assert manifest['migration_id'] == 'deep-score-evidence-explainability-alignment-01'
@@ -232,15 +364,51 @@ def run():
     assert built_migration['total_count'] == 43
     assert built_migration['pending_count'] == current_metrics['pending_count']
     assert built_migration['accepted_count'] == current_metrics['accepted_count']
-    if current_metrics['complete']:
-        assert built['projection_status'] != 'score_explainability_migration_active'
-    else:
+    assert current_metrics['exhausted'] == (
+        not current_metrics['complete']
+        and current_metrics['pending_count'] == 0
+        and current_metrics['stale_or_missing_prior_count'] > 0
+    )
+    if current_metrics['pending_count'] > 0:
         assert built['projection_status'] == 'score_explainability_migration_active'
+        assert built['scope']['deep_normal_work_paused_for_score_explainability_migration'] is True
         assert len(built['items']) == current_metrics['pending_count']
         assert all(
             row['work_mode'] == progressive_pass2.SCORE_EXPLAINABILITY_MODE
             for row in built['items']
         )
+    else:
+        # Current product identities use current normal Deep bindings. Frozen
+        # stale target authorization is neither rebound nor silently accepted.
+        assert built['projection_status'] == 'current_github_owned_fast_dossier_deep_v1_projection'
+        assert built['scope']['deep_normal_work_paused_for_score_explainability_migration'] is False
+        assert len(built['items']) == built['scope']['normal_pass2_eligible_count']
+        if not current_metrics['complete']:
+            assert current_metrics['exhausted'] is True
+
+    stale_target_dispositions = []
+    for frozen_item in _current_frozen['items']:
+        current_entry = (CURRENT_STATE.get('entries') or {}).get(frozen_item['family_id'])
+        status, _ = progressive_pass2.score_explainability_target_status(
+            current_entry, frozen_item, manifest['migration_id']
+        )
+        if status == 'stale_or_missing_prior':
+            stale_target_dispositions.append({
+                'family_id': frozen_item['family_id'],
+                'frozen_appid': frozen_item['appid'],
+                'current_appid': (current_entry or {}).get('appid'),
+                'current_taste_subject_key': (current_entry or {}).get('taste_subject_key'),
+                'prior_authorization_id': (
+                    frozen_item['score_migration_provenance']['prior_authorization_id']
+                ),
+                'current_authorization_id': (current_entry or {}).get('authorization_id'),
+                'disposition': status,
+            })
+    assert len(stale_target_dispositions) == current_metrics['stale_or_missing_prior_count']
+    print('DEEP_SCORE_MIGRATION_STALE_DISPOSITIONS=' + json.dumps(
+        stale_target_dispositions, ensure_ascii=False, sort_keys=True
+    ))
+    assert_score_migration_release_builder_regressions()
 
     item = copy.deepcopy(next(row for row in work if row['family_id'] == KOF_FAMILY))
     dossier = attach_frozen_dossier(item)
