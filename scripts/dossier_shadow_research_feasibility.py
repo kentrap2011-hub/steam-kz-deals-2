@@ -128,11 +128,21 @@ def verify_authorization_commit(repo, *, marker_commit, buffer_path, authorizati
     return trial
 
 
+def assert_canonical_remote(repo):
+    """Remote source must be this actual GitHub repository, not a local fixture."""
+    origin = run(repo, "remote", "get-url", "origin")
+    pattern = (r"(?:https://(?:[^/@]+@)?github\.com/|git@github\.com:|"
+               r"ssh://git@github\.com/)" + re.escape(REPOSITORY) + r"(?:\.git)?")
+    require(re.fullmatch(pattern, origin) is not None,
+            "origin is not exact canonical public GitHub repository")
+
+
 def authorized_trial(repo, *, marker_commit, buffer_path, authorization_commit):
     """Read-only READY only with remote durable authority and exact first parent."""
     trial = verify_authorization_commit(
         repo, marker_commit=marker_commit, buffer_path=buffer_path,
         authorization_commit=authorization_commit)
+    assert_canonical_remote(repo)
     # The publisher/authorizer actions are the only permitted issuers. Never
     # trust an arbitrary local Git commit, SHA supplied by chat or test fixture.
     remote = remote_sha(repo, "refs/heads/" + BRANCH)
@@ -172,6 +182,7 @@ def assert_authorizing_dispatch(expected, marker_commit, confirmation, env):
 
 def publish_authorization(repo, *, expected_main, marker_commit):
     """One GH-owned dispatch, create-only descendant push with exact remote lease."""
+    assert_canonical_remote(repo)
     require(run(repo, "symbolic-ref", "--short", "HEAD") == "main"
             and run(repo, "rev-parse", "HEAD") == expected_main
             and remote_sha(repo, "refs/heads/main") == expected_main,
