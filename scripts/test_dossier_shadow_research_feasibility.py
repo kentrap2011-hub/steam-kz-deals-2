@@ -136,6 +136,29 @@ class FeasibilityAuthorityTests(unittest.TestCase):
             verify_authorization_commit(self.repo, marker_commit=self.marker,
                                         buffer_path=BUFFER, authorization_commit=auth)
 
+    def test_06b_each_individual_pin_mismatch_fails_closed(self):
+        keys = (
+            "original_marker_commit", "original_marker_parent",
+            "original_marker_nonce", "research_buffer_blob_sha",
+            "research_buffer_id", "original_trial_contract_blob_sha",
+            "original_semantic_prompt_blob_sha", "feasibility_contract_blob_sha",
+            "feasibility_prompt_blob_sha", "feasibility_verifier_blob_sha",
+            "research_schema_blob_sha",
+        )
+        for key in keys:
+            with self.subTest(binding=key):
+                doc = copy.deepcopy(expected_authorization(self.repo, self.trial))
+                doc[key] = "tampered"
+                auth = self.add_auth(doc)
+                with self.mock_original, self.assertRaisesRegex(
+                    ValueError, "binding mismatch"
+                ):
+                    verify_authorization_commit(
+                        self.repo, marker_commit=self.marker, buffer_path=BUFFER,
+                        authorization_commit=auth)
+                # Reset only the disposable synthetic test checkout; no GitHub ref.
+                g(self.repo, "reset", "--hard", self.marker)
+
     def test_07_wrong_item_or_quality_status_rejected(self):
         doc = expected_authorization(self.repo, self.trial)
         doc["appids"][0] = "999"
