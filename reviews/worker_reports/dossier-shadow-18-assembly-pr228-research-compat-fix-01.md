@@ -109,8 +109,14 @@ This is **not** permission to dispatch any of these workflows in this worker:
 - Existing Research feasibility suite, original Research source/privacy and
   standalone 18-game baseline, existing async Assembly, strict final three-game
   and one-stage Dossier suites are included in dedicated PR CI.
-- CI on final PR head: **await GitHub Actions evidence**. A commit alone is
-  NOT an acceptance result; update this section after verifying the run.
+- Verified correction code/merge head `cbc8b1bc48c037f8d417fc629f9ee1cc8b665792`:
+  Stage B joint Research feasibility → Assembly PR CI **SUCCESS** (run
+  `38776182442`); existing inactive eventual-chain QA **SUCCESS**
+  (`38776182479`); backlog dispositions **SUCCESS** (`38776182951`);
+  execution ownership validation **SUCCESS** (`38776171659`).
+  These are disposable synthetic/offline checks, NOT a genuine freeze or
+  actual semantic Research/Assembly proof. The final report-only commit
+  requires the normal PR CI check again on its own exact SHA.
 - No changes to `data/production`, canonical Dossier, cache/inbox/control,
   Deep, Fast, ranking, site, Scheduled Tasks, Director Board or
   `CURRENT_TASK.md`. No semantic analysis executed, no new implementation
