@@ -1446,6 +1446,7 @@ def score_explainability_work_and_metrics(state_doc, manifest=None, *, repo_root
             'already_compliant_count': 0,
             'stale_or_missing_prior_count': 0,
             'complete': True,
+            'exhausted': False,
         }, {}
     frozen = _score_explainability_frozen_scope(manifest, repo_root=repo_root)
     migration_id = manifest['migration_id']
@@ -1462,6 +1463,7 @@ def score_explainability_work_and_metrics(state_doc, manifest=None, *, repo_root
         'stale_or_missing_prior_count': 0,
         'last_accepted_at_utc': None,
         'complete': False,
+        'exhausted': False,
     }
     work = []
     accepted_times = []
@@ -1490,6 +1492,14 @@ def score_explainability_work_and_metrics(state_doc, manifest=None, *, repo_root
             metrics['accepted_completed_count'] += 1
     metrics['last_accepted_at_utc'] = max(accepted_times) if accepted_times else None
     metrics['complete'] = metrics['accepted_count'] == metrics['total_count']
+    # Exhausting executable frozen targets is not the same as accepting them all.
+    # A stale prior revision stays unresolved (no invented acceptance or retry),
+    # but must not globally starve unrelated normal Deep work.
+    metrics['exhausted'] = (
+        not metrics['complete']
+        and metrics['pending_count'] == 0
+        and metrics['stale_or_missing_prior_count'] > 0
+    )
     return work, metrics, frozen
 
 def recompute_eligibility(
