@@ -4,6 +4,11 @@ on:
   pull_request:
     paths:
       - 'scripts/dossier_shadow_research_trial_publish.py'
+      - 'scripts/dossier_shadow_research_feasibility.py'
+      - 'scripts/test_dossier_shadow_research_feasibility.py'
+      - 'config/dossier_shadow_research_feasibility_contract_v1.json'
+      - 'config/dossier_shadow_research_feasibility_one_shot_prompt.md'
+      - '.github/workflows/authorize-dossier-shadow-research-feasibility.yml'
       - 'scripts/test_dossier_shadow_research_trial_publish.py'
       - '.github/workflows/publish-dossier-shadow-research-freeze.yml'
       - '.github/workflows/validate-dossier-shadow-research-publisher.yml'
@@ -26,6 +31,8 @@ jobs:
       - name: Compile plus run negative and independent marker tests (no GitHub writes)
         run: |
           python -m py_compile scripts/dossier_shadow_research_trial_publish.py scripts/test_dossier_shadow_research_trial_publish.py
+          python -m py_compile scripts/dossier_shadow_research_feasibility.py scripts/test_dossier_shadow_research_feasibility.py
+          python -m unittest discover -s scripts -p 'test_dossier_shadow_research_feasibility.py' -v
           python -m unittest discover -s scripts -p 'test_dossier_shadow_research_trial_publish.py' -v
           python -m unittest discover -s scripts -p 'test_dossier_shadow_research_trial.py' -v
       - name: Prove original strict six-group proposal and immutable Git freeze in temp clone
