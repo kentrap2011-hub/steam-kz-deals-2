@@ -1,0 +1,52 @@
+name: Authorize Dossier 18 sandbox Research FEASIBILITY (manual, once)
+
+# Separate, finite authority AFTER original strict GitHub buffer+marker publication.
+# Does not run Research or Assembly and never changes original BLOCKED flags.
+on:
+  workflow_dispatch:
+    inputs:
+      expected_main_sha:
+        description: 'Exact current 40-hex main SHA, captured immediately before dispatch'
+        type: string
+        required: true
+      original_marker_commit:
+        description: 'Real marker HEAD of original published sandbox ref (40-hex)'
+        type: string
+        required: true
+      confirmation:
+        description: 'Type AUTHORIZE_DOSSIER_SHADOW_18_FEASIBILITY_ONCE'
+        type: string
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dossier-shadow-calibration-20261011-6x3-single-use-feasibility
+  cancel-in-progress: false
+
+jobs:
+  authorize-only-original-frozen-research:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Install existing strict Research validator dependency
+        run: python -m pip install 'jsonschema>=4.21,<5'
+      - name: Create one additional GitHub authorization commit and verify durable remote proof
+        env:
+          EXPECTED_MAIN_SHA: ${{ inputs.expected_main_sha }}
+          ORIGINAL_MARKER_COMMIT: ${{ inputs.original_marker_commit }}
+          EXPLICIT_CONFIRMATION: ${{ inputs.confirmation }}
+        run: |
+          set -euo pipefail
+          python scripts/dossier_shadow_research_feasibility.py --authorize \
+            --expected-main-sha "$EXPECTED_MAIN_SHA" \
+            --marker-commit "$ORIGINAL_MARKER_COMMIT" \
+            --confirmation "$EXPLICIT_CONFIRMATION"
+      - name: Confirm Git working tree is clean
+        run: test -z "$(git status --porcelain --untracked-files=all)"

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-10-14",
+  "last_curated_on": "2026-10-15",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -1347,7 +1347,7 @@
       "id": "dossier-shadow-18-real-research-feasibility-gate-01",
       "title": "Dossier: разрешить настоящее изолированное Research на 18 играх",
       "goal": "Устранить только обязательный A/B/C до начала предварительного испытания, создать исполнимый GitHub-подтверждаемый sandbox-only semantic gate, сохранив настоящий freeze и запрет production.",
-      "status": "active",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Требуется согласовать frozen marker parent, отдельную семантическую авторизацию и канонический Research one-shot без ослабления GitHub publisher.",
       "urgency": "высокая",
@@ -1358,16 +1358,16 @@
       "depends_on": [
         "dossier-shadow-18-real-marker-publish-01"
       ],
-      "blocker": "Пока нельзя проводить Research на реальных играх: immutable GitHub marker и отдельно подтверждённый sandbox-only semantic gate отсутствуют.",
-      "updated_on": "2026-10-14",
-      "updated_at_utc": "2026-10-14T18:46:02.092Z",
-      "recent_completion": false
+      "blocker": "",
+      "updated_on": "2026-10-15",
+      "updated_at_utc": "2026-10-15T16:41:18.770Z",
+      "recent_completion": true
     },
     {
       "id": "dossier-shadow-18-real-assembly-sandbox-execution-01",
       "title": "Dossier: создать исполнимый изолированный Assembly после Research",
       "goal": "Выполнить минимальные реальные GitHub-only pinned stage-B marker/plan/transport и one-shot Assembly для тех же 18 игр, без нового продакшен-кэша, очереди и трёхролевой рецензии до feasibility.",
-      "status": "active",
+      "status": "blocked",
       "effort": "высокая",
       "effort_reason": "Текущий Assembly валидатор только offline; нужна настоящая неproduction marker/plan authority и строгий create-only транспорт после Research.",
       "urgency": "высокая",
@@ -1379,9 +1379,47 @@
         "dossier-shadow-18-assembly-compare-sandbox-01",
         "dossier-shadow-18-real-marker-publish-01"
       ],
-      "blocker": "Для живого этапа Assembly нужен настоящий GitHub Research marker/buffer и исходные подтверждённые Research transport commits; текущая задача реализации не запускает семантику.",
-      "updated_on": "2026-10-14",
-      "updated_at_utc": "2026-10-14T18:46:02.092Z",
+      "blocker": "Исходный запрос на слияние 228 прошёл CI, но несовместим с Research 227: другая sandbox branch и зависимость от старых reviewer flags. Продолжить на том же PR.",
+      "updated_on": "2026-10-15",
+      "updated_at_utc": "2026-10-15T16:59:19.358Z",
+      "recent_completion": false
+    },
+    {
+      "id": "deep-score-migration-zero-pending-release-normal-01",
+      "title": "Deep: возобновить обычную очередь после исчерпанной миграции",
+      "goal": "Исправить блокировку Deep (0 migration pending, 1 stale target), сохраняя честную статистику и 158 нормальных eligible игр через GitHub producer.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Точечная поправка генератора Deep work и регрессия score-explainability миграции; без прямых правок production.",
+      "urgency": "высокая",
+      "urgency_reason": "Ручной Deep разрешён, но GitHub выдаёт ему 0 заданий при 158 eligibility.",
+      "task_file": "WORKER_TASK_DEEP_SCORE_MIGRATION_ZERO_PENDING_RELEASE_NORMAL_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Deep items пустой из-за score migration pending=0, stale=1, complete=false.",
+      "updated_on": "2026-10-15",
+      "updated_at_utc": "2026-10-15T16:59:19.358Z",
+      "recent_completion": false
+    },
+    {
+      "id": "dossier-shadow-18-assembly-pr228-research-compat-fix-01",
+      "title": "Dossier: исправить интеграцию Stage B с реальным Research",
+      "goal": "На существующем запросе на слияние 228 согласовать Stage B с принятым Research 227, единой sandbox-веткой и отдельным авторизационным коммитом.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Подтверждены два интеграционных дефекта; исправление в существующей ветке и совместные тесты.",
+      "urgency": "высокая",
+      "urgency_reason": "Assembly не может работать с уже реализованным реальным Research из-за ошибочной ветки и старых флагов.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_ASSEMBLY_PR228_RESEARCH_COMPAT_FIX_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-shadow-18-real-assembly-sandbox-execution-01"
+      ],
+      "blocker": "Оригинальный запрос на слияние 228 несовместим с принятым Research 227: другой sandbox ref и требует A/B/C вместо separate feasibility authority.",
+      "updated_on": "2026-10-15",
+      "updated_at_utc": "2026-10-15T16:59:19.358Z",
       "recent_completion": false
     }
   ]

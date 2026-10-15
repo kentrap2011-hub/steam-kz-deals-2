@@ -1,0 +1,1523 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "45f351bf2610b6f26f12986ee05936f9d5ace7896a740d916cd15a098079b567",
+  "prepared_required_sha256": "83e865f67fa66cb913f2da2b884ffcb49b597cc41a05e355dc06ed39606c724c",
+  "group_plan_sha256": "c5f6b1e1de1ab49d4aa1114588d65f31acd174efcefa71a5c1d4731df33a166e",
+  "group_count": 71,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 3,
+  "start_index": 6,
+  "end_index_exclusive": 9,
+  "appids": [
+    "2005010",
+    "205840",
+    "2248760"
+  ],
+  "items_sha256": "14ab4b5b679a9b4d762b0e35ddf01c869e1c5377dce522f2eb482c7501efb3fc",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "57572b6e172d67cab29d50fe4b11b2a6693190be1be8835c25f68acf8c2f95fe",
+  "items": [
+    {
+      "key": "App_2005010",
+      "appid": "2005010",
+      "title": "Warhammer 40,000: Boltgun",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2005010.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_205840",
+      "appid": "205840",
+      "title": "Yesterday",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_205840.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2248760",
+      "appid": "2248760",
+      "title": "Car For Sale Simulator",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2248760.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "589a5fd7322bbf3086a2b1e11d36930f61cb65278a8a3581caa5c0967887f655",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "2005010",
+      "title": "Warhammer 40,000: Boltgun",
+      "generated_at_utc": "2026-10-15T16:41:56.099Z",
+      "expires_at_utc": "2026-11-04T16:41:56.099Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Warhammer 40,000: Boltgun",
+        "release_year": 2023,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "2005010"
+          },
+          {
+            "kind": "developer",
+            "value": "Auroch Digital"
+          },
+          {
+            "kind": "publisher",
+            "value": "Focus Entertainment"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 9 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Gunplay emphasizes continuous movement, heavy bolter impacts and shooting through waves of cultists, armored enemies and daemons.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-005",
+            "feedback-007"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "A chunky weapon report, striking explosions and armored footsteps give combat satisfying weight, but visual clutter and enemy damage resistance create friction.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-007"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Much of the campaign advances from corridors to combat arenas, with item hunting and searching for exits taking time away from shooting.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-006",
+            "feedback-007"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Players complain that similar waves of enemies and environments are recycled through long chapters after the appealing first levels.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-004",
+            "feedback-007"
+          ],
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Challenge comes from enemy armor tiers, resource scarcity and swarms, but some players experience sharp spikes or overly durable foes.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-006",
+            "feedback-007"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Pixelated retro shooter aesthetics, bombastic combat effects and faithful Warhammer imagery regularly earn praise.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-005",
+            "feedback-007"
+          ],
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "The campaign can alternate between enjoyable intense arenas and stretches of tedious repeated combat, especially in later chapters.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004",
+            "feedback-007"
+          ],
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Story is largely functional motivation for the Space Marine assault rather than elaborate dialogue or character-driven plot.",
+          "sentiment": "neutral",
+          "recurrence": "limited",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003"
+          ],
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "There is limited persistent build development; temporary weapon bonuses and armor interactions change moment-to-moment tactics rather than producing RPG growth.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-007"
+          ],
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "Some enjoy the relentless action and distinctive Warhammer style while others are frustrated by arena repetition, long maps and shallow progression.",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004",
+            "feedback-007"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                8
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                6
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                7
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                5
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                4,
+                6
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/2005010/Warhammer_40000_Boltgun/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/2005010/negativereviews/?browsefilter=toprated&l=russian&snr=1_5_100010_",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "2005010",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/2005010/reviews/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "2005010",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "other_player_feedback",
+            "domain": "stopgame.ru",
+            "url": "https://stopgame.ru/game/warhammer_40_000_boltgun/review/32182",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/boomershooters/comments/1td9zsh/boltgun_review/",
+            "publication_date": "2026-05-14",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2023-06-02",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2023-05-26",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-004",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://stopgame.ru/game/warhammer_40_000_boltgun/review/32182"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-005",
+            "publication_date": "2026-05-14",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://www.reddit.com/r/boomershooters/comments/1td9zsh/boltgun_review/"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "205840",
+      "title": "Yesterday",
+      "generated_at_utc": "2026-10-15T16:41:56.099Z",
+      "expires_at_utc": "2026-11-04T16:41:56.099Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Yesterday",
+        "release_year": 2012,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "205840"
+          },
+          {
+            "kind": "developer",
+            "value": "Pendulo Studios"
+          },
+          {
+            "kind": "publisher",
+            "value": "Focus Entertainment"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 9 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Point-and-click puzzles revolve around hotspot inspection, dialogue, using found objects and combining inventory items, assisted by optional hints.",
+          "sentiment": "neutral",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-006",
+            "feedback-008",
+            "feedback-009"
+          ],
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "The puzzle difficulty is often manageable and hints accessible, though a few contrived item combinations and the drag-and-drop inventory can irritate.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-006",
+            "feedback-007",
+            "feedback-008"
+          ],
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "A supernatural mystery with occult killings and amnesia alternates between time periods and protagonists and offers end-of-game outcome choices.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-006",
+            "feedback-009"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "A commonly reported three-to-six-hour campaign is brisk enough to finish but regarded by many as too short for satisfying plot development.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-005",
+            "feedback-006",
+            "feedback-007",
+            "feedback-008",
+            "feedback-010"
+          ],
+          "mention_count": 6,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Dark occult themes are a significant stylistic departure from Pendulo's earlier comedic adventures, with twists and secrets driving curiosity.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-006",
+            "feedback-007"
+          ],
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Comic-style environments and illustrated characters receive praise, though the small location count, abrupt scene cuts and sparse animations seem underfunded.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-006",
+            "feedback-007",
+            "feedback-008"
+          ],
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Inventory combination controls, some slow or instantly skipped character movement and limited hotspots attract criticism despite streamlining traversal.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-006",
+            "feedback-009"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Character arcs and revelations feel compelling to some players but hurried or thinly established to others.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-006",
+            "feedback-007",
+            "feedback-010"
+          ],
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "The limited locations and puzzles make for little repetitive grinding but also constrain chances to explore the setting and supporting cast.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-007",
+            "feedback-008"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "The concise dark mystery and late twists engage some fans while others think the plotting and puzzles end before they fully develop.",
+          "recurrence": "moderate",
+          "mention_count": 5,
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-006",
+            "feedback-007",
+            "feedback-010"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "Exact-game player accounts were verifiable on Steam; independent fan-forum retrieval failed with HTTP 502 and alternate sources were not securely attributable.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                6
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                8
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                8
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                4,
+                7
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                5
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                6,
+                7
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/205840/Yesterday/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/205840/positivereviews/?browsefilter=toprated&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "205840",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/205840/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "205840",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2014-04-30",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2019-10-30",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2020-01-15",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-002",
+            "publication_date": "2022-02-10",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-002",
+            "publication_date": "2025-12-21",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-003",
+            "publication_date": "2018-10-29",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-003",
+            "publication_date": "2014-11-08",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-003",
+            "publication_date": "2020-02-20",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-003",
+            "publication_date": "2014-01-11",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-010",
+            "source_id": "source-003",
+            "publication_date": "2013-11-30",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "2248760",
+      "title": "Car For Sale Simulator",
+      "generated_at_utc": "2026-10-15T16:41:56.099Z",
+      "expires_at_utc": "2026-11-04T16:41:56.099Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Car For Sale Simulator",
+        "release_year": 2024,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "2248760"
+          },
+          {
+            "kind": "developer",
+            "value": "Red Axe Games"
+          },
+          {
+            "kind": "publisher",
+            "value": "Red Axe Games"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 9 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Buying discounted used vehicles, haggling, detailing or repairing them and reselling for more money forms the main play loop.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-009"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "Profitable trades fund bigger stock, workshop improvements and a larger dealership, making the early rise in income rewarding.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-006"
+          ],
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Routine car trading, finding undervalued vehicles and watching one's earnings increase can be unexpectedly absorbing.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-006"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "After the initial discovery, some players find a pattern of similar vehicle transactions without enough fresh strategic activities.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-004",
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-007",
+            "feedback-002"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Several reviews criticize vehicle steering, sudden camera rotation and confusing collision behavior, even when they like the dealership idea.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-005",
+            "feedback-003"
+          ],
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "The city links dealers, workshops and seller appointments, although changes to the map have frustrated some returning players.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-004",
+            "feedback-003"
+          ],
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Profit depends on acquisition costs and customer offers; early-access player reports said aggressive low offers made business margins frustrating.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "evidence_status": "historical",
+          "source_ids": [
+            "source-005",
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-009",
+            "feedback-002"
+          ],
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "A 2024 player reported post-update camera glitches; newer player accounts describe saving or interface bugs, but their frequency in the present build is not independently resolved.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "evidence_status": "uncertain",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-007",
+            "feedback-008"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ]
+        },
+        {
+          "category": "multiplayer",
+          "statement": "Players request a fuller shared dealership mode, while their accounts chiefly describe the single-player business loop.",
+          "sentiment": "neutral",
+          "recurrence": "anecdotal",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-002"
+          ],
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "Players disagree whether the repetitive car-flipping system stays satisfying; awkward vehicle handling and software roughness add further tradeoffs.",
+          "recurrence": "moderate",
+          "mention_count": 4,
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-005",
+            "feedback-007"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                6
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                5,
+                6
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "covered",
+              "observation_indices": [
+                8
+              ]
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                4,
+                5,
+                7
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                7
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/2248760/Car_For_Sale_Simulator_2023/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/2248760/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "2248760",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/2248760/reviews/?l=russian",
+            "publication_date": null,
+            "language": "mixed",
+            "evidence_role": "uncertain",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "2248760",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/2248760/reviews/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "uncertain",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "2248760",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/2248760/discussions/0/3825289852115241449/",
+            "publication_date": "2023-05-18",
+            "language": "non_russian",
+            "evidence_role": "historical",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2023-08-29",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2023-08-29",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2024-11-01",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-003",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-004",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-004",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-005",
+            "publication_date": "2023-05-18",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://steamcommunity.com/app/2248760/discussions/0/3825289852115241449/"
+          }
+        ]
+      }
+    }
+  ],
+  "run_start_authority": {
+    "schema": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-REFERENCE-V1",
+    "schema_version": 1,
+    "run_start_anchor_commit": "4cfa6ec3d35e49183b8808e3ba308f744b889ace",
+    "run_start_nonce": "589c7b3cbde4e9f4d9caf0825b1642e9"
+  }
+}
