@@ -1,0 +1,1720 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "45f351bf2610b6f26f12986ee05936f9d5ace7896a740d916cd15a098079b567",
+  "prepared_required_sha256": "83e865f67fa66cb913f2da2b884ffcb49b597cc41a05e355dc06ed39606c724c",
+  "group_plan_sha256": "c5f6b1e1de1ab49d4aa1114588d65f31acd174efcefa71a5c1d4731df33a166e",
+  "group_count": 71,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 4,
+  "start_index": 9,
+  "end_index_exclusive": 12,
+  "appids": [
+    "22490",
+    "225260",
+    "235540"
+  ],
+  "items_sha256": "6f0ad56611c6635ffd43f92be3ebe399c9d574865e649ed2ca7f19577fea3925",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "57572b6e172d67cab29d50fe4b11b2a6693190be1be8835c25f68acf8c2f95fe",
+  "items": [
+    {
+      "key": "App_22490",
+      "appid": "22490",
+      "title": "Fallout: New Vegas",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_22490.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_225260",
+      "appid": "225260",
+      "title": "Brutal Legend",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_225260.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_235540",
+      "appid": "235540",
+      "title": "Warhammer: End Times - Vermintide",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_235540.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "1252fcd74b75d2baa1bcaec182af0a3c97a3c493966202862779f14bd88916c6",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "22490",
+      "title": "Fallout: New Vegas",
+      "generated_at_utc": "2026-10-15T16:47:54.961Z",
+      "expires_at_utc": "2026-11-04T16:47:54.961Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Fallout: New Vegas",
+        "release_year": 2010,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "22490"
+          },
+          {
+            "kind": "developer",
+            "value": "Obsidian Entertainment"
+          },
+          {
+            "kind": "publisher",
+            "value": "Bethesda Softworks"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 10 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Role-playing revolves around exploring the Mojave, talking and negotiating with factions, building attributes and skills and handling first-person or VATS-assisted gunfights.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-004",
+            "feedback-006"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Major factions and an independent route support multiple mutually exclusive political conclusions; diplomacy, combat and reputation choices affect how quests resolve.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-006"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "SPECIAL attributes, perks and specialized skill checks make dialogue and weapon strategies feel responsive to character builds; high charisma and luck support noncombat approaches.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-006"
+          ],
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Extensive dialogue, morally ambiguous factions and vividly interconnected settlements are repeatedly praised as strengths of the story and worldbuilding.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Players describe very large scope for replaying alternate factions and approaches, but revisiting the same quests and sections can feel less surprising after many runs.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003"
+          ],
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Several PC players report crashes, freeze risks and rough technical edges, including losing progress during lengthy sessions; the dated accounts cannot establish today's reliability.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "evidence_status": "uncertain",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-009",
+            "feedback-005"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "regional",
+          "statement": "The exact Steam appid 22490 PCR edition has historically prompted complaints about an isolated community hub and edition naming, while other PCR players report ordinary mod compatibility and alternate language selection.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "uncertain",
+          "source_ids": [
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-007",
+            "feedback-008",
+            "feedback-010"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "localization",
+          "statement": "A long Russian-language account criticized translation quality and lost references, while players discussing the PCR edition disagree about how reliably the localized game and addons run.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "evidence_status": "uncertain",
+          "source_ids": [
+            "source-002",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-010"
+          ],
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "The degree of challenge changes with build choices and willingness to use speech or luck solutions instead of fighting; some open-world boundaries restrict travel freedom.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-004",
+            "source-003",
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-006",
+            "feedback-009",
+            "feedback-004"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "The quest and faction web invites extended exploration and revisits, though opening navigation and many dialogue-heavy sequences can make progress slower than a linear shooter.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-004",
+            "feedback-006"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "The complex branching role-playing and substantial Mojave content win long-term admiration, while PC stability and PCR edition questions temper the experience for some owners.",
+          "recurrence": "moderate",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-007",
+            "feedback-008",
+            "feedback-009",
+            "feedback-006"
+          ],
+          "mention_count": 5
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                8
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                8
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                9
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                3
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                5,
+                6,
+                7
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/22490/Fallout_New_Vegas/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/22490/reviews/?browsefilter=toprated&filterLanguage=russian&p=1",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "22490",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/22490/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "22490",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/22490/positivereviews/?browsefilter=trendthreemonths&filterLanguage=russian&l=russian&p=1",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "22490",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/22490/discussions/0/1836811737994457736/",
+            "publication_date": "2019-03-12",
+            "language": "russian",
+            "evidence_role": "uncertain",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-006",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/22490/discussions/0/4032476115582985636/",
+            "publication_date": "2024-01-01",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2018-04-24",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2018-05-20",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2020-11-26",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-002",
+            "publication_date": "2019-11-29",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-004",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-004",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-003",
+            "publication_date": "2018-07-14",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-003",
+            "publication_date": "2024-04-02",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-003",
+            "publication_date": "2024-04-16",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-010",
+            "source_id": "source-005",
+            "publication_date": "2019-03-12",
+            "language": "russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://steamcommunity.com/app/22490/discussions/0/1836811737994457736/"
+          },
+          {
+            "feedback_id": "feedback-011",
+            "source_id": "source-006",
+            "publication_date": "2024-01-01",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://steamcommunity.com/app/22490/discussions/0/4032476115582985636/"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "225260",
+      "title": "Brutal Legend",
+      "generated_at_utc": "2026-10-15T16:47:54.961Z",
+      "expires_at_utc": "2026-11-04T16:47:54.961Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Brutal Legend",
+        "release_year": 2013,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "225260"
+          },
+          {
+            "kind": "developer",
+            "value": "Double Fine Productions"
+          },
+          {
+            "kind": "publisher",
+            "value": "Double Fine Productions"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 10 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "The adventure blends guitar-powered third-person brawling, exploration by hot-rod and larger battles in which the hero must summon, command and fight alongside units.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-006"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "controls_game_feel",
+          "statement": "First-person accounts praise the punchy guitar/axe special attacks and driving fantasy, but some dislike imprecise unit selection, cramped RTS commands and vehicle handling.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-005",
+            "feedback-007"
+          ],
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Progression unexpectedly shifts focus from solo hack-and-slash to large-scale stage battles; this strong change of format drives much of the divided response.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-005",
+            "feedback-006",
+            "feedback-007"
+          ],
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "A heavy-metal album-cover-inspired world, licensed classic metal soundtrack, celebrity appearances and Jack Black's roadie lead are consistently highlighted as the distinctive appeal.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-004",
+            "feedback-005",
+            "feedback-006",
+            "feedback-009"
+          ],
+          "mention_count": 6,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "Exploration leads to upgrades for the car and melee/guitar abilities, collectibles and lore; some accounts value this variety while finding side quests formulaic.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-006"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Driving activities and repeated limited side-mission templates become monotonous in some runs; other players remain motivated by music and new fantasy environments.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-005"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "The RTS combat requires juggling hero attacks, production and positioning; some enjoy the strategic improvisation and others find orders or later encounters frustrating.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-007",
+            "feedback-008",
+            "feedback-009"
+          ],
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "The story's middle-to-end acceleration leaves some players wanting more developed plot arcs, while others value a brisk funny heavy-metal story.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-009"
+          ],
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "multiplayer",
+          "statement": "The multiplayer emphasis is stage-battle RTS; a later player response questions how populated the online mode remains, so current matchmaking availability is unresolved.",
+          "sentiment": "mixed",
+          "recurrence": "anecdotal",
+          "evidence_status": "uncertain",
+          "source_ids": [
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-008"
+          ],
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Character humor and exaggerated concert-world design receive praise even from players who ultimately dislike the mixed-genre mechanics.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-002",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-004",
+            "feedback-005",
+            "feedback-001",
+            "feedback-009"
+          ],
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "Some players enjoy joining and directly fighting beside an army and call the unusual hybrid its strongest idea; critics find the same RTS controls and sudden genre switch damaging to an otherwise enjoyable action adventure.",
+          "recurrence": "moderate",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004",
+            "feedback-005",
+            "feedback-007",
+            "feedback-008"
+          ],
+          "mention_count": 5
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                6
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                6
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                7
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                4,
+                5
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "covered",
+              "observation_indices": [
+                8
+              ]
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                7,
+                9
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                9
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2,
+                5,
+                6
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                8
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/225260/Brutal_Legend/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/225260/reviews/?browsefilter=trendyear&filterLanguage=russian&l=english&p=1",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "225260",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/225260/negativereviews/?browsefilter=toprated&l=english&snr=1_5_9_",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "225260",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/225260/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "225260",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/225260/discussions/0/1290691937725051372/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-006",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/225260/discussions/0/597399610072272078/",
+            "publication_date": "2025-05-23",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2025-08-30",
+            "language": "russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2025-07-23",
+            "language": "russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2025-07-24",
+            "language": "russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
+            "publication_date": "2021-09-05",
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
+            "publication_date": "2013-12-23",
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-004",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-005",
+            "publication_date": "2017-06-04",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://steamcommunity.com/app/225260/discussions/0/1290691937725051372/"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-005",
+            "publication_date": "2017-06-05",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://steamcommunity.com/app/225260/discussions/0/1290691937725051372/"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-006",
+            "publication_date": "2025-05-23",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://steamcommunity.com/app/225260/discussions/0/597399610072272078/"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "235540",
+      "title": "Warhammer: End Times - Vermintide",
+      "generated_at_utc": "2026-10-15T16:47:54.961Z",
+      "expires_at_utc": "2026-11-04T16:47:54.961Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Warhammer: End Times - Vermintide",
+        "release_year": 2015,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "235540"
+          },
+          {
+            "kind": "developer",
+            "value": "Fatshark"
+          },
+          {
+            "kind": "publisher",
+            "value": "Fatshark"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 11 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "coop",
+          "statement": "Four heroes survive Skaven swarms and special enemies together, with a melee-heavy Left 4 Dead style focus on watching teammates and preventing isolation.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-004",
+            "feedback-005",
+            "feedback-008"
+          ],
+          "mention_count": 5,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "mechanics",
+          "statement": "First-person fighting combines dodges, blocking, charged weapon swings, limited ranged ammunition and situational use of healing and support items.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003",
+            "feedback-005",
+            "feedback-009"
+          ],
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Missions take teams across grim Warhammer Fantasy locations to complete compact objectives, rescue allies and survive extraction or end encounters.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-005",
+            "feedback-008"
+          ],
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Hard modes demand careful control, cooperative roles and enemy awareness; success against patrols and special enemies is often a major source of mastery satisfaction.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003",
+            "feedback-005"
+          ],
+          "mention_count": 4,
+          "evidence_languages": [
+            "non_russian"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "Level and mission completion reward random weapons, trinkets and item crafting, with useful loadout differences but player criticism of luck-heavy loot rolls.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-005",
+            "feedback-004"
+          ],
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Solo play with companion bots is markedly less dependable than coordinated human teams; players describe poor bot rescue timing and unclear response to disabled heroes.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-004",
+            "feedback-006",
+            "feedback-008",
+            "feedback-009"
+          ],
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Repeating the same objectives and stages at higher difficulties can be deeply absorbing for coordinated groups, yet shallow or grind-heavy for players wanting varied activities.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-005",
+            "feedback-007",
+            "feedback-008"
+          ],
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Gloomy Warhammer scenery, Skaven character design, atmospheric sound, and voiced banter receive broad praise.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-006",
+            "feedback-009"
+          ],
+          "mention_count": 4,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Some older owners report occasional disconnects, bugs and clunky menus or dice-roll result screens; their historical accounts do not demonstrate current frequency.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "evidence_status": "uncertain",
+          "source_ids": [
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-005",
+            "feedback-006"
+          ],
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ]
+        },
+        {
+          "category": "localization",
+          "statement": "An early Russian-language Steam discussion describes trouble selecting the translated interface in the launcher; the dated thread does not resolve the current language setup.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "evidence_status": "uncertain",
+          "source_ids": [
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-010"
+          ],
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Player accounts portray the campaign as mission-driven rather than a deep character-based RPG: five distinct heroes and equipment choices provide identity more than a branching narrative.",
+          "sentiment": "neutral",
+          "recurrence": "moderate",
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-005",
+            "feedback-004"
+          ],
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "Coordinated cooperative melee encounters produce long-term satisfaction for skilled groups, but repetitive missions, loot randomness and weak bots can diminish solo appeal.",
+          "recurrence": "moderate",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-004",
+            "feedback-005",
+            "feedback-006",
+            "feedback-008"
+          ],
+          "mention_count": 5
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                5
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                6
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                6
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                5
+              ]
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                7,
+                10
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1,
+                3,
+                7
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                4,
+                5,
+                6,
+                8
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                8,
+                9
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/235540/Warhammer_End_Times__Vermintide/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/235540/reviews/?browsefilter=toprated&snr=1_5_9_",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "235540",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/235540/reviews/?browsefilter=toprated&filterLanguage=german&p=1",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "235540",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/235540?l=russian",
+            "publication_date": null,
+            "language": "mixed",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "235540",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/235540/discussions/1/483368526582762709/?l=russian",
+            "publication_date": "2015-10-25",
+            "language": "russian",
+            "evidence_role": "uncertain",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2015-10-23",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2021-04-10",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
+            "publication_date": "2017-06-26",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-002",
+            "publication_date": "2017-08-31",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
+            "publication_date": "2016-07-02",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-003",
+            "publication_date": "2019-06-19",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-007",
+            "source_id": "source-003",
+            "publication_date": "2017-09-03",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-008",
+            "source_id": "source-004",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-009",
+            "source_id": "source-004",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-010",
+            "source_id": "source-005",
+            "publication_date": "2015-10-25",
+            "language": "russian",
+            "acquisition_mode": "stable_item",
+            "url": "https://steamcommunity.com/app/235540/discussions/1/483368526582762709/?l=russian"
+          }
+        ]
+      }
+    }
+  ],
+  "run_start_authority": {
+    "schema": "TASTE-STEAM-REVIEW-DOSSIER-RUN-START-REFERENCE-V1",
+    "schema_version": 1,
+    "run_start_anchor_commit": "4cfa6ec3d35e49183b8808e3ba308f744b889ace",
+    "run_start_nonce": "589c7b3cbde4e9f4d9caf0825b1642e9"
+  }
+}
