@@ -16,7 +16,11 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 from dossier_shadow_research_trial import (
-    PREFIX, TRIAL, frozen_trial, inspect_transport, sandbox_output_path, require,
+    PREFIX, TRIAL, sandbox_output_path, require,
+)
+from dossier_shadow_research_trial_publish import BRANCH, BUFFER as RESEARCH_BUFFER
+from dossier_shadow_research_feasibility import (
+    AUTH_PATH, authorized_trial, inspect_authorized_transport,
 )
 from dossier_two_stage_assembly_semantic_worker import (
     _check_exact_source_first, inactive_assembly_gate,
@@ -35,7 +39,6 @@ SCHEMA = "DOSSIER-SHADOW-18-ASSEMBLY-BUFFER-V1"
 RESULT = "DOSSIER-ASYNC-ASSEMBLY-RESULT-V1"
 H40 = re.compile(r"^[0-9a-f]{40}$")
 H32 = re.compile(r"^[0-9a-f]{32}$")
-BRANCH = "sandbox/" + TRIAL
 
 
 def raw_at(repo, commit, path):
@@ -68,19 +71,24 @@ def _pin(repo, revision, path):
     return blob(repo, revision, path)
 
 
-def prepare(repo, *, research_marker_commit):
+def prepare(repo, *, research_marker_commit, research_authorization_commit):
     """Produce the *single fixed* GitHub-owned buffer (no file writes).
 
     Marker and frozen Research buffer must already have been issued in this
     exact sandbox branch. No generic source commit input is accepted.
     """
     inactive_assembly_gate()
-    trial = frozen_trial(repo, marker_commit=research_marker_commit,
-                         buffer_path=PREFIX + "/research_buffer.json")
-    require(trial["sandbox_semantics_authorized"] is True,
-            "parallel Research semantic/reviewer gate is still blocked")
-    require(first_parent_contains(repo, research_marker_commit, head(repo)),
-            "Research marker not on current branch first-parent lineage")
+    # The original frozen_trial remains BLOCKED by design.
+    # Separate GitHub direct-child feasibility authority alone unlocks sandbox.
+    trial = authorized_trial(
+        repo, marker_commit=research_marker_commit,
+        buffer_path=RESEARCH_BUFFER,
+        authorization_commit=research_authorization_commit)
+    require(trial["status"] == "sandbox_research_invocation_ready"
+            and trial["canonical_acceptance"] is False
+            and trial["production_authorized"] is False
+            and first_parent_contains(repo, research_authorization_commit, head(repo)),
+            "separate GitHub Research feasibility authority missing or invalid")
     fixed_group_order(trial["items"])
     parent = trial["marker_parent"]
     for path in (trial["buffer_path"],):
@@ -97,6 +105,7 @@ def prepare(repo, *, research_marker_commit):
     for item in trial["items"]:
         a = item["assignment"]
         identity = {"trial_id": TRIAL, "research_marker_commit": research_marker_commit,
+                    "research_authorization_commit": research_authorization_commit,
                     "assignment": a, "assembly_prompt_blob": prompt_blob}
         aid = "shadow-assembly-" + canonical_sha256(identity)[:24]
         entries.append({
@@ -110,6 +119,9 @@ def prepare(repo, *, research_marker_commit):
     body = {
         "schema": SCHEMA, "version": 1, "trial_id": TRIAL, "sandbox_only": True,
         "research_marker_commit": research_marker_commit,
+        "research_authorization_commit": research_authorization_commit,
+        "research_authorization_path": AUTH_PATH,
+        "research_authorization_blob_sha": _pin(repo, research_authorization_commit, AUTH_PATH),
         "research_buffer_path": trial["buffer_path"],
         "research_buffer_blob_sha": trial["buffer_blob_sha"],
         "research_buffer_id": json_at(repo, parent, trial["buffer_path"])["research_buffer_id"],
@@ -161,8 +173,9 @@ def frozen(repo, *, marker_commit):
     require(first_parent_contains(repo, marker_commit, head(repo)),
             "Assembly marker not in current exact sandbox history")
     manifest = json_at(repo, parent, BUFFER)
-    require(manifest == prepare(repo,
-                               research_marker_commit=manifest["research_marker_commit"]),
+    require(manifest == prepare(
+        repo, research_marker_commit=manifest["research_marker_commit"],
+        research_authorization_commit=manifest["research_authorization_commit"]),
             "Assembly buffer/plan not exactly derived from original Research")
     require(blob(repo, parent, BUFFER) == blob(repo, head(repo), BUFFER),
             "Assembly plan overwritten/stale")
@@ -187,11 +200,13 @@ def inspect(repo, *, marker_commit, research_commits):
             set(research_commits) <= {e["appid"] for e in manifest["items"]}
             and all(H40.fullmatch(str(c)) for c in research_commits.values()),
             "foreign or malformed submitted Research commit locator")
-    trial = frozen_trial(repo, marker_commit=manifest["research_marker_commit"],
-                         buffer_path=manifest["research_buffer_path"])
+    trial = authorized_trial(
+        repo, marker_commit=manifest["research_marker_commit"],
+        buffer_path=manifest["research_buffer_path"],
+        authorization_commit=manifest["research_authorization_commit"])
     fixed_group_order(trial["items"])
     result = []
-    for item, entry in zip(trial["items"], manifest["items"]):
+    for ordinal, (item, entry) in enumerate(zip(trial["items"], manifest["items"])):
         row = {"group_sequence": entry["group_sequence"],
                "item_index": entry["item_index"], "appid": entry["appid"],
                "assembly_assignment_id": entry["assembly_assignment_id"],
@@ -202,8 +217,14 @@ def inspect(repo, *, marker_commit, research_commits):
             row["status"] = "research_not_submitted"
         else:
             try:
-                proof = inspect_transport(repo, trial=trial, item=item,
-                                          result_commit=commit)
+                require(first_parent_contains(
+                    repo, manifest["research_authorization_commit"], commit),
+                    "Research transport predates feasibility authorization")
+                proof = inspect_authorized_transport(
+                    repo, marker_commit=manifest["research_marker_commit"],
+                    buffer_path=manifest["research_buffer_path"],
+                    authorization_commit=manifest["research_authorization_commit"],
+                    ordinal=ordinal, result_commit=commit)
                 require(first_parent_contains(repo, commit, head(repo)),
                         "Research package not in current branch lineage")
                 if exists(repo, head(repo), row["output_path"]):
@@ -243,8 +264,10 @@ def build_candidate(repo, *, marker_commit, research_commits, appid, semantic,
     research_raw = raw_at(repo, r["research_proof"]["result_commit"],
                           r["research_proof"]["path"])
     package = strict_json(research_raw)
-    trial = frozen_trial(repo, marker_commit=manifest["research_marker_commit"],
-                         buffer_path=manifest["research_buffer_path"])
+    trial = authorized_trial(
+        repo, marker_commit=manifest["research_marker_commit"],
+        buffer_path=manifest["research_buffer_path"],
+        authorization_commit=manifest["research_authorization_commit"])
     a = next(item["assignment"] for item in trial["items"] if
              item["appid"] == appid)
     original = {**a, "research_marker_anchor_commit": trial["marker_commit"],
@@ -352,9 +375,12 @@ def verify_candidate(repo, *, marker_commit, research_commits, appid,
 def _issuer_env():
     require(os.environ.get("GITHUB_ACTIONS") == "true"
             and os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
+            and os.environ.get("GITHUB_REPOSITORY") == "kentrap2011-hub/steam-kz-deals-2"
+            and os.environ.get("GITHUB_RUN_ATTEMPT") == "1"
             and os.environ.get("GITHUB_REF_NAME") == BRANCH
-            and os.environ.get("GITHUB_WORKFLOW_REF", "").split("@")[0].endswith(
-                "/.github/workflows/issue-dossier-shadow-18-assembly.yml"),
+            and os.environ.get("GITHUB_WORKFLOW_REF") ==
+                "kentrap2011-hub/steam-kz-deals-2/.github/workflows/"
+                "issue-dossier-shadow-18-assembly.yml@refs/heads/" + BRANCH,
             "issuer is GitHub one-shot workflow on the exact sandbox branch only")
 
 
@@ -363,6 +389,7 @@ def cli():
     sp = parser.add_subparsers(dest="command", required=True)
     issue = sp.add_parser("issue-buffer")
     issue.add_argument("--research-marker-commit", required=True)
+    issue.add_argument("--research-authorization-commit", required=True)
     mark = sp.add_parser("issue-marker")
     mark.add_argument("--nonce", required=True)
     ready = sp.add_parser("inspect")
@@ -374,7 +401,9 @@ def cli():
     if args.command == "issue-buffer":
         _issuer_env()
         require(not exists(repo, head(repo), BUFFER), "one-shot buffer already exists")
-        body = prepare(repo, research_marker_commit=args.research_marker_commit)
+        body = prepare(
+            repo, research_marker_commit=args.research_marker_commit,
+            research_authorization_commit=args.research_authorization_commit)
         print(json.dumps(body, ensure_ascii=False, sort_keys=True, separators=(",", ":")))
     elif args.command == "issue-marker":
         _issuer_env()
