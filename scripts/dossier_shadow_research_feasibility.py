@@ -101,7 +101,7 @@ def expected_authorization(repo, trial):
         "feasibility_verifier_blob_sha": blob(repo, parent, FEASIBILITY_VERIFIER),
         "research_schema_blob_sha": blob(repo, parent,
                                         "config/dossier_research_package_v1.schema.json"),
-        "group_order": ORDER, "appids": EXPECTED_APPIDS,
+        "group_order": list(ORDER), "appids": list(EXPECTED_APPIDS),
         "mode": "sandbox_feasibility_Research_only_not_quality_approval",
         "quality_gate": "independent_AB_C_required_later_before_production",
         "canonical_acceptance": False, "assembly_authorized": False,
