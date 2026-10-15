@@ -1,0 +1,42 @@
+name: Validate Dossier shadow 18 real Assembly Stage B (PR only)
+
+on:
+  pull_request:
+    paths:
+      - "scripts/dossier_shadow_18_assembly_stage_b.py"
+      - "scripts/test_dossier_shadow_18_assembly_stage_b.py"
+      - "config/dossier_shadow_18_assembly_semantic_prompt.md"
+      - ".github/workflows/issue-dossier-shadow-18-assembly.yml"
+      - ".github/workflows/validate-dossier-shadow-18-real-assembly.yml"
+      - "reviews/worker_reports/dossier-shadow-18-real-assembly-sandbox-execution-01.md"
+      - "reviews/worker_reports/dossier-shadow-18-assembly-pr228-research-compat-fix-01.md"
+
+permissions:
+  contents: read
+
+jobs:
+  original-shadow-stage-b:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - run: python -m pip install 'jsonschema>=4.21,<5'
+      - name: Compile only bounded shadow stage-B and its tests
+        run: python -m py_compile scripts/dossier_shadow_18_assembly_stage_b.py scripts/test_dossier_shadow_18_assembly_stage_b.py
+      - name: Shadow Stage B disposable Git negative/lineage tests
+        run: python -m unittest discover -s scripts -p 'test_dossier_shadow_18_assembly_stage_b.py' -v
+      - name: Merged Research feasibility Git authority tests
+        run: python -m unittest discover -s scripts -p 'test_dossier_shadow_research_feasibility.py' -v
+      - name: Existing Research shadow strict/source/physical safety
+        run: python -m unittest discover -s scripts -p 'test_dossier_shadow_research_trial.py' -v
+      - name: Existing strict async Assembly/Research chain
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_assembly_semantic_worker.py' -v
+      - name: Existing 18-game original baseline and quality comparison
+        run: python -m unittest discover -s scripts -p 'test_dossier_shadow_18_assembly_sandbox.py' -v
+      - name: Existing strict final three-game group validation
+        run: python -m unittest discover -s scripts -p 'test_dossier_two_stage_final_acceptance.py' -v
+      - name: Original one-stage Dossier unchanged
+        run: python -m unittest discover -s scripts -p 'test_taste_steam_review_dossier_strict_recovery.py' -v

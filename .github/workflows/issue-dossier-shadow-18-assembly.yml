@@ -1,0 +1,84 @@
+name: Issue one-shot Dossier shadow 18 Assembly authority (manual, sandbox only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      research_marker_commit:
+        description: "Original frozen Research marker SHA from GitHub"
+        type: string
+        required: true
+      research_feasibility_authorization_commit:
+        description: "Exact separate Research feasibility direct-child commit SHA"
+        type: string
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dossier-shadow-18-assembly-issue-only
+  cancel-in-progress: false
+
+jobs:
+  issue-frozen-assembly:
+    if: github.ref == 'refs/heads/sandbox/dossier-shadow-calibration-20261011-6x3-frozen-research' && github.run_attempt == 1 && github.repository == 'kentrap2011-hub/steam-kz-deals-2'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      RESEARCH_MARKER: ${{ inputs.research_marker_commit }}
+      RESEARCH_AUTH: ${{ inputs.research_feasibility_authorization_commit }}
+      SANDBOX_BRANCH: sandbox/dossier-shadow-calibration-20261011-6x3-frozen-research
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Dependencies for existing strict Research and Assembly validators
+        run: python -m pip install 'jsonschema>=4.21,<5'
+      - name: Assert exact sandbox-only issuer and clean tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = "$SANDBOX_BRANCH"
+          [[ "$RESEARCH_MARKER" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$RESEARCH_AUTH" =~ ^[0-9a-f]{40}$ ]]
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$GITHUB_REPOSITORY" = kentrap2011-hub/steam-kz-deals-2
+          test -z "$(git status --porcelain)"
+          test ! -e reviews/dossier_shadow_offline/trials/dossier-shadow-calibration-20261011-6x3/assembly_buffer.json
+          git merge-base --is-ancestor "$RESEARCH_MARKER" HEAD
+          git merge-base --is-ancestor "$RESEARCH_AUTH" HEAD
+      - name: Freeze original 18 ordered plans in one create-only sandbox file
+        shell: bash
+        run: |
+          set -euo pipefail
+          path=reviews/dossier_shadow_offline/trials/dossier-shadow-calibration-20261011-6x3/assembly_buffer.json
+          python scripts/dossier_shadow_18_assembly_stage_b.py issue-buffer --research-marker-commit "$RESEARCH_MARKER" --research-authorization-commit "$RESEARCH_AUTH" > "$path"
+          python -m json.tool "$path" >/dev/null
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- "$path"
+          test "$(git diff --cached --name-only)" = "$path"
+          git diff --cached --check
+          git commit -m "Freeze fixed shadow Assembly 18-game plan [one-shot]"
+          git push origin "HEAD:refs/heads/$SANDBOX_BRANCH"
+      - name: Create exact single-parent GitHub-issued Assembly run-start marker
+        shell: bash
+        run: |
+          set -euo pipefail
+          nonce="$(python -c 'import secrets; print(secrets.token_hex(16))')"
+          path="reviews/dossier_shadow_offline/trials/dossier-shadow-calibration-20261011-6x3/assembly_run_starts/$nonce.json"
+          mkdir -p "$(dirname "$path")"
+          python scripts/dossier_shadow_18_assembly_stage_b.py issue-marker --nonce "$nonce" > "$path"
+          git add -- "$path"
+          test "$(git diff --cached --name-only)" = "$path"
+          git diff --cached --check
+          git commit -m "Issue original shadow Assembly marker [one-shot]"
+          marker="$(git rev-parse HEAD)"
+          git push origin "HEAD:refs/heads/$SANDBOX_BRANCH"
+          echo "assembly_marker_commit=$marker" >> "$GITHUB_STEP_SUMMARY"
+          echo "assembly_buffer_path=reviews/dossier_shadow_offline/trials/dossier-shadow-calibration-20261011-6x3/assembly_buffer.json" >> "$GITHUB_STEP_SUMMARY"
+          echo "issuer_run_id=$GITHUB_RUN_ID" >> "$GITHUB_STEP_SUMMARY"
+          echo "research_feasibility_authorization_commit=$RESEARCH_AUTH" >> "$GITHUB_STEP_SUMMARY"
+          echo "Semantic execution is NOT started. Verify GitHub run success, source Research marker and frozen plan before separate user invocation." >> "$GITHUB_STEP_SUMMARY"
