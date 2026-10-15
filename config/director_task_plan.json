@@ -1367,7 +1367,7 @@
       "id": "dossier-shadow-18-real-assembly-sandbox-execution-01",
       "title": "Dossier: создать исполнимый изолированный Assembly после Research",
       "goal": "Выполнить минимальные реальные GitHub-only pinned stage-B marker/plan/transport и one-shot Assembly для тех же 18 игр, без нового продакшен-кэша, очереди и трёхролевой рецензии до feasibility.",
-      "status": "blocked",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Текущий Assembly валидатор только offline; нужна настоящая неproduction marker/plan authority и строгий create-only транспорт после Research.",
       "urgency": "высокая",
@@ -1379,16 +1379,16 @@
         "dossier-shadow-18-assembly-compare-sandbox-01",
         "dossier-shadow-18-real-marker-publish-01"
       ],
-      "blocker": "Исходный запрос на слияние 228 прошёл CI, но несовместим с Research 227: другая sandbox branch и зависимость от старых reviewer flags. Продолжить на том же PR.",
+      "blocker": "",
       "updated_on": "2026-10-15",
-      "updated_at_utc": "2026-10-15T16:59:19.358Z",
-      "recent_completion": false
+      "updated_at_utc": "2026-10-15T18:49:05.261Z",
+      "recent_completion": true
     },
     {
       "id": "deep-score-migration-zero-pending-release-normal-01",
       "title": "Deep: возобновить обычную очередь после исчерпанной миграции",
       "goal": "Исправить блокировку Deep (0 migration pending, 1 stale target), сохраняя честную статистику и 158 нормальных eligible игр через GitHub producer.",
-      "status": "active",
+      "status": "blocked",
       "effort": "средняя",
       "effort_reason": "Точечная поправка генератора Deep work и регрессия score-explainability миграции; без прямых правок production.",
       "urgency": "высокая",
@@ -1397,16 +1397,16 @@
       "worker_slot": "ЧАТ 1",
       "order": null,
       "depends_on": [],
-      "blocker": "Deep items пустой из-за score migration pending=0, stale=1, complete=false.",
+      "blocker": "Реализация исправления Deep готова в открытом PR 229; 2/3 Actions successful, существующая Stage1 preview проверка упала на старом committed work с items=[]; нужен прямой closeout на том же PR, без production перезаписи.",
       "updated_on": "2026-10-15",
-      "updated_at_utc": "2026-10-15T16:59:19.358Z",
+      "updated_at_utc": "2026-10-15T18:49:05.261Z",
       "recent_completion": false
     },
     {
       "id": "dossier-shadow-18-assembly-pr228-research-compat-fix-01",
       "title": "Dossier: исправить интеграцию Stage B с реальным Research",
       "goal": "На существующем запросе на слияние 228 согласовать Stage B с принятым Research 227, единой sandbox-веткой и отдельным авторизационным коммитом.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Подтверждены два интеграционных дефекта; исправление в существующей ветке и совместные тесты.",
       "urgency": "высокая",
@@ -1417,9 +1417,29 @@
       "depends_on": [
         "dossier-shadow-18-real-assembly-sandbox-execution-01"
       ],
-      "blocker": "Оригинальный запрос на слияние 228 несовместим с принятым Research 227: другой sandbox ref и требует A/B/C вместо separate feasibility authority.",
+      "blocker": "",
       "updated_on": "2026-10-15",
-      "updated_at_utc": "2026-10-15T16:59:19.358Z",
+      "updated_at_utc": "2026-10-15T18:49:05.261Z",
+      "recent_completion": true
+    },
+    {
+      "id": "deep-score-migration-pr229-final-ci-closeout-01",
+      "title": "Deep: закрыть оставшуюся CI проверку PR229 без ослабления Stage1",
+      "goal": "Довести существующий PR Deep миграции до верифицированной новой CI с честным разграничением устаревшего committed work и read-only producer projection.",
+      "status": "active",
+      "effort": "низкая",
+      "effort_reason": "Сама логика исправлена и core PASS2 проверка зелёная; оставшийся несовместимый Stage1 preview check читает старую canonical очередь.",
+      "urgency": "высокая",
+      "urgency_reason": "Без приёмки producer исправления ручной Deep остаётся без заданий.",
+      "task_file": "WORKER_TASK_DEEP_SCORE_MIGRATION_PR229_FINAL_CI_CLOSEOUT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "deep-score-migration-zero-pending-release-normal-01"
+      ],
+      "blocker": "Нужно не ослабляя Stage1 CI доказать разницу старого committed work и read-only нового нормального producer; точный CI 2 green / 1 fail.",
+      "updated_on": "2026-10-15",
+      "updated_at_utc": "2026-10-15T18:49:05.261Z",
       "recent_completion": false
     }
   ]
