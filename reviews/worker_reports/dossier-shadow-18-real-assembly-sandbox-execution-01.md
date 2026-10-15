@@ -2,7 +2,7 @@
 
 - Worker: ЧАТ 2; separate IMPLEMENT PR; branch `implement/dossier-shadow-18-real-assembly-sandbox-execution-01`; base `main`.
 - Date: 2026-10-15.
-- Status: **implementation proposed; real semantic execution explicitly BLOCKED**
+- Status: **implementation complete, PR-only CI green; real semantic execution explicitly BLOCKED**
   until the parallel Research gate has produced and verified the GitHub-owned
   Research marker/buffer, the same sandbox branch has been prepared and a
   successful actual GitHub issuer workflow run is verified. **No new Research
@@ -80,6 +80,31 @@ trial has run, any source was independently reviewed, A/B/C parity was
 approved, or canonical Dossier was published. A workflow run id text in the
 marker alone is not sufficient as external attestation: separately verify
 GitHub's corresponding successful workflow run / branch / marker commit.
+
+## Verified PR-only checks
+
+For code head `6c8d1b1a22716019b19423319da24c0073feb38d`:
+- Stage B PR-only dedicated CI: run
+  `38769814470`, **success**, including compiled sandbox adapter/tests,
+  existing Research/source privacy checks, existing async Assembly, fixed
+  18-game baseline, final strict three-game validation and live one-stage
+  compatibility.
+- Inactive Dossier GitHub eventual chain acceptance QA: run
+  `38769814427`, **success**.
+- Backlog dispositions validation: run `38769814333`, **success**.
+- This is entirely synthetic/offline CI; genuine same-branch Research marker,
+  verified issuer provenance and real source evidence still absent. Neither
+  GitHub Actions run success nor this report constitutes semantic authorization.
+
+## Reusable project navigation candidate (parallel isolation)
+
+If the Director updates `PROJECT_ROUTES.md` after merging parallel PRs, the
+smallest Stage B route is: GitHub issuer workflow
+`.github/workflows/issue-dossier-shadow-18-assembly.yml` →
+`scripts/dossier_shadow_18_assembly_stage_b.py::frozen/inspect/build_candidate/
+verify_candidate` → isolated `reviews/dossier_shadow_offline/trials/` output;
+all strict semantic checks remain in the existing Research + async Assembly +
+V2 strict validators. Do not modify the shared route concurrently with ЧАТ 1.
 
 ## Acceptance and operator next steps
 
