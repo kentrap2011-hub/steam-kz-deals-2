@@ -11,6 +11,7 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -235,7 +236,7 @@ def inspect(repo, *, marker_commit, research_commits):
                 else:
                     row["status"] = "ready"
                 row["research_proof"] = proof
-            except (ValueError, KeyError):
+            except (ValueError, KeyError, subprocess.CalledProcessError):
                 row["status"] = "research_transport_invalid"
                 row["diagnostic_code"] = "invalid_origin_or_binding"
         result.append(row)
