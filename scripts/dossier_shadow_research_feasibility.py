@@ -14,6 +14,7 @@ from pathlib import Path
 from dossier_shadow_research_trial import (
     CONTRACT as ORIGINAL_CONTRACT, PROMPT as ORIGINAL_PROMPT,
     PREFIX, TRIAL, frozen_trial, require, json_git, blob,
+    validate_candidate, inspect_transport,
 )
 from dossier_shadow_research_trial_publish import (
     BRANCH, BUFFER, EXPECTED_APPIDS, ORDER, REPOSITORY,
@@ -162,6 +163,38 @@ def authorized_trial(repo, *, marker_commit, buffer_path, authorization_commit):
             "remote_head": remote, "canonical_acceptance": False,
             "assembly_authorized": False, "production_authorized": False,
             "quality_AB_C_completed": False}
+
+
+def authorized_item(repo, *, marker_commit, buffer_path,
+                    authorization_commit, ordinal):
+    """Only one of original exact 18 items; never caller-selected bindings."""
+    trial = authorized_trial(repo, marker_commit=marker_commit,
+                             buffer_path=buffer_path,
+                             authorization_commit=authorization_commit)
+    require(type(ordinal) is int and 0 <= ordinal < 18,
+            "item must be exact original frozen ordinal 0..17")
+    return trial, trial["items"][ordinal]
+
+
+def validate_authorized_candidate(repo, *, marker_commit, buffer_path,
+                                  authorization_commit, ordinal, package):
+    """Only an authorized original immutable assignment may be validated."""
+    trial, item = authorized_item(
+        repo, marker_commit=marker_commit, buffer_path=buffer_path,
+        authorization_commit=authorization_commit, ordinal=ordinal)
+    return validate_candidate(item, package, marker_commit=trial["marker_commit"],
+                              nonce=trial["nonce"])
+
+
+def inspect_authorized_transport(repo, *, marker_commit, buffer_path,
+                                 authorization_commit, ordinal, result_commit,
+                                 expected_raw=None):
+    """Actual first-parent create-only original item provenance; no acceptance."""
+    trial, item = authorized_item(
+        repo, marker_commit=marker_commit, buffer_path=buffer_path,
+        authorization_commit=authorization_commit, ordinal=ordinal)
+    return inspect_transport(repo, trial=trial, item=item,
+                             result_commit=result_commit, expected_raw=expected_raw)
 
 
 def assert_authorizing_dispatch(expected, marker_commit, confirmation, env):
