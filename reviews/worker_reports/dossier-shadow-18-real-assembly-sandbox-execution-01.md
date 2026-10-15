@@ -125,3 +125,27 @@ V2 strict validators. Do not modify the shared route concurrently with ЧАТ 1.
 **Prohibited changes performed:** none to production, live Dossier cache/
 inbox/state, Deep/Fast, ranking, site, Scheduled Tasks, old audits or parallel
 ЧАТ 1-owned files. No PR self-merge and no semantic attempt.
+
+## Correction 2026-10-15 — joint Research PR #227 compatibility
+
+**The earlier claimed branch and gate were incorrect.** PR #227 is now merged
+(`7d4a39b8ede4e858ae9ef58442c6cdb34df227fe`).
+The original Research publisher's one and only sandbox branch is
+`sandbox/dossier-shadow-calibration-20261011-6x3-frozen-research`, imported
+directly from `scripts/dossier_shadow_research_trial_publish.py::BRANCH`.
+The original publisher MUST remain `frozen_trial.status=blocked` and the
+original semantic/reviewer booleans remain false. A separate Research
+feasibility commit directly parented by the original Research marker is now
+required by Stage B via `authorized_trial`. Stage B's buffer freezes that
+authorization commit, original authorization path/blob and original Research
+marker/buffer; each submitted Research transport must descend from the
+authorization and pass the existing `inspect_authorized_transport` check.
+
+The one-shot Stage B workflow accepts exactly the original Research marker and
+the separate feasibility authorization commit, only on the original branch,
+first GitHub run attempt. Manual semantics still require independent actual
+GitHub issuer run-success / branch / workflow / first-parent / marker proof
+outside worker-supplied JSON. A/B/C parity remains post-evidence.
+For final CI evidence and handoff see
+`reviews/worker_reports/dossier-shadow-18-assembly-pr228-research-compat-fix-01.md`.
+The earlier synthetic green result is NOT an integration signoff.
