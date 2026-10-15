@@ -9,6 +9,7 @@ on:
       - ".github/workflows/issue-dossier-shadow-18-assembly.yml"
       - ".github/workflows/validate-dossier-shadow-18-real-assembly.yml"
       - "reviews/worker_reports/dossier-shadow-18-real-assembly-sandbox-execution-01.md"
+      - "reviews/worker_reports/dossier-shadow-18-assembly-pr228-research-compat-fix-01.md"
 
 permissions:
   contents: read
@@ -27,6 +28,8 @@ jobs:
         run: python -m py_compile scripts/dossier_shadow_18_assembly_stage_b.py scripts/test_dossier_shadow_18_assembly_stage_b.py
       - name: Shadow Stage B disposable Git negative/lineage tests
         run: python -m unittest discover -s scripts -p 'test_dossier_shadow_18_assembly_stage_b.py' -v
+      - name: Merged Research feasibility Git authority tests
+        run: python -m unittest discover -s scripts -p 'test_dossier_shadow_research_feasibility.py' -v
       - name: Existing Research shadow strict/source/physical safety
         run: python -m unittest discover -s scripts -p 'test_dossier_shadow_research_trial.py' -v
       - name: Existing strict async Assembly/Research chain
