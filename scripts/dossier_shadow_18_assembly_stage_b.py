@@ -223,7 +223,8 @@ def inspect(repo, *, marker_commit, research_commits):
             "rows": result, "ready_count": sum(r["status"] == "ready" for r in result)}
 
 
-def build_candidate(repo, *, marker_commit, research_commits, appid, semantic):
+def build_candidate(repo, *, marker_commit, research_commits, appid, semantic,
+                    _verify_existing=False):
     """Strict existing result schema/source-first semantics, shadow namespace only.
 
     No Git writes. Caller must publish the exact returned path create-only and
@@ -236,7 +237,9 @@ def build_candidate(repo, *, marker_commit, research_commits, appid, semantic):
                   if e["appid"] == appid]
     require(len(candidates) == 1, "unbound Assembly AppID")
     e, r = candidates[0]
-    require(r["status"] == "ready", "Research not proven or candidate already exists")
+    require(r["status"] == "ready" or (
+        _verify_existing and r["status"] == "candidate_already_submitted"),
+        "Research not proven or candidate already exists")
     research_raw = raw_at(repo, r["research_proof"]["result_commit"],
                           r["research_proof"]["path"])
     package = strict_json(research_raw)
@@ -335,15 +338,10 @@ def verify_candidate(repo, *, marker_commit, research_commits, appid,
             "Assembly original file overwritten")
     payload = strict_json(raw)
     semantic = {k: payload[k] for k in ("outcome", "payload", "supplemental_operations")}
-    # Exact re-validation against frozen Research, not mutable latest.
-    # An existing exact output is expected for verification only.
-    from unittest.mock import patch
-    original_exists = exists
-    with patch(f"{__name__}.exists", side_effect=lambda repo_, rev, path:
-               False if path == row["output_path"] else original_exists(repo_, rev, path)):
-        expected_path, expected = build_candidate(
-            repo, marker_commit=marker_commit, research_commits=research_commits,
-            appid=appid, semantic=semantic)
+    # Read-only exact verification; existing candidate never authorizes a rewrite.
+    expected_path, expected = build_candidate(
+        repo, marker_commit=marker_commit, research_commits=research_commits,
+        appid=appid, semantic=semantic, _verify_existing=True)
     require(expected_path == row["output_path"] and expected == payload,
             "Assembly result mutated frozen Git binding or provenance")
     return {"status": "submitted_unaccepted_shadow_only",
