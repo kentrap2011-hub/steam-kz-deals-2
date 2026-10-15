@@ -2,8 +2,8 @@
   "contract": "CROSS-PLATFORM-GIVEAWAY-V1",
   "schema_version": 1,
   "country_code": "KZ",
-  "generated_at_utc": "2026-10-14T23:18:35.241193Z",
-  "fresh_until_utc": "2026-10-16T05:18:35.241193Z",
+  "generated_at_utc": "2026-10-15T23:09:37.115282Z",
+  "fresh_until_utc": "2026-10-17T05:09:37.115282Z",
   "snapshot_status": "incomplete",
   "required_sources": [
     "steam",
@@ -15,21 +15,21 @@
       "required": true,
       "status": "failed",
       "complete": false,
-      "observed_at_utc": "2026-10-14T23:18:35.241193Z",
+      "observed_at_utc": "2026-10-15T23:09:37.115282Z",
       "endpoint": "existing KZ Steam catalog + targeted first-party validation",
       "candidate_count": 0,
       "accepted_count": 0,
       "rejected_count": 0,
       "unverified_count": 0,
       "error_code": "SOURCE_STALE",
-      "error": "Steam candidate snapshot is stale: 866.5h",
+      "error": "Steam candidate snapshot is stale: 890.4h",
       "details": {}
     },
     "epic": {
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-10-14T23:18:35.241193Z",
+      "observed_at_utc": "2026-10-15T23:09:37.115282Z",
       "endpoint": "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions",
       "candidate_count": 2,
       "accepted_count": 2,
@@ -49,7 +49,7 @@
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-10-14T23:18:35.241193Z",
+      "observed_at_utc": "2026-10-15T23:09:37.115282Z",
       "endpoint": "https://catalog.gog.com/v1/catalog",
       "candidate_count": 0,
       "accepted_count": 0,
@@ -73,27 +73,27 @@
   "unverified_offer_count": 0,
   "games": [
     {
-      "canonical_game_key": "meta-v1:abbf57217a9a4530ba05f48f",
+      "canonical_game_key": "meta-v1:d3851fdf607da0faff19e069",
       "identity_confidence": "high",
       "identity_evidence": {
         "basis": "exact_normalized_title_and_publishers",
         "publishers": [
-          "the gang studio ab"
+          "yak co"
         ]
       },
-      "title": "Out of Sight",
+      "title": "Agent A: A puzzle in disguise",
       "offers": [
         {
           "source_id": "epic",
-          "source_offer_id": "epic:436099305a2249a8bbe4d9113fc41d53:cb733f3432db46bca94965b422c33ede:2026-10-15T15:00:00Z:2026-10-08T15:00:00Z",
-          "source_product_id": "436099305a2249a8bbe4d9113fc41d53:cb733f3432db46bca94965b422c33ede",
+          "source_offer_id": "epic:45f125178d8c4bc18e1827a307bcc5c0:db1202a30c5541dd99cdf54c918a9348:2026-10-22T15:00:00Z:2026-10-15T15:00:00Z",
+          "source_product_id": "45f125178d8c4bc18e1827a307bcc5c0:db1202a30c5541dd99cdf54c918a9348",
           "storefront": "epic",
-          "title": "Out of Sight",
-          "claim_url": "https://store.epicgames.com/en-US/p/out-of-sight-b96ca8",
-          "promotion_start_utc": "2026-10-08T15:00:00Z",
-          "promotion_end_utc": "2026-10-15T15:00:00Z",
-          "observed_at_utc": "2026-10-14T23:18:35.241193Z",
-          "base_price": 410000,
+          "title": "Agent A: A puzzle in disguise",
+          "claim_url": "https://store.epicgames.com/en-US/p/agent-a-a-puzzle-in-disguise-42fe5f",
+          "promotion_start_utc": "2026-10-15T15:00:00Z",
+          "promotion_end_utc": "2026-10-22T15:00:00Z",
+          "observed_at_utc": "2026-10-15T23:09:37.115282Z",
+          "base_price": 370000,
           "final_price": 0,
           "currency": "KZT",
           "discount_percent": 100,
@@ -111,27 +111,27 @@
       ]
     },
     {
-      "canonical_game_key": "meta-v1:4573103a0a476f088cc01d0b",
+      "canonical_game_key": "meta-v1:8188648fecf3ec36011effb0",
       "identity_confidence": "high",
       "identity_evidence": {
         "basis": "exact_normalized_title_and_publishers",
         "publishers": [
-          "bitfall studios gmbh"
+          "feardemic sp z o o"
         ]
       },
-      "title": "TerraScape",
+      "title": "Bad Cheese",
       "offers": [
         {
           "source_id": "epic",
-          "source_offer_id": "epic:bfb80547289b477193ce3b14d83cd292:af6b823b8698465f9aedc3bddf2e8686:2026-10-15T15:00:00Z:2026-10-08T15:00:00Z",
-          "source_product_id": "bfb80547289b477193ce3b14d83cd292:af6b823b8698465f9aedc3bddf2e8686",
+          "source_offer_id": "epic:a0c80bf673a548bc97b4bb25abfaf2b4:6a846880836044a2adad614ac771f487:2026-10-22T15:00:00Z:2026-10-15T15:00:00Z",
+          "source_product_id": "a0c80bf673a548bc97b4bb25abfaf2b4:6a846880836044a2adad614ac771f487",
           "storefront": "epic",
-          "title": "TerraScape",
-          "claim_url": "https://store.epicgames.com/en-US/p/terrascape-2b12b1",
-          "promotion_start_utc": "2026-10-08T15:00:00Z",
-          "promotion_end_utc": "2026-10-15T15:00:00Z",
-          "observed_at_utc": "2026-10-14T23:18:35.241193Z",
-          "base_price": 315000,
+          "title": "Bad Cheese",
+          "claim_url": "https://store.epicgames.com/en-US/p/bad-cheese-4256d9",
+          "promotion_start_utc": "2026-10-15T15:00:00Z",
+          "promotion_end_utc": "2026-10-22T15:00:00Z",
+          "observed_at_utc": "2026-10-15T23:09:37.115282Z",
+          "base_price": 240000,
           "final_price": 0,
           "currency": "KZT",
           "discount_percent": 100,
