@@ -1,0 +1,505 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "appid": "1918450",
+  "title": "HunterX",
+  "generated_at_utc": "2026-10-16T02:56:00Z",
+  "expires_at_utc": "2026-11-05T02:56:00Z",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "HunterX",
+    "release_year": 2022,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "1918450"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 9 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The central 2.5D action loop involves exploring linked areas and managing stamina while using dodges, guards and parries against ordinary foes and bosses.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 5,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003",
+        "feedback-006",
+        "feedback-007"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Bosses demand pattern recognition and repeated attempts; some players praise satisfying challenge, while others report abruptly unfair damage spikes, difficult juggle escapes and unpredictable hit detection.",
+      "sentiment": "mixed",
+      "recurrence": "strong",
+      "mention_count": 7,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003",
+        "feedback-006",
+        "feedback-007",
+        "feedback-008",
+        "feedback-009"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Leveling, equipment and the skill tree let players develop combat abilities, but several players criticize stat-only nodes, compulsory dash upgrades and hard-to-reverse stamina investment.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 5,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003",
+        "feedback-004",
+        "feedback-007",
+        "feedback-009"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Exploration leads through connected action-platforming areas with short runs between many save points, secret pickups and gated traversal upgrades; players disagree about how richly the map rewards exploration.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-004",
+        "feedback-005",
+        "feedback-007"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Movement, attacks, collision and status-effect signaling can feel imprecise during crowded fights; complaints include unreliable dash invulnerability windows and visual clarity problems.",
+      "sentiment": "negative",
+      "recurrence": "strong",
+      "mention_count": 4,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-004",
+        "feedback-005",
+        "feedback-009"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Retro-leaning fantasy art, enemy designs and music are frequently singled out as appealing elements even by players who find the combat rough.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-005",
+        "feedback-007"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Storytelling is sparse and characterization thin; the focus is more on the succession of combat encounters than elaborate narrative quests.",
+      "sentiment": "neutral",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-004",
+        "feedback-008",
+        "feedback-009"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Some players finish a first run in roughly ten to twelve hours, with new-game-plus or post-game goals encouraging another run despite repetition for completionists.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-007"
+      ]
+    },
+    {
+      "category": "localization",
+      "statement": "An observed Russian player comment praised the large number and variety of bosses and stated that Russian text support had been added in a patch; its undated observation does not establish today's translation quality.",
+      "sentiment": "positive",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "uncertain",
+      "source_ids": [
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-010"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "Difficulty divides players: some describe responsive controls and learnable challenging bosses, while others experience severe spikes, stamina bottlenecks and unreliable attack feedback.",
+      "recurrence": "strong",
+      "mention_count": 6,
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003",
+        "feedback-006",
+        "feedback-008",
+        "feedback-009"
+      ]
+    },
+    {
+      "statement": "Players differ on whether the interconnected map and shortcuts supply meaningful Metroidvania exploration or mainly funnel the player through routine enemies toward the next boss.",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-004",
+        "feedback-007",
+        "feedback-008"
+      ]
+    }
+  ],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "strong",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            4
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            7
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            3,
+            7
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            4
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            3,
+            6,
+            7
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            6
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            5
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "covered",
+          "observation_indices": [
+            8
+          ]
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "steamdb.info",
+        "url": "https://steamdb.info/app/1918450/",
+        "publication_date": null,
+        "language": "unknown",
+        "evidence_role": "identity",
+        "player_feedback": false,
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1918450/reviews/?browsefilter=toprated",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1918450",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1918450/",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1918450",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "steam_reviews",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1918450/HunterX/?curator_clanid=45094141&l=russian",
+        "publication_date": null,
+        "language": "russian",
+        "evidence_role": "uncertain",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1918450",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "publication_date": "2022-04-28",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": "2025-05-17",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-002",
+        "publication_date": "2022-05-13",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-002",
+        "publication_date": "2022-05-18",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-002",
+        "publication_date": "2022-06-05",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-007",
+        "source_id": "source-002",
+        "publication_date": "2025-09-27",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-008",
+        "source_id": "source-003",
+        "publication_date": "2023-12-29",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-009",
+        "source_id": "source-003",
+        "publication_date": "2026-10-09",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-010",
+        "source_id": "source-004",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      }
+    ]
+  }
+}
