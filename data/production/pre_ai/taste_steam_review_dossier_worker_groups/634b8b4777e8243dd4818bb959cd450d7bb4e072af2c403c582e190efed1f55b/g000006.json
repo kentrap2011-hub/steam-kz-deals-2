@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+  "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+  "group_plan_sha256": "cbf022d0ed339abf4e1448e072e8c4c8ad462befe09af0b39ed25c9f2dfa5ed1",
+  "group_count": 73,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 6,
+  "start_index": 15,
+  "end_index_exclusive": 18,
+  "appids": [
+    "249870",
+    "2506480",
+    "251110"
+  ],
+  "items_sha256": "e9348fa6bd1e35e9c6876f9236ec741dc9b85a0d77bc2fb7eaf9d073ae2f1f4c",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+  "items": [
+    {
+      "key": "App_249870",
+      "appid": "249870",
+      "title": "Scribblenauts Unmasked: A DC Comics Adventure",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_249870.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2506480",
+      "appid": "2506480",
+      "title": "Clue/Cluedo",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2506480.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_251110",
+      "appid": "251110",
+      "title": "INFRA",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_251110.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "295f95b1cb9b7d0f5b4fbd74f11d37fe4bef89230a3992bb2c9f200380eec049"
+}

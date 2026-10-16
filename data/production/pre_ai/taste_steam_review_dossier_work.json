@@ -2,17 +2,17 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORK-V2",
   "schema_version": 2,
   "preparation_mode": "daily_fixed_full_backlog",
-  "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-  "prepared_at_utc": "2026-10-15T23:10:54+00:00",
-  "prepared_for_date": "2026-10-16",
+  "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+  "prepared_at_utc": "2026-10-16T22:56:58+00:00",
+  "prepared_for_date": "2026-10-17",
   "ttl_days": 20,
   "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
   "source_queue_path": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
-  "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-  "source_row_count": 445,
-  "eligible_row_count": 445,
+  "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+  "source_row_count": 452,
+  "eligible_row_count": 452,
   "excluded_row_count": 0,
-  "unique_appid_count": 444,
+  "unique_appid_count": 451,
   "deduplicated_row_count": 0,
   "identity_policy_revision": "package-member-dossier-aggregation-v1",
   "identity_blocked_count": 1,
@@ -401,8 +401,8 @@
     "ambiguous_excluded_count": 0,
     "classifications": []
   },
-  "eligible_scope_count": 444,
-  "eligible_scope_sha256": "c988ee8386cb5c9e59dadaf77999370a72116eda7b17d3b026e5782319898918",
+  "eligible_scope_count": 451,
+  "eligible_scope_sha256": "7b3b062d1abebfb1d7d6b41212826a3f4ddb5a4df56e47594dbeee05ee6328ed",
   "ordered_appids": [
     "1001270",
     "1016800",
@@ -445,6 +445,7 @@
     "1161580",
     "1164940",
     "1166290",
+    "1189290",
     "1202690",
     "1205450",
     "1207650",
@@ -487,7 +488,6 @@
     "1402110",
     "1402120",
     "1409740",
-    "1410710",
     "1413870",
     "1424330",
     "1429500",
@@ -523,6 +523,7 @@
     "1585180",
     "1590230",
     "1599600",
+    "1601970",
     "1607130",
     "1620720",
     "1622350",
@@ -589,11 +590,13 @@
     "221260",
     "221640",
     "22300",
+    "2243110",
     "2248760",
     "22490",
     "225260",
     "225540",
     "226840",
+    "2276930",
     "2289750",
     "2296990",
     "2303350",
@@ -624,9 +627,11 @@
     "248820",
     "249130",
     "249870",
+    "2506480",
     "251110",
     "251730",
     "252610",
+    "2570210",
     "258010",
     "258970",
     "2591910",
@@ -699,7 +704,6 @@
     "359510",
     "359840",
     "361280",
-    "3652650",
     "365360",
     "365450",
     "377160",
@@ -752,10 +756,11 @@
     "582270",
     "58560",
     "586140",
-    "591370",
+    "589290",
     "593200",
     "597180",
     "601150",
+    "604240",
     "609320",
     "612470",
     "619820",
@@ -788,6 +793,7 @@
     "702890",
     "70300",
     "718850",
+    "727850",
     "735290",
     "738520",
     "742250",
@@ -807,6 +813,7 @@
     "788100",
     "792040",
     "794540",
+    "794800",
     "805940",
     "807120",
     "813630",
@@ -885,8 +892,10 @@
       "appid": "1025960",
       "title": "BURIED STARS",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1025960.json",
-      "state": "missing",
-      "reason": "missing_dossier"
+      "state": "fresh",
+      "generated_at_utc": "2026-10-16T02:53:00Z",
+      "expires_at_utc": "2026-11-05T02:53:00Z",
+      "dossier_sha256": "048421b3b640735ea0280b4c1bbce1ead54659f6d9c3704f55f620d6f3a53b92"
     },
     {
       "key": "App_1030830",
@@ -1259,6 +1268,14 @@
       "dossier_sha256": "e6d0fca7eeee59995751170897e79b2b90336f60cfb5a3e235c0c57659affd66"
     },
     {
+      "key": "App_1189290",
+      "appid": "1189290",
+      "title": "The Black Grimoire: Cursebreaker",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1189290.json",
+      "state": "missing",
+      "reason": "missing_dossier"
+    },
+    {
       "key": "App_1202690",
       "appid": "1202690",
       "title": "Sex with the Devil",
@@ -1423,8 +1440,10 @@
       "appid": "1261040",
       "title": "Streamer Life Simulator",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1261040.json",
-      "state": "missing",
-      "reason": "missing_dossier"
+      "state": "fresh",
+      "generated_at_utc": "2026-10-16T02:53:00Z",
+      "expires_at_utc": "2026-11-05T02:53:00Z",
+      "dossier_sha256": "46bc7e7e87becd177dd0d1d1cda3e1563e1e18ae0669fd4be887ef4689146806"
     },
     {
       "key": "App_1265920",
@@ -1675,16 +1694,6 @@
       "generated_at_utc": "2026-10-11T04:56:01.909Z",
       "expires_at_utc": "2026-10-31T04:56:01.909Z",
       "dossier_sha256": "c53f1ad30dc9d9e8bd2bccbe544495edfa605ac2074c06072580cbd79cce0be9"
-    },
-    {
-      "key": "App_1410710",
-      "appid": "1410710",
-      "title": "Democracy 4",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1410710.json",
-      "state": "fresh",
-      "generated_at_utc": "2026-10-10T17:32:43.156Z",
-      "expires_at_utc": "2026-10-30T17:32:43.156Z",
-      "dossier_sha256": "d2a9a3d61ffebfaeae2de905e187ac8bd200edea3402ec37d160cbf71944a9b3"
     },
     {
       "key": "App_1413870",
@@ -1941,8 +1950,10 @@
       "appid": "1563180",
       "title": "Internet Cafe Simulator 2",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1563180.json",
-      "state": "missing",
-      "reason": "missing_dossier"
+      "state": "fresh",
+      "generated_at_utc": "2026-10-16T02:53:00Z",
+      "expires_at_utc": "2026-11-05T02:53:00Z",
+      "dossier_sha256": "ce5fe155e04ad41e2b8e225e0a585fa65a22784865a49ba5525e5f3a13943d72"
     },
     {
       "key": "App_1574580",
@@ -2033,6 +2044,14 @@
       "generated_at_utc": "2026-10-11T07:18:23.202Z",
       "expires_at_utc": "2026-10-31T07:18:23.202Z",
       "dossier_sha256": "c03128a74dd4ecc469eb347baeef4aaaf7d393debb5aa3eba2ee121db6545bb1"
+    },
+    {
+      "key": "App_1601970",
+      "appid": "1601970",
+      "title": "Tunguska: The Visitation - Final Cut",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1601970.json",
+      "state": "missing",
+      "reason": "missing_dossier"
     },
     {
       "key": "App_1607130",
@@ -2229,8 +2248,10 @@
       "appid": "1918450",
       "title": "HunterX",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1918450.json",
-      "state": "missing",
-      "reason": "missing_dossier"
+      "state": "fresh",
+      "generated_at_utc": "2026-10-16T02:56:00Z",
+      "expires_at_utc": "2026-11-05T02:56:00Z",
+      "dossier_sha256": "fa24bb569129f5108db6b4dd75f3292fc6011cefa5f4100a36d41df678b0fc78"
     },
     {
       "key": "App_1931770",
@@ -2287,16 +2308,20 @@
       "appid": "200260",
       "title": "Batman: Arkham City - Game of the Year Edition",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_200260.json",
-      "state": "missing",
-      "reason": "missing_dossier"
+      "state": "fresh",
+      "generated_at_utc": "2026-10-16T02:56:00Z",
+      "expires_at_utc": "2026-11-05T02:56:00Z",
+      "dossier_sha256": "096aaf41ed1eb1bf58ac2728b90a8e459fdee5fb4d1e6fcb9a1784be9e28037f"
     },
     {
       "key": "App_2005010",
       "appid": "2005010",
       "title": "Warhammer 40,000: Boltgun",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_2005010.json",
-      "state": "missing",
-      "reason": "missing_dossier"
+      "state": "fresh",
+      "generated_at_utc": "2026-10-16T02:56:00Z",
+      "expires_at_utc": "2026-11-05T02:56:00Z",
+      "dossier_sha256": "137bb8cad1de2723a49b5266b4af52a406e11e6ebef8a91532b594eb72c4133b"
     },
     {
       "key": "App_2009010",
@@ -2343,8 +2368,10 @@
       "appid": "204120",
       "title": "LEGO® Harry Potter: Years 5-7",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_204120.json",
-      "state": "missing",
-      "reason": "missing_dossier"
+      "state": "fresh",
+      "generated_at_utc": "2026-10-16T03:02:00Z",
+      "expires_at_utc": "2026-11-05T03:02:00Z",
+      "dossier_sha256": "ced0c4da056c194aeeb7c05cbcbced25df49e3ce7ad11b25b7c0ebbec29fb314"
     },
     {
       "key": "App_204300",
@@ -2361,8 +2388,10 @@
       "appid": "205840",
       "title": "Yesterday",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_205840.json",
-      "state": "missing",
-      "reason": "missing_dossier"
+      "state": "fresh",
+      "generated_at_utc": "2026-10-16T03:02:00Z",
+      "expires_at_utc": "2026-11-05T03:02:00Z",
+      "dossier_sha256": "a121b657522abe3b239e027ca8c9d690bc8a390a5ce12bdca5f910ee40111e28"
     },
     {
       "key": "App_2065810",
@@ -2419,8 +2448,10 @@
       "appid": "208650",
       "title": "Batman™: Arkham Knight",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_208650.json",
-      "state": "missing",
-      "reason": "missing_dossier"
+      "state": "fresh",
+      "generated_at_utc": "2026-10-16T03:02:00Z",
+      "expires_at_utc": "2026-11-05T03:02:00Z",
+      "dossier_sha256": "52d65f60ddb7f4a3bbfceaef4aa5a7fc9720970c792369b19622cea92de2eb57"
     },
     {
       "key": "App_2088840",
@@ -2437,8 +2468,10 @@
       "appid": "209000",
       "title": "Batman™: Arkham Origins",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_209000.json",
-      "state": "missing",
-      "reason": "missing_dossier"
+      "state": "fresh",
+      "generated_at_utc": "2026-10-16T03:14:09Z",
+      "expires_at_utc": "2026-11-05T03:14:09Z",
+      "dossier_sha256": "a4d6977fe4d9dfbf7f7bca403b9b42ee15876e6edd3b6a3f08787205f0998427"
     },
     {
       "key": "App_209370",
@@ -2455,32 +2488,40 @@
       "appid": "21000",
       "title": "LEGO® Batman™: The Videogame",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_21000.json",
-      "state": "missing",
-      "reason": "missing_dossier"
+      "state": "fresh",
+      "generated_at_utc": "2026-10-16T03:14:09Z",
+      "expires_at_utc": "2026-11-05T03:14:09Z",
+      "dossier_sha256": "bb07541c7a997ac724d2b4eaf9ce108c83de248e8fff450ee385df341694b575"
     },
     {
       "key": "App_21090",
       "appid": "21090",
       "title": "F.E.A.R.",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_21090.json",
-      "state": "missing",
-      "reason": "missing_dossier"
+      "state": "fresh",
+      "generated_at_utc": "2026-10-16T03:14:09Z",
+      "expires_at_utc": "2026-11-05T03:14:09Z",
+      "dossier_sha256": "7e1de388f3828da1b0c7ed4f096d7ad9beff2c2dc043c663e4bf4f642976a684"
     },
     {
       "key": "App_21100",
       "appid": "21100",
       "title": "F.E.A.R. 3",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_21100.json",
-      "state": "missing",
-      "reason": "missing_dossier"
+      "state": "fresh",
+      "generated_at_utc": "2026-10-16T03:20:16Z",
+      "expires_at_utc": "2026-11-05T03:20:16Z",
+      "dossier_sha256": "18ded74a7486d094ab527d5b81ce9bab68637b49cd19fa5cf8e40999e39ce7d8"
     },
     {
       "key": "App_21130",
       "appid": "21130",
       "title": "LEGO® Harry Potter: Years 1-4",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_21130.json",
-      "state": "missing",
-      "reason": "missing_dossier"
+      "state": "fresh",
+      "generated_at_utc": "2026-10-16T03:20:16Z",
+      "expires_at_utc": "2026-11-05T03:20:16Z",
+      "dossier_sha256": "6ec858988d19121051bd2c445a17b49c0a6f81d7550b43eeab172a741a30e56a"
     },
     {
       "key": "App_2113850",
@@ -2517,8 +2558,10 @@
       "appid": "213330",
       "title": "LEGO® Batman™ 2: DC Super Heroes",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_213330.json",
-      "state": "missing",
-      "reason": "missing_dossier"
+      "state": "fresh",
+      "generated_at_utc": "2026-10-16T03:20:16Z",
+      "expires_at_utc": "2026-11-05T03:20:16Z",
+      "dossier_sha256": "9776d4720b1a94560b71d34618b99cda061c672a80da4375fe4cc705ad6212d1"
     },
     {
       "key": "App_214340",
@@ -2663,6 +2706,14 @@
       "dossier_sha256": "41343cd4c0769ad2af5788e47720b26ff4af40ad06b6e2de7856a76b1c153c44"
     },
     {
+      "key": "App_2243110",
+      "appid": "2243110",
+      "title": "EMPTY SHELL",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2243110.json",
+      "state": "missing",
+      "reason": "missing_dossier"
+    },
+    {
       "key": "App_2248760",
       "appid": "2248760",
       "title": "Car For Sale Simulator",
@@ -2709,6 +2760,14 @@
       "generated_at_utc": "2026-10-14T17:54:03.088Z",
       "expires_at_utc": "2026-11-03T17:54:03.088Z",
       "dossier_sha256": "f26484e0f81240d176b6cec3ac5b1e23d5a97fb46706c064961e89a27269e89a"
+    },
+    {
+      "key": "App_2276930",
+      "appid": "2276930",
+      "title": "Chillquarium",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2276930.json",
+      "state": "missing",
+      "reason": "missing_dossier"
     },
     {
       "key": "App_2289750",
@@ -2997,6 +3056,14 @@
       "reason": "missing_dossier"
     },
     {
+      "key": "App_2506480",
+      "appid": "2506480",
+      "title": "Clue/Cluedo",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2506480.json",
+      "state": "missing",
+      "reason": "missing_dossier"
+    },
+    {
       "key": "App_251110",
       "appid": "251110",
       "title": "INFRA",
@@ -3017,6 +3084,14 @@
       "appid": "252610",
       "title": "Death Road to Canada",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_252610.json",
+      "state": "missing",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2570210",
+      "appid": "2570210",
+      "title": "Eden Crafters",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2570210.json",
       "state": "missing",
       "reason": "missing_dossier"
     },
@@ -3647,14 +3722,6 @@
       "reason": "missing_dossier"
     },
     {
-      "key": "App_3652650",
-      "appid": "3652650",
-      "title": "Love Begins With Goodbye",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_3652650.json",
-      "state": "missing",
-      "reason": "missing_dossier"
-    },
-    {
       "key": "App_365360",
       "appid": "365360",
       "title": "Battle Brothers",
@@ -4071,10 +4138,10 @@
       "reason": "missing_dossier"
     },
     {
-      "key": "App_591370",
-      "appid": "591370",
-      "title": "Production Line : Car factory simulation",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_591370.json",
+      "key": "App_589290",
+      "appid": "589290",
+      "title": "Holdfast: Nations At War",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_589290.json",
       "state": "missing",
       "reason": "missing_dossier"
     },
@@ -4099,6 +4166,14 @@
       "appid": "601150",
       "title": "Devil May Cry 5",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_601150.json",
+      "state": "missing",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_604240",
+      "appid": "604240",
+      "title": "Shotgun Farmers",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_604240.json",
       "state": "missing",
       "reason": "missing_dossier"
     },
@@ -4359,6 +4434,14 @@
       "reason": "missing_dossier"
     },
     {
+      "key": "App_727850",
+      "appid": "727850",
+      "title": "ELDERBORN",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_727850.json",
+      "state": "missing",
+      "reason": "missing_dossier"
+    },
+    {
       "key": "App_735290",
       "appid": "735290",
       "title": "Genesis Noir",
@@ -4507,6 +4590,14 @@
       "appid": "794540",
       "title": "Neo Cab",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_794540.json",
+      "state": "missing",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_794800",
+      "appid": "794800",
+      "title": "Clue/Cluedo: Classic Edition",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_794800.json",
       "state": "missing",
       "reason": "missing_dossier"
     },
@@ -4841,108 +4932,17 @@
   ],
   "prepared_required_items": [
     {
-      "key": "App_1025960",
-      "appid": "1025960",
-      "title": "BURIED STARS",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1025960.json",
+      "key": "App_1189290",
+      "appid": "1189290",
+      "title": "The Black Grimoire: Cursebreaker",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1189290.json",
       "reason": "missing_dossier"
     },
     {
-      "key": "App_1261040",
-      "appid": "1261040",
-      "title": "Streamer Life Simulator",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1261040.json",
-      "reason": "missing_dossier"
-    },
-    {
-      "key": "App_1563180",
-      "appid": "1563180",
-      "title": "Internet Cafe Simulator 2",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1563180.json",
-      "reason": "missing_dossier"
-    },
-    {
-      "key": "App_1918450",
-      "appid": "1918450",
-      "title": "HunterX",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1918450.json",
-      "reason": "missing_dossier"
-    },
-    {
-      "key": "App_200260",
-      "appid": "200260",
-      "title": "Batman: Arkham City - Game of the Year Edition",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_200260.json",
-      "reason": "missing_dossier"
-    },
-    {
-      "key": "App_2005010",
-      "appid": "2005010",
-      "title": "Warhammer 40,000: Boltgun",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2005010.json",
-      "reason": "missing_dossier"
-    },
-    {
-      "key": "App_204120",
-      "appid": "204120",
-      "title": "LEGO® Harry Potter: Years 5-7",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_204120.json",
-      "reason": "missing_dossier"
-    },
-    {
-      "key": "App_205840",
-      "appid": "205840",
-      "title": "Yesterday",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_205840.json",
-      "reason": "missing_dossier"
-    },
-    {
-      "key": "App_208650",
-      "appid": "208650",
-      "title": "Batman™: Arkham Knight",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_208650.json",
-      "reason": "missing_dossier"
-    },
-    {
-      "key": "App_209000",
-      "appid": "209000",
-      "title": "Batman™: Arkham Origins",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_209000.json",
-      "reason": "missing_dossier"
-    },
-    {
-      "key": "App_21000",
-      "appid": "21000",
-      "title": "LEGO® Batman™: The Videogame",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_21000.json",
-      "reason": "missing_dossier"
-    },
-    {
-      "key": "App_21090",
-      "appid": "21090",
-      "title": "F.E.A.R.",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_21090.json",
-      "reason": "missing_dossier"
-    },
-    {
-      "key": "App_21100",
-      "appid": "21100",
-      "title": "F.E.A.R. 3",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_21100.json",
-      "reason": "missing_dossier"
-    },
-    {
-      "key": "App_21130",
-      "appid": "21130",
-      "title": "LEGO® Harry Potter: Years 1-4",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_21130.json",
-      "reason": "missing_dossier"
-    },
-    {
-      "key": "App_213330",
-      "appid": "213330",
-      "title": "LEGO® Batman™ 2: DC Super Heroes",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_213330.json",
+      "key": "App_1601970",
+      "appid": "1601970",
+      "title": "Tunguska: The Visitation - Final Cut",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1601970.json",
       "reason": "missing_dossier"
     },
     {
@@ -4974,10 +4974,24 @@
       "reason": "missing_dossier"
     },
     {
+      "key": "App_2243110",
+      "appid": "2243110",
+      "title": "EMPTY SHELL",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2243110.json",
+      "reason": "missing_dossier"
+    },
+    {
       "key": "App_2248760",
       "appid": "2248760",
       "title": "Car For Sale Simulator",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_2248760.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2276930",
+      "appid": "2276930",
+      "title": "Chillquarium",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2276930.json",
       "reason": "missing_dossier"
     },
     {
@@ -5030,6 +5044,13 @@
       "reason": "missing_dossier"
     },
     {
+      "key": "App_2506480",
+      "appid": "2506480",
+      "title": "Clue/Cluedo",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2506480.json",
+      "reason": "missing_dossier"
+    },
+    {
       "key": "App_251110",
       "appid": "251110",
       "title": "INFRA",
@@ -5048,6 +5069,13 @@
       "appid": "252610",
       "title": "Death Road to Canada",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_252610.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2570210",
+      "appid": "2570210",
+      "title": "Eden Crafters",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2570210.json",
       "reason": "missing_dossier"
     },
     {
@@ -5377,13 +5405,6 @@
       "appid": "361280",
       "title": "Turmoil",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_361280.json",
-      "reason": "missing_dossier"
-    },
-    {
-      "key": "App_3652650",
-      "appid": "3652650",
-      "title": "Love Begins With Goodbye",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_3652650.json",
       "reason": "missing_dossier"
     },
     {
@@ -5751,10 +5772,10 @@
       "reason": "missing_dossier"
     },
     {
-      "key": "App_591370",
-      "appid": "591370",
-      "title": "Production Line : Car factory simulation",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_591370.json",
+      "key": "App_589290",
+      "appid": "589290",
+      "title": "Holdfast: Nations At War",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_589290.json",
       "reason": "missing_dossier"
     },
     {
@@ -5776,6 +5797,13 @@
       "appid": "601150",
       "title": "Devil May Cry 5",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_601150.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_604240",
+      "appid": "604240",
+      "title": "Shotgun Farmers",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_604240.json",
       "reason": "missing_dossier"
     },
     {
@@ -6003,6 +6031,13 @@
       "reason": "missing_dossier"
     },
     {
+      "key": "App_727850",
+      "appid": "727850",
+      "title": "ELDERBORN",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_727850.json",
+      "reason": "missing_dossier"
+    },
+    {
       "key": "App_735290",
       "appid": "735290",
       "title": "Genesis Noir",
@@ -6133,6 +6168,13 @@
       "appid": "794540",
       "title": "Neo Cab",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_794540.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_794800",
+      "appid": "794800",
+      "title": "Clue/Cluedo: Classic Edition",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_794800.json",
       "reason": "missing_dossier"
     },
     {
@@ -6423,8 +6465,8 @@
       "reason": "missing_dossier"
     }
   ],
-  "prepared_required_count": 226,
-  "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
+  "prepared_required_count": 219,
+  "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
   "checkpoint_size": 3,
   "checkpoint_semantics": "internal_durability_boundary_not_scope_quota",
   "sampling_policy": {
@@ -6466,228 +6508,65 @@
   "submission_group_plan": {
     "schema": "TASTE-STEAM-REVIEW-DOSSIER-GROUP-PLAN-V1",
     "schema_version": 1,
-    "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-    "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
+    "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+    "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
     "checkpoint_size": 3,
-    "group_count": 76,
+    "group_count": 73,
     "groups": [
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
         "sequence": 1,
         "start_index": 0,
         "end_index_exclusive": 3,
         "appids": [
-          "1025960",
-          "1261040",
-          "1563180"
+          "1189290",
+          "1601970",
+          "214510"
         ],
-        "items_sha256": "974b22713967a6dc5ff9084b6cb20a23955aed4785bb7f6f3ec1d1f2fa86e098",
+        "items_sha256": "856200ad8b64d69b1b05a36dca8fb1a50596079e28262f78ba2c8fac0e58f997",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
-            "key": "App_1025960",
-            "appid": "1025960",
-            "title": "BURIED STARS",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_1025960.json",
+            "key": "App_1189290",
+            "appid": "1189290",
+            "title": "The Black Grimoire: Cursebreaker",
+            "dossier_path": "data/cache/taste_steam_review_dossiers/App_1189290.json",
             "reason": "missing_dossier"
           },
           {
-            "key": "App_1261040",
-            "appid": "1261040",
-            "title": "Streamer Life Simulator",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_1261040.json",
+            "key": "App_1601970",
+            "appid": "1601970",
+            "title": "Tunguska: The Visitation - Final Cut",
+            "dossier_path": "data/cache/taste_steam_review_dossiers/App_1601970.json",
             "reason": "missing_dossier"
           },
-          {
-            "key": "App_1563180",
-            "appid": "1563180",
-            "title": "Internet Cafe Simulator 2",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_1563180.json",
-            "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "50019667925dc3b7874ff52f0a1bf2751273b69dc46676b612a90ad7366494e6"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 2,
-        "start_index": 3,
-        "end_index_exclusive": 6,
-        "appids": [
-          "1918450",
-          "200260",
-          "2005010"
-        ],
-        "items_sha256": "1b303cd11635f180aea4175dc3c308dee74ab5edbdd0a058c5f2ea36571671cd",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
-          {
-            "key": "App_1918450",
-            "appid": "1918450",
-            "title": "HunterX",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_1918450.json",
-            "reason": "missing_dossier"
-          },
-          {
-            "key": "App_200260",
-            "appid": "200260",
-            "title": "Batman: Arkham City - Game of the Year Edition",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_200260.json",
-            "reason": "missing_dossier"
-          },
-          {
-            "key": "App_2005010",
-            "appid": "2005010",
-            "title": "Warhammer 40,000: Boltgun",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_2005010.json",
-            "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "afbd9ff4b8477c165549212e9e9fbe3139549dfba164b790c8cfeba926c5dccf"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 3,
-        "start_index": 6,
-        "end_index_exclusive": 9,
-        "appids": [
-          "204120",
-          "205840",
-          "208650"
-        ],
-        "items_sha256": "7e331446fc5adb8bf9b5a3dbfa63df7646a2ebad2722715b3791edfe67f342c5",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
-          {
-            "key": "App_204120",
-            "appid": "204120",
-            "title": "LEGO® Harry Potter: Years 5-7",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_204120.json",
-            "reason": "missing_dossier"
-          },
-          {
-            "key": "App_205840",
-            "appid": "205840",
-            "title": "Yesterday",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_205840.json",
-            "reason": "missing_dossier"
-          },
-          {
-            "key": "App_208650",
-            "appid": "208650",
-            "title": "Batman™: Arkham Knight",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_208650.json",
-            "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "39f64cbfc4b4d0b2348772fed4147018407e2b5c4a32cf5dc6daf248ac18f665"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 4,
-        "start_index": 9,
-        "end_index_exclusive": 12,
-        "appids": [
-          "209000",
-          "21000",
-          "21090"
-        ],
-        "items_sha256": "f335998395f99e4b9f957ece7fddad89e9d8b04f90e1bf8e9488924ec609c65c",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
-          {
-            "key": "App_209000",
-            "appid": "209000",
-            "title": "Batman™: Arkham Origins",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_209000.json",
-            "reason": "missing_dossier"
-          },
-          {
-            "key": "App_21000",
-            "appid": "21000",
-            "title": "LEGO® Batman™: The Videogame",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_21000.json",
-            "reason": "missing_dossier"
-          },
-          {
-            "key": "App_21090",
-            "appid": "21090",
-            "title": "F.E.A.R.",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_21090.json",
-            "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "595fc7abbbb3576bd293fbdeae807aede720b708fc5eb7c0252fdf8512741835"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 5,
-        "start_index": 12,
-        "end_index_exclusive": 15,
-        "appids": [
-          "21100",
-          "21130",
-          "213330"
-        ],
-        "items_sha256": "e7d610e71780ec28ccb3f97f20ecd9b689f3faf20cbd4f7207b27f4ce2ea6532",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
-          {
-            "key": "App_21100",
-            "appid": "21100",
-            "title": "F.E.A.R. 3",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_21100.json",
-            "reason": "missing_dossier"
-          },
-          {
-            "key": "App_21130",
-            "appid": "21130",
-            "title": "LEGO® Harry Potter: Years 1-4",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_21130.json",
-            "reason": "missing_dossier"
-          },
-          {
-            "key": "App_213330",
-            "appid": "213330",
-            "title": "LEGO® Batman™ 2: DC Super Heroes",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_213330.json",
-            "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "983bc34e1421d5b1f17e03359f5758c773be8b4dc374821d1b716e63c5bb1e78"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 6,
-        "start_index": 15,
-        "end_index_exclusive": 18,
-        "appids": [
-          "214510",
-          "2147380",
-          "218680"
-        ],
-        "items_sha256": "571ff3e07e6c2c8b78c60fa5fe5d9fa9bb7e5cd9584a6d7f2907dc65b49b0ce5",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
           {
             "key": "App_214510",
             "appid": "214510",
             "title": "LEGO® The Lord of the Rings™",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_214510.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "d92511525a0a4532329867136ec5628e1c133fa15c56b2c139ba0bd752db011c"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 2,
+        "start_index": 3,
+        "end_index_exclusive": 6,
+        "appids": [
+          "2147380",
+          "218680",
+          "221260"
+        ],
+        "items_sha256": "8cb4b27fe6cd99e54b823d869964f557c00964cca8dc2b7a276f99f248bb15bb",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_2147380",
             "appid": "2147380",
@@ -6701,30 +6580,37 @@
             "title": "Scribblenauts Unlimited",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_218680.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "e39fdcc77789ce3c9a26eee4b304b7f7325c125ee6bae6f48fe136092b5eb6e8"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 7,
-        "start_index": 18,
-        "end_index_exclusive": 21,
-        "appids": [
-          "221260",
-          "2248760",
-          "234140"
-        ],
-        "items_sha256": "a70db9457593d3fc5b078f1e06417556f6077744b43e8bc3e9a83c05eb46fff0",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_221260",
             "appid": "221260",
             "title": "Little Inferno",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_221260.json",
+            "reason": "missing_dossier"
+          }
+        ],
+        "group_sha256": "76de9e02af5ea00f281cea3d78b15834255f721a415e6f46ed0ec4f8bc37b5d3"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 3,
+        "start_index": 6,
+        "end_index_exclusive": 9,
+        "appids": [
+          "2243110",
+          "2248760",
+          "2276930"
+        ],
+        "items_sha256": "c4b28907420f8e9ed626ee89af0b275c844ed2c5e00fc5a435890c6462705681",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
+          {
+            "key": "App_2243110",
+            "appid": "2243110",
+            "title": "EMPTY SHELL",
+            "dossier_path": "data/cache/taste_steam_review_dossiers/App_2243110.json",
             "reason": "missing_dossier"
           },
           {
@@ -6735,30 +6621,37 @@
             "reason": "missing_dossier"
           },
           {
+            "key": "App_2276930",
+            "appid": "2276930",
+            "title": "Chillquarium",
+            "dossier_path": "data/cache/taste_steam_review_dossiers/App_2276930.json",
+            "reason": "missing_dossier"
+          }
+        ],
+        "group_sha256": "919e5ff3b3b1a4b3fe22fec045a20da04331cd0f7c18f9c5be73c8cc19581ab6"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 4,
+        "start_index": 9,
+        "end_index_exclusive": 12,
+        "appids": [
+          "234140",
+          "241930",
+          "242700"
+        ],
+        "items_sha256": "121dace0fcc7f736c651e6fbb0a52f60590a55820fb23399b404083285c3b7a7",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
+          {
             "key": "App_234140",
             "appid": "234140",
             "title": "Mad Max",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_234140.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "e7d62656fa09f0173c24b9573203d0aeb4d53fbcf678ebbe47be5d566b5cc394"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 8,
-        "start_index": 21,
-        "end_index_exclusive": 24,
-        "appids": [
-          "241930",
-          "242700",
-          "243200"
-        ],
-        "items_sha256": "313c5e359a2fc4d60f16b837a7cf8a9e83e6d577ac0d1ce011895333aa162202",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_241930",
             "appid": "241930",
@@ -6772,32 +6665,32 @@
             "title": "Injustice: Gods Among Us Ultimate Edition",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_242700.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "5274fe2da28e255c8f7892e1687514c253a155e705601d1a313cb2d19a146878"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 5,
+        "start_index": 12,
+        "end_index_exclusive": 15,
+        "appids": [
+          "243200",
+          "2473480",
+          "249130"
+        ],
+        "items_sha256": "e09b42751d7a7f55670f93a149d93473d0ab1509b036745bd046c9d8d716c5ff",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_243200",
             "appid": "243200",
             "title": "The Dark Eye: Memoria",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_243200.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "fb9d6d96f49bb49cd5021759f5f608bf7ec2b5dd282e31af94b54aa52dc27c65"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 9,
-        "start_index": 24,
-        "end_index_exclusive": 27,
-        "appids": [
-          "2473480",
-          "249130",
-          "249870"
-        ],
-        "items_sha256": "8bafb7756c872bded0cc6d2c2e648db42945e224f4bd841ff4501a4727908901",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_2473480",
             "appid": "2473480",
@@ -6811,39 +6704,64 @@
             "title": "LEGO® Marvel™ Super Heroes",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_249130.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "891fd05a704dd1a1769450c8a3053470310ef6a0393c268e997531e7e525f650"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 6,
+        "start_index": 15,
+        "end_index_exclusive": 18,
+        "appids": [
+          "249870",
+          "2506480",
+          "251110"
+        ],
+        "items_sha256": "e9348fa6bd1e35e9c6876f9236ec741dc9b85a0d77bc2fb7eaf9d073ae2f1f4c",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_249870",
             "appid": "249870",
             "title": "Scribblenauts Unmasked: A DC Comics Adventure",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_249870.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "0200a85e558edfdd0c5c9ea7f1001ad0f8cb258a1ef2a87cef656f0dfeb7ef55"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 10,
-        "start_index": 27,
-        "end_index_exclusive": 30,
-        "appids": [
-          "251110",
-          "251730",
-          "252610"
-        ],
-        "items_sha256": "c69b794cc16a54ab81984825d7d0475392b58f3794bc80f6e65e13e001312b47",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
+          {
+            "key": "App_2506480",
+            "appid": "2506480",
+            "title": "Clue/Cluedo",
+            "dossier_path": "data/cache/taste_steam_review_dossiers/App_2506480.json",
+            "reason": "missing_dossier"
+          },
           {
             "key": "App_251110",
             "appid": "251110",
             "title": "INFRA",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_251110.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "295f95b1cb9b7d0f5b4fbd74f11d37fe4bef89230a3992bb2c9f200380eec049"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 7,
+        "start_index": 18,
+        "end_index_exclusive": 21,
+        "appids": [
+          "251730",
+          "252610",
+          "2570210"
+        ],
+        "items_sha256": "d1b2e725ec3f22343377f9366916f8ba66d2a3ab89231a9f9546c724be409bff",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_251730",
             "appid": "251730",
@@ -6857,16 +6775,23 @@
             "title": "Death Road to Canada",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_252610.json",
             "reason": "missing_dossier"
+          },
+          {
+            "key": "App_2570210",
+            "appid": "2570210",
+            "title": "Eden Crafters",
+            "dossier_path": "data/cache/taste_steam_review_dossiers/App_2570210.json",
+            "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "11dc573b207b4b82a32bec994a231470e6256a5c412ff2eeac0034ddc7c6789d"
+        "group_sha256": "32c74cf5f2cf0c1288edc4b80f0e740235418b406ca9578ffb2a8883c6175de7"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 11,
-        "start_index": 30,
-        "end_index_exclusive": 33,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 8,
+        "start_index": 21,
+        "end_index_exclusive": 24,
         "appids": [
           "258010",
           "258970",
@@ -6874,7 +6799,7 @@
         ],
         "items_sha256": "ed3540244216b8f85b5a78d6170813fbe77f00ddd3f98eff498788c79d491aec",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_258010",
@@ -6898,14 +6823,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "b99de9a6df62605404d0028e8e70cdf81cec7bc2973d0c706d47c1c3c90dafe2"
+        "group_sha256": "4ac15c11cad9c2913b6956558d259388a727bafeecb619e220d46b1ddb9140c3"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 12,
-        "start_index": 33,
-        "end_index_exclusive": 36,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 9,
+        "start_index": 24,
+        "end_index_exclusive": 27,
         "appids": [
           "263760",
           "266010",
@@ -6913,7 +6838,7 @@
         ],
         "items_sha256": "1560ef6378bab0f5c999862c0181b5fc6c582100e8068b14b62ca96bf68e010b",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_263760",
@@ -6937,14 +6862,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "0d28a0da9fd8d4149e463d754b9ba2429b1596dd6d981bce87eb634c957fe1f3"
+        "group_sha256": "7573d0b3b133f7a53345453d8e5e989050b4566c8b118f0186538140c01d9fd5"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 13,
-        "start_index": 36,
-        "end_index_exclusive": 39,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 10,
+        "start_index": 27,
+        "end_index_exclusive": 30,
         "appids": [
           "2683150",
           "270210",
@@ -6952,7 +6877,7 @@
         ],
         "items_sha256": "2e4678980a33f66336304fc7bdfdce60e7344ce20729caa61617cdf2fa340c44",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_2683150",
@@ -6976,14 +6901,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "fd01d4adcf2feda4c4ed93b0759b990217ede37fabd4ae7191a2870c05f3deff"
+        "group_sha256": "ef79616fa7b6977cbe6209498fd5ef13dd85b6ef5894438fc3bc2de4ae810cc3"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 14,
-        "start_index": 39,
-        "end_index_exclusive": 42,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 11,
+        "start_index": 30,
+        "end_index_exclusive": 33,
         "appids": [
           "274170",
           "275670",
@@ -6991,7 +6916,7 @@
         ],
         "items_sha256": "f9fd473d7f07cef6436c92296dab0a8f60f1c7bf335e5433ec7ae8c45e8fc465",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_274170",
@@ -7015,14 +6940,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "273b0701a84bc52ae8fd99bffcf12b6310afda04771acfb5b4f884d38c0c5655"
+        "group_sha256": "bbe39244230a729d18ed6ce427def1728045efe663de75301e2577c781c78d2b"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 15,
-        "start_index": 42,
-        "end_index_exclusive": 45,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 12,
+        "start_index": 33,
+        "end_index_exclusive": 36,
         "appids": [
           "2778610",
           "285160",
@@ -7030,7 +6955,7 @@
         ],
         "items_sha256": "45dcba86f5fb5c4e20ab0b74a06ae6c0a16a9fcfc7d91add7a07827fc8fc06c9",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_2778610",
@@ -7054,14 +6979,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "4054004109f5e001f1b8a5286044a119f61b785ca727a40a6972bc6217ee823b"
+        "group_sha256": "5d2b859ddaaf9260f09d9ad2d65a3c7737ecd8e415d0ce2d71f2e238274100c5"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 16,
-        "start_index": 45,
-        "end_index_exclusive": 48,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 13,
+        "start_index": 36,
+        "end_index_exclusive": 39,
         "appids": [
           "2890830",
           "2902540",
@@ -7069,7 +6994,7 @@
         ],
         "items_sha256": "91521c31e942d4fffd4cefa52056b2ea1b220a91c4adecffe32071113aeb744d",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_2890830",
@@ -7093,14 +7018,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "9c6c37f9a63c5e0105d0bb8d51cbc4257acb6dd636fc9270aeea561edfb64da7"
+        "group_sha256": "1ec11b67da1f0f5ba6a523ec8b2067d92e9c7988239a70c661b01fb27ae1f6ec"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 17,
-        "start_index": 48,
-        "end_index_exclusive": 51,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 14,
+        "start_index": 39,
+        "end_index_exclusive": 42,
         "appids": [
           "300550",
           "3028310",
@@ -7108,7 +7033,7 @@
         ],
         "items_sha256": "24ea717f4c9bc2015c0cf1e8f014115efce0b17f6f62b96cd0a47eed072be34c",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_300550",
@@ -7132,14 +7057,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "0f1822c6092709965037c995a01c07899195a21914f72da08292b577491ea2ac"
+        "group_sha256": "7338b617d97ee18266c86e5d2443de636cd2b40fe4a57bf9444f70a4b642ea3b"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 18,
-        "start_index": 51,
-        "end_index_exclusive": 54,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 15,
+        "start_index": 42,
+        "end_index_exclusive": 45,
         "appids": [
           "307110",
           "307780",
@@ -7147,7 +7072,7 @@
         ],
         "items_sha256": "f4a82998758afcfff2e6fb91cd29941f57978ce748a7b63b7394a59afa04681b",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_307110",
@@ -7171,14 +7096,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "133a7f254af0beeb68b88d5dc99932ec64a232d6d9cad63cb028a3438936735f"
+        "group_sha256": "b32c30b4095d442b926f5c909913d5195e270d9df3386ea05cea12400e2779de"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 19,
-        "start_index": 54,
-        "end_index_exclusive": 57,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 16,
+        "start_index": 45,
+        "end_index_exclusive": 48,
         "appids": [
           "313690",
           "314160",
@@ -7186,7 +7111,7 @@
         ],
         "items_sha256": "79ac959ffa73694a130b1bf5a1b90d5d84f2991d42bfe3f5572e4847d3bed087",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_313690",
@@ -7210,14 +7135,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "bd1c47b20ff61058b741cd9a98ae6b31e823c9b4210baade9129055caf931aa3"
+        "group_sha256": "40537b8618456afc67bc08611db2124b92762b746a276dd8d87470771e5a6f4c"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 20,
-        "start_index": 57,
-        "end_index_exclusive": 60,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 17,
+        "start_index": 48,
+        "end_index_exclusive": 51,
         "appids": [
           "314790",
           "3228590",
@@ -7225,7 +7150,7 @@
         ],
         "items_sha256": "c7984b18f4493bf49403de725254e544a188ff26ba60f294f34826b4b24452cd",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_314790",
@@ -7249,14 +7174,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "972e7a21d054b03d932676730c3500bcd14f01e07909a6a26efd0ca2f961242a"
+        "group_sha256": "e804265db7f1f034532e5d47ca6cb95688548a79126208a912cb85adbfbabd6f"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 21,
-        "start_index": 60,
-        "end_index_exclusive": 63,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 18,
+        "start_index": 51,
+        "end_index_exclusive": 54,
         "appids": [
           "331870",
           "332310",
@@ -7264,7 +7189,7 @@
         ],
         "items_sha256": "06fcbddf19cf3eed4f867a540f54f9fefc7240ea62fbcfc74a172bcf93ee7d26",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_331870",
@@ -7288,14 +7213,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "88d521fb82a71aeaf313756a7a077d3670d4b1c96e239f9c4ed462c5260952ff"
+        "group_sha256": "b97744e2d823e953557a4884fd8d9f81170e3fe4532bced5ad25d9c0c4e2dc51"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 22,
-        "start_index": 63,
-        "end_index_exclusive": 66,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 19,
+        "start_index": 54,
+        "end_index_exclusive": 57,
         "appids": [
           "340050",
           "341940",
@@ -7303,7 +7228,7 @@
         ],
         "items_sha256": "46e640c4af6b68a1f5ad61d3b6dc142e3574170729ab02cb0125cb7b5856a1bf",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_340050",
@@ -7327,14 +7252,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "17cfe3b273e221fb249f1afb5499b6366be071fd3c43e97a51412df1be50cba7"
+        "group_sha256": "a09a89a1788643d3b0aef45cde48b5836903313fdcca9b56c89a5d8dbe8040bf"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 23,
-        "start_index": 66,
-        "end_index_exclusive": 69,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 20,
+        "start_index": 57,
+        "end_index_exclusive": 60,
         "appids": [
           "346940",
           "35140",
@@ -7342,7 +7267,7 @@
         ],
         "items_sha256": "588649eda3fcdcc0aeba72bf257ba93e383e82a48c228b838d7da428fc4333e2",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_346940",
@@ -7366,14 +7291,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "f922c81905e4b6a63b509b02ad87faf8d947b1646ec831454aa724f310474112"
+        "group_sha256": "4c0c640d55868d4cc005f1357e69029813742b28e330ee88cd23c096555657d2"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 24,
-        "start_index": 69,
-        "end_index_exclusive": 72,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 21,
+        "start_index": 60,
+        "end_index_exclusive": 63,
         "appids": [
           "356190",
           "35700",
@@ -7381,7 +7306,7 @@
         ],
         "items_sha256": "7fcadf9a632a1de2fce1776c3bdb3c6fc52142579a2a1412cfb6f9dd4764b1c8",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_356190",
@@ -7405,14 +7330,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "b5879e4c96fe8b3425307c7cb9623209ba4cefdb908f27aaa4b58277eb951425"
+        "group_sha256": "ae35b29e78f612fbcc2126d32fe59cbf9f131bd7f10b10351e08fd2c87853624"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 25,
-        "start_index": 72,
-        "end_index_exclusive": 75,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 22,
+        "start_index": 63,
+        "end_index_exclusive": 66,
         "appids": [
           "357190",
           "35720",
@@ -7420,7 +7345,7 @@
         ],
         "items_sha256": "cbb158b7b7ba5aa27f69a4ffba984deec03e91a6c8599c5a5009caaf085cb63b",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_357190",
@@ -7444,22 +7369,22 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "eeb01aa571b76b704dcd70b1034f08d445ea6aa68d11fbd78f7182c873390d83"
+        "group_sha256": "e74ac5ebecbbaf9c592d7ad04a020dfe1819d0125a82e0a092d1de6f17aee468"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 26,
-        "start_index": 75,
-        "end_index_exclusive": 78,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 23,
+        "start_index": 66,
+        "end_index_exclusive": 69,
         "appids": [
           "359840",
           "361280",
-          "3652650"
+          "365360"
         ],
-        "items_sha256": "4fb3ffcb57f3baf877f7e9db152b9e6a3cbcb730e0789919f616e8c7c8d38cd4",
+        "items_sha256": "773cd072179648e3f3bfe036b9ce6c11fd91a2d4841d1fa912ca638fc0cd00d6",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_359840",
@@ -7476,37 +7401,30 @@
             "reason": "missing_dossier"
           },
           {
-            "key": "App_3652650",
-            "appid": "3652650",
-            "title": "Love Begins With Goodbye",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_3652650.json",
-            "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "339653ed4b45c461524115c4a2ad4eda72367cb02fcaf152e37e1f0a4f466987"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 27,
-        "start_index": 78,
-        "end_index_exclusive": 81,
-        "appids": [
-          "365360",
-          "365450",
-          "377160"
-        ],
-        "items_sha256": "40f3f6033db533336b495f1786c8b925face1c9250b7b07478f6fc8af0da02a4",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
-          {
             "key": "App_365360",
             "appid": "365360",
             "title": "Battle Brothers",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_365360.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "229f41c5ddcc9a6292b99ab85ba05f86b68614c2156fdbd81ca916402c66700b"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 24,
+        "start_index": 69,
+        "end_index_exclusive": 72,
+        "appids": [
+          "365450",
+          "377160",
+          "382140"
+        ],
+        "items_sha256": "d23cfbf426cf0c658746cb729fa374df0ccea5902f959812e15210352708714e",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_365450",
             "appid": "365450",
@@ -7520,32 +7438,32 @@
             "title": "Fallout 4",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_377160.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "523dda465f86c10ab58846a9352466e1e051bc6e222ff0afa89a7288053cc9e5"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 28,
-        "start_index": 81,
-        "end_index_exclusive": 84,
-        "appids": [
-          "382140",
-          "384490",
-          "386940"
-        ],
-        "items_sha256": "edccdd0ae4ae207d040e5e88b03e56130331269edb151656960e37b293a90cd7",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_382140",
             "appid": "382140",
             "title": "SKYHILL",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_382140.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "9e262d9a075a0913f9fa49f18ee6f5a134306da352f667b8902fe6850ce2ad55"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 25,
+        "start_index": 72,
+        "end_index_exclusive": 75,
+        "appids": [
+          "384490",
+          "386940",
+          "391720"
+        ],
+        "items_sha256": "d32154a6835a812057d2551050f66801c2b5bea7f14251ad6ad9563171b2e9b2",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_384490",
             "appid": "384490",
@@ -7559,32 +7477,32 @@
             "title": "Ultimate Chicken Horse",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_386940.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "95e0713fe3e9dc3a55488505a7c9b348efc767c25170f2a291fbaa65bdb1ef54"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 29,
-        "start_index": 84,
-        "end_index_exclusive": 87,
-        "appids": [
-          "391720",
-          "39190",
-          "392110"
-        ],
-        "items_sha256": "4c56bf73013b65eb4785a990cef08374caeea67031e8ac620085c48407ec28cf",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_391720",
             "appid": "391720",
             "title": "Layers of Fear (2016)",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_391720.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "2b6648a7f3a5a84fbfef6caeddd01d9aca7196d06a09060a12bf77a008d05a46"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 26,
+        "start_index": 75,
+        "end_index_exclusive": 78,
+        "appids": [
+          "39190",
+          "392110",
+          "395170"
+        ],
+        "items_sha256": "80f62b926933ae874f8f087e7b9c35249e7a77e9d54e21ba735786393bb18959",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_39190",
             "appid": "39190",
@@ -7598,32 +7516,32 @@
             "title": "ENDLESS Space™ 2",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_392110.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "8ca5786f44c57e387f2865cb2e6721750845c82b58969e9a087e83af9de51251"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 30,
-        "start_index": 87,
-        "end_index_exclusive": 90,
-        "appids": [
-          "395170",
-          "397330",
-          "398850"
-        ],
-        "items_sha256": "e200627b41fc2849839bf597dfd376b48d8b1358ea17b5b8512e653a231c43ba",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_395170",
             "appid": "395170",
             "title": "DISTRAINT: Deluxe Edition",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_395170.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "ff81607f8f8de03c75dfb3797f8e45bc08d2c9466e6f3f57881f4b9155276de9"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 27,
+        "start_index": 78,
+        "end_index_exclusive": 81,
+        "appids": [
+          "397330",
+          "398850",
+          "402330"
+        ],
+        "items_sha256": "b319b18128e9e16a5e8e747b39657e09f2f9b3a01645ca7fa778d09514a93200",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_397330",
             "appid": "397330",
@@ -7637,32 +7555,32 @@
             "title": "Epistory - Typing Chronicles",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_398850.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "1b4ae5a3bfb1553707af7378b3488ea7f36a9b9c840377d5ae1a715725a53839"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 31,
-        "start_index": 90,
-        "end_index_exclusive": 93,
-        "appids": [
-          "402330",
-          "405310",
-          "410110"
-        ],
-        "items_sha256": "e22f3aff4387c8181f0f65ccf07e58e60f9e8ea455af96c399f4c8e05efad354",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_402330",
             "appid": "402330",
             "title": "Press X to Not Die",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_402330.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "aa54c3a95b3586a9bdc222d6c9cd25032b343bcbd7ef3c439880304a9a82c1f8"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 28,
+        "start_index": 81,
+        "end_index_exclusive": 84,
+        "appids": [
+          "405310",
+          "410110",
+          "418240"
+        ],
+        "items_sha256": "16971af7b917f4967442fb347b3a8ef7819ed065f6a271d48e1ff9df969f6ff4",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_405310",
             "appid": "405310",
@@ -7676,32 +7594,32 @@
             "title": "12 is Better Than 6",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_410110.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "524bc3c27f0408d22927fd0eaef5f7a53470e8438069cdb60101ec2801f79075"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 32,
-        "start_index": 93,
-        "end_index_exclusive": 96,
-        "appids": [
-          "418240",
-          "418340",
-          "421050"
-        ],
-        "items_sha256": "423eafc26486d04f2ec8c054aa90ddf40ef3797569eb3c4b82f5704bd9b0265f",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_418240",
             "appid": "418240",
             "title": "Shadow Tactics: Blades of the Shogun",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_418240.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "5965167619cdd42df3c56781f8b4424c0d122e16d7082ec9d5c2f41d88958bd6"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 29,
+        "start_index": 84,
+        "end_index_exclusive": 87,
+        "appids": [
+          "418340",
+          "421050",
+          "423230"
+        ],
+        "items_sha256": "3d41d04ec0e063b62686d9961c7d612e1be78c8cf72453cfdce7e0708bfc0bec",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_418340",
             "appid": "418340",
@@ -7715,32 +7633,32 @@
             "title": "Deponia Doomsday",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_421050.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "11c2a7288abc6dfa434c78d928e92fea0143d12163bdae8103d40f601624c61e"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 33,
-        "start_index": 96,
-        "end_index_exclusive": 99,
-        "appids": [
-          "423230",
-          "426790",
-          "42960"
-        ],
-        "items_sha256": "5f07abb1fbb443f29ebf5127bd2047ece4d05c013ca4928720efce0ed9e8aa83",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_423230",
             "appid": "423230",
             "title": "Furi",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_423230.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "7b890980a2ec320cf0b78ed264f42f0e2774fd93329ed2e1ffa202194d8d3fb7"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 30,
+        "start_index": 87,
+        "end_index_exclusive": 90,
+        "appids": [
+          "426790",
+          "42960",
+          "438640"
+        ],
+        "items_sha256": "1572f0c2ccc1c2a20db9356fd0c9f1095c943da03430ebf3101e2957ab93eaf1",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_426790",
             "appid": "426790",
@@ -7754,32 +7672,32 @@
             "title": "Victoria II",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_42960.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "fc3fb6bfc0ce7efd2f4dd6311c2bb79ed0fe8dab6825856894877b3c377cfd7c"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 34,
-        "start_index": 99,
-        "end_index_exclusive": 102,
-        "appids": [
-          "438640",
-          "440650",
-          "446020"
-        ],
-        "items_sha256": "da1bc12f7aafdcebd10b6ad04423a40de2dc7b9c34293b9678e2677941cd2023",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_438640",
             "appid": "438640",
             "title": "LEGO® STAR WARS™: The Force Awakens",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_438640.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "bde0f4ae958037d5630848485c246e639bc18539ccb4d9c47a58bf3fc181b9d7"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 31,
+        "start_index": 90,
+        "end_index_exclusive": 93,
+        "appids": [
+          "440650",
+          "446020",
+          "45760"
+        ],
+        "items_sha256": "dff87fdd08be26fe5b6390a1fc13d237eb30162c584ffc55ac0544f0d26add18",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_440650",
             "appid": "440650",
@@ -7793,32 +7711,32 @@
             "title": "Jalopy",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_446020.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "ea99ae1e44e710fe2064966b5526db9d89eb7be5f024b3b97241ce33579bf506"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 35,
-        "start_index": 102,
-        "end_index_exclusive": 105,
-        "appids": [
-          "45760",
-          "468920",
-          "471550"
-        ],
-        "items_sha256": "fcd782677ad3888a72baec35003a12d943a954ee5605baeef3a8240a1a1de975",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_45760",
             "appid": "45760",
             "title": "Ultra Street Fighter® IV",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_45760.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "79d0b18c91791dbf1f1c3361e3db19ce8149029b972ad3dc31e842ecf7211c4f"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 32,
+        "start_index": 93,
+        "end_index_exclusive": 96,
+        "appids": [
+          "468920",
+          "471550",
+          "491950"
+        ],
+        "items_sha256": "abdbfc87cf97f02ad40c01d2bc9c053272d26672261b39a2febbaecf293d0cc9",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_468920",
             "appid": "468920",
@@ -7832,32 +7750,32 @@
             "title": "Nine Parchments",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_471550.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "7db64866ceefb8947aa93afb36431e4a682829df6349dbc51edfb704e771b743"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 36,
-        "start_index": 105,
-        "end_index_exclusive": 108,
-        "appids": [
-          "491950",
-          "49600",
-          "496300"
-        ],
-        "items_sha256": "2b253f8a454418f495962a5f1783aebefeb645f04c69f201378518dd231fba22",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_491950",
             "appid": "491950",
             "title": "Orwell: Keeping an Eye On You",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_491950.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "f02407ff1c356acf89a4fb698dbb431e6c839053eb7ba8f0b6e441df2da2ecdf"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 33,
+        "start_index": 96,
+        "end_index_exclusive": 99,
+        "appids": [
+          "49600",
+          "496300",
+          "50130"
+        ],
+        "items_sha256": "af27b09783979c7547c40e6f5aeb155475e6a243f9f1164d32c5b4ec659c72c4",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_49600",
             "appid": "49600",
@@ -7871,32 +7789,32 @@
             "title": "Kingdom: New Lands",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_496300.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "00f025da0e184d9e81925c28b8299546c5443ea63d19dd879aa1a287d68288df"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 37,
-        "start_index": 108,
-        "end_index_exclusive": 111,
-        "appids": [
-          "50130",
-          "501300",
-          "504230"
-        ],
-        "items_sha256": "91b843e43d59e8033c4fb736d5d356c8c8ea5c91ac84d617b1c105ee2f614c86",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_50130",
             "appid": "50130",
             "title": "Mafia II (Classic)",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_50130.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "2a23752108c46783137188d98aa9182a0cc30f6558e43a0abd0d896e3c8c64bc"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 34,
+        "start_index": 99,
+        "end_index_exclusive": 102,
+        "appids": [
+          "501300",
+          "504230",
+          "508440"
+        ],
+        "items_sha256": "f08a2d89f40c2c3fa6f3664cd0119565e12ea0c48a9908a78b2b86236f68862f",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_501300",
             "appid": "501300",
@@ -7910,32 +7828,32 @@
             "title": "Celeste",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_504230.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "d0925aedaf161dd1311b26e39b798a1573cc922b11e9358ebc10a7caf360c75e"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 38,
-        "start_index": 111,
-        "end_index_exclusive": 114,
-        "appids": [
-          "508440",
-          "514900",
-          "515180"
-        ],
-        "items_sha256": "511b3d18431cefba1f85a7168855467c8763d44c7bc1198eedcb43f49dae5c6c",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_508440",
             "appid": "508440",
             "title": "Totally Accurate Battle Simulator",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_508440.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "a72ab199d63efa5785ad98eb731b034308672fe934bda01610b4c37a5de2914a"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 35,
+        "start_index": 102,
+        "end_index_exclusive": 105,
+        "appids": [
+          "514900",
+          "515180",
+          "517710"
+        ],
+        "items_sha256": "4d1ee36b6b4aecbee36dd7fa9ae19f8172c5adcc9478f5d23f107f78f20f8119",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_514900",
             "appid": "514900",
@@ -7949,32 +7867,32 @@
             "title": "Bus Simulator 18",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_515180.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "09d142c5c916b06ab22bfcb599610c40f87633fdfc3aef9d14bc659bb7bb8bb5"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 39,
-        "start_index": 114,
-        "end_index_exclusive": 117,
-        "appids": [
-          "517710",
-          "520440",
-          "525480"
-        ],
-        "items_sha256": "a5d76aee41adca6fb005724e6452d372749aca1c6bd6762d36cfbeff969759f1",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_517710",
             "appid": "517710",
             "title": "Redout: Enhanced Edition",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_517710.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "10ce39d1a3a96cd04e9c3218a2ff479b79722e6e1d7d5155480e24a1faba7170"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 36,
+        "start_index": 105,
+        "end_index_exclusive": 108,
+        "appids": [
+          "520440",
+          "525480",
+          "526160"
+        ],
+        "items_sha256": "f6bb4811b553f2100c9384343bb5c50f5d7e36adacecefcd8064022ff958b047",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_520440",
             "appid": "520440",
@@ -7988,32 +7906,32 @@
             "title": ".hack//G.U. Last Recode",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_525480.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "f4bc000ba3822f58644a56b2af0a5c7f5f8a331e5d9bfa00d8bfeeafa21f92b3"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 40,
-        "start_index": 117,
-        "end_index_exclusive": 120,
-        "appids": [
-          "526160",
-          "539330",
-          "539470"
-        ],
-        "items_sha256": "41f382f7630c254bb56efb25cc617d03936dbbd7440e414658f85befe7fbf0a7",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_526160",
             "appid": "526160",
             "title": "The Wild Eight",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_526160.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "84e5cb77a286d3793b42360d9e757da6ae8143bdfebed764b02ba2c87d5038a7"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 37,
+        "start_index": 108,
+        "end_index_exclusive": 111,
+        "appids": [
+          "539330",
+          "539470",
+          "539720"
+        ],
+        "items_sha256": "23b7f8f87123f832cd0506aa1b442f01f43bf36ced9e5aaed1445c2693c4a89b",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_539330",
             "appid": "539330",
@@ -8027,32 +7945,32 @@
             "title": "Police Stories",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_539470.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "86645ad138f8e21a27c78a27aa1631e1b83f80d1d85cbda1772f8b9bd108f552"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 41,
-        "start_index": 120,
-        "end_index_exclusive": 123,
-        "appids": [
-          "539720",
-          "545040",
-          "552500"
-        ],
-        "items_sha256": "b073ccaba7fcfa1603fcb2a4a507eaf29e58044672e9b295e99e8ef359e5c7e0",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_539720",
             "appid": "539720",
             "title": "Razortron 2000",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_539720.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "8262c05516601e0619f993d752c2d836b6ef21977840d087fd40ed0894859a2d"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 38,
+        "start_index": 111,
+        "end_index_exclusive": 114,
+        "appids": [
+          "545040",
+          "552500",
+          "555150"
+        ],
+        "items_sha256": "776c4f4eedf3df060cf1f50b305d21150c3970bf7c10d6578b4961137a15d75e",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_545040",
             "appid": "545040",
@@ -8066,32 +7984,32 @@
             "title": "Warhammer: Vermintide 2",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_552500.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "e97b5bfa58877f5d3f99e9edd1f1e5ce084af1856356cd0369c526b0f7ade6e2"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 42,
-        "start_index": 123,
-        "end_index_exclusive": 126,
-        "appids": [
-          "555150",
-          "557600",
-          "578330"
-        ],
-        "items_sha256": "d0b1af1bf53be3bf0e929896f4ef405770ebee51e00523ed0ac8b3f87e0c0639",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_555150",
             "appid": "555150",
             "title": "The First Tree",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_555150.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "6e39337a78e08c9f5083934269af5757c1337c423b54e0e64a1f6d0a68d0a634"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 39,
+        "start_index": 114,
+        "end_index_exclusive": 117,
+        "appids": [
+          "557600",
+          "578330",
+          "581320"
+        ],
+        "items_sha256": "e2eb301c5f7cc6cf4cc73e10b4011a5a3f4e6c819259942c18764f4f5be5d929",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_557600",
             "appid": "557600",
@@ -8105,32 +8023,32 @@
             "title": "LEGO® City Undercover",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_578330.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "270395fa0269a13e0c589708e0b929f90e9afe7e17ab3f2cc0c8740050ad2c2e"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 43,
-        "start_index": 126,
-        "end_index_exclusive": 129,
-        "appids": [
-          "581320",
-          "582270",
-          "58560"
-        ],
-        "items_sha256": "84b59922b430fc8d7f250f868c8b0289b13e47754f1a4419c04f679796312008",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_581320",
             "appid": "581320",
             "title": "Insurgency: Sandstorm",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_581320.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "a48c46c55e45ab69c4a87add9203e9e4e4f5faa451801d09ae07efa52ceebafc"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 40,
+        "start_index": 117,
+        "end_index_exclusive": 120,
+        "appids": [
+          "582270",
+          "58560",
+          "586140"
+        ],
+        "items_sha256": "1598f44f9a52d5d050295ea537d1809d55ce806943acdf51b355823c667533f2",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_582270",
             "appid": "582270",
@@ -8144,37 +8062,37 @@
             "title": "Runaway: A Twist of Fate",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_58560.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "80fe97597ecd56d3f235804439276b31fc31f0205441f2471ed994193c14d0ad"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 44,
-        "start_index": 129,
-        "end_index_exclusive": 132,
-        "appids": [
-          "586140",
-          "591370",
-          "593200"
-        ],
-        "items_sha256": "dc8d2a16bef30a4aa3ab93897d4c083a24db7a952b309d79492ead1fe9799de0",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_586140",
             "appid": "586140",
             "title": "BlazBlue Centralfiction",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_586140.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "afbc0ac476b16ca2fbdf854a211f22f4419a7fa007bd06b4c82ed5a6884fff3f"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 41,
+        "start_index": 120,
+        "end_index_exclusive": 123,
+        "appids": [
+          "589290",
+          "593200",
+          "597180"
+        ],
+        "items_sha256": "a73e95eb9af88d938bbec9b967b5e568bac410b549876a7efbbc3838f32b9dd5",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
-            "key": "App_591370",
-            "appid": "591370",
-            "title": "Production Line : Car factory simulation",
-            "dossier_path": "data/cache/taste_steam_review_dossiers/App_591370.json",
+            "key": "App_589290",
+            "appid": "589290",
+            "title": "Holdfast: Nations At War",
+            "dossier_path": "data/cache/taste_steam_review_dossiers/App_589290.json",
             "reason": "missing_dossier"
           },
           {
@@ -8183,37 +8101,44 @@
             "title": "The Adventures of Fei Duanmu 端木斐异闻录",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_593200.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "c6563efc18009b9711cc32bb258e9d6faf1aa84ccdd0873c9f4ff9832840f1cf"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 45,
-        "start_index": 132,
-        "end_index_exclusive": 135,
-        "appids": [
-          "597180",
-          "601150",
-          "609320"
-        ],
-        "items_sha256": "3bbc995e41bceb0fe0c55a63a2835ea9608bf6713cbe6c1c231809b8aca3ff8b",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_597180",
             "appid": "597180",
             "title": "Old World",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_597180.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "8fb90ac463db129a5c55764a2e26e567efe60921b259a473d30c2298895e0181"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 42,
+        "start_index": 123,
+        "end_index_exclusive": 126,
+        "appids": [
+          "601150",
+          "604240",
+          "609320"
+        ],
+        "items_sha256": "3b6ab3bb32b15d60e29b4183b83acd497a02dd4dad84a8a2681a1a47c2ff64c3",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_601150",
             "appid": "601150",
             "title": "Devil May Cry 5",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_601150.json",
+            "reason": "missing_dossier"
+          },
+          {
+            "key": "App_604240",
+            "appid": "604240",
+            "title": "Shotgun Farmers",
+            "dossier_path": "data/cache/taste_steam_review_dossiers/App_604240.json",
             "reason": "missing_dossier"
           },
           {
@@ -8224,14 +8149,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "7825d7b8df7a584951f73c7ab68379060604d5eb0c817c6f944a62f72e608544"
+        "group_sha256": "a3fc0cc158aa7e2426558cf96b47deb1bd731018b305070b98ec270c5011e5df"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 46,
-        "start_index": 135,
-        "end_index_exclusive": 138,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 43,
+        "start_index": 126,
+        "end_index_exclusive": 129,
         "appids": [
           "612470",
           "619820",
@@ -8239,7 +8164,7 @@
         ],
         "items_sha256": "573e791158f9a0169aaf629c55d122a3d6f919d0dee2d0f895d07e6ee29b1775",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_612470",
@@ -8263,14 +8188,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "9342370d1c72af8f364e3a4188275d705ddc012e3ceeb772a3bc3d1b3441aaed"
+        "group_sha256": "e6368161a7a1b632ac4e520c983e5ed0fad087e737c2a6d27ca0d75038532521"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 47,
-        "start_index": 138,
-        "end_index_exclusive": 141,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 44,
+        "start_index": 129,
+        "end_index_exclusive": 132,
         "appids": [
           "6220",
           "627270",
@@ -8278,7 +8203,7 @@
         ],
         "items_sha256": "c06727d6c281490a327c0458b9282feb795263ca4c21a0839b58e3f8cbd0635c",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_6220",
@@ -8302,14 +8227,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "a3998d45bfc7f2c672e0744a4e6b2b0df9a7fa551bfe8b8d85b9e6eea6a2e6e1"
+        "group_sha256": "ca36ba18d29c3540cd48a24a5189b45da261b968c49c76d22c1ea60c1a1a1f8e"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 48,
-        "start_index": 141,
-        "end_index_exclusive": 144,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 45,
+        "start_index": 132,
+        "end_index_exclusive": 135,
         "appids": [
           "632360",
           "633230",
@@ -8317,7 +8242,7 @@
         ],
         "items_sha256": "fc4f65f794508a2d078004437842fc517090463ecec1dfd3b39fc7c384537464",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_632360",
@@ -8341,14 +8266,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "e0b1804029b11dea428bb2844da8f235cb5d1c188a513cbda254101cd6307851"
+        "group_sha256": "bcbff5d712499605297acff07294fca315e48b3e55d49250abf8acf612caca5c"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 49,
-        "start_index": 144,
-        "end_index_exclusive": 147,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 46,
+        "start_index": 135,
+        "end_index_exclusive": 138,
         "appids": [
           "638230",
           "640590",
@@ -8356,7 +8281,7 @@
         ],
         "items_sha256": "5db3ed9aa4f0debf8af6b61d7edb57c4c16fd9d1314ed50f517f4fa2f1a3f8e6",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_638230",
@@ -8380,14 +8305,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "3e0b6602e0dca9081008f56483e3240902bf2ccd8678b4c06fa0c9f8a06f8f5a"
+        "group_sha256": "45597c9c067ffa1295810159cfe1b42a4a6e7ea12b39887898299ffc993de51c"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 50,
-        "start_index": 147,
-        "end_index_exclusive": 150,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 47,
+        "start_index": 138,
+        "end_index_exclusive": 141,
         "appids": [
           "641990",
           "644560",
@@ -8395,7 +8320,7 @@
         ],
         "items_sha256": "64c516b152cba9e7abe65ccdcb6e71a962f6a623ef5819eb83d0a40d4e59c009",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_641990",
@@ -8419,14 +8344,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "b60d7ea5d469ccd73e7b0c721d42130bf86c5cfb8d250d31d063b8a33a0cbef4"
+        "group_sha256": "c7ff787c081b7deb10a81e2af848962ba334d3113b3b66d4d4e559c40a494003"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 51,
-        "start_index": 150,
-        "end_index_exclusive": 153,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 48,
+        "start_index": 141,
+        "end_index_exclusive": 144,
         "appids": [
           "651670",
           "656350",
@@ -8434,7 +8359,7 @@
         ],
         "items_sha256": "33ea42e550c6d64c7e4120c65a49569e15ee7323155ec2168a20c0b6dcac689c",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_651670",
@@ -8458,14 +8383,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "b7664a08cdcbb9c84c6f10a340bb3c2f8723bc8ba86cc6342c70ed6d283e936a"
+        "group_sha256": "fbac96eece5e749379645b02c790df47ab5c6d961f7b53842cfc9eed6f578164"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 52,
-        "start_index": 153,
-        "end_index_exclusive": 156,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 49,
+        "start_index": 144,
+        "end_index_exclusive": 147,
         "appids": [
           "668580",
           "673750",
@@ -8473,7 +8398,7 @@
         ],
         "items_sha256": "ddd80da7f3225e20d2b93f7c172f38ddc7f6b18a6fae7e06aea2da5c8c41f77f",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_668580",
@@ -8497,14 +8422,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "6ea658f9418e879866ee071b5505993a067966f5510adeaaff362d05a580aa0e"
+        "group_sha256": "1118c5cb4a8ededcb4260e35bdf736f23f78f861ce1daedbd8f5a4abb7266c62"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 53,
-        "start_index": 156,
-        "end_index_exclusive": 159,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 50,
+        "start_index": 147,
+        "end_index_exclusive": 150,
         "appids": [
           "675010",
           "678900",
@@ -8512,7 +8437,7 @@
         ],
         "items_sha256": "31faf484e1567933e78a5db7253da26a81d5a1b1578383e80e942c65a3005bd3",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_675010",
@@ -8536,14 +8461,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "dc1d653e8b34a391be9ad38fbbcd2514950c85e04e4dbc5a40301f2a7ded3947"
+        "group_sha256": "748051793b1308554b412bda1f6ce3d07b04b43e770c0dca9469cbdf70a14174"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 54,
-        "start_index": 159,
-        "end_index_exclusive": 162,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 51,
+        "start_index": 150,
+        "end_index_exclusive": 153,
         "appids": [
           "690640",
           "699130",
@@ -8551,7 +8476,7 @@
         ],
         "items_sha256": "b511638c88c96594c67614cda850524acb703473fa62446247f9dd4fa69c4834",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_690640",
@@ -8575,14 +8500,14 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "52ba264ea73d55aea5c7d894b5500f40c92faae41275a79686f8df656b608225"
+        "group_sha256": "792cb544b7524d7c3f090d6597150ceaaeadf609da439cb38a187996ca92de64"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 55,
-        "start_index": 162,
-        "end_index_exclusive": 165,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 52,
+        "start_index": 153,
+        "end_index_exclusive": 156,
         "appids": [
           "702670",
           "702890",
@@ -8590,7 +8515,7 @@
         ],
         "items_sha256": "4e0a9729b96d61e3cd997278db2a79679c183f9b532de17b60e14d8ab3f5473f",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_702670",
@@ -8614,22 +8539,22 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "57655ca02a8449ba238eb0b7608cc7bef0a560ca537d3b11fa0a413862942158"
+        "group_sha256": "5f02d59e25ad56df3dee3160b188443a22a2783501f7e6da62533aa385219fe0"
       },
       {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 56,
-        "start_index": 165,
-        "end_index_exclusive": 168,
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 53,
+        "start_index": 156,
+        "end_index_exclusive": 159,
         "appids": [
           "718850",
-          "735290",
-          "738520"
+          "727850",
+          "735290"
         ],
-        "items_sha256": "c7b7d09b328f01125998bfc000a8437c639d3de38f773846368781b6261a32d3",
+        "items_sha256": "e5faf46a333a426207ab5d3a5b5f77dd146c052fe3406c3050714e32e9acc9cf",
         "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
         "items": [
           {
             "key": "App_718850",
@@ -8639,37 +8564,44 @@
             "reason": "missing_dossier"
           },
           {
+            "key": "App_727850",
+            "appid": "727850",
+            "title": "ELDERBORN",
+            "dossier_path": "data/cache/taste_steam_review_dossiers/App_727850.json",
+            "reason": "missing_dossier"
+          },
+          {
             "key": "App_735290",
             "appid": "735290",
             "title": "Genesis Noir",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_735290.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "281cf41034398547c0dc8521e59cf5fb03d8970f00fd2ecb088f40c4e3c952fc"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 54,
+        "start_index": 159,
+        "end_index_exclusive": 162,
+        "appids": [
+          "738520",
+          "742250",
+          "743390"
+        ],
+        "items_sha256": "caacbb0977b0ad80219f4042673b7d2fd3692b4114788096f46f7bed48a1acda",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_738520",
             "appid": "738520",
             "title": "Breathedge",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_738520.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "905daacfcd8c3040a55ce599faa14f949437bcf5b5cbc6013bd52265a2cec52a"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 57,
-        "start_index": 168,
-        "end_index_exclusive": 171,
-        "appids": [
-          "742250",
-          "743390",
-          "753640"
-        ],
-        "items_sha256": "d6d59809acbd2218386d4ca5970247407b69685cab6b648da8dcf2cc2eaac5a2",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_742250",
             "appid": "742250",
@@ -8683,32 +8615,32 @@
             "title": "DISTRAINT 2",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_743390.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "33088c52e96960c44bdb5b04a5bdb081ca7bc8ccd67073680fa9ae1ed6226e76"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 55,
+        "start_index": 162,
+        "end_index_exclusive": 165,
+        "appids": [
+          "753640",
+          "754120",
+          "757310"
+        ],
+        "items_sha256": "f280a74945dca2ed8ff21cc8389d365fc4103a0e991012b5745f6c1c43db271e",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_753640",
             "appid": "753640",
             "title": "Outer Wilds",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_753640.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "cfb0c2afff42fa900accf2e338959ae8cbb6802eadfdeefe08ae197b9674ba20"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 58,
-        "start_index": 171,
-        "end_index_exclusive": 174,
-        "appids": [
-          "754120",
-          "757310",
-          "758190"
-        ],
-        "items_sha256": "9e6606a7fa3038b56b4ab8e53d39fb9344433b4d95a85a425353c3c2bdcc4ed4",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_754120",
             "appid": "754120",
@@ -8722,32 +8654,32 @@
             "title": "Sable",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_757310.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "f4e0524aca23bf24ce168967dc1e8c387a1e01bbd1883a908529ffbd2c620e77"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 56,
+        "start_index": 165,
+        "end_index_exclusive": 168,
+        "appids": [
+          "758190",
+          "759740",
+          "764790"
+        ],
+        "items_sha256": "1f76395af95a00c86aae2bc811613dc30a342b93918cadc309eae9fdfd588284",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_758190",
             "appid": "758190",
             "title": "Dragon Cliff",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_758190.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "5407e03fb1ca402be1804578faf95bfe7b957ad8f14e9fb79c877e0058cdec98"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 59,
-        "start_index": 174,
-        "end_index_exclusive": 177,
-        "appids": [
-          "759740",
-          "764790",
-          "768450"
-        ],
-        "items_sha256": "246844efb7b6564430b0653ba35be8e05a7154a5fd39fa6453ca80530d780608",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_759740",
             "appid": "759740",
@@ -8761,32 +8693,32 @@
             "title": "The Messenger",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_764790.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "939e606d7744b04ee581c7ed5d3e1cca14660b5a77072676bc17ea5cb18604b1"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 57,
+        "start_index": 168,
+        "end_index_exclusive": 171,
+        "appids": [
+          "768450",
+          "770810",
+          "774361"
+        ],
+        "items_sha256": "827392a598ed8379345c5b961bc585a6757512f9801520d39ea51e56d9f76a1a",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_768450",
             "appid": "768450",
             "title": "NUTS",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_768450.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "e5c10810cae4b017a66f1ca2a855d5574085520fcf419e89512c10a8c712fc80"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 60,
-        "start_index": 177,
-        "end_index_exclusive": 180,
-        "appids": [
-          "770810",
-          "774361",
-          "776490"
-        ],
-        "items_sha256": "641e44e94ab83a3dd204200cc51c1a5b3bac9691314cd6a365cda0fcf7c773db",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_770810",
             "appid": "770810",
@@ -8800,32 +8732,32 @@
             "title": "Blasphemous",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_774361.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "84698d3e0b90679473b878fe53224a40932dd25a4baf01037bf73f4f73c4e7df"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 58,
+        "start_index": 171,
+        "end_index_exclusive": 174,
+        "appids": [
+          "776490",
+          "779640",
+          "784150"
+        ],
+        "items_sha256": "3b579126fa7beb580d267fdaf5b97c86adc2b4bad7d94362afd8c8a7a9ae0d11",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_776490",
             "appid": "776490",
             "title": "永远消失的幻想乡 ～ The Disappearing of Gensokyo",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_776490.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "8676956f637b2c77241c8b1cc03429f62f2ffce9bb16db7dc0d331881655fb2a"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 61,
-        "start_index": 180,
-        "end_index_exclusive": 183,
-        "appids": [
-          "779640",
-          "784150",
-          "788100"
-        ],
-        "items_sha256": "2a834c8c4d2af613aeaeb5ba0e03fee3ff94423872a5253d1b9a9ad76c31c7a4",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_779640",
             "appid": "779640",
@@ -8839,32 +8771,32 @@
             "title": "Workers & Resources: Soviet Republic",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_784150.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "41bdabf7f62a2ebb38515af2f20aad8f56d7acb38afb6b9b7ae4ff81f149cb4c"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 59,
+        "start_index": 174,
+        "end_index_exclusive": 177,
+        "appids": [
+          "788100",
+          "792040",
+          "794540"
+        ],
+        "items_sha256": "7b2e6ea817ab9c75e54cc657b1308e104986d7ddb54fdf7af00afea5b8cb40b3",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_788100",
             "appid": "788100",
             "title": "Neon Abyss",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_788100.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "84cb1565544eea4143aef8e25f7cc24ccd9ef42b7b4c840344331102e979be1f"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 62,
-        "start_index": 183,
-        "end_index_exclusive": 186,
-        "appids": [
-          "792040",
-          "794540",
-          "805940"
-        ],
-        "items_sha256": "ded7735342c0eb0c891cf325b7bd682e1d089a3c2619fd56c4073b2d5db48d07",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_792040",
             "appid": "792040",
@@ -8878,6 +8810,31 @@
             "title": "Neo Cab",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_794540.json",
             "reason": "missing_dossier"
+          }
+        ],
+        "group_sha256": "ce44bb79da6540b1bb628bad1106b247a4625daf0f93f6606ab7d515a1ff41d3"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 60,
+        "start_index": 177,
+        "end_index_exclusive": 180,
+        "appids": [
+          "794800",
+          "805940",
+          "807120"
+        ],
+        "items_sha256": "b76839da0430cab66dcac343b892a56713453d0b13ac0e2e3df45cf5b52cf479",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
+          {
+            "key": "App_794800",
+            "appid": "794800",
+            "title": "Clue/Cluedo: Classic Edition",
+            "dossier_path": "data/cache/taste_steam_review_dossiers/App_794800.json",
+            "reason": "missing_dossier"
           },
           {
             "key": "App_805940",
@@ -8885,32 +8842,32 @@
             "title": "RUSSIA BATTLEGROUNDS",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_805940.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "a6930331e9a20de5841699d1a5e325584b67da6bf773bc235c8535e3819789e4"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 63,
-        "start_index": 186,
-        "end_index_exclusive": 189,
-        "appids": [
-          "807120",
-          "813630",
-          "814370"
-        ],
-        "items_sha256": "2dc981e79973515573f5d2fb457ad10b767ab98b7956b7ae1c4af5ad9703d3d7",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_807120",
             "appid": "807120",
             "title": "Iratus: Lord of the Dead",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_807120.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "8ccf923ccf2980c2b76e32e3bbcfbf382ebfda6ff630288e9c88f1cc70daa99f"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 61,
+        "start_index": 180,
+        "end_index_exclusive": 183,
+        "appids": [
+          "813630",
+          "814370",
+          "815370"
+        ],
+        "items_sha256": "ae25739aedb7d8c2277f3d8fe1b9b39fb4e4c768b3d8719b199936881c8450f6",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_813630",
             "appid": "813630",
@@ -8924,32 +8881,32 @@
             "title": "Monster Sanctuary",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_814370.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "15a91e18b2f61cd49381a5659aae07da1201cf5164b8fe4fa6899795f7d0981f"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 64,
-        "start_index": 189,
-        "end_index_exclusive": 192,
-        "appids": [
-          "815370",
-          "818320",
-          "8190"
-        ],
-        "items_sha256": "2489a3eeb9d4e2cb39813c988078740e90c04017f400d1d77c5fed227f588e75",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_815370",
             "appid": "815370",
             "title": "Green Hell",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_815370.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "2a5bbc8b6cd627f61ef0648462a1d8d657968cf36acd4fdacc3c67011a853989"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 62,
+        "start_index": 183,
+        "end_index_exclusive": 186,
+        "appids": [
+          "818320",
+          "8190",
+          "829110"
+        ],
+        "items_sha256": "5ec2a76e10fe61b8628ffb3eab84984c514dfa75df900610fdbbfeb484a60cc3",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_818320",
             "appid": "818320",
@@ -8963,32 +8920,32 @@
             "title": "Just Cause 2",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_8190.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "83d752797f42d01b8592418a1efa02ce210f77f2705f2a79f5f4e998670c7d83"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 65,
-        "start_index": 192,
-        "end_index_exclusive": 195,
-        "appids": [
-          "829110",
-          "829590",
-          "834740"
-        ],
-        "items_sha256": "6b815ee949ca5f488936988d09149abab29a192eed6ff5649e7fd14b69ff4288",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_829110",
             "appid": "829110",
             "title": "LEGO® DC Super-Villains",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_829110.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "52d00fd25d886ab805487baadddf409177cbe895d6b4cc19a74218d4c02b23ef"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 63,
+        "start_index": 186,
+        "end_index_exclusive": 189,
+        "appids": [
+          "829590",
+          "834740",
+          "846110"
+        ],
+        "items_sha256": "a9d43c587a8943b8aec72053e7dcbf9d10020b307e31883a4b14cca0828c42e3",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_829590",
             "appid": "829590",
@@ -9002,32 +8959,32 @@
             "title": "Circle Empires",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_834740.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "18c687cb2e26e24dab6162322060f1d65c2fc446547b5181ed17cee4c03b0771"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 66,
-        "start_index": 195,
-        "end_index_exclusive": 198,
-        "appids": [
-          "846110",
-          "846470",
-          "855740"
-        ],
-        "items_sha256": "3f6b02bf3392d58f397a62019a217542fc838390a08c5e70b5b8b3ff0ea286c0",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_846110",
             "appid": "846110",
             "title": "The friends of Ringo Ishikawa",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_846110.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "833e3fc5d0040a8b6b5d9bf243041bd9861eb21a3f4f05728b97c1625e89e372"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 64,
+        "start_index": 189,
+        "end_index_exclusive": 192,
+        "appids": [
+          "846470",
+          "855740",
+          "858820"
+        ],
+        "items_sha256": "e910e1a8937f17dc230041abdf5aa126b090e44c5998270dc63465ae783a3b5c",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_846470",
             "appid": "846470",
@@ -9041,32 +8998,32 @@
             "title": "Bum Simulator",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_855740.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "f7cf93954fa1ba89141067f149b3da45f497f1414477e71e6005aaf3ea356b5f"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 67,
-        "start_index": 198,
-        "end_index_exclusive": 201,
-        "appids": [
-          "858820",
-          "865360",
-          "868360"
-        ],
-        "items_sha256": "f79b6e628d96752b512277f936e973271cdd4abe3818926abc63afb5ca7aca0b",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_858820",
             "appid": "858820",
             "title": "Tribes of Midgard",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_858820.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "2f8a40feba2afd8d665afd8462159b0f9969299928ba0322790cfe4021bb8d25"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 65,
+        "start_index": 192,
+        "end_index_exclusive": 195,
+        "appids": [
+          "865360",
+          "868360",
+          "870780"
+        ],
+        "items_sha256": "9fd81ad70ca989fcd321acbc8032f0168c71df3b716b81ff849ad4c8779088d9",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_865360",
             "appid": "865360",
@@ -9080,32 +9037,32 @@
             "title": "Project Hospital",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_868360.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "846bfa197da8f2763854bdbc629ceacea8e38f286932d10d996d5a01f66563a6"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 68,
-        "start_index": 201,
-        "end_index_exclusive": 204,
-        "appids": [
-          "870780",
-          "873190",
-          "874260"
-        ],
-        "items_sha256": "5548eb171b6c18c5d7252bbb4d1f27eefbcae9207784aeae3a42f32f281ad045",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_870780",
             "appid": "870780",
             "title": "CONTROL Ultimate Edition",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_870780.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "80aaf59d6ca20152a7aa58c76eb48d762f80b079be0f978a15fa52e9b7faaf22"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 66,
+        "start_index": 195,
+        "end_index_exclusive": 198,
+        "appids": [
+          "873190",
+          "874260",
+          "874390"
+        ],
+        "items_sha256": "9602aa17e67946e628552e2b4c7e88206fabbb1d559405c0f684418299bea586",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_873190",
             "appid": "873190",
@@ -9119,32 +9076,32 @@
             "title": "The Forgotten City",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_874260.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "5b89d3ebcd547e6dbe81af6469ebe2b0eb1d131d4f9207dc57492ca966a98646"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 69,
-        "start_index": 204,
-        "end_index_exclusive": 207,
-        "appids": [
-          "874390",
-          "881100",
-          "890720"
-        ],
-        "items_sha256": "c5e5507f8875a117a78d2ed2269cc481d23fab9c207c1b05c1c40971dd3abe45",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_874390",
             "appid": "874390",
             "title": "The Battle of Polytopia",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_874390.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "96e92b4887a50a17ce9288b557b8735523a393a4b1fbff00954377fa45006fc3"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 67,
+        "start_index": 198,
+        "end_index_exclusive": 201,
+        "appids": [
+          "881100",
+          "890720",
+          "892860"
+        ],
+        "items_sha256": "5f6b2bbdfa17c6210c641b5d2c0d2e6f280a78c359c20e67a616a195c84846da",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_881100",
             "appid": "881100",
@@ -9158,32 +9115,32 @@
             "title": "In Other Waters",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_890720.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "7215f108a7f72bddd4caaf5589f398865f6852f2bb3091bdf7abde031a737471"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 70,
-        "start_index": 207,
-        "end_index_exclusive": 210,
-        "appids": [
-          "892860",
-          "894020",
-          "897450"
-        ],
-        "items_sha256": "7ea96468a1a865da8e6884cc111a2a4c903de365aa812d661b480762eea733b2",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_892860",
             "appid": "892860",
             "title": "Hot Brass",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_892860.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "99219c467466ea26353b0913890437805f46fb0c210f8b15e7957b9d601ddd63"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 68,
+        "start_index": 201,
+        "end_index_exclusive": 204,
+        "appids": [
+          "894020",
+          "897450",
+          "917950"
+        ],
+        "items_sha256": "85ca0bd1c53aed029b81fda6233e0cd9af72c62032b0319644647ee69fa7e723",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_894020",
             "appid": "894020",
@@ -9197,32 +9154,32 @@
             "title": "The Survivalists",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_897450.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "5ccc7952d7d325bfc904ea7dce263ccf7764872fef0ee043c24aff998bd96be3"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 71,
-        "start_index": 210,
-        "end_index_exclusive": 213,
-        "appids": [
-          "917950",
-          "920210",
-          "924750"
-        ],
-        "items_sha256": "970eb3bc6775a84e52b2c34842e60b366dde312aab92b8556b1f793986ed48c2",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_917950",
             "appid": "917950",
             "title": "Vellum",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_917950.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "ebfdc081431b0f01598e516d63dd79dcc1396048af0f42c454decb7afa306d83"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 69,
+        "start_index": 204,
+        "end_index_exclusive": 207,
+        "appids": [
+          "920210",
+          "924750",
+          "933820"
+        ],
+        "items_sha256": "4e071c8330afd066dd0c5831d86ff2f70831491d708de06b424fac6d9a60c5f8",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_920210",
             "appid": "920210",
@@ -9236,32 +9193,32 @@
             "title": "Harold Halibut",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_924750.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "50110964514c8643a092bdfb48609c174cb02ff3f318cb73926e203e011c4bb6"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 72,
-        "start_index": 213,
-        "end_index_exclusive": 216,
-        "appids": [
-          "933820",
-          "94400",
-          "951750"
-        ],
-        "items_sha256": "5a6573c1deb110c3f06fbc6ea4e80f218ca4e2660f4146811ed89c38a5978018",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_933820",
             "appid": "933820",
             "title": "Endzone - A World Apart",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_933820.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "ea354bce291fc057ab4b91a50a62a46b61e680a67ee4cec854108c8132f6dbde"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 70,
+        "start_index": 207,
+        "end_index_exclusive": 210,
+        "appids": [
+          "94400",
+          "951750",
+          "96000"
+        ],
+        "items_sha256": "77a1de6994b007009aacf9f99d009ee6b14d1d95be5486440eb89a97c8dcb14a",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_94400",
             "appid": "94400",
@@ -9275,32 +9232,32 @@
             "title": "I Am Dead",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_951750.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "9ae3779e3edcfe6e7f12c1a09581e73dbd2f5f98b7150429e9b1b4f9bb202d5d"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 73,
-        "start_index": 216,
-        "end_index_exclusive": 219,
-        "appids": [
-          "96000",
-          "96100",
-          "966330"
-        ],
-        "items_sha256": "6d320ca7cee5b1b80143cb1a3985805be83a721ff8498ee36a1c0185d83f8e2d",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_96000",
             "appid": "96000",
             "title": "The Tiny Bang Story",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_96000.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "b9dea46d43d9fc1b1c2a12fe534b649e34641a0fb3ef1bc500b019492a727842"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 71,
+        "start_index": 210,
+        "end_index_exclusive": 213,
+        "appids": [
+          "96100",
+          "966330",
+          "967250"
+        ],
+        "items_sha256": "333e8c40e3dfc70ff65dbb005281938f0b31278ce3a0fdba2963f8b4e56a0ca4",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_96100",
             "appid": "96100",
@@ -9314,32 +9271,32 @@
             "title": "Flower",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_966330.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "382edfd8f85993e87b6bf67906a256dee97be08b1e6e3c2ca0e501b0b396432a"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 74,
-        "start_index": 219,
-        "end_index_exclusive": 222,
-        "appids": [
-          "967250",
-          "970830",
-          "976310"
-        ],
-        "items_sha256": "fff886b7a24e5bdd1ae12615989318e44b1e7cbf7036d71b37a1ec90ca22af49",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_967250",
             "appid": "967250",
             "title": "DOKA 2 KISHKI EDITION",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_967250.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "9b15c4c788bf957bf8d8287faf0191f29b2ea0fbdc02ce1715a30de6ed297695"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 72,
+        "start_index": 213,
+        "end_index_exclusive": 216,
+        "appids": [
+          "970830",
+          "976310",
+          "979110"
+        ],
+        "items_sha256": "2b247899eaa29b63fd72e1d57d63d7481b82167153557621b98690efe27cbb74",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_970830",
             "appid": "970830",
@@ -9353,32 +9310,32 @@
             "title": "Mortal Kombat 11",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_976310.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "17b347a2adad9bf25f13eaa45c6e71414b0f3d37aa628cab2ad2778e926c77c0"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 75,
-        "start_index": 222,
-        "end_index_exclusive": 225,
-        "appids": [
-          "979110",
-          "983970",
-          "986130"
-        ],
-        "items_sha256": "d55ba339bd91810b7f9ebdc06b9be2e48fceee98c510e94b5a3030698b6b1920",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_979110",
             "appid": "979110",
             "title": "Space Haven",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_979110.json",
             "reason": "missing_dossier"
-          },
+          }
+        ],
+        "group_sha256": "174f061d0a6a39d982a1744e2aed723563ae1be293932cc5d809a65b0d615f5a"
+      },
+      {
+        "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+        "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+        "sequence": 73,
+        "start_index": 216,
+        "end_index_exclusive": 219,
+        "appids": [
+          "983970",
+          "986130",
+          "990080"
+        ],
+        "items_sha256": "c015b0f6a54c6457042bb773621711ccc4497c147760c3b090aa06acef7d65f1",
+        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+        "source_queue_sha256": "1d9a65b332668550e401fb1221b35fb8146d872155922acca71b517f8080212f",
+        "items": [
           {
             "key": "App_983970",
             "appid": "983970",
@@ -9392,23 +9349,7 @@
             "title": "Shadows of Doubt",
             "dossier_path": "data/cache/taste_steam_review_dossiers/App_986130.json",
             "reason": "missing_dossier"
-          }
-        ],
-        "group_sha256": "e2def9e1fa9364010ea65f69fc4b1c9405fa84d22e43b4e4ada5d35a8726f5b5"
-      },
-      {
-        "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-        "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-        "sequence": 76,
-        "start_index": 225,
-        "end_index_exclusive": 226,
-        "appids": [
-          "990080"
-        ],
-        "items_sha256": "e8a224a58cc30f1fc11e052fd2b27fe0a866c29143123e3d88a5e1371c41e91c",
-        "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
-        "source_queue_sha256": "7523faf975ff8e0ccca059d220b57788ce89a63bfc4f48400d0b0f737c74429b",
-        "items": [
+          },
           {
             "key": "App_990080",
             "appid": "990080",
@@ -9417,12 +9358,26 @@
             "reason": "missing_dossier"
           }
         ],
-        "group_sha256": "bdf94ccb6581679d69750e25e33dd588158f22eda3731afb0d4c4aa93fd4f969"
+        "group_sha256": "cba93aff853ca5f4b8d857488298507e6965bfddbe0994b04d80c29c34e49c71"
       }
     ],
-    "group_plan_sha256": "34806d452454c396db5a73c9e7a114eb418a3823c531788284f8ba3bd87d8dff"
+    "group_plan_sha256": "cbf022d0ed339abf4e1448e072e8c4c8ad462befe09af0b39ed25c9f2dfa5ed1"
   },
   "remaining_required_items": [
+    {
+      "key": "App_1189290",
+      "appid": "1189290",
+      "title": "The Black Grimoire: Cursebreaker",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1189290.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1601970",
+      "appid": "1601970",
+      "title": "Tunguska: The Visitation - Final Cut",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1601970.json",
+      "reason": "missing_dossier"
+    },
     {
       "key": "App_214510",
       "appid": "214510",
@@ -9452,10 +9407,24 @@
       "reason": "missing_dossier"
     },
     {
+      "key": "App_2243110",
+      "appid": "2243110",
+      "title": "EMPTY SHELL",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2243110.json",
+      "reason": "missing_dossier"
+    },
+    {
       "key": "App_2248760",
       "appid": "2248760",
       "title": "Car For Sale Simulator",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_2248760.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2276930",
+      "appid": "2276930",
+      "title": "Chillquarium",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2276930.json",
       "reason": "missing_dossier"
     },
     {
@@ -9508,6 +9477,13 @@
       "reason": "missing_dossier"
     },
     {
+      "key": "App_2506480",
+      "appid": "2506480",
+      "title": "Clue/Cluedo",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2506480.json",
+      "reason": "missing_dossier"
+    },
+    {
       "key": "App_251110",
       "appid": "251110",
       "title": "INFRA",
@@ -9526,6 +9502,13 @@
       "appid": "252610",
       "title": "Death Road to Canada",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_252610.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2570210",
+      "appid": "2570210",
+      "title": "Eden Crafters",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2570210.json",
       "reason": "missing_dossier"
     },
     {
@@ -9855,13 +9838,6 @@
       "appid": "361280",
       "title": "Turmoil",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_361280.json",
-      "reason": "missing_dossier"
-    },
-    {
-      "key": "App_3652650",
-      "appid": "3652650",
-      "title": "Love Begins With Goodbye",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_3652650.json",
       "reason": "missing_dossier"
     },
     {
@@ -10229,10 +10205,10 @@
       "reason": "missing_dossier"
     },
     {
-      "key": "App_591370",
-      "appid": "591370",
-      "title": "Production Line : Car factory simulation",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_591370.json",
+      "key": "App_589290",
+      "appid": "589290",
+      "title": "Holdfast: Nations At War",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_589290.json",
       "reason": "missing_dossier"
     },
     {
@@ -10254,6 +10230,13 @@
       "appid": "601150",
       "title": "Devil May Cry 5",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_601150.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_604240",
+      "appid": "604240",
+      "title": "Shotgun Farmers",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_604240.json",
       "reason": "missing_dossier"
     },
     {
@@ -10481,6 +10464,13 @@
       "reason": "missing_dossier"
     },
     {
+      "key": "App_727850",
+      "appid": "727850",
+      "title": "ELDERBORN",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_727850.json",
+      "reason": "missing_dossier"
+    },
+    {
       "key": "App_735290",
       "appid": "735290",
       "title": "Genesis Noir",
@@ -10611,6 +10601,13 @@
       "appid": "794540",
       "title": "Neo Cab",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_794540.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_794800",
+      "appid": "794800",
+      "title": "Clue/Cluedo: Classic Edition",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_794800.json",
       "reason": "missing_dossier"
     },
     {
@@ -10901,431 +10898,416 @@
       "reason": "missing_dossier"
     }
   ],
-  "remaining_required_count": 211,
-  "remaining_required_sha256": "78b1bdf7a669ec98f8c0a0cf261f8ac8e7809f55749c1e026eb11bf9063ba9e5",
-  "completed_required_count": 15,
+  "remaining_required_count": 219,
+  "remaining_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+  "completed_required_count": 0,
   "current_checkpoint_items": [
+    {
+      "key": "App_1189290",
+      "appid": "1189290",
+      "title": "The Black Grimoire: Cursebreaker",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1189290.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1601970",
+      "appid": "1601970",
+      "title": "Tunguska: The Visitation - Final Cut",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1601970.json",
+      "reason": "missing_dossier"
+    },
     {
       "key": "App_214510",
       "appid": "214510",
       "title": "LEGO® The Lord of the Rings™",
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_214510.json",
       "reason": "missing_dossier"
-    },
-    {
-      "key": "App_2147380",
-      "appid": "2147380",
-      "title": "Heroes of Science and Fiction",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2147380.json",
-      "reason": "missing_dossier"
-    },
-    {
-      "key": "App_218680",
-      "appid": "218680",
-      "title": "Scribblenauts Unlimited",
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_218680.json",
-      "reason": "missing_dossier"
     }
   ],
   "current_checkpoint_count": 3,
-  "current_checkpoint_sha256": "571ff3e07e6c2c8b78c60fa5fe5d9fa9bb7e5cd9584a6d7f2907dc65b49b0ce5",
-  "scope_sha256": "a3844d15a391c155da989e2aedea37641b99b8afebbb16af3363d8b682bf7647",
+  "current_checkpoint_sha256": "856200ad8b64d69b1b05a36dca8fb1a50596079e28262f78ba2c8fac0e58f997",
+  "scope_sha256": "be73fa46f5a881892708e0a4138297d25409ef3ee62d770fd6fc31d1fc6f047f",
   "full_backlog_complete": false,
   "status": "work_required",
   "group_progress": {
     "schema": "TASTE-STEAM-REVIEW-DOSSIER-GROUP-PROGRESS-V1",
     "schema_version": 1,
-    "snapshot_id": "15bebdca5599cc088ef2e1b58fceb5d4799e4e9ca364dbff497b79cf7ae8507c",
-    "prepared_required_sha256": "71c7a0b9d0f90aaf8af6080a0bb771c7b3ef952720c666ba6575287205a8bf1d",
-    "group_plan_sha256": "34806d452454c396db5a73c9e7a114eb418a3823c531788284f8ba3bd87d8dff",
+    "snapshot_id": "634b8b4777e8243dd4818bb959cd450d7bb4e072af2c403c582e190efed1f55b",
+    "prepared_required_sha256": "6b12bbd72d4209f781dfac07249069ec4b2f10c80cd825faf2edbd0fcef13583",
+    "group_plan_sha256": "cbf022d0ed339abf4e1448e072e8c4c8ad462befe09af0b39ed25c9f2dfa5ed1",
     "groups": [
       {
         "sequence": 1,
-        "group_sha256": "50019667925dc3b7874ff52f0a1bf2751273b69dc46676b612a90ad7366494e6",
-        "state": "accepted"
+        "group_sha256": "d92511525a0a4532329867136ec5628e1c133fa15c56b2c139ba0bd752db011c",
+        "state": "pending"
       },
       {
         "sequence": 2,
-        "group_sha256": "afbd9ff4b8477c165549212e9e9fbe3139549dfba164b790c8cfeba926c5dccf",
-        "state": "accepted"
+        "group_sha256": "76de9e02af5ea00f281cea3d78b15834255f721a415e6f46ed0ec4f8bc37b5d3",
+        "state": "pending"
       },
       {
         "sequence": 3,
-        "group_sha256": "39f64cbfc4b4d0b2348772fed4147018407e2b5c4a32cf5dc6daf248ac18f665",
-        "state": "accepted"
+        "group_sha256": "919e5ff3b3b1a4b3fe22fec045a20da04331cd0f7c18f9c5be73c8cc19581ab6",
+        "state": "pending"
       },
       {
         "sequence": 4,
-        "group_sha256": "595fc7abbbb3576bd293fbdeae807aede720b708fc5eb7c0252fdf8512741835",
-        "state": "accepted"
+        "group_sha256": "5274fe2da28e255c8f7892e1687514c253a155e705601d1a313cb2d19a146878",
+        "state": "pending"
       },
       {
         "sequence": 5,
-        "group_sha256": "983bc34e1421d5b1f17e03359f5758c773be8b4dc374821d1b716e63c5bb1e78",
-        "state": "accepted"
+        "group_sha256": "891fd05a704dd1a1769450c8a3053470310ef6a0393c268e997531e7e525f650",
+        "state": "pending"
       },
       {
         "sequence": 6,
-        "group_sha256": "e39fdcc77789ce3c9a26eee4b304b7f7325c125ee6bae6f48fe136092b5eb6e8",
+        "group_sha256": "295f95b1cb9b7d0f5b4fbd74f11d37fe4bef89230a3992bb2c9f200380eec049",
         "state": "pending"
       },
       {
         "sequence": 7,
-        "group_sha256": "e7d62656fa09f0173c24b9573203d0aeb4d53fbcf678ebbe47be5d566b5cc394",
+        "group_sha256": "32c74cf5f2cf0c1288edc4b80f0e740235418b406ca9578ffb2a8883c6175de7",
         "state": "pending"
       },
       {
         "sequence": 8,
-        "group_sha256": "fb9d6d96f49bb49cd5021759f5f608bf7ec2b5dd282e31af94b54aa52dc27c65",
+        "group_sha256": "4ac15c11cad9c2913b6956558d259388a727bafeecb619e220d46b1ddb9140c3",
         "state": "pending"
       },
       {
         "sequence": 9,
-        "group_sha256": "0200a85e558edfdd0c5c9ea7f1001ad0f8cb258a1ef2a87cef656f0dfeb7ef55",
+        "group_sha256": "7573d0b3b133f7a53345453d8e5e989050b4566c8b118f0186538140c01d9fd5",
         "state": "pending"
       },
       {
         "sequence": 10,
-        "group_sha256": "11dc573b207b4b82a32bec994a231470e6256a5c412ff2eeac0034ddc7c6789d",
+        "group_sha256": "ef79616fa7b6977cbe6209498fd5ef13dd85b6ef5894438fc3bc2de4ae810cc3",
         "state": "pending"
       },
       {
         "sequence": 11,
-        "group_sha256": "b99de9a6df62605404d0028e8e70cdf81cec7bc2973d0c706d47c1c3c90dafe2",
+        "group_sha256": "bbe39244230a729d18ed6ce427def1728045efe663de75301e2577c781c78d2b",
         "state": "pending"
       },
       {
         "sequence": 12,
-        "group_sha256": "0d28a0da9fd8d4149e463d754b9ba2429b1596dd6d981bce87eb634c957fe1f3",
+        "group_sha256": "5d2b859ddaaf9260f09d9ad2d65a3c7737ecd8e415d0ce2d71f2e238274100c5",
         "state": "pending"
       },
       {
         "sequence": 13,
-        "group_sha256": "fd01d4adcf2feda4c4ed93b0759b990217ede37fabd4ae7191a2870c05f3deff",
+        "group_sha256": "1ec11b67da1f0f5ba6a523ec8b2067d92e9c7988239a70c661b01fb27ae1f6ec",
         "state": "pending"
       },
       {
         "sequence": 14,
-        "group_sha256": "273b0701a84bc52ae8fd99bffcf12b6310afda04771acfb5b4f884d38c0c5655",
+        "group_sha256": "7338b617d97ee18266c86e5d2443de636cd2b40fe4a57bf9444f70a4b642ea3b",
         "state": "pending"
       },
       {
         "sequence": 15,
-        "group_sha256": "4054004109f5e001f1b8a5286044a119f61b785ca727a40a6972bc6217ee823b",
+        "group_sha256": "b32c30b4095d442b926f5c909913d5195e270d9df3386ea05cea12400e2779de",
         "state": "pending"
       },
       {
         "sequence": 16,
-        "group_sha256": "9c6c37f9a63c5e0105d0bb8d51cbc4257acb6dd636fc9270aeea561edfb64da7",
+        "group_sha256": "40537b8618456afc67bc08611db2124b92762b746a276dd8d87470771e5a6f4c",
         "state": "pending"
       },
       {
         "sequence": 17,
-        "group_sha256": "0f1822c6092709965037c995a01c07899195a21914f72da08292b577491ea2ac",
+        "group_sha256": "e804265db7f1f034532e5d47ca6cb95688548a79126208a912cb85adbfbabd6f",
         "state": "pending"
       },
       {
         "sequence": 18,
-        "group_sha256": "133a7f254af0beeb68b88d5dc99932ec64a232d6d9cad63cb028a3438936735f",
+        "group_sha256": "b97744e2d823e953557a4884fd8d9f81170e3fe4532bced5ad25d9c0c4e2dc51",
         "state": "pending"
       },
       {
         "sequence": 19,
-        "group_sha256": "bd1c47b20ff61058b741cd9a98ae6b31e823c9b4210baade9129055caf931aa3",
+        "group_sha256": "a09a89a1788643d3b0aef45cde48b5836903313fdcca9b56c89a5d8dbe8040bf",
         "state": "pending"
       },
       {
         "sequence": 20,
-        "group_sha256": "972e7a21d054b03d932676730c3500bcd14f01e07909a6a26efd0ca2f961242a",
+        "group_sha256": "4c0c640d55868d4cc005f1357e69029813742b28e330ee88cd23c096555657d2",
         "state": "pending"
       },
       {
         "sequence": 21,
-        "group_sha256": "88d521fb82a71aeaf313756a7a077d3670d4b1c96e239f9c4ed462c5260952ff",
+        "group_sha256": "ae35b29e78f612fbcc2126d32fe59cbf9f131bd7f10b10351e08fd2c87853624",
         "state": "pending"
       },
       {
         "sequence": 22,
-        "group_sha256": "17cfe3b273e221fb249f1afb5499b6366be071fd3c43e97a51412df1be50cba7",
+        "group_sha256": "e74ac5ebecbbaf9c592d7ad04a020dfe1819d0125a82e0a092d1de6f17aee468",
         "state": "pending"
       },
       {
         "sequence": 23,
-        "group_sha256": "f922c81905e4b6a63b509b02ad87faf8d947b1646ec831454aa724f310474112",
+        "group_sha256": "229f41c5ddcc9a6292b99ab85ba05f86b68614c2156fdbd81ca916402c66700b",
         "state": "pending"
       },
       {
         "sequence": 24,
-        "group_sha256": "b5879e4c96fe8b3425307c7cb9623209ba4cefdb908f27aaa4b58277eb951425",
+        "group_sha256": "9e262d9a075a0913f9fa49f18ee6f5a134306da352f667b8902fe6850ce2ad55",
         "state": "pending"
       },
       {
         "sequence": 25,
-        "group_sha256": "eeb01aa571b76b704dcd70b1034f08d445ea6aa68d11fbd78f7182c873390d83",
+        "group_sha256": "2b6648a7f3a5a84fbfef6caeddd01d9aca7196d06a09060a12bf77a008d05a46",
         "state": "pending"
       },
       {
         "sequence": 26,
-        "group_sha256": "339653ed4b45c461524115c4a2ad4eda72367cb02fcaf152e37e1f0a4f466987",
+        "group_sha256": "ff81607f8f8de03c75dfb3797f8e45bc08d2c9466e6f3f57881f4b9155276de9",
         "state": "pending"
       },
       {
         "sequence": 27,
-        "group_sha256": "523dda465f86c10ab58846a9352466e1e051bc6e222ff0afa89a7288053cc9e5",
+        "group_sha256": "aa54c3a95b3586a9bdc222d6c9cd25032b343bcbd7ef3c439880304a9a82c1f8",
         "state": "pending"
       },
       {
         "sequence": 28,
-        "group_sha256": "95e0713fe3e9dc3a55488505a7c9b348efc767c25170f2a291fbaa65bdb1ef54",
+        "group_sha256": "5965167619cdd42df3c56781f8b4424c0d122e16d7082ec9d5c2f41d88958bd6",
         "state": "pending"
       },
       {
         "sequence": 29,
-        "group_sha256": "8ca5786f44c57e387f2865cb2e6721750845c82b58969e9a087e83af9de51251",
+        "group_sha256": "7b890980a2ec320cf0b78ed264f42f0e2774fd93329ed2e1ffa202194d8d3fb7",
         "state": "pending"
       },
       {
         "sequence": 30,
-        "group_sha256": "1b4ae5a3bfb1553707af7378b3488ea7f36a9b9c840377d5ae1a715725a53839",
+        "group_sha256": "bde0f4ae958037d5630848485c246e639bc18539ccb4d9c47a58bf3fc181b9d7",
         "state": "pending"
       },
       {
         "sequence": 31,
-        "group_sha256": "524bc3c27f0408d22927fd0eaef5f7a53470e8438069cdb60101ec2801f79075",
+        "group_sha256": "79d0b18c91791dbf1f1c3361e3db19ce8149029b972ad3dc31e842ecf7211c4f",
         "state": "pending"
       },
       {
         "sequence": 32,
-        "group_sha256": "11c2a7288abc6dfa434c78d928e92fea0143d12163bdae8103d40f601624c61e",
+        "group_sha256": "f02407ff1c356acf89a4fb698dbb431e6c839053eb7ba8f0b6e441df2da2ecdf",
         "state": "pending"
       },
       {
         "sequence": 33,
-        "group_sha256": "fc3fb6bfc0ce7efd2f4dd6311c2bb79ed0fe8dab6825856894877b3c377cfd7c",
+        "group_sha256": "2a23752108c46783137188d98aa9182a0cc30f6558e43a0abd0d896e3c8c64bc",
         "state": "pending"
       },
       {
         "sequence": 34,
-        "group_sha256": "ea99ae1e44e710fe2064966b5526db9d89eb7be5f024b3b97241ce33579bf506",
+        "group_sha256": "a72ab199d63efa5785ad98eb731b034308672fe934bda01610b4c37a5de2914a",
         "state": "pending"
       },
       {
         "sequence": 35,
-        "group_sha256": "7db64866ceefb8947aa93afb36431e4a682829df6349dbc51edfb704e771b743",
+        "group_sha256": "10ce39d1a3a96cd04e9c3218a2ff479b79722e6e1d7d5155480e24a1faba7170",
         "state": "pending"
       },
       {
         "sequence": 36,
-        "group_sha256": "00f025da0e184d9e81925c28b8299546c5443ea63d19dd879aa1a287d68288df",
+        "group_sha256": "84e5cb77a286d3793b42360d9e757da6ae8143bdfebed764b02ba2c87d5038a7",
         "state": "pending"
       },
       {
         "sequence": 37,
-        "group_sha256": "d0925aedaf161dd1311b26e39b798a1573cc922b11e9358ebc10a7caf360c75e",
+        "group_sha256": "8262c05516601e0619f993d752c2d836b6ef21977840d087fd40ed0894859a2d",
         "state": "pending"
       },
       {
         "sequence": 38,
-        "group_sha256": "09d142c5c916b06ab22bfcb599610c40f87633fdfc3aef9d14bc659bb7bb8bb5",
+        "group_sha256": "6e39337a78e08c9f5083934269af5757c1337c423b54e0e64a1f6d0a68d0a634",
         "state": "pending"
       },
       {
         "sequence": 39,
-        "group_sha256": "f4bc000ba3822f58644a56b2af0a5c7f5f8a331e5d9bfa00d8bfeeafa21f92b3",
+        "group_sha256": "a48c46c55e45ab69c4a87add9203e9e4e4f5faa451801d09ae07efa52ceebafc",
         "state": "pending"
       },
       {
         "sequence": 40,
-        "group_sha256": "86645ad138f8e21a27c78a27aa1631e1b83f80d1d85cbda1772f8b9bd108f552",
+        "group_sha256": "afbc0ac476b16ca2fbdf854a211f22f4419a7fa007bd06b4c82ed5a6884fff3f",
         "state": "pending"
       },
       {
         "sequence": 41,
-        "group_sha256": "e97b5bfa58877f5d3f99e9edd1f1e5ce084af1856356cd0369c526b0f7ade6e2",
+        "group_sha256": "8fb90ac463db129a5c55764a2e26e567efe60921b259a473d30c2298895e0181",
         "state": "pending"
       },
       {
         "sequence": 42,
-        "group_sha256": "270395fa0269a13e0c589708e0b929f90e9afe7e17ab3f2cc0c8740050ad2c2e",
+        "group_sha256": "a3fc0cc158aa7e2426558cf96b47deb1bd731018b305070b98ec270c5011e5df",
         "state": "pending"
       },
       {
         "sequence": 43,
-        "group_sha256": "80fe97597ecd56d3f235804439276b31fc31f0205441f2471ed994193c14d0ad",
+        "group_sha256": "e6368161a7a1b632ac4e520c983e5ed0fad087e737c2a6d27ca0d75038532521",
         "state": "pending"
       },
       {
         "sequence": 44,
-        "group_sha256": "c6563efc18009b9711cc32bb258e9d6faf1aa84ccdd0873c9f4ff9832840f1cf",
+        "group_sha256": "ca36ba18d29c3540cd48a24a5189b45da261b968c49c76d22c1ea60c1a1a1f8e",
         "state": "pending"
       },
       {
         "sequence": 45,
-        "group_sha256": "7825d7b8df7a584951f73c7ab68379060604d5eb0c817c6f944a62f72e608544",
+        "group_sha256": "bcbff5d712499605297acff07294fca315e48b3e55d49250abf8acf612caca5c",
         "state": "pending"
       },
       {
         "sequence": 46,
-        "group_sha256": "9342370d1c72af8f364e3a4188275d705ddc012e3ceeb772a3bc3d1b3441aaed",
+        "group_sha256": "45597c9c067ffa1295810159cfe1b42a4a6e7ea12b39887898299ffc993de51c",
         "state": "pending"
       },
       {
         "sequence": 47,
-        "group_sha256": "a3998d45bfc7f2c672e0744a4e6b2b0df9a7fa551bfe8b8d85b9e6eea6a2e6e1",
+        "group_sha256": "c7ff787c081b7deb10a81e2af848962ba334d3113b3b66d4d4e559c40a494003",
         "state": "pending"
       },
       {
         "sequence": 48,
-        "group_sha256": "e0b1804029b11dea428bb2844da8f235cb5d1c188a513cbda254101cd6307851",
+        "group_sha256": "fbac96eece5e749379645b02c790df47ab5c6d961f7b53842cfc9eed6f578164",
         "state": "pending"
       },
       {
         "sequence": 49,
-        "group_sha256": "3e0b6602e0dca9081008f56483e3240902bf2ccd8678b4c06fa0c9f8a06f8f5a",
+        "group_sha256": "1118c5cb4a8ededcb4260e35bdf736f23f78f861ce1daedbd8f5a4abb7266c62",
         "state": "pending"
       },
       {
         "sequence": 50,
-        "group_sha256": "b60d7ea5d469ccd73e7b0c721d42130bf86c5cfb8d250d31d063b8a33a0cbef4",
+        "group_sha256": "748051793b1308554b412bda1f6ce3d07b04b43e770c0dca9469cbdf70a14174",
         "state": "pending"
       },
       {
         "sequence": 51,
-        "group_sha256": "b7664a08cdcbb9c84c6f10a340bb3c2f8723bc8ba86cc6342c70ed6d283e936a",
+        "group_sha256": "792cb544b7524d7c3f090d6597150ceaaeadf609da439cb38a187996ca92de64",
         "state": "pending"
       },
       {
         "sequence": 52,
-        "group_sha256": "6ea658f9418e879866ee071b5505993a067966f5510adeaaff362d05a580aa0e",
+        "group_sha256": "5f02d59e25ad56df3dee3160b188443a22a2783501f7e6da62533aa385219fe0",
         "state": "pending"
       },
       {
         "sequence": 53,
-        "group_sha256": "dc1d653e8b34a391be9ad38fbbcd2514950c85e04e4dbc5a40301f2a7ded3947",
+        "group_sha256": "281cf41034398547c0dc8521e59cf5fb03d8970f00fd2ecb088f40c4e3c952fc",
         "state": "pending"
       },
       {
         "sequence": 54,
-        "group_sha256": "52ba264ea73d55aea5c7d894b5500f40c92faae41275a79686f8df656b608225",
+        "group_sha256": "33088c52e96960c44bdb5b04a5bdb081ca7bc8ccd67073680fa9ae1ed6226e76",
         "state": "pending"
       },
       {
         "sequence": 55,
-        "group_sha256": "57655ca02a8449ba238eb0b7608cc7bef0a560ca537d3b11fa0a413862942158",
+        "group_sha256": "f4e0524aca23bf24ce168967dc1e8c387a1e01bbd1883a908529ffbd2c620e77",
         "state": "pending"
       },
       {
         "sequence": 56,
-        "group_sha256": "905daacfcd8c3040a55ce599faa14f949437bcf5b5cbc6013bd52265a2cec52a",
+        "group_sha256": "939e606d7744b04ee581c7ed5d3e1cca14660b5a77072676bc17ea5cb18604b1",
         "state": "pending"
       },
       {
         "sequence": 57,
-        "group_sha256": "cfb0c2afff42fa900accf2e338959ae8cbb6802eadfdeefe08ae197b9674ba20",
+        "group_sha256": "84698d3e0b90679473b878fe53224a40932dd25a4baf01037bf73f4f73c4e7df",
         "state": "pending"
       },
       {
         "sequence": 58,
-        "group_sha256": "5407e03fb1ca402be1804578faf95bfe7b957ad8f14e9fb79c877e0058cdec98",
+        "group_sha256": "41bdabf7f62a2ebb38515af2f20aad8f56d7acb38afb6b9b7ae4ff81f149cb4c",
         "state": "pending"
       },
       {
         "sequence": 59,
-        "group_sha256": "e5c10810cae4b017a66f1ca2a855d5574085520fcf419e89512c10a8c712fc80",
+        "group_sha256": "ce44bb79da6540b1bb628bad1106b247a4625daf0f93f6606ab7d515a1ff41d3",
         "state": "pending"
       },
       {
         "sequence": 60,
-        "group_sha256": "8676956f637b2c77241c8b1cc03429f62f2ffce9bb16db7dc0d331881655fb2a",
+        "group_sha256": "8ccf923ccf2980c2b76e32e3bbcfbf382ebfda6ff630288e9c88f1cc70daa99f",
         "state": "pending"
       },
       {
         "sequence": 61,
-        "group_sha256": "84cb1565544eea4143aef8e25f7cc24ccd9ef42b7b4c840344331102e979be1f",
+        "group_sha256": "2a5bbc8b6cd627f61ef0648462a1d8d657968cf36acd4fdacc3c67011a853989",
         "state": "pending"
       },
       {
         "sequence": 62,
-        "group_sha256": "a6930331e9a20de5841699d1a5e325584b67da6bf773bc235c8535e3819789e4",
+        "group_sha256": "52d00fd25d886ab805487baadddf409177cbe895d6b4cc19a74218d4c02b23ef",
         "state": "pending"
       },
       {
         "sequence": 63,
-        "group_sha256": "15a91e18b2f61cd49381a5659aae07da1201cf5164b8fe4fa6899795f7d0981f",
+        "group_sha256": "833e3fc5d0040a8b6b5d9bf243041bd9861eb21a3f4f05728b97c1625e89e372",
         "state": "pending"
       },
       {
         "sequence": 64,
-        "group_sha256": "83d752797f42d01b8592418a1efa02ce210f77f2705f2a79f5f4e998670c7d83",
+        "group_sha256": "2f8a40feba2afd8d665afd8462159b0f9969299928ba0322790cfe4021bb8d25",
         "state": "pending"
       },
       {
         "sequence": 65,
-        "group_sha256": "18c687cb2e26e24dab6162322060f1d65c2fc446547b5181ed17cee4c03b0771",
+        "group_sha256": "80aaf59d6ca20152a7aa58c76eb48d762f80b079be0f978a15fa52e9b7faaf22",
         "state": "pending"
       },
       {
         "sequence": 66,
-        "group_sha256": "f7cf93954fa1ba89141067f149b3da45f497f1414477e71e6005aaf3ea356b5f",
+        "group_sha256": "96e92b4887a50a17ce9288b557b8735523a393a4b1fbff00954377fa45006fc3",
         "state": "pending"
       },
       {
         "sequence": 67,
-        "group_sha256": "846bfa197da8f2763854bdbc629ceacea8e38f286932d10d996d5a01f66563a6",
+        "group_sha256": "99219c467466ea26353b0913890437805f46fb0c210f8b15e7957b9d601ddd63",
         "state": "pending"
       },
       {
         "sequence": 68,
-        "group_sha256": "5b89d3ebcd547e6dbe81af6469ebe2b0eb1d131d4f9207dc57492ca966a98646",
+        "group_sha256": "ebfdc081431b0f01598e516d63dd79dcc1396048af0f42c454decb7afa306d83",
         "state": "pending"
       },
       {
         "sequence": 69,
-        "group_sha256": "7215f108a7f72bddd4caaf5589f398865f6852f2bb3091bdf7abde031a737471",
+        "group_sha256": "ea354bce291fc057ab4b91a50a62a46b61e680a67ee4cec854108c8132f6dbde",
         "state": "pending"
       },
       {
         "sequence": 70,
-        "group_sha256": "5ccc7952d7d325bfc904ea7dce263ccf7764872fef0ee043c24aff998bd96be3",
+        "group_sha256": "b9dea46d43d9fc1b1c2a12fe534b649e34641a0fb3ef1bc500b019492a727842",
         "state": "pending"
       },
       {
         "sequence": 71,
-        "group_sha256": "50110964514c8643a092bdfb48609c174cb02ff3f318cb73926e203e011c4bb6",
+        "group_sha256": "9b15c4c788bf957bf8d8287faf0191f29b2ea0fbdc02ce1715a30de6ed297695",
         "state": "pending"
       },
       {
         "sequence": 72,
-        "group_sha256": "9ae3779e3edcfe6e7f12c1a09581e73dbd2f5f98b7150429e9b1b4f9bb202d5d",
+        "group_sha256": "174f061d0a6a39d982a1744e2aed723563ae1be293932cc5d809a65b0d615f5a",
         "state": "pending"
       },
       {
         "sequence": 73,
-        "group_sha256": "382edfd8f85993e87b6bf67906a256dee97be08b1e6e3c2ca0e501b0b396432a",
-        "state": "pending"
-      },
-      {
-        "sequence": 74,
-        "group_sha256": "17b347a2adad9bf25f13eaa45c6e71414b0f3d37aa628cab2ad2778e926c77c0",
-        "state": "pending"
-      },
-      {
-        "sequence": 75,
-        "group_sha256": "e2def9e1fa9364010ea65f69fc4b1c9405fa84d22e43b4e4ada5d35a8726f5b5",
-        "state": "pending"
-      },
-      {
-        "sequence": 76,
-        "group_sha256": "bdf94ccb6581679d69750e25e33dd588158f22eda3731afb0d4c4aa93fd4f969",
+        "group_sha256": "cba93aff853ca5f4b8d857488298507e6965bfddbe0994b04d80c29c34e49c71",
         "state": "pending"
       }
     ],
-    "accepted_group_count": 5,
+    "accepted_group_count": 0,
     "failed_group_count": 0,
-    "pending_group_count": 71,
-    "accepted_dossier_count": 15,
+    "pending_group_count": 73,
+    "accepted_dossier_count": 0,
     "failed_dossier_count": 0,
-    "pending_dossier_count": 211,
+    "pending_dossier_count": 219,
     "normal_first_pass_complete": false,
     "all_groups_accepted": false
   }
