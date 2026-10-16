@@ -207,12 +207,25 @@ def run():
         assert migration_scope['accepted_count'] == 30
         assert all(row['work_mode'] != progressive_pass2.LEGACY_REANALYSIS_MODE for row in persisted_work['items'])
         score_scope = persisted_work['scope'].get('score_explainability_migration') or {}
-        if score_scope and score_scope.get('complete') is False:
+        if score_scope and int(score_scope.get('pending_count') or 0) > 0:
             assert persisted_work['projection_status'] == 'score_explainability_migration_active'
             assert all(
                 row['work_mode'] == progressive_pass2.SCORE_EXPLAINABILITY_MODE
                 for row in persisted_work['items']
             )
+        elif score_scope and score_scope.get('complete') is False:
+            # The tracked snapshot predates producer recomputation. It may
+            # legitimately retain the original empty/paused projection until
+            # the next canonical GitHub cycle; this test never rewrites it.
+            assert int(score_scope.get('pending_count') or 0) == 0
+            assert persisted_work['projection_status'] in (
+                'score_explainability_migration_active',
+                'current_github_owned_fast_dossier_deep_v1_projection',
+            )
+            if persisted_work['projection_status'] == 'score_explainability_migration_active':
+                assert persisted_work['items'] == []
+            else:
+                assert len(persisted_work['items']) == persisted_work['scope']['normal_pass2_eligible_count']
         else:
             assert persisted_work['projection_status'] == 'current_github_owned_fast_dossier_deep_v1_projection'
     rebuilt = build_progressive_pass2_work.build_work_document()
@@ -228,7 +241,7 @@ def run():
         assert rebuilt['scope']['legacy_full_reanalysis']['accepted_count'] == 30
         assert all(row['work_mode'] != progressive_pass2.LEGACY_REANALYSIS_MODE for row in rebuilt['items'])
         score_scope = rebuilt['scope'].get('score_explainability_migration') or {}
-        if score_scope and score_scope.get('complete') is False:
+        if score_scope and int(score_scope.get('pending_count') or 0) > 0:
             assert rebuilt['projection_status'] == 'score_explainability_migration_active'
             assert all(
                 row['work_mode'] == progressive_pass2.SCORE_EXPLAINABILITY_MODE
@@ -236,6 +249,10 @@ def run():
             )
         else:
             assert rebuilt['projection_status'] == 'current_github_owned_fast_dossier_deep_v1_projection'
+            assert len(rebuilt['items']) == rebuilt['scope']['normal_pass2_eligible_count']
+            if score_scope and score_scope.get('complete') is False:
+                assert score_scope['exhausted'] is True
+                assert score_scope['stale_or_missing_prior_count'] > 0
 
     # Run-start validation uses the frozen migration authority Dossier, while the
     # ordinary V2 run-start receipt remains mandatory as publication authority.

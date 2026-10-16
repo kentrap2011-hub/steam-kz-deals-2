@@ -222,8 +222,20 @@ def build_work_document(now=None):
             'already_compliant_count': 0,
             'stale_or_missing_prior_count': 0,
             'complete': True,
+            'exhausted': False,
         }, {}
-    score_migration_active = bool(score_manifest) and not score_metrics['complete']
+    if len(score_items) != score_metrics['pending_count']:
+        raise ValueError('Deep score migration runnable work/count mismatch')
+    if score_metrics['submitted_count'] > score_metrics['pending_count']:
+        raise ValueError('Deep score migration submitted/pending accounting mismatch')
+    # Keep a frozen migration first only while it has authorized runnable work.
+    # A submitted-but-unresolved target is still pending and keeps priority.
+    # Frozen stale targets remain visible as exhausted, not falsely completed.
+    score_migration_active = (
+        bool(score_manifest)
+        and not score_metrics['complete']
+        and score_metrics['pending_count'] > 0
+    )
     if migration_active:
         # The one-off migration freezes its own profile/evidence authority. Keep one
         # homogeneous worker manifest until it terminates; ordinary Deep work is

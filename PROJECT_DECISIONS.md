@@ -1006,3 +1006,19 @@ A canonical Dossier/profile/work/repository write that lands **before** the mark
 **Why not accepted-only Assembly or 8-slot backpressure:** accepted-only handoff serialized semantic work on GitHub ingest latency; an unresolved-slot cap caused previously prepared work to stall simply because receipts lagged. Neither was part of the user's intended asynchronous execution model.
 
 **Durable files:** `config/dossier_two_stage_async_buffer_contract.json`, `config/dossier_two_stage_interfaces_contract.json`, `config/dossier_two_stage_staging_contract.json`, `scripts/dossier_two_stage_async_buffer.py`, `config/dossier_async_assembly_result_v1.schema.json`, `scripts/test_dossier_two_stage_async_buffer.py`.
+
+---
+
+## PPD-014 — Exhausted finite Deep score-evidence migration releases ordinary Deep without claiming completion
+
+**Дата:** 2026-10-15
+**Статус:** canonical interpretation of the existing DEEP-SCORE-EVIDENCE-V1 finite one-off; no new retry or scheduler.
+
+**Проблема:** a frozen migration may cease to have any authorized runnable target while retaining a target whose prior Deep revision no longer matches the frozen authorization. The original producer gated ordinary Deep only on `complete=false`, so one correctly counted `stale_or_missing_prior` target could stall all unrelated current normal eligible Deep work indefinitely. On the observed snapshot the manifest still had 43 frozen targets, 42 accepted (one already compliant), 1 stale, 0 pending, while the normal GitHub recomputation found 158 eligible games.
+
+**Решение:** `complete` continues to mean all finite targets accepted or already compliant; an unresolved stale target must keep `complete=false`. Separately `exhausted=true` means incomplete, no runnable pending targets, and at least one stale/missing frozen prior. The original migration holds exclusive worker projection priority only while there are authorized pending targets; pending-but-submitted-and-unresolved work remains pending and retains priority. Once the finite migration is exhausted without runnable work, the existing `scripts/build_progressive_pass2_work.py` emits GitHub-computed normal Deep work in the already-canonical never-completed-first / oldest-last-successful order. This does not retroactively accept stale targets, rewrite prior revisions, substitute current evidence into frozen work, authorize retry/recovery or weaken future `score_findings` validation. Subsequent new work and its result acceptance remain subject to the current V2 run-start authority, confirmed receipt and exact-bound Deep score evidence.
+
+**Почему:** terminal non-runnable exhaustion is an operational liveness condition, not evidence that an unresolved frozen migration target completed its semantic work. Treating them as the same would either fabricate an accepted analysis or starve unrelated normal work. No new queue or scheduler is necessary.
+
+**Основные места:** `config/progressive_pass2_contract.json#score_explainability.migration`, `scripts/progressive_pass2.py::score_explainability_work_and_metrics`, `scripts/build_progressive_pass2_work.py::build_work_document`, `scripts/test_deep_score_evidence_explainability.py`.
+

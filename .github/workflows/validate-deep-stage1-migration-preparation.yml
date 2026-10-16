@@ -5,6 +5,8 @@ on:
     paths:
       - 'scripts/prepare_deep_stage1_migration_work.py'
       - 'scripts/test_deep_stage1_migration_work.py'
+      - 'scripts/test_deep_stage1_migration_pr_preview.py'
+      - 'scripts/build_progressive_pass2_work.py'
       - '.github/workflows/validate-deep-stage1-migration-preparation.yml'
       - 'config/deep_two_stage_migration_contract.json'
       - 'scripts/deep_stage1.py'
@@ -19,27 +21,20 @@ jobs:
   migration-preparation:
     runs-on: ubuntu-latest
     steps:
+      # The current PASS2 producer checks immutable frozen migration authority
+      # commits; the default shallow checkout cannot satisfy that evidence gate.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Compile and unit-test the Stage-1 preparation gate
         run: |
           python3 -m py_compile scripts/prepare_deep_stage1_migration_work.py scripts/test_deep_stage1_migration_work.py
           PYTHONPATH=scripts python3 scripts/test_deep_stage1_migration_work.py
-      - name: Produce read-only current canonical Stage-1 migration plan
+      - name: Prove stale canonical Deep fails closed and fresh PR Deep permits non-active Stage-1 preview
         run: |
-          python3 scripts/prepare_deep_stage1_migration_work.py --preview-out "$RUNNER_TEMP/deep-stage1-migration-preparation.json"
-          python3 - <<'PY'
-          import json, os
-          from pathlib import Path
-          p = json.loads((Path(os.environ["RUNNER_TEMP"]) / "deep-stage1-migration-preparation.json").read_text())
-          assert p["semantic_execution_authorized"] is False
-          assert p["production_cutover_performed"] is False
-          assert p["research_assembly_dossier_used"] is False
-          assert p["executable_materialization_authorized"] is False
-          assert 0 <= p["requires_stage1_semantics"] <= p["eligible_with_current_dossier"] <= p["current_scope_total"]
-          assert len(p["canonical_work_if_authorized"]["items"]) == p["requires_stage1_semantics"]
-          assert not p["canonical_work_if_authorized"]["implementation_status"] == "active"
-          print("migration preview is non-executable; contract authority not bypassed")
-          PY
+          python3 -m py_compile scripts/test_deep_stage1_migration_pr_preview.py
+          PYTHONPATH=scripts python3 scripts/test_deep_stage1_migration_pr_preview.py \
+            --preview-out "$RUNNER_TEMP/deep-stage1-migration-preparation.json"
       - name: Prove current canonical Stage-1 manifest remains non-active
         run: |
           python3 - <<'PY'
