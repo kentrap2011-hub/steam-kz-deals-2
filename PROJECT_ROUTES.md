@@ -524,3 +524,18 @@ Currentness invariant after PPD-012:
 7. `reviews/worker_reports/dossier-fully-async-pipeline-01.md` — worker boundaries, regression status, next activation gates.
 
 **Invariants:** GitHub may cap only **future new preauthorizations**, never pause workers already holding an exact frozen manifest; Assembly directly consumes exact submitted immutable Research package, never requires Research acceptance; later GH checks Research, Assembly identity and strict final three-game Dossier as one provenance chain. Invalid A is item-local and cannot become canonical or Deep-ready. One-stage remains production authority. No semantic workers, live ingest integration, new scheduler or Scheduled Task mutation.
+
+---
+
+## Frozen 18-game shadow Assembly — canonical GitHub Python handoff (nonproduction)
+
+**Checked:** 2026-10-19, draft PR #230 (`fix/dossier-shadow-assembly-github-python-handoff-01`), reference original marker `2c2649fb98322507cd3758ff0ff7992128f94de0`; real GitHub Actions read-only inspect run `39212219378` (success).
+
+**Minimal route:**
+1. `config/dossier_shadow_18_github_python_handoff_pins_v1.json` — original issuer run, 14 introducing Research Git commits, four absent AppIDs, exact unchanged Git marker and buffer pins, separately authorized typed Git transport destination.
+2. `scripts/dossier_shadow_18_github_python_handoff.py` — original **sandbox** `scripts/dossier_shadow_18_assembly_stage_b.py::inspect` (not a parallel port), GitHub-owned source verification / strict original `build_candidate` / `verify_candidate`. New adapter validates only namespace, immutability, order and safe handoff. No source revalidation rewrite or loose schema.
+3. `.github/workflows/validate-dossier-shadow-18-github-python-handoff.yml` — install in `main` only after Director review; PR read-only check with full historical checkout and fixture mock-semantic tests; future main `workflow_dispatch(operation=inspect)` is read-only. A distinct gated `publish` mode needs fresh manual Director confirmation and an original one-file semantic Git commit; no scheduled activation.
+4. `scripts/test_dossier_shadow_18_github_python_handoff.py` — synthetic exact Git ancestry, immutable typed handoff, original V1/schema + strict Stage B builder/verifier, collision/order/race rejection; original `scripts/test_dossier_shadow_18_assembly_stage_b.py` unchanged.
+5. `reviews/worker_reports/dossier-shadow-assembly-github-python-handoff-fix-01.md` — actor/permissions, preflight, CI and blocker ledger.
+
+**Real inspect (GitHub Actions #39212219378):** 12 `ready`, 2 `research_transport_invalid` (SULFUR 2124120; Sifu 2138710), 4 `research_not_submitted`. This is read-only structural eligibility, not semantic Assembly, canonical acceptance or a retry. The first original GitHub issuer run `39054131983` must **never** be retriggered. Original sandbox branch, Research artifacts, issuer marker/buffer and live Dossier/Deep stay unchanged until a separately authorized manual candidate publication.
