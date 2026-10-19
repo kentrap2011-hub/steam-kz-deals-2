@@ -1446,7 +1446,7 @@
       "id": "dossier-shadow-assembly-github-python-handoff-fix-01",
       "title": "Dossier: GitHub-Python-проверка и передача Assembly",
       "goal": "Устранить блокировку полного канонического Git/Python-пути inspect → семантический результат → build_candidate/verify_candidate для неизменяемого пилота 18 игр.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Нужно согласовать исходную frozen-ветку, права GitHub Actions и проверяемую передачу данных без ослабления валидаторов.",
       "urgency": "высокая",
@@ -1457,9 +1457,28 @@
       "depends_on": [
         "dossier-shadow-18-assembly-compare-sandbox-01"
       ],
+      "blocker": "Implementation proposed in draft PR #230; independent security review pending; merge not authorized.",
+      "updated_on": "2026-10-19",
+      "updated_at_utc": "2026-10-19T07:15:01.378Z"
+    },
+    {
+      "id": "dossier-shadow-assembly-pr230-security-review-01",
+      "title": "Dossier: независимая проверка безопасности PR #230",
+      "goal": "Проверить изолированный GitHub-Python путь inspect→typed handoff→Assembly publish, права, неизменность Git, порядок, гонки и защиту production; сохранить вердикт в комментарии PR #230.",
+      "status": "active",
+      "effort": "низкая",
+      "effort_reason": "Ограниченный аудит семи изменённых файлов и уже выполненных Python CI, без повторного Research/Assembly.",
+      "urgency": "высокая",
+      "urgency_reason": "Блокирует решение о слиянии PR #230 и запуске испытания Assembly.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_ASSEMBLY_PR230_SECURITY_REVIEW_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-shadow-assembly-github-python-handoff-fix-01"
+      ],
       "blocker": "",
       "updated_on": "2026-10-19",
-      "updated_at_utc": "2026-10-19T06:35:56.565Z"
+      "updated_at_utc": "2026-10-19T07:15:01.378Z"
     }
   ]
 }

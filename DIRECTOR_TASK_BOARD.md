@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR QA ASSIGNMENT — 2026-10-19: independent security review of draft PR #230
+
+- **Verified candidate:** PR [#230](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/230), implementation branch `fix/dossier-shadow-assembly-github-python-handoff-01`, observed head `f7e02689cf73b54b068fd042ba4abe7270a1871c`, **DRAFT**, not merged. Read-only authentic GitHub Python inspect `39212984487` passed with **12 ready / 2 invalid / 4 Research missing**; no semantic Assembly and no candidate publications.
+- **Assigned:** **НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2**; independent read-only task `WORKER_TASK_DOSSIER_SHADOW_ASSEMBLY_PR230_SECURITY_REVIEW_01.md`. Reviewer examines original authority, typed handoff, workflow permissions, immutable Git provenance, candidate isolation, race, and possible sequential ordering deadlock; writes **one permanent PR #230 Conversation QA comment** with verdict. No PR modifications, merge or dispatch.
+- **Next Director decision:** Review independent `PASS_FOR_DIRECTOR_MERGE_REVIEW` / `CHANGES_REQUIRED` / `UNVERIFIED_BLOCKED` before deciding whether to accept PR #230. Keep original Assembly issuer, frozen Research, sandbox and production unchanged.
+- **Parallel safety:** `WORKER_TASK.md` is owned by unrelated project work and remains untouched. This separate QA file and canonical forward registry are published together.
+
 ## CURRENT DIRECTOR ASSIGNMENT — 2026-10-19: GitHub Python handoff for blocked shadow Assembly
 
 - **Trigger:** real Assembly issuer run `39054131983` succeeded, frozen assembly marker `2c2649fb98322507cd3758ff0ff7992128f94de0`, original 14/18 Research files still immutable. A separate manually launched Assembly semantic chat stopped `BLOCKED` before any semantic attempt because its environment lacked an authentic Git checkout; canonical Python `inspect` was never run. No new Assembly results exist.
