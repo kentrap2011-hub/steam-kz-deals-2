@@ -375,6 +375,30 @@ class GithubOriginalHandoffTests(unittest.TestCase):
         self.assertIn("sys.path.insert(0, str(authority / \"scripts\"))", code)
         self.assertIn('Path(CONFIG).resolve()', code)
 
+    def test_13_post_marker_extra_or_rewritten_candidate_rejected(self):
+        f = self.fixture
+        f.issue()
+        manifest, _nonce, _parent = stage.frozen(
+            f.root, marker_commit=f.assembly_marker)
+        paths = {stage.result_path(entry) for entry in manifest["items"]}
+        path = stage.result_path(manifest["items"][1])
+        f.put(path, {"synthetic": "first"})
+        f.put("docs/unauthorized.txt", "unrelated side effect")
+        multiple = f.commit("Post-marker candidate with extra added file")
+        with self.assertRaisesRegex(ValueError, "non-authorized path"):
+            gh.validate_sandbox_descendants(
+                f.root, stage, f.assembly_marker, multiple, paths)
+        f.git("reset", "--hard", f.assembly_marker)
+        f.put(path, {"synthetic": "first"})
+        initial = f.commit("One legitimate original candidate path")
+        gh.validate_sandbox_descendants(
+            f.root, stage, f.assembly_marker, initial, paths)
+        f.put(path, {"synthetic": "rewritten"})
+        rewritten = f.commit("Forbidden candidate rewrite")
+        with self.assertRaises(Exception):
+            gh.validate_sandbox_descendants(
+                f.root, stage, f.assembly_marker, rewritten, paths)
+
 
 if __name__ == "__main__":
     unittest.main()
