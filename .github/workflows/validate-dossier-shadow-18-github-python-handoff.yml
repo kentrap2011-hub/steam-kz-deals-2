@@ -47,6 +47,12 @@ jobs:
           persist-credentials: false
       - uses: actions/checkout@v4
         with:
+          ref: 2c2649fb98322507cd3758ff0ff7992128f94de0
+          path: authority
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
           ref: sandbox/dossier-shadow-calibration-20261011-6x3-frozen-research
           path: sandbox
           fetch-depth: 0
@@ -69,7 +75,7 @@ jobs:
           test "$GITHUB_RUN_ATTEMPT" = 1
           git -C sandbox merge-base --is-ancestor 2c2649fb98322507cd3758ff0ff7992128f94de0 HEAD
           python launcher/scripts/dossier_shadow_18_github_python_handoff.py inspect \
-            --sandbox sandbox \
+            --sandbox sandbox --authority authority \
             --pins launcher/config/dossier_shadow_18_github_python_handoff_pins_v1.json \
             > launcher/frozen-inspect.json
           test -z "$(git -C sandbox status --porcelain)"
@@ -82,6 +88,13 @@ jobs:
           missing={r['appid'] for r in v['rows'] if r['status']=='research_not_submitted'}
           assert invalid == {'2124120', '2138710'}, invalid
           assert missing == {'1508750', '1607130', '1849000', '1857090'}, missing
+          assert sum(r['status']=='ready' for r in v['rows']) == 12
+          import subprocess
+          from pathlib import Path
+          pins=json.loads(Path('launcher/config/dossier_shadow_18_github_python_handoff_pins_v1.json').read_text())
+          assert len(pins['original_research_introduction_commits']) == 14
+          for commit in pins['original_research_introduction_commits'].values():
+              subprocess.run(['git','-C','sandbox','merge-base','--is-ancestor',commit,pins['assembly_marker_commit']],check=True)
           print({s:sum(r['status']==s for r in v['rows'])
                  for s in sorted({r['status'] for r in v['rows']})})
           PY
@@ -109,19 +122,30 @@ jobs:
       SANDBOX_BRANCH: sandbox/dossier-shadow-calibration-20261011-6x3-frozen-research
       INPUT_BRANCH: handoff/dossier-shadow-18-assembly-typed
     steps:
-      - name: Director confirmation before any Git write
+      - name: Technical actor/event gate (human Director approval separately recorded)
         shell: bash
         run: |
           set -euo pipefail
+          test "$GITHUB_EVENT_NAME" = workflow_dispatch
           test "$GITHUB_REF" = refs/heads/main
           test "$GITHUB_RUN_ATTEMPT" = 1
           test "$GITHUB_REPOSITORY" = kentrap2011-hub/steam-kz-deals-2
+          test "$GITHUB_ACTOR" = kentrap2011-hub
           test "$APPROVAL" = DIRECTOR_AUTHORIZED_SHADOW_ASSEMBLY_TYPED_HANDOFF
           [[ "$APPID" =~ ^[0-9]+$ ]]
           [[ "$SEMANTIC_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+          # The public approval string is NOT an authenticated human approval.
+          # Operator must record per-AppID authorization in the PR discussion
+          # before this one-off manual workflow_dispatch (see worker report).
       - uses: actions/checkout@v4
         with:
           path: launcher
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 2c2649fb98322507cd3758ff0ff7992128f94de0
+          path: authority
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@v4
@@ -138,33 +162,42 @@ jobs:
           test "$(git -C sandbox branch --show-current)" = "$SANDBOX_BRANCH"
           git -C sandbox fetch origin \
             "+refs/heads/$INPUT_BRANCH:refs/remotes/origin/$INPUT_BRANCH"
+          echo "$(git -C sandbox rev-parse "refs/remotes/origin/$INPUT_BRANCH")" > launcher/semantic-tip.txt
+          test "$(git -C sandbox ls-remote origin "refs/heads/$INPUT_BRANCH" | cut -f1)" = "$(cat launcher/semantic-tip.txt)"
           python launcher/scripts/dossier_shadow_18_github_python_handoff.py inspect \
-            --sandbox sandbox \
+            --sandbox sandbox --authority authority \
             --pins launcher/config/dossier_shadow_18_github_python_handoff_pins_v1.json \
             > launcher/readiness.json
       - name: Python build_candidate, strict Git lineage verify, create-only push
         shell: bash
         run: |
           set -euo pipefail
+          semantic_tip="$(cat launcher/semantic-tip.txt)"
           path="$(python launcher/scripts/dossier_shadow_18_github_python_handoff.py build \
-            --sandbox sandbox \
+            --sandbox sandbox --authority authority \
             --pins launcher/config/dossier_shadow_18_github_python_handoff_pins_v1.json \
-            --appid "$APPID" --semantic-commit "$SEMANTIC_COMMIT")"
+            --appid "$APPID" --semantic-commit "$SEMANTIC_COMMIT" \
+            --expected-semantic-tip "$semantic_tip")"
           [[ "$path" == reviews/dossier_shadow_offline/trials/dossier-shadow-calibration-20261011-6x3/assembly/* ]]
           git -C sandbox config user.name 'github-actions[bot]'
           git -C sandbox config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git -C sandbox add -- "$path"
           test "$(git -C sandbox diff --cached --name-only)" = "$path"
           test -z "$(git -C sandbox diff --name-only)"
+          test -z "$(git -C sandbox ls-files --others --exclude-standard)"
           git -C sandbox diff --cached --check
           git -C sandbox commit -m "Submit original shadow Assembly typed $APPID [unaccepted]"
           result="$(git -C sandbox rev-parse HEAD)"
           python launcher/scripts/dossier_shadow_18_github_python_handoff.py verify \
-            --sandbox sandbox \
+            --sandbox sandbox --authority authority \
             --pins launcher/config/dossier_shadow_18_github_python_handoff_pins_v1.json \
-            --appid "$APPID" --result-commit "$result" \
+            --appid "$APPID" --semantic-commit "$SEMANTIC_COMMIT" \
+            --expected-semantic-tip "$semantic_tip" --result-commit "$result" \
             > launcher/verified.json
           test -z "$(git -C sandbox status --porcelain)"
+          # Recheck BOTH remote leases as late as possible; no force, retry or rebase.
+          test "$(git -C sandbox ls-remote origin "refs/heads/$INPUT_BRANCH" | cut -f1)" = "$semantic_tip"
+          test "$(git -C sandbox ls-remote origin "refs/heads/$SANDBOX_BRANCH" | cut -f1)" = "$(git -C sandbox rev-parse HEAD^)"
           git -C sandbox push origin "HEAD:refs/heads/$SANDBOX_BRANCH"
           test "$(git -C sandbox ls-remote origin "refs/heads/$SANDBOX_BRANCH" | cut -f1)" = "$result"
           echo "Verified create-only SHADOW submission: $result" >> "$GITHUB_STEP_SUMMARY"
