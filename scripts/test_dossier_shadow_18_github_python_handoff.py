@@ -308,6 +308,17 @@ class GithubOriginalHandoffTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "withdrawn or drifted"):
                 gh.semantic_submission(
                     f.root, stage, pins, "1517180", commit, f.assembly_marker)
+            # Competing orphan typed commit with a correct path and parent,
+            # but absent from the designated live handoff branch.
+            subprocess.run(["git", "-C", str(remote), "update-ref",
+                            "refs/heads/" + handoff_branch, commit], check=True)
+            f.git("checkout", "-b", "orphan-typed", f.assembly_marker)
+            f.put(path, original)
+            orphan = f.commit("Orphan one-add competing semantic")
+            f.git("checkout", stage.BRANCH)
+            with self.assertRaisesRegex(ValueError, "not in designated"):
+                gh.semantic_submission(
+                    f.root, stage, pins, "1517180", orphan, commit)
 
     def test_10_extra_file_wrong_path_and_rewrite_in_typed_intro_fail(self):
         f = self.fixture
@@ -323,7 +334,7 @@ class GithubOriginalHandoffTests(unittest.TestCase):
         f.git("checkout", stage.BRANCH)
         p = {"submission_branch": handoff_branch, "submission_namespace": prefix}
         with patch.object(gh, "remote_tip", return_value=wrong):
-            with self.assertRaises((ValueError, Exception)):
+            with self.assertRaises(Exception):
                 gh.semantic_submission(f.root, stage, p, "1517180", wrong, wrong)
         # Add two paths in the SAME introduction; original require_only_new fails.
         f.git("checkout", handoff_branch)
