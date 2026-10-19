@@ -100,10 +100,12 @@ class GithubOriginalHandoffTests(unittest.TestCase):
         f.git("checkout", stage.BRANCH)
         pins = {"submission_branch": handoff_branch,
                 "submission_namespace": path_prefix}
-        self.assertEqual(gh.semantic_submission(
-            f.root, stage, pins, "1517180", commit), semantic)
+        with patch.object(gh, "remote_tip", return_value=commit):
+            self.assertEqual(gh.semantic_submission(
+                f.root, stage, pins, "1517180", commit, commit), semantic)
         with self.assertRaisesRegex(ValueError, "no source Research"):
-            gh.semantic_submission(f.root, stage, pins, "1508750", commit)
+            with patch.object(gh, "remote_tip", return_value=commit):
+                gh.semantic_submission(f.root, stage, pins, "1508750", commit, commit)
         f.git("checkout", handoff_branch)
         altered = dict(semantic)
         altered["forged_marker"] = True
@@ -112,23 +114,29 @@ class GithubOriginalHandoffTests(unittest.TestCase):
         f.git("update-ref", "refs/remotes/origin/" + handoff_branch, f.head())
         f.git("checkout", stage.BRANCH)
         with self.assertRaises(ValueError):
-            gh.semantic_submission(f.root, stage, pins, "1517180", commit)
+            with patch.object(gh, "remote_tip", return_value=f.head()):
+                gh.semantic_submission(f.root, stage, pins, "1517180", commit, f.head())
 
-    def test_05_no_reordering_of_preceding_ready_but_missing_invalid_skippable(self):
+    def test_05_ready_A_unavailable_B_and_C_independent_no_retry(self):
         rows = [
             {"appid": "1508750", "status": "research_not_submitted"},
-            {"appid": "1517180", "status": "ready"},
-            {"appid": "1533420", "status": "ready"},
+            {"appid": "1517180", "status": "ready"},  # A never published
+            {"appid": "1533420", "status": "ready"},  # B independently allowed
+            {"appid": "1590230", "status": "ready"},  # C independently allowed
+            {"appid": "2124120", "status": "research_transport_invalid"},
         ]
-        gh.original_order_gate({"rows": rows}, "1517180")
-        with self.assertRaisesRegex(ValueError, "earlier ready"):
-            gh.original_order_gate({"rows": rows}, "1533420")
-        rows[1]["status"] = "candidate_already_submitted"
-        gh.original_order_gate({"rows": rows}, "1533420")
-        rows[1]["status"] = "research_transport_invalid"
-        gh.original_order_gate({"rows": rows}, "1533420")
+        state = {"rows": rows}
+        gh.original_order_gate(state, "1533420")
+        gh.original_order_gate(state, "1590230")
+        gh.original_order_gate(state, "1517180")  # no sibling state mutation/retry
+        self.assertEqual(rows[1]["status"], "ready")
+        self.assertEqual([r["appid"] for r in state["rows"]],
+                         [r["appid"] for r in rows])
+        for denied in ("1508750", "2124120"):
+            with self.assertRaisesRegex(ValueError, "not canonical Python ready"):
+                gh.original_order_gate(state, denied)
         with self.assertRaisesRegex(ValueError, "foreign AppID"):
-            gh.original_order_gate({"rows": rows}, "999999999")
+            gh.original_order_gate(state, "999999999")
 
 
     def test_06_typed_mock_diagnostic_original_Python_build_and_verify(self):
@@ -233,6 +241,128 @@ class GithubOriginalHandoffTests(unittest.TestCase):
                 ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             self.assertEqual(push(writers[0]).returncode, 0)
             self.assertNotEqual(push(writers[1]).returncode, 0)
+
+    def test_08_post_marker_single_candidate_allowed_but_code_and_schema_tamper_rejected(self):
+        f = self.fixture
+        f.issue()
+        manifest, _nonce, _parent = stage.frozen(
+            f.root, marker_commit=f.assembly_marker)
+        allowed = {stage.result_path(e) for e in manifest["items"]}
+        path = stage.result_path(manifest["items"][1])
+        f.put(path, {"outcome": "synthetic-only"})
+        good = f.commit("Synthetic one-add-only original Assembly candidate")
+        self.assertEqual(
+            gh.validate_sandbox_descendants(
+                f.root, stage, f.assembly_marker, good, allowed), 1)
+        # Both tampering cases are REAL Git commits on a checkout whose
+        # simulated fetched remote tracking tip exactly equals the HEAD.
+        for malicious_path in (
+            "scripts/dossier_shadow_18_assembly_stage_b.py",
+            "config/dossier_async_assembly_result_v1.schema.json",
+        ):
+            f.git("reset", "--hard", good)
+            f.put(malicious_path, "# malicious mutable sandbox authority")
+            bad = f.commit("Post-marker Python or strict-schema injection")
+            f.git("update-ref", "refs/remotes/origin/" + stage.BRANCH, bad)
+            self.assertEqual(f.head(), f.git(
+                "rev-parse", "refs/remotes/origin/" + stage.BRANCH))
+            with self.assertRaisesRegex(ValueError, "non-authorized path"):
+                gh.validate_sandbox_descendants(
+                    f.root, stage, f.assembly_marker, bad, allowed)
+        f.git("reset", "--hard", good)
+
+    def test_09_semantic_remote_rewrite_with_stale_fetched_tracking_ref(self):
+        import subprocess
+        f = self.fixture
+        f.issue()
+        with tempfile.TemporaryDirectory(prefix="shadow-handoff-remote-") as tmp:
+            remote = Path(tmp) / "origin.git"
+            subprocess.run(["git", "init", "--bare", str(remote)],
+                           check=True, stdout=subprocess.DEVNULL)
+            f.git("remote", "add", "origin", str(remote))
+            handoff_branch = "handoff/dossier-shadow-18-assembly-typed"
+            path_prefix = stage.PREFIX.replace("/trials/", "/handoff/")
+            f.git("checkout", "-b", handoff_branch)
+            path = path_prefix + "/1517180.json"
+            original = {"outcome": "runtime_or_tool_failure",
+                        "payload": {}, "supplemental_operations": []}
+            f.put(path, original)
+            commit = f.commit("Exact one-file typed semantic introduction")
+            f.git("push", "origin", "HEAD:refs/heads/" + handoff_branch)
+            f.git("update-ref", "refs/remotes/origin/" + handoff_branch, commit)
+            f.git("checkout", stage.BRANCH)
+            pins = {"submission_branch": handoff_branch,
+                    "submission_namespace": path_prefix}
+            self.assertEqual(gh.semantic_submission(
+                f.root, stage, pins, "1517180", commit, commit), original)
+            # Remote can be rewritten/withdrawn without changing the local
+            # already-fetched tracking ref (the exploit under review).
+            subprocess.run(["git", "-C", str(remote), "update-ref",
+                            "refs/heads/" + handoff_branch, f.assembly_marker],
+                           check=True)
+            self.assertEqual(f.git(
+                "rev-parse", "refs/remotes/origin/" + handoff_branch), commit)
+            with self.assertRaisesRegex(ValueError, "withdrawn or drifted"):
+                gh.semantic_submission(
+                    f.root, stage, pins, "1517180", commit, commit)
+            with self.assertRaisesRegex(ValueError, "withdrawn or drifted"):
+                gh.semantic_submission(
+                    f.root, stage, pins, "1517180", commit, f.assembly_marker)
+
+    def test_10_extra_file_wrong_path_and_rewrite_in_typed_intro_fail(self):
+        f = self.fixture
+        f.issue()
+        handoff_branch = "handoff/dossier-shadow-18-assembly-typed"
+        prefix = stage.PREFIX.replace("/trials/", "/handoff/")
+        path = prefix + "/1517180.json"
+        f.git("checkout", "-b", handoff_branch)
+        # Wrong path: the exact target does not exist at introducing commit.
+        f.put(prefix + "/9999999.json", {"outcome": "x"})
+        wrong = f.commit("Wrong AppID path")
+        f.git("update-ref", "refs/remotes/origin/" + handoff_branch, wrong)
+        f.git("checkout", stage.BRANCH)
+        p = {"submission_branch": handoff_branch, "submission_namespace": prefix}
+        with patch.object(gh, "remote_tip", return_value=wrong):
+            with self.assertRaises((ValueError, Exception)):
+                gh.semantic_submission(f.root, stage, p, "1517180", wrong, wrong)
+        # Add two paths in the SAME introduction; original require_only_new fails.
+        f.git("checkout", handoff_branch)
+        f.put(path, {"outcome": "x"})
+        f.put(prefix + "/1533420.json", {"outcome": "x"})
+        extra = f.commit("Two-file typed introduction forbidden")
+        f.git("update-ref", "refs/remotes/origin/" + handoff_branch, extra)
+        f.git("checkout", stage.BRANCH)
+        with patch.object(gh, "remote_tip", return_value=extra):
+            with self.assertRaises(Exception):
+                gh.semantic_submission(f.root, stage, p, "1517180", extra, extra)
+
+    def test_11_publish_authority_forbidden_event_actor_branch_and_inputs(self):
+        good = dict(event="workflow_dispatch", ref="refs/heads/main",
+                    repository="kentrap2011-hub/steam-kz-deals-2",
+                    actor="kentrap2011-hub", attempt="1",
+                    operation="publish",
+                    approval="DIRECTOR_AUTHORIZED_SHADOW_ASSEMBLY_TYPED_HANDOFF",
+                    appid="1517180", commit="a" * 40)
+        gh.require_publish_dispatch(**good)
+        for k, invalid in (
+            ("event", "pull_request"), ("ref", "refs/heads/other"),
+            ("repository", "someone-else/steam-kz-deals-2"),
+            ("actor", "attacker"), ("attempt", "2"),
+            ("operation", "inspect"), ("approval", ""),
+            ("appid", "1508750"), ("appid", "nope"),
+            ("commit", "bad"), ("commit", "f" * 39),
+        ):
+            case = dict(good, **{k: invalid})
+            with self.subTest(field=k, invalid=invalid):
+                with self.assertRaises(ValueError):
+                    gh.require_publish_dispatch(**case)
+
+    def test_12_stage_B_only_frozen_authority_loader_contract(self):
+        import inspect
+        code = inspect.getsource(gh.load_original_stage)
+        self.assertIn("FIXED_MARKER", code)
+        self.assertIn("sys.path.insert(0, str(authority / \"scripts\"))", code)
+        self.assertIn('Path(CONFIG).resolve()', code)
 
 
 if __name__ == "__main__":
