@@ -131,5 +131,109 @@ class GithubOriginalHandoffTests(unittest.TestCase):
             gh.original_order_gate({"rows": rows}, "999999999")
 
 
+    def test_06_typed_mock_diagnostic_original_Python_build_and_verify(self):
+        # All semantic facts synthetic; the real original Stage B schema,
+        # path and Git create-only verifier are deliberately NOT mocked.
+        f = self.fixture
+        row = f.items[1]
+        a = row["assignment"]
+        a.update({
+            "snapshot_id": "a" * 64,
+            "group_sequence": row["group_sequence"],
+            "group_sha256": "b" * 64,
+            "prepared_required_sha256": "c" * 64,
+            "group_plan_sha256": "d" * 64,
+            "items_sha256": "e" * 64,
+            "item_index": row["item_index"],
+            "scope_source": "synthetic_fixture_only",
+            "source_queue_sha256": "f" * 64,
+            "research_contract_sha256": "0" * 64,
+            "web_evidence_contract_binding": {
+                "evidence_contract_schema":
+                    "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "synthetic-fixture-v2",
+                "evidence_contract_sha256": "1" * 64,
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "synthetic-fixture-v2",
+                "worker_schema_sha256": "2" * 64,
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "synthetic-fixture-v2",
+                "worker_prompt_sha256": "3" * 64,
+            },
+        })
+        source_commit = f.research_result(1)
+        f.issue()
+        semantic = {
+            "outcome": "runtime_or_tool_failure",
+            "payload": {
+                "status": "runtime_or_tool_failure",
+                "gap_id": None,
+                "source_ref": None,
+                "field_or_dimension": None,
+                "safe_diagnostic": "Synthetic fixture backend unavailable",
+                "requires_github_classification": True,
+                "normal_first_pass_attempt_consumed": False,
+            },
+            "supplemental_operations": [],
+        }
+        mapping = {row["appid"]: source_commit}
+        path, candidate = stage.build_candidate(
+            f.root, marker_commit=f.assembly_marker,
+            research_commits=mapping, appid=row["appid"], semantic=semantic)
+        self.assertTrue(path.startswith(stage.PREFIX + "/assembly/"))
+        self.assertFalse(candidate["canonical_acceptance"])
+        self.assertTrue(candidate["staged_only"])
+        f.put(path, candidate)
+        created = f.commit("Fixture typed diagnostic, one-add only")
+        proof = stage.verify_candidate(
+            f.root, marker_commit=f.assembly_marker,
+            research_commits=mapping, appid=row["appid"], result_commit=created)
+        self.assertEqual(proof["result_commit"], created)
+        self.assertFalse(proof["canonical_acceptance"])
+        self.assertFalse(proof["deep_ready"])
+        with self.assertRaisesRegex(ValueError, "candidate already exists"):
+            stage.build_candidate(
+                f.root, marker_commit=f.assembly_marker,
+                research_commits=mapping, appid=row["appid"], semantic=semantic)
+
+    def test_07_non_fast_forward_sandbox_race_fails_without_retry(self):
+        import subprocess
+        with tempfile.TemporaryDirectory(prefix="shadow-race-only-") as tmp:
+            remote = Path(tmp) / "remote.git"
+            subprocess.run(["git", "init", "--bare", str(remote)],
+                           check=True, stdout=subprocess.DEVNULL)
+            f = self.fixture
+            f.git("remote", "add", "synthetic-race", str(remote))
+            f.git("push", "synthetic-race", "HEAD:refs/heads/frozen")
+            writers = []
+            for suffix in ("one", "two"):
+                clone = Path(tmp) / suffix
+                subprocess.run(["git", "clone", "--branch", "frozen",
+                                str(remote), str(clone)], check=True,
+                               stdout=subprocess.DEVNULL)
+                for key, value in (("user.name", "fixture"),
+                                   ("user.email", "fixture@example.invalid")):
+                    subprocess.run(["git", "-C", str(clone), "config",
+                                    key, value], check=True)
+                (clone / (suffix + ".txt")).write_text(
+                    "mock candidate only", encoding="utf-8")
+                subprocess.run(["git", "-C", str(clone), "add", "."],
+                               check=True)
+                subprocess.run(["git", "-C", str(clone), "commit", "-m",
+                                "Synthetic one-add"], check=True,
+                               stdout=subprocess.DEVNULL)
+                writers.append(clone)
+            def push(clone):
+                return subprocess.run([
+                    "git", "-C", str(clone), "push",
+                    "origin", "HEAD:refs/heads/frozen"
+                ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            self.assertEqual(push(writers[0]).returncode, 0)
+            self.assertNotEqual(push(writers[1]).returncode, 0)
+
+
 if __name__ == "__main__":
     unittest.main()
