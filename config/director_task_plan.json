@@ -1484,7 +1484,7 @@
       "id": "dossier-shadow-assembly-pr230-qa-remediation-01",
       "title": "Dossier: устранить замечания безопасности к PR #230",
       "goal": "В прежнем draft PR устранить блокировку независимых игр, защитить неизменяемый Python/schema, ветки и права публикации, пройти финальный CI.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Точечные исправления существующего workflow, адаптера, Git invariant и негативных тестов; возможны сложные нюансы исторического checkout.",
       "urgency": "высокая",
@@ -1496,9 +1496,30 @@
         "dossier-shadow-assembly-github-python-handoff-fix-01",
         "dossier-shadow-assembly-pr230-security-review-01"
       ],
+      "blocker": "Remediation code and CI complete; post-remediation independent QA and Director merge decision outstanding.",
+      "updated_on": "2026-10-19",
+      "updated_at_utc": "2026-10-19T18:09:22.401Z",
+      "recent_completion": true
+    },
+    {
+      "id": "dossier-shadow-assembly-pr230-post-remediation-qa-01",
+      "title": "Dossier: независимая повторная QA PR #230",
+      "goal": "Проверить устранение семи замечаний к PR #230 на итоговом SHA и сохранить независимый вердикт в комментарии PR.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Независимая проверка GitHub-кода, прав, provenance и тестов по 7 критериям.",
+      "urgency": "высокая",
+      "urgency_reason": "Без независимого заключения нельзя решить, безопасно ли объединять PR и продолжать Assembly.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_ASSEMBLY_PR230_POST_REMEDIATION_QA_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-shadow-assembly-pr230-qa-remediation-01"
+      ],
       "blocker": "",
       "updated_on": "2026-10-19",
-      "updated_at_utc": "2026-10-19T16:57:22.166Z"
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-19T18:09:22.401Z"
     }
   ]
 }

@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR NEXT QA — 2026-10-19: independent post-remediation re-review of PR #230
+
+- **Verified** existing [PR #230](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/230) stays OPEN/DRAFT/UNMERGED, observed head `48db1de81294008e1f55e857c4a42c663184e8a3`. Post-remediation [author comment](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/230#issuecomment-6273611265) and report exist. Final-head GitHub CI runs `39297241772`, `39297241824`, `39297242033` passed; no real candidate publish or semantic Assembly, human consent not demonstrated by CI.
+- **НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2:** `WORKER_TASK_DOSSIER_SHADOW_ASSEMBLY_PR230_POST_REMEDIATION_QA_01.md`; independent read-only re-review of all 7 QA gates, latest PR SHA, final-head CI and original authority. One NEW durable top-level PR #230 Conversation verdict; no PR/code changes, manual Action dispatch, Research/Assembly, sandbox mutations or Scheduled Tasks.
+- **Роль ЧАТА 1:** remediation code and synthetic tests done, held for potential direct continuation if new QA finds defects. Remediation ≠ Director acceptance or merge.
+- **Next Director gate:** read independently recorded PR verdict before any merge/ready decision. `PASS_FOR_DIRECTOR_MERGE_REVIEW` allows further Director acceptance evaluation only, never automatic merge. Keep `WORKER_TASK.md` assigned to unrelated work.
+
 ## DIRECTOR QA REMEDIATION — 2026-10-19: CHANGES_REQUIRED on PR #230
 
 - **Confirmed read-only QA:** [PR #230 independent comment](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/230#issuecomment-6264321596) = `CHANGES_REQUIRED` for exact head `f7e02689cf73b54b068fd042ba4abe7270a1871c`. Original GitHub Python `inspect` still 12 ready / 2 Research transport invalid / 4 Research missing. No real Assembly output exists.
