@@ -67,7 +67,7 @@ jobs:
           set -euo pipefail
           test "$GITHUB_REPOSITORY" = kentrap2011-hub/steam-kz-deals-2
           test "$GITHUB_RUN_ATTEMPT" = 1
-          test "$(git -C sandbox rev-parse HEAD)" = 2c2649fb98322507cd3758ff0ff7992128f94de0
+          git -C sandbox merge-base --is-ancestor 2c2649fb98322507cd3758ff0ff7992128f94de0 HEAD
           python launcher/scripts/dossier_shadow_18_github_python_handoff.py inspect \
             --sandbox sandbox \
             --pins launcher/config/dossier_shadow_18_github_python_handoff_pins_v1.json \
@@ -78,6 +78,10 @@ jobs:
           v=json.load(open('launcher/frozen-inspect.json', encoding='utf-8'))
           assert len(v['rows']) == 18 and v['semantic_attempts'] == 0
           assert not v['canonical_acceptance'] and not v['deep_ready']
+          invalid={r['appid'] for r in v['rows'] if r['status']=='research_transport_invalid'}
+          missing={r['appid'] for r in v['rows'] if r['status']=='research_not_submitted'}
+          assert invalid == {'2124120', '2138710'}, invalid
+          assert missing == {'1508750', '1607130', '1849000', '1857090'}, missing
           print({s:sum(r['status']==s for r in v['rows'])
                  for s in sorted({r['status'] for r in v['rows']})})
           PY
