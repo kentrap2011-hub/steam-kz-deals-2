@@ -1,10 +1,30 @@
 # DIRECTOR BOOTSTRAP
 
-Last refreshed: 2026-09-29
+Last refreshed: 2026-10-19
 
 Purpose: compact restart context for a **NEW physical Director conversation** after the previous Director chat reached its context limit.
 
 This file is a bootstrap snapshot, not a replacement for canonical project truth. The new Director must read current `CHAT_PROTOCOL.md`, `DIRECTOR_PROTOCOL.md`, fresh `DIRECTOR_TASK_BOARD.md`, and current `main` first. Newer canonical GitHub state always wins over this file.
+
+## ACTIVE DIRECTOR RESTART — 2026-10-19: PR #230 QA remediation (supersedes every older first-response instruction)
+
+**FIRST USER-VISIBLE RESPONSE IN THE NEXT NEW DIRECTOR CHAT:** after reading the current GitHub `CHAT_PROTOCOL.md`, `DIRECTOR_PROTOCOL.md`, `CHAT_CONTEXT.md`, `DIRECTOR_BOOTSTRAP.md`, `DIRECTOR_HANDOFF_CURRENT.md`, the top of `DIRECTOR_TASK_BOARD.md`, and the exact remediation task below, **immediately prepare and display ONE short copyable worker-launch prompt**, with explicit destination `СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1` (the physical Chat 1 that authored PR #230; direct continuation). Do NOT undertake implementation or QA in the director's first answer and do NOT create a second task/PR. If the original Chat 1 is inaccessible/retired, state that and offer a genuinely NEW physical worker chat with same task and exact PR continuity, without claiming its old context is present.
+
+**The prompt must** begin `ЧАТ 1 — исправление замечаний независимой проверки PR #230` and include repo `kentrap2011-hub/steam-kz-deals-2`, source `main`, requirement to fully read `CHAT_PROTOCOL.md` + START gate, then fully execute `WORKER_TASK_DOSSIER_SHADOW_ASSEMBLY_PR230_QA_REMEDIATION_01.md` from **current main** in existing PR #230 branch only. State do not merge, do not change production, Research, sandbox markers, Scheduled Tasks or run semantic Assembly. **Output prompt only and brief destination/explanation**, not the full task text.
+
+**Grounded LIVE snapshot at 2026-10-19:**
+- Main after task publication: `aa07bfe77e11a45b4ea6ae4bfd504894b19acc17` (verify fresh, do not freeze this as an eternal HEAD). Full exact remediation task is present on main and registered in Board + `config/director_task_plan.json` as ACTIVE for Chat 1; no new task creation required.
+- Existing [PR #230](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/230) `OPEN / DRAFT / UNMERGED`, implementation branch `fix/dossier-shadow-assembly-github-python-handoff-01`, last observed head `f7e02689cf73b54b068fd042ba4abe7270a1871c`. No merge authorization.
+- Independent [QA comment #6264321596](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/230#issuecomment-6264321596): `CHANGES_REQUIRED`. Blocking: earlier `ready` games erroneously block later independently `ready` games; executable Python/imported helpers/schema can drift on mutable sandbox HEAD. Also guard handoff-branch stale-ref race and verify supported manual GitHub Actions UI dispatch / explicit human authorization; add negative tests and final-head CI.
+- Verified real original Python inspect: GitHub run [39212984487](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39212984487) succeeded, `12 ready / 2 research_transport_invalid (SULFUR 2124120, Sifu 2138710) / 4 research_not_submitted (1508750,1607130,1849000,1857090)`. This is not canonical Dossier acceptance, nor semantic Assembly completion.
+- Original sandbox `sandbox/dossier-shadow-calibration-20261011-6x3-frozen-research` HEAD `2c2649fb98322507cd3758ff0ff7992128f94de0`; Assembly issuer run `39054131983` succeeded. Original Research/Assembly freeze, 14 Research bytes and markers must not be changed or reissued. **Zero real Assembly semantics, zero Assembly candidates** verified.
+- Separate QA physical ЧАТ 2 has **finished** and is not the implementation destination. Worker PR #230 author ЧАТ 1 is the intended direct continuation. `WORKER_TASK.md` is occupied by unrelated Taste Dossier work: **do not overwrite it**.
+- Continue after the worker reports: Director independently verifies updated PR HEAD, actual CI, QA blockers and only then decides if another independent re-review/merge is warranted. Do not auto-merge or dispatch live semantics. No Scheduled Tasks.
+
+**Priority order after first response:** remediation of PR #230 → independent post-fix acceptance → Director merge decision → separately approved sandbox Assembly data-plane on exactly eligible Research, then real quality comparison. Parallel Deep/site and unrelated task status must be checked fresh in Board; do not resurface obsolete October 13 first-response instructions.
+
+
+---
 
 ## Repository scope
 
@@ -27,7 +47,7 @@ Use only this repository unless an exact task explicitly authorizes another repo
 - Explain in simple Russian; minimize untranslated jargon.
 - Default max parallel workers: 2.
 
-## Current Director state
+## HISTORICAL Director state — 2026-09-29 (superseded; do not use for current assignments)
 
 Current accepted Director-state commit before this bootstrap:
 `3ff0a5041265851881499e18f87d8ece18eec450`.
