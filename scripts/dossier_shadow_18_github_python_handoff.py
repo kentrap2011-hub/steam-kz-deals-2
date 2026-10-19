@@ -40,7 +40,7 @@ def require(ok, message):
         raise ValueError("SHADOW_GITHUB_PYTHON_HANDOFF_BLOCKED: " + message)
 
 
-def checked(repo, pins, stage):
+def checked(repo, pins, stage, *, allow_local_result=False):
     """Fail before even reading semantic input if authority or inputs drift."""
     p = json.loads(Path(pins).read_text("utf-8"))
     require(p["schema"] == "DOSSIER-SHADOW-18-GITHUB-PYTHON-HANDOFF-PINS-V1"
@@ -62,8 +62,12 @@ def checked(repo, pins, stage):
             and p["scheduled_tasks"] is False
             and p["retry_enabled"] is False,
             "frozen pins mismatch")
-    require(stage.head(repo) == stage.git(
-        repo, "rev-parse", "refs/remotes/origin/" + stage.BRANCH).stdout.decode().strip(),
+    remote = stage.git(
+        repo, "rev-parse", "refs/remotes/origin/" + stage.BRANCH
+    ).stdout.decode().strip()
+    require(stage.head(repo) == remote or (
+        allow_local_result and stage.first_parent_contains(
+            repo, remote, stage.head(repo))),
         "sandbox checkout differs from remote (no race/rebind)")
     require(stage.git(repo, "symbolic-ref", "--short", "HEAD").stdout.decode().strip()
             == stage.BRANCH, "must checkout ORIGINAL sandbox branch")
@@ -76,8 +80,8 @@ def checked(repo, pins, stage):
     return p
 
 
-def readiness(repo, pins, stage):
-    p = checked(repo, pins, stage)
+def readiness(repo, pins, stage, *, allow_local_result=False):
+    p = checked(repo, pins, stage, allow_local_result=allow_local_result)
     result = stage.inspect(repo, marker_commit=FIXED_MARKER,
                            research_commits=p["original_research_introduction_commits"])
     from dossier_shadow_research_trial_publish import EXPECTED_APPIDS
@@ -145,8 +149,10 @@ def main():
     sys.path.insert(0, str(repo / "scripts"))
     import dossier_shadow_18_assembly_stage_b as stage
 
-    p = checked(repo, args.pins, stage)
-    state = readiness(repo, args.pins, stage)
+    p = checked(repo, args.pins, stage,
+                allow_local_result=args.mode == 'verify')
+    state = readiness(repo, args.pins, stage,
+                      allow_local_result=args.mode == 'verify')
     if args.mode == "inspect":
         print(json.dumps(state, indent=2, sort_keys=True, ensure_ascii=False))
         return
