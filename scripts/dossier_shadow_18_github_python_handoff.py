@@ -124,6 +124,8 @@ def semantic_submission(repo, stage, p, appid, commit):
 
 def original_order_gate(state, appid):
     """Existing frozen row order, without requiring invalid/missing siblings."""
+    require(any(row["appid"] == appid for row in state["rows"]),
+            "foreign AppID")
     found = False
     for row in state["rows"]:
         if row["appid"] == appid:
