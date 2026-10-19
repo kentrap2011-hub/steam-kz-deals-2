@@ -5,6 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR QA REMEDIATION — 2026-10-19: CHANGES_REQUIRED on PR #230
+
+- **Confirmed read-only QA:** [PR #230 independent comment](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/230#issuecomment-6264321596) = `CHANGES_REQUIRED` for exact head `f7e02689cf73b54b068fd042ba4abe7270a1871c`. Original GitHub Python `inspect` still 12 ready / 2 Research transport invalid / 4 Research missing. No real Assembly output exists.
+- **Next:** **СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1 (author of still-DRAFT PR #230, direct remediation continuation)** implements `WORKER_TASK_DOSSIER_SHADOW_ASSEMBLY_PR230_QA_REMEDIATION_01.md` **on the same PR branch**. Requirements: remove cross-ready deadlock; pin original immutable executable/scripts/schema and reject post-marker sandbox tampering; guard stale/rewritten typed handoff branch; prove manual GitHub Actions UI dispatch route and human authorization boundary; add negative tests and re-run exact-head CI.
+- **Boundaries:** do NOT merge, run semantic Assembly, Research, action issuer, Scheduled Tasks or production. QA ЧАТ 2 read-only work is closed. `WORKER_TASK.md` remains reserved for unrelated task. Director re-reviews the PR delta before merge.
+
 ## DIRECTOR QA ASSIGNMENT — 2026-10-19: independent security review of draft PR #230
 
 - **Verified candidate:** PR [#230](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/230), implementation branch `fix/dossier-shadow-assembly-github-python-handoff-01`, observed head `f7e02689cf73b54b068fd042ba4abe7270a1871c`, **DRAFT**, not merged. Read-only authentic GitHub Python inspect `39212984487` passed with **12 ready / 2 invalid / 4 Research missing**; no semantic Assembly and no candidate publications.

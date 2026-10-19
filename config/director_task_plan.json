@@ -1465,7 +1465,7 @@
       "id": "dossier-shadow-assembly-pr230-security-review-01",
       "title": "Dossier: независимая проверка безопасности PR #230",
       "goal": "Проверить изолированный GitHub-Python путь inspect→typed handoff→Assembly publish, права, неизменность Git, порядок, гонки и защиту production; сохранить вердикт в комментарии PR #230.",
-      "status": "active",
+      "status": "complete",
       "effort": "низкая",
       "effort_reason": "Ограниченный аудит семи изменённых файлов и уже выполненных Python CI, без повторного Research/Assembly.",
       "urgency": "высокая",
@@ -1476,9 +1476,29 @@
       "depends_on": [
         "dossier-shadow-assembly-github-python-handoff-fix-01"
       ],
+      "blocker": "Independent review completed: CHANGES_REQUIRED on PR #230, see GitHub comment 6264321596.",
+      "updated_on": "2026-10-19",
+      "updated_at_utc": "2026-10-19T16:57:22.166Z"
+    },
+    {
+      "id": "dossier-shadow-assembly-pr230-qa-remediation-01",
+      "title": "Dossier: устранить замечания безопасности к PR #230",
+      "goal": "В прежнем draft PR устранить блокировку независимых игр, защитить неизменяемый Python/schema, ветки и права публикации, пройти финальный CI.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Точечные исправления существующего workflow, адаптера, Git invariant и негативных тестов; возможны сложные нюансы исторического checkout.",
+      "urgency": "высокая",
+      "urgency_reason": "Независимая QA дала CHANGES_REQUIRED и запретила слияние PR до устранения блокеров.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_ASSEMBLY_PR230_QA_REMEDIATION_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-shadow-assembly-github-python-handoff-fix-01",
+        "dossier-shadow-assembly-pr230-security-review-01"
+      ],
       "blocker": "",
       "updated_on": "2026-10-19",
-      "updated_at_utc": "2026-10-19T07:15:01.378Z"
+      "updated_at_utc": "2026-10-19T16:57:22.166Z"
     }
   ]
 }
