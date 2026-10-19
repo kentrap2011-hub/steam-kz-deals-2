@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## CURRENT DIRECTOR ASSIGNMENT — 2026-10-19: GitHub Python handoff for blocked shadow Assembly
+
+- **Trigger:** real Assembly issuer run `39054131983` succeeded, frozen assembly marker `2c2649fb98322507cd3758ff0ff7992128f94de0`, original 14/18 Research files still immutable. A separate manually launched Assembly semantic chat stopped `BLOCKED` before any semantic attempt because its environment lacked an authentic Git checkout; canonical Python `inspect` was never run. No new Assembly results exist.
+- **Assigned:** **НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 1**; task: `WORKER_TASK_DOSSIER_SHADOW_ASSEMBLY_GITHUB_PYTHON_HANDOFF_FIX_01.md`. This is a bounded **developer** task, not real Assembly execution.
+- **Required boundary:** architecture preflight, reproduce canonical Python `inspect` in a real GitHub-owned checkout, and prove the FULL semantic-result → Python `build_candidate` → strict GitHub verification handoff. Respect frozen sandbox source/marker and preserve 14 Research files. No new Research, no reissued Assembly marker, no production/Scheduled Task changes. Worker submits PR for Director review only if whole path is feasible; otherwise precise CONTRACT/RUNTIME BLOCKED report.
+- **Parallel safety:** `WORKER_TASK.md` remains assigned to unrelated Taste Dossier temporal/ingest task and is NOT overwritten. This new assignment is kept in a uniquely named file and registered in the canonical forward-task plan.
+
 ## DIRECTOR CHECK — 2026-10-16: REAL Research authorization present; no semantic results
 
 - **REAL GitHub Actions passed:** Original sandbox freeze Actions run `38941191322` success first attempt; separate feasibility Actions run `38942024445` success first attempt. Canonical branch `sandbox/dossier-shadow-calibration-20261011-6x3-frozen-research` EXISTS; its current HEAD is exact authorized commit `2a726cf6731c0fc1e7bc809474627383c107ef9b`, direct-child of original marker `bb63cc291eba5aa8fc56e2920ef84d131ac28a4f` which is direct-child of immutable buffer commit `343e5956ceda07c728c00371301c418036068a22` which is direct-child of original source `b81873a2af5615b0057faf236d3374a5b4e46877`. The authorized buffer's exact 6×3/18 original AppIDs and all frozen authority blob pins were independently verified; Research authorization is READY for bounded isolated semantic work; original `frozen_trial` remains BLOCKED by design.

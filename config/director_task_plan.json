@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-10-16",
+  "last_curated_on": "2026-10-19",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -1441,6 +1441,25 @@
       "updated_on": "2026-10-16",
       "updated_at_utc": "2026-10-16T03:03:33.444Z",
       "recent_completion": true
+    },
+    {
+      "id": "dossier-shadow-assembly-github-python-handoff-fix-01",
+      "title": "Dossier: GitHub-Python-проверка и передача Assembly",
+      "goal": "Устранить блокировку полного канонического Git/Python-пути inspect → семантический результат → build_candidate/verify_candidate для неизменяемого пилота 18 игр.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Нужно согласовать исходную frozen-ветку, права GitHub Actions и проверяемую передачу данных без ослабления валидаторов.",
+      "urgency": "высокая",
+      "urgency_reason": "Без полной проверки и передачи нельзя продолжить разрешённый пилот Assembly.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_ASSEMBLY_GITHUB_PYTHON_HANDOFF_FIX_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-shadow-18-assembly-compare-sandbox-01"
+      ],
+      "blocker": "",
+      "updated_on": "2026-10-19",
+      "updated_at_utc": "2026-10-19T06:35:56.565Z"
     }
   ]
 }
