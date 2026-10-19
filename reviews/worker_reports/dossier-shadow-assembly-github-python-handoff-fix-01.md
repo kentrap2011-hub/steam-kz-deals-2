@@ -2,7 +2,7 @@
 
 Task: `WORKER_TASK_DOSSIER_SHADOW_ASSEMBLY_GITHUB_PYTHON_HANDOFF_FIX_01.md`  
 Mode: developer-only, isolated shadow, no Research / semantic Assembly / one-shot issuer / Scheduled Tasks.  
-Status: **implementation proposed, full acceptance subject to PR CI and Director review**.
+Status: **PR-only implementation validated with authentic GitHub Python inspect; review/merge + separately authorized semantic dry-run still required**.
 
 ## Independently checked before changes
 
@@ -11,7 +11,7 @@ Status: **implementation proposed, full acceptance subject to PR CI and Director
 - Original Research marker `bb63cc291eba5aa8fc56e2920ef84d131ac28a4f`, direct-child separate Research authorization `2a726cf6731c0fc1e7bc809474627383c107ef9b`.
 - Original issuer GitHub Action [39054131983](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39054131983) completed successfully, `workflow_dispatch`, `run_attempt=1`, original sandbox branch. Original marker Git author is GitHub Actions.
 - GitHub commit listing independently confirmed exact **14** original single-file Research-introduction commits, pinned verbatim in `config/dossier_shadow_18_github_python_handoff_pins_v1.json`. The other **4** AppIDs are `1508750`, `1607130`, `1849000`, `1857090` (not submitted). Neither QA findings for `2124120` and `2138710` nor `research_incomplete` may be converted into `ready` without real Python inspect.
-- In developer container, GitHub DNS is unavailable: `git ls-remote https://github.com/... refs/heads/main` fails `Could not resolve host: github.com`. This reproduces why a ChatGPT-local Python executable cannot inspect authentic Git ancestry. GitHub Actions issuer already demonstrated checkout and Python operational viability.
+- Prior blocked Assembly operator could not `git clone` due GitHub DNS failure. This developer run accessed authentic GitHub provenance through the connected GitHub API instead; GitHub Actions `actions/checkout` + original Python `inspect` is now proven to work on the genuine frozen sandbox. The original Assembly issuer already demonstrated Actions Python viability.
 
 ## Architecture preflight
 
@@ -31,7 +31,7 @@ Status: **implementation proposed, full acceptance subject to PR CI and Director
 
 ## Rejection and privacy invariants
 
-- Real two invalid QA packages must be judged by original canonical Research Python; synthetic tests verify two wrong-original-Git-origin records are rejected item-locally, and four missing records remain missing. *QA semantic deficiencies are not silently declared structurally invalid if the existing validator does not itself prove that result; any discrepancy must fail the Director's acceptance gate.*
+- Actual original Python Research transport checks, not a manual QA shortcut, classify SULFUR (2124120) and Sifu (2138710) `research_transport_invalid`, and exactly the four predeclared missing AppIDs `research_not_submitted`. All other 12 are structurally `ready` (NOT accepted as Dossiers). Additional synthetic tests independently verify item-local two-invalid/four-missing behavior. All 14 original Research bytes remain untouched.
 - Invalid Research, candidate collision, wrong source/old year, extra transport field, rewritten semantic blob, tampered marker/buffer, production path, source privacy, non-exact V2 Dossier, wrong original order, and racing sandbox push are fail-closed.
 - No Research or Assembly semantics executed by this worker. No existing sandbox files modified. No Published/Accepted dossiers or Deep readiness implied.
 
@@ -40,7 +40,12 @@ Status: **implementation proposed, full acceptance subject to PR CI and Director
 - Existing original Stage B fixture: `scripts/test_dossier_shadow_18_assembly_stage_b.py`.
 - Added focused tests: `scripts/test_dossier_shadow_18_github_python_handoff.py`.
 - PR-only GitHub CI and immutable original read-only inspect: `.github/workflows/validate-dossier-shadow-18-github-python-handoff.yml`.
-- **CI IDs and genuine per-AppID diagnostics must be recorded after the GitHub PR run.** Until then the proposal is NOT a claim that Assembly is unblocked.
+- Initial PR-only run [39212106823](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39212106823) failed one *test assertion wording only* (`foreign AppID` guard ran after `earlier ready` guard); fixed by checking frozen membership first. Did not relax any validator.
+- PR-only run [39212219378](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39212219378): **SUCCESS**. 11 pre-existing strict synthetic Stage B tests, 5 new handoff tests (+ fixture classes discovered again), and **REAL ORIGINAL canonical Python inspect** with exact output 12 `ready`, 2 `research_transport_invalid` (2124120 and 2138710), 4 `research_not_submitted`, all 18 in exact six-group order. GitHub artifact ID `12167573473`, [original frozen-inspect JSON](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39212219378/artifacts/12167573473).
+- PR-only run [39212499135](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39212499135): **SUCCESS** after adding strict original `build_candidate → verify_candidate` synthetic typed diagnostic test (original code/schema/lineage NOT mocked) and actual Git two-writer non-fast-forward rejection; 11 existing original cases + seven new cases, both executed in a single offline-only GitHub Actions job, followed again by real read-only Python inspect.
+- Additional assertion in workflow requires the exact 2 invalid AppIDs and 4 missing AppIDs on each authentic GitHub inspect. Once sandbox has a legitimate create-only candidate, descendant marker HEAD is allowed while original `stage.frozen` still checks first-parent ancestry.
+- Other existing CI checks on tested head `17c2cb335a2cf2f00370dda39c01ecde971791a1`: backlog run `39212499281` SUCCESS, inactive Dossier final chain QA `39212499309` SUCCESS.
+- Workflow `publish` is structurally implemented and tested with mock semantics but **intentionally never dispatched**: no real typed semantic result or candidate was authored/published. The complete real end-to-end semantic publication remains an explicitly separately authorized Director/operator acceptance boundary, not a worker claim of live unblocking.
 
 ## Safe Director next step
 
