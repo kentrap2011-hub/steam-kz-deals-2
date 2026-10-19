@@ -27,6 +27,8 @@ on:
         required: false
 permissions:
   contents: read
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
 concurrency:
   group: dossier-shadow-18-github-python-handoff
   cancel-in-progress: false
@@ -142,6 +144,27 @@ jobs:
           path: launcher
           fetch-depth: 0
           persist-credentials: false
+      - name: Tested Python publish technical authority gate
+        env:
+          OPERATION: ${{ inputs.operation }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=launcher/scripts python - <<'PY'
+          import os
+          from dossier_shadow_18_github_python_handoff import require_publish_dispatch
+          require_publish_dispatch(
+              event=os.environ["GITHUB_EVENT_NAME"],
+              ref=os.environ["GITHUB_REF"],
+              repository=os.environ["GITHUB_REPOSITORY"],
+              actor=os.environ["GITHUB_ACTOR"],
+              attempt=os.environ["GITHUB_RUN_ATTEMPT"],
+              operation=os.environ["OPERATION"],
+              approval=os.environ["APPROVAL"],
+              appid=os.environ["APPID"],
+              commit=os.environ["SEMANTIC_COMMIT"],
+          )
+          PY
       - uses: actions/checkout@v4
         with:
           ref: 2c2649fb98322507cd3758ff0ff7992128f94de0
