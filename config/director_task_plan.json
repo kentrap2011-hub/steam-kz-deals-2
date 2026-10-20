@@ -1545,7 +1545,7 @@
       "id": "dossier-shadow-18-sandbox-semantic-authority-fix-01",
       "title": "Dossier: узкое разрешение sandbox Assembly для одной игры",
       "goal": "Не обходя исходные frozen-запреты, подготовить через отдельный PR версионированное, совместимое с ownership разрешение на один будущий вручную запущенный semantic Assembly для 1517180 и строгий typed Git handoff; если невозможно — CONTRACT_BLOCKED.",
-      "status": "active",
+      "status": "blocked",
       "effort": "высокая",
       "effort_reason": "Противоречие frozen-протоколов и ownership; нужна архитектурная сверка, минимальный additive gate, отрицательные тесты и независимая приёмка.",
       "urgency": "высокая",
@@ -1556,10 +1556,48 @@
       "depends_on": [
         "dossier-shadow-18-first-one-game-assembly-handoff-01"
       ],
-      "blocker": "Только проектирование/разработка узкого gate; никаких реальных Assembly и publish. Задание может корректно завершиться CONTRACT_BLOCKED.",
+      "blocker": "SUPERSEDED before execution by user's revised 18-item trial-wide gate task dossier-shadow-18-trial-wide-semantic-authority-01; do NOT run old one-game assignment.",
       "updated_on": "2026-10-20",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-20T11:41:49.713Z"
+      "updated_at_utc": "2026-10-20T11:54:57.947Z"
+    },
+    {
+      "status": "active",
+      "urgency": "высокая",
+      "urgency_reason": "Блокирует реальный изолированный Assembly после успешной read-only проверки; пользователь просит параллельные рабочие чаты.",
+      "order": null,
+      "recent_completion": false,
+      "updated_on": "2026-10-20",
+      "updated_at_utc": "2026-10-20T11:54:57.947Z",
+      "id": "dossier-shadow-18-trial-wide-semantic-authority-01",
+      "title": "Dossier 18: разрешение семантического Assembly на весь изолированный эксперимент",
+      "goal": "Новый аддитивный канонический sandbox-only semantic gate для original 18/12 ready, один future one-shot session, проверяемый typed handoff, без production и publish.",
+      "effort": "высокая",
+      "effort_reason": "Архитектура, ownership, оригинальные frozen-флаги, тесты, реализация PR.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_TRIAL_WIDE_SEMANTIC_AUTHORITY_01.md",
+      "worker_slot": "ЧАТ 1",
+      "depends_on": [
+        "dossier-shadow-18-sandbox-semantic-authority-fix-01"
+      ],
+      "blocker": "Ещё нет реализованного отдельного canonical semantic authority gate; предыдущий one-game task не запускается."
+    },
+    {
+      "status": "active",
+      "urgency": "высокая",
+      "urgency_reason": "Блокирует реальный изолированный Assembly после успешной read-only проверки; пользователь просит параллельные рабочие чаты.",
+      "order": null,
+      "recent_completion": false,
+      "updated_on": "2026-10-20",
+      "updated_at_utc": "2026-10-20T11:54:57.947Z",
+      "id": "dossier-shadow-18-independent-execution-preflight-01",
+      "title": "Dossier 18: независимый аудит готовности общего Assembly",
+      "goal": "Параллельно проверить исходные 18/12, контрактные запреты, будущую передачу typed JSON и граничные тесты; затем отдельная QA разработческого PR.",
+      "effort": "средняя",
+      "effort_reason": "Независимая прицельная read-only проверка original frozen authority и эксплуатационных ограничений 12 готовых игр.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_INDEPENDENT_EXECUTION_PREFLIGHT_01.md",
+      "worker_slot": "ЧАТ 2",
+      "depends_on": [],
+      "blocker": "Нет семантического разрешения, нельзя публиковать/запускать Assembly; preflight выполняется независимо от разработки."
     }
   ]
 }
