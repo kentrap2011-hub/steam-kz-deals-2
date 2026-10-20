@@ -22,7 +22,15 @@ on:
         type: string
         required: false
       explicit_confirmation:
-        description: 'For publish: DIRECTOR_AUTHORIZED_SHADOW_ASSEMBLY_TYPED_HANDOFF'
+        description: 'Public technical string only; NOT human consent'
+        type: string
+        required: false
+      authority_run_id:
+        description: 'Successful separate read-only prospective authority GitHub Actions run'
+        type: string
+        required: false
+      director_approval_comment_id:
+        description: 'PR #230 owner comment authorizing exactly this AppID and typed commit'
         type: string
         required: false
 permissions:
@@ -117,7 +125,11 @@ jobs:
     timeout-minutes: 20
     permissions:
       contents: write
+      actions: read
+      issues: read
     env:
+      AUTHORITY_RUN_ID: ${{ inputs.authority_run_id }}
+      DIRECTOR_APPROVAL_COMMENT_ID: ${{ inputs.director_approval_comment_id }}
       APPID: ${{ inputs.appid }}
       SEMANTIC_COMMIT: ${{ inputs.semantic_commit }}
       APPROVAL: ${{ inputs.explicit_confirmation }}
@@ -191,6 +203,67 @@ jobs:
             --sandbox sandbox --authority authority \
             --pins launcher/config/dossier_shadow_18_github_python_handoff_pins_v1.json \
             > launcher/readiness.json
+      - name: Verify authenticated GitHub owner approval and immutable read-only authority receipt
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$AUTHORITY_RUN_ID" =~ ^[0-9]+$ ]]
+          [[ "$DIRECTOR_APPROVAL_COMMENT_ID" =~ ^[0-9]+$ ]]
+          # The public APPROVAL string is not human permission. The two
+          # independent GitHub API records below are mandatory.
+          base="https://api.github.com/repos/$GITHUB_REPOSITORY"
+          curl -fsS -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "$base/actions/runs/$AUTHORITY_RUN_ID" > launcher/authority-run.json
+          curl -fsS -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "$base/actions/runs/$AUTHORITY_RUN_ID/artifacts" > launcher/authority-artifacts.json
+          curl -fsS -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "$base/issues/comments/$DIRECTOR_APPROVAL_COMMENT_ID" > launcher/director-comment.json
+          artifact_id="$(python - <<'PY'
+          import json
+          r=json.load(open("launcher/authority-run.json"))
+          d=json.load(open("launcher/authority-artifacts.json"))
+          a=[x for x in d.get("artifacts", []) if x.get("name") ==
+             "dossier-shadow-18-prospective-assembly-authority" and
+             x.get("expired") is False and
+             x.get("workflow_run",{}).get("id")==r.get("id")]
+          assert len(a)==1, "Missing unique immutable successful authority artifact"
+          print(a[0]["id"])
+          PY
+          )"
+          [[ "$artifact_id" =~ ^[0-9]+$ ]]
+          curl -fsSL -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "$base/actions/artifacts/$artifact_id/zip" > launcher/authority-receipt.zip
+          PYTHONPATH=launcher/scripts python - <<'PY'
+          import json, os, zipfile
+          from pathlib import Path
+          from dossier_shadow_18_trial_wide_semantic_gate import (
+              validate_github_authority_receipt, validate_publish_approval,
+              verified_handoff_progress, load)
+          from dossier_shadow_18_github_python_handoff import load_original_stage
+          run=load("launcher/authority-run.json")
+          with zipfile.ZipFile("launcher/authority-receipt.zip") as z:
+              matches=[n for n in z.namelist() if n=="prospective-authority-receipt.json"]
+              assert len(matches)==1, "Authority artifact missing or ambiguous"
+              receipt=json.loads(z.read(matches[0]))
+          appid=os.environ["APPID"]
+          commit=os.environ["SEMANTIC_COMMIT"]
+          validate_github_authority_receipt(run, receipt, appid=appid)
+          comment=load("launcher/director-comment.json")
+          validate_publish_approval(comment, appid=appid, semantic_commit=commit)
+          frozen=load("launcher/readiness.json")
+          contract=load("launcher/config/dossier_shadow_18_trial_wide_semantic_authority_v1.json")
+          stage=load_original_stage("authority")
+          progress=verified_handoff_progress(Path("sandbox").resolve(),stage,contract,frozen)
+          assert {"appid":appid,"commit":commit} in progress["verified_submissions"], (
+              "Typed semantic commit not the exact original-order verified result")
+          print("AUTHENTICATED_APPROVAL_AND_ORIGINAL_ORDER_TYPED_HANDOFF_VERIFIED")
+          PY
       - name: Python build_candidate, strict Git lineage verify, create-only push
         shell: bash
         run: |
