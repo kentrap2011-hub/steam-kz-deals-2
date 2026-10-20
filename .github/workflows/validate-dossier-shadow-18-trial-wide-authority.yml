@@ -103,6 +103,26 @@ jobs:
           assert {r['appid'] for r in d['rows'] if r['status']=='research_transport_invalid'} == {'2124120','2138710'}
           assert {r['appid'] for r in d['rows'] if r['status']=='research_not_submitted'} == {'1508750','1607130','1849000','1857090'}
           PY
+      - name: Check original-order typed branch without creating it
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        run: |
+          set -euo pipefail
+          typed=handoff/dossier-shadow-18-assembly-typed
+          # Missing first-use branch is a blocker, never implicitly created.
+          git -C sandbox fetch origin \
+            "+refs/heads/$typed:refs/remotes/origin/$typed"
+          PYTHONPATH=launcher/scripts python - <<'PY'
+          import json
+          from pathlib import Path
+          from dossier_shadow_18_github_python_handoff import load_original_stage
+          from dossier_shadow_18_trial_wide_semantic_gate import verified_handoff_progress
+          stage=load_original_stage("authority")
+          contract=json.load(open("launcher/config/dossier_shadow_18_trial_wide_semantic_authority_v1.json"))
+          frozen=json.load(open("launcher/frozen-inspect.json"))
+          p=verified_handoff_progress(Path("sandbox").resolve(), stage,contract,frozen)
+          print("GITHUB_VERIFIED_TYPED_PREFIX:",p["verified_count"],p["verified_tip"])
+          PY
       - name: Require merged prospective contract and independent reviewer appointments
         if: github.event_name == 'workflow_dispatch'
         run: |
