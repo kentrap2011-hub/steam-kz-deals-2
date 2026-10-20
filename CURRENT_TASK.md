@@ -1609,3 +1609,14 @@ Status: `independently_accepted_producer_only_ready_for_director_merge_review`.
 - Confirmed isolated offline CI: final integration run `38114595702` SUCCESS, existing chain QA `38114595700` SUCCESS, backlog dispositions `38114595706` SUCCESS on tested implementation head `b126cd8`.
 - Original Research year XFAIL remains a **required ЧАТ 1 cross-PR fix and joint retest**, followed by evidence parity, shadow quality and separate activation authority. Production/Deep/Fast and Scheduled Tasks remain unchanged.
 - report: `reviews/worker_reports/dossier-async-github-final-acceptance-integration-01.md`; worker stops; Director reviews PR separately.
+
+## Worker completed — 2026-10-20
+
+### Original shadow 18 prospective trial-wide Assembly semantic authority 01
+Статус: `implementation_complete_draft_pr_pending_independent_QA`.
+- Worker: НОВЫЙ ЧАТ 1; task `WORKER_TASK_DOSSIER_SHADOW_18_TRIAL_WIDE_SEMANTIC_AUTHORITY_01.md`.
+- Branch `implement/dossier-shadow-18-trial-wide-semantic-authority-01`; draft PR [#232](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/232), **не объединён**.
+- Prospective isolated 18-game authority, independent GitHub owner read-only permission receipt, original marker-era Stage B and strictly typed per-game Git handoff, separate per-AppID approved publish, no actual semantic execution.
+- Original inspect: 12 ready, 2 Research invalid, 4 absent; A/B and separate C appointments not fabricated and still required before real semantics.
+- Original frozen Research, Assembly sandbox, issuer, live Dossier/Deep/Fast/site/production and Scheduled Tasks untouched.
+- Task-specific report: `reviews/worker_reports/dossier-shadow-18-trial-wide-semantic-authority-01.md`. Final PR checks and independent ЧАТ 2 QA must be reviewed before any Director merge/activation.
