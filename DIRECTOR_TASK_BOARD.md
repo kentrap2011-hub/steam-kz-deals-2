@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR DECISION — 2026-10-20: redesign Research Stage 1 before rerunning all original 18
+
+- **User direction:** Stage 1 semantic Research must concentrate on game investigation and source-supported facts; mechanical technical JSON/IDs/normalization/binding belongs to GitHub-owned deterministic code, without weakening evidence/semantic truth. First audit and fix Stage 1; then execute a separately authorized **new full Research run for the same original 18 games**, preserving original six groups/order and immutable historical records. Do NOT merely patch the six old payloads; do NOT run Research yet.
+- **New bounded assignment:** **НОВЫЙ ЧАТ 4** (not launched), `WORKER_TASK_DOSSIER_SHADOW_RESEARCH_STAGE1_TECHNICAL_BOUNDARY_AUDIT_01.md`, Task ID `dossier-shadow-research-stage1-technical-boundary-audit-01`, READ-ONLY architecture recon + contract design, report-only PR allowed. Field-by-field responsibility, failure trace, safe architecture, new immutable namespace/marker/one-shot approval plan, PR232 impact. Developer IMPLEMENT + independent QA must precede new 18-item semantic run.
+- **Dependency:** PR #232 prospective Assembly gate and planned ЧАТ 3 multipublish fix are **ON HOLD / do not launch or merge** until Research Stage 1 contract redesign scope/compatibility is known. Existing ЧАТ 2 QA CHANGES_REQUIRED remains valid for current exact HEAD. No Assembly, Research retry, marker reissue, publish or production action authorized by this decision.
+- **Existing status:** ЧАТ 1 recon saved in report-only PR #233, two proven technical rejection predicates, four absent transports with unknown attempt history; ЧАТ 2 QA waiting; ЧАТ 3 planned PR232 correction paused. Numbering remains simple unique `ЧАТ N`.
+
 ## DIRECTOR VERIFIED — 2026-10-20: ЧАТ 1 six-Research RECON_PARTIAL_BLOCKED
 
 - **Exact GitHub durable result:** [draft report-only PR #233](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/233) OPEN, exact head `d068f57fb983809906da7e7ac1dd805f32042b98`, single new file `reviews/worker_reports/dossier-shadow-18-six-research-gaps-recon-01.md`, no source/test/workflow mutations. [Backlog CI #39425646855](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39425646855) SUCCESS. The worker's report is **RECON_PARTIAL_BLOCKED** because absent-transports' attempt history is not provable from frozen Git; this is a completed bounded inquiry with unresolved historical facts, NOT a reason to run Research again.
