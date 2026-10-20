@@ -1,5 +1,20 @@
 # CURRENT TASK
 
+## IN REVIEW — PR #230 independent shadow Assembly QA remediation (ЧАТ 1)
+Status: `qa_remediation_code_completed_existing_draft_PR230_final_head_CI_and_independent_re_review`.
+- Task: `WORKER_TASK_DOSSIER_SHADOW_ASSEMBLY_PR230_QA_REMEDIATION_01.md`; existing draft [PR #230](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/230), branch `fix/dossier-shadow-assembly-github-python-handoff-01`, NOT merged.
+- Removed cross-ready item candidate dependency: frozen ordered 18 still inspected, ready B/C can progress when ready A is unavailable; original invalid/missing siblings never bypass per-item strict checks.
+- Executable Stage B/helpers/schemas imported from immutable original marker checkout, all post-marker sandbox commits audited one-parent/one-add original Assembly only; fetched and fresh remote typed Git handoff SHA revalidated in build/verify/pre-push, no force/retry/rebase.
+- New PR-only security regressions and authentic original Python inspect: 12 ready, 2 Research invalid (SULFUR/Sifu), 4 not submitted. Existing Dossier chain CI has a nondeterministic unrelated fixture `test_23` replacing last SHA digit with `0`; exact evidence in report.
+- Report: `reviews/worker_reports/dossier-shadow-assembly-pr230-qa-remediation-01.md`; independent QA authority [comment](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/230#issuecomment-6264321596). Director next: independently re-review exact final PR head and CI; separate explicit human approval required before any manual Actions inspect/publish. No real Assembly, sandbox/Research/production writes or Scheduled Task changes.
+
+## COMPLETE — Shadow Assembly Python GitHub handoff repair (ЧАТ 1)
+Status: `implementation_PR230_draft_real_python_inspect_validated_no_semantic_execution`.
+- Task: `WORKER_TASK_DOSSIER_SHADOW_ASSEMBLY_GITHUB_PYTHON_HANDOFF_FIX_01.md`; branch `fix/dossier-shadow-assembly-github-python-handoff-01`; draft [PR #230](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/230) OPEN, NOT MERGED.
+- Authentic original pinned GitHub Python Stage B `inspect` succeeded against unchanged original marker `2c2649fb98322507cd3758ff0ff7992128f94de0` with 12 `ready`, 2 invalid transport (SULFUR/Sifu), and 4 Research not submitted; run `39212219378`. Strict typed semantic Git handoff plus ORIGINAL `build_candidate` and `verify_candidate` tested with synthetic semantics (CI `39212499135`).
+- Main-installed workflow remains inactive until Director PR approval/merge and any future separate explicit operation; original sandbox Research/Assembly issuer/buffer/marker, production Dossier, Deep, queues, and Scheduled Tasks unchanged. No real Assembly, Research retries or semantic results were produced.
+- Report: `reviews/worker_reports/dossier-shadow-assembly-github-python-handoff-fix-01.md`. Director next: review full PR CI, original 18-row inspect and strict typed transport; do NOT restart one-shot issuer or semantic Assembly from this worker.
+
 ## COMPLETE — Deep history on site cards and Statistics (ЧАТ 1)
 Status: `implementation_proposed_PR224_unmerged_independent_CI_gate`.
 - Task: `WORKER_TASK_DEEP_HISTORY_SITE_CARDS_STATS_01.md`; branch `implement/deep-history-site-cards-stats-01`; PR #224 **open, not merged**.

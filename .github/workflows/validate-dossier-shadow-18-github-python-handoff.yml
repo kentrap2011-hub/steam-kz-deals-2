@@ -1,0 +1,228 @@
+name: Isolated shadow 18 Assembly canonical Python handoff
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/validate-dossier-shadow-18-github-python-handoff.yml'
+      - 'scripts/dossier_shadow_18_github_python_handoff.py'
+      - 'scripts/test_dossier_shadow_18_github_python_handoff.py'
+      - 'config/dossier_shadow_18_github_python_handoff_pins_v1.json'
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: 'Read-only inspect or separately authorized one-game publish'
+        type: choice
+        required: true
+        options: [inspect, publish]
+      appid:
+        description: 'Exact frozen AppID (publish only)'
+        type: string
+        required: false
+      semantic_commit:
+        description: 'Introducing single-file Git SHA in designated typed handoff branch'
+        type: string
+        required: false
+      explicit_confirmation:
+        description: 'For publish: DIRECTOR_AUTHORIZED_SHADOW_ASSEMBLY_TYPED_HANDOFF'
+        type: string
+        required: false
+permissions:
+  contents: read
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+concurrency:
+  group: dossier-shadow-18-github-python-handoff
+  cancel-in-progress: false
+
+jobs:
+  read-only-inspect:
+    if: >-
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'workflow_dispatch' && inputs.operation == 'inspect' &&
+       github.ref == 'refs/heads/main' && github.run_attempt == 1)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: launcher
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 2c2649fb98322507cd3758ff0ff7992128f94de0
+          path: authority
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: sandbox/dossier-shadow-calibration-20261011-6x3-frozen-research
+          path: sandbox
+          fetch-depth: 0
+          persist-credentials: false
+      - run: python -m pip install 'jsonschema>=4.21,<5'
+      - name: Synthetic Git fixture validations; no real game semantics
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=launcher/scripts python -m unittest discover \
+            -s launcher/scripts -p 'test_dossier_shadow_18_assembly_stage_b.py' -v
+          PYTHONPATH=launcher/scripts python -m unittest discover \
+            -s launcher/scripts -p 'test_dossier_shadow_18_github_python_handoff.py' -v
+      - name: Exact frozen sandbox original Python inspect, read-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = kentrap2011-hub/steam-kz-deals-2
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          git -C sandbox merge-base --is-ancestor 2c2649fb98322507cd3758ff0ff7992128f94de0 HEAD
+          python launcher/scripts/dossier_shadow_18_github_python_handoff.py inspect \
+            --sandbox sandbox --authority authority \
+            --pins launcher/config/dossier_shadow_18_github_python_handoff_pins_v1.json \
+            > launcher/frozen-inspect.json
+          test -z "$(git -C sandbox status --porcelain)"
+          python - <<'PY'
+          import json
+          v=json.load(open('launcher/frozen-inspect.json', encoding='utf-8'))
+          assert len(v['rows']) == 18 and v['semantic_attempts'] == 0
+          assert not v['canonical_acceptance'] and not v['deep_ready']
+          invalid={r['appid'] for r in v['rows'] if r['status']=='research_transport_invalid'}
+          missing={r['appid'] for r in v['rows'] if r['status']=='research_not_submitted'}
+          assert invalid == {'2124120', '2138710'}, invalid
+          assert missing == {'1508750', '1607130', '1849000', '1857090'}, missing
+          assert sum(r['status']=='ready' for r in v['rows']) == 12
+          import subprocess
+          from pathlib import Path
+          pins=json.loads(Path('launcher/config/dossier_shadow_18_github_python_handoff_pins_v1.json').read_text())
+          assert len(pins['original_research_introduction_commits']) == 14
+          for commit in pins['original_research_introduction_commits'].values():
+              subprocess.run(['git','-C','sandbox','merge-base','--is-ancestor',commit,pins['assembly_marker_commit']],check=True)
+          print({s:sum(r['status']==s for r in v['rows'])
+                 for s in sorted({r['status'] for r in v['rows']})})
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frozen-shadow-18-python-inspect
+          path: launcher/frozen-inspect.json
+          retention-days: 30
+          if-no-files-found: error
+
+  manually-gated-candidate:
+    if: >-
+      github.event_name == 'workflow_dispatch' && inputs.operation == 'publish' &&
+      github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
+      github.repository == 'kentrap2011-hub/steam-kz-deals-2' &&
+      github.actor == 'kentrap2011-hub'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    env:
+      APPID: ${{ inputs.appid }}
+      SEMANTIC_COMMIT: ${{ inputs.semantic_commit }}
+      APPROVAL: ${{ inputs.explicit_confirmation }}
+      SANDBOX_BRANCH: sandbox/dossier-shadow-calibration-20261011-6x3-frozen-research
+      INPUT_BRANCH: handoff/dossier-shadow-18-assembly-typed
+    steps:
+      - name: Technical actor/event gate (human Director approval separately recorded)
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_EVENT_NAME" = workflow_dispatch
+          test "$GITHUB_REF" = refs/heads/main
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$GITHUB_REPOSITORY" = kentrap2011-hub/steam-kz-deals-2
+          test "$GITHUB_ACTOR" = kentrap2011-hub
+          test "$APPROVAL" = DIRECTOR_AUTHORIZED_SHADOW_ASSEMBLY_TYPED_HANDOFF
+          [[ "$APPID" =~ ^[0-9]+$ ]]
+          [[ "$SEMANTIC_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+          # The public approval string is NOT an authenticated human approval.
+          # Operator must record per-AppID authorization in the PR discussion
+          # before this one-off manual workflow_dispatch (see worker report).
+      - uses: actions/checkout@v4
+        with:
+          path: launcher
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Tested Python publish technical authority gate
+        env:
+          OPERATION: ${{ inputs.operation }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=launcher/scripts python - <<'PY'
+          import os
+          from dossier_shadow_18_github_python_handoff import require_publish_dispatch
+          require_publish_dispatch(
+              event=os.environ["GITHUB_EVENT_NAME"],
+              ref=os.environ["GITHUB_REF"],
+              repository=os.environ["GITHUB_REPOSITORY"],
+              actor=os.environ["GITHUB_ACTOR"],
+              attempt=os.environ["GITHUB_RUN_ATTEMPT"],
+              operation=os.environ["OPERATION"],
+              approval=os.environ["APPROVAL"],
+              appid=os.environ["APPID"],
+              commit=os.environ["SEMANTIC_COMMIT"],
+          )
+          PY
+      - uses: actions/checkout@v4
+        with:
+          ref: 2c2649fb98322507cd3758ff0ff7992128f94de0
+          path: authority
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: sandbox/dossier-shadow-calibration-20261011-6x3-frozen-research
+          path: sandbox
+          fetch-depth: 0
+          persist-credentials: true
+      - run: python -m pip install 'jsonschema>=4.21,<5'
+      - name: Strict original Python inspect and source commit fetch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C sandbox branch --show-current)" = "$SANDBOX_BRANCH"
+          git -C sandbox fetch origin \
+            "+refs/heads/$INPUT_BRANCH:refs/remotes/origin/$INPUT_BRANCH"
+          echo "$(git -C sandbox rev-parse "refs/remotes/origin/$INPUT_BRANCH")" > launcher/semantic-tip.txt
+          test "$(git -C sandbox ls-remote origin "refs/heads/$INPUT_BRANCH" | cut -f1)" = "$(cat launcher/semantic-tip.txt)"
+          python launcher/scripts/dossier_shadow_18_github_python_handoff.py inspect \
+            --sandbox sandbox --authority authority \
+            --pins launcher/config/dossier_shadow_18_github_python_handoff_pins_v1.json \
+            > launcher/readiness.json
+      - name: Python build_candidate, strict Git lineage verify, create-only push
+        shell: bash
+        run: |
+          set -euo pipefail
+          semantic_tip="$(cat launcher/semantic-tip.txt)"
+          path="$(python launcher/scripts/dossier_shadow_18_github_python_handoff.py build \
+            --sandbox sandbox --authority authority \
+            --pins launcher/config/dossier_shadow_18_github_python_handoff_pins_v1.json \
+            --appid "$APPID" --semantic-commit "$SEMANTIC_COMMIT" \
+            --expected-semantic-tip "$semantic_tip")"
+          [[ "$path" == reviews/dossier_shadow_offline/trials/dossier-shadow-calibration-20261011-6x3/assembly/* ]]
+          git -C sandbox config user.name 'github-actions[bot]'
+          git -C sandbox config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C sandbox add -- "$path"
+          test "$(git -C sandbox diff --cached --name-only)" = "$path"
+          test -z "$(git -C sandbox diff --name-only)"
+          test -z "$(git -C sandbox ls-files --others --exclude-standard)"
+          git -C sandbox diff --cached --check
+          git -C sandbox commit -m "Submit original shadow Assembly typed $APPID [unaccepted]"
+          result="$(git -C sandbox rev-parse HEAD)"
+          python launcher/scripts/dossier_shadow_18_github_python_handoff.py verify \
+            --sandbox sandbox --authority authority \
+            --pins launcher/config/dossier_shadow_18_github_python_handoff_pins_v1.json \
+            --appid "$APPID" --semantic-commit "$SEMANTIC_COMMIT" \
+            --expected-semantic-tip "$semantic_tip" --result-commit "$result" \
+            > launcher/verified.json
+          test -z "$(git -C sandbox status --porcelain)"
+          # Recheck BOTH remote leases as late as possible; no force, retry or rebase.
+          test "$(git -C sandbox ls-remote origin "refs/heads/$INPUT_BRANCH" | cut -f1)" = "$semantic_tip"
+          test "$(git -C sandbox ls-remote origin "refs/heads/$SANDBOX_BRANCH" | cut -f1)" = "$(git -C sandbox rev-parse HEAD^)"
+          git -C sandbox push origin "HEAD:refs/heads/$SANDBOX_BRANCH"
+          test "$(git -C sandbox ls-remote origin "refs/heads/$SANDBOX_BRANCH" | cut -f1)" = "$result"
+          echo "Verified create-only SHADOW submission: $result" >> "$GITHUB_STEP_SUMMARY"
+          echo "Path: $path" >> "$GITHUB_STEP_SUMMARY"
+          echo "Unaccepted; no Dossier production or Deep writes." >> "$GITHUB_STEP_SUMMARY"
