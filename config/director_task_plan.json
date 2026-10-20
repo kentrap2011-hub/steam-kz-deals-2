@@ -1562,13 +1562,13 @@
       "updated_at_utc": "2026-10-20T11:54:57.947Z"
     },
     {
-      "status": "active",
+      "status": "complete",
       "urgency": "высокая",
       "urgency_reason": "Блокирует реальный изолированный Assembly после успешной read-only проверки; пользователь просит параллельные рабочие чаты.",
       "order": null,
       "recent_completion": false,
       "updated_on": "2026-10-20",
-      "updated_at_utc": "2026-10-20T11:54:57.947Z",
+      "updated_at_utc": "2026-10-20T12:28:40Z",
       "id": "dossier-shadow-18-trial-wide-semantic-authority-01",
       "title": "Dossier 18: разрешение семантического Assembly на весь изолированный эксперимент",
       "goal": "Новый аддитивный канонический sandbox-only semantic gate для original 18/12 ready, один future one-shot session, проверяемый typed handoff, без production и publish.",
@@ -1579,7 +1579,7 @@
       "depends_on": [
         "dossier-shadow-18-sandbox-semantic-authority-fix-01"
       ],
-      "blocker": "Ещё нет реализованного отдельного canonical semantic authority gate; предыдущий one-game task не запускается."
+      "blocker": "Developer scope complete: draft PR #232 exact HEAD 9b8535f406c9f22de319156e5f568d0981f5140f, 8/8 exact-head PR checks success; independent ЧАТ 2 QA and Director merge decision are NOT completed."
     },
     {
       "status": "active",
@@ -1588,7 +1588,7 @@
       "order": null,
       "recent_completion": false,
       "updated_on": "2026-10-20",
-      "updated_at_utc": "2026-10-20T11:54:57.947Z",
+      "updated_at_utc": "2026-10-20T12:28:40Z",
       "id": "dossier-shadow-18-independent-execution-preflight-01",
       "title": "Dossier 18: независимый аудит готовности общего Assembly",
       "goal": "Параллельно проверить исходные 18/12, контрактные запреты, будущую передачу typed JSON и граничные тесты; затем отдельная QA разработческого PR.",
@@ -1597,7 +1597,7 @@
       "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_INDEPENDENT_EXECUTION_PREFLIGHT_01.md",
       "worker_slot": "ЧАТ 2",
       "depends_on": [],
-      "blocker": "Нет семантического разрешения, нельзя публиковать/запускать Assembly; preflight выполняется независимо от разработки."
+      "blocker": "Independent preflight PASS documented in report-only PR #231; current phase: exact-head independent security QA of developer draft PR #232 at 9b8535f406c9f22de319156e5f568d0981f5140f. No merge/Assembly/publish before verdict."
     }
   ]
 }
