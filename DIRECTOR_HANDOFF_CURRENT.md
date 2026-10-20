@@ -5,6 +5,14 @@ Source of truth: `main`
 
 This is the transfer point for the next Director chat. Read the most recent handoff first; older sections below are historical and may contradict current GitHub state.
 
+## DIRECTOR AUTHORIZATION — 2026-10-20: exactly one read-only shadow Assembly inspect, manual UI pending
+
+- **User expressly authorized** proceeding with **one** manual read-only `workflow_dispatch` of existing merged workflow `.github/workflows/validate-dossier-shadow-18-github-python-handoff.yml` on **`main`** with `operation=inspect`; leave `appid`, `semantic_commit` and `explicit_confirmation` empty. The user has **not** authorized `publish`, semantic Assembly, Research repeat, issuer reissue, source/production change, recovery or Scheduled Tasks.
+- **Operator/runtime feasibility:** connected GitHub connector has no workflow dispatch/create-workflow-run action; no manual UI interaction can be performed from the current director conversation. The user must explicitly click GitHub repository → Actions → `Isolated shadow 18 Assembly canonical Python handoff` → Run workflow → branch main → operation inspect → Run workflow, once. Do not imitate dispatch using commits, reruns, or different events. Connected GitHub can verify the resulting run/artifact afterward.
+- **Last verified prior state:** original sandbox branch `sandbox/dossier-shadow-calibration-20261011-6x3-frozen-research` still points to immutable marker `2c2649fb98322507cd3758ff0ff7992128f94de0`, and manual workflow_dispatch list did not include a new inspect run. PR #230 merged; original PR CI `39297241772` was `pull_request`, NOT this post-merge manual inspect.
+- **Pass criteria after user UI dispatch:** one workflow run with `event=workflow_dispatch`, branch `main`, `run_attempt=1`, job `read-only-inspect=success`, `manually-gated-candidate=skipped`; inspect artifact proves 18 original frozen rows, 12 `ready`, 2 `research_transport_invalid` (2124120,2138710), 4 `research_not_submitted` (1508750,1607130,1849000,1857090), `semantic_attempts=0`, `canonical_acceptance=false`, `deep_ready=false`. Confirm original sandbox HEAD unchanged; do not claim new Dossiers.
+- **Next:** wait for a user-supplied run URL or `Проверь`, inspect latest Actions results through GitHub and decide next separate one-game semantic authorization only after this read-only gate.
+
 ## ACTIVE DIRECTOR STATUS — 2026-10-20: PR #230 MERGED; no Assembly execution authorized
 
 - **Latest verified main at PR merge:** `d543337e3613bc0542b7a89018ff980e9b2189a3` (refresh before decisions); [PR #230](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/230) is **CLOSED/MERGED**, GitHub `merged_at=2026-10-20T11:07:22Z`, merged from head `48db1de81294008e1f55e857c4a42c663184e8a3`. User explicitly authorized only the merge. Source commit history preserved.
