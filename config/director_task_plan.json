@@ -1525,7 +1525,7 @@
       "id": "dossier-shadow-18-first-one-game-assembly-handoff-01",
       "title": "Dossier: первый отдельный настоящий Assembly для готовой игры",
       "goal": "После канонической проверки полномочий выполнить максимум один исходный frozen Assembly для AppID 1517180 и создать строгий typed Git handoff без публикации; при блокере остановиться с доказательствами.",
-      "status": "active",
+      "status": "blocked",
       "effort": "высокая",
       "effort_reason": "Реальный однократный семантический разбор с проверкой исходного Research, внешних источников и безопасного Git handoff.",
       "urgency": "высокая",
@@ -1536,10 +1536,30 @@
       "depends_on": [
         "dossier-shadow-assembly-pr230-post-remediation-qa-01"
       ],
-      "blocker": "Любая неопределённость полномочий исходного однократного семантического Assembly или невозможность строгой typed-передачи останавливает работу до изменений.",
+      "blocker": "BLOCKED_AUTHORITY before any semantics. Original immutable trial no_assembly_activation=true and standalone_sandbox_semantics_approved=false; feasibility assembly_authorized=false, frozen decision actual_semantic_execution_permitted_now=false, ownership lacks Dossier manual exception. Needs bounded new sandbox-only authority PR and independent QA; NO result or typed handoff branch.",
       "updated_on": "2026-10-20",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-20T11:29:04.258Z"
+      "updated_at_utc": "2026-10-20T11:41:49.713Z"
+    },
+    {
+      "id": "dossier-shadow-18-sandbox-semantic-authority-fix-01",
+      "title": "Dossier: узкое разрешение sandbox Assembly для одной игры",
+      "goal": "Не обходя исходные frozen-запреты, подготовить через отдельный PR версионированное, совместимое с ownership разрешение на один будущий вручную запущенный semantic Assembly для 1517180 и строгий typed Git handoff; если невозможно — CONTRACT_BLOCKED.",
+      "status": "active",
+      "effort": "высокая",
+      "effort_reason": "Противоречие frozen-протоколов и ownership; нужна архитектурная сверка, минимальный additive gate, отрицательные тесты и независимая приёмка.",
+      "urgency": "высокая",
+      "urgency_reason": "Блокирует первый реальный one-game Assembly после успешного read-only inspect; пользователь просит продолжать без ожидания отдельного сигнала.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_SANDBOX_SEMANTIC_AUTHORITY_FIX_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-shadow-18-first-one-game-assembly-handoff-01"
+      ],
+      "blocker": "Только проектирование/разработка узкого gate; никаких реальных Assembly и publish. Задание может корректно завершиться CONTRACT_BLOCKED.",
+      "updated_on": "2026-10-20",
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-20T11:41:49.713Z"
     }
   ]
 }

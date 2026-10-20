@@ -5,6 +5,14 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR BLOCKER + ASSIGNMENT — 2026-10-20: original one-game Assembly BLOCKED_AUTHORITY
+
+- **Real worker result:** NEW one-shot physical ЧАТ 1 stopped `BLOCKED_AUTHORITY` BEFORE semantic work on exact AppID `1517180`. No typed handoff branch/JSON/commit or Assembly, no publish, frozen sandbox unchanged. This is **correct contract compliance**, not Research failure. Chat-only worker result, no durable authored worker report yet.
+- **Independently confirmed main contracts:** `config/dossier_shadow_research_trial_contract_v1.json` has `no_assembly_activation=true`, `standalone_sandbox_semantics_approved=false`; immutable original Director decision has `actual_semantic_execution_permitted_now=false` and requires compatible sandbox gate plus review-role appointments; `config/execution_ownership_contract.json#explicit_manual_semantic_worker_chats` has Russian translation/Deep exceptions only, no Dossier shadow one-shot. Research feasibility authorization `assembly_authorized=false` was reported by worker and must be rechecked from immutable Git proof. The prior Director task could **not** authorize semantics by itself.
+- **NEW physical developer worker destination: ЧАТ 2** (`НЕ` reuse previous QA ЧАТ 2); complete task `WORKER_TASK_DOSSIER_SHADOW_18_SANDBOX_SEMANTIC_AUTHORITY_FIX_01.md`. Mode IMPLEMENT in isolated PR with mandatory architecture/contract preflight, strict additive sandbox-only versioned one-game gate, current ownership explicit exception, tests and durable report; or `CONTRACT_BLOCKED` if any immutable authority forbids compatible exception. Do not modify frozen authority, approve appointments on worker's behalf, run semantics/publish/Actions/Scheduled Tasks or enable full Dossier production.
+- **Next Director action after Chat 2:** inspect worker PR/security tests and independent QA; obtain required user/Director approval to merge such governance before separately asking user to launch ONE new explicit semantic worker. Manual candidate `publish` remains separately unapproved per AppID. The former physical Chat1 is blocked/completed and should not be resumed as an implicit retry.
+- **Owner:** GitHub owns exact frozen scope/marker/validation/transport/persistence. ChatGPT semantic worker may only act under an explicit canonical one-shot exception. No new control-plane or recurring task owner.
+
 ## DIRECTOR NEXT WORK — 2026-10-20: first original-ready one-game Assembly handoff
 
 - **User instruction:** stop waiting after each declared next step. Director assigns the bounded actual worker step; Director itself does NOT perform semantic research/Assembly or Git candidate publication.
