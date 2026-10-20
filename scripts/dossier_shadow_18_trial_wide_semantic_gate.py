@@ -180,6 +180,8 @@ def verified_handoff_progress(repo, stage, contract, inspect):
             appid, commit, tip)
         prior = commit
     return {"verified_submitted_appids": ordered[:len(commits)],
+            "verified_submissions": [
+                {"appid": ordered[i], "commit": sha} for i, sha in enumerate(commits)],
             "next_unsubmitted_appid": ordered[len(commits)] if len(commits) < len(ordered) else None,
             "verified_tip": tip, "verified_count": len(commits),
             "no_automatic_resume_for_uncommitted_attempt": True}
