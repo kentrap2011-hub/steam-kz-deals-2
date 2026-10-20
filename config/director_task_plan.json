@@ -1598,6 +1598,24 @@
       "worker_slot": "ЧАТ 2",
       "depends_on": [],
       "blocker": "Independent preflight PASS documented in report-only PR #231; current phase: exact-head independent security QA of developer draft PR #232 at 9b8535f406c9f22de319156e5f568d0981f5140f. No merge/Assembly/publish before verdict."
+    },
+    {
+      "id": "dossier-shadow-18-six-research-gaps-recon-01",
+      "title": "Dossier 18 — выяснить причины двух недействительных и четырёх отсутствующих Research",
+      "goal": "Независимо установить доказанные причины 2 invalid и 4 missing из оригинальной 18-игровой выборки, выяснить законный путь восстановления без повторного Research, выдать отчёт без изменения оригинального frozen trial.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Точечная forensic-сверка двух опубликованных Research пакетов, четырёх отсутствующих и исходного Git provenance, без semantic execution.",
+      "urgency": "средняя",
+      "urgency_reason": "Не блокирует Assembly 12 готовых, но нужно для достижения исходных 18 и позднего сравнения A/B/C; выполняется параллельно с QA PR #232.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_SIX_RESEARCH_GAPS_RECON_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Реальные причины 2 transport-invalid и отсутствие 4 пакетов не установлены; запрещены Research rerun и изменение замороженных данных без отдельной власти.",
+      "recent_completion": false,
+      "updated_on": "2026-10-20",
+      "updated_at_utc": "2026-10-20T12:30:00Z"
     }
   ]
 }
