@@ -1,0 +1,127 @@
+name: Shadow 18 prospective semantic authority (read-only)
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/validate-dossier-shadow-18-trial-wide-authority.yml'
+      - 'scripts/dossier_shadow_18_trial_wide_semantic_gate.py'
+      - 'scripts/test_dossier_shadow_18_trial_wide_semantic_gate.py'
+      - 'config/dossier_shadow_18_trial_wide_semantic_authority_v1.json'
+      - 'config/execution_ownership_contract.json'
+      - 'config/dossier_shadow_18_trial_wide_semantic_launcher.md'
+  workflow_dispatch:
+    inputs:
+      operation:
+        required: true
+        type: choice
+        options: [authorize]
+        description: 'Read-only operator authority proof, NEVER executes semantics'
+permissions:
+  contents: read
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+concurrency:
+  group: dossier-shadow-18-prospective-readonly
+  cancel-in-progress: false
+jobs:
+  synthetic-regressions:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - run: python -m pip install 'jsonschema>=4.21,<5'
+      - name: Prospective authority positive/negative synthetic tests
+        run: |
+          set -euo pipefail
+          PYTHONPATH=scripts python -m unittest discover -s scripts -p 'test_dossier_shadow_18_trial_wide_semantic_gate.py' -v
+          PYTHONPATH=scripts python -m unittest discover -s scripts -p 'test_dossier_shadow_18_github_python_handoff.py' -v
+          PYTHONPATH=scripts python -m unittest discover -s scripts -p 'test_dossier_shadow_18_assembly_stage_b.py' -v
+      - name: Original historical flags and production activation remain blocked
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          def read(path): return json.loads(Path(path).read_text(encoding='utf-8'))
+          original=read('config/dossier_shadow_research_trial_contract_v1.json')
+          decision=read('reviews/dossier_shadow_offline/dossier_shadow_calibration_20261011_6x3_director_decision_v1.json')
+          two=read('config/dossier_two_stage_interfaces_contract.json')
+          async_buffer=read('config/dossier_two_stage_async_buffer_contract.json')
+          assert original['no_assembly_activation'] is True
+          assert original['standalone_sandbox_semantics_approved'] is False
+          assert original['reviewer_roles_finalized'] is False
+          assert decision['operator_authority']['actual_semantic_execution_permitted_now'] is False
+          assert two['active'] is False and two['authorized_for_canonical_ingest'] is False
+          assert async_buffer['active'] is False and async_buffer['executable_in_production'] is False
+          print('HISTORICAL_BLOCK_STILL_INTACT; PRODUCTION_TWO_STAGE_OFF')
+          PY
+  original-python-inspect:
+    if: >-
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'workflow_dispatch' && inputs.operation == 'authorize' &&
+       github.ref == 'refs/heads/main' && github.repository == 'kentrap2011-hub/steam-kz-deals-2' &&
+       github.actor == 'kentrap2011-hub' && github.run_attempt == 1)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: launcher
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 2c2649fb98322507cd3758ff0ff7992128f94de0
+          path: authority
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: sandbox/dossier-shadow-calibration-20261011-6x3-frozen-research
+          path: sandbox
+          fetch-depth: 0
+          persist-credentials: false
+      - run: python -m pip install 'jsonschema>=4.21,<5'
+      - name: Read-only immutable original Stage B Python inspection
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = kentrap2011-hub/steam-kz-deals-2
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          git -C authority diff --quiet
+          python launcher/scripts/dossier_shadow_18_github_python_handoff.py inspect \
+            --sandbox sandbox --authority authority \
+            --pins launcher/config/dossier_shadow_18_github_python_handoff_pins_v1.json \
+            > launcher/frozen-inspect.json
+          test -z "$(git -C sandbox status --porcelain)"
+          python - <<'PY'
+          import json
+          d=json.load(open('launcher/frozen-inspect.json'))
+          assert len(d['rows']) == 18 and d['semantic_attempts'] == 0
+          assert sum(r['status']=='ready' for r in d['rows']) == 12
+          assert {r['appid'] for r in d['rows'] if r['status']=='research_transport_invalid'} == {'2124120','2138710'}
+          assert {r['appid'] for r in d['rows'] if r['status']=='research_not_submitted'} == {'1508750','1607130','1849000','1857090'}
+          PY
+      - name: Require merged prospective contract and independent reviewer appointments
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          set -euo pipefail
+          test "$(git -C launcher branch --show-current)" = main
+          test "$(git -C launcher rev-parse HEAD)" = "$GITHUB_SHA"
+          PYTHONPATH=launcher/scripts python launcher/scripts/dossier_shadow_18_trial_wide_semantic_gate.py \
+            --contract launcher/config/dossier_shadow_18_trial_wide_semantic_authority_v1.json \
+            --original launcher/config/dossier_shadow_research_trial_contract_v1.json \
+            --decision launcher/reviews/dossier_shadow_offline/dossier_shadow_calibration_20261011_6x3_director_decision_v1.json \
+            --pins launcher/config/dossier_shadow_18_github_python_handoff_pins_v1.json \
+            --appointments launcher/reviews/dossier_shadow_offline/authorizations/dossier-shadow-18-assembly-reviewer-appointments-v1.json \
+            --inspect launcher/frozen-inspect.json > launcher/prospective-authority-receipt.json
+          test -z "$(git -C launcher status --porcelain)"
+      - name: Upload GitHub-owned read-only authority proof
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dossier-shadow-18-prospective-assembly-authority
+          path: launcher/prospective-authority-receipt.json
+          retention-days: 30
+          if-no-files-found: error
