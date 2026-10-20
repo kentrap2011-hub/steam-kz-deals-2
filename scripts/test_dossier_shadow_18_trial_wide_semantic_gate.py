@@ -178,6 +178,33 @@ class TrialWideGateTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             gate.validate_publish_approval(comment,appid="2124120",semantic_commit=sha)
 
+    def test_09b_github_run_and_receipt_must_be_independently_consistent(self):
+        receipt=self.check()
+        run={"id":123456789,"actor":{"login":"kentrap2011-hub"},
+             "event":"workflow_dispatch", "run_attempt":1, "status":"completed",
+             "conclusion":"success","head_branch":"main",
+             "path":".github/workflows/validate-dossier-shadow-18-trial-wide-authority.yml",
+             "head_sha":"a"*40}
+        self.assertTrue(gate.validate_github_authority_receipt(
+            run,receipt,appid="1517180"))
+        for key,val in (("id",2),("event","push"),("run_attempt",2),
+                        ("conclusion","failure"),("status","queued"),
+                        ("head_branch","else"),("head_sha","b"*40),
+                        ("path",".github/workflows/other.yml")):
+            wrong=copy.deepcopy(run); wrong[key]=val
+            with self.assertRaises(ValueError):
+                gate.validate_github_authority_receipt(
+                    wrong,receipt,appid="1517180")
+        for key,val in (("issuer_run_id",0),("original_marker","b"*40),
+                        ("ready_appids_in_original_order",[]),
+                        ("production_active",True),("semantics_executed",True)):
+            wrong=copy.deepcopy(receipt);wrong[key]=val
+            with self.assertRaises(ValueError):
+                gate.validate_github_authority_receipt(
+                    run,wrong,appid="1517180")
+        with self.assertRaises(ValueError):
+            gate.validate_github_authority_receipt(run,receipt,appid="2124120")
+
     def test_10_resume_only_verified_Git_commits_prefix(self):
         ready=[r["appid"] for r in self.s["rows"] if r["status"]=="ready"]
         c1,c2="1"*40,"2"*40
