@@ -186,6 +186,45 @@ def verified_handoff_progress(repo, stage, contract, inspect):
 
 
 
+def validate_github_authority_receipt(run, receipt, *, appid):
+    """Verifier of separately REST-fetched Actions run + Actions artifact.
+
+    Caller must obtain run and artifact independently from GitHub API; a
+    chat-supplied run ID/receipt string by itself has zero authority.
+    """
+    require(type(run) is dict and type(receipt) is dict
+            and type(run.get("actor")) is dict
+            and run["actor"].get("login") == "kentrap2011-hub"
+            and run.get("event") == "workflow_dispatch"
+            and run.get("run_attempt") == 1
+            and run.get("conclusion") == "success"
+            and run.get("status") == "completed"
+            and run.get("head_branch") == "main"
+            and run.get("path") ==
+              ".github/workflows/validate-dossier-shadow-18-trial-wide-authority.yml"
+            and str(run.get("id")) == receipt.get("github_run_id")
+            and run.get("head_sha") == receipt.get("github_main_sha")
+            and receipt.get("schema") ==
+              "DOSSIER-SHADOW-18-TRIAL-WIDE-READONLY-GATE-RECEIPT-V1"
+            and receipt.get("original_marker") == FIXED_MARKER
+            and receipt.get("trial_id") == TRIAL
+            and receipt.get("issuer_run_id") == 39054131983
+            and receipt.get("original_order") == EXPECTED_APPIDS
+            and receipt.get("semantics_executed") is False
+            and receipt.get("production_active") is False
+            and receipt.get("submission_is_not_acceptance") is True
+            and type(receipt.get("appointees")) is dict
+            and set(receipt["appointees"]) == {"A","B","C"}
+            and len(set(receipt["appointees"].values())) == 3
+            and type(receipt.get("ready_appids_in_original_order")) is list
+            and len(receipt["ready_appids_in_original_order"]) == 12
+            and receipt["ready_appids_in_original_order"] ==
+              [i for i in EXPECTED_APPIDS if i not in FIXED_MISSING | INVALID]
+            and str(appid) in receipt["ready_appids_in_original_order"],
+            "forged, stale, mismatched or absent GitHub Actions Assembly permit")
+    return True
+
+
 def validate_publish_approval(comment, *, appid, semantic_commit):
     """Verify an API-fetched GitHub owner comment scoped to ONE typed commit.
 
