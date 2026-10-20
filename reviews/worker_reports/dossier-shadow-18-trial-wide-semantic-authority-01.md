@@ -1,8 +1,8 @@
 # Worker report — dossier-shadow-18-trial-wide-semantic-authority-01
 
-Status: IMPLEMENTATION_ON_BRANCH_AWAITING_PR_CI (not semantic execution).
+Status: IMPLEMENTED_IN_DRAFT_PR_PENDING_EXACT_FINAL_HEAD_CI_AND_INDEPENDENT_QA (not semantic execution).
 Repo: `kentrap2011-hub/steam-kz-deals-2`. Base: `main`.
-Worker: NEW ЧАТ 1, developer only. Draft PR: pending.
+Worker: NEW ЧАТ 1, developer only. Draft PR: [#232](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/232), open and unmerged.
 2026-10-20.
 
 ## START and architecture preflight
@@ -99,3 +99,28 @@ No original sandbox or Research mutation. No typed semantic result branch
 created or used, no GitHub Actions workflow_dispatch, no actual semantic
 Research or Assembly, no canonical ingestion or publication, no PR merge,
 no Scheduled Task, and no independent source-quality QA claim.
+
+## CI trace / deterministic unrelated existing-test repair
+
+- Initial PR HEAD `f818c655add4c9c0ee952629b06ec9466294ae87`:
+  targeted `Shadow 18 prospective semantic authority` run
+  [39421282619](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39421282619)
+  SUCCESS, original handoff
+  [39421282651](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39421282651)
+  SUCCESS, execution ownership
+  [39421282463](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39421282463)
+  SUCCESS; separate backlog, site, Deep and eventual-chain checks also SUCCESS.
+- Subsequent PR HEAD `1d473f0e42a3eccee69c18fa0c298d1cef0e44f6`
+  saw one intermittent failure in unrelated *synthetic test only*:
+  `test_dossier_two_stage_staging.P2StagingTests.test_23_incorrect_original_anchor_cannot_be_substituted`
+  ([39421431370](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39421431370)).
+  Root cause proven from test source: replacing the last character of a
+  random 40-char fixture marker with `0` can leave it unchanged whenever
+  the original SHA already ends in `0` (~1/16). That fails its own
+  `assertRaises` despite no code-path change. Applied a **test-only**
+  deterministic alternate replacement with an explicit
+  `assertNotEqual` in `scripts/test_dossier_two_stage_staging.py`.
+  No staging, production, original Stage B or other runtime source changed.
+- Exact final PR HEAD checks remain the release criterion; later
+  confirmation should be recorded in PR #232 review/CI evidence. This
+  document never implies unobserved green CI.
