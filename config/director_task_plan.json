@@ -1579,16 +1579,16 @@
       "depends_on": [
         "dossier-shadow-18-sandbox-semantic-authority-fix-01"
       ],
-      "blocker": "Developer scope complete: draft PR #232 exact HEAD 9b8535f406c9f22de319156e5f568d0981f5140f, 8/8 exact-head PR checks success; independent ЧАТ 2 QA and Director merge decision are NOT completed."
+      "blocker": "Developer initial implementation finished, but independent QA CHANGES_REQUIRED on exact PR232 HEAD 9b8535f406c9f22de319156e5f568d0981f5140f (typed commit prefix fails after first sandbox publish). Corrective task planned; no merge."
     },
     {
-      "status": "active",
+      "status": "blocked",
       "urgency": "высокая",
       "urgency_reason": "Блокирует реальный изолированный Assembly после успешной read-only проверки; пользователь просит параллельные рабочие чаты.",
       "order": null,
       "recent_completion": false,
       "updated_on": "2026-10-20",
-      "updated_at_utc": "2026-10-20T12:28:40Z",
+      "updated_at_utc": "2026-10-20T12:38:21Z",
       "id": "dossier-shadow-18-independent-execution-preflight-01",
       "title": "Dossier 18: независимый аудит готовности общего Assembly",
       "goal": "Параллельно проверить исходные 18/12, контрактные запреты, будущую передачу typed JSON и граничные тесты; затем отдельная QA разработческого PR.",
@@ -1597,7 +1597,7 @@
       "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_INDEPENDENT_EXECUTION_PREFLIGHT_01.md",
       "worker_slot": "ЧАТ 2",
       "depends_on": [],
-      "blocker": "Independent preflight PASS documented in report-only PR #231; current phase: exact-head independent security QA of developer draft PR #232 at 9b8535f406c9f22de319156e5f568d0981f5140f. No merge/Assembly/publish before verdict."
+      "blocker": "Independent Chat 2 completed exact-HEAD QA of draft PR #232: CHANGES_REQUIRED at https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/232#issuecomment-6291021685. Await a NEW developer PR HEAD with fixed stable typed historical order after first publish, then re-review."
     },
     {
       "id": "dossier-shadow-18-six-research-gaps-recon-01",
@@ -1616,6 +1616,26 @@
       "recent_completion": false,
       "updated_on": "2026-10-20",
       "updated_at_utc": "2026-10-20T12:30:00Z"
+    },
+    {
+      "id": "dossier-shadow-18-pr232-multipublish-prefix-remediation-01",
+      "title": "Dossier PR232 — исправить ошибку второй и последующих публикаций Assembly",
+      "goal": "На существующем PR #232 устранить shrinking-ready-list при проверке исторического typed prefix, доказать два последовательных sandbox publish и сохранить GitHub per-AppID безопасность, затем отправить на повторный независимый QA.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Точечная корректировка валидатора префикса, сценарии жизненного цикла и тесты без изменения исторических границ.",
+      "urgency": "высокая",
+      "urgency_reason": "Независимый QA выявил реальную блокировку второй публикации несмотря на 8/8 CI.",
+      "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_PR232_MULTIPUBLISH_PREFIX_REMEDIATION_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-shadow-18-six-research-gaps-recon-01"
+      ],
+      "blocker": "Нужно освободить/согласовать физический слот ЧАТ 1, занятый read-only диагностикой шести Research, либо явно направить правку в прежний физический PR232 developer без конфликтующих слотов; старый PR232 HEAD QA blocked.",
+      "recent_completion": false,
+      "updated_on": "2026-10-20",
+      "updated_at_utc": "2026-10-20T12:38:21Z"
     }
   ]
 }
