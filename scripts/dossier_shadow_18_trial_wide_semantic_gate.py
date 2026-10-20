@@ -17,7 +17,16 @@ from dossier_shadow_18_github_python_handoff import (
     FIXED_MARKER, FIXED_BUFFER, FIXED_RESEARCH_MARKER, FIXED_AUTH,
     FIXED_MISSING, FIXED_RESEARCH_COMMITS, require,
 )
-from dossier_shadow_research_trial_publish import EXPECTED_APPIDS
+# Literal immutable original 6x3 Director selection, independently compared
+# with marker-era Python inspect. Do not pre-import mutable main Stage B deps.
+EXPECTED_APPIDS = [
+    "1508750", "1517180", "1533420",
+    "1590230", "1599600", "1607130",
+    "1849000", "1857090", "1868140",
+    "1999170", "1999360", "2009010",
+    "206420", "2067050", "2076140",
+    "2124120", "213610", "2138710",
+]
 
 TRIAL = "dossier-shadow-calibration-20261011-6x3"
 CONTRACT = "DOSSIER-SHADOW-18-TRIAL-WIDE-SEMANTIC-AUTHORITY-V1"
