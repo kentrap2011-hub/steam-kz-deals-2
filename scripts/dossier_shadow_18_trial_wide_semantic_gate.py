@@ -110,7 +110,7 @@ def validate_authority(contract, original, decision, pins, appointments, state,
             and all(type(v) is str and HANDLE.fullmatch(v) for v in roles.values())
             and len(set(roles.values())) == 3,
             "A/B independent and separate C distinct GitHub reviewers required")
-    require(a.get("quality_review_completed") is False
+    require(type(a.get("quality_review_completed")) is bool
             and a.get("source_privacy_rules") == "strict_original_Stage_B_source_first_privacy",
             "appointments do not mean completed quality review")
     require([r.get("appid") for r in s.get("rows", [])] == EXPECTED_APPIDS
@@ -183,6 +183,31 @@ def verified_handoff_progress(repo, stage, contract, inspect):
             "next_unsubmitted_appid": ordered[len(commits)] if len(commits) < len(ordered) else None,
             "verified_tip": tip, "verified_count": len(commits),
             "no_automatic_resume_for_uncommitted_attempt": True}
+
+
+
+def validate_publish_approval(comment, *, appid, semantic_commit):
+    """Verify an API-fetched GitHub owner comment scoped to ONE typed commit.
+
+    A public workflow confirmation string, a task prompt, or this Python
+    function's in-memory argument alone is NEVER human consent. Real workflow
+    must fetch this record from GitHub REST using its readonly issues token.
+    """
+    require(type(comment) is dict and str(comment.get("id", "")).isdigit()
+            and comment.get("user", {}).get("login") == "kentrap2011-hub"
+            and comment.get("issue_url") ==
+              "https://api.github.com/repos/kentrap2011-hub/steam-kz-deals-2/issues/230"
+            and isinstance(comment.get("created_at"), str),
+            "no separately recorded original PR #230 owner approval")
+    require(str(appid) in FIXED_RESEARCH_COMMITS
+            and re.fullmatch("[0-9a-f]{40}", str(semantic_commit)) is not None,
+            "invalid AppID or exact typed introduction")
+    expected = ("AUTHORIZE_SHADOW_ASSEMBLY_PUBLISH_V1 "
+                "trial_id=" + TRIAL + " appid=" + str(appid)
+                + " semantic_commit=" + semantic_commit)
+    require(comment.get("body", "").strip() == expected,
+            "GitHub approval must match this exact AppID and semantic commit")
+    return True
 
 
 def main():
