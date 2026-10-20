@@ -1,9 +1,9 @@
-# ЧАТ 1 — исправление мультипубликации в PR #232 после независимого QA
+# ЧАТ 3 — исправление мультипубликации в PR #232 после независимого QA
 
 Repository: `kentrap2011-hub/steam-kz-deals-2`
 Base branch / source of truth: `main`
 Task ID: `dossier-shadow-18-pr232-multipublish-prefix-remediation-01`
-Destination: **СУЩЕСТВУЮЩИЙ физический ЧАТ 1, создавший PR #232** — продолжение его прежней реализации, NOT the separate newer Chat 1 doing six-Research read-only diagnosis. Director launches this correction only without colliding with that already running research diagnosis; if physical identities are confused, stop and ask Director to resolve slot.
+Destination: **НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 3**. This is a separate physical dialogue continuing the exact developer change request for PR #232 from GitHub-persisted original task/report and independent QA. Existing ЧАТ 1 is assigned read-only six-Research diagnosis, ЧАТ 2 independent QA. NEVER reuse their active numbers. Open all source/PR/QA context through canonical GitHub; do not assume prior Chat 1 conversational state. Assignment is only PLANNED until user explicitly launches Chat 3.
 Mode: **FIX EXISTING PR**; existing branch `implement/dossier-shadow-18-trial-wide-semantic-authority-01`, draft PR [#232](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/232). No separate new feature PR.
 Report: `reviews/worker_reports/dossier-shadow-18-pr232-multipublish-prefix-remediation-01.md` in developer PR branch, or update its existing worker report if it is canonical; attach final exact-head CI and evidence to PR #232 Conversation. Do not self-merge.
 

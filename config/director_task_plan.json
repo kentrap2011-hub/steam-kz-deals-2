@@ -1627,15 +1627,15 @@
       "urgency": "высокая",
       "urgency_reason": "Независимый QA выявил реальную блокировку второй публикации несмотря на 8/8 CI.",
       "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_PR232_MULTIPUBLISH_PREFIX_REMEDIATION_01.md",
-      "worker_slot": "ЧАТ 1",
+      "worker_slot": "ЧАТ 3",
       "order": null,
       "depends_on": [
         "dossier-shadow-18-six-research-gaps-recon-01"
       ],
-      "blocker": "Нужно освободить/согласовать физический слот ЧАТ 1, занятый read-only диагностикой шести Research, либо явно направить правку в прежний физический PR232 developer без конфликтующих слотов; старый PR232 HEAD QA blocked.",
+      "blocker": "Не запущено: пользователю предстоит открыть НОВЫЙ ЧАТ 3. Отдельный developer fix PR232, без пересечения с активным ЧАТ1 Research и ожидающим ЧАТ2 QA. После исправления exact-head QA ЧАТ2 обязателен.",
       "recent_completion": false,
       "updated_on": "2026-10-20",
-      "updated_at_utc": "2026-10-20T12:38:21Z"
+      "updated_at_utc": "2026-10-20T15:14:00Z"
     }
   ]
 }
