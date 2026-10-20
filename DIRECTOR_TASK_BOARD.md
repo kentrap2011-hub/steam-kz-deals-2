@@ -5,6 +5,14 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR NEXT WORK — 2026-10-20: first original-ready one-game Assembly handoff
+
+- **User instruction:** stop waiting after each declared next step. Director assigns the bounded actual worker step; Director itself does NOT perform semantic research/Assembly or Git candidate publication.
+- **Куда отправить:** **НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 1**, task `WORKER_TASK_DOSSIER_SHADOW_18_FIRST_ONE_GAME_ASSEMBLY_HANDOFF_01.md`, `id=dossier-shadow-18-first-one-game-assembly-handoff-01`, scoped to original frozen **AppID `1517180`**, first transport-ready row in original 18 order (previous `1508750` is research_not_submitted). Task begins with READ-ONLY authority/transport preflight. If and ONLY if immutable canonical isolated sandbox one-shot is explicitly allowed, worker may produce exactly one genuine semantic typed Git handoff commit on `handoff/dossier-shadow-18-assembly-typed`. No ordinary developer PR or source changes. On any authority/runtime ambiguity, fail closed with exact evidence.
+- **Current real evidence:** merged [PR #230](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/230); manual inspect [39413937596](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39413937596) SUCCESS, 12 ready / 2 invalid / 4 missing, sandbox unchanged at `2c2649fb98322507cd3758ff0ff7992128f94de0`, no semantic output. First ready `1517180` Research SHA `33faf93e578d32dd5e694f72f119041eb102021d` pinned in `config/dossier_shadow_18_github_python_handoff_pins_v1.json`.
+- **Next Director gate:** inspect actual worker report / new typed introducing SHA and original immutable Git branch/bytes before separately deciding an exact authorized **one-game** manual `publish` UI dispatch. **No `publish` authorization now.** No original marker/Research/source/production/Deep/Task changes; no Scheduled Tasks. `WORKER_TASK.md` belongs to unrelated task.
+- **Physical chat state:** prior developer/QA Chat1/Chat2 are completed/retired. This is a new physical Chat1, not a continuation of merged PR #230 implementation.
+
 ## DIRECTOR VERIFIED — 2026-10-20: one post-merge read-only Assembly inspect PASSED
 
 - **EXECUTED, COMPLETE**: user manually triggered existing merged workflow `Isolated shadow 18 Assembly canonical Python handoff` **run #16 / ID `39413937596`** on `main` at `dfa159f6ac6826bad5dc38ef59f113c8638b156d`, `event=workflow_dispatch`, `run_attempt=1`, final `SUCCESS`. https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39413937596
