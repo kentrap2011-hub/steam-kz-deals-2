@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-10-19",
+  "last_curated_on": "2026-10-20",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -1457,9 +1457,9 @@
       "depends_on": [
         "dossier-shadow-18-assembly-compare-sandbox-01"
       ],
-      "blocker": "Implementation proposed in draft PR #230; independent security review pending; merge not authorized.",
-      "updated_on": "2026-10-19",
-      "updated_at_utc": "2026-10-19T07:15:01.378Z"
+      "blocker": "PR #230 merged into main on 2026-10-20 (d543337e3613bc0542b7a89018ff980e9b2189a3). No live Assembly or manual publish authorized.",
+      "updated_on": "2026-10-20",
+      "updated_at_utc": "2026-10-20T11:09:30.133Z"
     },
     {
       "id": "dossier-shadow-assembly-pr230-security-review-01",
@@ -1476,9 +1476,9 @@
       "depends_on": [
         "dossier-shadow-assembly-github-python-handoff-fix-01"
       ],
-      "blocker": "Independent review completed: CHANGES_REQUIRED on PR #230, see GitHub comment 6264321596.",
-      "updated_on": "2026-10-19",
-      "updated_at_utc": "2026-10-19T16:57:22.166Z"
+      "blocker": "PR #230 merged into main on 2026-10-20 (d543337e3613bc0542b7a89018ff980e9b2189a3). No live Assembly or manual publish authorized.",
+      "updated_on": "2026-10-20",
+      "updated_at_utc": "2026-10-20T11:09:30.133Z"
     },
     {
       "id": "dossier-shadow-assembly-pr230-qa-remediation-01",
@@ -1496,9 +1496,9 @@
         "dossier-shadow-assembly-github-python-handoff-fix-01",
         "dossier-shadow-assembly-pr230-security-review-01"
       ],
-      "blocker": "Remediation code and CI complete; post-remediation independent QA and Director merge decision outstanding.",
-      "updated_on": "2026-10-19",
-      "updated_at_utc": "2026-10-19T18:09:22.401Z",
+      "blocker": "PR #230 merged into main on 2026-10-20 (d543337e3613bc0542b7a89018ff980e9b2189a3). No live Assembly or manual publish authorized.",
+      "updated_on": "2026-10-20",
+      "updated_at_utc": "2026-10-20T11:09:30.133Z",
       "recent_completion": true
     },
     {
@@ -1516,10 +1516,10 @@
       "depends_on": [
         "dossier-shadow-assembly-pr230-qa-remediation-01"
       ],
-      "blocker": "Independent QA PASS on PR #230 exact head; Director merge decision and live Assembly remain separately gated.",
-      "updated_on": "2026-10-19",
+      "blocker": "PR #230 merged into main on 2026-10-20 (d543337e3613bc0542b7a89018ff980e9b2189a3). No live Assembly or manual publish authorized.",
+      "updated_on": "2026-10-20",
       "recent_completion": true,
-      "updated_at_utc": "2026-10-19T18:31:30.081Z"
+      "updated_at_utc": "2026-10-20T11:09:30.133Z"
     }
   ]
 }
