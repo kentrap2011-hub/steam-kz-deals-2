@@ -98,10 +98,19 @@ on the exact typed handoff branch. JSON top-level keys MUST be **only**
 `outcome`, `payload`, `supplemental_operations`; enforce the original
 schema/privacy in Stage B later. The Git commit must directly parent the
 freshly verified remote tip and add exactly that one previously absent file.
-Check commit SHA, blob, diff, remote tip and exact same contents after EACH
-success before continuing. No rebase, overwrite, alternate branch, reissue,
-background run, unattended continuation or extra metadata files. If a commit
-write is uncertain, STOP rather than recompute that game's semantics.
+Use GitHub's Git Data objects for a genuine remote-tip compare-and-swap:
+read the exact LIVE typed ref and its tip commit/tree; create only the JSON
+blob, a tree based on **that tip's tree** with only the single new path,
+and a new commit with **exactly that tip as its only parent**. Update only
+the typed branch using `update_ref(force=false, expected_sha=<previous-tip>)`.
+Do **NOT** use a plain Contents API create-file call as a substitute for
+the expected-parent branch lease: it can accidentally succeed on a moved
+remote tip. The compare-and-swap rejection is a STOP, never a silent
+retry or rebase. Check commit SHA, blob, diff, remote tip and exact same
+contents after EACH success before continuing. No overwrite, alternate
+branch, reissue, background run, unattended continuation or extra
+metadata files. If a ref write is uncertain, STOP rather than recompute
+that game's semantics.
 Submitted is **not** accepted. If a chat exhausts context, another explicitly
 launched chat may start only at the first as-yet unsubmitted READY row proven
 by live immutable GitHub typed commits; attempts without durable transport
