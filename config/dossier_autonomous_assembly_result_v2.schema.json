@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DOSSIER-AUTONOMOUS-ASSEMBLY-RESULT-V2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "assignment",
+    "research_transport",
+    "outcome",
+    "final_dossier",
+    "operations",
+    "mechanical_corrections",
+    "diagnostic",
+    "staged_only",
+    "canonical_acceptance"
+  ],
+  "properties": {
+    "schema": {
+      "const": "DOSSIER-AUTONOMOUS-ASSEMBLY-RESULT-V2"
+    },
+    "schema_version": {
+      "const": 2
+    },
+    "assignment": {
+      "type": "object"
+    },
+    "research_transport": {
+      "type": "object"
+    },
+    "outcome": {
+      "enum": [
+        "assembled_candidate_ready",
+        "assembly_missing_evidence",
+        "assembly_semantic_conflict",
+        "runtime_or_tool_interrupted",
+        "assembly_technical_error"
+      ]
+    },
+    "final_dossier": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "operations": {
+      "type": "array",
+      "maxItems": 60,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "access",
+          "summary"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "source_revisit",
+              "independent_discovery",
+              "targeted_gap_lookup",
+              "identity_disambiguation",
+              "conflict_resolution",
+              "technical_normalization",
+              "result_self_correction"
+            ]
+          },
+          "access": {
+            "enum": [
+              "opened",
+              "inspected_collection",
+              "search_result_only",
+              "unvisited_reference",
+              "unknown"
+            ]
+          },
+          "summary": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "locator": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "observed_at_utc": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "mechanical_corrections": {
+      "type": "array",
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "summary"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "format",
+              "reference",
+              "normalization"
+            ]
+          },
+          "summary": {
+            "type": "string",
+            "maxLength": 300
+          }
+        }
+      }
+    },
+    "diagnostic": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1000
+    },
+    "staged_only": {
+      "const": true
+    },
+    "canonical_acceptance": {
+      "const": false
+    }
+  }
+}
