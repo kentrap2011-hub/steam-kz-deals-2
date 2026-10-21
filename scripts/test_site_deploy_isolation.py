@@ -179,6 +179,24 @@ def test_paid_corruption_rejected(repo):
     expect_rejected(lambda: isolation.stage(repo, "general"), "Staged paid bytes differ")
 
 
+def test_committed_corrupt_paid_prices_and_scope_fail_closed(repo):
+    path = repo / VISUAL
+    for field, wrong in (("current_price_rub", -1), ("discount_percent", 101)):
+        value = json.loads(path.read_text())
+        value["items"][0][field] = wrong
+        content = json.dumps(value) + "\n"
+        path.write_text(content, encoding="utf-8")
+        (repo / "web/data/current.json").write_text(content, encoding="utf-8")
+        expect_rejected(lambda: isolation.stage(repo, "general"), "Out-of-range canonical paid")
+        path.write_text(json.dumps(GOOD, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
+    value = json.loads(path.read_text())
+    value["items"].append(dict(value["items"][0]))
+    content = json.dumps(value) + "\n"
+    path.write_text(content, encoding="utf-8")
+    (repo / "web/data/current.json").write_text(content, encoding="utf-8")
+    expect_rejected(lambda: isolation.stage(repo, "general"), "Duplicate canonical paid identity")
+
+
 def test_missing_canonical_source_rejected(repo):
     (repo / VISUAL).unlink()
     expect_rejected(lambda: isolation.stage(repo, "general"), "Missing canonical")
