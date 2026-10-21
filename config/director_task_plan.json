@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-10-20",
+  "last_curated_on": "2026-10-21",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -1661,7 +1661,7 @@
       "id": "research-assembly-notes-v2-autonomous-assembly-implement-01",
       "title": "Research Notes V2 и самостоятельный Assembly",
       "goal": "Реализовать новую двухэтапную Research Notes V2 → автономный Assembly по PR235, без активации",
-      "status": "authorized_ready_for_worker",
+      "status": "active",
       "effort": "высокая",
       "effort_reason": "Контрактная разработка и отрицательные тесты",
       "urgency": "высокая",
@@ -1670,15 +1670,16 @@
       "worker_slot": "ЧАТ 3",
       "order": null,
       "depends_on": [],
-      "blocker": null,
+      "blocker": "",
       "updated_on": "2026-10-21",
-      "recent_completion": false
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-21T17:16:34Z"
     },
     {
       "id": "site-publication-independent-failure-isolation-implement-01",
       "title": "Изоляция независимых отказов публикации сайта",
       "goal": "Изолировать некритические ошибки задач и независимых разделов от публикации проверенных скидок по PR236",
-      "status": "authorized_ready_for_worker",
+      "status": "active",
       "effort": "высокая",
       "effort_reason": "Контрактная разработка и отрицательные тесты",
       "urgency": "высокая",
@@ -1687,9 +1688,10 @@
       "worker_slot": "ЧАТ 1",
       "order": null,
       "depends_on": [],
-      "blocker": null,
+      "blocker": "",
       "updated_on": "2026-10-21",
-      "recent_completion": false
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-21T17:16:34Z"
     }
   ]
 }
