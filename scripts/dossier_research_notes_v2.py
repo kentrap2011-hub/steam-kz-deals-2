@@ -10,6 +10,7 @@ import hashlib
 import ipaddress
 import json
 import re
+import subprocess
 from pathlib import Path
 from urllib.parse import unquote, urlsplit, parse_qsl
 from jsonschema import Draft202012Validator
@@ -97,8 +98,12 @@ def _locator(loc):
             reject("unsafe_material", "unsafe URL")
         u = urlsplit(value)
         host = (u.hostname or "").lower()
+        try:
+            port = u.port
+        except ValueError:
+            reject("unsafe_material", "invalid URL port")
         if (u.scheme != "https" or not host or u.username or u.password
-                or u.port not in (None, 443) or u.fragment
+                or port not in (None, 443) or u.fragment
                 or host == "localhost" or host.endswith((".local", ".internal", ".test", ".invalid"))
                 or RESTRICTED.search(unquote(value))
                 or any(k.lower() in DENY_QUERY for k, _ in parse_qsl(u.query, keep_blank_values=True))):
@@ -153,7 +158,7 @@ def _manifest(repo, marker_commit, trial_id):
         return m, blob(repo, p, path)
     except NotesV2Error:
         raise
-    except (ValueError, KeyError, TypeError, RuntimeError) as exc:
+    except (ValueError, KeyError, TypeError, RuntimeError, subprocess.CalledProcessError) as exc:
         reject("broken_git_provenance", str(exc))
 
 def _marker_nonce(repo, commit):
@@ -223,7 +228,7 @@ def submitted_research(repo, *, marker_commit, trial_id, appid, introduction_com
         validate_notes(doc, a)
     except NotesV2Error:
         raise
-    except (ValueError, TypeError, KeyError, RuntimeError) as exc:
+    except (ValueError, TypeError, KeyError, RuntimeError, subprocess.CalledProcessError) as exc:
         reject("broken_git_provenance", str(exc))
     return {"status":"safe_incomplete_research","appid":a["appid"],
             "assignment":a,"research_package_git_commit":introduction_commit,
@@ -324,6 +329,92 @@ def inspect_assembly(repo, *, marker_commit, trial_id, appid, research_commit, r
     except (ValueError, KeyError, TypeError, RuntimeError) as exc:
         return {"status":"broken_git_provenance","diagnostic":str(exc)[:240],
                 "item_local_only":True,"canonical_acceptance":False,"deep_ready":False}
+
+
+def manifest_blueprint(trial_id, prepared_rows):
+    """GitHub-side pure future manifest planner: returns bytes, NEVER issues authority.
+
+    The new GitHub authorization must independently establish title/edition
+    correctness and write one immutable manifest before a new marker exists.
+    This code cannot reauthorize the old trial or infer titles from AppIDs.
+    """
+    c = _contract()
+    if not TRIAL.fullmatch(str(trial_id)) or not isinstance(prepared_rows, list):
+        reject("wrong_binding", "invalid future GitHub trial or prepared rows")
+    expected = [(g["group_sequence"], i, a)
+                for g in c["original_groups"] for i, a in enumerate(g["appids"])]
+    seen = []
+    for r in prepared_rows:
+        if (not isinstance(r, dict) or set(r) !=
+                {"group_sequence", "item_index", "appid", "title", "assignment_id"}
+                or not isinstance(r["title"], str) or not r["title"].strip()
+                or len(r["title"]) > 160
+                or not ASSIGNMENT.fullmatch(str(r["assignment_id"]))):
+            reject("wrong_binding", "incomplete original frozen assignment")
+        seen.append((r["group_sequence"], r["item_index"], r["appid"]))
+    if (seen != expected or len({r["assignment_id"] for r in prepared_rows}) != 18):
+        reject("wrong_binding", "future manifest must preserve full original 18 order")
+    obj = {"schema":"DOSSIER-NOTES-V2-FROZEN-MANIFEST",
+           "schema_version":2,"trial_id":trial_id,
+           "original_pins":c["immutable_original_pins"],"items":prepared_rows}
+    return {"output_path":f"data/control/dossier_notes_v2/manifests/{trial_id}.json",
+            "bytes":_canonical(obj),"blob_sha":blob_for(_canonical(obj)),
+            "authorizes_semantic_execution":False}
+
+def prepare_assembly_transport(repo, work, document):
+    """Validate draft once before a single future create-only submission.
+
+    Offline pure proposer. Never claims GitHub acceptance or extends scope.
+    """
+    if work.get("status") != "ready_for_autonomous_assembly":
+        reject("wrong_binding", "not an authorized V2 assembly item")
+    if (document.get("assignment") != work["assignment"]
+            or document.get("research_transport") != work["research_transport"]):
+        reject("wrong_binding", "Assembly output differs from original V2 binding")
+    candidate_assembly(work, outcome=document.get("outcome"),
+                       final_dossier=document.get("final_dossier"),
+                       operations=document.get("operations"),
+                       mechanical_corrections=document.get("mechanical_corrections"),
+                       diagnostic=document.get("diagnostic"))
+    if document["outcome"] == "assembled_candidate_ready":
+        try:
+            strict = json.loads((CONFIG / "taste_steam_review_dossier_contract.json").read_text("utf-8"))
+            validate_dossier_strict(document["final_dossier"], strict,
+                 expected_appid=work["assignment"]["appid"],
+                 expected_title=work["assignment"]["title"])
+        except (ValueError, AssertionError, TypeError, KeyError) as exc:
+            reject("final_strict_or_group_rejected", "strict draft validation failed: "+str(exc))
+    path = _path("assembly", work["assignment"])
+    if exists(repo, "HEAD", path):
+        reject("broken_git_provenance", "create-only Assembly path occupied")
+    if not first_parent_contains(
+            repo, work["research_transport"]["research_package_git_commit"], "HEAD"):
+        reject("broken_git_provenance", "Research commit no longer in original lineage")
+    raw = _canonical(document)
+    return {"status":"ready_for_create_only_submission","output_path":path,
+            "bytes":raw,"blob_sha":blob_for(raw),"raw_sha256":digest(raw),
+            "canonical_acceptance":False}
+
+def item_receipt_blueprint(assignment, *, phase, disposition, source=None):
+    """Typed GitHub receipt proposal, not acceptance or proof of attempt.
+
+    Only a separately authorized GitHub writer may attest and persist it.
+    """
+    c = _contract()
+    if phase not in ("research","assembly") or disposition not in c["receipts"]:
+        reject("wrong_binding", "unsupported per-item receipt disposition")
+    if not isinstance(assignment, dict) or not HEX40.fullmatch(
+            str(assignment.get("marker_commit", ""))):
+        reject("wrong_binding", "unbound receipt")
+    doc = {"schema":"DOSSIER-NOTES-V2-ITEM-RECEIPT",
+           "schema_version":2,"trial_id":assignment["trial_id"],
+           "appid":assignment["appid"],"assignment":assignment,
+           "phase":phase,"disposition":disposition,
+           "source":source,
+           "semantic_attempt_state":"unknown",
+           "staged_only":True,"canonical_acceptance":False}
+    _schema("dossier_notes_v2_item_receipt.schema.json",doc)
+    return doc
 
 def original_group_readiness(group_sequence, item_verdicts):
     """Reporting ONLY. Existing strict three-game writer is sole acceptance path."""

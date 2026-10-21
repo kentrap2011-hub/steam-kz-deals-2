@@ -73,7 +73,8 @@
     "frozen_manifest": "data/control/dossier_notes_v2/manifests/{trial_id}.json",
     "frozen_marker": "data/control/dossier_notes_v2/run_starts/{nonce}.json",
     "notes": "data/ai_inbox/dossier_notes_v2/{trial_id}/g{group_sequence:06d}/{appid}--{assignment_id}.json",
-    "assembly": "data/ai_inbox/dossier_assembly_v2/{trial_id}/g{group_sequence:06d}/{appid}--{assignment_id}.json"
+    "assembly": "data/ai_inbox/dossier_assembly_v2/{trial_id}/g{group_sequence:06d}/{appid}--{assignment_id}.json",
+    "receipt": "data/control/dossier_notes_v2/receipts/{trial_id}/g{group_sequence:06d}/{appid}--{assignment_id}--{phase}.json"
   },
   "research_handoff": {
     "allow_empty_notes": true,
@@ -124,5 +125,6 @@
     "scheduled_tasks",
     "cross_v1_rebinding",
     "canonical_ingest_without_separate_authority"
-  ]
+  ],
+  "item_receipt_schema": "config/dossier_notes_v2_item_receipt.schema.json"
 }

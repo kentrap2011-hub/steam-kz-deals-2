@@ -6,6 +6,7 @@ on:
       - "config/dossier_research_notes_v2_contract.json"
       - "config/dossier_research_notes_v2.schema.json"
       - "config/dossier_autonomous_assembly_result_v2.schema.json"
+      - "config/dossier_notes_v2_item_receipt.schema.json"
       - "config/dossier_two_stage_interfaces_contract.json"
       - "scripts/dossier_research_notes_v2.py"
       - "scripts/dossier_two_stage_versioned.py"
@@ -35,7 +36,7 @@ jobs:
           python -m py_compile scripts/dossier_research_notes_v2.py scripts/dossier_two_stage_versioned.py
           python - <<'PY'
           import json
-          for name in ('dossier_research_notes_v2_contract.json','dossier_research_notes_v2.schema.json','dossier_autonomous_assembly_result_v2.schema.json'):
+          for name in ('dossier_research_notes_v2_contract.json','dossier_research_notes_v2.schema.json','dossier_autonomous_assembly_result_v2.schema.json','dossier_notes_v2_item_receipt.schema.json'):
               with open('config/'+name,encoding='utf-8') as f: json.load(f)
           c=json.load(open('config/dossier_research_notes_v2_contract.json'))
           assert c['active'] is False and c['authorized_for_semantic_execution'] is False

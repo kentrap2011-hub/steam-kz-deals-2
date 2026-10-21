@@ -224,5 +224,53 @@ class NotesV2Tests(unittest.TestCase):
                          marker_commit=self.marker,trial_id=TRIAL,appid=self.appid,document=d)
         self.assertEqual(p["status"],"ready_for_create_only_submission")
 
+
+    def test_future_manifest_builder_only_prepares_frozen_bytes(self):
+        built=v2.manifest_blueprint(TRIAL,self.manifest["items"])
+        self.assertEqual(json.loads(built["bytes"]),self.manifest)
+        self.assertFalse(built["authorizes_semantic_execution"])
+        broken=copy.deepcopy(self.manifest["items"])
+        broken[0],broken[1]=broken[1],broken[0]
+        with self.assertRaises(v2.NotesV2Error):
+            v2.manifest_blueprint(TRIAL,broken)
+
+    def test_github_receipt_proposal_never_claims_attempt_or_acceptance(self):
+        doc=v2.item_receipt_blueprint(self.assignment,phase="research",
+                                     disposition="safe_incomplete_research")
+        self.assertEqual(doc["semantic_attempt_state"],"unknown")
+        self.assertFalse(doc["canonical_acceptance"])
+        with self.assertRaises(v2.NotesV2Error):
+            v2.item_receipt_blueprint(self.assignment,phase="assembly",
+                                      disposition="invented_green")
+
+    def test_mutated_original_transport_fails_local_chain(self):
+        sha=self.add_research()
+        path=v2._path("research",self.assignment)
+        write(self.repo,path,self.note(notes_text="tampered after introduction"))
+        commit(self.repo,"fixture: illegally edit original transport")
+        result=v2.classify_research(self.repo,marker_commit=self.marker,
+                                    trial_id=TRIAL,appid=self.appid,
+                                    introduction_commit=sha)
+        self.assertEqual(result["status"],"broken_git_provenance")
+
+    def test_nonexisting_research_commit_yields_local_provenance_diagnostic(self):
+        result=v2.classify_research(self.repo,marker_commit=self.marker,
+                                    trial_id=TRIAL,appid=self.appid,
+                                    introduction_commit="f"*40)
+        self.assertEqual(result["status"],"broken_git_provenance")
+
+    def test_prepare_assembly_transport_checks_strict_before_publishing(self):
+        _,work=self.work()
+        invalid=v2.candidate_assembly(work,outcome="assembled_candidate_ready",
+              final_dossier={"appid":self.appid,"title":self.assignment["title"]})
+        with self.assertRaises(v2.NotesV2Error) as cm:
+            v2.prepare_assembly_transport(self.repo,work,invalid)
+        self.assertEqual(cm.exception.code,"final_strict_or_group_rejected")
+        terminal=v2.candidate_assembly(work,outcome="runtime_or_tool_interrupted",
+                 diagnostic="Synthetic access was interrupted")
+        preview=v2.prepare_assembly_transport(self.repo,work,terminal)
+        self.assertEqual(preview["status"],"ready_for_create_only_submission")
+        self.assertFalse(preview["canonical_acceptance"])
+
 if __name__=="__main__":
     unittest.main()

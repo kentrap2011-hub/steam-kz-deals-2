@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DOSSIER-NOTES-V2-ITEM-RECEIPT",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "trial_id",
+    "appid",
+    "assignment",
+    "phase",
+    "disposition",
+    "source",
+    "semantic_attempt_state",
+    "staged_only",
+    "canonical_acceptance"
+  ],
+  "properties": {
+    "schema": {
+      "const": "DOSSIER-NOTES-V2-ITEM-RECEIPT"
+    },
+    "schema_version": {
+      "const": 2
+    },
+    "trial_id": {
+      "type": "string"
+    },
+    "appid": {
+      "type": "string"
+    },
+    "assignment": {
+      "type": "object"
+    },
+    "phase": {
+      "enum": [
+        "research",
+        "assembly"
+      ]
+    },
+    "disposition": {
+      "enum": [
+        "safe_incomplete_research",
+        "missing_research_transport",
+        "wrong_binding",
+        "unsafe_material",
+        "unparseable",
+        "broken_git_provenance",
+        "assembly_missing_evidence",
+        "assembly_semantic_conflict",
+        "runtime_or_tool_interrupted",
+        "assembly_technical_error",
+        "final_strict_or_group_rejected",
+        "strict_item_valid_pending_existing_atomic_group_ingest"
+      ]
+    },
+    "source": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "semantic_attempt_state": {
+      "const": "unknown"
+    },
+    "staged_only": {
+      "const": true
+    },
+    "canonical_acceptance": {
+      "const": false
+    }
+  }
+}
