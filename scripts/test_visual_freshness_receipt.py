@@ -34,6 +34,10 @@ def make_repo(root: Path) -> tuple[Path, dict]:
     subprocess.check_call(["git", "init", "-q", "-b", "main"], cwd=repo)
     subprocess.check_call(["git", "config", "user.email", "test@example.com"], cwd=repo)
     subprocess.check_call(["git", "config", "user.name", "test"], cwd=repo)
+    # Prevent detached git-auto-gc/maintenance processes from racing with
+    # TemporaryDirectory cleanup (OSError: Directory not empty: objects).
+    subprocess.check_call(["git", "config", "gc.auto", "0"], cwd=repo)
+    subprocess.check_call(["git", "config", "maintenance.auto", "false"], cwd=repo)
 
     for material_path in material_guard.unique_material_paths():
         path = repo / material_path

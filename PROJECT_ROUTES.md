@@ -539,3 +539,10 @@ Currentness invariant after PPD-012:
 5. `reviews/worker_reports/dossier-shadow-assembly-github-python-handoff-fix-01.md` — actor/permissions, preflight, CI and blocker ledger.
 
 **Real inspect (GitHub Actions #39212219378):** 12 `ready`, 2 `research_transport_invalid` (SULFUR 2124120; Sifu 2138710), 4 `research_not_submitted`. This is read-only structural eligibility, not semantic Assembly, canonical acceptance or a retry. The first original GitHub issuer run `39054131983` must **never** be retriggered. Original sandbox branch, Research artifacts, issuer marker/buffer and live Dossier/Deep stay unchanged until a separately authorized manual candidate publication.
+
+
+## Site Pages deploy: independent optional sections (2026-10-21, base a2f734d15ddd)
+
+- Core source/staged Git-blob and SHA256 preflight: `scripts/stage_site_optional_sections.py::check_core`; canonical visual `data/production/visual/current.json` remains byte-identical in `web/data/current.json` and mandatory `scripts/visual_freshness_receipt.py verify-receipt` stays in `.github/workflows/deploy-visual.yml`.
+- Optional site-status/task/giveaway presentation dispositions: `scripts/stage_site_optional_sections.py`, `web/data/publication-disposition.json`; failed task page must remove its index navigation; failed optional giveaway presentation is hidden by `web/app.js` without mutating canonical JSON. Status-only and giveaway-only continue to require exact valid own section.
+- Synthetic regression suite moved out of Deploy: `.github/workflows/validate-site-deploy-isolation.yml` and `scripts/test_site_deploy_isolation.py`, plus existing visual receipt/material + task UI tests. Live Pages read-back remains separate QA; no publication attested by PR tests.

@@ -376,7 +376,13 @@ async function init(){
     const res=await fetch(DATA_URL,{cache:'no-store'});if(!res.ok)throw new Error('data');
     data=await res.json();
     siteStatus=await statusPromise;
-    if(window.GiveawayUI)window.GiveawayUI.render(data.giveaways,$('giveawayBlock'));
+    // The deploy staging layer may omit a broken optional giveaway presentation.
+    // Source data/current.json stays byte-identical to its signed canonical input.
+    if(window.SITE_GIVEAWAY_ENABLED===false){
+      const tab=document.querySelector('.tab[data-tab="giveaway"]');
+      if(tab){tab.hidden=true;tab.disabled=true;tab.style.display='none';}
+      if(window.GiveawayUI)window.GiveawayUI.render(null,$('giveawayBlock'));
+    }else if(window.GiveawayUI)window.GiveawayUI.render(data.giveaways,$('giveawayBlock'));
     render();
   }
   catch{
