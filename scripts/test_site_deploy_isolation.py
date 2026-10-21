@@ -139,7 +139,7 @@ def test_crashed_generator(repo):
     flag(repo, "task_generator_crash")
     out = isolation.stage(repo, "general")
     assert out["sections"]["tasks"]["disposition"] == "omitted"
-    assert "generator" in out["sections"]["tasks"]["reason"]
+    assert "generation" in out["sections"]["tasks"]["reason"]
 
 
 def test_optional_status_and_status_only_gate(repo):
