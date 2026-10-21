@@ -1,0 +1,140 @@
+{
+  "schema": "DOSSIER-SHADOW-18-TRIAL-WIDE-SEMANTIC-AUTHORITY-V1",
+  "version": 1,
+  "trial_id": "dossier-shadow-calibration-20261011-6x3",
+  "scope": "prospective_nonproduction_manual_assembly_only",
+  "decision": "conditional_permission_not_execution_receipt",
+  "historical_authority_preserved": true,
+  "original_assembly_marker": "2c2649fb98322507cd3758ff0ff7992128f94de0",
+  "original_assembly_buffer_commit": "9782ab8492aadc744c23ec0425abf8d2d877590e",
+  "original_assembly_buffer_blob": "5c7e66db7d3880098c0cd85f0690661c9655cd09",
+  "research_marker": "bb63cc291eba5aa8fc56e2920ef84d131ac28a4f",
+  "research_feasibility_commit": "2a726cf6731c0fc1e7bc809474627383c107ef9b",
+  "original_issuer_run_id": 39054131983,
+  "original_trial_contract": "config/dossier_shadow_research_trial_contract_v1.json",
+  "immutable_decision": "reviews/dossier_shadow_offline/dossier_shadow_calibration_20261011_6x3_director_decision_v1.json",
+  "immutable_pins": "config/dossier_shadow_18_github_python_handoff_pins_v1.json",
+  "group_order": [
+    3,
+    8,
+    13,
+    15,
+    18,
+    20
+  ],
+  "groups": [
+    [
+      "1508750",
+      "1517180",
+      "1533420"
+    ],
+    [
+      "1590230",
+      "1599600",
+      "1607130"
+    ],
+    [
+      "1849000",
+      "1857090",
+      "1868140"
+    ],
+    [
+      "1999170",
+      "1999360",
+      "2009010"
+    ],
+    [
+      "206420",
+      "2067050",
+      "2076140"
+    ],
+    [
+      "2124120",
+      "213610",
+      "2138710"
+    ]
+  ],
+  "observed_not_authorized": {
+    "ready_count": 12,
+    "research_transport_invalid": [
+      "2124120",
+      "2138710"
+    ],
+    "research_not_submitted": [
+      "1508750",
+      "1607130",
+      "1849000",
+      "1857090"
+    ],
+    "source": "strict_original_GitHub_Python_inspect_run_39413937596"
+  },
+  "original_sandbox_branch": "sandbox/dossier-shadow-calibration-20261011-6x3-frozen-research",
+  "handoff_branch": "handoff/dossier-shadow-18-assembly-typed",
+  "handoff_prefix": "reviews/dossier_shadow_offline/handoff/dossier-shadow-calibration-20261011-6x3",
+  "handoff_branch_initial_base": "2c2649fb98322507cd3758ff0ff7992128f94de0",
+  "manual_one_shot": true,
+  "at_most_one_semantic_result_per_ready_original_appid": true,
+  "carry_only_original_ready_and_skip_nonready": true,
+  "requires": {
+    "merged_main_contract": true,
+    "read_only_github_actions_authority_check_success": true,
+    "independently_verified_run_metadata_and_artifact": true,
+    "independent_reviewer_appointments": "reviews/dossier_shadow_offline/authorizations/dossier-shadow-18-assembly-reviewer-appointments-v1.json",
+    "reviewers": "A,B independent review roles; separate C reviewer; three distinct verified GitHub handles; roles appointed before semantics, source quality review deferred",
+    "typed_branch_existing_at_original_marker_or_linear_authorized_commits": true,
+    "explicit_user_start_each_chat": true,
+    "strict_original_stage_b": "scripts/dossier_shadow_18_assembly_stage_b.py from immutable marker checkout",
+    "safe_source_privacy_v2": true
+  },
+  "github_owns": [
+    "frozen_scope_and_order",
+    "Git_commit_lineage_and_remote_tip",
+    "immutable_source_provenance",
+    "run_authority_and_read_only_receipt",
+    "validation",
+    "semantic_attempt_dispositions",
+    "retry_and_recovery",
+    "separate_per_appid_director_publish_approval",
+    "canonical_acceptance_and_publication"
+  ],
+  "typed_result_exact_keys": [
+    "outcome",
+    "payload",
+    "supplemental_operations"
+  ],
+  "typed_one_add_only_direct_parent_per_appid": true,
+  "typed_results_are_submission_only": true,
+  "context_rotation_rule": "Continue only from immutable remote GitHub verified typed introduction commits; if a semantic result was attempted but not durably submitted, stop for explicit Director decision, do not replay it.",
+  "publish_requires_separate_human_approval_per_appid": true,
+  "old_flags_are_not_approval": true,
+  "old_research_auth_is_not_assembly_auth": true,
+  "reviewer_names_may_not_be_invented": true,
+  "one_stage_dossier_production_unchanged": true,
+  "two_stage_production_active": false,
+  "canonical_acceptance": false,
+  "deep_ready": false,
+  "no_automatic_execution": true,
+  "no_recurring_schedule": true,
+  "no_retry": true,
+  "no_batch_quota": true,
+  "no_new_queue": true,
+  "forbidden_writes": [
+    "data/production/",
+    "data/cache/",
+    "data/ai_inbox/",
+    "data/control/",
+    "web/",
+    ".github/workflows/issue-dossier-shadow-18-assembly.yml",
+    "reviews/dossier_shadow_offline/trials/dossier-shadow-calibration-20261011-6x3/research/"
+  ],
+  "forbidden_activities": [
+    "real_Assembly_in_developer_chat",
+    "new_Research",
+    "retry_invalid_or_missing_research",
+    "create_issuer_or_frozen_marker",
+    "reissue_work_or_rewrite_old_authority",
+    "publish_without_separate_director_user_approval",
+    "modify_production_or_schedulers",
+    "auto_resume_an_uncommitted_semantic_attempt"
+  ]
+}

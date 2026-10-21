@@ -355,8 +355,12 @@ class P2StagingTests(unittest.TestCase):
 
     def test_23_incorrect_original_anchor_cannot_be_substituted(self):
         self.f.submit()
+        # A random fixture marker can already end in "0" (~1/16 runs).
+        # Ensure the substituted anchor is actually different, every time.
+        wrong_marker = self.f.marker[:-1] + ("1" if self.f.marker.endswith("0") else "0")
+        self.assertNotEqual(wrong_marker, self.f.marker)
         with self.assertRaises(ValueError):
-            receive_research(self.f.root, marker_commit=self.f.marker[:-1] + "0",
+            receive_research(self.f.root, marker_commit=wrong_marker,
                              prepared_work_path=self.f.p_path,
                              package_commit=self.f.package_commit)
 
