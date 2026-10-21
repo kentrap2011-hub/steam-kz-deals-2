@@ -1,0 +1,43 @@
+name: Validate inactive Research Notes V2 and autonomous Assembly
+
+on:
+  pull_request:
+    paths:
+      - "config/dossier_research_notes_v2_contract.json"
+      - "config/dossier_research_notes_v2.schema.json"
+      - "config/dossier_autonomous_assembly_result_v2.schema.json"
+      - "config/dossier_two_stage_interfaces_contract.json"
+      - "scripts/dossier_research_notes_v2.py"
+      - "scripts/dossier_two_stage_versioned.py"
+      - "scripts/test_dossier_research_notes_v2.py"
+      - ".github/workflows/validate-dossier-research-notes-v2.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install offline validator dependency
+        run: python -m pip install jsonschema==4.23.0
+      - name: Adversarial synthetic Notes V2 and assembly
+        run: python scripts/test_dossier_research_notes_v2.py -v
+      - name: Syntax and PR activation guard
+        run: |
+          python -m py_compile scripts/dossier_research_notes_v2.py scripts/dossier_two_stage_versioned.py
+          python - <<'PY'
+          import json
+          for name in ('dossier_research_notes_v2_contract.json','dossier_research_notes_v2.schema.json','dossier_autonomous_assembly_result_v2.schema.json'):
+              with open('config/'+name,encoding='utf-8') as f: json.load(f)
+          c=json.load(open('config/dossier_research_notes_v2_contract.json'))
+          assert c['active'] is False and c['authorized_for_semantic_execution'] is False
+          assert c['authorized_for_canonical_ingest'] is False and c['production_enabled'] is False
+          PY
