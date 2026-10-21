@@ -235,12 +235,14 @@ class NotesV2Tests(unittest.TestCase):
             v2.manifest_blueprint(TRIAL,broken)
 
     def test_github_receipt_proposal_never_claims_attempt_or_acceptance(self):
-        doc=v2.item_receipt_blueprint(self.assignment,phase="research",
+        doc=v2.item_receipt_blueprint(self.repo,marker_commit=self.marker,trial_id=TRIAL,
+                                     appid=self.appid,phase="research",
                                      disposition="safe_incomplete_research")
         self.assertEqual(doc["semantic_attempt_state"],"unknown")
         self.assertFalse(doc["canonical_acceptance"])
         with self.assertRaises(v2.NotesV2Error):
-            v2.item_receipt_blueprint(self.assignment,phase="assembly",
+            v2.item_receipt_blueprint(self.repo,marker_commit=self.marker,trial_id=TRIAL,
+                                      appid=self.appid,phase="assembly",
                                       disposition="invented_green")
 
     def test_mutated_original_transport_fails_local_chain(self):
@@ -271,6 +273,31 @@ class NotesV2Tests(unittest.TestCase):
         preview=v2.prepare_assembly_transport(self.repo,work,terminal)
         self.assertEqual(preview["status"],"ready_for_create_only_submission")
         self.assertFalse(preview["canonical_acceptance"])
+
+
+    def test_immutable_marker_and_manifest_are_not_rewritten(self):
+        path=f"data/control/dossier_notes_v2/manifests/{TRIAL}.json"
+        mutated=copy.deepcopy(self.manifest)
+        mutated["items"][0]["title"]="Tampered"
+        write(self.repo,path,mutated)
+        commit(self.repo,"fixture: illegally overwrite frozen manifest")
+        with self.assertRaises(v2.NotesV2Error) as cm:
+            v2.frozen_assignment(self.repo,marker_commit=self.marker,trial_id=TRIAL,
+                                 appid=self.appid)
+        self.assertEqual(cm.exception.code,"broken_git_provenance")
+
+    def test_bad_marker_not_from_current_lineage_fails_closed(self):
+        run(self.repo,"checkout","-b","independent")
+        # This branch still has the marker; remove it from history by creating
+        # an orphan branch, then the original marker is not in first-parent HEAD.
+        run(self.repo,"checkout","--orphan","foreign")
+        run(self.repo,"rm","-qr","--cached",".")
+        write(self.repo,"foreign.json",{"unrelated":True})
+        commit(self.repo,"fixture: foreign initial history")
+        with self.assertRaises(v2.NotesV2Error) as cm:
+            v2.frozen_assignment(self.repo,marker_commit=self.marker,trial_id=TRIAL,
+                                 appid=self.appid)
+        self.assertEqual(cm.exception.code,"broken_git_provenance")
 
 if __name__=="__main__":
     unittest.main()

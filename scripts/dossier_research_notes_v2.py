@@ -134,11 +134,19 @@ def _manifest(repo, marker_commit, trial_id):
         p = require_only_new(repo, marker_commit, [
             f"data/control/dossier_notes_v2/run_starts/{_marker_nonce(repo, marker_commit)}.json"])
         marker_path = git(repo, "diff-tree", "--no-commit-id", "--name-only", "-r", marker_commit).stdout.decode().strip()
+        if not first_parent_contains(repo, marker_commit, "HEAD"):
+            reject("broken_git_provenance", "V2 marker is not in current original first-parent lineage")
         marker = json_at(repo, marker_commit, marker_path)
+        if (blob(repo, "HEAD", marker_path) != blob(repo, marker_commit, marker_path)
+                or file_at(repo, "HEAD", marker_path) != file_at(repo, marker_commit, marker_path)):
+            reject("broken_git_provenance", "V2 run-start marker was changed after issuance")
         if marker != {"schema":"DOSSIER-NOTES-V2-RUN-START","schema_version":2,"nonce":_marker_nonce(repo, marker_commit),"trial_id":trial_id}:
             reject("wrong_binding", "marker contents mismatch")
         path = f"data/control/dossier_notes_v2/manifests/{trial_id}.json"
         m = json_at(repo, p, path)
+        if (blob(repo, "HEAD", path) != blob(repo, p, path)
+                or file_at(repo, "HEAD", path) != file_at(repo, p, path)):
+            reject("broken_git_provenance", "V2 frozen manifest was overwritten")
         if (not isinstance(m, dict) or set(m) != {"schema","schema_version","trial_id","original_pins","items"}
                 or m["schema"] != "DOSSIER-NOTES-V2-FROZEN-MANIFEST"
                 or m["schema_version"] != 2 or m["trial_id"] != trial_id
@@ -395,7 +403,7 @@ def prepare_assembly_transport(repo, work, document):
             "bytes":raw,"blob_sha":blob_for(raw),"raw_sha256":digest(raw),
             "canonical_acceptance":False}
 
-def item_receipt_blueprint(assignment, *, phase, disposition, source=None):
+def item_receipt_blueprint(repo, *, marker_commit, trial_id, appid, phase, disposition, source=None):
     """Typed GitHub receipt proposal, not acceptance or proof of attempt.
 
     Only a separately authorized GitHub writer may attest and persist it.
@@ -403,9 +411,8 @@ def item_receipt_blueprint(assignment, *, phase, disposition, source=None):
     c = _contract()
     if phase not in ("research","assembly") or disposition not in c["receipts"]:
         reject("wrong_binding", "unsupported per-item receipt disposition")
-    if not isinstance(assignment, dict) or not HEX40.fullmatch(
-            str(assignment.get("marker_commit", ""))):
-        reject("wrong_binding", "unbound receipt")
+    assignment = frozen_assignment(repo, marker_commit=marker_commit,
+                                   trial_id=trial_id, appid=appid)
     doc = {"schema":"DOSSIER-NOTES-V2-ITEM-RECEIPT",
            "schema_version":2,"trial_id":assignment["trial_id"],
            "appid":assignment["appid"],"assignment":assignment,
@@ -467,7 +474,10 @@ def verify_independent_reviewers(appointments, authenticated_lookup, director_ap
     ids = []
     for role in ("A","B","C"):
         row = appointments[role]
-        if not isinstance(row, dict) or set(row) != {"login","github_id","appointment_ref"}:
+        if (not isinstance(row, dict) or set(row) != {"login","github_id","appointment_ref"}
+                or not isinstance(row["login"], str)
+                or type(row["github_id"]) is not int or row["github_id"] <= 0
+                or not isinstance(row["appointment_ref"], str) or not row["appointment_ref"]):
             reject("wrong_binding", "reviewer appointment requires bound authenticated identity")
         observed = authenticated_lookup(row["login"])
         if not isinstance(observed, dict) or observed.get("login","").casefold() != row["login"].casefold() or observed.get("id") != row["github_id"]:
