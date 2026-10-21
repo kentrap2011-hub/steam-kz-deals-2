@@ -1022,3 +1022,15 @@ A canonical Dossier/profile/work/repository write that lands **before** the mark
 
 **Основные места:** `config/progressive_pass2_contract.json#score_explainability.migration`, `scripts/progressive_pass2.py::score_explainability_work_and_metrics`, `scripts/build_progressive_pass2_work.py::build_work_document`, `scripts/test_deep_score_evidence_explainability.py`.
 
+
+---
+
+## DOSSIER-NOTES-V2-001 — safety-only first boundary and independent final Assembly
+
+**Date:** 2026-10-21. **Decision:** inactive implementation proposal, draft PR #239, not production authority.
+
+**Problem:** old V1 Research requires a nearly complete schema (12 dimensions, source roles and year) before Assembly; correct but sparse findings are rejected for format/sufficiency, while Assembly is blocked from independent fact-checking outside named Research gaps. PR #235 documents the mismatch; the strict V1 adapter suggested by PR #234 would reproduce the wrong semantic intermediate gate. PR #232 additionally derives typed Git submission order from a mutable ready list, invalidating valid second publications.
+
+**Choice:** keep immutable V1 historical bytes and existing strict final Dossier/group writer. Create separately versioned `DOSSIER-RESEARCH-NOTES-V2` in a new inactive namespace. GitHub issues a new finite original-six-group marker/manifest and alone checks assignment, privacy, safe locator, single-add Git proof and receipts; sparse Research is transmitted without semantic acceptance. Assembly is the **second and last** semantic stage: it independently verifies/augments notes, records conflict/source provenance and either submits a strict final V2 candidate or honest typed terminal outcome. GitHub still performs strict final validation and atomic existing three-game acceptance. No third agent, forced 12-dimension Stage1 serializer, retry loop, state/production change, scheduled task or reuse of old marker.
+
+**Compat/risk:** preserve V1 routing and contract hashes; the V2 typed-prefix guard is based on original frozen authorized order, never transient ready statuses. Actual reviewer independence needs authenticated GitHub account resolution and Director approval, not regex. Synthetic passing CI is not semantic accuracy, publication authorization or PR #232 merge eligibility. Future V2 issuer/receipt persistence/real writer integration require independent QA and explicit separate approval. Implementation: `config/dossier_research_notes_v2_contract.json`, `scripts/dossier_research_notes_v2.py`, V2 schemas/prompt and PR-only tests in draft PR #239.
