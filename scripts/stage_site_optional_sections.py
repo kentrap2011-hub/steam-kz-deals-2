@@ -48,6 +48,26 @@ def check_core(root: Path) -> tuple[str, str]:
         raise ValueError("Client-side source/commercial recalculation forbidden")
     if not isinstance(payload.get("items"), list):
         raise ValueError("Missing canonical paid items list")
+    if type(payload.get("schema_version")) is not int or payload["schema_version"] < 1:
+        raise ValueError("Invalid canonical visual schema version")
+    seen = set()
+    for index, item in enumerate(payload["items"]):
+        if not isinstance(item, dict):
+            raise ValueError(f"Invalid canonical paid item at index {index}")
+        identity = item.get("id")
+        if not isinstance(identity, (str, int)) or isinstance(identity, bool) or not str(identity).strip():
+            raise ValueError(f"Missing canonical paid identity at index {index}")
+        identity = str(identity)
+        if identity in seen:
+            raise ValueError(f"Duplicate canonical paid identity: {identity}")
+        seen.add(identity)
+        for field, minimum, maximum in (("current_price_rub", 0, None), ("discount_percent", 0, 100)):
+            value = item.get(field)
+            if not isinstance(value, (int, float)) or isinstance(value, bool):
+                raise ValueError(f"Invalid canonical paid {field} for {identity}")
+            import math
+            if not math.isfinite(value) or value < minimum or (maximum is not None and value > maximum):
+                raise ValueError(f"Out-of-range canonical paid {field} for {identity}")
     # Staging may not modify ANY field in canonical paid/giveaway JSON; Git blob
     # identity and freshness receipt are verified against this exact file.
     ok, blob = invoke(root, "git", "rev-parse", "HEAD:data/production/visual/current.json")
