@@ -3485,3 +3485,23 @@ No blocking structural issue was found. Architecture cleanup recommendations rem
 ## Proactive Project Auditor — standing role
 Protocol:
 `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`
+
+
+## DIRECTOR AUTHORIZATION UPDATE — 2026-10-21 (supersedes older ON HOLD for new V2 only)
+
+### AUTHORIZED_READY_FOR_WORKER — Research Notes V2 → autonomous Assembly IMPLEMENT
+- Task ID: `research-assembly-notes-v2-autonomous-assembly-implement-01`
+- Task file: `WORKER_TASK_RESEARCH_ASSEMBLY_NOTES_V2_AUTONOMOUS_ASSEMBLY_IMPLEMENT_01.md` (in main)
+- Worker: СУЩЕСТВУЮЩИЙ ЧАТ 3, direct continuation after START BLOCKED
+- User authorization: explicitly approved implementing audit PR #235, no live semantics.
+- Dependencies: PR #235 architectural report, QA PR #232; these are read-only inputs, not merges.
+- Previous `ON HOLD` for separate PR #232-only multipublish remediation remains; it does NOT block the newly authorized versioned V2 implementation. No PR #232 merge.
+- No production, real Research/Assembly, schedules or activation.
+
+### AUTHORIZED_READY_FOR_WORKER — isolated site publication resilience IMPLEMENT
+- Task ID: `site-publication-independent-failure-isolation-implement-01`
+- Task file: `WORKER_TASK_SITE_PUBLICATION_INDEPENDENT_FAILURE_ISOLATION_IMPLEMENT_01.md`
+- Worker: НОВЫЙ ЧАТ 1, separate physical conversation after PR #236 read-only investigation
+- User authorization: explicit decision to fix unrelated checks blocking safe paid publication.
+- Dependencies: PR #236 read-only report and current site resilience/ownership contracts.
+- Critical paid-data, source and receipt gates remain fail-closed. PR-only development and independent QA before merge or Deploy.
