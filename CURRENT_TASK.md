@@ -1,5 +1,21 @@
 # CURRENT TASK
 
+## IN QA RE-REVIEW — ЧАТ 3 PR #239 QA remediation (2026-10-22)
+- Scope: two blockers from ЧАТ 2 independent review comment [#6336680554](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/239#issuecomment-6336680554), same existing `implement/research-notes-v2-autonomous-assembly-01` draft PR.
+- Fixed prospective 18-item product/name/edition/assignment trust by verifying exact original Research Git blob `c8a6b6f515162f431c0e3d86175376114c0acf7e`; V2 manifest cannot relabel AppIDs/titles/edition suffixes, original IDs or full original assignment digests.
+- Stage2 entry and 18-item traversal now isolate unsafe, malformed, wrong-binding and bad-Git Research A without preventing independently authorized B/C. Missing transport consumes no invented attempts; incomplete safe notes continue to Assembly.
+- Synthetic fixtures: swapped-title/edition/assignment with unchanged count/order refused, unsafe or invalid UTF-8 A with valid sparse B/C, status/attempt assertions. Confirm final SHA and CI via PR before independent ЧАТ 2 re-review. No real semantics/production/PR232 merge/scheduler.
+
+
+## COMPLETE — ЧАТ 3: inactive Research Notes V2 → autonomous Assembly implementation PR #239 (2026-10-21)
+
+- Task ID: `research-assembly-notes-v2-autonomous-assembly-implement-01`; START unblocked by merged Director PR #237 at `a2f734d15dddfe870927c7bd484050b73594ec10` and exact Board/registry authorization.
+- Code branch: `implement/research-notes-v2-autonomous-assembly-01`; [draft PR #239](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/239), **NOT merged, NOT activated**, independent exact-final-HEAD QA required.
+- Separate Notes V2/Git transport, immutable original six groups/18 IDs, independently exploratory Assembly, strict final validator and typed item dispositions; V1 historical code/artifacts remain unchanged. Frozen typed publish regression helper uses immutable original authorized order rather than shrinking ready statuses; **PR #232 itself is not repaired or merged**.
+- Synthetic validation: [V2 21/21 PASS at code HEAD 0e2b2a7](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39645191028). Existing eventual chain PR-only CI launched and must be rechecked at final HEAD. No real semantic data-plane run, production, scripts invoking scheduled ChatGPT, original marker, old sandbox, site, Deep/Fast/ranking or canonical writer mutation.
+- Durable handoff: `reviews/worker_reports/research-assembly-notes-v2-autonomous-assembly-implement-01.md`. Follow-up: independent QA of exact PR head and separately approved GitHub-owned live issuer/writer integration; no new semantic authorization inferred from these tests.
+
+
 ## IN REVIEW — PR #230 independent shadow Assembly QA remediation (ЧАТ 1)
 Status: `qa_remediation_code_completed_existing_draft_PR230_final_head_CI_and_independent_re_review`.
 - Task: `WORKER_TASK_DOSSIER_SHADOW_ASSEMBLY_PR230_QA_REMEDIATION_01.md`; existing draft [PR #230](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/230), branch `fix/dossier-shadow-assembly-github-python-handoff-01`, NOT merged.

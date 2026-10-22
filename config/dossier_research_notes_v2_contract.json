@@ -1,0 +1,138 @@
+{
+  "schema": "DOSSIER-RESEARCH-NOTES-V2-CONTRACT",
+  "schema_version": 2,
+  "implemented": "inactive_offline_pr_only",
+  "active": false,
+  "authoritative": false,
+  "authorized_for_semantic_execution": false,
+  "authorized_for_canonical_ingest": false,
+  "production_enabled": false,
+  "mode": "two_semantic_stages_only",
+  "owner": "github_control_plane",
+  "legacy_v1_preserved": true,
+  "strict_final_dossier_v2_required": true,
+  "notes_schema": "config/dossier_research_notes_v2.schema.json",
+  "assembly_schema": "config/dossier_autonomous_assembly_result_v2.schema.json",
+  "immutable_original_pins": {
+    "baseline": "95a4bf4990a60082ecb3302da5bc7f23b618d93e",
+    "research_marker": "bb63cc291eba5aa8fc56e2920ef84d131ac28a4f",
+    "research_authorization": "2a726cf6731c0fc1e7bc809474627383c107ef9b",
+    "assembly_marker": "2c2649fb98322507cd3758ff0ff7992128f94de0"
+  },
+  "original_groups": [
+    {
+      "group_sequence": 3,
+      "appids": [
+        "1508750",
+        "1517180",
+        "1533420"
+      ]
+    },
+    {
+      "group_sequence": 8,
+      "appids": [
+        "1590230",
+        "1599600",
+        "1607130"
+      ]
+    },
+    {
+      "group_sequence": 13,
+      "appids": [
+        "1849000",
+        "1857090",
+        "1868140"
+      ]
+    },
+    {
+      "group_sequence": 15,
+      "appids": [
+        "1999170",
+        "1999360",
+        "2009010"
+      ]
+    },
+    {
+      "group_sequence": 18,
+      "appids": [
+        "206420",
+        "2067050",
+        "2076140"
+      ]
+    },
+    {
+      "group_sequence": 20,
+      "appids": [
+        "2124120",
+        "213610",
+        "2138710"
+      ]
+    }
+  ],
+  "namespace": {
+    "frozen_manifest": "data/control/dossier_notes_v2/manifests/{trial_id}.json",
+    "frozen_marker": "data/control/dossier_notes_v2/run_starts/{nonce}.json",
+    "notes": "data/ai_inbox/dossier_notes_v2/{trial_id}/g{group_sequence:06d}/{appid}--{assignment_id}.json",
+    "assembly": "data/ai_inbox/dossier_assembly_v2/{trial_id}/g{group_sequence:06d}/{appid}--{assignment_id}.json",
+    "receipt": "data/control/dossier_notes_v2/receipts/{trial_id}/g{group_sequence:06d}/{appid}--{assignment_id}--{phase}.json"
+  },
+  "research_handoff": {
+    "allow_empty_notes": true,
+    "allow_zero_sources": true,
+    "require_release_year": false,
+    "require_twelve_dimensions": false,
+    "require_research_acceptance": false,
+    "github_checks": [
+      "safe_utf8_json",
+      "exact_frozen_assignment",
+      "no_private_raw_review_material",
+      "safe_public_locators",
+      "single_parent_one_add_git_introduction",
+      "original_blob_and_raw_digest",
+      "exact_marker_ancestry"
+    ]
+  },
+  "assembly": {
+    "independent_source_discovery": true,
+    "can_correct_research_facts": true,
+    "required_named_gap_id": false,
+    "mandatory_exact_source_revisit": false,
+    "max_mechanical_self_corrections": 2,
+    "no_retry_between_invocations": true,
+    "strict_final_validation": "scripts/taste_steam_review_dossier_strict.py",
+    "group_acceptance": "existing_atomic_three_game_writer_only"
+  },
+  "attempts": "transport refusal proves no acceptance but not worker attempt history; report attempt state unknown unless GitHub attests execution",
+  "reviewer_authorization": "real GitHub identity lookup + owner-confirmed separate appointment required; regex-only forbidden",
+  "receipts": [
+    "safe_incomplete_research",
+    "missing_research_transport",
+    "wrong_binding",
+    "unsafe_material",
+    "unparseable",
+    "broken_git_provenance",
+    "assembly_missing_evidence",
+    "assembly_semantic_conflict",
+    "runtime_or_tool_interrupted",
+    "assembly_technical_error",
+    "final_strict_or_group_rejected",
+    "strict_item_valid_pending_existing_atomic_group_ingest"
+  ],
+  "forbidden": [
+    "actual_semantic_execution",
+    "automatic_retry",
+    "production_writes",
+    "scheduled_tasks",
+    "cross_v1_rebinding",
+    "canonical_ingest_without_separate_authority"
+  ],
+  "item_receipt_schema": "config/dossier_notes_v2_item_receipt.schema.json",
+  "original_research_identity_authority": {
+    "original_marker_commit": "bb63cc291eba5aa8fc56e2920ef84d131ac28a4f",
+    "original_buffer_path": "reviews/dossier_shadow_offline/trials/dossier-shadow-calibration-20261011-6x3/research_buffer.json",
+    "original_buffer_git_blob_sha": "c8a6b6f515162f431c0e3d86175376114c0acf7e",
+    "byte_identical_local_snapshot": "config/dossier_notes_v2_pinned_original_research_buffer_v1.json",
+    "original_assignment_binding": "exact all 18 original assignment fields including title, source, group hash, original unique assignment_id; not free-text or new candidate assertions",
+    "edition_policy": "frozen exact original title including edition qualifier is authoritative; no independent alias, edition substitution or reassigned product permitted"
+  }
+}

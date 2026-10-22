@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DOSSIER-RESEARCH-NOTES-V2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "assignment",
+    "notes_text",
+    "source_log",
+    "research_status"
+  ],
+  "properties": {
+    "schema": {
+      "const": "DOSSIER-RESEARCH-NOTES-V2"
+    },
+    "schema_version": {
+      "const": 2
+    },
+    "assignment": {
+      "type": "object"
+    },
+    "notes_text": {
+      "type": "string",
+      "maxLength": 1200
+    },
+    "unknowns_text": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1200
+    },
+    "conflicts_text": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1200
+    },
+    "research_status": {
+      "enum": [
+        "notes_recorded",
+        "limited_evidence",
+        "no_verifiable_findings",
+        "tool_interrupted"
+      ]
+    },
+    "source_log": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "locator",
+          "access",
+          "observation"
+        ],
+        "properties": {
+          "locator": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": [
+                  "url"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "minLength": 9,
+                    "maxLength": 600
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "required": [
+                  "public_ref"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "public_ref": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 200
+                  }
+                }
+              }
+            ]
+          },
+          "access": {
+            "enum": [
+              "opened",
+              "inspected_collection",
+              "search_result_only",
+              "unvisited_reference",
+              "unknown"
+            ]
+          },
+          "observation": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "observed_at_utc": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 30
+          }
+        }
+      }
+    }
+  }
+}
