@@ -1,18 +1,8 @@
 name: Validate site task registry and page
 
 on:
+  # Required checks must run for every PR, including non-task code changes.
   pull_request:
-    paths:
-      - 'DIRECTOR_TASK_BOARD.md'
-      - 'config/director_task_plan.json'
-      - 'config/deep_two_stage_dependency_map.json'
-      - 'scripts/build_site_tasks.py'
-      - 'scripts/test_site_tasks.py'
-      - 'web/tasks*'
-      - 'web/index.html'
-      - 'web/styles.css'
-      - '.github/workflows/deploy-visual.yml'
-      - '.github/workflows/validate-site-tasks-page.yml'
   workflow_dispatch:
 
 permissions:
