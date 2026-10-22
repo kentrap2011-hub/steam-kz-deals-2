@@ -1457,34 +1457,34 @@
       "depends_on": [
         "dossier-shadow-18-assembly-compare-sandbox-01"
       ],
-      "blocker": "PR #230 merged into main on 2026-10-20 (d543337e3613bc0542b7a89018ff980e9b2189a3). No live Assembly or manual publish authorized.",
+      "blocker": "изменение №230 merged into main on 2026-10-20 (d543337e3613bc0542b7a89018ff980e9b2189a3). No live Assembly or manual publish authorized.",
       "updated_on": "2026-10-20",
       "updated_at_utc": "2026-10-20T11:09:30.133Z",
       "recent_completion": false
     },
     {
       "id": "dossier-shadow-assembly-pr230-security-review-01",
-      "title": "Dossier: независимая проверка безопасности PR #230",
-      "goal": "Проверить изолированный GitHub-Python путь inspect→typed handoff→Assembly publish, права, неизменность Git, порядок, гонки и защиту production; сохранить вердикт в комментарии PR #230.",
+      "title": "Dossier: независимая проверка безопасности изменение №230",
+      "goal": "Проверить изолированный GitHub-Python путь inspect→typed handoff→Assembly publish, права, неизменность Git, порядок, гонки и защиту production; сохранить вердикт в комментарии изменение №230.",
       "status": "complete",
       "effort": "низкая",
       "effort_reason": "Ограниченный аудит семи изменённых файлов и уже выполненных Python CI, без повторного Research/Assembly.",
       "urgency": "высокая",
-      "urgency_reason": "Блокирует решение о слиянии PR #230 и запуске испытания Assembly.",
+      "urgency_reason": "Блокирует решение о слиянии изменение №230 и запуске испытания Assembly.",
       "task_file": "WORKER_TASK_DOSSIER_SHADOW_ASSEMBLY_PR230_SECURITY_REVIEW_01.md",
       "worker_slot": "ЧАТ 2",
       "order": null,
       "depends_on": [
         "dossier-shadow-assembly-github-python-handoff-fix-01"
       ],
-      "blocker": "PR #230 merged into main on 2026-10-20 (d543337e3613bc0542b7a89018ff980e9b2189a3). No live Assembly or manual publish authorized.",
+      "blocker": "изменение №230 merged into main on 2026-10-20 (d543337e3613bc0542b7a89018ff980e9b2189a3). No live Assembly or manual publish authorized.",
       "updated_on": "2026-10-20",
       "updated_at_utc": "2026-10-20T11:09:30.133Z",
       "recent_completion": false
     },
     {
       "id": "dossier-shadow-assembly-pr230-qa-remediation-01",
-      "title": "Dossier: устранить замечания безопасности к PR #230",
+      "title": "Dossier: устранить замечания безопасности к изменение №230",
       "goal": "В прежнем draft PR устранить блокировку независимых игр, защитить неизменяемый Python/schema, ветки и права публикации, пройти финальный CI.",
       "status": "complete",
       "effort": "средняя",
@@ -1498,15 +1498,15 @@
         "dossier-shadow-assembly-github-python-handoff-fix-01",
         "dossier-shadow-assembly-pr230-security-review-01"
       ],
-      "blocker": "PR #230 merged into main on 2026-10-20 (d543337e3613bc0542b7a89018ff980e9b2189a3). No live Assembly or manual publish authorized.",
+      "blocker": "изменение №230 merged into main on 2026-10-20 (d543337e3613bc0542b7a89018ff980e9b2189a3). No live Assembly or manual publish authorized.",
       "updated_on": "2026-10-20",
       "updated_at_utc": "2026-10-20T11:09:30.133Z",
       "recent_completion": true
     },
     {
       "id": "dossier-shadow-assembly-pr230-post-remediation-qa-01",
-      "title": "Dossier: независимая повторная QA PR #230",
-      "goal": "Проверить устранение семи замечаний к PR #230 на итоговом SHA и сохранить независимый вердикт в комментарии PR.",
+      "title": "Dossier: независимая повторная QA изменение №230",
+      "goal": "Проверить устранение семи замечаний к изменение №230 на итоговом SHA и сохранить независимый вердикт в комментарии PR.",
       "status": "complete",
       "effort": "средняя",
       "effort_reason": "Независимая проверка GitHub-кода, прав, provenance и тестов по 7 критериям.",
@@ -1518,7 +1518,7 @@
       "depends_on": [
         "dossier-shadow-assembly-pr230-qa-remediation-01"
       ],
-      "blocker": "PR #230 merged into main on 2026-10-20 (d543337e3613bc0542b7a89018ff980e9b2189a3). No live Assembly or manual publish authorized.",
+      "blocker": "изменение №230 merged into main on 2026-10-20 (d543337e3613bc0542b7a89018ff980e9b2189a3). No live Assembly or manual publish authorized.",
       "updated_on": "2026-10-20",
       "recent_completion": true,
       "updated_at_utc": "2026-10-20T11:09:30.133Z"
@@ -1599,7 +1599,7 @@
       "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_INDEPENDENT_EXECUTION_PREFLIGHT_01.md",
       "worker_slot": "ЧАТ 2",
       "depends_on": [],
-      "blocker": "Independent Chat 2 QA of draft PR #232: CHANGES_REQUIRED (see PR #232 comment). Await developer correction to stable typed historical order after first publication, then re-review exact new HEAD."
+      "blocker": "Independent Chat 2 QA of draft изменение №232: CHANGES_REQUIRED (see изменение №232 comment). Await developer correction to stable typed historical order after first publication, then re-review exact new HEAD."
     },
     {
       "id": "dossier-shadow-18-six-research-gaps-recon-01",
@@ -1609,12 +1609,12 @@
       "effort": "средняя",
       "effort_reason": "Точечная forensic-сверка двух опубликованных Research пакетов, четырёх отсутствующих и исходного Git provenance, без semantic execution.",
       "urgency": "обычная",
-      "urgency_reason": "Не блокирует Assembly 12 готовых, но нужно для достижения исходных 18 и позднего сравнения A/B/C; выполняется параллельно с QA PR #232.",
+      "urgency_reason": "Не блокирует Assembly 12 готовых, но нужно для достижения исходных 18 и позднего сравнения A/B/C; выполняется параллельно с QA изменение №232.",
       "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_SIX_RESEARCH_GAPS_RECON_01.md",
       "worker_slot": "ЧАТ 1",
       "order": null,
       "depends_on": [],
-      "blocker": "RECON_PARTIAL_BLOCKED: PR #233 proved two invalid Research packets and four absent transports; attempt history unknown. Recovery requires separate authorization; no retries or semantics permitted.",
+      "blocker": "RECON_PARTIAL_BLOCKED: изменение №233 proved two invalid Research packets and four absent transports; attempt history unknown. Recovery requires separate authorization; no retries or semantics permitted.",
       "recent_completion": false,
       "updated_on": "2026-10-20",
       "updated_at_utc": "2026-10-20T12:52:06Z"
@@ -1622,7 +1622,7 @@
     {
       "id": "dossier-shadow-18-pr232-multipublish-prefix-remediation-01",
       "title": "Dossier PR232 — исправить ошибку второй и последующих публикаций Assembly",
-      "goal": "На существующем PR #232 устранить shrinking-ready-list при проверке исторического typed prefix, доказать два последовательных sandbox publish и сохранить GitHub per-AppID безопасность, затем отправить на повторный независимый QA.",
+      "goal": "На существующем изменение №232 устранить shrinking-ready-list при проверке исторического typed prefix, доказать два последовательных sandbox publish и сохранить GitHub per-AppID безопасность, затем отправить на повторный независимый QA.",
       "status": "planned",
       "effort": "средняя",
       "effort_reason": "Точечная корректировка валидатора префикса, сценарии жизненного цикла и тесты без изменения исторических границ.",
@@ -1634,7 +1634,7 @@
       "depends_on": [
         "dossier-shadow-18-six-research-gaps-recon-01"
       ],
-      "blocker": "ON HOLD by Director/user Stage 1 redesign priority: do not launch ЧАТ 3 or merge PR #232 before Stage 1 Research contract impact/compatibility review. Existing QA blocker still applies.",
+      "blocker": "ON HOLD by Director/user Stage 1 redesign priority: do not launch ЧАТ 3 or merge изменение №232 before Stage 1 Research contract impact/compatibility review. Existing QA blocker still applies.",
       "recent_completion": false,
       "updated_on": "2026-10-20",
       "updated_at_utc": "2026-10-20T15:14:00Z"
