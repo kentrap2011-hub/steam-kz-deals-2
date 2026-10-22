@@ -122,6 +122,48 @@ class SiteTasksTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, expected_error):
                     self.build(plan)
 
+    def test_registry_diagnostic_identifies_valid_id_and_schema_fields(self):
+        """Keep useful strict-schema diagnostics for a validated, safe task ID."""
+        for change, detail in (
+            ("missing", "missing=['recent_completion']"),
+            ("extra", "extra=['unexpected_setting']"),
+        ):
+            with self.subTest(change=change):
+                plan = copy.deepcopy(self.plan)
+                item = plan["items"][0]
+                valid_id = item["id"]
+                if change == "missing":
+                    item.pop("recent_completion")
+                else:
+                    item["unexpected_setting"] = "invalid"
+                with self.assertRaisesRegex(ValueError, "Unexpected/omitted task registry fields") as caught:
+                    self.build(plan)
+                self.assertIn(f"for {valid_id}:", str(caught.exception))
+                self.assertIn(detail, str(caught.exception))
+
+    def test_registry_diagnostic_never_prints_unvalidated_id(self):
+        """An invalid ID must not inject Actions annotations or raw control characters."""
+        malicious_id = "untrusted\n::error title=INJECTED::bad\r\x1b[31m"
+        for bad_schema in (True, False):
+            with self.subTest(bad_schema=bad_schema):
+                plan = copy.deepcopy(self.plan)
+                item = plan["items"][0]
+                item["id"] = malicious_id
+                if bad_schema:
+                    item.pop("recent_completion")
+                with self.assertRaises(ValueError) as caught:
+                    self.build(plan)
+                diagnostic = str(caught.exception)
+                self.assertIn("<invalid-id>", diagnostic)
+                self.assertNotIn(malicious_id, diagnostic)
+                self.assertNotIn("::error", diagnostic)
+                self.assertNotIn("INJECTED", diagnostic)
+                self.assertNotIn("\n", diagnostic)
+                self.assertNotIn("\r", diagnostic)
+                self.assertNotIn("\x1b", diagnostic)
+                if bad_schema:
+                    self.assertIn("missing=['recent_completion']", diagnostic)
+
     def test_completed_registry_entries_survive_recent_display_eviction(self):
         """Public titles preserve all canonical task identities, even when hidden by the cap."""
         payload = self.build()
