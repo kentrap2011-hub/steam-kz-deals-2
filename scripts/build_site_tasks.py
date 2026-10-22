@@ -64,12 +64,20 @@ def validate_plan(plan, board_text, dependency_map, *, verify_task_files=True):
 
     ids, files, orders = set(), set(), set()
     for item in items:
-        if not isinstance(item, dict) or set(item) != {
+        required_fields = {
             "id", "title", "goal", "status", "effort", "effort_reason", "urgency",
             "urgency_reason", "task_file", "worker_slot", "order", "depends_on",
             "blocker", "updated_on", "updated_at_utc", "recent_completion"
-        }:
-            raise ValueError("Unexpected/omitted task registry fields")
+        }
+        if not isinstance(item, dict):
+            raise ValueError("Task registry item must be an object")
+        if set(item) != required_fields:
+            missing = sorted(required_fields - set(item))
+            extra = sorted(set(item) - required_fields)
+            raise ValueError(
+                f"Unexpected/omitted task registry fields for {item.get('id', '<missing-id>')}: "
+                f"missing={missing} extra={extra}"
+            )
         tid = item["id"]
         if not isinstance(tid, str) or not re.fullmatch(r"[a-z0-9-]{3,64}", tid) or tid in ids:
             raise ValueError(f"Duplicate or invalid task ID: {tid}")
