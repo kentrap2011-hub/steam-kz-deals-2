@@ -39,12 +39,9 @@ class NotesV2Tests(unittest.TestCase):
         run(self.repo,"init","-q")
         run(self.repo,"config","user.name","Synthetic Fixture")
         run(self.repo,"config","user.email","synthetic@example.invalid")
-        rows=[]
-        for g in C["original_groups"]:
-            for i,appid in enumerate(g["appids"]):
-                rows.append({"group_sequence":g["group_sequence"],"item_index":i,
-                             "appid":appid,"title":"Synthetic title "+appid,
-                             "assignment_id":"assignment-"+appid})
+        # Exact historical title, edition qualifier, Research assignment and
+        # original work SHA are anchored by the authentic original Git blob.
+        rows=copy.deepcopy(v2._original_rows())
         self.manifest={"schema":"DOSSIER-NOTES-V2-FROZEN-MANIFEST",
                        "schema_version":2,"trial_id":TRIAL,
                        "original_pins":C["immutable_original_pins"],"items":rows}
@@ -197,6 +194,8 @@ class NotesV2Tests(unittest.TestCase):
         all_appids=[a for g in C["original_groups"] for a in g["appids"]]
         self.assertEqual(len(all_appids),18)
         self.assertEqual(len(set(all_appids)),18)
+        self.assertEqual(v2._original_rows()[1]["title"],"Mindcop")
+        self.assertEqual(v2._original_rows()[12]["title"],"Saints Row IV: Re-Elected")
         group=C["original_groups"][0]
         full={a:"strict_item_valid_pending_existing_atomic_group_ingest" for a in group["appids"]}
         self.assertTrue(v2.original_group_readiness(3,full)["strict_three_ready"])
@@ -298,6 +297,101 @@ class NotesV2Tests(unittest.TestCase):
             v2.frozen_assignment(self.repo,marker_commit=self.marker,trial_id=TRIAL,
                                  appid=self.appid)
         self.assertEqual(cm.exception.code,"broken_git_provenance")
+
+
+    def test_wrong_title_edition_and_original_assignment_with_right_appids_fail(self):
+        baseline=copy.deepcopy(self.manifest["items"])
+        # All 18 identifiers and original pins are unchanged. Relabel only one.
+        for field, replacement in (
+                ("title","Totally Different Game"),
+                ("title","Saints Row IV: Generic Edition"),
+                ("assignment_id","shadow-03-1517180-forged"),
+                ("original_assignment_sha256","0"*64)):
+            rows=copy.deepcopy(baseline)
+            i=12 if replacement.startswith("Saints Row") else 1
+            rows[i][field]=replacement
+            with self.subTest(field=field,replacement=replacement):
+                with self.assertRaises(v2.NotesV2Error) as ctx:
+                    v2.manifest_blueprint(TRIAL,rows)
+                self.assertEqual(ctx.exception.code,"wrong_binding")
+                # Reject even when a poisoned Git marker/manifest is published.
+                tampered=copy.deepcopy(self.manifest)
+                tampered["items"]=rows
+                with tempfile.TemporaryDirectory() as td:
+                    repo=Path(td)
+                    run(repo,"init","-q")
+                    run(repo,"config","user.name","Synthetic Fixture")
+                    run(repo,"config","user.email","synthetic@example.invalid")
+                    write(repo,f"data/control/dossier_notes_v2/manifests/{TRIAL}.json",tampered)
+                    commit(repo,"fixture: forged original work identity")
+                    write(repo,f"data/control/dossier_notes_v2/run_starts/{NONCE}.json",
+                         {"schema":"DOSSIER-NOTES-V2-RUN-START","schema_version":2,
+                          "nonce":NONCE,"trial_id":TRIAL})
+                    marker=commit(repo,"fixture: marker")
+                    with self.assertRaises(v2.NotesV2Error):
+                        v2.frozen_assignment(repo,marker_commit=marker,trial_id=TRIAL,
+                                             appid=rows[i]["appid"])
+
+    def test_unsafe_corrupt_a_cannot_stop_valid_b_and_c(self):
+        group=C["original_groups"][0]
+        commits={}
+        for index,appid in enumerate(group["appids"]):
+            assignment=v2.frozen_assignment(
+                self.repo,marker_commit=self.marker,trial_id=TRIAL,appid=appid)
+            note={"schema":"DOSSIER-RESEARCH-NOTES-V2","schema_version":2,
+                  "assignment":assignment,"notes_text":"",
+                  "source_log":[],"research_status":"no_verifiable_findings"}
+            if index==0:
+                note["source_log"]=[{"locator":{"url":"https://127.0.0.1/secret"},
+                                     "access":"opened","observation":"unsafe"}]
+            write(self.repo,v2._path("research",assignment),note)
+            commits[appid]=commit(self.repo,"fixture: original item "+appid)
+        rows=v2.frozen_assembly_traversal(
+            self.repo,marker_commit=self.marker,trial_id=TRIAL,research_commits=commits)
+        self.assertEqual(len(rows),18)
+        self.assertEqual([r["appid"] for r in rows[:3]],group["appids"])
+        self.assertEqual(rows[0]["status"],"unsafe_material")
+        self.assertTrue(rows[0]["item_local_only"])
+        self.assertEqual(rows[0]["attempt_state"],"unknown")
+        self.assertFalse(rows[0]["canonical_acceptance"])
+        for row in rows[1:3]:
+            self.assertEqual(row["status"],"ready_for_autonomous_assembly")
+            self.assertFalse(row["canonical_acceptance"])
+        self.assertEqual(rows[3]["status"],"missing_research_transport")
+        self.assertEqual(rows[3]["attempt_state"],"unknown")
+        self.assertEqual(rows[-1]["appid"],C["original_groups"][-1]["appids"][-1])
+        self.assertEqual([r["status"] for r in rows].count("ready_for_autonomous_assembly"),2)
+        self.assertEqual([r["status"] for r in rows].count("missing_research_transport"),15)
+
+    def test_invalid_binding_and_git_proof_are_item_local_at_assembly_entry(self):
+        for kind in ("wrong_binding","broken_git_provenance"):
+            with self.subTest(kind=kind):
+                with tempfile.TemporaryDirectory() as td:
+                    repo=Path(td)
+                    run(repo,"init","-q")
+                    run(repo,"config","user.name","Synthetic Fixture")
+                    run(repo,"config","user.email","synthetic@example.invalid")
+                    write(repo,f"data/control/dossier_notes_v2/manifests/{TRIAL}.json",self.manifest)
+                    commit(repo,"fixture: immutable manifest")
+                    write(repo,f"data/control/dossier_notes_v2/run_starts/{NONCE}.json",
+                         {"schema":"DOSSIER-NOTES-V2-RUN-START","schema_version":2,"nonce":NONCE,"trial_id":TRIAL})
+                    marker=commit(repo,"fixture: marker")
+                    assignment=v2.frozen_assignment(repo,marker_commit=marker,
+                                                   trial_id=TRIAL,appid="1508750")
+                    note={"schema":"DOSSIER-RESEARCH-NOTES-V2","schema_version":2,
+                          "assignment":assignment,"notes_text":"","source_log":[],
+                          "research_status":"no_verifiable_findings"}
+                    if kind=="wrong_binding":
+                        note["assignment"]["title"]="unrelated game"
+                    write(repo,v2._path("research",assignment),note)
+                    if kind=="broken_git_provenance":
+                        write(repo,"extra-unrelated.txt",{"extra":True})
+                    commitsha=commit(repo,"fixture: failed Research")
+                    item=v2.assembly_work(repo,marker_commit=marker,trial_id=TRIAL,
+                                          appid="1508750",research_commit=commitsha)
+                    self.assertEqual(item["status"],kind)
+                    self.assertTrue(item["item_local_only"])
+                    self.assertEqual(item["attempt_state"],"unknown")
 
 if __name__=="__main__":
     unittest.main()

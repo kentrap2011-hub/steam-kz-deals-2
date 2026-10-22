@@ -25,6 +25,7 @@ from taste_steam_review_dossier_strict import validate_dossier_strict
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "config"
 CONTRACT_PATH = CONFIG / "dossier_research_notes_v2_contract.json"
+ORIGINAL_BUFFER_PATH = CONFIG / "dossier_notes_v2_pinned_original_research_buffer_v1.json"
 HEX40 = re.compile(r"^[a-f0-9]{40}$")
 NONCE = re.compile(r"^[a-f0-9]{32}$")
 TRIAL = re.compile(r"^[a-z0-9][a-z0-9-]{7,99}$")
@@ -126,6 +127,62 @@ def _validate_sources(rows):
             if not re.fullmatch(r"\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ", row["observed_at_utc"]):
                 reject("unparseable", "source timestamp must be UTC or null")
 
+
+def _original_rows():
+    """Verify an exact byte-for-byte Git blob copy of the original 18-game buffer.
+
+    The SHA is pinned in the separate V2 contract to the actual immutable
+    original Research marker's source blob. No test-generated or worker-edited
+    product title, edition suffix, assignment identity or original source
+    binding can replace the frozen original item.
+    """
+    c = _contract()
+    pin = c["original_research_identity_authority"]
+    if (pin["original_marker_commit"] != c["immutable_original_pins"]["research_marker"]
+            or pin["original_buffer_git_blob_sha"] != "c8a6b6f515162f431c0e3d86175376114c0acf7e"
+            or pin["byte_identical_local_snapshot"] !=
+               "config/dossier_notes_v2_pinned_original_research_buffer_v1.json"):
+        reject("wrong_binding", "original Research provenance constants differ")
+    try:
+        raw = ORIGINAL_BUFFER_PATH.read_bytes()
+    except OSError as exc:
+        reject("broken_git_provenance", "original immutable source not readable: "+str(exc))
+    if blob_for(raw) != pin["original_buffer_git_blob_sha"]:
+        reject("broken_git_provenance", "pinned original Research Git blob changed")
+    try:
+        source = strict_json(raw)
+    except (ValueError, UnicodeDecodeError) as exc:
+        reject("broken_git_provenance", "original frozen buffer invalid: "+str(exc))
+    if (source.get("source_head") != c["immutable_original_pins"]["baseline"]
+            or source.get("trial_id") != "dossier-shadow-calibration-20261011-6x3"
+            or not isinstance(source.get("items"), list)
+            or len(source["items"]) != 18):
+        reject("wrong_binding", "original Research Git buffer or trial identity mismatch")
+    group_pins = {g["sequence"]:g for g in source["groups"]}
+    expected = [(g["group_sequence"], i, appid)
+                for g in c["original_groups"] for i, appid in enumerate(g["appids"])]
+    rows = []
+    for item in source["items"]:
+        original = item["assignment"]
+        group = item["group_sequence"]
+        if (item["appid"] != original["appid"]
+                or item["item_index"] != original["item_index"]
+                or group != original["group_sequence"]
+                or original["group_sha256"] != group_pins[group]["group_sha256"]
+                or item["appid"] not in group_pins[group]["appids"]):
+            reject("wrong_binding", "inconsistent original work, source or group")
+        # Deliberately do NOT bind old_year: it may be wrong (Sifu 2022/2023).
+        # The title, including any edition suffix, is the original bound work.
+        rows.append({
+            "group_sequence":group, "item_index":item["item_index"],
+            "appid":item["appid"], "title":original["title"],
+            "assignment_id":original["assignment_id"],
+            "original_assignment_sha256":digest(_canonical(original)),
+        })
+    if [(r["group_sequence"], r["item_index"], r["appid"]) for r in rows] != expected:
+        reject("wrong_binding", "original 18 Git-pinned item identities/order differ")
+    return rows
+
 def _manifest(repo, marker_commit, trial_id):
     c = _contract()
     if not TRIAL.fullmatch(str(trial_id)) or not HEX40.fullmatch(str(marker_commit)):
@@ -152,17 +209,8 @@ def _manifest(repo, marker_commit, trial_id):
                 or m["schema_version"] != 2 or m["trial_id"] != trial_id
                 or m["original_pins"] != c["immutable_original_pins"]):
             reject("wrong_binding", "incorrect frozen GitHub manifest/pins")
-        expected = [(g["group_sequence"], i, a) for g in c["original_groups"] for i,a in enumerate(g["appids"])]
-        actual = []
-        for row in m["items"]:
-            if (not isinstance(row, dict) or set(row) != {"group_sequence","item_index","appid","title","assignment_id"}
-                or not isinstance(row["title"], str) or not row["title"].strip()
-                or len(row["title"]) > 160
-                or not ASSIGNMENT.fullmatch(str(row["assignment_id"]))):
-                reject("wrong_binding", "invalid frozen AppID/title/assignment row")
-            actual.append((row["group_sequence"], row["item_index"], row["appid"]))
-        if actual != expected or len({r["assignment_id"] for r in m["items"]}) != 18:
-            reject("wrong_binding", "original six triples / eighteen AppIDs changed or duplicated")
+        if m["items"] != _original_rows():
+            reject("wrong_binding", "title, edition, assignment ID or source binding differs from original frozen Git buffer")
         return m, blob(repo, p, path)
     except NotesV2Error:
         raise
@@ -254,8 +302,9 @@ def classify_research(repo, *, marker_commit, trial_id, appid, introduction_comm
                 "item_local_only":True,"attempt_state":"unknown","canonical_acceptance":False}
 
 def assembly_work(repo, *, marker_commit, trial_id, appid, research_commit):
-    transport = submitted_research(repo, marker_commit=marker_commit, trial_id=trial_id,
-                                   appid=appid, introduction_commit=research_commit)
+    # Stage 2 is a per-item boundary: bad A may not abort B/C.
+    transport = classify_research(repo, marker_commit=marker_commit, trial_id=trial_id,
+                                  appid=appid, introduction_commit=research_commit)
     if transport["status"] != "safe_incomplete_research":
         return transport
     a = transport["assignment"]
@@ -267,6 +316,28 @@ def assembly_work(repo, *, marker_commit, trial_id, appid, research_commit):
             "output_path":_path("assembly", a),
             "source_notes_are_unverified_leads":True,"may_independently_discover":True,
             "max_mechanical_corrections":2,"canonical_acceptance":False}
+
+
+def frozen_assembly_traversal(repo, *, marker_commit, trial_id, research_commits):
+    """Classify all original 18 independently, preserving immutable order.
+
+    GitHub supplies only committed transport SHAs. No semantics, retries,
+    preauthorization or implicit work claims are performed here.
+    """
+    m, _ = _manifest(repo, marker_commit, trial_id)
+    appids = [row["appid"] for row in m["items"]]
+    if (not isinstance(research_commits, dict)
+            or any(appid not in appids for appid in research_commits)):
+        reject("wrong_binding", "unknown AppID in Research transport table")
+    rows = []
+    for a in m["items"]:
+        appid = a["appid"]
+        result = assembly_work(repo, marker_commit=marker_commit, trial_id=trial_id,
+                               appid=appid, research_commit=research_commits.get(appid))
+        rows.append({"group_sequence":a["group_sequence"],
+                     "item_index":a["item_index"],"appid":appid,
+                     **result})
+    return rows
 
 def candidate_assembly(work, *, outcome, final_dossier=None, operations=None,
                        mechanical_corrections=None, diagnostic=None):
@@ -349,19 +420,8 @@ def manifest_blueprint(trial_id, prepared_rows):
     c = _contract()
     if not TRIAL.fullmatch(str(trial_id)) or not isinstance(prepared_rows, list):
         reject("wrong_binding", "invalid future GitHub trial or prepared rows")
-    expected = [(g["group_sequence"], i, a)
-                for g in c["original_groups"] for i, a in enumerate(g["appids"])]
-    seen = []
-    for r in prepared_rows:
-        if (not isinstance(r, dict) or set(r) !=
-                {"group_sequence", "item_index", "appid", "title", "assignment_id"}
-                or not isinstance(r["title"], str) or not r["title"].strip()
-                or len(r["title"]) > 160
-                or not ASSIGNMENT.fullmatch(str(r["assignment_id"]))):
-            reject("wrong_binding", "incomplete original frozen assignment")
-        seen.append((r["group_sequence"], r["item_index"], r["appid"]))
-    if (seen != expected or len({r["assignment_id"] for r in prepared_rows}) != 18):
-        reject("wrong_binding", "future manifest must preserve full original 18 order")
+    if prepared_rows != _original_rows():
+        reject("wrong_binding", "future manifest must preserve exact original AppID, title/edition and Research assignment digest")
     obj = {"schema":"DOSSIER-NOTES-V2-FROZEN-MANIFEST",
            "schema_version":2,"trial_id":trial_id,
            "original_pins":c["immutable_original_pins"],"items":prepared_rows}
