@@ -3505,3 +3505,11 @@ Protocol:
 - User authorization: explicit decision to fix unrelated checks blocking safe paid publication.
 - Dependencies: PR #236 read-only report and current site resilience/ownership contracts.
 - Critical paid-data, source and receipt gates remain fail-closed. PR-only development and independent QA before merge or Deploy.
+
+
+## DIRECTOR AUTHORIZATION — 2026-10-22: ЧАТ 4 governance safe fixes (A; B design only)
+
+- **Task ID:** `director-governance-safe-fixes-chat4-01`; **task:** `WORKER_TASK_DIRECTOR_GOVERNANCE_SAFE_FIXES_CHAT4_01.md`; **worker:** СУЩЕСТВУЮЩИЙ ЧАТ 4, continuation after START BLOCKED; **status:** active/authorized, user explicitly requested launch.
+- **Scope:** fix strict Director task registry failures (including `recent_completion`), investigate Deploy visual mailing Actions #39647198011, align contradictory chat-count instructions and merge checks; prepare a compact Variant B design, not full migration.
+- **Boundaries:** separate draft PR and CI only; no real Deploy, Research/Assembly, production writes, merge or Scheduled Tasks. PR #238 and #239 owned by other chats; do not alter them.
+- **Acceptance:** exact-HEAD CI and independent Director review, worker report `reviews/worker_reports/director-governance-safe-fixes-chat4-01.md`.

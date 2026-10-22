@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-10-21",
+  "last_curated_on": "2026-10-22",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -1692,6 +1692,24 @@
       "updated_on": "2026-10-21",
       "recent_completion": false,
       "updated_at_utc": "2026-10-21T17:16:34Z"
+    },
+    {
+      "id": "director-governance-safe-fixes-chat4-01",
+      "title": "ЧАТ 4 — безопасное исправление управления проектом",
+      "goal": "Устранить подтверждённые ошибки реестра, выяснить сбой публикации #39647198011, согласовать правила и подготовить минимальное упрощение без дублирования состояния.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Локальные правки контрактов/валидаторов с регрессионными проверками; без реального Deploy.",
+      "urgency": "высокая",
+      "urgency_reason": "Красная проверка реестра и заблокированное назначение.",
+      "task_file": "WORKER_TASK_DIRECTOR_GOVERNANCE_SAFE_FIXES_CHAT4_01.md",
+      "worker_slot": "ЧАТ 4",
+      "order": null,
+      "depends_on": [],
+      "blocker": "",
+      "updated_on": "2026-10-22",
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-22T09:35:00Z"
     }
   ]
 }
