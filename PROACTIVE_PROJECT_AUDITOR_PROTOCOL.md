@@ -6,7 +6,7 @@ The project must not rely on the user to notice operational, orchestration, sche
 
 A reusable **Proactive Project Auditor** role performs bounded read-only checks and raises gaps itself.
 
-The auditor is not a permanent third worker. It uses a free `ЧАТ 1` or `ЧАТ 2` slot when a trigger below is reached, preserving the global maximum of two worker chats.
+The auditor is not a permanent additional worker. When a trigger warrants a separate chat, the Director assigns any available uniquely numbered `ЧАТ N` under `DIRECTOR_PROTOCOL.md` §10. There is no fixed two-worker limit; no slot is seized from an active unrelated task.
 
 ## Core rule
 
