@@ -393,5 +393,35 @@ class NotesV2Tests(unittest.TestCase):
                     self.assertTrue(item["item_local_only"])
                     self.assertEqual(item["attempt_state"],"unknown")
 
+
+    def test_invalid_utf8_research_A_does_not_stop_B_C_in_frozen_order(self):
+        group=C["original_groups"][1]
+        commits={}
+        for index,appid in enumerate(group["appids"]):
+            assignment=v2.frozen_assignment(
+                self.repo,marker_commit=self.marker,trial_id=TRIAL,appid=appid)
+            path=v2._path("research",assignment)
+            if index==0:
+                bad=self.repo/path
+                bad.parent.mkdir(parents=True,exist_ok=True)
+                bad.write_bytes(b"\xff\xfe\x00{\"invalid\":true}")
+            else:
+                write(self.repo,path,{"schema":"DOSSIER-RESEARCH-NOTES-V2",
+                      "schema_version":2,"assignment":assignment,"notes_text":"",
+                      "source_log":[],"research_status":"no_verifiable_findings"})
+            commits[appid]=commit(self.repo,"fixture: original g8 item "+appid)
+        rows=v2.frozen_assembly_traversal(
+            self.repo,marker_commit=self.marker,trial_id=TRIAL,research_commits=commits)
+        offset=3
+        self.assertEqual([r["appid"] for r in rows[offset:offset+3]],group["appids"])
+        self.assertEqual(rows[offset]["status"],"unparseable")
+        self.assertTrue(rows[offset]["item_local_only"])
+        self.assertEqual(rows[offset]["attempt_state"],"unknown")
+        self.assertEqual([r["status"] for r in rows[offset+1:offset+3]],
+                         ["ready_for_autonomous_assembly"]*2)
+        self.assertEqual(len(rows),18)
+        self.assertEqual([r["status"] for r in rows].count("ready_for_autonomous_assembly"),2)
+        self.assertEqual([r["status"] for r in rows].count("missing_research_transport"),15)
+
 if __name__=="__main__":
     unittest.main()

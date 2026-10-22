@@ -1,5 +1,12 @@
 # CURRENT TASK
 
+## IN QA RE-REVIEW — ЧАТ 3 PR #239 QA remediation (2026-10-22)
+- Scope: two blockers from ЧАТ 2 independent review comment [#6336680554](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/239#issuecomment-6336680554), same existing `implement/research-notes-v2-autonomous-assembly-01` draft PR.
+- Fixed prospective 18-item product/name/edition/assignment trust by verifying exact original Research Git blob `c8a6b6f515162f431c0e3d86175376114c0acf7e`; V2 manifest cannot relabel AppIDs/titles/edition suffixes, original IDs or full original assignment digests.
+- Stage2 entry and 18-item traversal now isolate unsafe, malformed, wrong-binding and bad-Git Research A without preventing independently authorized B/C. Missing transport consumes no invented attempts; incomplete safe notes continue to Assembly.
+- Synthetic fixtures: swapped-title/edition/assignment with unchanged count/order refused, unsafe or invalid UTF-8 A with valid sparse B/C, status/attempt assertions. Confirm final SHA and CI via PR before independent ЧАТ 2 re-review. No real semantics/production/PR232 merge/scheduler.
+
+
 ## COMPLETE — ЧАТ 3: inactive Research Notes V2 → autonomous Assembly implementation PR #239 (2026-10-21)
 
 - Task ID: `research-assembly-notes-v2-autonomous-assembly-implement-01`; START unblocked by merged Director PR #237 at `a2f734d15dddfe870927c7bd484050b73594ec10` and exact Board/registry authorization.
