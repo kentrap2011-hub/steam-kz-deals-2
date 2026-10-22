@@ -108,7 +108,7 @@ class SiteTasksTests(unittest.TestCase):
         for case, expected_error in cases:
             with self.subTest(case=case):
                 plan = copy.deepcopy(self.plan)
-                item = next(i for i in plan["items"] if i["id"] == "director-governance-safe-fixes-chat4-01")
+                item = plan["items"][0]  # Deliberately no dependence on a particular future task ID
                 if case == "missing_recent_completion":
                     item.pop("recent_completion")
                 elif case == "null_recent_completion":
