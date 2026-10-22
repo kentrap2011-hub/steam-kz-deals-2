@@ -74,13 +74,17 @@ def validate_plan(plan, board_text, dependency_map, *, verify_task_files=True):
         if set(item) != required_fields:
             missing = sorted(required_fields - set(item))
             extra = sorted(set(item) - required_fields)
+            raw_id = item.get("id")
+            safe_id = raw_id if isinstance(raw_id, str) and re.fullmatch(r"[a-z0-9-]{3,64}", raw_id) else "<invalid-id>"
             raise ValueError(
-                f"Unexpected/omitted task registry fields for {item.get('id', '<missing-id>')}: "
+                f"Unexpected/omitted task registry fields for {safe_id}: "
                 f"missing={missing} extra={extra}"
             )
         tid = item["id"]
-        if not isinstance(tid, str) or not re.fullmatch(r"[a-z0-9-]{3,64}", tid) or tid in ids:
-            raise ValueError(f"Duplicate or invalid task ID: {tid}")
+        if not isinstance(tid, str) or not re.fullmatch(r"[a-z0-9-]{3,64}", tid):
+            raise ValueError("Invalid task ID: <invalid-id>")
+        if tid in ids:
+            raise ValueError(f"Duplicate task ID: {tid}")
         ids.add(tid)
         if item["status"] not in STATUSES or item["effort"] not in EFFORT or item["urgency"] not in URGENCY:
             raise ValueError(f"Invalid state, effort or urgency: {tid}")
