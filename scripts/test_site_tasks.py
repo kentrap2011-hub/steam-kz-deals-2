@@ -96,6 +96,32 @@ class SiteTasksTests(unittest.TestCase):
         self.assertIn("min-width:700px", (ROOT / "web/tasks.css").read_text(encoding="utf-8"))
         self.assertNotIn("api.github.com", (ROOT / "web/tasks.js").read_text(encoding="utf-8"))
 
+    def test_director_registry_registration_errors_fail_closed(self):
+        """PR #237 / Actions #39647198011: never normalize missing fields or statuses."""
+        cases = (
+            ("missing_recent_completion", "Unexpected/omitted task registry fields"),
+            ("null_recent_completion", "recent_completion is not boolean"),
+            ("missing_updated_at_utc", "Unexpected/omitted task registry fields"),
+            ("null_blocker", "Unsafe public field"),
+            ("unsupported_status", "Invalid state, effort or urgency"),
+        )
+        for case, expected_error in cases:
+            with self.subTest(case=case):
+                plan = copy.deepcopy(self.plan)
+                item = next(i for i in plan["items"] if i["id"] == "director-governance-safe-fixes-chat4-01")
+                if case == "missing_recent_completion":
+                    item.pop("recent_completion")
+                elif case == "null_recent_completion":
+                    item["recent_completion"] = None
+                elif case == "missing_updated_at_utc":
+                    item.pop("updated_at_utc")
+                elif case == "null_blocker":
+                    item["blocker"] = None
+                elif case == "unsupported_status":
+                    item["status"] = "authorized_ready_for_worker"
+                with self.assertRaisesRegex(ValueError, expected_error):
+                    self.build(plan)
+
     def test_completed_registry_entries_survive_recent_display_eviction(self):
         """Public titles preserve all canonical task identities, even when hidden by the cap."""
         payload = self.build()
