@@ -6,6 +6,8 @@ Purpose: compact restart context for a **NEW physical Director conversation** af
 
 This file is a bootstrap snapshot, not a replacement for canonical project truth. The new Director must read current `CHAT_PROTOCOL.md`, `DIRECTOR_PROTOCOL.md`, fresh `DIRECTOR_TASK_BOARD.md`, and current `main` first. Newer canonical GitHub state always wins over this file.
 
+**Historical snapshot warning (2026-10-22):** The task assignments, next actions and worker-cap statements in the dated sections below are NOT current launch authority. For each new decision read current `config/director_task_plan.json`, latest Board authorization, exact task and current PR/report state; apply `DIRECTOR_PROTOCOL.md` §10 (no fixed chat limit). Do not reactivate an old task from this snapshot.
+
 ## ACTIVE DIRECTOR STATUS — 2026-10-20: PR #230 MERGED; no Assembly execution authorized
 
 - **Latest verified main at PR merge:** `d543337e3613bc0542b7a89018ff980e9b2189a3` (refresh before decisions); [PR #230](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/230) is **CLOSED/MERGED**, GitHub `merged_at=2026-10-20T11:07:22Z`, merged from head `48db1de81294008e1f55e857c4a42c663184e8a3`. User explicitly authorized only the merge. Source commit history preserved.
@@ -37,7 +39,7 @@ Use only this repository unless an exact task explicitly authorizes another repo
 - Retired physical worker chats are not reused for unrelated work. Slot numbers ЧАТ 1/2 may be reused only as explicitly NEW physical chats.
 - The user personally controls ChatGPT Scheduled Task UI. Do not create/edit/run Scheduled Tasks unless explicitly requested.
 - Explain in simple Russian; minimize untranslated jargon.
-- Default max parallel workers: 2.
+- No fixed worker limit; independent work requires unique physical `ЧАТ N` slots and dependency/ownership preflight (`DIRECTOR_PROTOCOL.md` §10).
 
 ## HISTORICAL Director state — 2026-09-29 (superseded; do not use for current assignments)
 
