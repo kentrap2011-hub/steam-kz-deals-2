@@ -539,3 +539,18 @@ Currentness invariant after PPD-012:
 5. `reviews/worker_reports/dossier-shadow-assembly-github-python-handoff-fix-01.md` — actor/permissions, preflight, CI and blocker ledger.
 
 **Real inspect (GitHub Actions #39212219378):** 12 `ready`, 2 `research_transport_invalid` (SULFUR 2124120; Sifu 2138710), 4 `research_not_submitted`. This is read-only structural eligibility, not semantic Assembly, canonical acceptance or a retry. The first original GitHub issuer run `39054131983` must **never** be retriggered. Original sandbox branch, Research artifacts, issuer marker/buffer and live Dossier/Deep stay unchanged until a separately authorized manual candidate publication.
+
+---
+
+## Inactive Notes V2 → independent Assembly (ЧАТ 3, draft PR #239)
+
+**Verified:** 2026-10-21, code HEAD `0e2b2a7adee39fa59f192aa410f9a8132e6c8549`; synthetic PR-only validation `39645191028` (21/21 PASS). No production authority.
+
+**Read in order:** `config/dossier_research_notes_v2_contract.json` (inactive; pinned six original three-game groups); `config/dossier_research_notes_v2.schema.json`; `config/dossier_autonomous_assembly_result_v2.schema.json`; `config/dossier_notes_v2_item_receipt.schema.json`; `scripts/dossier_research_notes_v2.py`; `scripts/dossier_two_stage_versioned.py`; the two V2-only inactive prompt files; `scripts/test_dossier_research_notes_v2.py` + `.github/workflows/validate-dossier-research-notes-v2.yml`.
+
+**Boundary:** strict old `DOSSIER-RESEARCH-PACKAGE-V1` and historic Git blobs left untouched. Future V2 namespace uses a new create-only run-start marker in a GitHub-prepared manifest parent with exact 18 frozen AppIDs; safe sparse Research Notes (even zero sources) transfer as unverified leads via original one-add Git blob/raw proof, without accepted Research receipt. Stage 2 can independently find sources/resolve SULFUR source role and Sifu work year, but final strict V2 and atomic existing three-member writer remain sole eventual acceptance. No third semantic stage, no autopublishing, auto-retry, scheduler or authorization for another run.
+
+**Handoff:** `reviews/worker_reports/research-assembly-notes-v2-autonomous-assembly-implement-01.md`; independent QA must verify exact final PR HEAD, V1 compatibility, Git lineage, strict final and source-quality policy. The PR232 double-publish helper is V2-only future compatibility evidence; it **does not** fix or supersede PR #232's production/publisher code or its CHANGES_REQUIRED verdict. All activation gates remain false.
+
+
+**2026-10-22 QA hardening / independent PR #239 CHANGES_REQUIRED follow-up:** versioned original identity is now pinned through byte-identical original Research buffer `config/dossier_notes_v2_pinned_original_research_buffer_v1.json` (Git blob `c8a6b6f515162f431c0e3d86175376114c0acf7e`). `scripts/dossier_research_notes_v2.py::_original_rows` derives immutable exact work/title/edition-suffixed name/original assignment digest from it, and `_manifest` rejects forged names/IDs with otherwise correct AppIDs. Stage2 `assembly_work` uses typed `classify_research`, and `frozen_assembly_traversal` quarantines individual bad/unsafe/missing packages while keeping all 18 ordered siblings eligible. Tests in `scripts/test_dossier_research_notes_v2.py`: new poisoned Git manifest and multi-item unsafe/invalid UTF-8 A → B/C ready. Original old Research/year/PR232 still untouched.
