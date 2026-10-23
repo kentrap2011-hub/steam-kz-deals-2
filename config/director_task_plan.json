@@ -1717,7 +1717,7 @@
       "id": "research-assembly-v2-safe-use-readiness-01",
       "title": "Research → Assembly V2: подготовка к безопасному использованию",
       "goal": "Безопасно подготовить inactive V2 к будущему отдельно разрешённому trial, не запуская семантику.",
-      "status": "planned",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Ограниченная задача с независимой веткой и проверяемым отчётом.",
       "urgency": "высокая",
@@ -1728,16 +1728,16 @@
       "depends_on": [
         "research-assembly-notes-v2-autonomous-assembly-implement-01"
       ],
-      "blocker": "Запуск только после полного merge task/JSON/Board в main и зеленых проверок; реальная production/semantic authority НЕ выдана.",
-      "recent_completion": false,
+      "blocker": "ЧАТ 1 ограниченно завершил техническую подготовку: draft изменение №243 HEAD 7765083edfff0802026f1f16b663cef3518c7ed7, 3 exact-HEAD CI SUCCESS. Изменение НЕ MERGED; независимый QA и live authority отсутствуют.",
+      "recent_completion": true,
       "updated_on": "2026-10-23",
-      "updated_at_utc": "2026-10-23T13:28:38.985Z"
+      "updated_at_utc": "2026-10-23T14:56:51.935Z"
     },
     {
       "id": "main-branch-protection-audit-01",
       "title": "main: защита ветки и обязательные проверки",
       "goal": "Независимо проверить protections/rulesets и сформировать administrator plan без настройки доступа.",
-      "status": "planned",
+      "status": "active",
       "effort": "средняя",
       "effort_reason": "Ограниченная задача с независимой веткой и проверяемым отчётом.",
       "urgency": "высокая",
@@ -1746,16 +1746,16 @@
       "worker_slot": "ЧАТ 3",
       "order": null,
       "depends_on": [],
-      "blocker": "Запуск только после полного merge task/JSON/Board в main и зеленых проверок; реальная production/semantic authority НЕ выдана.",
+      "blocker": "Worker report draft изменение №244 в GitHub; результат ещё не принят Director, настройки защиты не менялись.",
       "recent_completion": false,
       "updated_on": "2026-10-23",
-      "updated_at_utc": "2026-10-23T13:28:38.985Z"
+      "updated_at_utc": "2026-10-23T14:56:51.935Z"
     },
     {
       "id": "pages-live-publication-readback-audit-01",
       "title": "Pages: read-only проверка реально опубликованного сайта",
       "goal": "Сопоставить actual Pages bytes/receipts и current main визуальные данные без Deploy.",
-      "status": "planned",
+      "status": "active",
       "effort": "средняя",
       "effort_reason": "Ограниченная задача с независимой веткой и проверяемым отчётом.",
       "urgency": "высокая",
@@ -1766,10 +1766,30 @@
       "depends_on": [
         "site-publication-independent-failure-isolation-implement-01"
       ],
-      "blocker": "Запуск только после полного merge task/JSON/Board в main и зеленых проверок; реальная production/semantic authority НЕ выдана.",
+      "blocker": "Worker report draft изменение №245 в GitHub; результат ещё не принят Director, Deploy не разрешён.",
       "recent_completion": false,
       "updated_on": "2026-10-23",
-      "updated_at_utc": "2026-10-23T13:28:38.985Z"
+      "updated_at_utc": "2026-10-23T14:56:51.935Z"
+    },
+    {
+      "id": "research-assembly-v2-pr243-independent-qa-01",
+      "title": "ЧАТ 2 — независимый QA V2 draft изменения №243",
+      "goal": "Независимо проверить точный HEAD V2 inactive PR, код/тесты/приёмку и выдать PASS или CHANGES_REQUIRED без запуска семантики.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Три изменённых файла, synthetic Git provenance, negative tests и проверка exact-HEAD CI.",
+      "urgency": "высокая",
+      "urgency_reason": "Требуется обязательный независимый QA до решения директора о merge реализации V2.",
+      "task_file": "WORKER_TASK_RESEARCH_ASSEMBLY_V2_PR243_INDEPENDENT_QA_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "research-assembly-v2-safe-use-readiness-01"
+      ],
+      "blocker": "Запуск только после merge director registration PR и успешного CI на main; реализация изменение №243 ещё не принята, настоящий Research/Assembly запрещён.",
+      "recent_completion": false,
+      "updated_on": "2026-10-23",
+      "updated_at_utc": "2026-10-23T14:56:51.935Z"
     }
   ]
 }
