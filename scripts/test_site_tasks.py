@@ -96,6 +96,74 @@ class SiteTasksTests(unittest.TestCase):
         self.assertIn("min-width:700px", (ROOT / "web/tasks.css").read_text(encoding="utf-8"))
         self.assertNotIn("api.github.com", (ROOT / "web/tasks.js").read_text(encoding="utf-8"))
 
+    def test_director_registry_registration_errors_fail_closed(self):
+        """PR #237 / Actions #39647198011: never normalize missing fields or statuses."""
+        cases = (
+            ("missing_recent_completion", "Unexpected/omitted task registry fields"),
+            ("null_recent_completion", "recent_completion is not boolean"),
+            ("missing_updated_at_utc", "Unexpected/omitted task registry fields"),
+            ("null_blocker", "Unsafe public field"),
+            ("unsupported_status", "Invalid state, effort or urgency"),
+        )
+        for case, expected_error in cases:
+            with self.subTest(case=case):
+                plan = copy.deepcopy(self.plan)
+                item = plan["items"][0]  # Deliberately no dependence on a particular future task ID
+                if case == "missing_recent_completion":
+                    item.pop("recent_completion")
+                elif case == "null_recent_completion":
+                    item["recent_completion"] = None
+                elif case == "missing_updated_at_utc":
+                    item.pop("updated_at_utc")
+                elif case == "null_blocker":
+                    item["blocker"] = None
+                elif case == "unsupported_status":
+                    item["status"] = "authorized_ready_for_worker"
+                with self.assertRaisesRegex(ValueError, expected_error):
+                    self.build(plan)
+
+    def test_registry_diagnostic_identifies_valid_id_and_schema_fields(self):
+        """Keep useful strict-schema diagnostics for a validated, safe task ID."""
+        for change, detail in (
+            ("missing", "missing=['recent_completion']"),
+            ("extra", "extra=['unexpected_setting']"),
+        ):
+            with self.subTest(change=change):
+                plan = copy.deepcopy(self.plan)
+                item = plan["items"][0]
+                valid_id = item["id"]
+                if change == "missing":
+                    item.pop("recent_completion")
+                else:
+                    item["unexpected_setting"] = "invalid"
+                with self.assertRaisesRegex(ValueError, "Unexpected/omitted task registry fields") as caught:
+                    self.build(plan)
+                self.assertIn(f"for {valid_id}:", str(caught.exception))
+                self.assertIn(detail, str(caught.exception))
+
+    def test_registry_diagnostic_never_prints_unvalidated_id(self):
+        """An invalid ID must not inject Actions annotations or raw control characters."""
+        malicious_id = "untrusted\n::error title=INJECTED::bad\r\x1b[31m"
+        for bad_schema in (True, False):
+            with self.subTest(bad_schema=bad_schema):
+                plan = copy.deepcopy(self.plan)
+                item = plan["items"][0]
+                item["id"] = malicious_id
+                if bad_schema:
+                    item.pop("recent_completion")
+                with self.assertRaises(ValueError) as caught:
+                    self.build(plan)
+                diagnostic = str(caught.exception)
+                self.assertIn("<invalid-id>", diagnostic)
+                self.assertNotIn(malicious_id, diagnostic)
+                self.assertNotIn("::error", diagnostic)
+                self.assertNotIn("INJECTED", diagnostic)
+                self.assertNotIn("\n", diagnostic)
+                self.assertNotIn("\r", diagnostic)
+                self.assertNotIn("\x1b", diagnostic)
+                if bad_schema:
+                    self.assertIn("missing=['recent_completion']", diagnostic)
+
     def test_completed_registry_entries_survive_recent_display_eviction(self):
         """Public titles preserve all canonical task identities, even when hidden by the cap."""
         payload = self.build()

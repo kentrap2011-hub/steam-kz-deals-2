@@ -5,6 +5,8 @@ Source of truth: `main`
 
 This is the transfer point for the next Director chat. Read the most recent handoff first; older sections below are historical and may contradict current GitHub state.
 
+**Superseded operational snapshot:** This handoff contains historical statuses through 2026-10-20; it is not a live assignments ledger. For any launch or acceptance, use current `config/director_task_plan.json`, latest Board authorization, exact PR HEAD/CI and the worker task/report. `DIRECTOR_PROTOCOL.md` §10 supersedes every historical two-worker cap in this file.
+
 ## DIRECTOR DECISION — 2026-10-20: redesign Research Stage 1 before rerunning all original 18
 
 - **User direction:** Stage 1 semantic Research must concentrate on game investigation and source-supported facts; mechanical technical JSON/IDs/normalization/binding belongs to GitHub-owned deterministic code, without weakening evidence/semantic truth. First audit and fix Stage 1; then execute a separately authorized **new full Research run for the same original 18 games**, preserving original six groups/order and immutable historical records. Do NOT merely patch the six old payloads; do NOT run Research yet.
@@ -586,7 +588,7 @@ a bounded implementation task on the **existing Steam KZ production shortlist ow
 ## IMPORTANT USER OPERATING RULES
 
 - Director delegates implementation/diagnostics to worker chats; do not directly implement when user says “исправляем/делаем”.
-- Max two physical developer worker slots: ЧАТ 1 and ЧАТ 2.
+- Historical two-slot limit is superseded: no fixed physical-worker cap; assign unique `ЧАТ N` under current `DIRECTOR_PROTOCOL.md` §10.
 - Semantic workers (Dossier, Deep, manual translation) do not consume those physical slots.
 - User remains operator of semantic runs/Scheduled Task UI.
 - Never create/modify Scheduled Tasks unless explicitly requested.

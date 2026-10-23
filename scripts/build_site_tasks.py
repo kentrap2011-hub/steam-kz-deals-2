@@ -64,15 +64,27 @@ def validate_plan(plan, board_text, dependency_map, *, verify_task_files=True):
 
     ids, files, orders = set(), set(), set()
     for item in items:
-        if not isinstance(item, dict) or set(item) != {
+        required_fields = {
             "id", "title", "goal", "status", "effort", "effort_reason", "urgency",
             "urgency_reason", "task_file", "worker_slot", "order", "depends_on",
             "blocker", "updated_on", "updated_at_utc", "recent_completion"
-        }:
-            raise ValueError("Unexpected/omitted task registry fields")
+        }
+        if not isinstance(item, dict):
+            raise ValueError("Task registry item must be an object")
+        if set(item) != required_fields:
+            missing = sorted(required_fields - set(item))
+            extra = sorted(set(item) - required_fields)
+            raw_id = item.get("id")
+            safe_id = raw_id if isinstance(raw_id, str) and re.fullmatch(r"[a-z0-9-]{3,64}", raw_id) else "<invalid-id>"
+            raise ValueError(
+                f"Unexpected/omitted task registry fields for {safe_id}: "
+                f"missing={missing} extra={extra}"
+            )
         tid = item["id"]
-        if not isinstance(tid, str) or not re.fullmatch(r"[a-z0-9-]{3,64}", tid) or tid in ids:
-            raise ValueError(f"Duplicate or invalid task ID: {tid}")
+        if not isinstance(tid, str) or not re.fullmatch(r"[a-z0-9-]{3,64}", tid):
+            raise ValueError("Invalid task ID: <invalid-id>")
+        if tid in ids:
+            raise ValueError(f"Duplicate task ID: {tid}")
         ids.add(tid)
         if item["status"] not in STATUSES or item["effort"] not in EFFORT or item["urgency"] not in URGENCY:
             raise ValueError(f"Invalid state, effort or urgency: {tid}")
