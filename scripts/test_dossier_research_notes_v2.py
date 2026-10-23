@@ -274,6 +274,51 @@ class NotesV2Tests(unittest.TestCase):
         self.assertFalse(preview["canonical_acceptance"])
 
 
+    def test_pre_submission_rejects_original_document_forbidden_flags_and_fields(self):
+        _,work=self.work()
+        original=v2.candidate_assembly(work,outcome="assembly_missing_evidence",
+                                       diagnostic="fixture insufficient evidence")
+        mutations=(
+            ("acceptance_true", {"canonical_acceptance":True}),
+            ("staged_false", {"staged_only":False}),
+            ("raw_reviews", {"raw_reviews":"private player review text"}),
+            ("unknown_extra", {"invented_verified":True}),
+            ("wrong_schema", {"schema":"DOSSIER-RESEARCH-NOTES-V2"}),
+            ("unknown_outcome", {"outcome":"unauthorized_success"}),
+            ("missing_required", {"diagnostic":None,"outcome":"assembly_missing_evidence"}),
+        )
+        for name,changes in mutations:
+            with self.subTest(name=name):
+                supplied=copy.deepcopy(original)
+                supplied.update(changes)
+                with self.assertRaises(v2.NotesV2Error) as cm:
+                    v2.prepare_assembly_transport(self.repo,work,supplied)
+                self.assertIn(cm.exception.code,("unparseable","unsafe_material","assembly_technical_error"))
+                self.assertFalse((self.repo/work["output_path"]).exists(),
+                                 "preflight must never create invalid transport")
+                self.assertEqual(supplied,dict(original,**changes),
+                                 "validation must not rewrite the submitted document")
+
+    def test_pre_submission_validates_exact_original_payload_and_status(self):
+        _,work=self.work()
+        original=v2.candidate_assembly(
+            work,outcome="assembly_missing_evidence",
+            diagnostic="fixture lacked verification")
+        prepared=v2.prepare_assembly_transport(self.repo,work,original)
+        self.assertEqual(prepared["status"],"ready_for_create_only_submission")
+        self.assertEqual(json.loads(prepared["bytes"]),original)
+        self.assertFalse(prepared["canonical_acceptance"])
+        for changes in (
+            {"outcome":"assembled_candidate_ready","final_dossier":None},
+            {"outcome":"runtime_or_tool_interrupted","final_dossier":{"appid":self.appid}},
+            {"operations":[{"kind":"independent_discovery","access":"invalid_mode",
+                            "summary":"not verified"}]},
+            {"schema_version":1},
+            {"canonical_acceptance":"false"},
+        ):
+            with self.subTest(changes=changes),self.assertRaises(v2.NotesV2Error):
+                v2.prepare_assembly_transport(self.repo,work,dict(original,**changes))
+
     def test_immutable_marker_and_manifest_are_not_rewritten(self):
         path=f"data/control/dossier_notes_v2/manifests/{TRIAL}.json"
         mutated=copy.deepcopy(self.manifest)
@@ -422,6 +467,161 @@ class NotesV2Tests(unittest.TestCase):
         self.assertEqual(len(rows),18)
         self.assertEqual([r["status"] for r in rows].count("ready_for_autonomous_assembly"),2)
         self.assertEqual([r["status"] for r in rows].count("missing_research_transport"),15)
+
+
+    def test_mutate_then_restore_frozen_manifest_rejected_by_git_history(self):
+        path=f"data/control/dossier_notes_v2/manifests/{TRIAL}.json"
+        original=copy.deepcopy(self.manifest)
+        changed=copy.deepcopy(original)
+        changed["trial_id"]="another-trial-identifier"
+        write(self.repo,path,changed)
+        commit(self.repo,"fixture: tamper immutable manifest")
+        write(self.repo,path,original)
+        commit(self.repo,"fixture: restore manifest bytes")
+        with self.assertRaises(v2.NotesV2Error) as cm:
+            v2.frozen_assignment(self.repo,marker_commit=self.marker,
+                                 trial_id=TRIAL,appid=self.appid)
+        self.assertEqual(cm.exception.code,"broken_git_provenance")
+
+    def test_mutate_then_restore_run_marker_rejected_by_git_history(self):
+        path=f"data/control/dossier_notes_v2/run_starts/{NONCE}.json"
+        original={"schema":"DOSSIER-NOTES-V2-RUN-START","schema_version":2,
+                  "nonce":NONCE,"trial_id":TRIAL}
+        changed={**original,"nonce":"b"*32}
+        write(self.repo,path,changed)
+        commit(self.repo,"fixture: rewrite run-start marker")
+        write(self.repo,path,original)
+        commit(self.repo,"fixture: restore original marker bytes")
+        with self.assertRaises(v2.NotesV2Error) as cm:
+            v2.frozen_assignment(self.repo,marker_commit=self.marker,
+                                 trial_id=TRIAL,appid=self.appid)
+        self.assertEqual(cm.exception.code,"broken_git_provenance")
+
+    def test_mutate_then_restore_research_rejected_not_accepted(self):
+        original=self.note()
+        sha=self.add_research(original)
+        path=v2._path("research",self.assignment)
+        write(self.repo,path,self.note(notes_text="illicit altered lead"))
+        commit(self.repo,"fixture: rewrite research")
+        write(self.repo,path,original)
+        commit(self.repo,"fixture: restore research bytes")
+        verdict=v2.classify_research(self.repo,marker_commit=self.marker,
+                                    trial_id=TRIAL,appid=self.appid,
+                                    introduction_commit=sha)
+        self.assertEqual(verdict["status"],"broken_git_provenance")
+        self.assertEqual(verdict["attempt_state"],"unknown")
+        self.assertFalse(verdict["canonical_acceptance"])
+
+    def test_mutate_then_restore_assembly_candidate_rejected(self):
+        sha,work=self.work()
+        original=v2.candidate_assembly(work,outcome="assembly_missing_evidence",
+                                       diagnostic="Fixture insufficient")
+        path=work["output_path"]
+        write(self.repo,path,original)
+        original_commit=commit(self.repo,"fixture: original assembly terminal")
+        changed=copy.deepcopy(original)
+        changed["diagnostic"]="Forged terminal status"
+        write(self.repo,path,changed)
+        commit(self.repo,"fixture: overwrite terminal")
+        write(self.repo,path,original)
+        commit(self.repo,"fixture: restore terminal")
+        result=v2.inspect_assembly(self.repo,marker_commit=self.marker,
+                                   trial_id=TRIAL,appid=self.appid,
+                                   research_commit=sha,result_commit=original_commit)
+        self.assertEqual(result["status"],"broken_git_provenance")
+        self.assertFalse(result["canonical_acceptance"])
+
+    def test_assembly_transport_rechecks_stale_research(self):
+        sha,work=self.work()
+        terminal=v2.candidate_assembly(work,outcome="assembly_missing_evidence",
+                                       diagnostic="Fixture no sufficient evidence")
+        path=v2._path("research",self.assignment)
+        write(self.repo,path,self.note(notes_text="illicit later revision"))
+        commit(self.repo,"fixture: invalid later edit")
+        with self.assertRaises(v2.NotesV2Error) as cm:
+            v2.prepare_assembly_transport(self.repo,work,terminal)
+        self.assertEqual(cm.exception.code,"broken_git_provenance")
+        self.assertFalse(v2.classify_research(
+            self.repo,marker_commit=self.marker,trial_id=TRIAL,
+            appid=self.appid,introduction_commit=sha)["canonical_acceptance"])
+
+    def test_assembly_transport_rejects_forged_work_binding(self):
+        sha,work=self.work()
+        fake=copy.deepcopy(work)
+        fake["source_notes_are_unverified_leads"]=False
+        terminal=v2.candidate_assembly(fake,outcome="assembly_missing_evidence",
+                                       diagnostic="Fixture")
+        with self.assertRaises(v2.NotesV2Error) as cm:
+            v2.prepare_assembly_transport(self.repo,fake,terminal)
+        self.assertEqual(cm.exception.code,"broken_git_provenance")
+
+    def test_typed_prefix_cannot_skip_next_item(self):
+        order=["1517180","1533420","1590230"]
+        for typed,target,states in [
+            (["1517180"],"1590230",
+             {"1517180":"ready","1533420":"ready","1590230":"ready"}),
+            ([], "1517180", {"1517180":"ready"}),
+            (["1517180","1533420"],"1533420",
+             {"1517180":"ready","1533420":"ready"})]:
+            with self.subTest(typed=typed,target=target):
+                with self.assertRaises(v2.NotesV2Error) as cm:
+                    v2.checked_typed_publish_prefix(order,typed,target,states)
+                self.assertEqual(cm.exception.code,"wrong_binding")
+
+    def test_receipt_phase_confusion_and_unsafe_source_rejected(self):
+        for phase,disposition in [
+            ("research","strict_item_valid_pending_existing_atomic_group_ingest"),
+            ("research","assembly_semantic_conflict"),
+            ("assembly","safe_incomplete_research")]:
+            with self.subTest(phase=phase,disposition=disposition):
+                with self.assertRaises(v2.NotesV2Error):
+                    v2.item_receipt_blueprint(
+                        self.repo,marker_commit=self.marker,trial_id=TRIAL,
+                        appid=self.appid,phase=phase,disposition=disposition)
+        with self.assertRaises(v2.NotesV2Error):
+            v2.item_receipt_blueprint(
+                self.repo,marker_commit=self.marker,trial_id=TRIAL,
+                appid=self.appid,phase="assembly",disposition="missing_research_transport",
+                source={"locator":"https://example.org/?token=secret",
+                        "raw_reviews":"unsafe personal data"})
+
+    def test_duplicate_reviewer_appointment_and_unverified_approval_rejected(self):
+        roles={r:{"login":"fixture"+r,"github_id":i+101,
+                  "appointment_ref":"synthetic-approval-"+r}
+               for i,r in enumerate(("A","B","C"))}
+        lookup=lambda login:{"login":login,"id":roles[login[-1]]["github_id"]}
+        roles["C"]["appointment_ref"]=roles["A"]["appointment_ref"]
+        with self.assertRaises(v2.NotesV2Error):
+            v2.verify_independent_reviewers(roles,lookup,lambda *args: True)
+        roles["C"]["appointment_ref"]="synthetic-approval-C"
+        with self.assertRaises(v2.NotesV2Error):
+            v2.verify_independent_reviewers(roles,lookup,lambda *args: "yes")
+
+    def test_four_missing_slots_and_fourteen_synthetic_sparse_notes(self):
+        # This is a disposable fixture, NOT a claim of actual historical
+        # attempts or accepted evidence for the original fourteen transports.
+        missing={"1508750","1607130","1849000","1857090"}
+        commits={}
+        for assignment in v2._original_rows():
+            appid=assignment["appid"]
+            if appid in missing:
+                commits[appid]=None
+                continue
+            frozen=v2.frozen_assignment(self.repo,marker_commit=self.marker,
+                                        trial_id=TRIAL,appid=appid)
+            doc={"schema":"DOSSIER-RESEARCH-NOTES-V2","schema_version":2,
+                 "assignment":frozen,"notes_text":"","source_log":[],
+                 "research_status":"no_verifiable_findings"}
+            write(self.repo,v2._path("research",frozen),doc)
+            commits[appid]=commit(self.repo,"fixture: sparse "+appid)
+        rows=v2.frozen_assembly_traversal(
+            self.repo,marker_commit=self.marker,trial_id=TRIAL,
+            research_commits=commits)
+        self.assertEqual(len(rows),18)
+        self.assertEqual({r["appid"] for r in rows if r["status"]=="missing_research_transport"},missing)
+        self.assertEqual([r["status"] for r in rows].count("ready_for_autonomous_assembly"),14)
+        self.assertTrue(all(r.get("attempt_state")=="unknown" for r in rows if r["appid"] in missing))
+        self.assertTrue(all(r.get("canonical_acceptance") is False for r in rows))
 
 if __name__=="__main__":
     unittest.main()
