@@ -5,6 +5,17 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT AUTHORIZATION — 2026-10-23 (source main 4cadd6dd6b8f)
+
+- Latest merged: PR #239 inactive Notes V2, PR #238 optional Pages isolation, PR #241 director safety. Their registry entries are marked complete; no live semantic run or Pages Deploy is inferred.
+- **ЧАТ 1, СУЩЕСТВУЮЩИЙ новый физический чат, previously BLOCKED_AUTHORITY:** task `research-assembly-v2-safe-use-readiness-01`, `WORKER_TASK_RESEARCH_ASSEMBLY_V2_SAFE_USE_READINESS_01.md`; planned IMPLEMENT, inactive PR-only. Exclusive V2 sandbox/control-plane/test edits. No real Research/Assembly, retry, activation, PR #232 modification, production or Scheduled Tasks.
+- **НОВЫЙ ЧАТ 3:** `main-branch-protection-audit-01`, `WORKER_TASK_MAIN_BRANCH_PROTECTION_AUDIT_01.md`, planned READ-ONLY / RECON, own report-only branch; no GitHub settings writes. Old planned Chat 3 PR #232 remediation is suspended and slot released.
+- **НОВЫЙ ЧАТ 4:** `pages-live-publication-readback-audit-01`, `WORKER_TASK_PAGES_LIVE_PUBLICATION_READBACK_AUDIT_01.md`, planned READ-ONLY / RECON, own report-only branch; no Deploy. Old Chat 4 Stage-1 audit report in draft PR #234 remains evidence, no active assignment.
+- **НОВЫЙ ЧАТ 2:** reserved for later independent exact-HEAD QA of Chat 1 V2 PR; task NOT YET REGISTERED until actual PR exists. Old historical QA of PR #232 is held; no active physical slot conflict.
+- **Other open historic drafts:** #231, #232 (CHANGES_REQUIRED), #233, #234, #235, #236 are not new authorization; PR #239 does not cure PR #232 and does not prove Research recovery for the historical 18.
+- **Parallel-ownership rule:** ЧАТ 1 writes only dedicated V2 implementation PR + own report; ЧАТ 3/4 write only distinct report files on separate branches; Director alone writes Board/registry. No launch before exact task/JSON/Board merge and successful CI on main.
+- **Director next:** after reports review exact commits/CI, assign independent Chat 2 QA, merge only after passing gates. Separate authorizations required for real semantic work, manual publish and Deploy.
+
 ## DIRECTOR DECISION — 2026-10-20: redesign Research Stage 1 before rerunning all original 18
 
 - **User direction:** Stage 1 semantic Research must concentrate on game investigation and source-supported facts; mechanical technical JSON/IDs/normalization/binding belongs to GitHub-owned deterministic code, without weakening evidence/semantic truth. First audit and fix Stage 1; then execute a separately authorized **new full Research run for the same original 18 games**, preserving original six groups/order and immutable historical records. Do NOT merely patch the six old payloads; do NOT run Research yet.
