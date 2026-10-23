@@ -183,6 +183,20 @@ def _original_rows():
         reject("wrong_binding", "original 18 Git-pinned item identities/order differ")
     return rows
 
+def _assert_unchanged_since(repo, original_commit, path):
+    """Fail closed on ANY intervening first-parent path write, even if restored.
+
+    HEAD byte equality alone misses rewrite-then-restore provenance attacks.
+    This is an offline prospective guard, not an issuer or runtime authority.
+    """
+    if not first_parent_contains(repo, original_commit, "HEAD"):
+        reject("broken_git_provenance", "original Git commit not on current first-parent chain")
+    changed = git(repo, "log", "--first-parent", "--format=%H",
+                  f"{original_commit}..HEAD", "--", path).stdout.strip()
+    if changed:
+        reject("broken_git_provenance", "immutable V2 artifact modified after original introduction")
+
+
 def _manifest(repo, marker_commit, trial_id):
     c = _contract()
     if not TRIAL.fullmatch(str(trial_id)) or not HEX40.fullmatch(str(marker_commit)):
@@ -197,6 +211,7 @@ def _manifest(repo, marker_commit, trial_id):
         if (blob(repo, "HEAD", marker_path) != blob(repo, marker_commit, marker_path)
                 or file_at(repo, "HEAD", marker_path) != file_at(repo, marker_commit, marker_path)):
             reject("broken_git_provenance", "V2 run-start marker was changed after issuance")
+        _assert_unchanged_since(repo, marker_commit, marker_path)
         if marker != {"schema":"DOSSIER-NOTES-V2-RUN-START","schema_version":2,"nonce":_marker_nonce(repo, marker_commit),"trial_id":trial_id}:
             reject("wrong_binding", "marker contents mismatch")
         path = f"data/control/dossier_notes_v2/manifests/{trial_id}.json"
@@ -204,6 +219,7 @@ def _manifest(repo, marker_commit, trial_id):
         if (blob(repo, "HEAD", path) != blob(repo, p, path)
                 or file_at(repo, "HEAD", path) != file_at(repo, p, path)):
             reject("broken_git_provenance", "V2 frozen manifest was overwritten")
+        _assert_unchanged_since(repo, p, path)
         if (not isinstance(m, dict) or set(m) != {"schema","schema_version","trial_id","original_pins","items"}
                 or m["schema"] != "DOSSIER-NOTES-V2-FROZEN-MANIFEST"
                 or m["schema_version"] != 2 or m["trial_id"] != trial_id
@@ -277,6 +293,7 @@ def submitted_research(repo, *, marker_commit, trial_id, appid, introduction_com
                 or blob(repo, "HEAD", path) != blob_for(raw)
                 or file_at(repo, "HEAD", path) != raw):
             reject("broken_git_provenance", "Research bytes altered after original introduction")
+        _assert_unchanged_since(repo, introduction_commit, path)
         try:
             doc = strict_json(raw)
         except (ValueError, UnicodeDecodeError) as exc:
@@ -379,6 +396,7 @@ def inspect_assembly(repo, *, marker_commit, trial_id, appid, research_commit, r
         if (blob(repo, result_commit, path) != blob_for(raw) or blob(repo, "HEAD", path) != blob_for(raw)
                 or file_at(repo, "HEAD", path) != raw):
             reject("broken_git_provenance", "Assembly candidate overwritten")
+        _assert_unchanged_since(repo, result_commit, path)
         doc = strict_json(raw)
         _schema("dossier_autonomous_assembly_result_v2.schema.json", doc)
         if doc["assignment"] != work["assignment"] or doc["research_transport"] != work["research_transport"]:
@@ -436,6 +454,19 @@ def prepare_assembly_transport(repo, work, document):
     """
     if work.get("status") != "ready_for_autonomous_assembly":
         reject("wrong_binding", "not an authorized V2 assembly item")
+    # A prior work dict is only a snapshot, not fresh authority. Reverify the
+    # original single-add Research bytes, marker and manifest at submission.
+    a = work.get("assignment", {})
+    transport = work.get("research_transport", {})
+    if not isinstance(a, dict) or not isinstance(transport, dict):
+        reject("wrong_binding", "invalid frozen Assembly work envelope")
+    if not all(k in a for k in ("marker_commit", "trial_id", "appid")) or "research_package_git_commit" not in transport:
+        reject("wrong_binding", "incomplete frozen Assembly work envelope")
+    current = assembly_work(repo, marker_commit=a["marker_commit"],
+                            trial_id=a["trial_id"], appid=a["appid"],
+                            research_commit=transport["research_package_git_commit"])
+    if current.get("status") != "ready_for_autonomous_assembly" or current != work:
+        reject("broken_git_provenance", "stale or forged Assembly work / Research chain")
     if (document.get("assignment") != work["assignment"]
             or document.get("research_transport") != work["research_transport"]):
         reject("wrong_binding", "Assembly output differs from original V2 binding")
@@ -481,6 +512,14 @@ def item_receipt_blueprint(repo, *, marker_commit, trial_id, appid, phase, dispo
            "semantic_attempt_state":"unknown",
            "staged_only":True,"canonical_acceptance":False}
     _schema("dossier_notes_v2_item_receipt.schema.json",doc)
+    if phase == "research" and disposition in (
+            "assembly_missing_evidence", "assembly_semantic_conflict",
+            "assembly_technical_error", "final_strict_or_group_rejected",
+            "strict_item_valid_pending_existing_atomic_group_ingest"):
+        reject("wrong_binding", "Research phase cannot claim Assembly disposition")
+    if phase == "assembly" and disposition == "safe_incomplete_research":
+        reject("wrong_binding", "Assembly receipt cannot attest Research completeness")
+    _safe_text(doc)
     return doc
 
 def original_group_readiness(group_sequence, item_verdicts):
@@ -512,11 +551,14 @@ def checked_typed_publish_prefix(frozen_authorized_order, typed_git_history,
             or [a for a in original if a in order] != order
             or typed != order[:len(typed)]
             or len(typed) != len(set(typed))
+            or not typed or typed[-1] != target_appid
             or target_appid not in order):
         reject("wrong_binding", "typed lineage must be exact prefix of stable frozen authorization")
     states = dict(current_inspect)
     if states.get(target_appid) != "ready":
         reject("wrong_binding", "target currently not individually publishable")
+    if any(states.get(previous) != "candidate_already_submitted" for previous in typed[:-1]):
+        reject("wrong_binding", "historical typed prefix must remain published, not reusable")
     return {"validated_typed_prefix":typed,"target_appid":target_appid,
             "prior_published_items_remain_in_frozen_order":True}
 
@@ -532,6 +574,7 @@ def verify_independent_reviewers(appointments, authenticated_lookup, director_ap
     if not isinstance(appointments, dict) or set(appointments) != {"A","B","C"}:
         reject("wrong_binding", "three separately appointed reviewer roles required")
     ids = []
+    refs = []
     for role in ("A","B","C"):
         row = appointments[role]
         if (not isinstance(row, dict) or set(row) != {"login","github_id","appointment_ref"}
@@ -542,9 +585,12 @@ def verify_independent_reviewers(appointments, authenticated_lookup, director_ap
         observed = authenticated_lookup(row["login"])
         if not isinstance(observed, dict) or observed.get("login","").casefold() != row["login"].casefold() or observed.get("id") != row["github_id"]:
             reject("wrong_binding", "reviewer has no matching authenticated account identity")
-        if not director_approval(role,row["github_id"],row["appointment_ref"]):
+        if director_approval(role,row["github_id"],row["appointment_ref"]) is not True:
             reject("wrong_binding", "Director did not authenticate independent appointment")
         ids.append(row["github_id"])
+        refs.append(row["appointment_ref"])
+    if len(set(refs)) != 3:
+        reject("wrong_binding", "independent roles cannot reuse one appointment receipt")
     if len(set(ids)) != 3:
         reject("wrong_binding", "reviewer A/B/C identities are not independent")
     return True
