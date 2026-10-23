@@ -58,13 +58,6 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Validate visual freshness receipt contract
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/test_visual_freshness_receipt.py
-          python scripts/test_visual_material_freshness_guard.py
-
       - name: Download exact triggering build freshness receipt
         if: github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Build daily visual payload'
         uses: actions/download-artifact@v4
@@ -272,40 +265,6 @@ jobs:
           set -euo pipefail
           echo 'COMMERCIAL_VISUAL_ACCEPTANCE=bounded_paid_refresh semantic_and_description_fields_unchanged=true giveaway_unchanged=true'
 
-      - name: Validate giveaway visual payload
-        if: steps.visual_scope.outputs.status_only != 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/validate_giveaway_visual_payload.py data/production/visual/current.json
-
-      - name: Validate independent current site status
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [ -s data/production/site/current_status.json ]; then
-            python scripts/build_site_status.py --validate-current data/production/site/current_status.json
-          elif [ "${{ steps.visual_scope.outputs.status_only }}" = "true" ]; then
-            echo "status-only deploy requires current_status.json"
-            exit 1
-          else
-            echo "SITE_STATUS=legacy_missing status_artifact_not_yet_persisted"
-          fi
-
-      - name: Run UI regressions
-        shell: bash
-        run: |
-          set -euo pipefail
-          node web/image-swipe-sync.test.js
-          node web/package-deal-ui.test.js
-          node web/score-details-ui.test.js
-          node web/giveaway-ui.test.js
-          node web/paid-freshness-ui.test.js
-          node web/progressive-personalization-ui.test.js
-          node scripts/test_feed_bootstrap_cache_identity.js
-          python scripts/test_site_tasks.py
-          node web/tasks.test.js
-
       - name: Stage precomputed visual payload
         shell: bash
         run: |
@@ -314,16 +273,26 @@ jobs:
           grep -q '"mode":"daily_precomputed_read_only_for_ui"' data/production/visual/current.json
           mkdir -p web/data
           cp data/production/visual/current.json web/data/current.json
-          if [ -s data/production/site/current_status.json ]; then
-            cp data/production/site/current_status.json web/data/status.json
-          fi
+          # Independent status validity is handled by stage_site_optional_sections.py.
+          # Do not copy a potentially invalid status artifact into Pages here.
 
-      - name: Generate static Director task page data from canonical GitHub plan
+      - name: Validate canonical staged paid bytes and isolate optional sections
+        id: sections
         shell: bash
+        env:
+          STATUS_ONLY: ${{ steps.visual_scope.outputs.status_only }}
+          GIVEAWAY_ONLY: ${{ steps.visual_scope.outputs.giveaway_only }}
+          COMMERCIAL_ONLY: ${{ steps.visual_scope.outputs.commercial_only }}
         run: |
           set -euo pipefail
-          python scripts/build_site_tasks.py --output web/data/tasks.json
-          python scripts/build_site_tasks.py --validate-current web/data/tasks.json
+          scope=general
+          if [ "$STATUS_ONLY" = true ]; then scope=status_only
+          elif [ "$GIVEAWAY_ONLY" = true ]; then scope=giveaway_only
+          elif [ "$COMMERCIAL_ONLY" = true ]; then scope=commercial_only
+          fi
+          python scripts/stage_site_optional_sections.py --scope "$scope" | tee /tmp/site-section-disposition.log
+          test -s web/data/publication-disposition.json
+          echo "manifest=web/data/publication-disposition.json" >> "$GITHUB_OUTPUT"
 
       - name: Bind staged publication to triggering build freshness receipt
         id: freshness
@@ -359,6 +328,10 @@ jobs:
         run: |
           set -euo pipefail
           echo "VISUAL_PUBLICATION_OUTCOME=$CLASSIFICATION"
+          echo "SITE_SECTION_MANIFEST=web/data/publication-disposition.json"
+          cat web/data/publication-disposition.json >> "$GITHUB_STEP_SUMMARY"
+          echo >> "$GITHUB_STEP_SUMMARY"
+          echo "Published bytes are NOT attested until a separate live Pages read-back; the manifest records exact staged bytes." >> "$GITHUB_STEP_SUMMARY"
           {
             echo '## Visual publication freshness'
             echo "- classification: \`$CLASSIFICATION\`"

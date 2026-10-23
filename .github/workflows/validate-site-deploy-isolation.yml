@@ -1,0 +1,63 @@
+name: Validate site deploy isolation (PR only)
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/deploy-visual.yml'
+      - '.github/workflows/validate-site-deploy-isolation.yml'
+      - 'scripts/stage_site_optional_sections.py'
+      - 'scripts/test_site_deploy_isolation.py'
+      - 'scripts/test_visual_freshness_receipt.py'
+      - 'scripts/visual_freshness_receipt.py'
+      - 'scripts/test_visual_material_freshness_guard.py'
+      - 'web/app.js'
+      - 'web/index.html'
+      - 'scripts/build_site_tasks.py'
+      - 'web/tasks.js'
+
+permissions:
+  contents: read
+
+jobs:
+  core-and-optional-isolation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile and simulate scoped staging and rejection
+        run: |
+          python -m py_compile scripts/stage_site_optional_sections.py
+          python scripts/test_site_deploy_isolation.py
+      - name: Synthetic provenance mismatch and material regression (not Deploy)
+        run: |
+          python scripts/test_visual_freshness_receipt.py
+          python scripts/test_visual_material_freshness_guard.py
+      - name: Browser regressions (not Deploy)
+        run: |
+          node web/image-swipe-sync.test.js
+          node web/package-deal-ui.test.js
+          node web/score-details-ui.test.js
+          node web/giveaway-ui.test.js
+          node web/paid-freshness-ui.test.js
+          node web/progressive-personalization-ui.test.js
+          node scripts/test_feed_bootstrap_cache_identity.js
+          node web/tasks.test.js
+
+  independent-director-registry-quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    # An unrelated invalid Director task registry is diagnosed here, not in live Pages Deploy.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/test_site_tasks.py
