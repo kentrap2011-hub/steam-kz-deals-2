@@ -468,14 +468,25 @@ def prepare_assembly_transport(repo, work, document):
                             research_commit=transport["research_package_git_commit"])
     if current.get("status") != "ready_for_autonomous_assembly" or current != work:
         reject("broken_git_provenance", "stale or forged Assembly work / Research chain")
-    if (document.get("assignment") != work["assignment"]
-            or document.get("research_transport") != work["research_transport"]):
+    # The exact supplied document is what will be serialized below. Validate
+    # its full schema/flags/unknown keys and privacy before proposing create-only
+    # transport; checking only candidate_assembly's reconstructed copy is unsafe.
+    _schema("dossier_autonomous_assembly_result_v2.schema.json", document)
+    try:
+        _privacy(document)
+    except (ValueError, TypeError) as exc:
+        reject("unsafe_material", str(exc))
+    _safe_text({k:v for k,v in document.items() if k != "final_dossier"})
+    if (document["assignment"] != work["assignment"]
+            or document["research_transport"] != work["research_transport"]):
         reject("wrong_binding", "Assembly output differs from original V2 binding")
-    candidate_assembly(work, outcome=document.get("outcome"),
-                       final_dossier=document.get("final_dossier"),
-                       operations=document.get("operations"),
-                       mechanical_corrections=document.get("mechanical_corrections"),
-                       diagnostic=document.get("diagnostic"))
+    checked = candidate_assembly(work, outcome=document["outcome"],
+                       final_dossier=document["final_dossier"],
+                       operations=document["operations"],
+                       mechanical_corrections=document["mechanical_corrections"],
+                       diagnostic=document["diagnostic"])
+    if checked != document:
+        reject("wrong_binding", "supplied Assembly document differs from validated candidate")
     if document["outcome"] == "assembled_candidate_ready":
         try:
             strict = json.loads((CONFIG / "taste_steam_review_dossier_contract.json").read_text("utf-8"))
