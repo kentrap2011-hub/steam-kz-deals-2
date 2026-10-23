@@ -1,9 +1,13 @@
 # ЧАТ 2 — independent exact-HEAD QA: inactive Notes V2 PR #243
 
 **Task ID:** `research-assembly-v2-pr243-independent-qa-01`  
-**Target:** [PR #243](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/243), exact reviewed HEAD `7765083edfff0802026f1f16b663cef3518c7ed7`, base at authoring `e9d9fd64986ada2e26a5ea1dea95298f98b1ae3e`.  
-**Verdict:** **`CHANGES_REQUIRED`** — inactive merge is blocked by one demonstrated source-level transport false positive. Real-trial authorization is **NOT GRANTED** independently of this verdict.  
+**Target:** [PR #243](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/243). Historical original QA HEAD `7765083edfff0802026f1f16b663cef3518c7ed7`; **latest independently re-reviewed HEAD `5e956f35e2aa63f9d56a9006cd186913c8cba2e1`**. Original base `e9d9fd64986ada2e26a5ea1dea95298f98b1ae3e`.  
+**LATEST VERDICT (re-review 2026-10-23): `PASS_FOR_DIRECTOR_MERGE_REVIEW` for exact HEAD `5e956f35e2aa63f9d56a9006cd186913c8cba2e1`.** The earlier `CHANGES_REQUIRED` below is retained as **historical QA of prior HEAD only**, not a current blocker. Real-trial authorization is **NOT GRANTED**.  
 **Mode:** independent static code review + exact-HEAD GitHub CI readback. No edits to PR #243, original V1/trial, runtime, production, or workflows; no real Research or Assembly.
+
+## Historical first review — superseded after correction
+
+The findings, original CI and `CHANGES_REQUIRED` in the sections below apply only to the earlier `7765083edfff0802026f1f16b663cef3518c7ed7` HEAD. New exact-HEAD re-review and current verdict appear at the end of this file.
 
 ## Authority / START / architecture gate
 
@@ -53,3 +57,39 @@ There is no actual authenticated GitHub reviewer appointment verifier, trusted n
 **Recommended ONE next step:** return PR #243 to developer ЧАТ 1 for a narrowly scoped pre-submission document-validation correction and adversarial tests; require fresh exact-HEAD CI and independent QA before Director merge review. Even if corrected and later merged, V2 must remain inactive pending separately authorized GitHub issuer, authenticated appointments, persistence/atomic writer and user-approved live-trial contract.
 
 **Final:** `CHANGES_REQUIRED`; reviewed exact `7765083edfff0802026f1f16b663cef3518c7ed7`; verdict invalid if target HEAD changes.
+
+---
+
+## Independent bounded re-review — 2026-10-23 (current verdict)
+
+**Current target:** [PR #243](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/243), verified OPEN/DRAFT/NOT MERGED, exact final source HEAD `5e956f35e2aa63f9d56a9006cd186913c8cba2e1`. **New verdict: `PASS_FOR_DIRECTOR_MERGE_REVIEW`**, **only for inactive code**; it supersedes the old-head `CHANGES_REQUIRED`. The target was rechecked for exact HEAD after review before reporting.
+
+**Registration / procedure:** Existing registered `WORKER_TASK_RESEARCH_ASSEMBLY_V2_PR243_INDEPENDENT_QA_01.md`, `main` Board + registry and merged director registration PR #246 remain the authority; original registration required site/backlog CI both success. Re-read current `CHAT_PROTOCOL.md`, `CHAT_CONTEXT.md`, bounded Notes V2 route, Director protocol, ownership contract and relevant task. GitHub remains control-plane owner. No authority to change source, stage, pipeline, queue, or runtime; only this report-only QA amendment and target PR Conversation response.
+
+### Delta to prior rejected head
+
+Git compare `7765083edfff0802026f1f16b663cef3518c7ed7..5e956f35e2aa63f9d56a9006cd186913c8cba2e1`: three commits ahead, zero behind; **exactly three modified files**: `scripts/dossier_research_notes_v2.py` (+18/-7), `scripts/test_dossier_research_notes_v2.py` (+45/-0), developer's `reviews/worker_reports/research-assembly-v2-safe-use-readiness-01.md` (+16/-0). No activation contract/schema/workflow edits, no V1, PR #232, original trial, production, publishing, or runtime edits.
+
+**Verified source correction** (`scripts/dossier_research_notes_v2.py::prepare_assembly_transport`, lines around 476–500):
+1. Re-verifies immutable marker, original Research-introduction Git parent/blob/raw and current `assembly_work`; supplied `work` must match regenerated full frozen envelope, blocking stale or forged work before examining Assembly output.
+2. Calls `_schema("dossier_autonomous_assembly_result_v2.schema.json", document)` on the **actual caller-supplied whole document**. Schema's `additionalProperties:false`, required keys, outcome enum, `canonical_acceptance:false` and `staged_only:true` reject the previously admitted mutations.
+3. Calls `_privacy(document)` on the same original payload and applies existing bounded text/size checks; tests confirm forbidden raw/private fields are rejected. Requires exact assignment and Research transport binding. Reconstructed `candidate_assembly` is now compared `checked != document` to reject any drift from semantically validated shape, including terminal/final consistency and operation checks.
+4. Strict final dossier validator still runs on a ready outcome, and only **after** these checks and create-only output-path/lineage checks is the exact `_canonical(document)` returned. This closes the previous false-positive `ready_for_create_only_submission` on mutated source document. No operator transport writer is created.
+
+**New adversarial tests** (`scripts/test_dossier_research_notes_v2.py`):
+- `test_pre_submission_rejects_original_document_forbidden_flags_and_fields`: checks prohibited true acceptance, false staging, `raw_reviews`, unknown extra field, wrong schema, invalid outcome, and missing terminal diagnostic. Each must raise `NotesV2Error`; test confirms no published output path.
+- `test_pre_submission_validates_exact_original_payload_and_status`: validates a legitimate terminal document and byte-serialized payload round-trip; rejects ready outcome with no final dossier, terminal with unexpected final dossier, invalid operation access, schema version 1 and string-valued `canonical_acceptance`.
+- Old tests for immutable original 18 items/six fixed groups, four missing transports (attempt unknown; no fabricated attempts), sparse/yearless/zero-source Notes, SULFUR substantive source-role conflict, Sifu hostname/original-work-year tension, first-parent rewrite/byte-perfect restoration, stale/forged Research, two sequential original-order candidate targets, reviewer A/B/C shape and receipt phases still execute on the exact HEAD. No test or code claims real authenticated appointments.
+
+**Exact HEAD CI readback** (queried specifically for `5e956f35e2aa63f9d56a9006cd186913c8cba2e1`):
+- [Validate inactive Research Notes V2 and autonomous Assembly — run 39982459578](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39982459578): `completed/success`. Inspected job `120512983315` log: **37 tests in 11.700s, OK**, including both new test methods; syntax/disabled-activation guard SUCCESS.
+- [Validate site task registry and page — run 39982459638](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39982459638): `completed/success`.
+- [Validate backlog dispositions — run 39982459698](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39982459698): `completed/success`.
+
+**Inactive boundary / original scope:** `config/dossier_research_notes_v2_contract.json` at this HEAD still says `active=false`, `authorized_for_semantic_execution=false`, `authorized_for_canonical_ingest=false`, `production_enabled=false`. `config/dossier_two_stage_interfaces_contract.json` also remains inactive. Original frozen group sequences 3/8/13/15/18/20 and their 18 AppIDs remain unchanged. The stable typed-prefix and reviewer helpers are offline-only; they are **not** integrated authenticated GitHub authorization or a live V2 writer. `original_group_readiness` is a proposal/reporting helper, **not** proof of actual atomic three-item canonical ingest.
+
+**Limits/unknown (not blockers for this inactive PR):** This QA independently read source/schema/test code and CI logs, but did **not** execute an independent local disposable checkout or real semantic acceptance. No live authenticated GitHub reviewer appointment mechanism, new-run issuer/nonce, durable item receipt persistence, V2 transport writer, actual autonomous Research/Assembly launcher or strict atomic canonical writer integration is provided. Git HEAD can move between offline validation and a future GitHub writer; any live integration must attest and revalidate the same immutable authority at its actual write boundary with race protection. No real-trial authorization, Research/Assembly, semantic attempt, Deploy, scheduled-task change or production write is inferred from green tests.
+
+**Next step:** Director may review and decide whether to merge **inactive-only** implementation PR #243 **provided it is still exactly HEAD `5e956f35e2aa63f9d56a9006cd186913c8cba2e1` with the three cited checks green**. If target HEAD changes, re-review is required. Activation/live execution remains a separate GitHub-owned `CONTRACT`/issuer/writer/independent-appointments/QA authorization; **do not start a real trial now**.
+
+**CURRENT VERDICT: `PASS_FOR_DIRECTOR_MERGE_REVIEW`** for HEAD `5e956f35e2aa63f9d56a9006cd186913c8cba2e1`; earlier `CHANGES_REQUIRED` is superseded.
