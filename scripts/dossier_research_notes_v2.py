@@ -280,7 +280,8 @@ def submitted_research(repo, *, marker_commit, trial_id, appid, introduction_com
     a = frozen_assignment(repo, marker_commit=marker_commit, trial_id=trial_id, appid=appid)
     path = _path("research", a)
     if introduction_commit is None:
-        return {"status":"missing_research_transport","attempt_state":"unknown","appid":a["appid"]}
+        return {"status":"missing_research_transport","attempt_state":"unknown",
+                "appid":a["appid"],"item_local_only":True,"canonical_acceptance":False}
     if not HEX40.fullmatch(str(introduction_commit)):
         reject("broken_git_provenance", "invalid Git introduction SHA")
     try:
