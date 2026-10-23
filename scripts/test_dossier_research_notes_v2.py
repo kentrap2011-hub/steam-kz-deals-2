@@ -274,6 +274,51 @@ class NotesV2Tests(unittest.TestCase):
         self.assertFalse(preview["canonical_acceptance"])
 
 
+    def test_pre_submission_rejects_original_document_forbidden_flags_and_fields(self):
+        _,work=self.work()
+        original=v2.candidate_assembly(work,outcome="assembly_missing_evidence",
+                                       diagnostic="fixture insufficient evidence")
+        mutations=(
+            ("acceptance_true", {"canonical_acceptance":True}),
+            ("staged_false", {"staged_only":False}),
+            ("raw_reviews", {"raw_reviews":"private player review text"}),
+            ("unknown_extra", {"invented_verified":True}),
+            ("wrong_schema", {"schema":"DOSSIER-RESEARCH-NOTES-V2"}),
+            ("unknown_outcome", {"outcome":"unauthorized_success"}),
+            ("missing_required", {"diagnostic":None,"outcome":"assembly_missing_evidence"}),
+        )
+        for name,changes in mutations:
+            with self.subTest(name=name):
+                supplied=copy.deepcopy(original)
+                supplied.update(changes)
+                with self.assertRaises(v2.NotesV2Error) as cm:
+                    v2.prepare_assembly_transport(self.repo,work,supplied)
+                self.assertIn(cm.exception.code,("unparseable","unsafe_material","assembly_technical_error"))
+                self.assertFalse((self.repo/work["output_path"]).exists(),
+                                 "preflight must never create invalid transport")
+                self.assertEqual(supplied,dict(original,**changes),
+                                 "validation must not rewrite the submitted document")
+
+    def test_pre_submission_validates_exact_original_payload_and_status(self):
+        _,work=self.work()
+        original=v2.candidate_assembly(
+            work,outcome="assembly_missing_evidence",
+            diagnostic="fixture lacked verification")
+        prepared=v2.prepare_assembly_transport(self.repo,work,original)
+        self.assertEqual(prepared["status"],"ready_for_create_only_submission")
+        self.assertEqual(json.loads(prepared["bytes"]),original)
+        self.assertFalse(prepared["canonical_acceptance"])
+        for changes in (
+            {"outcome":"assembled_candidate_ready","final_dossier":None},
+            {"outcome":"runtime_or_tool_interrupted","final_dossier":{"appid":self.appid}},
+            {"operations":[{"kind":"independent_discovery","access":"invalid_mode",
+                            "summary":"not verified"}]},
+            {"schema_version":1},
+            {"canonical_acceptance":"false"},
+        ):
+            with self.subTest(changes=changes),self.assertRaises(v2.NotesV2Error):
+                v2.prepare_assembly_transport(self.repo,work,dict(original,**changes))
+
     def test_immutable_marker_and_manifest_are_not_rewritten(self):
         path=f"data/control/dossier_notes_v2/manifests/{TRIAL}.json"
         mutated=copy.deepcopy(self.manifest)
