@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR PARALLEL ASSIGNMENTS — 2026-10-23: Steam Reviews and public Pages
+
+- User approved **parallel** new worker assignments, no new CI/Actions/validators and no edits to Dossier/Deep.
+- **НОВЫЙ ЧАТ 3:** `steam-reviews-429-publication-reliability-01`, `WORKER_TASK_STEAM_REVIEWS_429_PUBLICATION_RELIABILITY_01.md`: existing Steam Reviews 429/publication lane; evidence-first single isolated bug fix only if proven, otherwise report-only, draft PR and independent QA before implementation merge. No site workflow or production execution.
+- **НОВЫЙ ЧАТ 4:** `pages-live-delivery-freshness-followup-01`, `WORKER_TASK_PAGES_LIVE_DELIVERY_FRESHNESS_FOLLOWUP_01.md`: address previous PR #245 live Pages HTTP readback and freshness proof, report-only; no deployment, UI/currency, source/data writes.
+- Separate owners: common publication changes must be escalated; no competing edits. ЧАТ 1 draft PR #255 awaits independent ЧАТ 2 QA. Old ЧАТ 3 #244 / ЧАТ 4 #245 are completed reports, not permission for settings changes or a Deploy.
+
 ## DIRECTOR CURRENT ASSIGNMENT — 2026-10-23: typed decision fast path without new CI
 
 - **РЕШЕНИЕ ПОЛЬЗОВАТЕЛЯ:** approved limited director protocol fast path and human anti-aging guard. **Rejected any NEW GitHub Actions, CI, automated validators, pipelines or scheduled checks** for this governance change. Preserve already existing checks/QA/authorization. No Dossier/Deep modification.
