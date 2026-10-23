@@ -1790,6 +1790,23 @@
       "recent_completion": false,
       "updated_on": "2026-10-23",
       "updated_at_utc": "2026-10-23T14:56:51.935Z"
+    },
+    {
+      "id": "director-role-context-regression-diagnosis-01",
+      "title": "Директор: диагностика расхода контекста и дрейфа роли",
+      "goal": "Независимо установить конкретные причины переаудита директором GitHub/правил и медленных ответов, не изменяя протоколы и код.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Точечное чтение governance файлов и репорт; без реализации.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь отмечает повторяющееся ухудшение директорской работы и потерю цели экономии контекста.",
+      "task_file": "WORKER_TASK_DIRECTOR_ROLE_CONTEXT_REGRESSION_DIAGNOSIS_01.md",
+      "worker_slot": "ЧАТ 5",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Нельзя запускать до merge регистрации в main и успешного CI; диагностика только, никакой переписи правил.",
+      "recent_completion": false,
+      "updated_on": "2026-10-23"
     }
   ]
 }
