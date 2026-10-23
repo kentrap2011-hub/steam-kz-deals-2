@@ -552,18 +552,31 @@ class NotesV2Tests(unittest.TestCase):
         with self.assertRaises(v2.NotesV2Error):
             v2.verify_independent_reviewers(roles,lookup,lambda *args: "yes")
 
-    def test_historical_missing_four_are_unknown_not_automatic_retries(self):
+    def test_four_missing_slots_and_fourteen_synthetic_sparse_notes(self):
+        # This is a disposable fixture, NOT a claim of actual historical
+        # attempts or accepted evidence for the original fourteen transports.
         missing={"1508750","1607130","1849000","1857090"}
-        commits={appid:None for appid in missing}
+        commits={}
+        for assignment in v2._original_rows():
+            appid=assignment["appid"]
+            if appid in missing:
+                commits[appid]=None
+                continue
+            frozen=v2.frozen_assignment(self.repo,marker_commit=self.marker,
+                                        trial_id=TRIAL,appid=appid)
+            doc={"schema":"DOSSIER-RESEARCH-NOTES-V2","schema_version":2,
+                 "assignment":frozen,"notes_text":"","source_log":[],
+                 "research_status":"no_verifiable_findings"}
+            write(self.repo,v2._path("research",frozen),doc)
+            commits[appid]=commit(self.repo,"fixture: sparse "+appid)
         rows=v2.frozen_assembly_traversal(
             self.repo,marker_commit=self.marker,trial_id=TRIAL,
             research_commits=commits)
         self.assertEqual(len(rows),18)
-        self.assertEqual({r["appid"] for r in rows if r["status"]=="missing_research_transport"},
-                         {appid for g in C["original_groups"] for appid in g["appids"]})
-        self.assertTrue(all(r.get("attempt_state")=="unknown" for r in rows))
+        self.assertEqual({r["appid"] for r in rows if r["status"]=="missing_research_transport"},missing)
+        self.assertEqual([r["status"] for r in rows].count("ready_for_autonomous_assembly"),14)
+        self.assertTrue(all(r.get("attempt_state")=="unknown" for r in rows if r["appid"] in missing))
         self.assertTrue(all(r.get("canonical_acceptance") is False for r in rows))
-        self.assertEqual(len(missing),4)
 
 if __name__=="__main__":
     unittest.main()
