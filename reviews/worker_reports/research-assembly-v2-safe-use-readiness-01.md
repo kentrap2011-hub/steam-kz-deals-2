@@ -61,3 +61,19 @@ Additional disposable-Git negative tests: manifest/marker/Research/Assembly rewr
 - `CURRENT_TASK.md` is shared historic operational handoff; untouched to avoid overwriting other active work. This task's complete durable report is this dedicated file.
 
 **Final worker status:** `INACTIVE_IMPLEMENTATION_DRAFT_FOR_INDEPENDENT_QA` (provided exact-head CI green; otherwise `CI_BLOCKED`). **Recommended next step:** Director registers NEW independent ЧАТ 2 exact-HEAD QA for draft PR #243; do not merge or authorize real Research/Assembly before its verdict and separate live-contract gate.
+
+## Independent QA #249 — bounded remediation in same PR #243 (2026-10-23)
+
+**QA finding:** ЧАТ 2 [report-only draft PR #249](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/249) and [PR #243 QA comment](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/243#issuecomment-6368624608) returned `CHANGES_REQUIRED` on prior exact HEAD `7765083edfff0802026f1f16b663cef3518c7ed7`. Demonstrated source-level bug: `prepare_assembly_transport` validated a reconstructed `candidate_assembly`, then serialized the unvalidated caller-supplied `document`. Forbidden `canonical_acceptance=true`, `staged_only=false`, `raw_reviews`, unknown outcome and extra fields could falsely reach `ready_for_create_only_submission`. This was unsafe **pre-transport readiness**, not a demonstrated canonical ingest bypass.
+
+**Fixed in the same draft implementation PR #243, not a new PR:**
+- Before inspecting any supplied document fields or preparing create-only bytes, validate the **actual supplied document** against `config/dossier_autonomous_assembly_result_v2.schema.json`. It enforces exact schema/version, valid terminal/outcome enumeration, required keys, `staged_only=true`, `canonical_acceptance=false`, and `additionalProperties=false`.
+- Apply full-document `_privacy(document)` to the actual supplied object and existing size/privacy envelope checks; preserve the existing independently revalidated frozen Research chain, exact assignment/transport comparison, `candidate_assembly` phase/operations invariants and final strict Dossier validator. Require the checked candidate to be identical to the serialized supplied object.
+- Two new focused tests exercise individually and together the forbidden flags, `raw_reviews`, extra key, wrong schema/version, unknown status, terminal without diagnostic, incompatible final-outcome combinations, invalid operation access, and the **valid original document** byte-exact successful path. No invalid preview/transport can be produced in fixtures.
+
+**Observed CI on code HEAD `ad5f67b7481c4651b3bc1ec7a3ff72a84ae1db50`:**
+- [Inactive Research Notes V2](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39982230143): SUCCESS; **37/37 synthetic tests OK**, syntax and disabled-activation check passed.
+- [Site task registry](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39982230148): SUCCESS.
+- [Backlog dispositions](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/39982230212): SUCCESS.
+
+This report-only addendum creates a later final Git commit; **all three CI results must also be confirmed SUCCESS on that later exact final PR HEAD**. No self-QA, no Director merge claim, no real Research, Assembly, marker, submit/ingest, Deploy, V1/trial/PR232, schedules, canonical writer or activation. Existing V2 flags stay false. **Next step:** same independently assigned ЧАТ 2 re-reviews the new exact HEAD and posts its own verdict before any Director merge decision.
