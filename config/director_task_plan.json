@@ -1775,7 +1775,7 @@
       "id": "research-assembly-v2-pr243-independent-qa-01",
       "title": "ЧАТ 2 — независимый QA V2 draft изменения №243",
       "goal": "Независимо проверить точный HEAD V2 inactive PR, код/тесты/приёмку и выдать PASS или CHANGES_REQUIRED без запуска семантики.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Три изменённых файла, synthetic Git provenance, negative tests и проверка exact-HEAD CI.",
       "urgency": "высокая",
@@ -1786,16 +1786,16 @@
       "depends_on": [
         "research-assembly-v2-safe-use-readiness-01"
       ],
-      "blocker": "Запуск только после merge director registration PR и успешного CI на main; реализация изменение №243 ещё не принята, настоящий Research/Assembly запрещён.",
-      "recent_completion": false,
+      "blocker": "Отчёт завершён и сохранён в draft изменении №249. Режим задачи был REPORT ONLY; самостоятельное принятие или реализация не разрешались.",
+      "recent_completion": true,
       "updated_on": "2026-10-23",
-      "updated_at_utc": "2026-10-23T14:56:51.935Z"
+      "updated_at_utc": "2026-10-23T16:52:00.000Z"
     },
     {
       "id": "director-role-context-regression-diagnosis-01",
       "title": "Директор: диагностика расхода контекста и дрейфа роли",
       "goal": "Независимо установить конкретные причины переаудита директором GitHub/правил и медленных ответов, не изменяя протоколы и код.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Точечное чтение governance файлов и репорт; без реализации.",
       "urgency": "высокая",
@@ -1804,16 +1804,16 @@
       "worker_slot": "ЧАТ 5",
       "order": null,
       "depends_on": [],
-      "blocker": "Нельзя запускать до merge регистрации в main и успешного CI; диагностика только, никакой переписи правил.",
-      "recent_completion": false,
+      "blocker": "Отчёт завершён и сохранён в draft изменении №248. Режим задачи был REPORT ONLY; самостоятельное принятие или реализация не разрешались.",
+      "recent_completion": true,
       "updated_on": "2026-10-23",
-      "updated_at_utc": "2026-10-23T15:11:30.000Z"
+      "updated_at_utc": "2026-10-23T16:52:00.000Z"
     },
     {
       "id": "director-audits-followthrough-action-plan-01",
       "title": "ЧАТ 6 — план выполнения прежних рекомендаций по роли директора",
       "goal": "Сопоставить уже выполненные и невыполненные рекомендации старого аудита и ЧАТА 5; выдать одно конкретное следующее IMPLEMENT-задание без переписывания правил.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Точечное сравнение существующих отчётов с main; только план и report-only PR.",
       "urgency": "высокая",
@@ -1822,16 +1822,16 @@
       "worker_slot": "ЧАТ 6",
       "order": null,
       "depends_on": [],
-      "blocker": "Старт только после merge регистрации и зелёных обязательных CI на main. Не начинать реализацию или очередной полный аудит.",
-      "recent_completion": false,
+      "blocker": "Отчёт завершён и сохранён в draft изменении №251. Режим задачи был REPORT ONLY; самостоятельное принятие или реализация не разрешались.",
+      "recent_completion": true,
       "updated_on": "2026-10-23",
-      "updated_at_utc": "2026-10-23T15:38:00.000Z"
+      "updated_at_utc": "2026-10-23T16:52:00.000Z"
     },
     {
       "id": "director-governance-aging-resilience-review-01",
       "title": "ЧАТ 7 — устойчивость директорских правил к устареванию",
       "goal": "Расширить выводы существующих аудитов проверкой устойчивости director governance через 6–12 месяцев без наращивания бюрократии и перерасхода контекста.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Сопоставление существующих отчётов, точечный анализ governance и bounded future-proof plan; без изменений правил.",
       "urgency": "высокая",
@@ -1842,10 +1842,51 @@
       "depends_on": [
         "director-audits-followthrough-action-plan-01"
       ],
-      "blocker": "Начинать только после merge регистрации и успешных обязательных проверок CI; это независимое дополнение к отчёту, не IMPLEMENT.",
+      "blocker": "Отчёт завершён и сохранён в draft изменении №253. Режим задачи был REPORT ONLY; самостоятельное принятие или реализация не разрешались.",
+      "recent_completion": true,
+      "updated_on": "2026-10-23",
+      "updated_at_utc": "2026-10-23T16:52:00.000Z"
+    },
+    {
+      "id": "director-typed-fastpath-anti-aging-implement-01",
+      "title": "ЧАТ 1 — короткий протокол решений директора и защита от устаревания",
+      "goal": "Внести небольшую операционную правку только DIRECTOR_PROTOCOL.md: четыре типизированных маршрута, условия остановки, противодействие наслоению будущих правил; без новой CI/Actions или изменения существующих pipeline.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Один нормативный файл и отчёт, без изменения кода, схем, CI, production или автоматизаций.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь утвердил ограниченное исправление без новых GitHub проверок.",
+      "task_file": "WORKER_TASK_DIRECTOR_TYPED_FASTPATH_ANTI_AGING_IMPLEMENT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "director-audits-followthrough-action-plan-01",
+        "director-governance-aging-resilience-review-01"
+      ],
+      "blocker": "Не запускать до merge регистрационного изменения и существующих обязательных CI. Только draft PR с изменением DIRECTOR_PROTOCOL.md + отчёт; никакого merge самим worker.",
       "recent_completion": false,
       "updated_on": "2026-10-23",
-      "updated_at_utc": "2026-10-23T16:02:00.000Z"
+      "updated_at_utc": "2026-10-23T16:52:00.000Z"
+    },
+    {
+      "id": "director-typed-fastpath-anti-aging-independent-qa-01",
+      "title": "ЧАТ 2 — независимый QA директорского fast path и anti-aging",
+      "goal": "Независимо проверить final HEAD draft PR ЧАТА 1 по четырём режимам и anti-aging, без новых CI/Actions и без правок исходного протокола.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Только targeted review изменённых строк, сценарии поведения, существующие доступные CI.",
+      "urgency": "высокая",
+      "urgency_reason": "Независимое QA требуется до решения директора о принятии нормативного PR.",
+      "task_file": "WORKER_TASK_DIRECTOR_TYPED_FASTPATH_ANTI_AGING_INDEPENDENT_QA_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "director-typed-fastpath-anti-aging-implement-01"
+      ],
+      "blocker": "WAIT_FOR_IMPLEMENTATION_PR: запускать только после того, как ЧАТ 1 опубликует draft PR и точный HEAD; независимый QA не пишет исходный протокол.",
+      "recent_completion": false,
+      "updated_on": "2026-10-23",
+      "updated_at_utc": "2026-10-23T16:52:00.000Z"
     }
   ]
 }
