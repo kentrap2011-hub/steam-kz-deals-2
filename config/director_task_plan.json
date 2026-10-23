@@ -1925,6 +1925,44 @@
       "recent_completion": false,
       "updated_on": "2026-10-23",
       "updated_at_utc": "2026-10-23T17:20:00.000Z"
+    },
+    {
+      "id": "dossier-v2-next-safe-component-01",
+      "title": "ЧАТ 1 — Dossier V2: первый недостающий безопасный компонент",
+      "goal": "Выбрать по доказанным V2 blocker-контрактам ровно один минимальный технический компонент для будущего Research → Assembly и реализовать только безопасную inactive часть при достаточной авторизации; без семантического запуска.",
+      "status": "planned",
+      "effort": "высокая",
+      "effort_reason": "Узкая работа вокруг V2 source/control-plane и доказательств, без запуска и расширения архитектуры.",
+      "urgency": "высокая",
+      "urgency_reason": "PR №239 и №243 приняты, реальная Research→Assembly V2 всё ещё contract-blocked.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_NEXT_SAFE_COMPONENT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "research-assembly-v2-safe-use-readiness-01"
+      ],
+      "blocker": "Старт после merge регистрации и существующих обязательных CI. Только разрешённая inactive часть, без нового GitHub CI/Actions/validator, без live Research/Assembly и Deploy; code draft PR требует отдельного QA.",
+      "recent_completion": false,
+      "updated_on": "2026-10-23",
+      "updated_at_utc": "2026-10-23T18:05:00.000Z"
+    },
+    {
+      "id": "progressive-deep-current-queue-unblock-01",
+      "title": "ЧАТ 2 — Progressive Deep: текущая очередь и конкретный блокер",
+      "goal": "Точечно установить текущую официальную очередь Deep, последние принятые Stage 1/2 результаты и один доказанный операционный блокер прогресса; выполнить только безопасный локальный fix при доказанном узком объёме, иначе короткий отчёт с одним следующим действием.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Чтение точных state/receipts/работающих контрактов без массового аудита и без нового семантического запуска.",
+      "urgency": "высокая",
+      "urgency_reason": "Продвижение Deep независимо от работ по Dossier V2 и директорскому протоколу.",
+      "task_file": "WORKER_TASK_PROGRESSIVE_DEEP_CURRENT_QUEUE_UNBLOCK_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Не смешивать с текущим semantic worker; запуск только после merge регистрации/CI. Никаких запускаемых Deep semantic попыток, Fast cutover, новых CI/Actions/validator/автоматизаций.",
+      "recent_completion": false,
+      "updated_on": "2026-10-23",
+      "updated_at_utc": "2026-10-23T18:05:00.000Z"
     }
   ]
 }
