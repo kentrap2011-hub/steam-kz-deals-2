@@ -5,6 +5,14 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT ASSIGNMENT — 2026-10-23: typed decision fast path without new CI
+
+- **РЕШЕНИЕ ПОЛЬЗОВАТЕЛЯ:** approved limited director protocol fast path and human anti-aging guard. **Rejected any NEW GitHub Actions, CI, automated validators, pipelines or scheduled checks** for this governance change. Preserve already existing checks/QA/authorization. No Dossier/Deep modification.
+- **НОВЫЙ ЧАТ 1, implementation PLANNED:** `director-typed-fastpath-anti-aging-implement-01` → `WORKER_TASK_DIRECTOR_TYPED_FASTPATH_ANTI_AGING_IMPLEMENT_01.md`. Edit only `DIRECTOR_PROTOCOL.md` plus worker report, small draft PR, no merge; STOP/typed STATUS/DECIDE/REGISTER/MERGE and one human future-rule replacement discipline from ЧАТ 6/7 audit reports. This supersedes neither the already merged inactive V2 PR #243 nor its real activation blockers.
+- **НОВЫЙ ЧАТ 2, independent QA PLANNED/BLOCKED until ЧАТ 1 draft PR:** `director-typed-fastpath-anti-aging-independent-qa-01` → `WORKER_TASK_DIRECTOR_TYPED_FASTPATH_ANTI_AGING_INDEPENDENT_QA_01.md`. Review exact implementation HEAD, report-only draft PR, no source edits or merge. Do not dispatch simultaneously before developer PR.
+- **RECENTLY COMPLETED:** previous ЧАТ 1 V2 task accepted via implementation PR #243, old ЧАТ 2 QA PR #249 reported PASS; ЧАТ 5 #248, ЧАТ 6 #251, ЧАТ 7 #253 completed audit reports. Their *old physical chats retire*; draft reports may remain open, but they are not active implementations. ЧАТ 3 #244 and ЧАТ 4 #245 report-only audits have no requested implementation now.
+- **Director next:** existing required registration checks, merge this registration to main; launch only new physical ЧАТ 1 with task. When developer reports exact HEAD, dispatch new physical ЧАТ 2; Director reviews final QA and merge conditions. No extra work order.
+
 ## DIRECTOR CURRENT AUTHORIZATION — 2026-10-23 (main e9d9fd64986a)
 
 - **ЧАТ 1: worker task COMPLETED, physical worker retires.** Task `research-assembly-v2-safe-use-readiness-01`, draft [PR #243](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/243) HEAD `7765083edfff0802026f1f16b663cef3518c7ed7`, 3 exact-HEAD CI checks SUCCESS. Dedicated worker report in PR branch. Source is **DRAFT / NOT MERGED**, not accepted independently; no semantic or production run, no real activation.
