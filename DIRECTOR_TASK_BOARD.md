@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT AUTHORIZATION — 2026-10-23: parallel Dossier V2 and Progressive Deep
+
+- **USER APPROVED launch prompts:** New independent ЧАТ 1 and ЧАТ 2 to move analysis work forward; neither replaces an already-running semantic worker. No new GitHub Actions/CI/validators/automations or changes to existing checks, no real semantic execution, deploy or production.
+- **НОВЫЙ ЧАТ 1:** `dossier-v2-next-safe-component-01`, `WORKER_TASK_DOSSIER_V2_NEXT_SAFE_COMPONENT_01.md`: one proven first inactive V2 technical component after merged PRs #239/#243. If authority cannot safely be bounded, report `CONTRACT_BLOCKED` rather than create fake writer. One draft PR + independent QA before code merge.
+- **НОВЫЙ ЧАТ 2:** `progressive-deep-current-queue-unblock-01`, `WORKER_TASK_PROGRESSIVE_DEEP_CURRENT_QUEUE_UNBLOCK_01.md`: exact existing Deep queue/receipt status and one proven local blockage, optionally small offline fix, otherwise report only. Do not run semantic Deep or Fast cutover.
+- Past physical ЧАТ 1/#255 protocol work and ЧАТ 2/#257 QA are DONE; new slots refer to new physical conversations. Report-only ЧАТ 3 #258 and ЧАТ 4 #259 are also complete and not authority for repairs.
+
 ## DIRECTOR PARALLEL ASSIGNMENTS — 2026-10-23: Steam Reviews and public Pages
 
 - User approved **parallel** new worker assignments, no new CI/Actions/validators and no edits to Dossier/Deep.
