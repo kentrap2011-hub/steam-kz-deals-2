@@ -19,6 +19,11 @@
 - **НОВЫЙ ЧАТ 5**: task `director-role-context-regression-diagnosis-01`, `WORKER_TASK_DIRECTOR_ROLE_CONTEXT_REGRESSION_DIAGNOSIS_01.md`, registered **PLANNED** pending exact-HEAD CI + merge. One read-only/diagnostic report-only draft PR; determine evidenced cause of Director repeatedly re-reading huge GitHub governance documents, over-scanning tasks and drifting into worker implementation. Must separate actual rule gaps from Director disobedience and resource overhead. **NO rule changes, code changes, production operations, user-approval claims or self-directed fixes.**
 - Director keeps conversation/priority/handoffs short and does not independently redo worker's diagnosis. Read worker's verdict after PR; decide any subsequent action separately. Existing ЧАТ 2 QA for #243, ЧАТ 3 audit #244, ЧАТ 4 audit #245 remain unchanged.
 
+## DIRECTOR ASSIGNMENT — 2026-10-23: close out prior director-context audits
+
+- **НОВЫЙ ЧАТ 6**: task `director-audits-followthrough-action-plan-01`, `WORKER_TASK_DIRECTOR_AUDITS_FOLLOWTHROUGH_ACTION_PLAN_01.md`, PLAN ONLY until this registration PR is merged and required CI green. Single report-only draft PR. Compare previously documented director/governance audit recommendations around PR #241 with independent ЧАТ 5 report PR #248, distinguish implemented vs unimplemented, and prepare **one bounded next implementation assignment** or explain why behavioral enforcement alone suffices. No new wide-ranging audit, no changes to rules, source, registry/Board, site or production.
+- This new assignment does not supersede independent ЧАТ 2 QA of PR #243 or ЧАТ 3/4 audits, and does not authorize real Research/Assembly/Deploy. Director only registers/dispatches and reviews compact result.
+
 ## DIRECTOR DECISION — 2026-10-20: redesign Research Stage 1 before rerunning all original 18
 
 - **User direction:** Stage 1 semantic Research must concentrate on game investigation and source-supported facts; mechanical technical JSON/IDs/normalization/binding belongs to GitHub-owned deterministic code, without weakening evidence/semantic truth. First audit and fix Stage 1; then execute a separately authorized **new full Research run for the same original 18 games**, preserving original six groups/order and immutable historical records. Do NOT merely patch the six old payloads; do NOT run Research yet.
