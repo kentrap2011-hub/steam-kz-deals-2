@@ -24,6 +24,11 @@
 - **НОВЫЙ ЧАТ 6**: task `director-audits-followthrough-action-plan-01`, `WORKER_TASK_DIRECTOR_AUDITS_FOLLOWTHROUGH_ACTION_PLAN_01.md`, PLAN ONLY until this registration PR is merged and required CI green. Single report-only draft PR. Compare previously documented director/governance audit recommendations around PR #241 with independent ЧАТ 5 report PR #248, distinguish implemented vs unimplemented, and prepare **one bounded next implementation assignment** or explain why behavioral enforcement alone suffices. No new wide-ranging audit, no changes to rules, source, registry/Board, site or production.
 - This new assignment does not supersede independent ЧАТ 2 QA of PR #243 or ЧАТ 3/4 audits, and does not authorize real Research/Assembly/Deploy. Director only registers/dispatches and reviews compact result.
 
+## DIRECTOR ASSIGNMENT — 2026-10-23: long-term director architecture resilience
+
+- **НОВЫЙ ЧАТ 7**: task `director-governance-aging-resilience-review-01`, `WORKER_TASK_DIRECTOR_GOVERNANCE_AGING_RESILIENCE_REVIEW_01.md`, PLANNED pending exact-head registration CI + merge to main. READ-ONLY follow-up to existing audits from ЧАТ 5/6; test whether their solution survives growing documentation, new rules and director rotation in six to twelve months. Produce only report and one bounded follow-on correction proposal (or explain none needed).
+- No rule/source/CI changes, no whole-system audit, no new governance redesign, no implementation, no semantics/production/deploy. This task does not supersede ЧАТ 2 QA of PR #243 or other independent worker tasks.
+
 ## DIRECTOR DECISION — 2026-10-20: redesign Research Stage 1 before rerunning all original 18
 
 - **User direction:** Stage 1 semantic Research must concentrate on game investigation and source-supported facts; mechanical technical JSON/IDs/normalization/binding belongs to GitHub-owned deterministic code, without weakening evidence/semantic truth. First audit and fix Stage 1; then execute a separately authorized **new full Research run for the same original 18 games**, preserving original six groups/order and immutable historical records. Do NOT merely patch the six old payloads; do NOT run Research yet.
