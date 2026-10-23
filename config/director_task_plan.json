@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-10-22",
+  "last_curated_on": "2026-10-23",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -1623,47 +1623,47 @@
       "id": "dossier-shadow-18-pr232-multipublish-prefix-remediation-01",
       "title": "Dossier PR232 — исправить ошибку второй и последующих публикаций Assembly",
       "goal": "На существующем изменение №232 устранить shrinking-ready-list при проверке исторического typed prefix, доказать два последовательных sandbox publish и сохранить GitHub per-AppID безопасность, затем отправить на повторный независимый QA.",
-      "status": "planned",
+      "status": "blocked",
       "effort": "средняя",
       "effort_reason": "Точечная корректировка валидатора префикса, сценарии жизненного цикла и тесты без изменения исторических границ.",
       "urgency": "высокая",
       "urgency_reason": "Независимый QA выявил реальную блокировку второй публикации несмотря на 8/8 CI.",
       "task_file": "WORKER_TASK_DOSSIER_SHADOW_18_PR232_MULTIPUBLISH_PREFIX_REMEDIATION_01.md",
-      "worker_slot": "ЧАТ 3",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "dossier-shadow-18-six-research-gaps-recon-01"
       ],
-      "blocker": "ON HOLD by Director/user Stage 1 redesign priority: do not launch ЧАТ 3 or merge изменение №232 before Stage 1 Research contract impact/compatibility review. Existing QA blocker still applies.",
+      "blocker": "Historical V1/Stage-1 assignment suspended and slot released; newer V2 изменение №239 is canonical inactive architecture. изменение №232 remains CHANGES_REQUIRED, unmerged. Previous report изменение №234 exists but is not new authority.",
       "recent_completion": false,
-      "updated_on": "2026-10-20",
-      "updated_at_utc": "2026-10-20T15:14:00Z"
+      "updated_on": "2026-10-23",
+      "updated_at_utc": "2026-10-23T13:28:38.985Z"
     },
     {
       "id": "dossier-shadow-research-stage1-technical-boundary-audit-01",
       "title": "Audit Research Stage 1 technical boundary before fresh original-18 rerun",
       "goal": "Separate semantic evidence investigation from deterministic technical JSON/normalization, design safe new full 18 Research trial without executing",
-      "status": "planned",
+      "status": "blocked",
       "effort": "средняя",
       "effort_reason": "Contract and evidence trace across original frozen 18, no implementation",
       "urgency": "высокая",
       "urgency_reason": "User directs Stage 1 correction before any Assembly or re-Research",
       "task_file": "WORKER_TASK_DOSSIER_SHADOW_RESEARCH_STAGE1_TECHNICAL_BOUNDARY_AUDIT_01.md",
-      "worker_slot": "ЧАТ 4",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "dossier-shadow-18-six-research-gaps-recon-01"
       ],
-      "blocker": "Awaiting user launch of new physical ЧАТ 4; read-only architecture recon only",
+      "blocker": "Historical V1/Stage-1 assignment suspended and slot released; newer V2 изменение №239 is canonical inactive architecture. изменение №232 remains CHANGES_REQUIRED, unmerged. Previous report изменение №234 exists but is not new authority.",
       "recent_completion": false,
-      "updated_on": "2026-10-20",
-      "updated_at_utc": "2026-10-20T18:49:00Z"
+      "updated_on": "2026-10-23",
+      "updated_at_utc": "2026-10-23T13:28:38.985Z"
     },
     {
       "id": "research-assembly-notes-v2-autonomous-assembly-implement-01",
       "title": "Research Notes V2 и самостоятельный Assembly",
       "goal": "Реализовать новую двухэтапную Research Notes V2 → автономный Assembly по PR235, без активации",
-      "status": "active",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Контрактная разработка и отрицательные тесты",
       "urgency": "высокая",
@@ -1672,16 +1672,16 @@
       "worker_slot": "ЧАТ 3",
       "order": null,
       "depends_on": [],
-      "blocker": "",
-      "updated_on": "2026-10-21",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-21T17:16:34Z"
+      "blocker": "Merged изменение №239 confirmed in main; execution/deploy not implied; retired old physical worker.",
+      "updated_on": "2026-10-23",
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-23T13:28:38.985Z"
     },
     {
       "id": "site-publication-independent-failure-isolation-implement-01",
       "title": "Изоляция независимых отказов публикации сайта",
       "goal": "Изолировать некритические ошибки задач и независимых разделов от публикации проверенных скидок по PR236",
-      "status": "active",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Контрактная разработка и отрицательные тесты",
       "urgency": "высокая",
@@ -1690,16 +1690,16 @@
       "worker_slot": "ЧАТ 1",
       "order": null,
       "depends_on": [],
-      "blocker": "",
-      "updated_on": "2026-10-21",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-21T17:16:34Z"
+      "blocker": "Merged изменение №238 confirmed in main; execution/deploy not implied; retired old physical worker.",
+      "updated_on": "2026-10-23",
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-23T13:28:38.985Z"
     },
     {
       "id": "director-governance-safe-fixes-chat4-01",
       "title": "ЧАТ 4 — безопасное исправление управления проектом",
       "goal": "Устранить подтверждённые ошибки реестра, выяснить сбой публикации #39647198011, согласовать правила и подготовить минимальное упрощение без дублирования состояния.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Локальные правки контрактов/валидаторов с регрессионными проверками; без реального Deploy.",
       "urgency": "высокая",
@@ -1708,10 +1708,68 @@
       "worker_slot": "ЧАТ 4",
       "order": null,
       "depends_on": [],
-      "blocker": "",
-      "updated_on": "2026-10-22",
+      "blocker": "Merged изменение №241 confirmed in main; execution/deploy not implied; retired old physical worker.",
+      "updated_on": "2026-10-23",
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-23T13:28:38.985Z"
+    },
+    {
+      "id": "research-assembly-v2-safe-use-readiness-01",
+      "title": "Research → Assembly V2: подготовка к безопасному использованию",
+      "goal": "Безопасно подготовить inactive V2 к будущему отдельно разрешённому trial, не запуская семантику.",
+      "status": "planned",
+      "effort": "высокая",
+      "effort_reason": "Ограниченная задача с независимой веткой и проверяемым отчётом.",
+      "urgency": "высокая",
+      "urgency_reason": "Требуется техническая связка after изменение №239",
+      "task_file": "WORKER_TASK_RESEARCH_ASSEMBLY_V2_SAFE_USE_READINESS_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "research-assembly-notes-v2-autonomous-assembly-implement-01"
+      ],
+      "blocker": "Запуск только после полного merge task/JSON/Board в main и зеленых проверок; реальная production/semantic authority НЕ выдана.",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-22T09:35:00Z"
+      "updated_on": "2026-10-23",
+      "updated_at_utc": "2026-10-23T13:28:38.985Z"
+    },
+    {
+      "id": "main-branch-protection-audit-01",
+      "title": "main: защита ветки и обязательные проверки",
+      "goal": "Независимо проверить protections/rulesets и сформировать administrator plan без настройки доступа.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Ограниченная задача с независимой веткой и проверяемым отчётом.",
+      "urgency": "высокая",
+      "urgency_reason": "main сейчас protected=false",
+      "task_file": "WORKER_TASK_MAIN_BRANCH_PROTECTION_AUDIT_01.md",
+      "worker_slot": "ЧАТ 3",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Запуск только после полного merge task/JSON/Board в main и зеленых проверок; реальная production/semantic authority НЕ выдана.",
+      "recent_completion": false,
+      "updated_on": "2026-10-23",
+      "updated_at_utc": "2026-10-23T13:28:38.985Z"
+    },
+    {
+      "id": "pages-live-publication-readback-audit-01",
+      "title": "Pages: read-only проверка реально опубликованного сайта",
+      "goal": "Сопоставить actual Pages bytes/receipts и current main визуальные данные без Deploy.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Ограниченная задача с независимой веткой и проверяемым отчётом.",
+      "urgency": "высокая",
+      "urgency_reason": "изменение №238 принят, реальный Deploy не доказан",
+      "task_file": "WORKER_TASK_PAGES_LIVE_PUBLICATION_READBACK_AUDIT_01.md",
+      "worker_slot": "ЧАТ 4",
+      "order": null,
+      "depends_on": [
+        "site-publication-independent-failure-isolation-implement-01"
+      ],
+      "blocker": "Запуск только после полного merge task/JSON/Board в main и зеленых проверок; реальная production/semantic authority НЕ выдана.",
+      "recent_completion": false,
+      "updated_on": "2026-10-23",
+      "updated_at_utc": "2026-10-23T13:28:38.985Z"
     }
   ]
 }
