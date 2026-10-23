@@ -5,16 +5,14 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## DIRECTOR CURRENT AUTHORIZATION — 2026-10-23 (source main 4cadd6dd6b8f)
+## DIRECTOR CURRENT AUTHORIZATION — 2026-10-23 (main e9d9fd64986a)
 
-- Latest merged: PR #239 inactive Notes V2, PR #238 optional Pages isolation, PR #241 director safety. Their registry entries are marked complete; no live semantic run or Pages Deploy is inferred.
-- **ЧАТ 1, СУЩЕСТВУЮЩИЙ новый физический чат, previously BLOCKED_AUTHORITY:** task `research-assembly-v2-safe-use-readiness-01`, `WORKER_TASK_RESEARCH_ASSEMBLY_V2_SAFE_USE_READINESS_01.md`; planned IMPLEMENT, inactive PR-only. Exclusive V2 sandbox/control-plane/test edits. No real Research/Assembly, retry, activation, PR #232 modification, production or Scheduled Tasks.
-- **НОВЫЙ ЧАТ 3:** `main-branch-protection-audit-01`, `WORKER_TASK_MAIN_BRANCH_PROTECTION_AUDIT_01.md`, planned READ-ONLY / RECON, own report-only branch; no GitHub settings writes. Old planned Chat 3 PR #232 remediation is suspended and slot released.
-- **НОВЫЙ ЧАТ 4:** `pages-live-publication-readback-audit-01`, `WORKER_TASK_PAGES_LIVE_PUBLICATION_READBACK_AUDIT_01.md`, planned READ-ONLY / RECON, own report-only branch; no Deploy. Old Chat 4 Stage-1 audit report in draft PR #234 remains evidence, no active assignment.
-- **НОВЫЙ ЧАТ 2:** reserved for later independent exact-HEAD QA of Chat 1 V2 PR; task NOT YET REGISTERED until actual PR exists. Old historical QA of PR #232 is held; no active physical slot conflict.
-- **Other open historic drafts:** #231, #232 (CHANGES_REQUIRED), #233, #234, #235, #236 are not new authorization; PR #239 does not cure PR #232 and does not prove Research recovery for the historical 18.
-- **Parallel-ownership rule:** ЧАТ 1 writes only dedicated V2 implementation PR + own report; ЧАТ 3/4 write only distinct report files on separate branches; Director alone writes Board/registry. No launch before exact task/JSON/Board merge and successful CI on main.
-- **Director next:** after reports review exact commits/CI, assign independent Chat 2 QA, merge only after passing gates. Separate authorizations required for real semantic work, manual publish and Deploy.
+- **ЧАТ 1: worker task COMPLETED, physical worker retires.** Task `research-assembly-v2-safe-use-readiness-01`, draft [PR #243](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/243) HEAD `7765083edfff0802026f1f16b663cef3518c7ed7`, 3 exact-HEAD CI checks SUCCESS. Dedicated worker report in PR branch. Source is **DRAFT / NOT MERGED**, not accepted independently; no semantic or production run, no real activation.
+- **НОВЫЙ ЧАТ 2: independent QA assigned PLANNED until this director registration PR is merged and CI green.** Task `research-assembly-v2-pr243-independent-qa-01`, `WORKER_TASK_RESEARCH_ASSEMBLY_V2_PR243_INDEPENDENT_QA_01.md`, READ-ONLY code/evidence review of exact PR #243 HEAD; own separate report-only draft PR plus review verdict on PR #243. Independent of Chat1; no code edits/self-merge/real run.
+- **ЧАТ 3: audit work submitted, Director review pending.** Task `main-branch-protection-audit-01`; draft report [PR #244](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/244), head `342e636546adec3d7c999ae9051e2efef1cb39e4`. Audit report does not change GitHub protection.
+- **ЧАТ 4: audit work submitted, Director review pending.** Task `pages-live-publication-readback-audit-01`; draft report [PR #245](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/245), head `82e933622dd828fb95d64af383c23f226f723c7e`. Report does not prove or authorize Deploy by itself.
+- Existing inactive [PR #239](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/239) merged. Historical [PR #232](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/232) remains CHANGES_REQUIRED. Notes V2 contract stays `active=false`, no real semantic Research/Assembly or canonical ingest authority. Independent QA passing #243 permits **Director merge consideration only**, not trial activation.
+- **Director next:** finish registration merge after successful exact-head validation, send ЧАТ 2 prompt to a NEW physical chat. Evaluate independent QA verdict before code merge. Read ЧАТ 3/4 reports separately. Keep ownership isolated, no deployment, no Scheduling Tasks.
 
 ## DIRECTOR DECISION — 2026-10-20: redesign Research Stage 1 before rerunning all original 18
 
