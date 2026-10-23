@@ -14,6 +14,11 @@
 - Existing inactive [PR #239](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/239) merged. Historical [PR #232](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/232) remains CHANGES_REQUIRED. Notes V2 contract stays `active=false`, no real semantic Research/Assembly or canonical ingest authority. Independent QA passing #243 permits **Director merge consideration only**, not trial activation.
 - **Director next:** finish registration merge after successful exact-head validation, send ЧАТ 2 prompt to a NEW physical chat. Evaluate independent QA verdict before code merge. Read ЧАТ 3/4 reports separately. Keep ownership isolated, no deployment, no Scheduling Tasks.
 
+## DIRECTOR ASSIGNMENT — 2026-10-23: independent diagnosis of director role/context regression
+
+- **НОВЫЙ ЧАТ 5**: task `director-role-context-regression-diagnosis-01`, `WORKER_TASK_DIRECTOR_ROLE_CONTEXT_REGRESSION_DIAGNOSIS_01.md`, registered **PLANNED** pending exact-HEAD CI + merge. One read-only/diagnostic report-only draft PR; determine evidenced cause of Director repeatedly re-reading huge GitHub governance documents, over-scanning tasks and drifting into worker implementation. Must separate actual rule gaps from Director disobedience and resource overhead. **NO rule changes, code changes, production operations, user-approval claims or self-directed fixes.**
+- Director keeps conversation/priority/handoffs short and does not independently redo worker's diagnosis. Read worker's verdict after PR; decide any subsequent action separately. Existing ЧАТ 2 QA for #243, ЧАТ 3 audit #244, ЧАТ 4 audit #245 remain unchanged.
+
 ## DIRECTOR DECISION — 2026-10-20: redesign Research Stage 1 before rerunning all original 18
 
 - **User direction:** Stage 1 semantic Research must concentrate on game investigation and source-supported facts; mechanical technical JSON/IDs/normalization/binding belongs to GitHub-owned deterministic code, without weakening evidence/semantic truth. First audit and fix Stage 1; then execute a separately authorized **new full Research run for the same original 18 games**, preserving original six groups/order and immutable historical records. Do NOT merely patch the six old payloads; do NOT run Research yet.
