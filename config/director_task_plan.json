@@ -1851,7 +1851,7 @@
       "id": "director-typed-fastpath-anti-aging-implement-01",
       "title": "ЧАТ 1 — короткий протокол решений директора и защита от устаревания",
       "goal": "Внести небольшую операционную правку только DIRECTOR_PROTOCOL.md: четыре типизированных маршрута, условия остановки, противодействие наслоению будущих правил; без новой CI/Actions или изменения существующих pipeline.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Один нормативный файл и отчёт, без изменения кода, схем, CI, production или автоматизаций.",
       "urgency": "высокая",
@@ -1863,16 +1863,16 @@
         "director-audits-followthrough-action-plan-01",
         "director-governance-aging-resilience-review-01"
       ],
-      "blocker": "Не запускать до merge регистрационного изменения и существующих обязательных CI. Только draft PR с изменением DIRECTOR_PROTOCOL.md + отчёт; никакого merge самим worker.",
-      "recent_completion": false,
-      "updated_on": "2026-10-23",
-      "updated_at_utc": "2026-10-23T16:52:00.000Z"
+      "blocker": "Задание завершено: PR №255, вывод MERGED. Никакого дополнительного выполнения без нового назначения.",
+      "recent_completion": true,
+      "updated_on": "2026-10-24",
+      "updated_at_utc": "2026-10-24T09:49:00.000Z"
     },
     {
       "id": "director-typed-fastpath-anti-aging-independent-qa-01",
       "title": "ЧАТ 2 — независимый QA директорского fast path и anti-aging",
       "goal": "Независимо проверить final HEAD draft PR ЧАТА 1 по четырём режимам и anti-aging, без новых CI/Actions и без правок исходного протокола.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Только targeted review изменённых строк, сценарии поведения, существующие доступные CI.",
       "urgency": "высокая",
@@ -1883,10 +1883,10 @@
       "depends_on": [
         "director-typed-fastpath-anti-aging-implement-01"
       ],
-      "blocker": "WAIT_FOR_IMPLEMENTATION_PR: запускать только после того, как ЧАТ 1 опубликует draft PR и точный HEAD; независимый QA не пишет исходный протокол.",
-      "recent_completion": false,
-      "updated_on": "2026-10-23",
-      "updated_at_utc": "2026-10-23T16:52:00.000Z"
+      "blocker": "Задание завершено: PR №257, вывод PASS_FOR_DIRECTOR_MERGE_REVIEW. Никакого дополнительного выполнения без нового назначения.",
+      "recent_completion": true,
+      "updated_on": "2026-10-24",
+      "updated_at_utc": "2026-10-24T09:49:00.000Z"
     },
     {
       "id": "steam-reviews-429-publication-reliability-01",
@@ -1895,16 +1895,16 @@
       "task_file": "WORKER_TASK_STEAM_REVIEWS_429_PUBLICATION_RELIABILITY_01.md",
       "worker_slot": "ЧАТ 3",
       "depends_on": [],
-      "blocker": "START после merge регистрации; не считать исторические 429 текущим дефектом; запрет на новую CI/Actions, Dossier/Deep, production и общие публикационные workflow.",
-      "status": "planned",
+      "blocker": "Задание завершено: PR №258, вывод NO_CONFIRMED_BOUNDED_FIX. Никакого дополнительного выполнения без нового назначения.",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Точечная работа с документированными доказательствами, без дублирования смежной задачи.",
       "urgency": "высокая",
       "urgency_reason": "Пользователь поручил выполнение параллельно с исправлением директорского протокола.",
       "order": null,
-      "recent_completion": false,
-      "updated_on": "2026-10-23",
-      "updated_at_utc": "2026-10-23T17:20:00.000Z"
+      "recent_completion": true,
+      "updated_on": "2026-10-24",
+      "updated_at_utc": "2026-10-24T09:49:00.000Z"
     },
     {
       "id": "pages-live-delivery-freshness-followup-01",
@@ -1915,22 +1915,22 @@
       "depends_on": [
         "pages-live-publication-readback-audit-01"
       ],
-      "blocker": "START после merge регистрации; если HTTP недоступен — UNVERIFIED; не менять UI/currency, CI/Actions, существующие workflows, production.",
-      "status": "planned",
+      "blocker": "Задание завершено: PR №259, вывод LIVE_HTTP_UNVERIFIED. Никакого дополнительного выполнения без нового назначения.",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Точечная работа с документированными доказательствами, без дублирования смежной задачи.",
       "urgency": "высокая",
       "urgency_reason": "Пользователь поручил выполнение параллельно с исправлением директорского протокола.",
       "order": null,
-      "recent_completion": false,
-      "updated_on": "2026-10-23",
-      "updated_at_utc": "2026-10-23T17:20:00.000Z"
+      "recent_completion": true,
+      "updated_on": "2026-10-24",
+      "updated_at_utc": "2026-10-24T09:49:00.000Z"
     },
     {
       "id": "dossier-v2-next-safe-component-01",
       "title": "ЧАТ 1 — Dossier V2: первый недостающий безопасный компонент",
       "goal": "Выбрать по доказанным V2 blocker-контрактам ровно один минимальный технический компонент для будущего Research → Assembly и реализовать только безопасную inactive часть при достаточной авторизации; без семантического запуска.",
-      "status": "planned",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Узкая работа вокруг V2 source/control-plane и доказательств, без запуска и расширения архитектуры.",
       "urgency": "высокая",
@@ -1941,16 +1941,16 @@
       "depends_on": [
         "research-assembly-v2-safe-use-readiness-01"
       ],
-      "blocker": "Старт после merge регистрации и существующих обязательных CI. Только разрешённая inactive часть, без нового GitHub CI/Actions/validator, без live Research/Assembly и Deploy; code draft PR требует отдельного QA.",
-      "recent_completion": false,
-      "updated_on": "2026-10-23",
-      "updated_at_utc": "2026-10-23T18:05:00.000Z"
+      "blocker": "Задание завершено: PR №261, вывод CONTRACT_BLOCKED. Никакого дополнительного выполнения без нового назначения.",
+      "recent_completion": true,
+      "updated_on": "2026-10-24",
+      "updated_at_utc": "2026-10-24T09:49:00.000Z"
     },
     {
       "id": "progressive-deep-current-queue-unblock-01",
       "title": "ЧАТ 2 — Progressive Deep: текущая очередь и конкретный блокер",
       "goal": "Точечно установить текущую официальную очередь Deep, последние принятые Stage 1/2 результаты и один доказанный операционный блокер прогресса; выполнить только безопасный локальный fix при доказанном узком объёме, иначе короткий отчёт с одним следующим действием.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Чтение точных state/receipts/работающих контрактов без массового аудита и без нового семантического запуска.",
       "urgency": "высокая",
@@ -1959,10 +1959,30 @@
       "worker_slot": "ЧАТ 2",
       "order": null,
       "depends_on": [],
-      "blocker": "Не смешивать с текущим semantic worker; запуск только после merge регистрации/CI. Никаких запускаемых Deep semantic попыток, Fast cutover, новых CI/Actions/validator/автоматизаций.",
+      "blocker": "Задание завершено: PR №262, вывод NO_CONFIRMED_TECHNICAL_BLOCKER. Никакого дополнительного выполнения без нового назначения.",
+      "recent_completion": true,
+      "updated_on": "2026-10-24",
+      "updated_at_utc": "2026-10-24T09:49:00.000Z"
+    },
+    {
+      "id": "dossier-v2-original-run-issuer-reuse-01",
+      "title": "ЧАТ 1 — Dossier V2: переиспользовать старый подтверждённый механизм запуска",
+      "goal": "Сопоставить реально использованный исторический Research marker/authority GitHub с недостающим V2 issuer, определить доказанную повторно используемую часть и реализовать максимум один безопасный offline адаптер при наличии строгой совместимости.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Узкая compatibility matrix по существующим коммитам/контрактам, без нового архитектурного аудита или нового runtime writer.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь требует не изобретать новый механизм, пока не проверено переиспользование реального исторического запуска Dossier.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_ORIGINAL_RUN_ISSUER_REUSE_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-next-safe-component-01"
+      ],
+      "blocker": "Не запускать до main merge регистрационного PR и существующих CI. Ни историческое разрешение, ни synthetic marker не становятся новым V2 user grant. Никакого реального Research/Assembly, issuer run, marker creation, новых CI/Actions/валидаторов.",
       "recent_completion": false,
-      "updated_on": "2026-10-23",
-      "updated_at_utc": "2026-10-23T18:05:00.000Z"
+      "updated_on": "2026-10-24",
+      "updated_at_utc": "2026-10-24T09:49:00.000Z"
     }
   ]
 }
