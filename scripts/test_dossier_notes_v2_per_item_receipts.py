@@ -297,6 +297,18 @@ class PerItemReceiptGitTests(unittest.TestCase):
         self.assertFalse(receipt["github_receipt_confirmed"])
         self.assertEqual(receipts._remote_tip(self.repo, branch), receipt["remote_commit"])
 
+    def test_complete_one_game_remote_path_remains_noncanonical(self):
+        branch = self.setup_disposable_remote()
+        result = receipts.publish_one_research_item_remote(
+            self.repo, branch=branch, expected_remote_head=self.auth,
+            **self.kw(document=self.note()))
+        self.assertEqual(result["status"], "disposable_remote_item_only")
+        self.assertEqual(receipts._remote_tip(self.repo, branch), result["receipt_commit"])
+        self.assertNotEqual(result["candidate_commit"], result["receipt_commit"])
+        self.assertFalse(result["github_receipt_confirmed"])
+        self.assertFalse(result["semantic_quality_accepted"])
+        self.assertFalse(result["canonical_acceptance"])
+
     def test_remote_duplicate_stale_parent_and_spoofed_github_fail_closed(self):
         branch = self.setup_disposable_remote()
         sent = receipts.publish_candidate_remote(
