@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT ASSIGNMENT — 2026-10-24: finish V2 individual GitHub writer hookup
+
+- **USER DECISION:** finish connecting the already-written per-game final V2 acceptance in draft PR #274 to the existing locked GitHub canonical writer. Prior Chat 1 delivered offline writer logic but not the live GitHub entry. This is authorization to implement and test with synthetic/disposable data, NOT authorization to execute actual Research/Assembly, make production writes or enable V2.
+- **НОВЫЙ ЧАТ 1:** `dossier-v2-individual-github-writer-hookup-01` → `WORKER_TASK_DOSSIER_V2_INDIVIDUAL_GITHUB_WRITER_HOOKUP_01.md`. Continue existing draft PR #274 at reference HEAD `5caa9024741383517d49140fda64b394d3c7235b`, then refresh exact GitHub HEAD. Implement bounded disabled-by-default V2-only input hook and shared-writer integration; preserve atomic 3-game V1 legacy. Test A valid / B invalid / C valid from end to end on safe test data where tooling allows, without mistaking local fixture for live GitHub.
+- **Dependency/ownership:** PR #266 issuer and PR #270 Research receipts remain open, separately owned. Do not edit their files or merge/activate them. If canonical V2 contract conflicts with PR #266, resolve narrow V2-only precedence without overwriting the other branch or report one exact necessary merge/order constraint. No new Actions, CI, validators, writer, scheduler or automation.
+- **After Chat 1:** check updated code + existing checks and assign one independent exact-HEAD review before any merge or real one-shot trial; no production changes.
+
 ## DIRECTOR CURRENT NEXT IMPLEMENTATION — 2026-10-24: finish real Research save and per-game V2 acceptance
 
 - **USER DECISION:** complete two necessary components, then decide a separately authorized real one-shot trial with the unchanged original 18 games. This is developer authorization only, not actual Research/Assembly, remote semantic writes, production, Deploy, or changing the current inactive V2 flags.
