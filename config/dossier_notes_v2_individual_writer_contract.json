@@ -1,0 +1,38 @@
+{
+  "schema": "DOSSIER-NOTES-V2-INDIVIDUAL-WRITER-V1",
+  "version": 1,
+  "owner": "github_control_plane",
+  "implemented": "inactive_disposable_fixture_extension_of_existing_writer",
+  "active": false,
+  "authorized_for_canonical_ingest": false,
+  "existing_writer_integration_approved": false,
+  "per_item_only": true,
+  "scope": "immutable_original_18_games_exact_frozen_appids_assignment_title_and_provenance",
+  "writer": "scripts/taste_steam_review_dossier_buffered.py",
+  "shared_concurrency_group": "taste-steam-review-dossier-canonical-writer",
+  "v1_group_writer_unchanged": true,
+  "strict_validator": "scripts/taste_steam_review_dossier_strict.py::validate_dossier_strict",
+  "source": "scripts/dossier_research_notes_v2.py::inspect_assembly",
+  "store": "data/cache/taste_steam_review_dossiers/{appid}.json",
+  "receipt": "data/control/dossier_notes_v2/canonical_accepted/{trial_id}/g{group_sequence:06d}/{appid}--{assignment_id}.json",
+  "persistence": "existing_atomic_write_json_and_existing_stage_taste_dossier_canonical_writer_sh_stages_cache_and_data_control_in_same_Git_transaction",
+  "no_committed_receipt_means_no_canonical_acceptance": true,
+  "legacy_v1_group_acceptance_unchanged": true,
+  "v2_group_override_condition": "Only after separate contract/activation approval; existing Notes V2 group_acceptance remains authoritative and V2 writer cannot run live while it remains inactive",
+  "future_live_prerequisites": [
+    "separate owner authorization to amend V2-only group rule (avoid overlapping PR266)",
+    "verified existing locked GitHub canonical-writer workflow integration",
+    "one-stage-V1 replacement/collision policy and downstream Deep binding reviewed",
+    "Notes V2 source contract activation and strict Git lineage validation",
+    "independent QA of complete existing-workflow transaction"
+  ],
+  "forbidden": [
+    "actual_production_write",
+    "activating_v2",
+    "semantic_execution",
+    "new_workflow_or_ci",
+    "new_automation",
+    "V1_acceptance_changes",
+    "forge_independent_acceptance_from_status_only"
+  ]
+}
