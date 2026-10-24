@@ -1988,7 +1988,7 @@
       "id": "dossier-v2-existing-issuer-adapt-implement-01",
       "title": "ЧАТ 1 — Dossier V2: минимально адаптировать существующий ручной issuer",
       "goal": "Переиспользовать доказанный GitHub-owned original Research freeze + отдельную feasibility authorization с V2-specific one-use approval contract; реализовать ограниченный inactive/manual механизм и offline tests без реального запуска.",
-      "status": "planned",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Точечная реализация совместимости существующих issuer scripts/разрешённого ручного trigger, V2 contract и тестов; отдельный exact-HEAD QA необходим.",
       "urgency": "высокая",
@@ -1999,10 +1999,30 @@
       "depends_on": [
         "dossier-v2-original-run-issuer-reuse-01"
       ],
-      "blocker": "Разработка только inactive после merge регистрации и existing CI. Запрещены реальный issuer/marker/grant, Research/Assembly, production, новые CI/Actions/validators. Минимальная default-off V2-ветка в существующем ручном workflow допустима при сохранении V1. Требуется независимый QA.",
+      "blocker": "Разработка сдана в draft изменении №266; точный HEAD 1d46b84. Пока не принята, требуется независимая QA до merge.",
+      "recent_completion": true,
+      "updated_on": "2026-10-24",
+      "updated_at_utc": "2026-10-24T07:10:00.000Z"
+    },
+    {
+      "id": "dossier-v2-existing-issuer-pr266-independent-qa-01",
+      "title": "ЧАТ 2 — независимый QA адаптации существующего issuer для Dossier V2",
+      "goal": "Проверить точный HEAD реализации #266 с двумя ручными issuer workflow, V1 backward compatibility, отключённой V2 authority и защитой от повторного или поддельного human grant.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Семь изменённых файлов, два прежних manual workflow, unit/disposable-Git tests и exact-HEAD CI; без нового runtime.",
+      "urgency": "высокая",
+      "urgency_reason": "Нужно подтвердить безопасную приёмку V2 issuer adapter перед merge реализации.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_EXISTING_ISSUER_PR266_INDEPENDENT_QA_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-existing-issuer-adapt-implement-01"
+      ],
+      "blocker": "Старт после merge регистрации и существующих CI; QA привязан к точному HEAD №266. Только отдельный report-only draft PR. Не запускать issuer, Research, Assembly, новые проверки или Deploy.",
       "recent_completion": false,
       "updated_on": "2026-10-24",
-      "updated_at_utc": "2026-10-24T06:27:38.114Z"
+      "updated_at_utc": "2026-10-24T07:10:00.000Z"
     }
   ]
 }
