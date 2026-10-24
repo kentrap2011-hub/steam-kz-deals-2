@@ -303,13 +303,17 @@ def _github_tip(repository, branch, token):
 
 
 def _github_preflight(repo, branch, expected_head, repository, token):
+    url = git(repo, "remote", "get-url", "origin").stdout.decode().strip()
     if token is None and repository is None:
-        # Only suitable for local bare-Git regression; never a GitHub claim.
+        # Only a disposable local bare repository may skip GitHub authority.
+        # In particular never push to GitHub over configured Git credentials
+        # while omitting authenticated GitHub read-back.
+        if not Path(url).is_absolute():
+            v2.reject("wrong_binding", "remote publication requires authenticated GitHub")
         return False
     if (not isinstance(token, str) or not token.strip()
             or repository != "kentrap2011-hub/steam-kz-deals-2"):
         v2.reject("wrong_binding", "GitHub confirmation requires exact repository and token")
-    url = git(repo, "remote", "get-url", "origin").stdout.decode().strip()
     expected_urls = {
         "https://github.com/" + repository,
         "https://github.com/" + repository + ".git",
@@ -478,3 +482,39 @@ def publish_receipt_remote(repo, *, branch, expected_remote_head,
                         else "disposable_remote_receipt_only")
     result["github_receipt_confirmed"] = result["authenticated_github_readback"]
     return result
+
+def publish_one_research_item_remote(repo, *, branch, expected_remote_head,
+                                     marker_commit, trial_id, appid,
+                                     authorization_commit, document,
+                                     github_repository=None, github_token=None):
+    """One-item candidate then one-item receipt, no siblings, retries or semantic run.
+
+    A failure of receipt publication does not erase an already pushed candidate.
+    It raises rather than inventing acceptance; the operator must inspect remote
+    state explicitly before any follow-up, never resubmit the candidate.
+    """
+    shared = {
+        "branch": branch, "marker_commit": marker_commit,
+        "trial_id": trial_id, "appid": appid,
+        "authorization_commit": authorization_commit,
+        "github_repository": github_repository, "github_token": github_token,
+    }
+    candidate = publish_candidate_remote(
+        repo, expected_remote_head=expected_remote_head, document=document, **shared)
+    receipt = publish_receipt_remote(
+        repo, expected_remote_head=candidate["remote_commit"],
+        introduction_commit=candidate["remote_commit"], **shared)
+    return {
+        "status": ("github_research_receipt_confirmed"
+                   if receipt["github_receipt_confirmed"]
+                   else "disposable_remote_item_only"),
+        "candidate_commit": candidate["remote_commit"],
+        "receipt_commit": receipt["remote_commit"],
+        "candidate_path": candidate["remote_path"],
+        "receipt_path": receipt["remote_path"],
+        "github_candidate_confirmed": candidate["github_candidate_confirmed"],
+        "github_receipt_confirmed": receipt["github_receipt_confirmed"],
+        "semantic_quality_accepted": False,
+        "canonical_acceptance": False,
+        "attempt_state": "unknown",
+    }
