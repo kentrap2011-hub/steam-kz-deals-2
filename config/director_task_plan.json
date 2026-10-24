@@ -2104,7 +2104,7 @@
       "id": "dossier-v2-individual-canonical-publish-finish-01",
       "title": "ЧАТ 1 — закончить индивидуальное принятие Dossier V2",
       "goal": "Развить готовое изменение №274 до отдельной реальной канонической записи каждой V2-игры без зависимости от соседей. Переиспользовать строгий валидатор и общий механизм записи; не ломать V1, не запускать production.",
-      "status": "planned",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Точечное изменение старой атомарной публикации требует сохранения поведения V1 и порядка совместной записи.",
       "urgency": "высокая",
@@ -2115,10 +2115,10 @@
       "depends_on": [
         "dossier-v2-individual-final-acceptance-implement-01"
       ],
-      "blocker": "Старт после слияния регистрации. Работать на основе черновика №274, не создавать дубль. Изолировать V2 от старого writer; без реальных записей, Research и Assembly.",
-      "recent_completion": false,
+      "blocker": "Разработка №274 сдана: запись V2 по одной игре проверена на тестовых данных, но ещё не подключена к настоящему общему механизму GitHub; требуется согласованная точка входа.",
+      "recent_completion": true,
       "updated_on": "2026-10-24",
-      "updated_at_utc": "2026-10-24T13:32:28.950Z"
+      "updated_at_utc": "2026-10-24T16:59:52.231Z"
     },
     {
       "id": "dossier-v2-research-github-persistence-finish-01",
@@ -2140,6 +2140,26 @@
       "recent_completion": false,
       "updated_on": "2026-10-24",
       "updated_at_utc": "2026-10-24T13:32:28.950Z"
+    },
+    {
+      "id": "dossier-v2-individual-github-writer-hookup-01",
+      "title": "ЧАТ 1 — подключить отдельное принятие Dossier V2 к GitHub",
+      "goal": "Закончить изменение №274: подключить уже написанный V2-режим поштучного принятия к существующему заблокированному механизму записи GitHub, сохранив старый Dossier. Доказать полный путь A готова, B ошибочна, C готова на тестовых данных.",
+      "status": "planned",
+      "effort": "высокая",
+      "effort_reason": "Нужно корректно подключить прежнюю реализацию к общему GitHub-писателю и сохранить старое поведение.",
+      "urgency": "высокая",
+      "urgency_reason": "Без подключения подготовленный механизм поштучной приёмки не может использоваться для будущего настоящего испытания.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_INDIVIDUAL_GITHUB_WRITER_HOOKUP_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-individual-canonical-publish-finish-01"
+      ],
+      "blocker": "Работать в уже открытом изменении №274. Без настоящего Research/Assembly и записи в production. Не менять файлы незавершённых №266 и №270; не создавать новые Action/CI/планировщики.",
+      "recent_completion": false,
+      "updated_on": "2026-10-24",
+      "updated_at_utc": "2026-10-24T16:59:52.231Z"
     }
   ]
 }
