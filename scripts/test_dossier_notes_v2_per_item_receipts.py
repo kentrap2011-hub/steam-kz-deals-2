@@ -243,5 +243,81 @@ class PerItemReceiptGitTests(unittest.TestCase):
         self.assertTrue(sha_b)
 
 
+
+    def setup_disposable_remote(self):
+        """Bare Git transport only: never a GitHub-authenticated result."""
+        bare = self.repo / "remote.git"
+        run(self.repo, "init", "--bare", str(bare))
+        run(self.repo, "remote", "add", "origin", str(bare))
+        branch = "sandbox/notes-v2-fixture"
+        run(self.repo, "branch", branch, self.auth)
+        run(self.repo, "push", "origin", branch)
+        return branch
+
+    def test_remote_candidate_then_receipt_one_item_exact_readback(self):
+        branch = self.setup_disposable_remote()
+        sent = receipts.publish_candidate_remote(
+            self.repo, branch=branch, expected_remote_head=self.auth,
+            **self.kw(document=self.note()))
+        self.assertTrue(sent["remote_git_confirmed"])
+        self.assertFalse(sent["github_candidate_confirmed"])
+        self.assertFalse(sent["github_receipt_confirmed"])
+        self.assertEqual(receipts._remote_tip(self.repo, branch), sent["remote_commit"])
+        self.assertEqual(run(self.repo, "rev-parse", "HEAD"), self.auth)
+        receipt = receipts.publish_receipt_remote(
+            self.repo, branch=branch, expected_remote_head=sent["remote_commit"],
+            **self.kw(introduction_commit=sent["remote_commit"]))
+        self.assertEqual(receipts._remote_tip(self.repo, branch), receipt["remote_commit"])
+        self.assertTrue(receipt["remote_git_confirmed"])
+        self.assertFalse(receipt["github_receipt_confirmed"])
+        self.assertFalse(receipt["canonical_acceptance"])
+        self.assertEqual(run(self.repo, "rev-parse", "HEAD"), self.auth)
+
+    def test_remote_failure_for_a_does_not_prevent_b(self):
+        branch = self.setup_disposable_remote()
+        bad_a = self.note()
+        bad_a["assignment"]["appid"] = "invalid"
+        with self.assertRaises(v2.NotesV2Error):
+            receipts.publish_candidate_remote(
+                self.repo, branch=branch, expected_remote_head=self.auth,
+                **self.kw(document=bad_a))
+        self.assertEqual(receipts._remote_tip(self.repo, branch), self.auth)
+        other = "213610"
+        other_assignment = v2.frozen_assignment(
+            self.repo, marker_commit=self.marker, trial_id=TRIAL, appid=other)
+        good_b = {**self.note(), "assignment": other_assignment}
+        sent = receipts.publish_candidate_remote(
+            self.repo, branch=branch, expected_remote_head=self.auth,
+            **self.kw(appid=other, document=good_b))
+        self.assertTrue(sent["remote_git_confirmed"])
+        receipt = receipts.publish_receipt_remote(
+            self.repo, branch=branch, expected_remote_head=sent["remote_commit"],
+            **self.kw(appid=other, introduction_commit=sent["remote_commit"]))
+        self.assertTrue(receipt["remote_git_confirmed"])
+        self.assertFalse(receipt["github_receipt_confirmed"])
+        self.assertEqual(receipts._remote_tip(self.repo, branch), receipt["remote_commit"])
+
+    def test_remote_duplicate_stale_parent_and_spoofed_github_fail_closed(self):
+        branch = self.setup_disposable_remote()
+        sent = receipts.publish_candidate_remote(
+            self.repo, branch=branch, expected_remote_head=self.auth,
+            **self.kw(document=self.note()))
+        with self.assertRaises(v2.NotesV2Error):
+            receipts.publish_candidate_remote(
+                self.repo, branch=branch, expected_remote_head=self.auth,
+                **self.kw(document=self.note()))
+        with self.assertRaises(v2.NotesV2Error):
+            receipts.publish_candidate_remote(
+                self.repo, branch=branch, expected_remote_head=sent["remote_commit"],
+                **self.kw(document=self.note()))
+        with self.assertRaises(v2.NotesV2Error):
+            receipts.publish_receipt_remote(
+                self.repo, branch=branch, expected_remote_head=sent["remote_commit"],
+                github_repository="kentrap2011-hub/steam-kz-deals-2",
+                github_token="fixture-not-a-real-token",
+                **self.kw(introduction_commit=sent["remote_commit"]))
+        self.assertEqual(receipts._remote_tip(self.repo, branch), sent["remote_commit"])
+
+
 if __name__ == "__main__":
     unittest.main()
