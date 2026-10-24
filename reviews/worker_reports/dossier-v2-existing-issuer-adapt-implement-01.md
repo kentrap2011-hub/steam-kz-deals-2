@@ -21,12 +21,12 @@ No V2 scope grant exists on current main; `manual_v2_issuer.enabled=false` is ch
 
 ## Tests and QA
 
-The existing Notes V2 unittest runner (not new CI) has been extended with disposable local Git tests. **Passed on implementation code HEAD `a755684e9c88f3fd0a63fc9f13ccb75f3c5ce12c`:**
-- Existing [Notes V2/Assembly CI run 40071640709](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40071640709): **SUCCESS**, 45 synthetic unittest cases, including 8 new original-issuer adapter cases and existing Notes V2 regression.
-- Existing [original Dossier shadow publisher PR-only run 40071640718](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40071640718): **SUCCESS** (V1 publication path regression).
-- Existing [eventual Dossier chain run 40071640716](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40071640716): **SUCCESS**.
-- Existing [backlog dispositions run 40071640708](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40071640708): **SUCCESS**.
-- Existing [site task registry run 40071640715](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40071640715): **SUCCESS**.
+The existing Notes V2 unittest runner (not new CI) has been extended with disposable local Git tests. **Passed on implementation code HEAD `7e90a61a88097f9aafaaeb8135555e0d1ad2d4a6`:**
+- Existing [Notes V2/Assembly CI run 40071841197](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40071841197): **SUCCESS**, 46 synthetic unittest cases, including 9 new original-issuer adapter cases and existing Notes V2 regression.
+- Existing [original Dossier shadow publisher PR-only run 40071841214](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40071841214): **SUCCESS** (V1 publication path regression).
+- Existing [eventual Dossier chain run 40071841132](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40071841132): **SUCCESS**.
+- Existing [backlog dispositions run 40071841081](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40071841081): **SUCCESS**.
+- Existing [site task registry run 40071841074](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40071841074): **SUCCESS**.
 
 An earlier CI run 40071495956 **failed** on a synthetic test which assumed pushing the same already-published SHA with an empty-ref lease must fail; Git can treat that as a successful no-op. The test was corrected to use an actual competing new commit. It passed on the code HEAD above; this was not a real GitHub issuer malfunction. No actual GitHub V2 dispatch/activation has been tested or attempted.
 
