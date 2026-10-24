@@ -1187,7 +1187,11 @@ def _drain_notes_v2_individual(
             # and pushes this exact cache + exact receipt; no early Deep claim.
             row["receipt_path"] = receipt.as_posix()
             row["canonical_acceptance"] = False
-        except (ValueError, TypeError, KeyError, OSError, AssertionError) as exc:
+        except OSError:
+            # Fatal storage failure: abort the entire GitHub transaction rather
+            # than committing a cache file without its acceptance receipt.
+            raise
+        except (ValueError, TypeError, KeyError, AssertionError) as exc:
             row["status"] = "writer_rejected"
             row["reason"] = str(exc)[:240]
         rows.append(row)
