@@ -444,5 +444,91 @@ class NotesV2IndividualReadinessTests(unittest.TestCase):
         self.assertFalse(notes._contract()["authorized_for_canonical_ingest"])
 
 
+    def test_v2_individual_shared_writer_a_c_persist_b_invalid_and_next_group_continues(self):
+        f, helpers = self.fixture()
+        from taste_steam_review_dossier_buffered import drain_notes_v2_individual
+        first, second = helpers.C["original_groups"][:2]
+        a, b, c = first["appids"]
+        d = second["appids"][0]
+        locators = {
+            a: self.submit(f, helpers, a),
+            b: self.submit(f, helpers, b, result="invalid_strict"),
+            c: self.submit(f, helpers, c),
+            d: self.submit(f, helpers, d),
+        }
+        (f.repo / ".dossier-final-offline-fixture").write_text("synthetic\n")
+        store, receipts = f.repo / "store", f.repo / "accepted"
+        def run_writer():
+            return drain_notes_v2_individual(
+                repo=f.repo, marker_commit=f.marker, trial_id=helpers.TRIAL,
+                item_commits=locators, store_dir=store, accepted_dir=receipts,
+                offline_fixture=True,
+            )
+        before = helpers.run(f.repo, "rev-parse", "HEAD") if hasattr(helpers, "run") else None
+        result = run_writer()
+        statuses = {row["appid"]: row["status"] for row in result["items"]}
+        self.assertEqual([statuses[x] for x in (a, b, c, d)], [
+            "persisted_pending_github_commit", "invalid",
+            "persisted_pending_github_commit", "persisted_pending_github_commit",
+        ])
+        self.assertEqual(len(result["items"]), 18)
+        self.assertFalse(result["canonical_acceptance"])
+        self.assertTrue(result["requires_existing_github_writer_commit"])
+        for appid in (a, c, d):
+            self.assertTrue((store / ("App_" + appid + ".json")).is_file())
+            self.assertEqual(len(list(receipts.rglob(appid + "--*.json"))), 1)
+        self.assertFalse((store / ("App_" + b + ".json")).exists())
+        self.assertFalse(list(receipts.rglob(b + "--*.json")))
+        second_pass = run_writer()
+        replay = {row["appid"]: row["status"] for row in second_pass["items"]}
+        self.assertEqual([replay[x] for x in (a, b, c, d)], [
+            "already_persisted_same_binding", "invalid",
+            "already_persisted_same_binding", "already_persisted_same_binding",
+        ])
+        self.assertEqual(len(list(receipts.rglob("*.json"))), 3)
+        if before is not None:
+            self.assertEqual(helpers.run(f.repo, "rev-parse", "HEAD"), before)
+
+    def test_v2_single_writer_collision_and_unauthorized_fail_closed(self):
+        f, helpers = self.fixture()
+        from taste_steam_review_dossier_buffered import drain_notes_v2_individual
+        a, b, c = helpers.C["original_groups"][0]["appids"]
+        locators = {
+            a: self.submit(f, helpers, a),
+            c: self.submit(f, helpers, c),
+        }
+        (f.repo / ".dossier-final-offline-fixture").write_text("synthetic\n")
+        store, receipts = f.repo / "store", f.repo / "accepted"
+        def run_writer(**extra):
+            kwargs = dict(repo=f.repo, marker_commit=f.marker,
+                          trial_id=helpers.TRIAL, item_commits=locators,
+                          store_dir=store, accepted_dir=receipts)
+            kwargs.update(extra)
+            return drain_notes_v2_individual(**kwargs)
+        with self.assertRaisesRegex(ValueError, "disabled"):
+            run_writer()
+        with self.assertRaisesRegex(ValueError, "subdirectories"):
+            run_writer(offline_fixture=True, accepted_dir=store)
+        with self.assertRaises(helpers.v2.NotesV2Error):
+            run_writer(offline_fixture=True, item_commits={"0": {}})
+        first = run_writer(offline_fixture=True)
+        self.assertEqual([x["status"] for x in first["items"][:3]],
+                         ["persisted_pending_github_commit", "missing",
+                          "persisted_pending_github_commit"])
+        original_c = (store / ("App_" + c + ".json")).read_bytes()
+        # Exact existing canonical dossier must never be replaced by another
+        # document or by a forged same-name receipt.
+        (store / ("App_" + a + ".json")).write_text('{"appid":"forged"}\n')
+        second = run_writer(offline_fixture=True)
+        self.assertEqual([x["status"] for x in second["items"][:3]],
+                         ["writer_rejected", "missing",
+                          "already_persisted_same_binding"])
+        self.assertEqual((store / ("App_" + a + ".json")).read_text(),
+                         '{"appid":"forged"}\n')
+        self.assertEqual((store / ("App_" + c + ".json")).read_bytes(), original_c)
+        self.assertEqual(len(list(receipts.rglob("*.json"))), 2)
+
+
+
 if __name__ == "__main__":
     unittest.main()
