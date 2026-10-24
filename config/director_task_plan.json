@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-10-23",
+  "last_curated_on": "2026-10-24",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -2048,7 +2048,7 @@
       "id": "dossier-v2-individual-final-acceptance-implement-01",
       "title": "ЧАТ 1 — индивидуальная приёмка итогового Dossier V2",
       "goal": "Установить, мешает ли тройная атомарная публикация отдельному готовому Dossier V2; если мешает и можно безопасно без изменения V1, сразу реализовать ограниченный выключенный адаптер для одной игры.",
-      "status": "planned",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Одна ограниченная задача, без полного аудита или новых внешних проверок.",
       "urgency": "обычная",
@@ -2057,16 +2057,16 @@
       "worker_slot": "ЧАТ 1",
       "order": null,
       "depends_on": [],
-      "blocker": "Старт после приёмки регистрации; не менять ни один файл PR №266 и PR №270. Не трогать V1 общий писатель или production. Иначе остановиться с точным блокером.",
-      "recent_completion": false,
+      "blocker": "Отчёт сдан в изменении №274. Индивидуальная проверка реализована, окончательная запись одной игры ещё заблокирована.",
+      "recent_completion": true,
       "updated_on": "2026-10-24",
-      "updated_at_utc": "2026-10-24T13:02:54.950Z"
+      "updated_at_utc": "2026-10-24T13:32:28.950Z"
     },
     {
       "id": "dossier-v2-pr270-receipts-independent-qa-01",
       "title": "ЧАТ 2 — независимая проверка Research receipt PR №270",
       "goal": "Проверить exact PR №270 HEAD, исполнить новые локальные тесты где реально возможно, оценить один-игра-один receipt, неизменяемые привязки и запрет подмены GitHub-подтверждения.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Одна ограниченная задача, без полного аудита или новых внешних проверок.",
       "urgency": "высокая",
@@ -2077,16 +2077,16 @@
       "depends_on": [
         "dossier-v2-research-per-item-receipts-implement-01"
       ],
-      "blocker": "Старт после регистрации; отзыв только о точном HEAD PR №270. Код не менять. Если тесты нельзя реально запустить, не объявлять PASS.",
-      "recent_completion": false,
+      "blocker": "ЧАТ 2 завершил отчёт №273: исходная реализация №270 прочитана, тесты не были исполнены; до проверки функциональность не подтверждена.",
+      "recent_completion": true,
       "updated_on": "2026-10-24",
-      "updated_at_utc": "2026-10-24T13:02:54.950Z"
+      "updated_at_utc": "2026-10-24T13:32:28.950Z"
     },
     {
       "id": "director-plain-russian-communication-diagnosis-01",
       "title": "ЧАТ 4 — разобраться в усложнённом языке директора",
       "goal": "Найти реальные правила простого русского и конкретные причины, по которым директор отвечает ненужными английскими терминами и служебными сокращениями; предложить одно небольшое исправление без нового CI.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Одна ограниченная задача, без полного аудита или новых внешних проверок.",
       "urgency": "обычная",
@@ -2095,10 +2095,51 @@
       "worker_slot": "ЧАТ 4",
       "order": null,
       "depends_on": [],
-      "blocker": "Старт после регистрации; только анализ языка директорских правил, без их изменений или новых CI.",
+      "blocker": "Диагностика сдана в изменении №272; отдельная небольшая правка правил предложена в изменении №275.",
+      "recent_completion": true,
+      "updated_on": "2026-10-24",
+      "updated_at_utc": "2026-10-24T13:32:28.950Z"
+    },
+    {
+      "id": "dossier-v2-individual-canonical-publish-finish-01",
+      "title": "ЧАТ 1 — закончить индивидуальное принятие Dossier V2",
+      "goal": "Развить готовое изменение №274 до отдельной реальной канонической записи каждой V2-игры без зависимости от соседей. Переиспользовать строгий валидатор и общий механизм записи; не ломать V1, не запускать production.",
+      "status": "planned",
+      "effort": "высокая",
+      "effort_reason": "Точечное изменение старой атомарной публикации требует сохранения поведения V1 и порядка совместной записи.",
+      "urgency": "высокая",
+      "urgency_reason": "Без этого готовые игры V2 по-прежнему блокируются неисправной игрой из той же тройки.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_INDIVIDUAL_CANONICAL_PUBLISH_FINISH_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-individual-final-acceptance-implement-01"
+      ],
+      "blocker": "Старт после слияния регистрации. Работать на основе черновика №274, не создавать дубль. Изолировать V2 от старого writer; без реальных записей, Research и Assembly.",
       "recent_completion": false,
       "updated_on": "2026-10-24",
-      "updated_at_utc": "2026-10-24T13:02:54.950Z"
+      "updated_at_utc": "2026-10-24T13:32:28.950Z"
+    },
+    {
+      "id": "dossier-v2-research-github-persistence-finish-01",
+      "title": "ЧАТ 3 — настоящее поштучное сохранение Research V2 в GitHub",
+      "goal": "Завершить изменение №270: безопасно сохранять результат отдельной игры в удалённом GitHub и независимо подтверждать успешную запись; исполнить уже написанные тесты. Не объявлять локальный успех подтверждением GitHub.",
+      "status": "planned",
+      "effort": "высокая",
+      "effort_reason": "Нужна минимальная удалённая запись с защитой от повторов и подтверждением удалённого состояния.",
+      "urgency": "высокая",
+      "urgency_reason": "Без настоящего сохранения отдельный Research V2 не сможет надёжно передать результаты Assembly.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_RESEARCH_GITHUB_PERSISTENCE_FINISH_01.md",
+      "worker_slot": "ЧАТ 3",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-research-per-item-receipts-implement-01",
+        "dossier-v2-pr270-receipts-independent-qa-01"
+      ],
+      "blocker": "Старт после слияния регистрации. Продолжить черновик №270 с учётом отчёта №273; не трогать №266 и №274; никаких реальных семантических запусков.",
+      "recent_completion": false,
+      "updated_on": "2026-10-24",
+      "updated_at_utc": "2026-10-24T13:32:28.950Z"
     }
   ]
 }
