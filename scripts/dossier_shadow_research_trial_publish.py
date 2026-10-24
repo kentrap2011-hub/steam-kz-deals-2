@@ -386,10 +386,19 @@ def main():
     summary = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary:
         with open(summary, "a", encoding="utf-8") as handle:
-            handle.write("### Immutable Research freeze (NOT semantic approval)\n\n")
-            for key, value in output.items():
-                if key not in ("items",):
-                    handle.write("- " + key + ": " + chr(96) + str(value) + chr(96) + "\n")
+            if args.version == "v1":
+                handle.write("### Immutable Research sandbox freeze (NOT semantic approval)\n\n")
+                for key in ("sandbox_branch", "source_commit", "buffer_commit",
+                            "marker_commit", "buffer_path", "buffer_blob_sha",
+                            "status", "sandbox_research_invocation_ready",
+                            "semantic_calls", "production_mutations"):
+                    handle.write("- " + key + ": " + chr(96) + str(output[key]) + chr(96) + "\n")
+            else:
+                handle.write("### Inactive V2 marker, no semantic authorization\n\n")
+                for key in ("sandbox_branch", "source_commit", "manifest_commit",
+                            "marker_commit", "manifest_path", "manifest_blob_sha",
+                            "human_grant_commit", "status"):
+                    handle.write("- " + key + ": `" + str(output[key]) + "`\n")
 
 
 if __name__ == "__main__":
