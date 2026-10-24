@@ -256,7 +256,6 @@ def v2_grant(repo, expected, env):
     The *actual* Actions actor is bound by the GitHub-controlled environment.
     """
     from dossier_two_stage_staging import first_parent_contains
-    from dossier_research_notes_v2 import blob_for
     cfg, m, rows = v2_scope(repo)
     g = m["human_grant"]
     check(m["enabled"] is True and m["enabled_by_default"] is False,
@@ -277,14 +276,14 @@ def v2_grant(repo, expected, env):
           "human grant path altered")
     assert_one_new_path(repo, run(repo, "rev-parse", g["commit"] + "^"),
                         g["commit"], grant_path)
-    data = run(repo, "show", g["commit"] + ":" + grant_path).encode("utf-8")
-    check(blob_for(data) == g["blob_sha"]
+    data_sha = run(repo, "rev-parse", g["commit"] + ":" + grant_path)
+    check(data_sha == g["blob_sha"]
           and run(repo, "rev-parse", expected + ":" + grant_path) == g["blob_sha"],
           "immutable approved grant blob not preserved on main")
     check(not run(repo, "log", "--first-parent", "--format=%H",
                   g["commit"] + ".." + expected, "--", grant_path),
           "scoped grant mutated or replaced after approval")
-    record = json.loads(data)
+    record = json.loads(run(repo, "show", g["commit"] + ":" + grant_path))
     check(record == {
         "schema":"DOSSIER-NOTES-V2-MANUAL-ISSUER-HUMAN-GRANT",
         "schema_version":2,
@@ -387,10 +386,10 @@ def main():
     summary = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary:
         with open(summary, "a", encoding="utf-8") as handle:
-            handle.write("### Immutable Research freeze (NOT semantic approval)\\n\\n")
+            handle.write("### Immutable Research freeze (NOT semantic approval)\n\n")
             for key, value in output.items():
                 if key not in ("items",):
-                    handle.write("- " + key + ": " + chr(96) + str(value) + chr(96) + "\\n")
+                    handle.write("- " + key + ": " + chr(96) + str(value) + chr(96) + "\n")
 
 
 if __name__ == "__main__":
