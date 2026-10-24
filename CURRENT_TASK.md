@@ -1,5 +1,12 @@
 # CURRENT TASK
 
+## BLOCKED — ЧАТ 3: Research Notes V2 remote persistence PR #270 (2026-10-24)
+- Task: `WORKER_TASK_DOSSIER_V2_RESEARCH_GITHUB_PERSISTENCE_FINISH_01.md`; existing draft PR #270 remains open and inactive.
+- Code: single-item create-only Git transport plus authenticated GitHub ref/content re-read, separate candidate/receipt, no semantic execution or final acceptance. Failures of A do not select or block B/C.
+- Boundary: genuine issuer/semantic execution authority remains absent; no live V2 publication authorized. GitHub repository checkout unavailable in local runtime (DNS), so written regressions still require independent actual execution at final PR HEAD.
+- Report: `reviews/worker_reports/dossier-v2-research-github-persistence-finish-01.md`. No production, old Dossier, issuer/marker, workflow, CI or scheduler changes; do not merge.
+
+
 ## IN QA RE-REVIEW — ЧАТ 3 PR #239 QA remediation (2026-10-22)
 - Scope: two blockers from ЧАТ 2 independent review comment [#6336680554](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/239#issuecomment-6336680554), same existing `implement/research-notes-v2-autonomous-assembly-01` draft PR.
 - Fixed prospective 18-item product/name/edition/assignment trust by verifying exact original Research Git blob `c8a6b6f515162f431c0e3d86175376114c0acf7e`; V2 manifest cannot relabel AppIDs/titles/edition suffixes, original IDs or full original assignment digests.
