@@ -43,10 +43,15 @@ class PerItemReceiptGitTests(unittest.TestCase):
             p.parent.mkdir(parents=True, exist_ok=True)
             p.write_bytes(source.read_bytes())
         commit(self.repo, "fixture: inert code/contract")
-        self.grant = commit(self.repo, "fixture: unique mock grant") if False else None
         write(self.repo, self.grant_path, {
-            "schema": "SYNTHETIC-DOES-NOT-AUTHORIZE-ANY-RESEARCH",
-            "trial_id": TRIAL, "github_actor_id": "12345",
+            "schema": "DOSSIER-NOTES-V2-MANUAL-ISSUER-HUMAN-GRANT",
+            "schema_version": 2, "trial_id": TRIAL,
+            "original_buffer_blob_sha": contract["original_research_identity_authority"]["original_buffer_git_blob_sha"],
+            "original_pins": contract["immutable_original_pins"],
+            "original_groups": contract["original_groups"],
+            "github_actor_id": "12345",
+            "scope": "issue_single_original18_V2_manifest_marker_then_separate_authorization_only",
+            "semantic_execution_approved": False, "production_approved": False,
         })
         self.grant = commit(self.repo, "fixture: fake grant only")
         write(self.repo, self.manifest_path, {
@@ -182,8 +187,7 @@ class PerItemReceiptGitTests(unittest.TestCase):
                 receipts.issuer_structure(
                     self.repo, marker_commit=self.marker, trial_id=TRIAL,
                     authorization_commit=wrong)
-            run(self.repo, "checkout", "-q", "master") if False else run(
-                self.repo, "checkout", "-q", "--detach", self.auth)
+            run(self.repo, "checkout", "-q", "--detach", self.auth)
 
     def test_auth_commit_not_direct_child_or_marker_not_ancestor(self):
         source = self.add_candidate()
