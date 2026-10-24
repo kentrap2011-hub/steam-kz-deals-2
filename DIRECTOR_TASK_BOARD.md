@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT ASSIGNMENT — 2026-10-24: implement V2 reuse of original manual Research issuer
+
+- **USER AUTHORIZATION:** adapt existing V1 GitHub-owned **manual** freeze + separate one-use Research feasibility approval pattern for **inactive** Notes V2, as proven in report-only PR #264. This is code/contract implementation authorization only, **NOT** a human Research grant, marker issuance, workflow dispatch, real semantics, Assembly, production or cutover.
+- **НОВЫЙ ЧАТ 1:** `dossier-v2-existing-issuer-adapt-implement-01` → `WORKER_TASK_DOSSIER_V2_EXISTING_ISSUER_ADAPT_IMPLEMENT_01.md`, PLANNED until registration PR merge and successful **existing** CI. One minimal code/contract + existing tests draft PR using already existing manual issuer machinery; preserve V1 and V2 inactive fail-closed state. No NEW workflows/CI/Actions/validators. A minimal additive switch in an existing manual issuer workflow is allowed only if provably required and disabled by default; existing CI checks are untouchable.
+- **NEXT:** after Chat 1 code draft with exact HEAD, Director assigns an independent NEW ЧАТ 2 QA. No real V2 trial or activation yet.
+- Previous ЧАТ 1 report #264 (`CONTRACT_BLOCKED_REUSE_DECISION`) is concluded; authorizes reasoning but is not a live V2 grant. Historic V1 authorization commit cannot be reused.
+
 ## DIRECTOR CURRENT ASSIGNMENT — 2026-10-24: REUSE existing Dossier Research launch before a new V2 issuer
 
 - **User decision:** priority Dossier, not new Progressive Deep worker. Already-run original Research (18 games, 14 received, 2 invalid/4 missing) had an actual sandbox marker and GitHub confirmation; first prove what can safely be reused by V2. Do **not** invent a new issuer/CI/check by default.
