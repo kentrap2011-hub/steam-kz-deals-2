@@ -786,6 +786,47 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
                          "--force-with-lease=" + ref + ":" + proof["marker_commit"],
                          "origin", proof["marker_commit"] + ":" + ref)
 
+    def test_approved_immutable_grant_requires_real_exact_git_blob(self):
+        from unittest.mock import patch
+        grant_path = "config/dossier_notes_v2_issuer_human_grant.json"
+        record = {
+            "schema":"DOSSIER-NOTES-V2-MANUAL-ISSUER-HUMAN-GRANT",
+            "schema_version":2,
+            "trial_id":self.m["trial_id"],
+            "original_buffer_blob_sha":self.m["frozen_original_buffer_blob_sha"],
+            "original_pins":self.cfg["immutable_original_pins"],
+            "original_groups":self.cfg["original_groups"],
+            "github_actor_id":"1234",
+            "scope":"issue_single_original18_V2_manifest_marker_then_separate_authorization_only",
+            "semantic_execution_approved":False,
+            "production_approved":False,
+        }
+        write(self.repo, grant_path, record)
+        approved = commit(self.repo, "synthetic owner-approved scope grant")
+        approved_blob = run(self.repo, "rev-parse", approved+":"+grant_path)
+        prospective = copy.deepcopy(self.m)
+        prospective["enabled"] = True
+        prospective["human_grant"] = {
+            "path":grant_path, "commit":approved,
+            "blob_sha":approved_blob, "github_actor_id":"1234"
+        }
+        env = {
+            "GITHUB_ACTOR_ID":"1234", "GITHUB_ACTOR":"verified-actor",
+            "GITHUB_TRIGGERING_ACTOR":"verified-actor","GITHUB_RUN_ID":"556677"
+        }
+        with patch.object(self.pub, "v2_scope",
+                          return_value=(self.cfg, prospective, self.rows)):
+            _, m, rows = self.pub.v2_grant(self.repo, approved, env)
+            self.assertEqual(m["human_grant"]["commit"], approved)
+            self.assertEqual(len(rows), 18)
+            # Mutable grant contents must not be accepted even if restored.
+            write(self.repo, grant_path, {**record, "semantic_execution_approved":True})
+            commit(self.repo, "synthetic unapproved grant mutation")
+            write(self.repo, grant_path, record)
+            restored = commit(self.repo, "synthetic restore grant")
+            with self.assertRaises(RuntimeError):
+                self.pub.v2_grant(self.repo, restored, env)
+
     def test_v1_dispatch_contract_still_has_same_gate(self):
         original = self.initial
         env = {
