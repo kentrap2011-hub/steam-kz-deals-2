@@ -769,13 +769,15 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
         run(self.repo, "push", "--force-with-lease=" + ref + ":",
             "origin", "HEAD:" + ref)
         self.assertEqual(self.pub.remote_sha(self.repo, ref), proof["marker_commit"])
-        with self.assertRaises(RuntimeError):
-            self.pub.run(self.repo, "push", "--force-with-lease=" + ref + ":",
-                         "origin", "HEAD:" + ref)
-        # Simulates a racing ref advance before post-marker grant publication.
+        # A duplicate no-op push of the identical SHA can succeed in Git;
+        # model an actual competing new commit when testing the empty lease.
         newpath = self.repo / "race-proof.txt"
         newpath.write_text("racer\n")
         raced = commit(self.repo, "fixture: another remote actor")
+        with self.assertRaises(RuntimeError):
+            self.pub.run(self.repo, "push", "--force-with-lease=" + ref + ":",
+                         "origin", "HEAD:" + ref)
+        # The first valid old-SHA lease advances; stale ones then fail.
         run(self.repo, "push", "--force-with-lease=" + ref + ":" + proof["marker_commit"],
             "origin", "HEAD:" + ref)
         self.assertEqual(self.pub.remote_sha(self.repo, ref), raced)
