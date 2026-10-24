@@ -534,6 +534,75 @@ def item_receipt_blueprint(repo, *, marker_commit, trial_id, appid, phase, dispo
     _safe_text(doc)
     return doc
 
+def individual_final_readiness(repo, *, marker_commit, trial_id, item_commits):
+    """Offline per-game strict readiness, NEVER canonical acceptance.
+
+    A/C can be locally ready while B is invalid, missing or still awaiting
+    Assembly. Only immutable submitted Git commits are examined; caller
+    assertions of readiness or acceptance are not accepted as input.
+    """
+    manifest, _ = _manifest(repo, marker_commit, trial_id)
+    appids = [item["appid"] for item in manifest["items"]]
+    if (type(item_commits) is not dict
+            or any(type(key) is not str or key not in appids for key in item_commits)):
+        reject("wrong_binding", "item commits must reference only frozen V2 AppIDs")
+
+    outcomes = []
+    for item in manifest["items"]:
+        appid = item["appid"]
+        pair = item_commits.get(appid)
+        status = "missing"
+        source_status = "missing_research_transport"
+        if pair is not None:
+            if type(pair) is not dict or set(pair) != {"research_commit", "assembly_commit"}:
+                status, source_status = "invalid", "wrong_binding"
+            else:
+                research, assembly = pair["research_commit"], pair["assembly_commit"]
+                if research is None and assembly is not None:
+                    status, source_status = "invalid", "wrong_binding"
+                elif research is not None:
+                    try:
+                        if assembly is None:
+                            checked = assembly_work(
+                                repo, marker_commit=marker_commit, trial_id=trial_id,
+                                appid=appid, research_commit=research)
+                        else:
+                            checked = inspect_assembly(
+                                repo, marker_commit=marker_commit, trial_id=trial_id,
+                                appid=appid, research_commit=research,
+                                result_commit=assembly)
+                        source_status = checked["status"]
+                        if source_status == "strict_item_valid_pending_existing_atomic_group_ingest":
+                            status = "ready"
+                        elif source_status == "ready_for_autonomous_assembly":
+                            status = "waiting"
+                        elif source_status == "missing_research_transport":
+                            status = "missing"
+                        elif source_status in ("runtime_or_tool_interrupted", "assembly_technical_error"):
+                            status = "error"
+                        else:
+                            status = "invalid"
+                    except NotesV2Error as exc:
+                        status, source_status = "invalid", exc.code
+                    except (KeyError, TypeError, ValueError, RuntimeError,
+                            OSError, subprocess.CalledProcessError) as exc:
+                        status, source_status = "error", type(exc).__name__
+        outcomes.append({
+            "appid": appid, "group_sequence": item["group_sequence"],
+            "item_index": item["item_index"],
+            "status": status, "source_status": source_status,
+            "strict_item_valid": status == "ready",
+            "canonical_acceptance": False, "deep_ready": False,
+        })
+
+    return {
+        "schema": "DOSSIER-NOTES-V2-OFFLINE-INDIVIDUAL-READINESS",
+        "trial_id": trial_id, "items": outcomes,
+        "canonical_acceptance": False, "deep_ready": False,
+        "requires_separately_authorized_canonical_writer": True,
+    }
+
+
 def original_group_readiness(group_sequence, item_verdicts):
     """Reporting ONLY. Existing strict three-game writer is sole acceptance path."""
     c = _contract()

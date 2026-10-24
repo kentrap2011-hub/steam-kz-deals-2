@@ -1042,6 +1042,168 @@ def apply_buffered_drain(
     return persisted
 
 
+
+def _drain_notes_v2_individual(
+    *, repo, marker_commit, trial_id, item_commits, store_dir, accepted_dir,
+    offline_fixture=False,
+):
+    """V2-only per-item extension of the existing canonical Dossier writer.
+
+    The live entry is deliberately closed until a separate V2 activation and
+    existing locked GitHub writer integration. An explicitly marked disposable
+    Git fixture exercises the *same* strict check and cache/receipt writes.
+    No V1 group plan, progress, buffer format, or writer entrypoint is changed.
+    """
+    from dossier_research_notes_v2 import (
+        assembly_work, individual_final_readiness, inspect_assembly,
+    )
+    from dossier_two_stage_staging import json_at
+    from taste_steam_review_dossier_strict import validate_dossier_strict
+
+    spec_path = Path(__file__).resolve().parents[1] / "config" / (
+        "dossier_notes_v2_individual_writer_contract.json"
+    )
+    spec = json.loads(spec_path.read_text(encoding="utf-8"))
+    if (spec.get("schema") != "DOSSIER-NOTES-V2-INDIVIDUAL-WRITER-V1"
+            or spec.get("writer") != "scripts/taste_steam_review_dossier_buffered.py"
+            or spec.get("shared_concurrency_group")
+            != "taste-steam-review-dossier-canonical-writer"
+            or spec.get("per_item_only") is not True
+            or spec.get("v1_group_writer_unchanged") is not True):
+        raise ValueError("unrecognized V2 single-item writer authority")
+    root = Path(repo).resolve()
+    if offline_fixture:
+        # The old bridge's fixture gate ensures a separate disposable Git
+        # checkout. Never accept a forged flag in a real/local project clone.
+        from dossier_two_stage_final_acceptance import offline_gate
+        root = offline_gate(root, offline_fixture=True)
+        if (spec.get("active") is not False
+                or spec.get("authorized_for_canonical_ingest") is not False):
+            raise ValueError("offline V2 writer must remain nonactive")
+    else:
+        # A live call cannot be authorized by a caller's Boolean alone.
+        # GitHub must separately activate this contract and wire the call
+        # inside the *existing* serialized canonical-writer transaction.
+        if not (spec.get("active") is True
+                and spec.get("authorized_for_canonical_ingest") is True
+                and spec.get("existing_writer_integration_approved") is True):
+            raise ValueError("V2 per-item canonical publication is disabled")
+
+    store = Path(store_dir).resolve()
+    accepted = Path(accepted_dir).resolve()
+    if (store == root or accepted == root or store == accepted
+            or not store.is_relative_to(root) or not accepted.is_relative_to(root)
+            or store.is_relative_to(accepted) or accepted.is_relative_to(store)):
+        raise ValueError("V2 single-item paths must be separate writer-owned subdirectories")
+    if not offline_fixture:
+        if (store != root / "data/cache/taste_steam_review_dossiers"
+                or accepted != root / "data/control/dossier_notes_v2/canonical_accepted"):
+            raise ValueError("V2 live destination differs from existing shared canonical writer")
+
+    projection = individual_final_readiness(
+        root, marker_commit=marker_commit, trial_id=trial_id,
+        item_commits=item_commits,
+    )
+    strict_contract = json.loads(
+        (Path(__file__).resolve().parents[1] / "config" /
+         "taste_steam_review_dossier_contract.json").read_text(encoding="utf-8")
+    )
+    rows = []
+    for item in projection["items"]:
+        appid = item["appid"]
+        row = {
+            "appid": appid, "group_sequence": item["group_sequence"],
+            "status": item["status"], "canonical_acceptance": False,
+        }
+        if item["status"] != "ready":
+            rows.append(row)
+            continue
+        pair = item_commits[appid]
+        try:
+            # Do not trust the readiness projection. Reinspect exact immutable
+            # Git history at the writer boundary before reading original bytes.
+            checked = inspect_assembly(
+                root, marker_commit=marker_commit, trial_id=trial_id,
+                appid=appid, research_commit=pair["research_commit"],
+                result_commit=pair["assembly_commit"],
+            )
+            if checked.get("status") != "strict_item_valid_pending_existing_atomic_group_ingest":
+                raise ValueError("Git/strict readiness changed before writer")
+            work = assembly_work(
+                root, marker_commit=marker_commit, trial_id=trial_id,
+                appid=appid, research_commit=pair["research_commit"],
+            )
+            if work.get("status") != "ready_for_autonomous_assembly":
+                raise ValueError("original Research is not authorized for Assembly")
+            original = json_at(root, pair["assembly_commit"], work["output_path"])
+            if (original.get("assignment") != work["assignment"]
+                    or original.get("research_transport") != work["research_transport"]
+                    or original.get("outcome") != "assembled_candidate_ready"):
+                raise ValueError("original Assembly Git binding changed")
+            dossier = original["final_dossier"]
+            validate_dossier_strict(
+                dossier, strict_contract, expected_appid=appid,
+                expected_title=work["assignment"]["title"],
+            )
+            validate_compact_provenance(dossier, load_compact_provenance_policy())
+            dossier_sha = canonical_sha256(dossier)
+            target = dossier_path(store, appid)
+            receipt = accepted / trial_id / (
+                f"g{item['group_sequence']:06d}"
+            ) / (f"{appid}--{work['assignment']['assignment_id']}.json")
+            if not (target.resolve().is_relative_to(store)
+                    and receipt.resolve().is_relative_to(accepted)):
+                raise ValueError("V2 writer destination escapes canonical directories")
+            bound_receipt = {
+                "schema": "DOSSIER-NOTES-V2-INDIVIDUAL-CANONICAL-ACCEPTANCE-V1",
+                "trial_id": trial_id, "marker_commit": marker_commit,
+                "assignment": work["assignment"],
+                "research_commit": pair["research_commit"],
+                "assembly_commit": pair["assembly_commit"],
+                "dossier_sha256": dossier_sha,
+            }
+            exists_cache = target.exists()
+            exists_receipt = receipt.exists()
+            if exists_cache:
+                if canonical_sha256(json.loads(target.read_text(encoding="utf-8"))) != dossier_sha:
+                    raise ValueError("existing canonical dossier collision; never overwrite")
+            if exists_receipt:
+                if json.loads(receipt.read_text(encoding="utf-8")) != bound_receipt:
+                    raise ValueError("existing V2 acceptance receipt binding collision")
+                if not exists_cache:
+                    raise ValueError("acceptance receipt exists without its canonical dossier")
+            # Shared canonical storage primitive; the locked GitHub writer must
+            # stage cache + data/control and commit/push them in ONE transaction.
+            if not exists_cache:
+                atomic_write_json(target, dossier)
+            if not exists_receipt:
+                atomic_write_json(receipt, bound_receipt)
+            row["status"] = (
+                "already_persisted_same_binding" if exists_receipt
+                else "persisted_pending_github_commit"
+            )
+            row["dossier_sha256"] = dossier_sha
+            # GitHub acceptance is true only once the existing writer commits
+            # and pushes this exact cache + exact receipt; no early Deep claim.
+            row["receipt_path"] = receipt.as_posix()
+            row["canonical_acceptance"] = False
+        except OSError:
+            # Fatal storage failure: abort the entire GitHub transaction rather
+            # than committing a cache file without its acceptance receipt.
+            raise
+        except (ValueError, TypeError, KeyError, AssertionError) as exc:
+            row["status"] = "writer_rejected"
+            row["reason"] = str(exc)[:240]
+        rows.append(row)
+    return {
+        "schema": "DOSSIER-NOTES-V2-INDIVIDUAL-WRITER-RESULT-V1",
+        "offline_fixture": offline_fixture,
+        "canonical_acceptance": False,
+        "requires_existing_github_writer_commit": True,
+        "items": rows,
+    }
+
+
 def drain_buffered_groups(
     *,
     manifest_path="data/production/pre_ai/taste_steam_review_dossier_work.json",
@@ -1055,7 +1217,16 @@ def drain_buffered_groups(
     terminal_receipt_archive_root=_DEFAULT_TERMINAL_RECEIPT_ARCHIVE,
     frozen_authority_audit_path=_DEFAULT_FROZEN_AUTHORITY_AUDIT,
     repo_root=Path("."),
+    notes_v2=None,
 ):
+    # V1 is byte-for-byte unchanged unless the caller explicitly selects the
+    # separately gated Notes V2 mode inside this SAME existing writer entrypoint.
+    if notes_v2 is not None:
+        expected = {"repo", "marker_commit", "trial_id", "item_commits",
+                    "store_dir", "accepted_dir", "offline_fixture"}
+        if type(notes_v2) is not dict or set(notes_v2) != expected:
+            raise ValueError("invalid explicitly bound V2 shared-writer invocation")
+        return _drain_notes_v2_individual(**notes_v2)
     manifest_path = Path(manifest_path)
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     plan = plan_buffered_drain(

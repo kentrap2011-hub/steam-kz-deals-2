@@ -312,5 +312,253 @@ class FinalAcceptanceOfflineTests(unittest.TestCase):
         self.assertFalse((x.f.root / "store" / "App_12345.json").exists())
 
 
+
+class NotesV2IndividualReadinessTests(unittest.TestCase):
+    """Real V2 frozen Git lineage and existing strict validator, synthetic only."""
+
+    def fixture(self):
+        import test_dossier_research_notes_v2 as notes_fixture
+        f = notes_fixture.NotesV2Tests(
+            methodName="test_zero_evidence_research_passes_without_year_sources_or_dimensions")
+        f.setUp()
+        self.addCleanup(f.doCleanups)
+        return f, notes_fixture
+
+    def submit(self, f, helpers, appid, *, result="valid"):
+        import dossier_research_notes_v2 as notes
+        a = notes.frozen_assignment(
+            f.repo, marker_commit=f.marker, trial_id=helpers.TRIAL, appid=appid)
+        raw_notes = {
+            "schema": "DOSSIER-RESEARCH-NOTES-V2", "schema_version": 2,
+            "assignment": a, "notes_text": "", "source_log": [],
+            "research_status": "no_verifiable_findings",
+        }
+        helpers.write(f.repo, notes._path("research", a), raw_notes)
+        research = helpers.commit(f.repo, "synthetic per-item Notes " + appid)
+        if result == "waiting":
+            return {"research_commit": research, "assembly_commit": None}
+        work = notes.assembly_work(
+            f.repo, marker_commit=f.marker, trial_id=helpers.TRIAL,
+            appid=appid, research_commit=research)
+        self.assertEqual(work["status"], "ready_for_autonomous_assembly")
+        dossier = (
+            {"appid": appid, "title": a["title"]}
+            if result == "invalid_strict"
+            else web_dossier(appid, datetime.now(timezone.utc), title=a["title"])
+        )
+        document = notes.candidate_assembly(
+            work, outcome="assembled_candidate_ready", final_dossier=dossier)
+        helpers.write(f.repo, work["output_path"], document)
+        assembly = helpers.commit(f.repo, "synthetic per-item Assembly " + appid)
+        return {"research_commit": research, "assembly_commit": assembly}
+
+    def inspect_v2(self, f, helpers, locators):
+        import dossier_research_notes_v2 as notes
+        return notes.individual_final_readiness(
+            f.repo, marker_commit=f.marker,
+            trial_id=helpers.TRIAL, item_commits=locators)
+
+    def test_v2_a_and_c_ready_b_strict_invalid_no_cross_acceptance(self):
+        f, helpers = self.fixture()
+        group = helpers.C["original_groups"][0]
+        a, b, c = group["appids"]
+        locators = {
+            a: self.submit(f, helpers, a),
+            b: self.submit(f, helpers, b, result="invalid_strict"),
+            c: self.submit(f, helpers, c),
+        }
+        projection = self.inspect_v2(f, helpers, locators)
+        rows = projection["items"]
+        self.assertEqual(len(rows), 18)
+        self.assertEqual([x["appid"] for x in rows],
+                         [x for g in helpers.C["original_groups"] for x in g["appids"]])
+        self.assertEqual([x["status"] for x in rows[:3]], ["ready", "invalid", "ready"])
+        self.assertEqual(rows[1]["source_status"], "final_strict_or_group_rejected")
+        self.assertEqual([x["status"] for x in rows[3:]], ["missing"] * 15)
+        self.assertEqual([x["strict_item_valid"] for x in rows[:3]],
+                         [True, False, True])
+        self.assertFalse(projection["canonical_acceptance"])
+        self.assertFalse(projection["deep_ready"])
+        self.assertTrue(projection["requires_separately_authorized_canonical_writer"])
+        self.assertTrue(all(not x["canonical_acceptance"] and not x["deep_ready"]
+                            for x in rows))
+        self.assertFalse(helpers.v2.original_group_readiness(
+            group["group_sequence"],
+            {x["appid"]: x["source_status"] for x in rows[:3]})["strict_three_ready"])
+
+    def test_v2_b_missing_does_not_block_a_and_c(self):
+        f, helpers = self.fixture()
+        a, b, c = helpers.C["original_groups"][0]["appids"]
+        projected = self.inspect_v2(f, helpers, {
+            a: self.submit(f, helpers, a),
+            c: self.submit(f, helpers, c),
+        })
+        self.assertEqual([x["status"] for x in projected["items"][:3]],
+                         ["ready", "missing", "ready"])
+        self.assertEqual(sum(x["status"] == "missing" for x in projected["items"]), 16)
+        self.assertTrue(all(x["canonical_acceptance"] is False
+                            for x in projected["items"]))
+
+    def test_v2_runtime_terminal_error_is_local(self):
+        f, helpers = self.fixture()
+        import dossier_research_notes_v2 as notes
+        a, b, c = helpers.C["original_groups"][0]["appids"]
+        good = self.submit(f, helpers, a)
+        in_progress = self.submit(f, helpers, b, result="waiting")
+        work = notes.assembly_work(
+            f.repo, marker_commit=f.marker, trial_id=helpers.TRIAL,
+            appid=b, research_commit=in_progress["research_commit"])
+        terminal = notes.candidate_assembly(
+            work, outcome="runtime_or_tool_interrupted",
+            diagnostic="synthetic Git-only tool failure")
+        helpers.write(f.repo, work["output_path"], terminal)
+        failed = helpers.commit(f.repo, "synthetic B interrupted Assembly")
+        projected = self.inspect_v2(f, helpers, {
+            a: good, b: {"research_commit": in_progress["research_commit"],
+                         "assembly_commit": failed},
+        })
+        self.assertEqual([x["status"] for x in projected["items"][:3]],
+                         ["ready", "error", "missing"])
+        self.assertEqual(projected["items"][1]["source_status"], "runtime_or_tool_interrupted")
+        self.assertFalse(projected["canonical_acceptance"])
+
+    def test_v2_waiting_errors_bad_locator_and_frozen_scope(self):
+        f, helpers = self.fixture()
+        import dossier_research_notes_v2 as notes
+        a, b, c = helpers.C["original_groups"][0]["appids"]
+        projected = self.inspect_v2(f, helpers, {
+            a: self.submit(f, helpers, a),
+            b: self.submit(f, helpers, b, result="waiting"),
+            c: {"research_commit": "not-a-commit", "assembly_commit": "also-invalid"},
+        })
+        self.assertEqual([x["status"] for x in projected["items"][:3]],
+                         ["ready", "waiting", "invalid"])
+        self.assertFalse(projected["items"][2]["strict_item_valid"])
+        wrong = {a: {"research_commit": None, "assembly_commit": "not-a-commit"}}
+        self.assertEqual(self.inspect_v2(f, helpers, wrong)["items"][0]["status"],
+                         "invalid")
+        with self.assertRaises(notes.NotesV2Error):
+            self.inspect_v2(f, helpers, {"123456789": {}})
+        with self.assertRaises(notes.NotesV2Error):
+            self.inspect_v2(f, helpers, [a])
+        self.assertFalse(notes._contract()["authorized_for_canonical_ingest"])
+
+
+    def test_v2_individual_shared_writer_a_c_persist_b_invalid_and_next_group_continues(self):
+        f, helpers = self.fixture()
+        from taste_steam_review_dossier_buffered import drain_buffered_groups
+        first, second = helpers.C["original_groups"][:2]
+        a, b, c = first["appids"]
+        d = second["appids"][0]
+        locators = {
+            a: self.submit(f, helpers, a),
+            b: self.submit(f, helpers, b, result="invalid_strict"),
+            c: self.submit(f, helpers, c),
+            d: self.submit(f, helpers, d),
+        }
+        (f.repo / ".dossier-final-offline-fixture").write_text("synthetic\n")
+        store, receipts = f.repo / "store", f.repo / "accepted"
+        def run_writer():
+            return drain_buffered_groups(notes_v2={
+                "repo": f.repo, "marker_commit": f.marker, "trial_id": helpers.TRIAL,
+                "item_commits": locators, "store_dir": store,
+                "accepted_dir": receipts, "offline_fixture": True,
+            })
+        before = helpers.run(f.repo, "rev-parse", "HEAD") if hasattr(helpers, "run") else None
+        result = run_writer()
+        statuses = {row["appid"]: row["status"] for row in result["items"]}
+        self.assertEqual([statuses[x] for x in (a, b, c, d)], [
+            "persisted_pending_github_commit", "invalid",
+            "persisted_pending_github_commit", "persisted_pending_github_commit",
+        ])
+        self.assertEqual(len(result["items"]), 18)
+        self.assertFalse(result["canonical_acceptance"])
+        self.assertTrue(result["requires_existing_github_writer_commit"])
+        for appid in (a, c, d):
+            self.assertTrue((store / ("App_" + appid + ".json")).is_file())
+            self.assertEqual(len(list(receipts.rglob(appid + "--*.json"))), 1)
+        self.assertFalse((store / ("App_" + b + ".json")).exists())
+        self.assertFalse(list(receipts.rglob(b + "--*.json")))
+        second_pass = run_writer()
+        replay = {row["appid"]: row["status"] for row in second_pass["items"]}
+        self.assertEqual([replay[x] for x in (a, b, c, d)], [
+            "already_persisted_same_binding", "invalid",
+            "already_persisted_same_binding", "already_persisted_same_binding",
+        ])
+        self.assertEqual(len(list(receipts.rglob("*.json"))), 3)
+        if before is not None:
+            self.assertEqual(helpers.run(f.repo, "rev-parse", "HEAD"), before)
+
+    def test_v2_single_writer_collision_and_unauthorized_fail_closed(self):
+        f, helpers = self.fixture()
+        from taste_steam_review_dossier_buffered import drain_buffered_groups
+        a, b, c = helpers.C["original_groups"][0]["appids"]
+        locators = {
+            a: self.submit(f, helpers, a),
+            c: self.submit(f, helpers, c),
+        }
+        (f.repo / ".dossier-final-offline-fixture").write_text("synthetic\n")
+        store, receipts = f.repo / "store", f.repo / "accepted"
+        def run_writer(**extra):
+            kwargs = dict(repo=f.repo, marker_commit=f.marker,
+                          trial_id=helpers.TRIAL, item_commits=locators,
+                          store_dir=store, accepted_dir=receipts)
+            kwargs.update(extra)
+            kwargs.setdefault("offline_fixture", False)
+            return drain_buffered_groups(notes_v2=kwargs)
+        with self.assertRaisesRegex(ValueError, "disabled"):
+            run_writer()
+        with self.assertRaisesRegex(ValueError, "subdirectories"):
+            run_writer(offline_fixture=True, accepted_dir=store)
+        with self.assertRaises(helpers.v2.NotesV2Error):
+            run_writer(offline_fixture=True, item_commits={"0": {}})
+        first = run_writer(offline_fixture=True)
+        self.assertEqual([x["status"] for x in first["items"][:3]],
+                         ["persisted_pending_github_commit", "missing",
+                          "persisted_pending_github_commit"])
+        original_c = (store / ("App_" + c + ".json")).read_bytes()
+        # Exact existing canonical dossier must never be replaced by another
+        # document or by a forged same-name receipt.
+        (store / ("App_" + a + ".json")).write_text('{"appid":"forged"}\n')
+        second = run_writer(offline_fixture=True)
+        self.assertEqual([x["status"] for x in second["items"][:3]],
+                         ["writer_rejected", "missing",
+                          "already_persisted_same_binding"])
+        self.assertEqual((store / ("App_" + a + ".json")).read_text(),
+                         '{"appid":"forged"}\n')
+        self.assertEqual((store / ("App_" + c + ".json")).read_bytes(), original_c)
+        self.assertEqual(len(list(receipts.rglob("*.json"))), 2)
+
+
+
+    def test_v2_writer_storage_error_aborts_github_transaction(self):
+        f, helpers = self.fixture()
+        from unittest.mock import patch
+        import taste_steam_review_dossier_buffered as writer
+        a = helpers.C["original_groups"][0]["appids"][0]
+        locators = {a: self.submit(f, helpers, a)}
+        (f.repo / ".dossier-final-offline-fixture").write_text("synthetic\n")
+        stored = f.repo / "store"
+        accepted = f.repo / "accepted"
+        real_write = writer.atomic_write_json
+        def fail_receipt_write(path, data):
+            if Path(path).is_relative_to(accepted):
+                raise OSError("synthetic receipt storage unavailable")
+            return real_write(path, data)
+        with patch.object(writer, "atomic_write_json", side_effect=fail_receipt_write):
+            with self.assertRaisesRegex(OSError, "receipt storage unavailable"):
+                writer.drain_buffered_groups(notes_v2={
+                    "repo": f.repo, "marker_commit": f.marker,
+                    "trial_id": helpers.TRIAL, "item_commits": locators,
+                    "store_dir": stored, "accepted_dir": accepted,
+                    "offline_fixture": True,
+                })
+        self.assertFalse(list(accepted.rglob("*.json")))
+        # Existing GitHub writer must treat the raised error as a failed whole
+        # transaction, not stage the temporarily written uncommitted cache.
+        self.assertFalse((f.repo / "data/control/dossier_notes_v2/canonical_accepted").exists())
+
+
+
 if __name__ == "__main__":
     unittest.main()
