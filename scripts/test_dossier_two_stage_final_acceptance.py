@@ -312,5 +312,114 @@ class FinalAcceptanceOfflineTests(unittest.TestCase):
         self.assertFalse((x.f.root / "store" / "App_12345.json").exists())
 
 
+
+class NotesV2IndividualReadinessTests(unittest.TestCase):
+    """Real V2 frozen Git lineage and existing strict validator, synthetic only."""
+
+    def fixture(self):
+        import test_dossier_research_notes_v2 as notes_fixture
+        f = notes_fixture.NotesV2Tests(
+            methodName="test_zero_evidence_research_passes_without_year_sources_or_dimensions")
+        f.setUp()
+        self.addCleanup(f.doCleanups)
+        return f, notes_fixture
+
+    def submit(self, f, helpers, appid, *, result="valid"):
+        import dossier_research_notes_v2 as notes
+        a = notes.frozen_assignment(
+            f.repo, marker_commit=f.marker, trial_id=helpers.TRIAL, appid=appid)
+        raw_notes = {
+            "schema": "DOSSIER-RESEARCH-NOTES-V2", "schema_version": 2,
+            "assignment": a, "notes_text": "", "source_log": [],
+            "research_status": "no_verifiable_findings",
+        }
+        helpers.write(f.repo, notes._path("research", a), raw_notes)
+        research = helpers.commit(f.repo, "synthetic per-item Notes " + appid)
+        if result == "waiting":
+            return {"research_commit": research, "assembly_commit": None}
+        work = notes.assembly_work(
+            f.repo, marker_commit=f.marker, trial_id=helpers.TRIAL,
+            appid=appid, research_commit=research)
+        self.assertEqual(work["status"], "ready_for_autonomous_assembly")
+        dossier = (
+            {"appid": appid, "title": a["title"]}
+            if result == "invalid_strict"
+            else web_dossier(appid, datetime.now(timezone.utc), title=a["title"])
+        )
+        document = notes.candidate_assembly(
+            work, outcome="assembled_candidate_ready", final_dossier=dossier)
+        helpers.write(f.repo, work["output_path"], document)
+        assembly = helpers.commit(f.repo, "synthetic per-item Assembly " + appid)
+        return {"research_commit": research, "assembly_commit": assembly}
+
+    def inspect_v2(self, f, helpers, locators):
+        import dossier_research_notes_v2 as notes
+        return notes.individual_final_readiness(
+            f.repo, marker_commit=f.marker,
+            trial_id=helpers.TRIAL, item_commits=locators)
+
+    def test_v2_a_and_c_ready_b_strict_invalid_no_cross_acceptance(self):
+        f, helpers = self.fixture()
+        group = helpers.C["original_groups"][0]
+        a, b, c = group["appids"]
+        locators = {
+            a: self.submit(f, helpers, a),
+            b: self.submit(f, helpers, b, result="invalid_strict"),
+            c: self.submit(f, helpers, c),
+        }
+        projection = self.inspect_v2(f, helpers, locators)
+        rows = projection["items"]
+        self.assertEqual(len(rows), 18)
+        self.assertEqual([x["appid"] for x in rows],
+                         [x for g in helpers.C["original_groups"] for x in g["appids"]])
+        self.assertEqual([x["status"] for x in rows[:3]], ["ready", "invalid", "ready"])
+        self.assertEqual(rows[1]["source_status"], "final_strict_or_group_rejected")
+        self.assertEqual([x["status"] for x in rows[3:]], ["missing"] * 15)
+        self.assertEqual([x["strict_item_valid"] for x in rows[:3]],
+                         [True, False, True])
+        self.assertFalse(projection["canonical_acceptance"])
+        self.assertFalse(projection["deep_ready"])
+        self.assertTrue(projection["requires_separately_authorized_canonical_writer"])
+        self.assertTrue(all(not x["canonical_acceptance"] and not x["deep_ready"]
+                            for x in rows))
+        self.assertFalse(helpers.v2.original_group_readiness(
+            group["group_sequence"],
+            {x["appid"]: x["source_status"] for x in rows[:3]})["strict_three_ready"])
+
+    def test_v2_b_missing_does_not_block_a_and_c(self):
+        f, helpers = self.fixture()
+        a, b, c = helpers.C["original_groups"][0]["appids"]
+        projected = self.inspect_v2(f, helpers, {
+            a: self.submit(f, helpers, a),
+            c: self.submit(f, helpers, c),
+        })
+        self.assertEqual([x["status"] for x in projected["items"][:3]],
+                         ["ready", "missing", "ready"])
+        self.assertEqual(sum(x["status"] == "missing" for x in projected["items"]), 16)
+        self.assertTrue(all(x["canonical_acceptance"] is False
+                            for x in projected["items"]))
+
+    def test_v2_waiting_errors_bad_locator_and_frozen_scope(self):
+        f, helpers = self.fixture()
+        import dossier_research_notes_v2 as notes
+        a, b, c = helpers.C["original_groups"][0]["appids"]
+        projected = self.inspect_v2(f, helpers, {
+            a: self.submit(f, helpers, a),
+            b: self.submit(f, helpers, b, result="waiting"),
+            c: {"research_commit": "not-a-commit", "assembly_commit": "also-invalid"},
+        })
+        self.assertEqual([x["status"] for x in projected["items"][:3]],
+                         ["ready", "waiting", "invalid"])
+        self.assertFalse(projected["items"][2]["strict_item_valid"])
+        wrong = {a: {"research_commit": None, "assembly_commit": "not-a-commit"}}
+        self.assertEqual(self.inspect_v2(f, helpers, wrong)["items"][0]["status"],
+                         "invalid")
+        with self.assertRaises(notes.NotesV2Error):
+            self.inspect_v2(f, helpers, {"123456789": {}})
+        with self.assertRaises(notes.NotesV2Error):
+            self.inspect_v2(f, helpers, [a])
+        self.assertFalse(notes._contract()["authorized_for_canonical_ingest"])
+
+
 if __name__ == "__main__":
     unittest.main()
