@@ -531,5 +531,34 @@ class NotesV2IndividualReadinessTests(unittest.TestCase):
 
 
 
+    def test_v2_writer_storage_error_aborts_github_transaction(self):
+        f, helpers = self.fixture()
+        from unittest.mock import patch
+        import taste_steam_review_dossier_buffered as writer
+        a = helpers.C["original_groups"][0]["appids"][0]
+        locators = {a: self.submit(f, helpers, a)}
+        (f.repo / ".dossier-final-offline-fixture").write_text("synthetic\n")
+        stored = f.repo / "store"
+        accepted = f.repo / "accepted"
+        real_write = writer.atomic_write_json
+        def fail_receipt_write(path, data):
+            if Path(path).is_relative_to(accepted):
+                raise OSError("synthetic receipt storage unavailable")
+            return real_write(path, data)
+        with patch.object(writer, "atomic_write_json", side_effect=fail_receipt_write):
+            with self.assertRaisesRegex(OSError, "receipt storage unavailable"):
+                writer.drain_buffered_groups(notes_v2={
+                    "repo": f.repo, "marker_commit": f.marker,
+                    "trial_id": helpers.TRIAL, "item_commits": locators,
+                    "store_dir": stored, "accepted_dir": accepted,
+                    "offline_fixture": True,
+                })
+        self.assertFalse(list(accepted.rglob("*.json")))
+        # Existing GitHub writer must treat the raised error as a failed whole
+        # transaction, not stage the temporarily written uncommitted cache.
+        self.assertFalse((f.repo / "data/control/dossier_notes_v2/canonical_accepted").exists())
+
+
+
 if __name__ == "__main__":
     unittest.main()
