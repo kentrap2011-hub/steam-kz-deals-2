@@ -9,7 +9,7 @@
 
 - **НОВЫЙ ЧАТ 2:** `dossier-v2-existing-issuer-pr266-independent-qa-01` / `WORKER_TASK_DOSSIER_V2_EXISTING_ISSUER_PR266_INDEPENDENT_QA_01.md`. Report-only independent QA of existing manual Dossier V2 issuer adapter in **draft PR #266 HEAD `1d46b84aff35feee0aca68fc8ad9f3154a330036`**. Starts after registration PR merge and existing green checks. Investigate legacy V1 compatibility, immutable grants, default-disabled V2, authority/actor proof and replay/ref races; give PASS_FOR_DIRECTOR_MERGE_REVIEW or CHANGES_REQUIRED, independent branch and exact-HEAD evidence.
 - **ЧАТ 1 implementation:** draft PR #266 submitted, awaiting QA. Do NOT merge or authorize any real V2 issuer dispatch, Research, Assembly, canonical ingest or production on the strength of this task. No new GitHub Actions/CI/validators/automations.
-- **Parallel proposal only (NOT assigned):** an independent Chat 3 could prepare a *separate* V2 per-item GitHub receipt persistence component after Director registration, with no overlapping issuer implementation files, no new CI or real run. This is not launch authority.
+- **НОВЫЙ ЧАТ 3 PLANNED (registration gates first):** `dossier-v2-research-per-item-receipts-implement-01` / `WORKER_TASK_DOSSIER_V2_RESEARCH_PER_ITEM_RECEIPTS_IMPLEMENT_01.md`. Independently implement only a bounded inactive per-item Research Notes V2 GitHub receipt component reusing existing transport/receipt primitives; no overlap with seven PR #266 paths, no new workflow/CI/validator or live writes. Stop as BLOCKED if strict ownership/authority prevents safe offline implementation. Chat 2's PR #266 independent QA continues unchanged.
 
 ## DIRECTOR CURRENT ASSIGNMENT — 2026-10-24: implement V2 reuse of original manual Research issuer
 

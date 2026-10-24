@@ -2023,6 +2023,26 @@
       "recent_completion": false,
       "updated_on": "2026-10-24",
       "updated_at_utc": "2026-10-24T07:10:00.000Z"
+    },
+    {
+      "id": "dossier-v2-research-per-item-receipts-implement-01",
+      "title": "ЧАТ 3 — Dossier V2: durable per-item Research receipts",
+      "goal": "Минимально адаптировать существующее GitHub-owned сохранение одиночных Research результатов под неактивный Notes V2 с create-only receipts и immutable provenance, без реального запуска.",
+      "status": "planned",
+      "effort": "высокая",
+      "effort_reason": "Ограниченный offline writer/receipt путь и существующие регрессионные проверки, отдельный независимый QA перед merge.",
+      "urgency": "высокая",
+      "urgency_reason": "Без подтверждённого сохранения каждого Research Notes V2 автономный Assembly нельзя безопасно запускать.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_RESEARCH_PER_ITEM_RECEIPTS_IMPLEMENT_01.md",
+      "worker_slot": "ЧАТ 3",
+      "order": null,
+      "depends_on": [
+        "research-assembly-v2-safe-use-readiness-01"
+      ],
+      "blocker": "Начать после merge регистрации и существующих CI. Не изменять файлы или ветку реализации issuer №266. При неизбежном пересечении остановиться. Нет реальных GitHub writes, CI/Actions/валидаторов, Research/Assembly или Deploy.",
+      "recent_completion": false,
+      "updated_on": "2026-10-24",
+      "updated_at_utc": "2026-10-24T07:18:37.545Z"
     }
   ]
 }
