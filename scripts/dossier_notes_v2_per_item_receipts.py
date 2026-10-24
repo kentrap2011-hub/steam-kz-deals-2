@@ -169,6 +169,9 @@ def _receipt(repo, *, marker_commit, trial_id, appid,
                               trial_id=trial_id, authorization_commit=authorization_commit)
     if receipt_parent is None or not first_parent_contains(repo, authorization_commit, receipt_parent):
         v2.reject("broken_git_provenance", "receipt parent is outside issuer ancestry")
+    if introduction_commit is not None and not first_parent_contains(
+            repo, introduction_commit, receipt_parent):
+        v2.reject("broken_git_provenance", "receipt cannot predate its candidate introduction")
     outcome = inspect_candidate(repo, marker_commit=marker_commit, trial_id=trial_id,
                                 appid=appid, authorization_commit=authorization_commit,
                                 introduction_commit=introduction_commit)
