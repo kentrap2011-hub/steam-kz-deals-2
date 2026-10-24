@@ -21,8 +21,17 @@ No V2 scope grant exists on current main; `manual_v2_issuer.enabled=false` is ch
 
 ## Tests and QA
 
-The existing Notes V2 unittest runner (not new CI) has been extended with disposable local Git tests. **Actual existing GitHub checks pending on the draft PR.** Final HEAD, check results and admissible QA status must be recorded after those checks, not guessed. V1 original freeze/authorization code and historical control-plane refs were not executed or modified.
+The existing Notes V2 unittest runner (not new CI) has been extended with disposable local Git tests. **Passed on implementation code HEAD `a755684e9c88f3fd0a63fc9f13ccb75f3c5ce12c`:**
+- Existing [Notes V2/Assembly CI run 40071640709](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40071640709): **SUCCESS**, 45 synthetic unittest cases, including 8 new original-issuer adapter cases and existing Notes V2 regression.
+- Existing [original Dossier shadow publisher PR-only run 40071640718](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40071640718): **SUCCESS** (V1 publication path regression).
+- Existing [eventual Dossier chain run 40071640716](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40071640716): **SUCCESS**.
+- Existing [backlog dispositions run 40071640708](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40071640708): **SUCCESS**.
+- Existing [site task registry run 40071640715](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40071640715): **SUCCESS**.
+
+An earlier CI run 40071495956 **failed** on a synthetic test which assumed pushing the same already-published SHA with an empty-ref lease must fail; Git can treat that as a successful no-op. The test was corrected to use an actual competing new commit. It passed on the code HEAD above; this was not a real GitHub issuer malfunction. No actual GitHub V2 dispatch/activation has been tested or attempted.
+
+The final report-only commit after this checked code HEAD requires exact-final-HEAD CI recheck by independent QA. V1 original freeze/authorization code and historical control-plane refs were not executed or modified.
 
 **Next separate gate:** independent ЧАТ 2 QA on the exact final draft PR HEAD. Even after successful QA/merge, a fresh human-grant scope decision, later exact manual issuer invocation with authenticated GitHub runs, and separate Research semantic approval are all required. No automatic activation.
 
-Status: `IMPLEMENTED_INACTIVE_PENDING_EXISTING_TESTS_AND_INDEPENDENT_QA`.
+Status: `READY_FOR_INDEPENDENT_QA` (inactive implementation; merge/activation not authorized).
