@@ -399,6 +399,29 @@ class NotesV2IndividualReadinessTests(unittest.TestCase):
         self.assertTrue(all(x["canonical_acceptance"] is False
                             for x in projected["items"]))
 
+    def test_v2_runtime_terminal_error_is_local(self):
+        f, helpers = self.fixture()
+        import dossier_research_notes_v2 as notes
+        a, b, c = helpers.C["original_groups"][0]["appids"]
+        good = self.submit(f, helpers, a)
+        in_progress = self.submit(f, helpers, b, result="waiting")
+        work = notes.assembly_work(
+            f.repo, marker_commit=f.marker, trial_id=helpers.TRIAL,
+            appid=b, research_commit=in_progress["research_commit"])
+        terminal = notes.candidate_assembly(
+            work, outcome="runtime_or_tool_interrupted",
+            diagnostic="synthetic Git-only tool failure")
+        helpers.write(f.repo, work["output_path"], terminal)
+        failed = helpers.commit(f.repo, "synthetic B interrupted Assembly")
+        projected = self.inspect_v2(f, helpers, {
+            a: good, b: {"research_commit": in_progress["research_commit"],
+                         "assembly_commit": failed},
+        })
+        self.assertEqual([x["status"] for x in projected["items"][:3]],
+                         ["ready", "error", "missing"])
+        self.assertEqual(projected["items"][1]["source_status"], "runtime_or_tool_interrupted")
+        self.assertFalse(projected["canonical_acceptance"])
+
     def test_v2_waiting_errors_bad_locator_and_frozen_scope(self):
         f, helpers = self.fixture()
         import dossier_research_notes_v2 as notes
