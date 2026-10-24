@@ -1,14 +1,19 @@
 #!/usr/bin/env python3
-"""Inactive Notes V2 per-item transport/receipt adapter, for disposable Git only.
+"""Inactive Notes V2 per-item Research transport and receipt validation.
 
-No network, push, Git commit, semantic execution, retry, or canonical writer.
-GitHub must separately authenticate the human semantic grant, Actions run,
-remote compare-and-swap and re-fetched receipt before claiming a durable receipt.
+The optional, explicitly invoked single-item Git writer uses the existing Git
+transport; it never runs semantics, schedules work or accepts final Dossier.
+Authenticated GitHub REST read-back is required for a GitHub receipt claim.
 A V2 issuer commit alone expressly does NOT authorize Research semantics.
 """
+import base64
 import json
 import re
+import tempfile
 from pathlib import Path
+from urllib.parse import quote
+from urllib.request import Request, urlopen
+
 
 import dossier_research_notes_v2 as v2
 from dossier_two_stage_staging import (
@@ -252,3 +257,224 @@ def inspect_receipt_commit(repo, *, marker_commit, trial_id, appid,
     v2._assert_unchanged_since(repo, receipt_commit, path)
     return {**expected, "status": "local_git_receipt_proved_remote_unconfirmed",
             "receipt_commit": receipt_commit, "github_receipt_confirmed": False}
+
+
+# This is a transport primitive, not an executor or a second acceptance path.
+# The caller/GitHub owner must separately authorize the invocation and its
+# immutable trial; a structurally valid inactive issuer grants NO semantics.
+def _remote_tip(repo, branch):
+    if (not isinstance(branch, str) or not branch.startswith("sandbox/")
+            or git(repo, "check-ref-format", "--branch", branch,
+                   required=False).returncode):
+        v2.reject("wrong_binding", "expected explicitly selected nonproduction sandbox branch")
+    ref = "refs/heads/" + branch
+    result = git(repo, "ls-remote", "--exit-code", "origin", ref,
+                 required=False)
+    if result.returncode:
+        v2.reject("broken_git_provenance", "cannot read the authoritative remote branch")
+    entries = result.stdout.decode("ascii").strip().splitlines()
+    if len(entries) != 1 or entries[0].split("\t")[-1] != ref:
+        v2.reject("broken_git_provenance", "ambiguous remote branch")
+    return _sha(entries[0].split("\t")[0], "remote branch tip")
+
+
+def _github_get(repository, endpoint, token):
+    """Authenticated official GitHub REST GET, with no retry or write side effects."""
+    url = "https://api.github.com/repos/" + repository + "/" + endpoint
+    request = Request(url, headers={
+        "Accept": "application/vnd.github+json",
+        "Authorization": "Bearer " + token,
+        "X-GitHub-Api-Version": "2022-11-28",
+    })
+    try:
+        with urlopen(request, timeout=20) as response:
+            if response.status != 200:
+                v2.reject("broken_git_provenance", "GitHub returned non-200 on read-back")
+            return json.loads(response.read().decode("utf-8"))
+    except (OSError, ValueError, UnicodeError) as exc:
+        v2.reject("broken_git_provenance", "authenticated GitHub read-back failed: "
+                  + type(exc).__name__)
+
+
+def _github_tip(repository, branch, token):
+    obj = _github_get(repository, "git/ref/heads/" + quote(branch, safe="/"), token)
+    sha = obj.get("object", {}).get("sha") if isinstance(obj, dict) else None
+    return _sha(sha, "authenticated GitHub branch ref")
+
+
+def _github_preflight(repo, branch, expected_head, repository, token):
+    if token is None and repository is None:
+        # Only suitable for local bare-Git regression; never a GitHub claim.
+        return False
+    if (not isinstance(token, str) or not token.strip()
+            or repository != "kentrap2011-hub/steam-kz-deals-2"):
+        v2.reject("wrong_binding", "GitHub confirmation requires exact repository and token")
+    url = git(repo, "remote", "get-url", "origin").stdout.decode().strip()
+    expected_urls = {
+        "https://github.com/" + repository,
+        "https://github.com/" + repository + ".git",
+        "git@github.com:" + repository + ".git",
+        "git@github.com:" + repository,
+        "ssh://git@github.com/" + repository + ".git",
+    }
+    if url not in expected_urls:
+        v2.reject("wrong_binding", "origin does not point to the exact GitHub repository")
+    if _github_tip(repository, branch, token) != expected_head:
+        v2.reject("broken_git_provenance", "GitHub ref moved before publication")
+    return True
+
+
+def _single_remote_add(repo, *, branch, expected_remote_head, make_plan,
+                       check_commit, message, github_repository=None,
+                       github_token=None):
+    """One clean temporary Git worktree, one create-only commit, one non-force push.
+
+    No retries: a failed/ambiguous push or read-back MUST NOT become success.
+    Git first-parent + exact bytes are checked again against freshly fetched
+    remote objects, and optionally against authenticated GitHub REST.
+    """
+    expected_remote_head = _sha(expected_remote_head, "expected remote parent")
+    current = _remote_tip(repo, branch)
+    if current != expected_remote_head:
+        v2.reject("broken_git_provenance", "remote branch changed; no write attempted")
+    authenticated = _github_preflight(repo, branch, current,
+                                       github_repository, github_token)
+    git(repo, "fetch", "--no-tags", "origin", "refs/heads/" + branch)
+    fetched = git(repo, "rev-parse", "FETCH_HEAD").stdout.decode().strip()
+    if fetched != current:
+        v2.reject("broken_git_provenance", "remote changed during fetch")
+    with tempfile.TemporaryDirectory(prefix="notes-v2-single-add-") as d:
+        work = Path(d) / "checkout"
+        git(repo, "worktree", "add", "--detach", str(work), fetched)
+        try:
+            if git(work, "status", "--porcelain", "--untracked-files=all").stdout.strip():
+                v2.reject("broken_git_provenance", "temporary Git worktree is not clean")
+            plan = make_plan(work)
+            path = plan.get("output_path") or plan.get("receipt_path")
+            raw = plan.get("bytes") if "bytes" in plan else plan.get("receipt_bytes")
+            if (not isinstance(path, str) or not isinstance(raw, bytes)
+                    or not raw or exists(work, "HEAD", path)):
+                v2.reject("broken_git_provenance", "invalid, empty or duplicate create-only artifact")
+            target = work / path
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(raw)
+            git(work, "add", "--", path)
+            git(work, "commit", "-m", message)
+            commit_sha = git(work, "rev-parse", "HEAD").stdout.decode().strip()
+            if (parent(work, commit_sha) != fetched
+                    or require_only_new(work, commit_sha, [path]) != fetched
+                    or blob(work, commit_sha, path) != blob_for(raw)):
+                v2.reject("broken_git_provenance", "new Git commit is not exact one-add")
+            check_commit(work, commit_sha, plan)
+            if _remote_tip(repo, branch) != fetched:
+                v2.reject("broken_git_provenance", "remote branch changed before push")
+            if authenticated and _github_tip(github_repository, branch, github_token) != fetched:
+                v2.reject("broken_git_provenance", "authenticated GitHub ref moved before push")
+            # Ordinary non-force push is a server-enforced fast-forward check.
+            # On concurrent writers the loser cannot replace the winner.
+            push = git(repo, "push", "--porcelain", "origin",
+                       commit_sha + ":refs/heads/" + branch, required=False)
+            if push.returncode:
+                v2.reject("broken_git_provenance", "Git remote rejected or did not confirm push")
+            if _remote_tip(repo, branch) != commit_sha:
+                v2.reject("broken_git_provenance", "remote did not retain exact new commit")
+            git(repo, "fetch", "--no-tags", "origin", "refs/heads/" + branch)
+            if git(repo, "rev-parse", "FETCH_HEAD").stdout.decode().strip() != commit_sha:
+                v2.reject("broken_git_provenance", "remote fetch does not confirm new commit")
+            if (parent(repo, commit_sha) != fetched
+                    or require_only_new(repo, commit_sha, [path]) != fetched
+                    or file_at(repo, commit_sha, path) != raw
+                    or blob(repo, commit_sha, path) != blob_for(raw)):
+                v2.reject("broken_git_provenance", "remote Git bytes or ancestry differ")
+            if authenticated:
+                if _github_tip(github_repository, branch, github_token) != commit_sha:
+                    v2.reject("broken_git_provenance", "authenticated GitHub ref differs")
+                doc = _github_get(github_repository,
+                                  "contents/" + quote(path, safe="/") +
+                                  "?ref=" + commit_sha, github_token)
+                try:
+                    body = base64.b64decode(doc["content"], validate=False)
+                    valid = (doc["sha"] == blob_for(raw)
+                             and doc["encoding"] == "base64" and body == raw)
+                except (ValueError, KeyError, TypeError):
+                    valid = False
+                if not valid or _github_tip(github_repository, branch, github_token) != commit_sha:
+                    v2.reject("broken_git_provenance", "GitHub ref or content read-back mismatch")
+            if _remote_tip(repo, branch) != commit_sha:
+                v2.reject("broken_git_provenance", "remote ref changed after read-back")
+            return {
+                **{k: val for k, val in plan.items() if k not in ("bytes", "receipt_bytes")},
+                "remote_branch": branch, "remote_parent_commit": fetched,
+                "remote_commit": commit_sha, "remote_path": path,
+                "remote_git_confirmed": True,
+                "github_candidate_confirmed": False,
+                "github_receipt_confirmed": False,
+                "authenticated_github_readback": authenticated,
+                "semantic_quality_accepted": False, "canonical_acceptance": False,
+            }
+        finally:
+            git(repo, "worktree", "remove", "--force", str(work), required=False)
+
+
+def publish_candidate_remote(repo, *, branch, expected_remote_head,
+                             marker_commit, trial_id, appid,
+                             authorization_commit, document,
+                             github_repository=None, github_token=None):
+    """Publish ONE preexisting semantic document; never generate Research."""
+    def plan(work):
+        return prepare_candidate(work, marker_commit=marker_commit, trial_id=trial_id,
+                                 appid=appid, authorization_commit=authorization_commit,
+                                 document=document)
+
+    def inspect(work, commit_sha, planned):
+        proof = inspect_candidate(work, marker_commit=marker_commit, trial_id=trial_id,
+                                  appid=appid, authorization_commit=authorization_commit,
+                                  introduction_commit=commit_sha)
+        if (not proof["transport_technically_verified"]
+                or proof["research_package_blob_sha"] != planned["blob_sha"]):
+            v2.reject("broken_git_provenance", "new candidate failed existing validator")
+
+    result = _single_remote_add(
+        repo, branch=branch, expected_remote_head=expected_remote_head,
+        make_plan=plan, check_commit=inspect,
+        message="dossier notes v2: create-only Research item " + str(appid),
+        github_repository=github_repository, github_token=github_token)
+    result["status"] = ("github_candidate_confirmed" if result["authenticated_github_readback"]
+                        else "disposable_remote_candidate_only")
+    result["github_candidate_confirmed"] = result["authenticated_github_readback"]
+    return result
+
+
+def publish_receipt_remote(repo, *, branch, expected_remote_head,
+                           marker_commit, trial_id, appid,
+                           authorization_commit, introduction_commit,
+                           github_repository=None, github_token=None):
+    """Publish ONE typed receipt after candidate introduction is on remote."""
+    _sha(introduction_commit, "candidate introduction")
+    def plan(work):
+        proof = inspect_candidate(work, marker_commit=marker_commit, trial_id=trial_id,
+                                  appid=appid, authorization_commit=authorization_commit,
+                                  introduction_commit=introduction_commit)
+        if not proof["transport_technically_verified"]:
+            v2.reject("broken_git_provenance", "candidate not verified on authoritative remote")
+        return prepare_receipt(work, marker_commit=marker_commit, trial_id=trial_id,
+                               appid=appid, authorization_commit=authorization_commit,
+                               introduction_commit=introduction_commit)
+
+    def inspect(work, commit_sha, planned):
+        proof = inspect_receipt_commit(work, marker_commit=marker_commit, trial_id=trial_id,
+                                       appid=appid, authorization_commit=authorization_commit,
+                                       introduction_commit=introduction_commit,
+                                       receipt_commit=commit_sha)
+        if proof["receipt_blob_sha"] != planned["receipt_blob_sha"]:
+            v2.reject("broken_git_provenance", "new receipt failed existing validator")
+
+    result = _single_remote_add(
+        repo, branch=branch, expected_remote_head=expected_remote_head,
+        make_plan=plan, check_commit=inspect,
+        message="dossier notes v2: create-only Research receipt " + str(appid),
+        github_repository=github_repository, github_token=github_token)
+    result["status"] = ("github_receipt_confirmed" if result["authenticated_github_readback"]
+                        else "disposable_remote_receipt_only")
+    result["github_receipt_confirmed"] = result["authenticated_github_readback"]
+    return result
