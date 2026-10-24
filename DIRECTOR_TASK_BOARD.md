@@ -5,6 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT ASSIGNMENT — 2026-10-24: REUSE existing Dossier Research launch before a new V2 issuer
+
+- **User decision:** priority Dossier, not new Progressive Deep worker. Already-run original Research (18 games, 14 received, 2 invalid/4 missing) had an actual sandbox marker and GitHub confirmation; first prove what can safely be reused by V2. Do **not** invent a new issuer/CI/check by default.
+- **НОВЫЙ ЧАТ 1**: `dossier-v2-original-run-issuer-reuse-01` / `WORKER_TASK_DOSSIER_V2_ORIGINAL_RUN_ISSUER_REUSE_01.md`, PLANNED until registration PR existing CI success and main merge. Compare exact original marker `bb63cc291eba5aa8fc56e2920ef84d131ac28a4f` and authorization `2a726cf6731c0fc1e7bc809474627383c107ef9b` with the proved V2 trusted prospective issuer blocker (report PR #261). Single compatibility matrix, one minimal inactive offline adapter ONLY if no new authority is created; otherwise contract blocked report. No Research/Assembly execution, marker/manifest issuance, new CI/Actions/validators or production changes.
+- Previous ЧАТ 1 (#261) and ЧАТ 2 (#262) finished report-only. No new Deep task here; manual Deep run is user's separate choice. Existing Fast remains authoritative until separately authorized cutover.
+
 ## DIRECTOR CURRENT AUTHORIZATION — 2026-10-23: parallel Dossier V2 and Progressive Deep
 
 - **USER APPROVED launch prompts:** New independent ЧАТ 1 and ЧАТ 2 to move analysis work forward; neither replaces an already-running semantic worker. No new GitHub Actions/CI/validators/automations or changes to existing checks, no real semantic execution, deploy or production.
