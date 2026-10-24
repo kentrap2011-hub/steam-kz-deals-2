@@ -69,7 +69,14 @@ def issuer_structure(repo, *, marker_commit, trial_id, authorization_commit):
         "assembly_authorized": False,
         "production_authorized": False,
     }
-    if not isinstance(record, dict) or any(record.get(k) != val for k, val in required.items()):
+    extra = {
+        "human_grant_commit", "human_grant_blob_sha",
+        "v2_contract_blob_sha", "v2_research_guard_blob_sha",
+        "github_actor_id", "github_authorization_run_id",
+    }
+    if (not isinstance(record, dict)
+            or set(record) != set(required) | extra
+            or any(record.get(k) != val for k, val in required.items())):
         v2.reject("wrong_binding", "V2 issuer document disagrees with frozen marker/manifest")
     for key in ("human_grant_commit", "human_grant_blob_sha",
                 "v2_contract_blob_sha", "v2_research_guard_blob_sha"):
@@ -77,8 +84,28 @@ def issuer_structure(repo, *, marker_commit, trial_id, authorization_commit):
     if not all(isinstance(record.get(key), str) and record[key].isdigit()
                for key in ("github_actor_id", "github_authorization_run_id")):
         v2.reject("wrong_binding", "issuer actor/run identity is malformed")
-    if not first_parent_contains(repo, record["human_grant_commit"], marker_parent):
+    grant_commit = record["human_grant_commit"]
+    if not first_parent_contains(repo, grant_commit, marker_parent):
         v2.reject("wrong_binding", "issuer grant is not an ancestor of marker parent")
+    grant_path = "config/dossier_notes_v2_issuer_human_grant.json"
+    require_only_new(repo, grant_commit, [grant_path])
+    v2._assert_unchanged_since(repo, grant_commit, grant_path)
+    if (blob(repo, grant_commit, grant_path) != record["human_grant_blob_sha"]
+            or blob(repo, marker_parent, grant_path) != record["human_grant_blob_sha"]):
+        v2.reject("broken_git_provenance", "V2 grant blob is not preserved")
+    grant = strict_json(file_at(repo, grant_commit, grant_path))
+    expected_grant = {
+        "schema": "DOSSIER-NOTES-V2-MANUAL-ISSUER-HUMAN-GRANT",
+        "schema_version": 2, "trial_id": trial_id,
+        "original_buffer_blob_sha": required["original_buffer_blob_sha"],
+        "original_pins": c["immutable_original_pins"],
+        "original_groups": c["original_groups"],
+        "github_actor_id": record["github_actor_id"],
+        "scope": "issue_single_original18_V2_manifest_marker_then_separate_authorization_only",
+        "semantic_execution_approved": False, "production_approved": False,
+    }
+    if grant != expected_grant:
+        v2.reject("wrong_binding", "issuer does not refer to an exact scoped structural grant")
     # Exact source guards belong to the same GitHub-side issuer, not a worker claim.
     for key, source_path in (
             ("v2_contract_blob_sha", "config/dossier_research_notes_v2_contract.json"),
