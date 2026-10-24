@@ -5,6 +5,14 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT PARALLEL ASSIGNMENTS — 2026-10-24: individual Dossier, receipt QA, plain Russian
+
+- **РЕШЕНИЕ ПОЛЬЗОВАТЕЛЯ:** для Dossier V2 оценить и, если действительно нужно, немедленно реализовать поштучное принятие итоговых анализов: ошибочная игра не задерживает готовые. Research→Assembly independent handling **already exists**, не переписывать. Не трогать общий V1 production writer и не активировать V2.
+- **НОВЫЙ ЧАТ 1:** `dossier-v2-individual-final-acceptance-implement-01` → `WORKER_TASK_DOSSIER_V2_INDIVIDUAL_FINAL_ACCEPTANCE_IMPLEMENT_01.md`. Один ограниченный draft PR после текущей регистрации; реализовать только при подтверждённой необходимости и безопасной границе, иначе конкретный блокер или ALREADY_SUPPORTED. Не пересекаться с незавершёнными PR #266 и #270.
+- **НОВЫЙ ЧАТ 2:** `dossier-v2-pr270-receipts-independent-qa-01` → `WORKER_TASK_DOSSIER_V2_PR270_RECEIPTS_INDEPENDENT_QA_01.md`. Независимо проверить код ЧАТА 3 в PR #270, HEAD `676d7473e5fda85e8e07bfdbb206859d69e3be69` и реально запустить новые offline тесты если возможно. ЧАТ 3 код сдал; сейчас QA отдельно.
+- **НОВЫЙ ЧАТ 4:** `director-plain-russian-communication-diagnosis-01` → `WORKER_TASK_DIRECTOR_PLAIN_RUSSIAN_COMMUNICATION_DIAGNOSIS_01.md`. Чётко установить, почему директор нарушает ожидание пользователя «объясняй простым русским, без лишних терминов». Диагноз и одно малое предложение, report-only. Не вводить новые правила без отдельного решения.
+- Все три чата независимы. NO new GitHub Actions/CI/validators/automations, no real Research/Assembly, Deploy, canonical writes, production or self-merge. Previously completed QA of PR #266 found one uncorrected issue; не объявлять PR #266 принятым.
+
 ## DIRECTOR CURRENT QA ASSIGNMENT — 2026-10-24: independent exact-HEAD PR #266 issuer review
 
 - **НОВЫЙ ЧАТ 2:** `dossier-v2-existing-issuer-pr266-independent-qa-01` / `WORKER_TASK_DOSSIER_V2_EXISTING_ISSUER_PR266_INDEPENDENT_QA_01.md`. Report-only independent QA of existing manual Dossier V2 issuer adapter in **draft PR #266 HEAD `1d46b84aff35feee0aca68fc8ad9f3154a330036`**. Starts after registration PR merge and existing green checks. Investigate legacy V1 compatibility, immutable grants, default-disabled V2, authority/actor proof and replay/ref races; give PASS_FOR_DIRECTOR_MERGE_REVIEW or CHANGES_REQUIRED, independent branch and exact-HEAD evidence.
