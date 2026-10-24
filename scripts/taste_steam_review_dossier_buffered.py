@@ -1043,7 +1043,7 @@ def apply_buffered_drain(
 
 
 
-def drain_notes_v2_individual(
+def _drain_notes_v2_individual(
     *, repo, marker_commit, trial_id, item_commits, store_dir, accepted_dir,
     offline_fixture=False,
 ):
@@ -1213,7 +1213,16 @@ def drain_buffered_groups(
     terminal_receipt_archive_root=_DEFAULT_TERMINAL_RECEIPT_ARCHIVE,
     frozen_authority_audit_path=_DEFAULT_FROZEN_AUTHORITY_AUDIT,
     repo_root=Path("."),
+    notes_v2=None,
 ):
+    # V1 is byte-for-byte unchanged unless the caller explicitly selects the
+    # separately gated Notes V2 mode inside this SAME existing writer entrypoint.
+    if notes_v2 is not None:
+        expected = {"repo", "marker_commit", "trial_id", "item_commits",
+                    "store_dir", "accepted_dir", "offline_fixture"}
+        if type(notes_v2) is not dict or set(notes_v2) != expected:
+            raise ValueError("invalid explicitly bound V2 shared-writer invocation")
+        return _drain_notes_v2_individual(**notes_v2)
     manifest_path = Path(manifest_path)
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     plan = plan_buffered_drain(
