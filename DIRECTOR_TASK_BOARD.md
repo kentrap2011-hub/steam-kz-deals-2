@@ -5,6 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT QA ASSIGNMENT — 2026-10-24: independent exact-HEAD PR #266 issuer review
+
+- **НОВЫЙ ЧАТ 2:** `dossier-v2-existing-issuer-pr266-independent-qa-01` / `WORKER_TASK_DOSSIER_V2_EXISTING_ISSUER_PR266_INDEPENDENT_QA_01.md`. Report-only independent QA of existing manual Dossier V2 issuer adapter in **draft PR #266 HEAD `1d46b84aff35feee0aca68fc8ad9f3154a330036`**. Starts after registration PR merge and existing green checks. Investigate legacy V1 compatibility, immutable grants, default-disabled V2, authority/actor proof and replay/ref races; give PASS_FOR_DIRECTOR_MERGE_REVIEW or CHANGES_REQUIRED, independent branch and exact-HEAD evidence.
+- **ЧАТ 1 implementation:** draft PR #266 submitted, awaiting QA. Do NOT merge or authorize any real V2 issuer dispatch, Research, Assembly, canonical ingest or production on the strength of this task. No new GitHub Actions/CI/validators/automations.
+- **Parallel proposal only (NOT assigned):** an independent Chat 3 could prepare a *separate* V2 per-item GitHub receipt persistence component after Director registration, with no overlapping issuer implementation files, no new CI or real run. This is not launch authority.
+
 ## DIRECTOR CURRENT ASSIGNMENT — 2026-10-24: implement V2 reuse of original manual Research issuer
 
 - **USER AUTHORIZATION:** adapt existing V1 GitHub-owned **manual** freeze + separate one-use Research feasibility approval pattern for **inactive** Notes V2, as proven in report-only PR #264. This is code/contract implementation authorization only, **NOT** a human Research grant, marker issuance, workflow dispatch, real semantics, Assembly, production or cutover.
