@@ -5,6 +5,14 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT NEXT IMPLEMENTATION — 2026-10-24: finish real Research save and per-game V2 acceptance
+
+- **USER DECISION:** complete two necessary components, then decide a separately authorized real one-shot trial with the unchanged original 18 games. This is developer authorization only, not actual Research/Assembly, remote semantic writes, production, Deploy, or changing the current inactive V2 flags.
+- **НОВЫЙ ЧАТ 1:** `dossier-v2-individual-canonical-publish-finish-01` → `WORKER_TASK_DOSSIER_V2_INDIVIDUAL_CANONICAL_PUBLISH_FINISH_01.md`. Continue draft PR #274 on its existing implementation branch (or one explicitly dependent proposal) and finish future V2 canonical single-game acceptance using current strict validator and shared writer, without changing V1 atomic publication. If owner/authorization prevents safe path, report exact blocker, do not fake acceptance.
+- **НОВЫЙ ЧАТ 3:** `dossier-v2-research-github-persistence-finish-01` → `WORKER_TASK_DOSSIER_V2_RESEARCH_GITHUB_PERSISTENCE_FINISH_01.md`. Continue draft PR #270 on its existing branch (or one explicitly dependent proposal). Finish remote GitHub create-only per-game Research receipts and re-fetch proof, and run authored tests; report blocked instead of claiming success when local-only.
+- **Separation:** ЧАТ 1 stays on PR #274 final acceptance paths; ЧАТ 3 stays on PR #270 Research receipt paths. Neither edits PR #266 issuer or PR #275 director protocol. No new GitHub Actions, CI, validators, recurring workers or automation. Existing checks and final bounded independent review before any live trial. No real research authorization is implied by this task.
+- **Prior deliveries:** ЧАТ 1 #274 complete but final canonical writer blocked; ЧАТ 2 QA #273 complete with tests unexecuted; ЧАТ 4 #272 complete and minimal director language patch in draft #275 pending separate review.
+
 ## DIRECTOR CURRENT PARALLEL ASSIGNMENTS — 2026-10-24: individual Dossier, receipt QA, plain Russian
 
 - **РЕШЕНИЕ ПОЛЬЗОВАТЕЛЯ:** для Dossier V2 оценить и, если действительно нужно, немедленно реализовать поштучное принятие итоговых анализов: ошибочная игра не задерживает готовые. Research→Assembly independent handling **already exists**, не переписывать. Не трогать общий V1 production writer и не активировать V2.
