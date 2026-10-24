@@ -353,11 +353,15 @@ def verify_v2_authorization(repo, *, marker_commit, authorization_commit):
     manifest, manifest_blob = _manifest(repo, marker_commit, trial_id)
     require(manifest["items"] == rows, "authorization changed original frozen 18")
     record = json_git(repo, authorization_commit, m["authorization_path"])
+    grant = m["human_grant"]
     require(isinstance(record.get("github_actor_id"), str)
             and record["github_actor_id"].isdigit()
             and isinstance(record.get("github_authorization_run_id"), str)
-            and record["github_authorization_run_id"].isdigit(),
-            "authorization lacks typed GitHub actor/run evidence")
+            and record["github_authorization_run_id"].isdigit()
+            and record.get("human_grant_commit") == grant["commit"]
+            and record.get("human_grant_blob_sha") == grant["blob_sha"]
+            and record["github_actor_id"] == grant["github_actor_id"],
+            "authorization lacks exact approved human grant or typed GitHub actor/run")
     expected = v2_expected_authorization(
         repo, marker_commit=marker_commit, trial_id=trial_id,
         grant_commit=record.get("human_grant_commit"),
