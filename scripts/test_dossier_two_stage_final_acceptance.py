@@ -446,7 +446,7 @@ class NotesV2IndividualReadinessTests(unittest.TestCase):
 
     def test_v2_individual_shared_writer_a_c_persist_b_invalid_and_next_group_continues(self):
         f, helpers = self.fixture()
-        from taste_steam_review_dossier_buffered import drain_notes_v2_individual
+        from taste_steam_review_dossier_buffered import drain_buffered_groups
         first, second = helpers.C["original_groups"][:2]
         a, b, c = first["appids"]
         d = second["appids"][0]
@@ -459,11 +459,11 @@ class NotesV2IndividualReadinessTests(unittest.TestCase):
         (f.repo / ".dossier-final-offline-fixture").write_text("synthetic\n")
         store, receipts = f.repo / "store", f.repo / "accepted"
         def run_writer():
-            return drain_notes_v2_individual(
-                repo=f.repo, marker_commit=f.marker, trial_id=helpers.TRIAL,
-                item_commits=locators, store_dir=store, accepted_dir=receipts,
-                offline_fixture=True,
-            )
+            return drain_buffered_groups(notes_v2={
+                "repo": f.repo, "marker_commit": f.marker, "trial_id": helpers.TRIAL,
+                "item_commits": locators, "store_dir": store,
+                "accepted_dir": receipts, "offline_fixture": True,
+            })
         before = helpers.run(f.repo, "rev-parse", "HEAD") if hasattr(helpers, "run") else None
         result = run_writer()
         statuses = {row["appid"]: row["status"] for row in result["items"]}
@@ -491,7 +491,7 @@ class NotesV2IndividualReadinessTests(unittest.TestCase):
 
     def test_v2_single_writer_collision_and_unauthorized_fail_closed(self):
         f, helpers = self.fixture()
-        from taste_steam_review_dossier_buffered import drain_notes_v2_individual
+        from taste_steam_review_dossier_buffered import drain_buffered_groups
         a, b, c = helpers.C["original_groups"][0]["appids"]
         locators = {
             a: self.submit(f, helpers, a),
@@ -504,7 +504,8 @@ class NotesV2IndividualReadinessTests(unittest.TestCase):
                           trial_id=helpers.TRIAL, item_commits=locators,
                           store_dir=store, accepted_dir=receipts)
             kwargs.update(extra)
-            return drain_notes_v2_individual(**kwargs)
+            kwargs.setdefault("offline_fixture", False)
+            return drain_buffered_groups(notes_v2=kwargs)
         with self.assertRaisesRegex(ValueError, "disabled"):
             run_writer()
         with self.assertRaisesRegex(ValueError, "subdirectories"):
