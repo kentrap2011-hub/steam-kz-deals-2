@@ -134,5 +134,30 @@
     "byte_identical_local_snapshot": "config/dossier_notes_v2_pinned_original_research_buffer_v1.json",
     "original_assignment_binding": "exact all 18 original assignment fields including title, source, group hash, original unique assignment_id; not free-text or new candidate assertions",
     "edition_policy": "frozen exact original title including edition qualifier is authoritative; no independent alias, edition substitution or reassigned product permitted"
+  },
+  "manual_v2_issuer": {
+    "enabled": false,
+    "trial_id": "dossier-notes-v2-original18-first",
+    "sandbox_branch": "sandbox/dossier-notes-v2-original18-first",
+    "manifest_path": "data/control/dossier_notes_v2/manifests/dossier-notes-v2-original18-first.json",
+    "authorization_path": "data/control/dossier_notes_v2/authorizations/dossier-notes-v2-original18-first.json",
+    "frozen_original_buffer_blob_sha": "c8a6b6f515162f431c0e3d86175376114c0acf7e",
+    "workflow_freeze": ".github/workflows/publish-dossier-shadow-research-freeze.yml",
+    "workflow_authorize": ".github/workflows/authorize-dossier-shadow-research-feasibility.yml",
+    "freeze_confirmation": "FREEZE_DOSSIER_NOTES_V2_ORIGINAL18_ONCE",
+    "authorization_confirmation": "AUTHORIZE_DOSSIER_NOTES_V2_ORIGINAL18_ONCE",
+    "human_grant": {
+      "path": "config/dossier_notes_v2_issuer_human_grant.json",
+      "commit": null,
+      "blob_sha": null,
+      "github_actor_id": null
+    },
+    "one_use": "separate_first_attempt_manual_dispatches_and_create_only_remote_branch_leases",
+    "issuer_evidence": "verified GitHub Actions event/ref/main SHA/run attempt/actor ID plus an independently approved immutable grant Git commit; a chat prompt, Git committer label and original V1 authorization are not grants",
+    "semantics_after_issuer": "separate future human authorization AND accepted authenticated GitHub workflow-run proof required; issuer commits alone never enable semantics",
+    "canonical_acceptance": false,
+    "assembly_authorized": false,
+    "semantic_execution_authorized": false,
+    "enabled_by_default": false
   }
 }
