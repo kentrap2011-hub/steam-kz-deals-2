@@ -217,23 +217,180 @@ def publish(repo, expected):
     }
 
 
+
+# V2 reuses the V1 Git control-plane primitives above. This prospective mode
+# is intentionally disabled by the V2 contract; it is NOT a semantic grant.
+def v2_scope(repo):
+    from dossier_research_notes_v2 import _contract, _original_rows, blob_for
+    cfg = _contract()
+    m = cfg["manual_v2_issuer"]
+    check(cfg["active"] is False and cfg["authorized_for_semantic_execution"] is False
+          and cfg["authorized_for_canonical_ingest"] is False
+          and cfg["production_enabled"] is False,
+          "V2 issuer must not activate semantic/production paths")
+    check(m["trial_id"] == "dossier-notes-v2-original18-first"
+          and m["sandbox_branch"] == "sandbox/dossier-notes-v2-original18-first"
+          and m["manifest_path"] == "data/control/dossier_notes_v2/manifests/" + m["trial_id"] + ".json"
+          and m["authorization_path"] == "data/control/dossier_notes_v2/authorizations/" + m["trial_id"] + ".json"
+          and m["frozen_original_buffer_blob_sha"] == "c8a6b6f515162f431c0e3d86175376114c0acf7e"
+          and m["workflow_freeze"] == WORKFLOW
+          and m["workflow_authorize"] == ".github/workflows/authorize-dossier-shadow-research-feasibility.yml"
+          and m["canonical_acceptance"] is False and m["assembly_authorized"] is False
+          and m["semantic_execution_authorized"] is False,
+          "prospective V2 namespace/scope changed")
+    rows = _original_rows()  # authentic V1 Git blob, complete edition/assignment pins
+    check(len(rows) == 18
+          and [r["appid"] for r in rows] == EXPECTED_APPIDS
+          and [r["group_sequence"] for r in rows] == [n for n in ORDER for _ in range(3)],
+          "V2 scope differs from the actual frozen original 18")
+    check(blob_for((repo / "config/dossier_notes_v2_pinned_original_research_buffer_v1.json").read_bytes())
+          == m["frozen_original_buffer_blob_sha"],
+          "original immutable Research buffer copy changed")
+    return cfg, m, rows
+
+
+def v2_grant(repo, expected, env):
+    """Require separately Git-committed scoped human evidence before any V2 write.
+
+    A task prompt, hardcoded confirmation string and old V1 SHA are not a grant.
+    The *actual* Actions actor is bound by the GitHub-controlled environment.
+    """
+    from dossier_two_stage_staging import first_parent_contains
+    from dossier_research_notes_v2 import blob_for
+    cfg, m, rows = v2_scope(repo)
+    g = m["human_grant"]
+    check(m["enabled"] is True and m["enabled_by_default"] is False,
+          "inactive V2 issuer: distinct human grant and later enablement required")
+    check(isinstance(g["commit"], str) and SHA40.fullmatch(g["commit"])
+          and isinstance(g["blob_sha"], str) and SHA40.fullmatch(g["blob_sha"])
+          and isinstance(g["github_actor_id"], str) and g["github_actor_id"].isdigit(),
+          "missing immutable scoped V2 human grant")
+    check(env.get("GITHUB_ACTOR_ID") == g["github_actor_id"]
+          and bool(env.get("GITHUB_ACTOR"))
+          and env.get("GITHUB_TRIGGERING_ACTOR") == env.get("GITHUB_ACTOR")
+          and str(env.get("GITHUB_RUN_ID", "")).isdigit(),
+          "GitHub actor identity/run not verified against preapproved grant")
+    check(first_parent_contains(repo, g["commit"], expected),
+          "V2 human grant does not precede exact main SHA on first-parent history")
+    grant_path = g["path"]
+    check(grant_path == "config/dossier_notes_v2_issuer_human_grant.json",
+          "human grant path altered")
+    assert_one_new_path(repo, run(repo, "rev-parse", g["commit"] + "^"),
+                        g["commit"], grant_path)
+    data = run(repo, "show", g["commit"] + ":" + grant_path).encode("utf-8")
+    check(blob_for(data) == g["blob_sha"]
+          and run(repo, "rev-parse", expected + ":" + grant_path) == g["blob_sha"],
+          "immutable approved grant blob not preserved on main")
+    check(not run(repo, "log", "--first-parent", "--format=%H",
+                  g["commit"] + ".." + expected, "--", grant_path),
+          "scoped grant mutated or replaced after approval")
+    record = json.loads(data)
+    check(record == {
+        "schema":"DOSSIER-NOTES-V2-MANUAL-ISSUER-HUMAN-GRANT",
+        "schema_version":2,
+        "trial_id":m["trial_id"],
+        "original_buffer_blob_sha":m["frozen_original_buffer_blob_sha"],
+        "original_pins":cfg["immutable_original_pins"],
+        "original_groups":cfg["original_groups"],
+        "github_actor_id":g["github_actor_id"],
+        "scope":"issue_single_original18_V2_manifest_marker_then_separate_authorization_only",
+        "semantic_execution_approved":False,
+        "production_approved":False,
+    }, "human evidence is not an exact scoped original-18 approval")
+    return cfg, m, rows
+
+
+def assert_v2_freeze_dispatch(expected, confirmation, env):
+    check(isinstance(expected, str) and SHA40.fullmatch(expected),
+          "V2 expected main SHA invalid")
+    check(confirmation == "FREEZE_DOSSIER_NOTES_V2_ORIGINAL18_ONCE",
+          "fresh V2-only manual freeze confirmation missing")
+    check(env.get("GITHUB_ACTIONS") == "true"
+          and env.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
+          and env.get("GITHUB_REPOSITORY") == REPOSITORY
+          and env.get("GITHUB_REF") == "refs/heads/main"
+          and env.get("GITHUB_WORKFLOW_REF") == REPOSITORY + "/" + WORKFLOW + "@refs/heads/main"
+          and env.get("GITHUB_SHA") == expected
+          and env.get("GITHUB_RUN_ATTEMPT") == "1",
+          "only first-attempt GitHub manual main issuer can freeze V2")
+
+
+def local_v2_freeze(repo, trial_id, rows, nonce):
+    """Real two-commit freeze logic on the supplied Git repo (offline fixtures)."""
+    from dossier_research_notes_v2 import manifest_blueprint, _manifest
+    check(bool(re.fullmatch("[a-f0-9]{32}", nonce)), "V2 marker nonce invalid")
+    blueprint = manifest_blueprint(trial_id, rows)
+    source = run(repo, "rev-parse", "HEAD")
+    manifest_commit = commit_new(repo, blueprint["output_path"], blueprint["bytes"],
+                                 "Freeze original-18 Dossier Notes V2 manifest only")
+    marker_path = "data/control/dossier_notes_v2/run_starts/" + nonce + ".json"
+    marker = {"schema":"DOSSIER-NOTES-V2-RUN-START","schema_version":2,
+              "trial_id":trial_id,"nonce":nonce}
+    marker_raw = (json.dumps(marker, sort_keys=True, separators=(",", ":")) + "\n").encode()
+    marker_commit = commit_new(repo, marker_path, marker_raw,
+                               "Start immutable inactive Dossier Notes V2 marker")
+    frozen, manifest_blob = _manifest(repo, marker_commit, trial_id)
+    check(frozen["items"] == rows and manifest_blob == blueprint["blob_sha"]
+          and run(repo, "rev-parse", marker_commit + "^") == manifest_commit
+          and run(repo, "diff", "--name-status", source, marker_commit).splitlines()
+              == ["A\t" + blueprint["output_path"], "A\t" + marker_path],
+          "V2 manifest/marker parent, original-18 scope or one-add proof failed")
+    return {"source_commit":source,"manifest_commit":manifest_commit,
+            "marker_commit":marker_commit,"marker_parent":manifest_commit,
+            "manifest_path":blueprint["output_path"],"manifest_blob_sha":manifest_blob,
+            "marker_path":marker_path,"nonce":nonce,"trial_id":trial_id,
+            "semantic_execution_authorized":False}
+
+
+def publish_v2(repo, expected):
+    """Same original create-only remote lease; permanently inactive until grant."""
+    assert_canonical = __import__("dossier_shadow_research_feasibility").assert_canonical_remote
+    assert_canonical(repo)
+    check(run(repo, "rev-parse", "HEAD") == expected
+          and run(repo, "symbolic-ref", "--short", "HEAD") == "main"
+          and remote_sha(repo, "refs/heads/main") == expected,
+          "V2 exact remote main SHA drifted")
+    assert_clean(repo)
+    cfg, m, rows = v2_grant(repo, expected, os.environ)
+    ref = "refs/heads/" + m["sandbox_branch"]
+    check(remote_sha(repo, ref) is None, "V2 branch already exists; no second marker or replay")
+    # Directly reuse V1 create-only commit and exact empty-ref lease primitives.
+    run(repo, "checkout", "-b", m["sandbox_branch"])
+    proof = local_v2_freeze(repo, m["trial_id"], rows, secrets.token_hex(16))
+    check(remote_sha(repo, "refs/heads/main") == expected
+          and remote_sha(repo, ref) is None,
+          "V2 main or new branch changed before first publication")
+    run(repo, "push", "--porcelain", "--force-with-lease=" + ref + ":",
+        "origin", "HEAD:" + ref)
+    check(remote_sha(repo, ref) == proof["marker_commit"], "V2 marker not durable")
+    run(repo, "fetch", "--no-tags", "origin", ref)
+    check(run(repo, "rev-parse", "FETCH_HEAD") == proof["marker_commit"], "V2 freeze re-fetch mismatch")
+    return {**proof,"sandbox_branch":m["sandbox_branch"],
+            "human_grant_commit":m["human_grant"]["commit"],
+            "issuer_gh_run_id":os.environ["GITHUB_RUN_ID"],
+            "issuer_gh_actor_id":os.environ["GITHUB_ACTOR_ID"],
+            "status":"issued_inactive_V2_marker_not_semantics"}
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--expected-main-sha", required=True)
     parser.add_argument("--approval", required=True)
+    parser.add_argument("--version", choices=("v1", "v2"), default="v1")
     args = parser.parse_args()
-    assert_github_dispatch(args.expected_main_sha, args.approval, os.environ)
-    output = publish(Path.cwd().resolve(), args.expected_main_sha)
+    if args.version == "v1":
+        assert_github_dispatch(args.expected_main_sha, args.approval, os.environ)
+        output = publish(Path.cwd().resolve(), args.expected_main_sha)
+    else:
+        assert_v2_freeze_dispatch(args.expected_main_sha, args.approval, os.environ)
+        output = publish_v2(Path.cwd().resolve(), args.expected_main_sha)
     print(json.dumps(output, sort_keys=True, indent=2))
     summary = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary:
         with open(summary, "a", encoding="utf-8") as handle:
-            handle.write("### Immutable Research sandbox freeze (NOT semantic approval)\n\n")
-            for key in ("sandbox_branch", "source_commit", "buffer_commit",
-                        "marker_commit", "buffer_path", "buffer_blob_sha",
-                        "status", "sandbox_research_invocation_ready",
-                        "semantic_calls", "production_mutations"):
-                handle.write("- " + key + ": " + chr(96) + str(output[key]) + chr(96) + "\n")
+            handle.write("### Immutable Research freeze (NOT semantic approval)\\n\\n")
+            for key, value in output.items():
+                if key not in ("items",):
+                    handle.write("- " + key + ": " + chr(96) + str(value) + chr(96) + "\\n")
 
 
 if __name__ == "__main__":
