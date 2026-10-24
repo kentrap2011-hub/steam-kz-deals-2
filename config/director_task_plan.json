@@ -1968,7 +1968,7 @@
       "id": "dossier-v2-original-run-issuer-reuse-01",
       "title": "ЧАТ 1 — Dossier V2: переиспользовать старый подтверждённый механизм запуска",
       "goal": "Сопоставить реально использованный исторический Research marker/authority GitHub с недостающим V2 issuer, определить доказанную повторно используемую часть и реализовать максимум один безопасный offline адаптер при наличии строгой совместимости.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Узкая compatibility matrix по существующим коммитам/контрактам, без нового архитектурного аудита или нового runtime writer.",
       "urgency": "высокая",
@@ -1979,10 +1979,30 @@
       "depends_on": [
         "dossier-v2-next-safe-component-01"
       ],
-      "blocker": "Не запускать до main merge регистрационного PR и существующих CI. Ни историческое разрешение, ни synthetic marker не становятся новым V2 user grant. Никакого реального Research/Assembly, issuer run, marker creation, новых CI/Actions/валидаторов.",
+      "blocker": "Работа закончена отчётом в draft изменении №264: proven reuse старого GitHub issuer; требуется отдельная V2-specific inactive adaptation. Ни marker, ни новый human grant ещё не выданы.",
+      "recent_completion": true,
+      "updated_on": "2026-10-24",
+      "updated_at_utc": "2026-10-24T06:27:38.114Z"
+    },
+    {
+      "id": "dossier-v2-existing-issuer-adapt-implement-01",
+      "title": "ЧАТ 1 — Dossier V2: минимально адаптировать существующий ручной issuer",
+      "goal": "Переиспользовать доказанный GitHub-owned original Research freeze + отдельную feasibility authorization с V2-specific one-use approval contract; реализовать ограниченный inactive/manual механизм и offline tests без реального запуска.",
+      "status": "planned",
+      "effort": "высокая",
+      "effort_reason": "Точечная реализация совместимости существующих issuer scripts/разрешённого ручного trigger, V2 contract и тестов; отдельный exact-HEAD QA необходим.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь одобрил адаптацию существующего механизма вместо новой архитектуры после report изменения №264.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_EXISTING_ISSUER_ADAPT_IMPLEMENT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-original-run-issuer-reuse-01"
+      ],
+      "blocker": "Разработка ТОЛЬКО inactive. Начать после merge регистрации и existing CI. Реальный issuer dispatch, manifest/marker/grant, Research/Assembly, production и любые новые или изменённые CI/validators/Actions запрещены; допускается минимальная V2-ветка в существующем РУЧНОМ issuer workflow только при необходимости и сохранении V1; отдельный независимый QA до merge реализации.",
       "recent_completion": false,
       "updated_on": "2026-10-24",
-      "updated_at_utc": "2026-10-24T09:49:00.000Z"
+      "updated_at_utc": "2026-10-24T06:27:38.114Z"
     }
   ]
 }
