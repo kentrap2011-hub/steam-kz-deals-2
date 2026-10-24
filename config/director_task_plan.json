@@ -2008,7 +2008,7 @@
       "id": "dossier-v2-existing-issuer-pr266-independent-qa-01",
       "title": "ЧАТ 2 — независимый QA адаптации существующего issuer для Dossier V2",
       "goal": "Проверить точный HEAD реализации #266 с двумя ручными issuer workflow, V1 backward compatibility, отключённой V2 authority и защитой от повторного или поддельного human grant.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Семь изменённых файлов, два прежних manual workflow, unit/disposable-Git tests и exact-HEAD CI; без нового runtime.",
       "urgency": "высокая",
@@ -2019,16 +2019,16 @@
       "depends_on": [
         "dossier-v2-existing-issuer-adapt-implement-01"
       ],
-      "blocker": "Старт после merge регистрации и существующих CI; QA привязан к точному HEAD №266. Только отдельный report-only draft PR. Не запускать issuer, Research, Assembly, новые проверки или Deploy.",
-      "recent_completion": false,
+      "blocker": "Отчёт/код готов в draft изменении №269; итог CHANGES_REQUIRED. Реальные Dossier V2 запуски не разрешены.",
+      "recent_completion": true,
       "updated_on": "2026-10-24",
-      "updated_at_utc": "2026-10-24T07:10:00.000Z"
+      "updated_at_utc": "2026-10-24T13:02:54.950Z"
     },
     {
       "id": "dossier-v2-research-per-item-receipts-implement-01",
       "title": "ЧАТ 3 — Dossier V2: durable per-item Research receipts",
       "goal": "Минимально адаптировать существующее GitHub-owned сохранение одиночных Research результатов под неактивный Notes V2 с create-only receipts и immutable provenance, без реального запуска.",
-      "status": "planned",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Ограниченный offline writer/receipt путь и существующие регрессионные проверки, отдельный независимый QA перед merge.",
       "urgency": "высокая",
@@ -2039,10 +2039,66 @@
       "depends_on": [
         "research-assembly-v2-safe-use-readiness-01"
       ],
-      "blocker": "Начать после merge регистрации и существующих CI. Не изменять файлы или ветку реализации issuer №266. При неизбежном пересечении остановиться. Нет реальных GitHub writes, CI/Actions/валидаторов, Research/Assembly или Deploy.",
+      "blocker": "Отчёт/код готов в draft изменении №270; итог READY_FOR_INDEPENDENT_QA. Реальные Dossier V2 запуски не разрешены.",
+      "recent_completion": true,
+      "updated_on": "2026-10-24",
+      "updated_at_utc": "2026-10-24T13:02:54.950Z"
+    },
+    {
+      "id": "dossier-v2-individual-final-acceptance-implement-01",
+      "title": "ЧАТ 1 — индивидуальная приёмка итогового Dossier V2",
+      "goal": "Установить, мешает ли тройная атомарная публикация отдельному готовому Dossier V2; если мешает и можно безопасно без изменения V1, сразу реализовать ограниченный выключенный адаптер для одной игры.",
+      "status": "planned",
+      "effort": "высокая",
+      "effort_reason": "Одна ограниченная задача, без полного аудита или новых внешних проверок.",
+      "urgency": "обычная",
+      "urgency_reason": "Нужно изолировать V2 final acceptance без слома существующего shared writer.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_INDIVIDUAL_FINAL_ACCEPTANCE_IMPLEMENT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Старт после приёмки регистрации; не менять ни один файл PR №266 и PR №270. Не трогать V1 общий писатель или production. Иначе остановиться с точным блокером.",
       "recent_completion": false,
       "updated_on": "2026-10-24",
-      "updated_at_utc": "2026-10-24T07:18:37.545Z"
+      "updated_at_utc": "2026-10-24T13:02:54.950Z"
+    },
+    {
+      "id": "dossier-v2-pr270-receipts-independent-qa-01",
+      "title": "ЧАТ 2 — независимая проверка Research receipt PR №270",
+      "goal": "Проверить exact PR №270 HEAD, исполнить новые локальные тесты где реально возможно, оценить один-игра-один receipt, неизменяемые привязки и запрет подмены GitHub-подтверждения.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Одна ограниченная задача, без полного аудита или новых внешних проверок.",
+      "urgency": "высокая",
+      "urgency_reason": "Два зелёных site checks не подтверждают специальные новые тесты PR №270.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_PR270_RECEIPTS_INDEPENDENT_QA_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-research-per-item-receipts-implement-01"
+      ],
+      "blocker": "Старт после регистрации; отзыв только о точном HEAD PR №270. Код не менять. Если тесты нельзя реально запустить, не объявлять PASS.",
+      "recent_completion": false,
+      "updated_on": "2026-10-24",
+      "updated_at_utc": "2026-10-24T13:02:54.950Z"
+    },
+    {
+      "id": "director-plain-russian-communication-diagnosis-01",
+      "title": "ЧАТ 4 — разобраться в усложнённом языке директора",
+      "goal": "Найти реальные правила простого русского и конкретные причины, по которым директор отвечает ненужными английскими терминами и служебными сокращениями; предложить одно небольшое исправление без нового CI.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Одна ограниченная задача, без полного аудита или новых внешних проверок.",
+      "urgency": "обычная",
+      "urgency_reason": "Нужно отличить отсутствие нормы от несоблюдения уже существующей нормы; только отчёт.",
+      "task_file": "WORKER_TASK_DIRECTOR_PLAIN_RUSSIAN_COMMUNICATION_DIAGNOSIS_01.md",
+      "worker_slot": "ЧАТ 4",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Старт после регистрации; только анализ языка директорских правил, без их изменений или новых CI.",
+      "recent_completion": false,
+      "updated_on": "2026-10-24",
+      "updated_at_utc": "2026-10-24T13:02:54.950Z"
     }
   ]
 }
