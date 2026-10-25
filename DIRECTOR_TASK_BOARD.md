@@ -5,6 +5,14 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT PARALLEL FINAL CHECKS — 2026-10-25: accept PR #274 and run PR #270 tests
+
+- **USER DECISION:** finish verification without introducing another development/review loop. Two separate, non-overlapping tasks registered to process completed drafts #274 and #270. These are checks of inactive code, not V2 Research/Assembly execution or permission to change production.
+- **НОВЫЙ ЧАТ 2:** `dossier-v2-pr274-enabled-fix-final-independent-qa-01` → `WORKER_TASK_DOSSIER_V2_PR274_ENABLED_FIX_FINAL_INDEPENDENT_QA_01.md`. One bounded independent review of newly corrected PR #274 HEAD `f7f2f54023acf2d66a8fd54a2888ec1497582781` for the previously proven enabled-state contradiction from QA #279. Existing green test coverage for `offline_fixture=False`, A/C accepted despite invalid B, V1 unchanged. Report-only PR, no new CI/Actions.
+- **НОВЫЙ ЧАТ 4:** `dossier-v2-pr270-existing-tests-execution-qa-01` → `WORKER_TASK_DOSSIER_V2_PR270_EXISTING_TESTS_EXECUTION_QA_01.md`. Execute the **already authored** 14 Research Notes V2 tests in PR #270 at HEAD `97f30cbfe3285610649c85e96d4ae179644d677e`, using a narrow source retrieval path through available GitHub connector if direct checkout is unavailable. Do not repeat solely read-only review #282. Report actual executed cases or precise irreducible barrier.
+- **Prior completed work:** ЧАТ 1 update #274 passed eight GitHub checks; independent ЧАТ 3 report #282 identified no code defect but could not execute 14 Research tests. Do not merge #274/#270 without corresponding finished evidence and separate Director decision.
+- **Restrictions:** no new workflows, CI, GitHub Actions, validators, automation, production changes, real Research/Assembly, or V2 enablement. Do not edit #266, #270 or #274 implementation branches.
+
 ## DIRECTOR CURRENT PARALLEL QA — 2026-10-25: PR #270 Research storage
 
 - **USER DECISION:** независимо проверить окончательную версию кода Research Notes V2 в PR #270, не повторяя проверку готового Dossier PR #274. Это проверка сохранения **промежуточных сведений**, а не финального анализа; настоящий Research/Assembly не запускать.
