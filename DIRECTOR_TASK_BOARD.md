@@ -5,6 +5,14 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## ТЕКУЩЕЕ РЕШЕНИЕ — 2026-10-25: после передачи новому директору
+
+- Пользователь разрешил объединить проверенную неактивную разработку ЧАТА 1: PR #274 объединён с main, merge `bcd62873d9a7df65aa1c9e492fdf3ca2ff2cb2d0`. Это НЕ разрешение на настоящий Research/Assembly или включение production.
+- ЧАТ 4 закончил попытку выполнить 14 готовых тестов Research по PR #270: отчёт PR #289, **0/14 фактически выполнены** из-за отсутствующей исполнимой локальной копии. #270 по-прежнему не принят; не выдавать недостаток тестов за успешное подтверждение.
+- ЧАТ 5 завершил диагностику долгих копируемых команд: отчёт PR #287; по отдельному разрешению пользователя в этом изменении заменена одна фраза `DIRECTOR_PROTOCOL.md` §2, чтобы запретить пересказывать WORKER_TASK в команде.
+- **НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 6**, task `director-plain-language-recurrence-diagnosis-02`, файл `WORKER_TASK_DIRECTOR_PLAIN_LANGUAGE_RECURRENCE_DIAGNOSIS_02.md`: независимая повторная диагностика непонятного языка директора с учётом старого PR #272 и непринятого PR #275. Состояние: **planned, not launched** до того как регистрация и необходимые проверки приняты в main.
+- Никакого реального Research, Assembly, изменения production, публикации или Scheduled Tasks не разрешено.
+
 ## DIRECTOR CURRENT HANDOFF — 2026-10-25: next Director chat starts here
 
 - **ЧАТ 1 завершил код:** draft PR #274, exact HEAD `f7f2f54023acf2d66a8fd54a2888ec1497582781`; отдельное принятие готового Dossier V2, старая ошибка разрешений исправлена, 8 checks green. Не сливать без точного gate.
