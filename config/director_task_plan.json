@@ -2296,6 +2296,44 @@
       "recent_completion": false,
       "updated_on": "2026-10-25",
       "updated_at_utc": "2026-10-25T11:45:00Z"
+    },
+    {
+      "id": "director-plain-language-recurrence-diagnosis-02",
+      "title": "ЧАТ 6 — повторно проверить причину непонятных объяснений директора",
+      "goal": "Разобраться, почему директор снова пишет сложным языком после предыдущей диагностики, сравнить ранее предложенное исправление №275 и дать одно минимальное действенное решение.",
+      "status": "planned",
+      "effort": "низкая",
+      "effort_reason": "Ограниченное чтение прежней диагностики, одного нерешённого изменения и обязательных правил.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь повторно заявил, что понимает лишь половину ответов директора.",
+      "task_file": "WORKER_TASK_DIRECTOR_PLAIN_LANGUAGE_RECURRENCE_DIAGNOSIS_02.md",
+      "worker_slot": "ЧАТ 6",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Запуск после принятия регистрации. Только независимый отчёт, не редактировать правила.",
+      "recent_completion": false,
+      "updated_on": "2026-10-25",
+      "updated_at_utc": "2026-10-25T12:00:00Z"
+    },
+    {
+      "id": "dossier-v2-pr270-test-execution-environment-recovery-01",
+      "title": "ЧАТ 8 — выполнить 14 существующих тестов Research",
+      "goal": "Получить фактические результаты 14 тестов сохранения Research по PR №270 либо доказать одну точную преграду исполняемой среды и указать конкретный способ её устранить без новых CI.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Нужно найти рабочее исполняемое окружение для точного набора исходников без повторения недоступного скачивания.",
+      "urgency": "высокая",
+      "urgency_reason": "Без результатов 14 тестов невозможно подтвердить безопасность сохранения Research в GitHub.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_PR270_TEST_EXECUTION_ENVIRONMENT_RECOVERY_01.md",
+      "worker_slot": "ЧАТ 8",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-pr270-existing-tests-execution-qa-01"
+      ],
+      "blocker": "ЧАТ 4 завершил с 0/14. Не повторять прежнюю загрузку, использовать существующую исполняемую среду или закончить одним конкретным внешним способом запуска.",
+      "recent_completion": false,
+      "updated_on": "2026-10-25",
+      "updated_at_utc": "2026-10-25T12:00:00Z"
     }
   ]
 }
