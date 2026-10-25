@@ -5,6 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT LANGUAGE QA — 2026-10-25: why worker launch prompts grow
+
+- **USER DECISION:** независимый разбор повторяющегося поведения директорских чатов: после регистрации подробного задания в GitHub директор всё равно со временем вставляет его содержание в длинную копируемую команду, хотя текущий протокол требует короткий запуск.
+- **НОВЫЙ ЧАТ 5:** `director-worker-launch-prompt-growth-diagnosis-01` → `WORKER_TASK_DIRECTOR_WORKER_LAUNCH_PROMPT_GROWTH_DIAGNOSIS_01.md`. Только диагностика по действующим правилам, старым примерам и фактическому длинному запуску заданий №283. Отличить реальную причину в правилах от недоказанного предположения о механизме модели, предложить ровно одно небольшое улучшение или подтвердить достаточность имеющейся нормы. Report-only draft PR.
+- **Separation:** ЧАТ 2 и ЧАТ 4 продолжают параллельные проверки Dossier V2 из предыдущего назначения; ЧАТ 5 не трогает их код/отчёты, не изменяет Director Protocol, не объединяет незавершённый PR #275 о простом языке. Никаких новых Actions, CI, автоматизаций или production.
+
 ## DIRECTOR CURRENT PARALLEL FINAL CHECKS — 2026-10-25: accept PR #274 and run PR #270 tests
 
 - **USER DECISION:** finish verification without introducing another development/review loop. Two separate, non-overlapping tasks registered to process completed drafts #274 and #270. These are checks of inactive code, not V2 Research/Assembly execution or permission to change production.
