@@ -5,6 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT QA ASSIGNMENT — 2026-10-25: verify PR #274 per-game GitHub hookup
+
+- НОВЫЙ ЧАТ 2: dossier-v2-pr274-writer-hookup-independent-qa-01 / WORKER_TASK_DOSSIER_V2_PR274_WRITER_HOOKUP_INDEPENDENT_QA_01.md. Независимая read-only проверка draft PR #274 на exact HEAD 7d1167ae4201c712fcdcf18330d55c3be5889fb1. Проверить выключенный ручной V2-вход в existing shared writer, поштучную запись A/C при ошибке B и сохранность V1, уже существующие тесты/CI. Отдельный короткий отчёт, без изменений кода.
+- ЧАТ 1 завершил реализацию PR #274, восемь существующих проверок GitHub на этой версии прошли. Принятия кода и разрешения реального запуска пока нет.
+- Запреты: никакого Research/Assembly, production, workflow dispatch, новых GitHub Actions/CI/автоматизаций или работ над PR #266/#270. Вывод только по конкретному PR #274.
+
 ## DIRECTOR CURRENT ASSIGNMENT — 2026-10-24: finish V2 individual GitHub writer hookup
 
 - **USER DECISION:** finish connecting the already-written per-game final V2 acceptance in draft PR #274 to the existing locked GitHub canonical writer. Prior Chat 1 delivered offline writer logic but not the live GitHub entry. This is authorization to implement and test with synthetic/disposable data, NOT authorization to execute actual Research/Assembly, make production writes or enable V2.
