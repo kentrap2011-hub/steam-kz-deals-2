@@ -2,15 +2,15 @@
   "schema_version": 5,
   "purpose": "chatgpt_consumer_bundle_with_context_bound_price_blind_taste_fit_evidence_state_and_grounded_negative_readiness",
   "status": "degraded",
-  "source_mailing_updated_at_utc": "2026-10-24T22:33:47.553911+00:00",
+  "source_mailing_updated_at_utc": "2026-10-25T22:38:20.965876+00:00",
   "profile_binding": {
     "canonical_profile_blob_sha": "1d0a3aac67e798398683b8631dbd0eecae47c71d",
     "taste_model_version": "taste-v3",
     "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-    "content_metadata_blob_sha": "d1fe4c45f124899bb520d107e48a85fcb5e98eb5"
+    "content_metadata_blob_sha": "3f617e32601ae344dbedcef9c942d9a2ddb10734"
   },
   "wishlist_binding": {
-    "blob_sha": "1a21d8f370f51225970dbb7531ab2f1065f61eb5",
+    "blob_sha": "b2fcd4197d468b1ff41328cfb9b039b9658c7d43",
     "entry_count": 88,
     "is_context_only_not_taste_proof": true
   },
@@ -76,28 +76,26 @@
     "purchase_context_jsonl": "data/production/pre_ai/chatgpt_purchase_context.jsonl",
     "line_alignment": "taste_queue line N == purchase_context line N for 1..ai_queue_count",
     "ready_context_start_line": null,
-    "progressive_candidate_context_jsonl": "data/production/pre_ai/progressive_candidate_context.jsonl",
-    "russian_description_translation_queue_jsonl": "data/production/pre_ai/chatgpt_ru_description_queue.jsonl",
-    "russian_description_translation_status_json": "data/production/pre_ai/chatgpt_ru_description_status.json"
+    "progressive_candidate_context_jsonl": "data/production/pre_ai/progressive_candidate_context.jsonl"
   },
-  "source_family_count": 387,
-  "candidate_description_known_count": 387,
+  "source_family_count": 385,
+  "candidate_description_known_count": 385,
   "candidate_description_missing_count": 0,
   "candidate_description_coverage": 1.0,
-  "ai_queue_count": 372,
+  "ai_queue_count": 369,
   "ready_without_ai_count": 0,
-  "purchase_context_line_count": 372,
-  "progressive_candidate_count": 372,
-  "deterministically_excluded_without_ai_count": 15,
+  "purchase_context_line_count": 369,
+  "progressive_candidate_count": 369,
+  "deterministically_excluded_without_ai_count": 16,
   "deterministic_exclusion_counts": {
-    "deal_excludes_even_if_strong": 12,
+    "deal_excludes_even_if_strong": 13,
     "package_member_taste_pending": 3
   },
   "commercial_eligibility_bridge_counts": {},
   "fixed_package_bridge_evidence": {
     "status": "complete",
     "source_aligned": true,
-    "stable_positive_family_count": 131,
+    "stable_positive_family_count": 127,
     "reconsiderable_candidate_count": 0,
     "strict_savings_candidate_count": 0,
     "bridge_family_ids": []
@@ -109,7 +107,7 @@
   "negative_analysis": {
     "work_code": "resolve_grounded_negative_analysis",
     "negative_backfill_queue_count": 0,
-    "negative_full_evaluation_queue_count": 372,
+    "negative_full_evaluation_queue_count": 369,
     "negative_ready_without_ai_count": 0,
     "evidence_backfill_queue_count": 0,
     "normal_ready_requires_confirmed_negative": true
@@ -117,7 +115,7 @@
   "sale_end_coverage": 1.0,
   "sale_end_missing_count": 0,
   "sale_end_missing_primary_keys": [],
-  "source_pre_ai_artifact_bytes": 1497117,
+  "source_pre_ai_artifact_bytes": 1489863,
   "deterministically_excluded_primary_keys": [
     "Sub_44162",
     "Sub_55062",
@@ -128,6 +126,7 @@
     "App_2201320",
     "App_2356560",
     "App_2438680",
+    "App_383980",
     "App_482400",
     "App_587620",
     "App_678950",
@@ -135,17 +134,17 @@
     "App_802880",
     "App_909660"
   ],
-  "elapsed_seconds": 0.262,
+  "elapsed_seconds": 0.205,
   "semantic_completeness": {
     "status": "degraded",
     "scope_partition_complete": true,
     "sufficiently_complete_for_publication": false,
-    "unresolved_semantic_count": 372,
+    "unresolved_semantic_count": 369,
     "resolved_semantic_count": 0,
-    "total_relevant_semantic_scope": 372,
-    "source_family_count": 387,
-    "unresolved_scope_source_mailing_updated_at_utc": "2026-10-24T22:33:47.553911+00:00",
-    "unresolved_scope_age_seconds": 46954,
+    "total_relevant_semantic_scope": 369,
+    "source_family_count": 385,
+    "unresolved_scope_source_mailing_updated_at_utc": "2026-10-25T22:38:20.965876+00:00",
+    "unresolved_scope_age_seconds": 70,
     "unresolved_age_basis": "source_mailing_updated_at_utc"
   },
   "semantic_runtime_observability": {
@@ -159,33 +158,11 @@
     "last_successful_semantic_execution_at_utc": "2026-09-12T11:51:43+00:00",
     "last_accepted_semantic_progress_at_utc": "2026-09-12T11:51:43+00:00",
     "last_accepted_source_mailing_updated_at_utc": "2026-09-11T22:45:29.586278+00:00",
-    "current_scope_source_mailing_updated_at_utc": "2026-10-24T22:33:47.553911+00:00",
+    "current_scope_source_mailing_updated_at_utc": "2026-10-25T22:38:20.965876+00:00",
     "current_scope_progress_observed": false,
     "last_queue_before_count": 609,
     "last_queue_after_count": 608,
     "last_queue_delta_count": 1,
     "queue_presence_is_not_heartbeat": true
-  },
-  "semantic_work": {
-    "taste": {
-      "work_type": "taste",
-      "queue_path": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
-      "queue_count": 372,
-      "result_contract": "config/taste_result_contract.json"
-    },
-    "russian_description_translation": {
-      "work_type": "russian_description_translation",
-      "contract": "RUSSIAN-DESCRIPTION-TRANSLATION-V1",
-      "result_contract": "RUSSIAN-DESCRIPTION-TRANSLATION-RESULT-V1",
-      "cache_contract": "RUSSIAN-DESCRIPTION-TRANSLATION-CACHE-ENTRY-V1",
-      "queue_path": "data/production/pre_ai/chatgpt_ru_description_queue.jsonl",
-      "status_path": "data/production/pre_ai/chatgpt_ru_description_status.json",
-      "queue_count": 6,
-      "diagnostic_path": "data/cache/russian_description_translation_diagnostics.json",
-      "diagnostic_count": 0,
-      "submission_glob": "data/ai_inbox/russian_descriptions/*.json",
-      "runtime_owner": "scheduled_chatgpt_runtime_data_plane",
-      "control_plane_owner": "github_control_plane"
-    }
   }
 }
