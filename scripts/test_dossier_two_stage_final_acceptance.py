@@ -575,7 +575,7 @@ class NotesV2IndividualReadinessTests(unittest.TestCase):
             b: self.submit(f, helpers, b, result="invalid_strict"),
             c: self.submit(f, helpers, c),
         }
-        (f.repo / ".dossier-final-offline-fixture").write_text("synthetic\\n")
+        (f.repo / ".dossier-final-offline-fixture").write_text("synthetic\n")
         # The existing V1 staging helper requires its existing V1 state paths.
         # Create harmless placeholders in this *disposable* test repo only.
         required_files = [
@@ -591,14 +591,14 @@ class NotesV2IndividualReadinessTests(unittest.TestCase):
         for rel in required_files:
             path = f.repo / rel
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text("{}\\n", encoding="utf-8")
+            path.write_text("{}\n", encoding="utf-8")
         for rel in required_dirs:
             path = f.repo / rel / ".keep"
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text("fixture\\n", encoding="utf-8")
+            path.write_text("fixture\n", encoding="utf-8")
         # The required fixture marker is not canonical output.
         with (f.repo / ".git/info/exclude").open("a", encoding="utf-8") as out:
-            out.write("\\n.dossier-final-offline-fixture\\n")
+            out.write("\n.dossier-final-offline-fixture\n")
 
         result = drain_buffered_groups(notes_v2={
             "repo": f.repo, "marker_commit": f.marker, "trial_id": helpers.TRIAL,
