@@ -5,6 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## АКТУАЛЬНОЕ ПОРУЧЕНИЕ — 2026-10-25: независимая проверка изменения №290
+
+- **НОВЫЙ ЧАТ 7:** `director-pr290-short-launch-change-independent-qa-01` / `WORKER_TASK_DIRECTOR_PR290_SHORT_LAUNCH_CHANGE_INDEPENDENT_QA_01.md`. Независимо проверить точную версию изменения №290 (короткие запуски директора + регистрация ЧАТА 6). Не исправлять и не объединять код. После отчёта вернуться к директору; запуск ЧАТА 6 только после отдельного принятия его регистрации в main.
+- №274 уже принят; №270 остаётся без доказанных 14 тестов. Никакого настоящего Research/Assembly или production разрешения нет.
+- №290 всё ещё только предложенное изменение; актуальные подробности для решения — его ветка/HEAD/проверки и отчёт ЧАТА 7, а не устаревшие строки ниже.
+
 ## DIRECTOR CURRENT HANDOFF — 2026-10-25: next Director chat starts here
 
 - **ЧАТ 1 завершил код:** draft PR #274, exact HEAD `f7f2f54023acf2d66a8fd54a2888ec1497582781`; отдельное принятие готового Dossier V2, старая ошибка разрешений исправлена, 8 checks green. Не сливать без точного gate.
