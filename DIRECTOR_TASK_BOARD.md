@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT PARALLEL QA — 2026-10-25: PR #270 Research storage
+
+- **USER DECISION:** независимо проверить окончательную версию кода Research Notes V2 в PR #270, не повторяя проверку готового Dossier PR #274. Это проверка сохранения **промежуточных сведений**, а не финального анализа; настоящий Research/Assembly не запускать.
+- **НОВЫЙ ЧАТ 3:** `dossier-v2-pr270-remote-research-independent-qa-01` → `WORKER_TASK_DOSSIER_V2_PR270_REMOTE_RESEARCH_INDEPENDENT_QA_01.md`. Проверить PR #270 на HEAD `97f30cbfe3285610649c85e96d4ae179644d677e` (обновить SHA при фактическом изменении): отдельная удалённая GitHub-запись Research, точное подтверждение после записи, независимость игр, запрет ложного успеха при ошибках, существующие тесты. Только отчёт в отдельном черновике, никаких изменений кода.
+- **Параллельно НОВЫЙ ЧАТ 1:** `dossier-v2-pr274-enabled-path-contract-fix-01` исправляет конкретную ошибку допусков финального Dossier V2 в PR #274. Файлы и назначения не пересекаются; не смешивать результаты этих двух чатов.
+- **Границы:** без новых GitHub Actions, CI, валидаторов, автоматизаций, реальных Research/Assembly, публикации, production или самостоятельного объединения PR. Заключение независимого проверяющего не заменяет разрешение настоящего запуска.
+
 ## DIRECTOR CURRENT FIX — 2026-10-25: resolve proven V2 authorized-path contradiction
 
 - **USER DECISION:** ЧАТ 1 исправляет ровно один обнаруженный независимой проверкой №279 дефект в существующем PR #274. Действительный V2 режим требует активного допуска, а вложенная старая проверка запрещает активный режим; текущий успешно проверенный offline-путь этого не замечал.

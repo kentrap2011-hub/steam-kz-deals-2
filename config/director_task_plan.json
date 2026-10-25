@@ -2200,6 +2200,26 @@
       "recent_completion": false,
       "updated_on": "2026-10-25",
       "updated_at_utc": "2026-10-25T09:56:54.153Z"
+    },
+    {
+      "id": "dossier-v2-pr270-remote-research-independent-qa-01",
+      "title": "ЧАТ 3 — независимо проверить сохранение Research V2 в GitHub",
+      "goal": "Проверить изменение №270: сведения об отдельной игре действительно сохраняются и подтверждаются через GitHub, ошибки и повторы не считаются успехом, соседние игры независимы. Использовать существующие тесты.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Ограниченная проверка готового кода записи сведений и уже написанных испытаний.",
+      "urgency": "высокая",
+      "urgency_reason": "Без подтверждения сохранения Research следующему этапу нельзя доверять полученные сведения при реальном испытании.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_PR270_REMOTE_RESEARCH_INDEPENDENT_QA_01.md",
+      "worker_slot": "ЧАТ 3",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-research-github-persistence-finish-01"
+      ],
+      "blocker": "Старт после принятия регистрации. Только отчёт по последней версии №270; без настоящего Research/Assembly, записи в рабочий GitHub и правок кода.",
+      "recent_completion": false,
+      "updated_on": "2026-10-25",
+      "updated_at_utc": "2026-10-25T10:04:05.750Z"
     }
   ]
 }
