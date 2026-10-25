@@ -5,6 +5,16 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT HANDOFF — 2026-10-25: next Director chat starts here
+
+- **ЧАТ 1 завершил код:** draft PR #274, exact HEAD `f7f2f54023acf2d66a8fd54a2888ec1497582781`; отдельное принятие готового Dossier V2, старая ошибка разрешений исправлена, 8 checks green. Не сливать без точного gate.
+- **ЧАТ 2 завершил независимый QA:** report-only PR #284 — `PASS_FOR_DIRECTOR_MERGE_REVIEW` ровно для этого HEAD #274. Следующий Director должен принять решение о безопасном merge неактивного кода по protocol (не равно запуску).
+- **ЧАТ 3 завершил QA Research:** report-only PR #282 — нет доказанных дефектов #270, но 14 тестов не запущены; #270 НЕ принят.
+- **ЧАТ 4 назначен:** `dossier-v2-pr270-existing-tests-execution-qa-01`; требуется фактический запуск 14 уже написанных тестов. Пока нет подтверждённого итогового отчёта.
+- **ЧАТ 5 назначен:** `director-launch-prompt-length-drift-diagnosis-01`; задача уже зарегистрирована PR #286, диагностика почему длиннеют копируемые промпты. Только отчёт, не менять директорские правила.
+- **План:** (1) решение о #274 после актуальных merge gates, (2) фактические тесты #270 и решение о его принятии, (3) отчёт #5, (4) отдельный PR #266 с прежним QA CHANGES_REQUIRED и необходимые V2 полномочия/совместимость, (5) только после разрешения пользователя реальная проба на исходных 18 играх. Старый Dossier и production не трогать; новые GitHub Actions/CI не создавать. Подробнее — верх `DIRECTOR_HANDOFF_CURRENT.md`.
+- **Launch policy:** краткие команды `ЧАТ N — название / Repository / main / CHAT_PROTOCOL START / WORKER_TASK_*.md` с запретом других repo; вся подробная инструкция уже в GitHub. Не пересказывать её пользователю.
+
 ## DIRECTOR PARALLEL DIAGNOSIS — 2026-10-25: why director launch prompts grow
 
 - **USER DECISION:** create one independent investigation of recurring director-chat drift toward increasingly long copyable worker-launch prompts, despite the already required short-launch contract in DIRECTOR_PROTOCOL.md §2.
