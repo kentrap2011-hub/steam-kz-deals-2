@@ -5,6 +5,14 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR CURRENT FIX — 2026-10-25: resolve proven V2 authorized-path contradiction
+
+- **USER DECISION:** ЧАТ 1 исправляет ровно один обнаруженный независимой проверкой №279 дефект в существующем PR #274. Действительный V2 режим требует активного допуска, а вложенная старая проверка запрещает активный режим; текущий успешно проверенный offline-путь этого не замечал.
+- **НОВЫЙ ЧАТ 1:** `dossier-v2-pr274-enabled-path-contract-fix-01` → `WORKER_TASK_DOSSIER_V2_PR274_ENABLED_PATH_CONTRACT_FIX_01.md`. Продолжить черновик PR #274 от проверенного HEAD `7d1167ae4201c712fcdcf18330d55c3be5889fb1` с обновлением до фактического HEAD; исправить несовместимые правила без ослабления выключенного по умолчанию V2, независимости игр, общего писателя или старого Dossier. Добавить один целевой тест для `offline_fixture=False`, используя прежние проверки.
+- **QA №279:** отчёт готов, доказанный дефект; PR #274 **не принимать** до исправления и последующей краткой независимой проверки нового HEAD. Не повторять теоретический аудит или старые этапы.
+- **Parallel suggestion, NOT assigned:** Независимая итоговая проверка обновлённого PR #270 Research Notes V2 (фактическая возможность отдельной удалённой записи и подтверждения, выполнение уже написанных тестов без новой инфраструктуры). ЧАТ 3 закончил разработку, но последний код не проверялся независимым проверяющим; начинать только после отдельного согласия пользователя.
+- **Restrictions:** никакого реального Research, Assembly, включения production, Deploy, изменения PR #266/#270, новых GitHub Actions/CI/автоматизаций.
+
 ## DIRECTOR CURRENT QA ASSIGNMENT — 2026-10-25: verify PR #274 per-game GitHub hookup
 
 - НОВЫЙ ЧАТ 2: dossier-v2-pr274-writer-hookup-independent-qa-01 / WORKER_TASK_DOSSIER_V2_PR274_WRITER_HOOKUP_INDEPENDENT_QA_01.md. Независимая read-only проверка draft PR #274 на exact HEAD 7d1167ae4201c712fcdcf18330d55c3be5889fb1. Проверить выключенный ручной V2-вход в existing shared writer, поштучную запись A/C при ошибке B и сохранность V1, уже существующие тесты/CI. Отдельный короткий отчёт, без изменений кода.
