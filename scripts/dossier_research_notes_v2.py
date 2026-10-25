@@ -56,15 +56,57 @@ def digest(data):
 def _canonical(obj):
     return json.dumps(obj, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
 
+
+def _v2_individual_writer_authorized(source, writer):
+    """One V2-only permission check shared by source and locked writer.
+
+    A dispatch option or a source active flag alone never grants approval.
+    This helper does not persist data and never changes V1 group acceptance.
+    """
+    precedence = writer.get("v2_group_policy_precedence") or {}
+    return (
+        source.get("schema") == "DOSSIER-RESEARCH-NOTES-V2-CONTRACT"
+        and source.get("schema_version") == 2
+        and source.get("owner") == "github_control_plane"
+        and source.get("active") is True
+        and source.get("authorized_for_canonical_ingest") is True
+        and writer.get("schema") == "DOSSIER-NOTES-V2-INDIVIDUAL-WRITER-V1"
+        and writer.get("owner") == "github_control_plane"
+        and writer.get("active") is True
+        and writer.get("authorized_for_canonical_ingest") is True
+        and writer.get("existing_writer_integration_approved") is True
+        and writer.get("downstream_deep_handoff_approved") is True
+        and writer.get("per_item_only") is True
+        and writer.get("v1_group_writer_unchanged") is True
+        and writer.get("writer") == "scripts/taste_steam_review_dossier_buffered.py"
+        and writer.get("shared_concurrency_group")
+            == "taste-steam-review-dossier-canonical-writer"
+        and writer.get("existing_locked_writer_workflow")
+            == ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
+        and precedence.get("scope") == "explicit_notes_v2_mode_only"
+        and precedence.get("acceptance")
+            == "individual_game_independent_under_existing_shared_writer"
+    )
+
 def _contract():
     c = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
     interfaces = json.loads((CONFIG / "dossier_two_stage_interfaces_contract.json").read_text(encoding="utf-8"))
+    inactive = (c.get("active") is False
+                and c.get("authorized_for_canonical_ingest") is False)
+    authorized_v2 = False
+    if not inactive:
+        # Only the separately approved V2 writer can authorize the enabled
+        # source; _contract itself is read-only and does not grant publication.
+        writer = json.loads((CONFIG / "dossier_notes_v2_individual_writer_contract.json")
+                            .read_text(encoding="utf-8"))
+        authorized_v2 = _v2_individual_writer_authorized(c, writer)
     if (c["schema"] != "DOSSIER-RESEARCH-NOTES-V2-CONTRACT"
             or c["schema_version"] != 2
-            or any(c[k] is not False for k in ("active", "authoritative", "authorized_for_semantic_execution", "authorized_for_canonical_ingest", "production_enabled"))
+            or not (inactive or authorized_v2)
+            or any(c[k] is not False for k in ("authoritative", "authorized_for_semantic_execution", "production_enabled"))
             or interfaces["active"] is not False
             or interfaces["authorized_for_canonical_ingest"] is not False):
-        reject("wrong_binding", "Notes V2 must remain explicitly inactive and noncanonical")
+        reject("wrong_binding", "Notes V2 requires inactive defaults or an approved V2-only writer")
     return c
 
 def _schema(name, doc):

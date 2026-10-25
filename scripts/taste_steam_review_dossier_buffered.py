@@ -1055,7 +1055,8 @@ def _drain_notes_v2_individual(
     No V1 group plan, progress, buffer format, or writer entrypoint is changed.
     """
     from dossier_research_notes_v2 import (
-        assembly_work, individual_final_readiness, inspect_assembly,
+        _v2_individual_writer_authorized, assembly_work,
+        individual_final_readiness, inspect_assembly,
     )
     from dossier_two_stage_staging import json_at
     from taste_steam_review_dossier_strict import validate_dossier_strict
@@ -1090,18 +1091,7 @@ def _drain_notes_v2_individual(
             (Path(__file__).resolve().parents[1] / "config" /
              "dossier_research_notes_v2_contract.json").read_text(encoding="utf-8")
         )
-        precedence = spec.get("v2_group_policy_precedence") or {}
-        if not (source.get("active") is True
-                and source.get("authorized_for_canonical_ingest") is True
-                and spec.get("active") is True
-                and spec.get("authorized_for_canonical_ingest") is True
-                and spec.get("existing_writer_integration_approved") is True
-                and spec.get("downstream_deep_handoff_approved") is True
-                and precedence.get("scope") == "explicit_notes_v2_mode_only"
-                and precedence.get("acceptance")
-                == "individual_game_independent_under_existing_shared_writer"
-                and spec.get("existing_locked_writer_workflow")
-                == ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"):
+        if not _v2_individual_writer_authorized(source, spec):
             raise ValueError("V2 per-item canonical publication is disabled")
 
     store = Path(store_dir).resolve()

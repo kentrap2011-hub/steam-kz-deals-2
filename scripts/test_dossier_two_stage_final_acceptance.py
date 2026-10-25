@@ -646,6 +646,98 @@ class NotesV2IndividualReadinessTests(unittest.TestCase):
                                  for x in tree if x.startswith("data/cache/") or
                                  "/canonical_accepted/" in x))
 
+
+    def test_v2_enabled_contract_offline_false_keeps_independent_items(self):
+        """Simulated permitted writer path, never an actual GitHub or main write."""
+        from unittest.mock import patch
+        import dossier_research_notes_v2 as notes
+        from taste_steam_review_dossier_buffered import drain_buffered_groups
+
+        f, helpers = self.fixture()
+        a, b, c = helpers.C["original_groups"][0]["appids"]
+        d = helpers.C["original_groups"][1]["appids"][0]
+        locators = {
+            a: self.submit(f, helpers, a),
+            b: self.submit(f, helpers, b, result="invalid_strict"),
+            c: self.submit(f, helpers, c),
+            d: self.submit(f, helpers, d),
+        }
+        source = copy.deepcopy(helpers.C)
+        source["active"] = True
+        source["authorized_for_canonical_ingest"] = True
+        contract_path = (Path(__file__).resolve().parents[1] / "config" /
+                         "dossier_notes_v2_individual_writer_contract.json")
+        permit = json.loads(contract_path.read_text(encoding="utf-8"))
+        permit.update(active=True, authorized_for_canonical_ingest=True,
+                      existing_writer_integration_approved=True,
+                      downstream_deep_handoff_approved=True)
+        normal_read = Path.read_text
+
+        def simulated_contract_read(path, *args, **kwargs):
+            if path.resolve() == notes.CONTRACT_PATH.resolve():
+                return json.dumps(source)
+            if path.resolve() == contract_path.resolve():
+                return json.dumps(permit)
+            return normal_read(path, *args, **kwargs)
+
+        store = f.repo / "data/cache/taste_steam_review_dossiers"
+        receipts = f.repo / "data/control/dossier_notes_v2/canonical_accepted"
+
+        def invoke():
+            return drain_buffered_groups(notes_v2={
+                "repo": f.repo, "marker_commit": f.marker,
+                "trial_id": helpers.TRIAL, "item_commits": locators,
+                "store_dir": store, "accepted_dir": receipts,
+                "offline_fixture": False,
+            })
+
+        with patch.object(Path, "read_text", new=simulated_contract_read):
+            # Both source and dedicated writer must independently grant access.
+            source["authorized_for_canonical_ingest"] = False
+            with self.assertRaisesRegex(ValueError, "disabled"):
+                invoke()
+            source["authorized_for_canonical_ingest"] = True
+            permit["downstream_deep_handoff_approved"] = False
+            with self.assertRaisesRegex(ValueError, "disabled"):
+                invoke()
+            permit["downstream_deep_handoff_approved"] = True
+            permit["authorized_for_canonical_ingest"] = False
+            with self.assertRaisesRegex(ValueError, "disabled"):
+                invoke()
+            permit["authorized_for_canonical_ingest"] = True
+            self.assertFalse(store.exists())
+            output = invoke()
+            statuses = {r["appid"]: r["status"] for r in output["items"]}
+            self.assertEqual([statuses[x] for x in (a, b, c, d)], [
+                "persisted_pending_github_commit", "invalid",
+                "persisted_pending_github_commit", "persisted_pending_github_commit",
+            ])
+            self.assertFalse(output["canonical_acceptance"])
+            for appid in (a, c, d):
+                self.assertTrue((store / ("App_" + appid + ".json")).is_file())
+                self.assertEqual(len(list(receipts.rglob(appid + "--*.json"))), 1)
+            self.assertFalse((store / ("App_" + b + ".json")).exists())
+            self.assertFalse(list(receipts.rglob(b + "--*.json")))
+            self.assertEqual([r["status"] for r in invoke()["items"][:3]], [
+                "already_persisted_same_binding", "invalid",
+                "already_persisted_same_binding",
+            ])
+            original_a = locators[a]
+            locators[a] = {"research_commit": "0" * 40,
+                           "assembly_commit": original_a["assembly_commit"]}
+            self.assertEqual(invoke()["items"][0]["status"], "invalid")
+            locators[a] = original_a
+            locators["999999999"] = {}
+            try:
+                with self.assertRaises(notes.NotesV2Error):
+                    invoke()
+            finally:
+                del locators["999999999"]
+        # No activation on disk, no real canonical Dossier was published.
+        self.assertFalse(notes._contract()["active"])
+        self.assertFalse(json.loads(contract_path.read_text(
+            encoding="utf-8"))["active"])
+
     def test_v2_hook_uses_same_disabled_dispatch_and_shared_lock(self):
         root = Path(__file__).resolve().parents[1]
         workflow = (root / ".github/workflows/"
