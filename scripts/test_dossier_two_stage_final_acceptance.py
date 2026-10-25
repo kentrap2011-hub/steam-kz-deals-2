@@ -2,6 +2,7 @@
 """Inactive final Research->Assembly->three-game writer integration, Git-only."""
 import copy
 import json
+import subprocess
 import tempfile
 import unittest
 from datetime import datetime, timezone
@@ -558,6 +559,116 @@ class NotesV2IndividualReadinessTests(unittest.TestCase):
         # transaction, not stage the temporarily written uncommitted cache.
         self.assertFalse((f.repo / "data/control/dossier_notes_v2/canonical_accepted").exists())
 
+
+
+    def test_v2_github_writer_hookup_single_transaction(self):
+        """Exercise the existing staging shell and Git push in a disposable local remote.
+
+        This proves one Git commit contains A/C cache + receipts, not a real
+        GitHub publication. B's failed strict dossier never enters that commit.
+        """
+        f, helpers = self.fixture()
+        from taste_steam_review_dossier_buffered import drain_buffered_groups
+        a, b, c = helpers.C["original_groups"][0]["appids"]
+        locators = {
+            a: self.submit(f, helpers, a),
+            b: self.submit(f, helpers, b, result="invalid_strict"),
+            c: self.submit(f, helpers, c),
+        }
+        (f.repo / ".dossier-final-offline-fixture").write_text("synthetic\\n")
+        # The existing V1 staging helper requires its existing V1 state paths.
+        # Create harmless placeholders in this *disposable* test repo only.
+        required_files = [
+            "data/production/pre_ai/taste_steam_review_dossier_work.json",
+            "data/production/pre_ai/taste_steam_review_dossier_worker_index.json",
+            "data/production/pre_ai/taste_steam_review_dossier_validation_status.json",
+            "data/production/pre_ai/progressive_pass2_work.json",
+        ]
+        required_dirs = [
+            "data/ai_inbox/taste_steam_review_dossiers",
+            "data/production/pre_ai/taste_steam_review_dossier_worker_groups",
+        ]
+        for rel in required_files:
+            path = f.repo / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("{}\\n", encoding="utf-8")
+        for rel in required_dirs:
+            path = f.repo / rel / ".keep"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("fixture\\n", encoding="utf-8")
+        # The required fixture marker is not canonical output.
+        with (f.repo / ".git/info/exclude").open("a", encoding="utf-8") as out:
+            out.write("\\n.dossier-final-offline-fixture\\n")
+
+        result = drain_buffered_groups(notes_v2={
+            "repo": f.repo, "marker_commit": f.marker, "trial_id": helpers.TRIAL,
+            "item_commits": locators,
+            "store_dir": f.repo / "data/cache/taste_steam_review_dossiers",
+            "accepted_dir": f.repo / "data/control/dossier_notes_v2/canonical_accepted",
+            "offline_fixture": True,
+        })
+        self.assertEqual([x["status"] for x in result["items"][:3]], [
+            "persisted_pending_github_commit", "invalid", "persisted_pending_github_commit"
+        ])
+        self.assertFalse(result["canonical_acceptance"])
+
+        root = Path(__file__).resolve().parents[1]
+        stage = root / "scripts/stage_taste_dossier_canonical_writer.sh"
+        subprocess.run(["bash", str(stage), "stage"], cwd=f.repo, check=True)
+        staged = subprocess.check_output(
+            ["git", "diff", "--cached", "--name-only"], cwd=f.repo, text=True
+        ).splitlines()
+        for appid in (a, c):
+            self.assertIn("data/cache/taste_steam_review_dossiers/App_" + appid + ".json", staged)
+            self.assertEqual(len([x for x in staged if "/canonical_accepted/" in x
+                                  and ("/" + appid + "--") in x]), 1)
+        self.assertNotIn("data/cache/taste_steam_review_dossiers/App_" + b + ".json", staged)
+        self.assertFalse(any("/" + b + "--" in x for x in staged))
+        subprocess.run(["git", "-c", "user.name=Test", "-c",
+                        "user.email=test@example.invalid", "commit", "-qm",
+                        "Synthetic one-transaction Dossier V2 writer"], cwd=f.repo, check=True)
+        subprocess.run(["bash", str(stage), "assert-clean"], cwd=f.repo, check=True)
+
+        with tempfile.TemporaryDirectory(prefix="dossier-v2-local-bare-") as remote:
+            bare = Path(remote) / "bare.git"
+            subprocess.run(["git", "init", "--bare", "-q", str(bare)], check=True)
+            subprocess.run(["git", "push", "-q", str(bare), "HEAD:refs/heads/v2-test"],
+                           cwd=f.repo, check=True)
+            tree = subprocess.check_output([
+                "git", "--git-dir", str(bare), "ls-tree", "-r", "--name-only",
+                "refs/heads/v2-test"], text=True).splitlines()
+            for appid in (a, c):
+                self.assertIn("data/cache/taste_steam_review_dossiers/App_" + appid + ".json",
+                              tree)
+                self.assertEqual(len([x for x in tree if "/canonical_accepted/" in x
+                                      and ("/" + appid + "--") in x]), 1)
+            self.assertFalse(any("App_" + b + ".json" in x or "/" + b + "--" in x
+                                 for x in tree if x.startswith("data/cache/") or
+                                 "/canonical_accepted/" in x))
+
+    def test_v2_hook_uses_same_disabled_dispatch_and_shared_lock(self):
+        root = Path(__file__).resolve().parents[1]
+        workflow = (root / ".github/workflows/"
+                    "ingest-taste-steam-review-dossier-checkpoint.yml"
+                    ).read_text(encoding="utf-8")
+        writer = json.loads((root / "config/dossier_notes_v2_individual_writer_contract.json"
+                             ).read_text(encoding="utf-8"))
+        self.assertIn("group: taste-steam-review-dossier-canonical-writer", workflow)
+        self.assertIn("workflow_dispatch:", workflow)
+        self.assertIn("notes_v2_writer:", workflow)
+        self.assertIn("default: false", workflow)
+        self.assertIn('if: github.event_name == \'push\'', workflow)
+        self.assertIn('"offline_fixture": False', workflow)
+        self.assertIn("drain_buffered_groups(notes_v2=", workflow)
+        self.assertIn("bash scripts/stage_taste_dossier_canonical_writer.sh stage", workflow)
+        self.assertIn("git push origin HEAD:main", workflow)
+        self.assertFalse(writer["active"])
+        self.assertFalse(writer["authorized_for_canonical_ingest"])
+        self.assertFalse(writer["existing_writer_integration_approved"])
+        self.assertFalse(writer["downstream_deep_handoff_approved"])
+        self.assertEqual(
+            writer["v2_group_policy_precedence"]["scope"], "explicit_notes_v2_mode_only"
+        )
 
 
 if __name__ == "__main__":
