@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## ТЕКУЩИЕ ПАРАЛЛЕЛЬНЫЕ НАЗНАЧЕНИЯ — 2026-10-25
+
+- **НОВЫЙ ЧАТ 6:** `director-plain-language-recurrence-diagnosis-02` / `WORKER_TASK_DIRECTOR_PLAIN_LANGUAGE_RECURRENCE_DIAGNOSIS_02.md`. Повторная независимая диагностика, почему директор использует непонятные слова. Отдельный отчёт, правила не менять. Запуск после принятия регистрации в main.
+- **НОВЫЙ ЧАТ 8:** `dossier-v2-pr270-test-execution-environment-recovery-01` / `WORKER_TASK_DOSSIER_V2_PR270_TEST_EXECUTION_ENVIRONMENT_RECOVERY_01.md`. Проверить реальный запуск 14 готовых тестов Research, опираясь на неудачу ЧАТА 4 и не повторяя прежний сетевой маршрут. Отдельный отчёт; код #270 не править.
+- **ЧАТ 7:** зарегистрирован отдельно, проверяет подготовленную поправку к коротким командам в №290; та поправка конфликтует с актуальным main и НЕ принята. ЧАТ 6 и ЧАТ 8 независимы от него.
+- Код ЧАТА 1 уже в main. Новый Dossier V2 остаётся выключенным. Настоящий запуск 18 игр, публикация в production или Scheduled Tasks не разрешены.
+
 ## АКТУАЛЬНОЕ ПОРУЧЕНИЕ — 2026-10-25: независимая проверка изменения №290
 
 - **НОВЫЙ ЧАТ 7:** `director-pr290-short-launch-change-independent-qa-01` / `WORKER_TASK_DIRECTOR_PR290_SHORT_LAUNCH_CHANGE_INDEPENDENT_QA_01.md`. Независимо проверить точную версию изменения №290 (короткие запуски директора + регистрация ЧАТА 6). Не исправлять и не объединять код. После отчёта вернуться к директору; запуск ЧАТА 6 только после отдельного принятия его регистрации в main.
