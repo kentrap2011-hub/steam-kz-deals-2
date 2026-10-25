@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## DIRECTOR PARALLEL DIAGNOSIS — 2026-10-25: why director launch prompts grow
+
+- **USER DECISION:** create one independent investigation of recurring director-chat drift toward increasingly long copyable worker-launch prompts, despite the already required short-launch contract in DIRECTOR_PROTOCOL.md §2.
+- **НОВЫЙ ЧАТ 5:** `director-launch-prompt-length-drift-diagnosis-01` → `WORKER_TASK_DIRECTOR_LAUNCH_PROMPT_LENGTH_DRIFT_DIAGNOSIS_01.md`. Read-only diagnosis of repeated task-content duplication across director handoffs, rule/application gaps and confusing examples; one grounded minimal recommendation, a short sample launch, and report-only PR. Distinct from earlier Chat 4 work on overly technical wording (PR #272 / proposed #275).
+- **Separation:** ЧАТЫ 2 и 4 continue PR #274 final QA and PR #270 existing-test execution independently. This task does not edit protocols or any current work, and makes no new governance rule without user approval.
+- **Constraints:** no new scripts, CI, workflows, validators, automations, Research/Assembly or production modifications.
+
 ## DIRECTOR CURRENT PARALLEL FINAL CHECKS — 2026-10-25: accept PR #274 and run PR #270 tests
 
 - **USER DECISION:** finish verification without introducing another development/review loop. Two separate, non-overlapping tasks registered to process completed drafts #274 and #270. These are checks of inactive code, not V2 Research/Assembly execution or permission to change production.
