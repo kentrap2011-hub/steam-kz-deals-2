@@ -274,7 +274,18 @@ class BufferedSubmissionTests(unittest.TestCase):
             self.assertNotIn(forbidden, joined)
         workflow = (ROOT / ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml").read_text(encoding="utf-8")
         self.assertIn("taste-steam-review-dossier-canonical-writer", workflow)
-        self.assertNotIn("workflow_dispatch", workflow)
+        # The old V1 producer remains push-only; a distinct, default-disabled
+        # manual V2 mode is allowed only inside the existing shared writer.
+        self.assertIn("workflow_dispatch:", workflow)
+        self.assertIn("notes_v2_writer:", workflow)
+        self.assertIn("default: false", workflow)
+        self.assertIn("if: github.event_name == 'push'", workflow)
+        self.assertIn(
+            "github.event_name == 'workflow_dispatch' && inputs.notes_v2_writer == true",
+            workflow,
+        )
+        self.assertIn('"offline_fixture": False', workflow)
+        self.assertIn("drain_buffered_groups(notes_v2=", workflow)
 
 
 if __name__ == "__main__":
