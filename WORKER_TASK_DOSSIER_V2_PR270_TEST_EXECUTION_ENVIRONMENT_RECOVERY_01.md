@@ -1,9 +1,9 @@
-# ЧАТ 8 — реальный запуск 14 тестов Research
+# ЧАТ 3 — реальный запуск 14 тестов Research
 
 Repository: kentrap2011-hub/steam-kz-deals-2
 Base branch / source of truth: main
 Task ID: dossier-v2-pr270-test-execution-environment-recovery-01
-Worker: НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 8
+Worker: НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 3
 Mode: независимая проверка / READ-ONLY QA; отчётный PR разрешён
 
 ## Цель
