@@ -1,0 +1,48 @@
+{
+  "schema": "DOSSIER-NOTES-V2-INDIVIDUAL-WRITER-V1",
+  "version": 1,
+  "owner": "github_control_plane",
+  "implemented": "inactive_existing_locked_github_writer_dispatch_hookup",
+  "active": false,
+  "authorized_for_canonical_ingest": false,
+  "existing_writer_integration_approved": false,
+  "per_item_only": true,
+  "scope": "immutable_original_18_games_exact_frozen_appids_assignment_title_and_provenance",
+  "writer": "scripts/taste_steam_review_dossier_buffered.py",
+  "shared_concurrency_group": "taste-steam-review-dossier-canonical-writer",
+  "v1_group_writer_unchanged": true,
+  "strict_validator": "scripts/taste_steam_review_dossier_strict.py::validate_dossier_strict",
+  "source": "scripts/dossier_research_notes_v2.py::inspect_assembly",
+  "store": "data/cache/taste_steam_review_dossiers/{appid}.json",
+  "receipt": "data/control/dossier_notes_v2/canonical_accepted/{trial_id}/g{group_sequence:06d}/{appid}--{assignment_id}.json",
+  "persistence": "existing_atomic_write_json_and_existing_stage_taste_dossier_canonical_writer_sh_stages_cache_and_data_control_in_same_Git_transaction",
+  "no_committed_receipt_means_no_canonical_acceptance": true,
+  "legacy_v1_group_acceptance_unchanged": true,
+  "v2_group_override_condition": "Explicit notes_v2 mode has its own higher-priority V2-only per-item rule, but no live execution while either V2 source or dedicated writer/Deep approval is inactive; the original V1 three-game rule is unchanged",
+  "future_live_prerequisites": [
+    "separate owner authorization for inactive Notes V2 source and dedicated writer activation, including V2-only group rule precedence (without overwriting PR266)",
+    "independent QA and approved existing locked GitHub writer workflow dispatch integration",
+    "one-stage V1 collision and downstream Deep binding safety approval",
+    "strict frozen original Git lineage validated at writer entry",
+    "one bounded manually authorized live trial; no automatic activation"
+  ],
+  "forbidden": [
+    "actual_production_write",
+    "activating_v2",
+    "semantic_execution",
+    "new_workflow_or_ci",
+    "new_automation",
+    "V1_acceptance_changes",
+    "forge_independent_acceptance_from_status_only"
+  ],
+  "existing_locked_writer_workflow": ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml",
+  "workflow_entry": "workflow_dispatch_opt_in_notes_v2_only",
+  "downstream_deep_handoff_approved": false,
+  "v2_group_policy_precedence": {
+    "scope": "explicit_notes_v2_mode_only",
+    "acceptance": "individual_game_independent_under_existing_shared_writer",
+    "higher_priority_than": "config/dossier_research_notes_v2_contract.json::assembly.group_acceptance ONLY for explicitly gated notes_v2 canonical writer mode",
+    "activation": "only after Notes V2 source active + authorized, this contract active + ingest authorized + existing-writer integration approved + downstream Deep safety approved",
+    "original_three_game_v1": "unchanged; no effect on default drain or legacy two-stage group writer"
+  }
+}

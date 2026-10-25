@@ -6,6 +6,27 @@ on:
     paths:
       - "data/ai_inbox/taste_steam_review_dossiers/*.json"
       - "data/control/taste_steam_review_dossier_recovery_request.json"
+  # Manual V2-only writer entry; default false and separately denied by BOTH
+  # inactive Notes V2/source and dedicated per-game writer contracts.
+  workflow_dispatch:
+    inputs:
+      notes_v2_writer:
+        description: "Request separately approved Notes V2 individual shared writer"
+        type: boolean
+        required: true
+        default: false
+      notes_v2_marker_commit:
+        description: "Original frozen V2 run-start marker Git commit"
+        type: string
+        required: false
+      notes_v2_trial_id:
+        description: "Frozen V2 trial identity (not a user-selected game queue)"
+        type: string
+        required: false
+      notes_v2_item_commits_json:
+        description: "Exact frozen AppID to Research/Assembly commit map (JSON)"
+        type: string
+        required: false
 
 permissions:
   contents: write
@@ -18,6 +39,8 @@ concurrency:
 
 jobs:
   ingest:
+    # Manual dispatch must never become an alternative way to run V1.
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.notes_v2_writer == true)
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -32,12 +55,50 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Drain separately authorized V2 items through the existing shared writer
+        if: github.event_name == 'workflow_dispatch' && inputs.notes_v2_writer == true
+        env:
+          NOTES_V2_MARKER_COMMIT: ${{ inputs.notes_v2_marker_commit }}
+          NOTES_V2_TRIAL_ID: ${{ inputs.notes_v2_trial_id }}
+          NOTES_V2_ITEM_COMMITS_JSON: ${{ inputs.notes_v2_item_commits_json }}
+        run: |
+          set -euo pipefail
+          # Inputs only locate original immutable Git objects: all authorization,
+          # lineage and strict per-game checks are re-run by the SAME writer.
+          # No offline-fixture bypass is possible in this workflow.
+          python - <<'PY'
+          import json
+          import os
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, str(Path.cwd() / "scripts"))
+          from taste_steam_review_dossier_buffered import drain_buffered_groups
+
+          item_commits = json.loads(os.environ["NOTES_V2_ITEM_COMMITS_JSON"])
+          if type(item_commits) is not dict:
+              raise ValueError("V2 dispatch must provide a Git-bound item commit map")
+          result = drain_buffered_groups(notes_v2={
+              "repo": Path.cwd(),
+              "marker_commit": os.environ["NOTES_V2_MARKER_COMMIT"],
+              "trial_id": os.environ["NOTES_V2_TRIAL_ID"],
+              "item_commits": item_commits,
+              "store_dir": Path("data/cache/taste_steam_review_dossiers"),
+              "accepted_dir": Path("data/control/dossier_notes_v2/canonical_accepted"),
+              "offline_fixture": False,
+          })
+          # Staged files are not accepted until this job's existing Git commit
+          # and successful push. In particular, do not report Deep readiness.
+          print(json.dumps(result, ensure_ascii=False, sort_keys=True))
+          PY
+
       - name: Apply explicit GitHub-owned dossier recovery if requested
+        if: github.event_name == 'push'
         run: |
           set -euo pipefail
           python scripts/taste_steam_review_dossier_recovery.py
 
       - name: Classify and drain pending dossier groups independently
+        if: github.event_name == 'push'
         id: dossier_drain
         run: |
           set -euo pipefail
@@ -50,6 +111,7 @@ jobs:
           echo "status=$status" >> "$GITHUB_OUTPUT"
 
       - name: Record strict validation status for all current-snapshot candidate groups
+        if: github.event_name == 'push'
         run: |
           set -euo pipefail
           # This pass projects candidate validation plus canonical failed-group
@@ -57,6 +119,7 @@ jobs:
           python scripts/taste_steam_review_dossier_parallel_validation.py
 
       - name: Recompute Progressive PASS 2 eligibility from canonical accepted Dossiers
+        if: github.event_name == 'push'
         run: |
           set -euo pipefail
           python scripts/build_progressive_pass2_work.py

@@ -56,15 +56,57 @@ def digest(data):
 def _canonical(obj):
     return json.dumps(obj, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
 
+
+def _v2_individual_writer_authorized(source, writer):
+    """One V2-only permission check shared by source and locked writer.
+
+    A dispatch option or a source active flag alone never grants approval.
+    This helper does not persist data and never changes V1 group acceptance.
+    """
+    precedence = writer.get("v2_group_policy_precedence") or {}
+    return (
+        source.get("schema") == "DOSSIER-RESEARCH-NOTES-V2-CONTRACT"
+        and source.get("schema_version") == 2
+        and source.get("owner") == "github_control_plane"
+        and source.get("active") is True
+        and source.get("authorized_for_canonical_ingest") is True
+        and writer.get("schema") == "DOSSIER-NOTES-V2-INDIVIDUAL-WRITER-V1"
+        and writer.get("owner") == "github_control_plane"
+        and writer.get("active") is True
+        and writer.get("authorized_for_canonical_ingest") is True
+        and writer.get("existing_writer_integration_approved") is True
+        and writer.get("downstream_deep_handoff_approved") is True
+        and writer.get("per_item_only") is True
+        and writer.get("v1_group_writer_unchanged") is True
+        and writer.get("writer") == "scripts/taste_steam_review_dossier_buffered.py"
+        and writer.get("shared_concurrency_group")
+            == "taste-steam-review-dossier-canonical-writer"
+        and writer.get("existing_locked_writer_workflow")
+            == ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
+        and precedence.get("scope") == "explicit_notes_v2_mode_only"
+        and precedence.get("acceptance")
+            == "individual_game_independent_under_existing_shared_writer"
+    )
+
 def _contract():
     c = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
     interfaces = json.loads((CONFIG / "dossier_two_stage_interfaces_contract.json").read_text(encoding="utf-8"))
+    inactive = (c.get("active") is False
+                and c.get("authorized_for_canonical_ingest") is False)
+    authorized_v2 = False
+    if not inactive:
+        # Only the separately approved V2 writer can authorize the enabled
+        # source; _contract itself is read-only and does not grant publication.
+        writer = json.loads((CONFIG / "dossier_notes_v2_individual_writer_contract.json")
+                            .read_text(encoding="utf-8"))
+        authorized_v2 = _v2_individual_writer_authorized(c, writer)
     if (c["schema"] != "DOSSIER-RESEARCH-NOTES-V2-CONTRACT"
             or c["schema_version"] != 2
-            or any(c[k] is not False for k in ("active", "authoritative", "authorized_for_semantic_execution", "authorized_for_canonical_ingest", "production_enabled"))
+            or not (inactive or authorized_v2)
+            or any(c[k] is not False for k in ("authoritative", "authorized_for_semantic_execution", "production_enabled"))
             or interfaces["active"] is not False
             or interfaces["authorized_for_canonical_ingest"] is not False):
-        reject("wrong_binding", "Notes V2 must remain explicitly inactive and noncanonical")
+        reject("wrong_binding", "Notes V2 requires inactive defaults or an approved V2-only writer")
     return c
 
 def _schema(name, doc):
@@ -533,6 +575,75 @@ def item_receipt_blueprint(repo, *, marker_commit, trial_id, appid, phase, dispo
         reject("wrong_binding", "Assembly receipt cannot attest Research completeness")
     _safe_text(doc)
     return doc
+
+def individual_final_readiness(repo, *, marker_commit, trial_id, item_commits):
+    """Offline per-game strict readiness, NEVER canonical acceptance.
+
+    A/C can be locally ready while B is invalid, missing or still awaiting
+    Assembly. Only immutable submitted Git commits are examined; caller
+    assertions of readiness or acceptance are not accepted as input.
+    """
+    manifest, _ = _manifest(repo, marker_commit, trial_id)
+    appids = [item["appid"] for item in manifest["items"]]
+    if (type(item_commits) is not dict
+            or any(type(key) is not str or key not in appids for key in item_commits)):
+        reject("wrong_binding", "item commits must reference only frozen V2 AppIDs")
+
+    outcomes = []
+    for item in manifest["items"]:
+        appid = item["appid"]
+        pair = item_commits.get(appid)
+        status = "missing"
+        source_status = "missing_research_transport"
+        if pair is not None:
+            if type(pair) is not dict or set(pair) != {"research_commit", "assembly_commit"}:
+                status, source_status = "invalid", "wrong_binding"
+            else:
+                research, assembly = pair["research_commit"], pair["assembly_commit"]
+                if research is None and assembly is not None:
+                    status, source_status = "invalid", "wrong_binding"
+                elif research is not None:
+                    try:
+                        if assembly is None:
+                            checked = assembly_work(
+                                repo, marker_commit=marker_commit, trial_id=trial_id,
+                                appid=appid, research_commit=research)
+                        else:
+                            checked = inspect_assembly(
+                                repo, marker_commit=marker_commit, trial_id=trial_id,
+                                appid=appid, research_commit=research,
+                                result_commit=assembly)
+                        source_status = checked["status"]
+                        if source_status == "strict_item_valid_pending_existing_atomic_group_ingest":
+                            status = "ready"
+                        elif source_status == "ready_for_autonomous_assembly":
+                            status = "waiting"
+                        elif source_status == "missing_research_transport":
+                            status = "missing"
+                        elif source_status in ("runtime_or_tool_interrupted", "assembly_technical_error"):
+                            status = "error"
+                        else:
+                            status = "invalid"
+                    except NotesV2Error as exc:
+                        status, source_status = "invalid", exc.code
+                    except (KeyError, TypeError, ValueError, RuntimeError,
+                            OSError, subprocess.CalledProcessError) as exc:
+                        status, source_status = "error", type(exc).__name__
+        outcomes.append({
+            "appid": appid, "group_sequence": item["group_sequence"],
+            "item_index": item["item_index"],
+            "status": status, "source_status": source_status,
+            "strict_item_valid": status == "ready",
+            "canonical_acceptance": False, "deep_ready": False,
+        })
+
+    return {
+        "schema": "DOSSIER-NOTES-V2-OFFLINE-INDIVIDUAL-READINESS",
+        "trial_id": trial_id, "items": outcomes,
+        "canonical_acceptance": False, "deep_ready": False,
+        "requires_separately_authorized_canonical_writer": True,
+    }
+
 
 def original_group_readiness(group_sequence, item_verdicts):
     """Reporting ONLY. Existing strict three-game writer is sole acceptance path."""

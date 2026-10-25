@@ -309,7 +309,14 @@ class ParallelValidationTests(unittest.TestCase):
         self.assertIn("bash scripts/stage_taste_dossier_canonical_writer.sh stage", workflow)
         stager = (ROOT / "scripts/stage_taste_dossier_canonical_writer.sh").read_text(encoding="utf-8")
         self.assertIn("taste_steam_review_dossier_validation_status.json", stager)
-        self.assertNotIn("workflow_dispatch", workflow)
+        # No second scheduler or V1 manual trigger: the only new entry is
+        # default-disabled, single-job Notes V2 through the existing lock.
+        self.assertIn("workflow_dispatch:", workflow)
+        self.assertIn("notes_v2_writer:", workflow)
+        self.assertIn("default: false", workflow)
+        self.assertIn("github.event_name == 'workflow_dispatch' && inputs.notes_v2_writer == true", workflow)
+        self.assertIn("if: github.event_name == 'push'", workflow)
+        self.assertIn("group: taste-steam-review-dossier-canonical-writer", workflow)
 
 
 if __name__ == "__main__":
