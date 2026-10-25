@@ -1081,12 +1081,27 @@ def _drain_notes_v2_individual(
                 or spec.get("authorized_for_canonical_ingest") is not False):
             raise ValueError("offline V2 writer must remain nonactive")
     else:
-        # A live call cannot be authorized by a caller's Boolean alone.
-        # GitHub must separately activate this contract and wire the call
-        # inside the *existing* serialized canonical-writer transaction.
-        if not (spec.get("active") is True
+        # The V2-only item rule takes precedence over the older three-game
+        # Notes V2 field ONLY for this explicit mode. V1 keeps its own gate.
+        # Both sources of authority and downstream Deep safety must first be
+        # separately activated by the GitHub owner; a dispatch input alone
+        # cannot grant permission to publish.
+        source = json.loads(
+            (Path(__file__).resolve().parents[1] / "config" /
+             "dossier_research_notes_v2_contract.json").read_text(encoding="utf-8")
+        )
+        precedence = spec.get("v2_group_policy_precedence") or {}
+        if not (source.get("active") is True
+                and source.get("authorized_for_canonical_ingest") is True
+                and spec.get("active") is True
                 and spec.get("authorized_for_canonical_ingest") is True
-                and spec.get("existing_writer_integration_approved") is True):
+                and spec.get("existing_writer_integration_approved") is True
+                and spec.get("downstream_deep_handoff_approved") is True
+                and precedence.get("scope") == "explicit_notes_v2_mode_only"
+                and precedence.get("acceptance")
+                == "individual_game_independent_under_existing_shared_writer"
+                and spec.get("existing_locked_writer_workflow")
+                == ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"):
             raise ValueError("V2 per-item canonical publication is disabled")
 
     store = Path(store_dir).resolve()
