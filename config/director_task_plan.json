@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-10-24",
+  "last_curated_on": "2026-10-25",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -2145,7 +2145,7 @@
       "id": "dossier-v2-individual-github-writer-hookup-01",
       "title": "ЧАТ 1 — подключить отдельное принятие Dossier V2 к GitHub",
       "goal": "Закончить изменение №274: подключить уже написанный V2-режим поштучного принятия к существующему заблокированному механизму записи GitHub, сохранив старый Dossier. Доказать полный путь A готова, B ошибочна, C готова на тестовых данных.",
-      "status": "planned",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Нужно корректно подключить прежнюю реализацию к общему GitHub-писателю и сохранить старое поведение.",
       "urgency": "высокая",
@@ -2156,10 +2156,30 @@
       "depends_on": [
         "dossier-v2-individual-canonical-publish-finish-01"
       ],
-      "blocker": "Работать в уже открытом изменении №274. Без настоящего Research/Assembly и записи в production. Не менять файлы незавершённых №266 и №270; не создавать новые Action/CI/планировщики.",
+      "blocker": "Результат сдан в изменении №274. Выключенный по умолчанию путь V2 подключён к прежнему механизму GitHub; нужна независимая проверка последней версии перед принятием.",
+      "recent_completion": true,
+      "updated_on": "2026-10-25",
+      "updated_at_utc": "2026-10-25T08:06:38.736Z"
+    },
+    {
+      "id": "dossier-v2-pr274-writer-hookup-independent-qa-01",
+      "title": "ЧАТ 2 — проверить подключение поштучного Dossier V2 к GitHub",
+      "goal": "Независимо проверить точную версию изменения №274: сохранение A и C при ошибке B, безопасный выключенный вход V2 в общий механизм записи, старый Dossier без изменений и результаты существующих тестов.",
+      "status": "planned",
+      "effort": "средняя",
+      "effort_reason": "Одна ограниченная проверка законченного изменения №274 и уже выполненных тестов.",
+      "urgency": "высокая",
+      "urgency_reason": "Без проверки последней версии нельзя принимать код для будущего настоящего испытания.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_PR274_WRITER_HOOKUP_INDEPENDENT_QA_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-individual-github-writer-hookup-01"
+      ],
+      "blocker": "Старт после принятия регистрации. Только точная версия изменения №274, отчёт без правок разработчика. Запрещены настоящий Research/Assembly, GitHub workflow dispatch и production.",
       "recent_completion": false,
-      "updated_on": "2026-10-24",
-      "updated_at_utc": "2026-10-24T16:59:52.231Z"
+      "updated_on": "2026-10-25",
+      "updated_at_utc": "2026-10-25T08:06:38.736Z"
     }
   ]
 }
