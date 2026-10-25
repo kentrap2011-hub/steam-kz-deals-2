@@ -1,10 +1,16 @@
 # DIRECTOR BOOTSTRAP
 
-Last refreshed: 2026-10-20
+Last refreshed: 2026-10-25
 
 Purpose: compact restart context for a **NEW physical Director conversation** after the previous Director chat reached its context limit.
 
 This file is a bootstrap snapshot, not a replacement for canonical project truth. The new Director must read current `CHAT_PROTOCOL.md`, `DIRECTOR_PROTOCOL.md`, fresh `DIRECTOR_TASK_BOARD.md`, and current `main` first. Newer canonical GitHub state always wins over this file.
+
+## СВЕЖИЙ СТАРТ ДИРЕКТОРА — 2026-10-25
+
+Для актуального состояния чатов 1–5 и плана сперва прочитать **только верхнюю секцию 2026-10-25** файла `DIRECTOR_HANDOFF_CURRENT.md`, затем верх `DIRECTOR_TASK_BOARD.md` и нужные записи `config/director_task_plan.json`. Ниже в этом файле идут архивные снимки от 2026-10-20 — не использовать их как актуальную очередь.
+
+**Первый ответ пользователю нового чата:** сразу коротко объяснить на простом русском, чем заняты ЧАТЫ 1–5 и ближайший план, без ещё одной регистрации или повторного чтения всей истории. Главный следующий выбор — объединение уже проверенного неактивного PR #274 (QA #284 PASS) с сохранением выключенного V2; отдельно идут тесты PR #270 (ЧАТ 4), диагностика длинных промптов (ЧАТ 5) и ранее заблокированный issuer PR #266. Никакого настоящего Research/Assembly или производства без явной отдельной авторизации.
 
 **Historical snapshot warning (2026-10-22):** The task assignments, next actions and worker-cap statements in the dated sections below are NOT current launch authority. For each new decision read current `config/director_task_plan.json`, latest Board authorization, exact task and current PR/report state; apply `DIRECTOR_PROTOCOL.md` §10 (no fixed chat limit). Do not reactivate an old task from this snapshot.
 
