@@ -2225,7 +2225,7 @@
       "id": "dossier-v2-pr274-enabled-fix-final-independent-qa-01",
       "title": "ЧАТ 2 — проверить исправление запуска Dossier V2",
       "goal": "Проверить, что точечная ошибка противоречивых разрешений в №274 устранена: разрешённый V2 пишет A и C при ошибочной B, выключенный режим и старый Dossier не изменены. Использовать уже выполненные проверки.",
-      "status": "planned",
+      "status": "complete",
       "effort": "низкая",
       "effort_reason": "Одна локальная ошибка исправлена и уже покрыта действующим тестом.",
       "urgency": "высокая",
@@ -2236,10 +2236,10 @@
       "depends_on": [
         "dossier-v2-pr274-enabled-path-contract-fix-01"
       ],
-      "blocker": "Старт после регистрации. Проверять точную версию №274, только дельту исправления; никаких настоящих запусков.",
-      "recent_completion": false,
+      "blocker": "Отчёт независимого ЧАТА 2 в draft №284: PASS_FOR_DIRECTOR_MERGE_REVIEW для №274 на HEAD f7f2f540; 8 GitHub checks green, тест разрешённого V2 пути пройден. Код не объединён, настоящего запуска не было.",
+      "recent_completion": true,
       "updated_on": "2026-10-25",
-      "updated_at_utc": "2026-10-25T10:20:43.059Z"
+      "updated_at_utc": "2026-10-25T11:13:29.769Z"
     },
     {
       "id": "dossier-v2-pr270-existing-tests-execution-qa-01",
