@@ -5,6 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## НОВОЕ НЕЗАВИСИМОЕ ПОРУЧЕНИЕ — 2026-10-25
+
+- **НОВЫЙ ЧАТ 4 — оценить, оправданы ли многочисленные проверки перехода Dossier на Research → Assembly.** `dossier-v2-process-value-and-review-overhead-audit-01` → `WORKER_TASK_DOSSIER_V2_PROCESS_VALUE_AND_REVIEW_OVERHEAD_AUDIT_01.md`. Только аудит практической пользы проверок и маршрут из 3–5 шагов к испытанию исходных 18 игр. Не назначать дополнительную цепочку проверок, не менять код/правила, не запускать Research или Assembly.
+- Прежний физический ЧАТ 4 завершён с сохранённым отчётом №289: 0/14 проверок исполнено из-за отсутствия рабочего окружения. Его прежняя задача помечена blocked в реестре; новый ЧАТ 4 — отдельный физический диалог, свободный номер.
+- Независим от новых ЧАТОВ 1–3 и не является обязательной предпроверкой их работы.
+
 ## ТЕКУЩИЕ НАЗНАЧЕНИЯ — 2026-10-25 (после решения пользователя)
 
 - **НОВЫЙ ЧАТ 1 — независимая проверка повторяющихся ошибок директора.** Задание `WORKER_TASK_DIRECTOR_PLAIN_LANGUAGE_RECURRENCE_DIAGNOSIS_02.md`. Включает понятность языка, игнорирование части запроса, неверную нумерацию, лишние зависимости, устаревшие статусы, неудачное управление 14 тестами и длинные команды. Только отчёт, без самостоятельной правки правил.
