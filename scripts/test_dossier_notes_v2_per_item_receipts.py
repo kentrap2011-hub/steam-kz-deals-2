@@ -2,6 +2,7 @@
 """Disposable Git-only Notes V2 per-item receipt regression, no network or semantics."""
 import copy
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 import subprocess
 import tempfile
@@ -308,6 +309,97 @@ class PerItemReceiptGitTests(unittest.TestCase):
         self.assertFalse(result["github_receipt_confirmed"])
         self.assertFalse(result["semantic_quality_accepted"])
         self.assertFalse(result["canonical_acceptance"])
+
+    def test_one_realistic_two_stage_transport_to_existing_disposable_writer(self):
+        """Positive Research -> Git receipt -> Assembly -> strict shared writer -> Git.
+
+        Only a synthetic final dossier and a disposable bare Git repository are
+        used; this is not an attestation of an actual 18-game semantic trial.
+        """
+        from taste_steam_review_dossier_test_fixture import web_dossier
+        from taste_steam_review_dossier_buffered import drain_buffered_groups
+
+        branch = self.setup_disposable_remote()
+        submitted = receipts.publish_one_research_item_remote(
+            self.repo, branch=branch, expected_remote_head=self.auth,
+            **self.kw(document=self.note()))
+        self.assertFalse(submitted["github_receipt_confirmed"])
+        self.assertEqual(receipts._remote_tip(self.repo, branch), submitted["receipt_commit"])
+
+        run(self.repo, "fetch", "origin", "refs/heads/" + branch)
+        work_repo = self.repo
+        # Work envelope can be checked against fetched immutable Research bytes.
+        run(work_repo, "checkout", "--detach", submitted["receipt_commit"])
+        work = v2.assembly_work(
+            work_repo, marker_commit=self.marker, trial_id=TRIAL,
+            appid=self.appid, research_commit=submitted["candidate_commit"])
+        self.assertEqual(work["status"], "ready_for_autonomous_assembly")
+        dossier = web_dossier(
+            self.appid, datetime.now(timezone.utc), title=self.assignment["title"])
+        final = v2.candidate_assembly(
+            work, outcome="assembled_candidate_ready", final_dossier=dossier)
+        asm = receipts.publish_assembly_item_remote(
+            self.repo, branch=branch, expected_remote_head=submitted["receipt_commit"],
+            **self.kw(research_commit=submitted["candidate_commit"], document=final))
+        self.assertEqual(asm["status"], "disposable_remote_assembly_only")
+        self.assertFalse(asm["canonical_acceptance"])
+        self.assertFalse(asm["github_assembly_transport_confirmed"])
+        self.assertEqual(receipts._remote_tip(self.repo, branch), asm["remote_commit"])
+        run(self.repo, "fetch", "origin", "refs/heads/" + branch)
+        run(self.repo, "checkout", "--detach", asm["remote_commit"])
+        checked = v2.inspect_assembly(
+            self.repo, marker_commit=self.marker, trial_id=TRIAL,
+            appid=self.appid, research_commit=submitted["candidate_commit"],
+            result_commit=asm["remote_commit"])
+        self.assertEqual(checked["status"],
+                         "strict_item_valid_pending_existing_atomic_group_ingest")
+
+        (self.repo / ".dossier-final-offline-fixture").write_text("synthetic\n")
+        with (self.repo / ".git/info/exclude").open("a") as handle:
+            handle.write("\n.dossier-final-offline-fixture\nremote.git\n")
+        for rel in (
+            "data/production/pre_ai/taste_steam_review_dossier_work.json",
+            "data/production/pre_ai/taste_steam_review_dossier_worker_index.json",
+            "data/production/pre_ai/taste_steam_review_dossier_validation_status.json",
+            "data/production/pre_ai/progressive_pass2_work.json",
+        ):
+            p = self.repo / rel
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text("{}\n")
+        for rel in (
+            "data/ai_inbox/taste_steam_review_dossiers",
+            "data/production/pre_ai/taste_steam_review_dossier_worker_groups",
+        ):
+            p = self.repo / rel / ".keep"
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text("fixture\n")
+        result = drain_buffered_groups(notes_v2={
+            "repo": self.repo, "marker_commit": self.marker, "trial_id": TRIAL,
+            "item_commits": {self.appid: {
+                "research_commit": submitted["candidate_commit"],
+                "assembly_commit": asm["remote_commit"],
+            }},
+            "store_dir": self.repo / "data/cache/taste_steam_review_dossiers",
+            "accepted_dir": self.repo / "data/control/dossier_notes_v2/canonical_accepted",
+            "offline_fixture": True,
+        })
+        first = next(x for x in result["items"] if x["appid"] == self.appid)
+        self.assertEqual(first["status"], "persisted_pending_github_commit")
+        self.assertFalse(first["canonical_acceptance"])
+        root = Path(__file__).resolve().parents[1]
+        subprocess.run(["bash", str(root / "scripts/stage_taste_dossier_canonical_writer.sh"),
+                        "stage"], cwd=self.repo, check=True)
+        staged = run(self.repo, "diff", "--cached", "--name-only").splitlines()
+        self.assertIn("data/cache/taste_steam_review_dossiers/App_" + self.appid + ".json",
+                      staged)
+        self.assertEqual(len([p for p in staged if "/canonical_accepted/" in p
+                              and ("/" + self.appid + "--") in p]), 1)
+        run(self.repo, "commit", "-m", "fixture: same existing writer, one transaction")
+        subprocess.run(["bash", str(root / "scripts/stage_taste_dossier_canonical_writer.sh"),
+                        "assert-clean"], cwd=self.repo, check=True)
+        run(self.repo, "push", "origin", "HEAD:refs/heads/" + branch)
+        self.assertEqual(receipts._remote_tip(self.repo, branch),
+                         run(self.repo, "rev-parse", "HEAD"))
 
     def test_remote_duplicate_stale_parent_and_spoofed_github_fail_closed(self):
         branch = self.setup_disposable_remote()
