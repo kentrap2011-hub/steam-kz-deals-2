@@ -2,7 +2,8 @@
 
 Repository: `kentrap2011-hub/steam-kz-deals-2`
 Source of truth: `main`
-Task ID: `giveaway-itad`
+Task ID: `giveaway-itad-identity-implement-01`
+Director task registry key: `giveaway-itad`
 Worker slot: **НОВЫЙ физический ЧАТ 2**
 
 Only repository `kentrap2011-hub/steam-kz-deals-2`; if another repository opens, switch immediately. The existing ITAD implementation scope is authoritative; no duplicate worker task, scheduler or alternate provider architecture. Concurrent fileset boundary: change giveaway identity/provider code only, not Steam discovery 50%-discount/top-100, Dossier V2 Research/Assembly or director Board/registry/handoff. If an essential shared change is discovered, first coordinate with Director rather than editing files in parallel.
