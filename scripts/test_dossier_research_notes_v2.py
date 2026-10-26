@@ -682,7 +682,7 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
             self.pub.local_v2_freeze(self.repo, "future-other-trial", edited, "d" * 32)
 
     def test_disabled_mode_no_grant_and_forged_actions_context(self):
-        self.assertFalse(self.m["enabled"])
+        self.assertTrue(self.m["enabled"])  # only scoped owner Actions can exercise it
         self.assertIsNone(self.m["human_grant"]["commit"])
         self.assertFalse(self.cfg["authorized_for_semantic_execution"])
         with self.assertRaises(RuntimeError):
