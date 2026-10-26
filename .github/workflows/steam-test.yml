@@ -117,6 +117,9 @@ jobs:
             scripts/test_expired_offer_guard.py \
             scripts/test_commercial_refresh.py
 
+      - name: Bounded live Steam KZ source recon (diagnostic, 4 reads max)
+        run: python scripts/probe_steam_kz_bounded.py
+
       - name: Run fresh discovery regressions
         run: |
           python scripts/test_discovery_freshness.py
