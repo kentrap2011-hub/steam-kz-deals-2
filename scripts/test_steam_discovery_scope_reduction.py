@@ -52,17 +52,14 @@ def page(total, rows):
 def test_explicit_partitions_cover_supported_content_types_and_params():
     c = core()
     assert c['PAGE_SIZE'] == 100
-    assert tuple(c['SEARCH_CATEGORY_TYPES']) == ('games', 'dlc')
-    assert c['SEARCH_CATEGORY_TYPES'] == {
-        'games': '998',
-        'dlc': '21',
-    }
+    assert tuple(c['SEARCH_CATEGORY_TYPES']) == ('games',)
+    assert c['SEARCH_CATEGORY_TYPES'] == {'games': '998'}
     assert '996' not in {
         partition['category1']
         for partition in c['SEARCH_PARTITIONS']
     }
     bundle_policy = c['PAID_DISCOVERY_POLICY']['bundle_package_discovery']
-    assert bundle_policy['mode'] == 'embedded_in_games_partition'
+    assert bundle_policy['mode'] == 'embedded_sub_in_live_bounded_games_partition_independent'
     assert bundle_policy['representative_identity'] == 'Sub_76471'
     assert bundle_policy['representative_live_category1'] == '998'
     assert bundle_policy['standalone_category1_996_traversal'] is False
@@ -216,12 +213,11 @@ def test_kz_maxprice_validation_does_not_require_monotonic_price_asc():
     assert evidence['maxprice_kzt'] == 4500
     assert evidence['price_asc_monotonicity_required'] is False
     assert evidence['partition_price_desc_checks']['games']['max_price_kzt'] == 4500
-    assert evidence['partition_price_desc_checks']['dlc']['max_price_kzt'] == 4499
-    assert tuple(evidence['partition_price_desc_checks']) == ('games', 'dlc')
+    assert tuple(evidence['partition_price_desc_checks']) == ('games',)
     assert evidence['games_sort_invariant_check']['total_count'] == 3
     assert evidence['games_uncapped_control']['total_count'] == 6
     assert evidence['games_uncapped_control']['max_price_kzt'] == 6000
-    assert evidence['logical_requests'] == 4
+    assert evidence['logical_requests'] == 3
 
 
 def test_kz_maxprice_validation_fails_closed_if_capped_partition_leaks_over_cap():
