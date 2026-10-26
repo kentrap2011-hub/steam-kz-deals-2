@@ -14,6 +14,12 @@ on:
       - "scripts/test_dossier_research_notes_v2.py"
       - "scripts/dossier_notes_v2_per_item_receipts.py"
       - "scripts/dossier_notes_v2_original18_pilot.py"
+      - "scripts/dossier_shadow_research_trial_publish.py"
+      - "scripts/dossier_shadow_research_feasibility.py"
+      - "scripts/taste_steam_review_dossier_buffered.py"
+      - ".github/workflows/publish-dossier-shadow-research-freeze.yml"
+      - ".github/workflows/authorize-dossier-shadow-research-feasibility.yml"
+      - ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
       - "scripts/test_dossier_notes_v2_per_item_receipts.py"
       - ".github/workflows/validate-dossier-research-notes-v2.yml"
 
@@ -37,9 +43,11 @@ jobs:
         run: python scripts/test_dossier_research_notes_v2.py -v
       - name: Inactive V2 per-item Git receipt regression (14 tests)
         run: python scripts/test_dossier_notes_v2_per_item_receipts.py -v
+      - name: Existing strict V2 isolated writer transaction regression
+        run: python scripts/test_dossier_two_stage_final_acceptance.py NotesV2IndividualReadinessTests.test_v2_github_writer_hookup_single_transaction -v
       - name: Syntax and PR activation guard
         run: |
-          python -m py_compile scripts/dossier_research_notes_v2.py scripts/dossier_two_stage_versioned.py scripts/dossier_notes_v2_per_item_receipts.py scripts/dossier_notes_v2_original18_pilot.py
+          python -m py_compile scripts/dossier_research_notes_v2.py scripts/dossier_two_stage_versioned.py scripts/dossier_notes_v2_per_item_receipts.py scripts/dossier_notes_v2_original18_pilot.py scripts/taste_steam_review_dossier_buffered.py scripts/dossier_shadow_research_trial_publish.py scripts/dossier_shadow_research_feasibility.py
           python - <<'PY'
           import json
           for name in ('dossier_research_notes_v2_contract.json','dossier_research_notes_v2.schema.json','dossier_autonomous_assembly_result_v2.schema.json','dossier_notes_v2_item_receipt.schema.json'):
