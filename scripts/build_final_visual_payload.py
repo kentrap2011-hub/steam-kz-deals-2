@@ -94,9 +94,15 @@ def bound_paid_source_funnel(ready, path=None):
         'source_reported_rows', 'source_rows_seen', 'parsed_rows',
         'removed_non_paid_or_missing_price', 'removed_discount_below_50',
         'removed_price_above_4500', 'removed_obvious_extras',
-        'removed_software_only', 'eligible_rows_before_partition_dedupe',
-        'unique_eligible_after_partition_dedupe', 'broad_shortlist_items',
-        'paid_shortlist_items',
+        'removed_software_only', 'removed_obscure_low_signal',
+        'eligible_rows_before_partition_dedupe',
+        'unique_eligible_after_partition_dedupe',
+        'base_candidates_entering_lightweight_suitability',
+        'eligible_suitable_base_games', 'dlc_identified_from_admitted_bases',
+        'dlc_admitted_after_price_discount', 'dlc_rejected_after_price_discount',
+        'bundle_offers_seen', 'bundle_offers_surviving_cheap_gate',
+        'bundle_offers_admitted', 'eligible_paid_rows_after_targeted_dlc',
+        'broad_shortlist_items', 'paid_shortlist_items',
     )
     metrics = {}
     for key in fields:
@@ -121,6 +127,7 @@ def bound_paid_source_funnel(ready, path=None):
     rejection_keys = (
         'non_paid_or_missing_price', 'discount_below_50',
         'price_above_4500', 'obvious_extras', 'software_only',
+        'obscure_low_signal',
     )
     if parsed is not None and accepted is not None and all(
         'paid_source_removed_' + key in metrics for key in rejection_keys
@@ -128,6 +135,24 @@ def bound_paid_source_funnel(ready, path=None):
         rejected = sum(metrics['paid_source_removed_' + key] for key in rejection_keys)
         if parsed != accepted + rejected:
             raise ValueError('paid discovery filtering funnel does not reconcile')
+    # Other stage denominators are sourced from their own complete, current
+    # GitHub producer artifacts; no inferred membership/price/suitability.
+    graph_path = Path('data/production/pre_ai/family_graph.json')
+    if graph_path.is_file():
+        graph = json.loads(graph_path.read_text(encoding='utf-8'))
+        if (graph.get('status') == 'complete'
+                and graph.get('source_updated_at_utc') == visual_source):
+            count = graph.get('family_count')
+            if type(count) is int and count >= 0:
+                metrics['paid_source_family_resolved_offers'] = count
+    package_path = Path('data/production/pre_ai/fixed_package_options.json')
+    if package_path.is_file():
+        packages = json.loads(package_path.read_text(encoding='utf-8'))
+        if (packages.get('status') == 'complete'
+                and packages.get('source_mailing_updated_at_utc') == visual_source):
+            count = packages.get('verified_package_content_resolution_count')
+            if type(count) is int and count >= 0:
+                metrics['paid_source_bundle_contents_resolved'] = count
     return {'metrics': metrics, 'partitions': partitions,
             'discovery_source_updated_at_utc': visual_source}
 
