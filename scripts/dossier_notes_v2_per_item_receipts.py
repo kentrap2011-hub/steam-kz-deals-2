@@ -435,11 +435,47 @@ def _single_remote_add(repo, *, branch, expected_remote_head, make_plan,
             git(repo, "worktree", "remove", "--force", str(work), required=False)
 
 
+def verify_scoped_semantic_run(repo, *, marker_commit, trial_id,
+                               authorization_commit, github_repository, github_token):
+    """Authenticate exact original18 owner Actions authorizer before ANY semantic push.
+
+    The inert historical fixture does not authorize semantics or claim GitHub
+    confirmation; its disposable bare Git regression remains operational.
+    """
+    anchor = issuer_structure(repo, marker_commit=marker_commit, trial_id=trial_id,
+                              authorization_commit=authorization_commit)
+    if not anchor["semantic_execution_authorized"]:
+        return anchor
+    config = v2._contract()
+    pilot = config.get("original18_trial_scoped_authorization") or {}
+    if (github_repository != "kentrap2011-hub/steam-kz-deals-2"
+            or not isinstance(github_token, str) or not github_token.strip()
+            or pilot.get("enabled") is not True):
+        v2.reject("wrong_binding", "scoped original18 semantic transport needs authenticated GitHub")
+    run_id = anchor["github_authorization_run_id"]
+    observed = _github_get(github_repository, "actions/runs/" + run_id, github_token)
+    if (observed.get("id") != int(run_id)
+            or observed.get("event") != "workflow_dispatch"
+            or observed.get("head_branch") != "main"
+            or observed.get("status") != "completed"
+            or observed.get("conclusion") != "success"
+            or observed.get("run_attempt") != 1
+            or observed.get("path") != config["manual_v2_issuer"]["workflow_authorize"]
+            or observed.get("actor", {}).get("id") != int(pilot["github_owner_actor_id"])
+            or observed.get("actor", {}).get("login") != pilot["github_owner_login"]):
+        v2.reject("wrong_binding", "original18 real owner GitHub Actions authorization not confirmed")
+    return {**anchor, "github_run_authenticated": True}
+
+
 def publish_candidate_remote(repo, *, branch, expected_remote_head,
                              marker_commit, trial_id, appid,
                              authorization_commit, document,
                              github_repository=None, github_token=None):
     """Publish ONE preexisting semantic document; never generate Research."""
+    verify_scoped_semantic_run(
+        repo, marker_commit=marker_commit, trial_id=trial_id,
+        authorization_commit=authorization_commit,
+        github_repository=github_repository, github_token=github_token)
     def plan(work):
         return prepare_candidate(work, marker_commit=marker_commit, trial_id=trial_id,
                                  appid=appid, authorization_commit=authorization_commit,
@@ -509,6 +545,10 @@ def publish_assembly_item_remote(repo, *, branch, expected_remote_head,
     Each item is independent; no scheduler, retry or final writer is invoked.
     """
     _sha(research_commit, "original Research introduction")
+    verify_scoped_semantic_run(
+        repo, marker_commit=marker_commit, trial_id=trial_id,
+        authorization_commit=authorization_commit,
+        github_repository=github_repository, github_token=github_token)
     def plan(work_repo):
         issuer_structure(work_repo, marker_commit=marker_commit,
                          trial_id=trial_id,
