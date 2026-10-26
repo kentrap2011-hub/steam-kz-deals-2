@@ -10,7 +10,7 @@ QUERIES = [
     (
         'game_dlc_relation',
         'https://store.steampowered.com/api/appdetails',
-        {'appids': '1091500', 'cc': 'kz', 'l': 'english', 'filters': 'dlc'},
+        {'appids': '1091500', 'cc': 'kz', 'l': 'english'},
     ),
     (
         'related_dlc_kz_price',
@@ -42,7 +42,7 @@ def main():
                 url, params=params, timeout=12,
                 headers={'User-Agent': 'SteamKZDeals/1.0 bounded-acceptance-recon'}
             )
-            record = {'name': name, 'http_status': response.status_code}
+            record = {'probe_id': name, 'http_status': response.status_code}
             if response.status_code == 200:
                 doc = response.json()
                 if name == 'discounted_games_partition':
@@ -71,7 +71,7 @@ def main():
                     })
             results.append(record)
         except Exception as exc:
-            results.append({'name': name, 'error': str(exc)[:200]})
+            results.append({'probe_id': name, 'error': str(exc)[:200]})
     print('BOUNDED_STEAM_KZ_SOURCE_PROBE=' +
           json.dumps(results, ensure_ascii=False, separators=(',', ':')))
     # Recon is diagnostic only: inconclusive live responses must not fail
