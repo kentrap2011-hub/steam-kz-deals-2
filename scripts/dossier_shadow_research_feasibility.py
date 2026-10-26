@@ -260,6 +260,240 @@ def publish_authorization(repo, *, expected_main, marker_commit):
     return {k: v for k, v in ready.items() if k != "items"}
 
 
+
+# Narrow V2 extension of the SAME original manual authorization mechanism.
+# Structural issuance never substitutes for separate human semantic execution.
+def assert_v2_authorizing_dispatch(expected, marker_commit, confirmation, env):
+    require(isinstance(expected, str) and SHA40.fullmatch(expected)
+            and isinstance(marker_commit, str) and SHA40.fullmatch(marker_commit),
+            "V2 exact main and marker SHA mandatory")
+    require(confirmation == "AUTHORIZE_DOSSIER_NOTES_V2_ORIGINAL18_ONCE",
+            "separate explicit V2 post-marker confirmation missing")
+    require(env.get("GITHUB_ACTIONS") == "true"
+            and env.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
+            and env.get("GITHUB_REPOSITORY") == REPOSITORY
+            and env.get("GITHUB_REF") == "refs/heads/main"
+            and env.get("GITHUB_WORKFLOW_REF") == REPOSITORY + "/" + WORKFLOW + "@refs/heads/main"
+            and env.get("GITHUB_SHA") == expected
+            and env.get("GITHUB_RUN_ATTEMPT") == "1",
+            "only first-attempt GitHub manual main authorizer may issue V2")
+
+
+def v2_freeze_chain(repo, *, marker_commit, trial_id,
+                    approved_main=None, grant_commit=None):
+    """Verify the exact, original-18 Git freeze shape and approved ancestry.
+
+    A first-attempt freeze workflow/run attribution is not an additional
+    issuance prerequisite; GitHub's authorized manual dispatch, immutable
+    manifest/marker and create-only branch are the operational boundary.
+    """
+    from dossier_shadow_research_trial_publish import v2_scope
+    from dossier_research_notes_v2 import _marker_nonce
+    cfg, m, rows = v2_scope(repo)
+    require(trial_id == m["trial_id"], "V2 freeze trial differs from approved original 18")
+    require(isinstance(marker_commit, str) and SHA40.fullmatch(marker_commit),
+            "V2 marker SHA must be exact")
+    parent = run(repo, "rev-parse", marker_commit + "^")
+    source = run(repo, "rev-parse", parent + "^")
+    assert_one_new_path(repo, source, parent, m["manifest_path"])
+    nonce = _marker_nonce(repo, marker_commit)
+    marker_path = "data/control/dossier_notes_v2/run_starts/" + nonce + ".json"
+    assert_one_new_path(repo, parent, marker_commit, marker_path)
+    require(json_git(repo, marker_commit, marker_path) == {
+                "schema":"DOSSIER-NOTES-V2-RUN-START",
+                "schema_version":2, "trial_id":trial_id, "nonce":nonce},
+            "V2 freeze marker must be exact original one-add payload")
+    require(json_git(repo, parent, m["manifest_path"]) == {
+                "schema":"DOSSIER-NOTES-V2-FROZEN-MANIFEST",
+                "schema_version":2, "trial_id":trial_id,
+                "original_pins":cfg["immutable_original_pins"], "items":rows},
+            "V2 manifest must be the exact previously approved original groups")
+    if approved_main is not None:
+        require(first_parent_contains(repo, source, approved_main),
+                "V2 freeze source is not on approved current main first-parent ancestry")
+    if grant_commit is not None:
+        require(isinstance(grant_commit, str) and SHA40.fullmatch(grant_commit)
+                and first_parent_contains(repo, grant_commit, source),
+                "V2 freeze source does not descend from approved original human grant")
+    return {"source_commit":source, "manifest_commit":parent,
+            "marker_commit":marker_commit, "marker_path":marker_path}
+
+
+def v2_expected_authorization(repo, *, marker_commit, trial_id,
+                              grant_commit, grant_blob, actor_id, run_id):
+    from dossier_research_notes_v2 import _manifest, _marker_nonce, blob as v2_blob
+    m, manifest_blob = _manifest(repo, marker_commit, trial_id)
+    parent = run(repo, "rev-parse", marker_commit + "^")
+    return {
+        "schema":"DOSSIER-NOTES-V2-MANUAL-RESEARCH-ISSUER-AUTHORIZATION",
+        "schema_version":2, "trial_id":trial_id,
+        "marker_commit":marker_commit, "marker_parent":parent,
+        "marker_nonce":_marker_nonce(repo, marker_commit),
+        "manifest_path":"data/control/dossier_notes_v2/manifests/" + trial_id + ".json",
+        "manifest_blob_sha":manifest_blob,
+        "original_pins":m["original_pins"],
+        "original_buffer_blob_sha":"c8a6b6f515162f431c0e3d86175376114c0acf7e",
+        "v2_contract_blob_sha":v2_blob(repo, parent,
+                                      "config/dossier_research_notes_v2_contract.json"),
+        "v2_research_guard_blob_sha":v2_blob(repo, parent,
+                                            "scripts/dossier_research_notes_v2.py"),
+        "human_grant_commit":grant_commit,
+        "human_grant_blob_sha":grant_blob,
+        "github_actor_id":actor_id, "github_authorization_run_id":run_id,
+        "mode":"original18_inactive_V2_control_plane_issuance_only",
+        "semantic_execution_authorized":False,
+        "canonical_acceptance":False, "assembly_authorized":False,
+        "production_authorized":False,
+    }
+
+
+def local_v2_authorization(repo, *, marker_commit, trial_id,
+                           grant_commit, grant_blob, actor_id, run_id):
+    """One true additive Git commit; same V1 create-only primitive, fixture-safe."""
+    from dossier_shadow_research_trial_publish import v2_scope
+    _, m, _ = v2_scope(repo)
+    require(trial_id == m["trial_id"], "not the one predefined V2 trial")
+    doc = v2_expected_authorization(
+        repo, marker_commit=marker_commit, trial_id=trial_id,
+        grant_commit=grant_commit, grant_blob=grant_blob,
+        actor_id=actor_id, run_id=run_id)
+    path = m["authorization_path"]
+    raw = (json.dumps(doc, sort_keys=True, separators=(",", ":")) + "\n").encode()
+    commit = commit_new(repo, path, raw,
+                        "Authorize original-18 inactive Notes V2 Git issuer only")
+    assert_one_new_path(repo, marker_commit, commit, path)
+    return commit
+
+
+def verify_v2_authorization(repo, *, marker_commit, authorization_commit):
+    """Immutable Git shape only. Does not authenticate a completed GH run."""
+    from dossier_shadow_research_trial_publish import v2_scope
+    from dossier_research_notes_v2 import _manifest, _original_rows
+    _, m, rows = v2_scope(repo)
+    trial_id = m["trial_id"]
+    require(marker_commit not in (
+                "bb63cc291eba5aa8fc56e2920ef84d131ac28a4f",
+                "2a726cf6731c0fc1e7bc809474627383c107ef9b")
+            and authorization_commit not in (
+                "bb63cc291eba5aa8fc56e2920ef84d131ac28a4f",
+                "2a726cf6731c0fc1e7bc809474627383c107ef9b"),
+            "historic V1 SHA can never grant V2")
+    require(isinstance(marker_commit, str) and SHA40.fullmatch(marker_commit)
+            and isinstance(authorization_commit, str)
+            and SHA40.fullmatch(authorization_commit),
+            "exact 40-hex new V2 SHA required")
+    parents = git(repo, "rev-list", "--parents", "-n", "1",
+                  authorization_commit).stdout.decode().split()
+    require(parents == [authorization_commit, marker_commit],
+            "new V2 authorization must be the single direct child of marker")
+    delta = git(repo, "diff-tree", "--no-commit-id", "--name-status", "-r",
+                authorization_commit).stdout.decode().splitlines()
+    require(delta == ["A\t" + m["authorization_path"]],
+            "authorization may add one predefined V2 path only")
+    # Verify the earlier Git parent and original one-add tree independently,
+    # not just the later authorization's own direct-child shape.
+    v2_freeze_chain(repo, marker_commit=marker_commit, trial_id=trial_id,
+                    approved_main=run(repo, "rev-parse", "refs/heads/main"))
+    manifest, manifest_blob = _manifest(repo, marker_commit, trial_id)
+    require(manifest["items"] == rows, "authorization changed original frozen 18")
+    record = json_git(repo, authorization_commit, m["authorization_path"])
+    grant = m["human_grant"]
+    require(isinstance(record.get("github_actor_id"), str)
+            and record["github_actor_id"].isdigit()
+            and isinstance(record.get("github_authorization_run_id"), str)
+            and record["github_authorization_run_id"].isdigit()
+            and record.get("human_grant_commit") == grant["commit"]
+            and record.get("human_grant_blob_sha") == grant["blob_sha"]
+            and record["github_actor_id"] == grant["github_actor_id"],
+            "authorization lacks exact approved human grant or typed GitHub actor/run")
+    expected = v2_expected_authorization(
+        repo, marker_commit=marker_commit, trial_id=trial_id,
+        grant_commit=record.get("human_grant_commit"),
+        grant_blob=record.get("human_grant_blob_sha"),
+        actor_id=record["github_actor_id"],
+        run_id=record["github_authorization_run_id"])
+    require(record == expected, "V2 authorization/pin/parent/grant mismatch")
+    # Authorization exists as an inactive control-plane proof, never approval
+    # for Research semantics or authenticated GH Actions run attestation.
+    return {"status":"structural_V2_issuer_only_not_semantic_permission",
+            "marker_commit":marker_commit,
+            "authorization_commit":authorization_commit,
+            "manifest_blob_sha":manifest_blob,
+            "github_actor_id":record["github_actor_id"],
+            "github_authorization_run_id":record["github_authorization_run_id"],
+            "semantic_execution_authorized":False}
+
+
+def publish_v2_authorization(repo, *, expected_main, marker_commit):
+    from dossier_shadow_research_trial_publish import v2_grant, v2_scope
+    from dossier_research_notes_v2 import blob as v2_blob, _manifest
+    assert_canonical_remote(repo)
+    require(run(repo, "symbolic-ref", "--short", "HEAD") == "main"
+            and run(repo, "rev-parse", "HEAD") == expected_main
+            and remote_sha(repo, "refs/heads/main") == expected_main,
+            "main checkout/remote drifted before V2 authorization")
+    assert_clean(repo)
+    _, m, _ = v2_grant(repo, expected_main, os.environ)
+    ref = "refs/heads/" + m["sandbox_branch"]
+    require(remote_sha(repo, ref) == marker_commit,
+            "V2 ref must be exactly marker HEAD; no second authorization/replay")
+    run(repo, "fetch", "--no-tags", "origin", ref)
+    require(run(repo, "rev-parse", "FETCH_HEAD") == marker_commit,
+            "genuine V2 marker ref cannot be fetched")
+    # Bind the exact two one-add commits to the approved MAIN first-parent
+    # lineage; an extra external freeze-run attestation is not required.
+    v2_freeze_chain(repo, marker_commit=marker_commit, trial_id=m["trial_id"],
+                    approved_main=expected_main,
+                    grant_commit=m["human_grant"]["commit"])
+    # Bind the authorizer to ALL immutable source contracts from marker parent.
+    parent = run(repo, "rev-parse", marker_commit + "^")
+    for path in ("config/dossier_research_notes_v2_contract.json",
+                 "scripts/dossier_research_notes_v2.py",
+                 "scripts/dossier_shadow_research_trial_publish.py",
+                 "scripts/dossier_shadow_research_feasibility.py"):
+        require(v2_blob(repo, parent, path) == v2_blob(repo, expected_main, path),
+                "V2 predeclared code/contract drifted after freeze: " + path)
+    run(repo, "checkout", "--detach", marker_commit)
+    assert_clean(repo)
+    _manifest(repo, marker_commit, m["trial_id"])
+    commit = local_v2_authorization(
+        repo, marker_commit=marker_commit, trial_id=m["trial_id"],
+        grant_commit=m["human_grant"]["commit"],
+        grant_blob=m["human_grant"]["blob_sha"],
+        actor_id=os.environ["GITHUB_ACTOR_ID"],
+        run_id=os.environ["GITHUB_RUN_ID"])
+    proof = verify_v2_authorization(
+        repo, marker_commit=marker_commit, authorization_commit=commit)
+    require(remote_sha(repo, ref) == marker_commit
+            and remote_sha(repo, "refs/heads/main") == expected_main,
+            "raced V2 ref/main prevents authorization")
+    run(repo, "push", "--porcelain",
+        "--force-with-lease=" + ref + ":" + marker_commit,
+        "origin", "HEAD:" + ref)
+    require(remote_sha(repo, ref) == commit,
+            "V2 authorization remote head not exact")
+    run(repo, "fetch", "--no-tags", "origin", ref)
+    require(run(repo, "rev-parse", "FETCH_HEAD") == commit,
+            "V2 authorization remote re-fetch failed")
+    return {**proof, "sandbox_branch":m["sandbox_branch"],
+            "human_grant_commit":m["human_grant"]["commit"],
+            "status":"issued_inactive_V2_authorization_not_semantics"}
+
+
+def authorized_v2_structure_only(repo, *, marker_commit, authorization_commit):
+    """Read-only remote structural proof; deliberately no semantic readiness."""
+    from dossier_shadow_research_trial_publish import v2_scope
+    assert_canonical_remote(repo)
+    proof = verify_v2_authorization(
+        repo, marker_commit=marker_commit, authorization_commit=authorization_commit)
+    _, m, _ = v2_scope(repo)
+    remote = remote_sha(repo, "refs/heads/" + m["sandbox_branch"])
+    require(remote is not None
+            and first_parent_contains(repo, authorization_commit, remote)
+            and first_parent_contains(repo, marker_commit, authorization_commit),
+            "authorization not on actual V2 remote first-parent chain")
+    return {**proof, "remote_head":remote, "semantic_execution_authorized":False}
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     mode = ap.add_mutually_exclusive_group(required=True)
@@ -270,8 +504,27 @@ def main():
     ap.add_argument("--authorization-commit")
     ap.add_argument("--expected-main-sha")
     ap.add_argument("--confirmation")
+    ap.add_argument("--version", choices=("v1", "v2"), default="v1")
     a = ap.parse_args()
     repo = Path.cwd().resolve()
+    if a.version == "v2":
+        require(a.buffer_path == BUFFER, "V2 has no caller-supplied buffer")
+        if a.authorize:
+            require(a.authorization_commit is None, "V2 issuer must not accept an authority SHA")
+            assert_v2_authorizing_dispatch(a.expected_main_sha, a.marker_commit,
+                                           a.confirmation, os.environ)
+            result = publish_v2_authorization(repo, expected_main=a.expected_main_sha,
+                                              marker_commit=a.marker_commit)
+        else:
+            require(a.expected_main_sha is None and a.confirmation is None
+                    and a.authorization_commit is not None,
+                    "V2 verifier is read-only and requires exact authorization SHA")
+            result = authorized_v2_structure_only(
+                repo, marker_commit=a.marker_commit,
+                authorization_commit=a.authorization_commit)
+        print(json.dumps(result, sort_keys=True, ensure_ascii=False, indent=2))
+        print("sandbox_research_invocation_ready=blocked")
+        return
     if a.authorize:
         assert_authorizing_dispatch(a.expected_main_sha, a.marker_commit,
                                     a.confirmation, os.environ)
