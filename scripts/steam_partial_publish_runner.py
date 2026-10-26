@@ -1234,6 +1234,42 @@ def run():
             item['russian_review_positive'] = result['russian']['positive']
             item['russian_review_count'] = result['russian']['count']
 
+    # After the normal review/suitability route has decided which BASE games
+    # qualify, look up only the DLC that Steam explicitly associates with them.
+    # The package lane is sourced independently from on-sale Sub_ search rows.
+    base_admitted_ids = targeted.suitable_base_ids(items, failed_keys, core, today)
+    packages, package_stats = targeted.classify_discounted_package_rows(items, core)
+    reporter.set_stage('targeted_dlc_relations',
+                       admitted_base_count=len(base_admitted_ids),
+                       bundle_surviving_cheap_gate=len(packages))
+    relation_started = time.monotonic()
+    try:
+        targeted_dlc, dlc_stats = targeted.discover_dlc_for_bases(
+            base_admitted_ids, core, reporter=reporter
+        )
+    except Exception as exc:
+        reporter.set_stage('targeted_dlc_relations_failed', error=str(exc))
+        reporter.stop()
+        failures.write()
+        raise SystemExit(
+            'Verified parent-targeted DLC discovery incomplete; prior paid '
+            f'publication kept unchanged: {exc}'
+        )
+    stage_timings_seconds['targeted_dlc_relations'] = round(
+        time.monotonic() - relation_started, 3
+    )
+    # A DLC offer may belong to several eligible bases, but it is one exact
+    # App_ identity, not one row per relationship.
+    for key, item in sorted(targeted_dlc.items()):
+        if key in catalog:
+            raise SystemExit(f'Expected disjoint game and DLC identity: {key}')
+        catalog[key] = item
+        items.append(item)
+    items.sort(key=lambda item: (item['title'].casefold(), item['key']))
+    source_unique_eligible_count = len(items) - len(targeted_dlc)
+    reporter.update(targeted_paid_candidates=len(items),
+                    dlc_targeted_added=len(targeted_dlc), emit=True)
+
     broad = []
     broad_reason_counts = Counter()
     excluded_extra = int(source_rejection_counts.get('obvious_extra', 0))
@@ -1249,7 +1285,15 @@ def run():
                 excluded_extra += 1
             elif tags & core['SOFTWARE_TAGS'] and not tags & core['GAME_TAGS']:
                 excluded_software += 1
-            reasons, fit_tags = core['broad_reasons'](item, today)
+            if key in packages:
+                reasons, fit_tags = ['current_discounted_multi_game_package'], []
+            elif key in targeted_dlc:
+                # Base-game quality is a parent admissibility prerequisite,
+                # not a fictional DLC review score. DLC receives its own
+                # later semantic assessment under the canonical pipeline.
+                reasons, fit_tags = ['verified_relevant_dlc'], []
+            else:
+                reasons, fit_tags = core['broad_reasons'](item, today)
         except Exception as exc:
             failures.record_game(
                 key,
@@ -1287,7 +1331,12 @@ def run():
     for item in broad:
         key = item['key']
         try:
-            reasons, core_fit_count = core['refined_reasons'](item)
+            if key in packages:
+                reasons, core_fit_count = ['current_discounted_multi_game_package'], 0
+            elif key in targeted_dlc:
+                reasons, core_fit_count = ['verified_relevant_dlc'], 0
+            else:
+                reasons, core_fit_count = core['refined_reasons'](item)
         except Exception as exc:
             failures.record_game(
                 key,
@@ -1460,8 +1509,23 @@ def run():
         'removed_software_only': int(
             source_rejection_counts.get('software_only', 0)
         ),
+        'removed_obscure_low_signal': int(
+            source_rejection_counts.get('obscure_low_signal', 0)
+        ),
+        'base_candidates_entering_lightweight_suitability': sum(
+            item['key'].startswith('App_') and item['key'] not in targeted_dlc
+            for item in items
+        ),
+        'eligible_suitable_base_games': len(base_admitted_ids),
+        'dlc_identified_from_admitted_bases': dlc_stats['related_dlc_unique_ids'],
+        'dlc_admitted_after_price_discount': len(targeted_dlc),
+        'dlc_rejected_after_price_discount': dlc_stats['dlc_rejected_after_paid_gate'],
+        'bundle_offers_seen': package_stats['bundle_offers_seen'],
+        'bundle_offers_surviving_cheap_gate': package_stats['bundle_offers_survived_cheap_gate'],
+        'bundle_offers_admitted': sum(row['key'] in packages for row in selected),
         'eligible_rows_before_partition_dedupe': eligible_rows_seen,
-        'unique_eligible_after_partition_dedupe': len(items),
+        'unique_eligible_after_partition_dedupe': source_unique_eligible_count,
+        'eligible_paid_rows_after_targeted_dlc': len(items),
         'review_candidate_items': len(review_candidate_items),
         'review_candidate_appids': len(review_appids),
         'broad_shortlist_items': len(broad),
@@ -1483,7 +1547,7 @@ def run():
     )
 
     manifest = {
-        'collector_version': 9,
+        'collector_version': 10,
         'source': 'Steam Store',
         'country_code': 'kz',
         'region': 'Kazakhstan',
@@ -1497,6 +1561,9 @@ def run():
         'search_query_shape': 'explicit_partitions',
         'search_combined_category_query_used': False,
         'search_partitions': partition_stats,
+        'targeted_dlc_discovery': dlc_stats,
+        'independent_discounted_packages': package_stats,
+        'base_game_eligible_count': len(base_admitted_ids),
         'search_specials_only': True,
         'search_hidef2p_paid_partitions': True,
         'search_maxprice_kzt': core['PAID_MAX_PRICE_KZT'],
@@ -1543,6 +1610,8 @@ def run():
         },
         'network_stats': review_network_stats,
         'filtering_funnel': filtering_funnel,
+        'targeted_dlc_discovery': dlc_stats,
+        'independent_discounted_packages': package_stats,
         'items_with_review_data': items_with_search_review_data,
         'review_coverage': round(search_review_coverage, 6),
         'items_with_search_review_data': items_with_search_review_data,
