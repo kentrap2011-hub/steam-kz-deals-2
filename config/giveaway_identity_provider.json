@@ -2,17 +2,29 @@
   "contract": "GIVEAWAY-IDENTITY-PROVIDER-V1",
   "status": "canonical",
   "giveaway_identity_provider": "itad",
-  "recognized_providers": ["itad", "igdb"],
-  "implemented_providers": ["itad"],
+  "recognized_providers": [
+    "itad",
+    "igdb"
+  ],
+  "implemented_providers": [
+    "itad"
+  ],
   "unavailable_selection": "provider_not_ready; no fallback",
   "identity_rule": "Exact persisted source product ID -> exactly one ITAD game UUID -> exactly one Steam app/<digits>. Titles, slugs, web searches, prices and manual exceptions are not identity authority.",
   "itad": {
     "api_base": "https://api.isthereanydeal.com",
     "shop_map": "/service/shops/map/v1",
     "shop_titles": {
-      "steam": ["Steam"],
-      "epic": ["Epic Games Store"],
-      "gog": ["GOG", "GOG.com"]
+      "steam": [
+        "Steam"
+      ],
+      "epic": [
+        "Epic Game Store"
+      ],
+      "gog": [
+        "GOG",
+        "GOG.com"
+      ]
     },
     "forward": "/lookup/id/shop/{shopId}/v1",
     "reverse": "/lookup/shop/{shopId}/id/v1",
