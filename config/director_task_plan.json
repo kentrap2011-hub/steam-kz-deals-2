@@ -2460,6 +2460,24 @@
       "recent_completion": false,
       "updated_on": "2026-10-26",
       "updated_at_utc": "2026-10-26T18:00:00Z"
+    },
+    {
+      "id": "dossier-v2-original18-real-pilot-end-to-end-route-implement-01",
+      "title": "ЧАТ 3 — реальный маршрут Research → Assembly для исходных 18 игр",
+      "goal": "Реализовать недостающий исполняемый end-to-end маршрут Dossier V2 original18, используя принятые issuer/Research receipts/Assembly writer; довести до live пробного запуска при наличии ручных GitHub/semantic capabilities, без production и очередного аудита.",
+      "status": "planned",
+      "effort": "высокая",
+      "effort_reason": "Из уже имеющихся V2 модулей нужно выполнить scoped authorization/semantic handoff и реальную поигровую запись через GitHub, без дублирования архитектуры.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь прямо одобрил реальное испытание 18 игр и потребовал сделать недостающий рабочий маршрут, а не продолжать подготовку.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_ORIGINAL18_REAL_PILOT_END_TO_END_ROUTE_IMPLEMENT_01.md",
+      "worker_slot": "ЧАТ 3",
+      "order": null,
+      "depends_on": [],
+      "blocker": "НОВЫЙ физический ЧАТ 3; пользователь уже разрешил оригинальное one-shot испытание 18 игр. GitHub dispatch и реальные semantic worker invocations могут требовать пользовательского действия в UI, не имитировать их. ЧАТ 1 завершил аналитический отчёт, ЧАТЫ 2/4 занимались отдельными уже выполненными задачами.",
+      "recent_completion": false,
+      "updated_on": "2026-10-26",
+      "updated_at_utc": "2026-10-26T18:30:00Z"
     }
   ]
 }
