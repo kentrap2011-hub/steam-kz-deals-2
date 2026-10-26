@@ -1,0 +1,35 @@
+{
+  "contract": "GIVEAWAY-IDENTITY-PROVIDER-V1",
+  "status": "canonical",
+  "giveaway_identity_provider": "itad",
+  "recognized_providers": ["itad", "igdb"],
+  "implemented_providers": ["itad"],
+  "unavailable_selection": "provider_not_ready; no fallback",
+  "identity_rule": "Exact persisted source product ID -> exactly one ITAD game UUID -> exactly one Steam app/<digits>. Titles, slugs, web searches, prices and manual exceptions are not identity authority.",
+  "itad": {
+    "api_base": "https://api.isthereanydeal.com",
+    "shop_map": "/service/shops/map/v1",
+    "shop_titles": {
+      "steam": ["Steam"],
+      "epic": ["Epic Games Store"],
+      "gog": ["GOG", "GOG.com"]
+    },
+    "forward": "/lookup/id/shop/{shopId}/v1",
+    "reverse": "/lookup/shop/{shopId}/id/v1",
+    "auth": "none_or_optional_api_key_header",
+    "github_secret_if_provisioned": "ITAD_API_KEY",
+    "attribution_url": "https://isthereanydeal.com/",
+    "attribution_label": "Game identity via IsThereAnyDeal"
+  },
+  "cache": {
+    "path": "data/production/giveaways/v1/identity_cache.json",
+    "resolved_ttl_hours": 168,
+    "unresolved_ttl_hours": 24
+  },
+  "ownership": {
+    "writer": "scripts/giveaway_production.py",
+    "control_plane": "github_actions",
+    "browser_external_fetch": false,
+    "second_scheduler": false
+  }
+}
