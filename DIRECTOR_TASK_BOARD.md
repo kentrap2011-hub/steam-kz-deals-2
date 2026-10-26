@@ -5,6 +5,11 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## НОВОЕ НЕЗАВИСИМОЕ ПОРУЧЕНИЕ — НУМЕРАЦИЯ И МОДЕЛЬ ЧАТОВ, 2026-10-26
+
+- **НОВЫЙ ЧАТ 1**: `director-chat-numbering-cause-and-redesign-options-audit-01` → `WORKER_TASK_DIRECTOR_CHAT_NUMBERING_CAUSE_AND_REDESIGN_OPTIONS_AUDIT_01.md`. Независимо выяснить причины повторной путаницы номеров, физического чата и task ID; сравнить любые варианты от точечной правки правил до отказа от самой модели Director/worker или введения другой роли; для каждого варианта плюсы, минусы, риски и цена внедрения. Только самостоятельный отчёт, не изменять текущую схему до решения пользователя.
+- **НОВЫЕ ЧАТЫ 2 и 4** пользователь уже запустил по другим заданиям. Они остаются самостоятельными активными физическими диалогами; этот ЧАТ 1 их не переназначает. ЧАТ 3 свободен. Поручение ЧАТА 1 не является prerequisite для завершения Dossier V2 или параллельного широкого исследования ЧАТА 4.
+
 ## НОВЫЕ ПОРУЧЕНИЯ ПО РЕШЕНИЮ ПОЛЬЗОВАТЕЛЯ — 2026-10-26
 
 - **НОВЫЙ ЧАТ 2:** `dossier-v2-pr266-remove-extra-freeze-provenance-gate-01` → `WORKER_TASK_DOSSIER_V2_PR266_REMOVE_EXTRA_FREEZE_PROVENANCE_GATE_01.md`. Пользователь отверг дополнительную внешнюю аттестацию происхождения freeze в личном проекте. Удалить именно искусственный блокирующий gate из уже исправленного №266; штатное разрешение на конкретный запуск, записи по 18 и режим V1 сохранять. Не запускать настоящий V2 Research/Assembly.
