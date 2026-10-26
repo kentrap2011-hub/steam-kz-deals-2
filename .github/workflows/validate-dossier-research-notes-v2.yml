@@ -13,6 +13,7 @@ on:
       - "scripts/dossier_two_stage_versioned.py"
       - "scripts/test_dossier_research_notes_v2.py"
       - "scripts/dossier_notes_v2_per_item_receipts.py"
+      - "scripts/dossier_notes_v2_original18_pilot.py"
       - "scripts/test_dossier_notes_v2_per_item_receipts.py"
       - ".github/workflows/validate-dossier-research-notes-v2.yml"
 
@@ -38,7 +39,7 @@ jobs:
         run: python scripts/test_dossier_notes_v2_per_item_receipts.py -v
       - name: Syntax and PR activation guard
         run: |
-          python -m py_compile scripts/dossier_research_notes_v2.py scripts/dossier_two_stage_versioned.py
+          python -m py_compile scripts/dossier_research_notes_v2.py scripts/dossier_two_stage_versioned.py scripts/dossier_notes_v2_per_item_receipts.py scripts/dossier_notes_v2_original18_pilot.py
           python - <<'PY'
           import json
           for name in ('dossier_research_notes_v2_contract.json','dossier_research_notes_v2.schema.json','dossier_autonomous_assembly_result_v2.schema.json','dossier_notes_v2_item_receipt.schema.json'):
