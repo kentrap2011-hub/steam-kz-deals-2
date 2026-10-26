@@ -5,6 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## НОВЫЕ ПОРУЧЕНИЯ ПО РЕШЕНИЮ ПОЛЬЗОВАТЕЛЯ — 2026-10-26
+
+- **НОВЫЙ ЧАТ 2:** `dossier-v2-pr266-remove-extra-freeze-provenance-gate-01` → `WORKER_TASK_DOSSIER_V2_PR266_REMOVE_EXTRA_FREEZE_PROVENANCE_GATE_01.md`. Пользователь отверг дополнительную внешнюю аттестацию происхождения freeze в личном проекте. Удалить именно искусственный блокирующий gate из уже исправленного №266; штатное разрешение на конкретный запуск, записи по 18 и режим V1 сохранять. Не запускать настоящий V2 Research/Assembly.
+- **НОВЫЙ ЧАТ 4:** `director-verification-overhead-operating-model-options-audit-01` → `WORKER_TASK_DIRECTOR_VERIFICATION_OVERHEAD_OPERATING_MODEL_OPTIONS_AUDIT_01.md`. Независимо разобрать циклические перепроверки и конфликтующие director PR и **свободно** сравнить минимальные изменения, релизные роли, полный редизайн рабочего процесса и прочие модели. Не ограничивать число альтернатив или их глубину, но не менять код/правила без решения пользователя.
+- Прежние ЧАТ 2 (исправил №266) и ЧАТ 4 (проанализировал Dossier) **завершены**; номера выше только для НОВЫХ физических диалогов. Работы параллельны. Предыдущее №299 принято в main, №270 тесты 14/14 прошли, но №270 пока не принято в main. №300 обновлялось после №301, однако из-за дальнейших изменений правила снова возник merge conflict; до нового совместимого решения не говорить, что оно принято. Ни один настоящий V2 запуск не разрешён.
+
 ## АКТУАЛЬНЫЕ ПАРАЛЛЕЛЬНЫЕ ЗАДАНИЯ — 2026-10-26
 
 - **НОВЫЙ ЧАТ 1**: `WORKER_TASK_DIRECTOR_PR299_PR300_FINAL_INDEPENDENT_ACCEPTANCE_01.md` — одно независимое заключение по двум уже готовым небольшим изменениям директора №299 и №300; не повторять полный аудит.
