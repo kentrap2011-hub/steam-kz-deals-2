@@ -56,6 +56,21 @@ def issuer_structure(repo, *, marker_commit, trial_id, authorization_commit):
         v2.reject("broken_git_provenance", "issuer was overwritten")
     record = strict_json(file_at(repo, authorization_commit, path))
     marker_parent = parent(repo, marker_commit)
+    grant_commit = record.get("human_grant_commit") if isinstance(record, dict) else None
+    grant_path = "config/dossier_notes_v2_issuer_human_grant.json"
+    _sha(grant_commit, "immutable human grant")
+    grant_record = strict_json(file_at(repo, grant_commit, grant_path))
+    pilot = c.get("original18_trial_scoped_authorization") or {}
+    scoped = (
+        pilot.get("enabled") is True
+        and grant_record.get("semantic_execution_approved") is True
+        and grant_commit == parent(repo, marker_parent)
+        and record.get("github_actor_id") == pilot.get("github_owner_actor_id")
+        and grant_record.get("github_actor_id") == pilot.get("github_owner_actor_id")
+        and pilot.get("isolated_sandbox_only") is True
+        and pilot.get("canonical_ingest") is False
+        and pilot.get("production") is False
+    )
     nonce = v2._marker_nonce(repo, marker_commit)
     required = {
         "schema": ISSUER_SCHEMA,
@@ -68,10 +83,11 @@ def issuer_structure(repo, *, marker_commit, trial_id, authorization_commit):
         "manifest_blob_sha": manifest_sha,
         "original_pins": c["immutable_original_pins"],
         "original_buffer_blob_sha": c["original_research_identity_authority"]["original_buffer_git_blob_sha"],
-        "mode": "original18_inactive_V2_control_plane_issuance_only",
-        "semantic_execution_authorized": False,
+        "mode": ("original18_scoped_nonproduction_semantic_trial" if scoped
+                 else "original18_inactive_V2_control_plane_issuance_only"),
+        "semantic_execution_authorized": scoped,
         "canonical_acceptance": False,
-        "assembly_authorized": False,
+        "assembly_authorized": scoped,
         "production_authorized": False,
     }
     extra = {
@@ -92,7 +108,6 @@ def issuer_structure(repo, *, marker_commit, trial_id, authorization_commit):
     grant_commit = record["human_grant_commit"]
     if not first_parent_contains(repo, grant_commit, marker_parent):
         v2.reject("wrong_binding", "issuer grant is not an ancestor of marker parent")
-    grant_path = "config/dossier_notes_v2_issuer_human_grant.json"
     require_only_new(repo, grant_commit, [grant_path])
     v2._assert_unchanged_since(repo, grant_commit, grant_path)
     if (blob(repo, grant_commit, grant_path) != record["human_grant_blob_sha"]
@@ -107,7 +122,7 @@ def issuer_structure(repo, *, marker_commit, trial_id, authorization_commit):
         "original_groups": c["original_groups"],
         "github_actor_id": record["github_actor_id"],
         "scope": "issue_single_original18_V2_manifest_marker_then_separate_authorization_only",
-        "semantic_execution_approved": False, "production_approved": False,
+        "semantic_execution_approved": scoped, "production_approved": False,
     }
     if grant != expected_grant:
         v2.reject("wrong_binding", "issuer does not refer to an exact scoped structural grant")
@@ -129,7 +144,7 @@ def issuer_structure(repo, *, marker_commit, trial_id, authorization_commit):
         "github_actor_id": record["github_actor_id"],
         "github_authorization_run_id": record["github_authorization_run_id"],
         "issuer_structural_only": True,
-        "semantic_execution_authorized": False,
+        "semantic_execution_authorized": scoped,
         "github_run_authenticated": False,
     }
 
