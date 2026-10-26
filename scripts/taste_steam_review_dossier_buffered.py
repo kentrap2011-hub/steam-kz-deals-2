@@ -1045,7 +1045,7 @@ def apply_buffered_drain(
 
 def _drain_notes_v2_individual(
     *, repo, marker_commit, trial_id, item_commits, store_dir, accepted_dir,
-    offline_fixture=False,
+    offline_fixture=False, trial_sandbox=False,
 ):
     """V2-only per-item extension of the existing canonical Dossier writer.
 
@@ -1073,6 +1073,67 @@ def _drain_notes_v2_individual(
             or spec.get("v1_group_writer_unchanged") is not True):
         raise ValueError("unrecognized V2 single-item writer authority")
     root = Path(repo).resolve()
+    if offline_fixture and trial_sandbox:
+        raise ValueError("nonproduction GitHub pilot must not use offline fixture mode")
+    if trial_sandbox:
+        import os
+        from dossier_notes_v2_per_item_receipts import issuer_structure, _github_get
+        from dossier_two_stage_staging import git, json_at
+        source = json.loads(
+            (Path(__file__).resolve().parents[1] / "config" /
+             "dossier_research_notes_v2_contract.json").read_text(encoding="utf-8"))
+        )
+        pilot = source.get("original18_trial_scoped_authorization", {})
+        issuer = source.get("manual_v2_issuer", {})
+        branch = "sandbox/dossier-notes-v2-original18-first"
+        if (not pilot.get("enabled") or not pilot.get("isolated_sandbox_only")
+                or pilot.get("production") is not False
+                or pilot.get("canonical_ingest") is not False
+                or source.get("active") is not False
+                or source.get("authorized_for_canonical_ingest") is not False
+                or issuer.get("trial_id") != trial_id
+                or trial_id != pilot.get("exact_trial_id")
+                or git(root, "symbolic-ref", "--short", "HEAD").stdout.decode().strip()
+                != branch
+                or os.environ.get("GITHUB_ACTIONS") != "true"
+                or os.environ.get("GITHUB_EVENT_NAME") != "workflow_dispatch"
+                or os.environ.get("GITHUB_REF") != "refs/heads/main"
+                or os.environ.get("GITHUB_ACTOR_ID") != pilot.get("github_owner_actor_id")
+                or os.environ.get("GITHUB_ACTOR") != pilot.get("github_owner_login")
+                or os.environ.get("GITHUB_RUN_ATTEMPT") != "1"):
+            raise ValueError("only exact original18 owner manual GitHub sandbox trial may persist")
+        path = "data/control/dossier_notes_v2/authorizations/" + trial_id + ".json"
+        authorization_commit = json_at(root, "HEAD", path)
+        authorization_commit = authorization_commit.get("marker_commit")  # checked below
+        # The immutable authorizer is pinned as the marker's exact child and
+        # must be an ancestor of the actual current sandbox HEAD.
+        from dossier_two_stage_staging import first_parent_contains
+        auth = git(root, "rev-list", "--first-parent", "--format=%H",
+                   "HEAD", "--", path).stdout.decode().splitlines()
+        auth = [v for v in auth if len(v) == 40 and all(c in "0123456789abcdef" for c in v)]
+        if len(auth) != 1:
+            raise ValueError("original18 immutable authorizer must be unique")
+        evidence = issuer_structure(
+            root, marker_commit=marker_commit, trial_id=trial_id,
+            authorization_commit=auth[0])
+        if not evidence["semantic_execution_authorized"]:
+            raise ValueError("scoped original18 authorizer does not grant semantics")
+        token = os.environ.get("GITHUB_TOKEN")
+        if not token:
+            raise ValueError("authenticated original18 GitHub run proof unavailable")
+        run_id = evidence["github_authorization_run_id"]
+        event = _github_get("kentrap2011-hub/steam-kz-deals-2",
+                            "actions/runs/" + run_id, token)
+        if (event.get("id") != int(run_id)
+                or event.get("status") != "completed"
+                or event.get("conclusion") != "success"
+                or event.get("event") != "workflow_dispatch"
+                or event.get("head_branch") != "main"
+                or event.get("run_attempt") != 1
+                or event.get("actor", {}).get("id") != int(pilot["github_owner_actor_id"])
+                or event.get("actor", {}).get("login") != pilot["github_owner_login"]
+                or event.get("path") != issuer["workflow_authorize"]):
+            raise ValueError("actual original18 owner GitHub authorizing run not confirmed")
     if offline_fixture:
         # The old bridge's fixture gate ensures a separate disposable Git
         # checkout. Never accept a forged flag in a real/local project clone.
@@ -1081,7 +1142,7 @@ def _drain_notes_v2_individual(
         if (spec.get("active") is not False
                 or spec.get("authorized_for_canonical_ingest") is not False):
             raise ValueError("offline V2 writer must remain nonactive")
-    else:
+    elif not trial_sandbox:
         # The V2-only item rule takes precedence over the older three-game
         # Notes V2 field ONLY for this explicit mode. V1 keeps its own gate.
         # Both sources of authority and downstream Deep safety must first be
@@ -1100,7 +1161,11 @@ def _drain_notes_v2_individual(
             or not store.is_relative_to(root) or not accepted.is_relative_to(root)
             or store.is_relative_to(accepted) or accepted.is_relative_to(store)):
         raise ValueError("V2 single-item paths must be separate writer-owned subdirectories")
-    if not offline_fixture:
+    if trial_sandbox:
+        if (store != root / "data/control/dossier_notes_v2/pilot_store"
+                or accepted != root / "data/control/dossier_notes_v2/pilot_accepted"):
+            raise ValueError("V2 original18 pilot may persist only in sandbox data/control")
+    elif not offline_fixture:
         if (store != root / "data/cache/taste_steam_review_dossiers"
                 or accepted != root / "data/control/dossier_notes_v2/canonical_accepted"):
             raise ValueError("V2 live destination differs from existing shared canonical writer")
@@ -1160,7 +1225,8 @@ def _drain_notes_v2_individual(
                     and receipt.resolve().is_relative_to(accepted)):
                 raise ValueError("V2 writer destination escapes canonical directories")
             bound_receipt = {
-                "schema": "DOSSIER-NOTES-V2-INDIVIDUAL-CANONICAL-ACCEPTANCE-V1",
+                "schema": ("DOSSIER-NOTES-V2-ISOLATED-TRIAL-RECEIPT-V1"
+                           if trial_sandbox else "DOSSIER-NOTES-V2-INDIVIDUAL-CANONICAL-ACCEPTANCE-V1"),
                 "trial_id": trial_id, "marker_commit": marker_commit,
                 "assignment": work["assignment"],
                 "research_commit": pair["research_commit"],
@@ -1229,7 +1295,9 @@ def drain_buffered_groups(
     if notes_v2 is not None:
         expected = {"repo", "marker_commit", "trial_id", "item_commits",
                     "store_dir", "accepted_dir", "offline_fixture"}
-        if type(notes_v2) is not dict or set(notes_v2) != expected:
+        pilot_expected = expected | {"trial_sandbox"}
+        if (type(notes_v2) is not dict
+                or set(notes_v2) not in (expected, pilot_expected)):
             raise ValueError("invalid explicitly bound V2 shared-writer invocation")
         return _drain_notes_v2_individual(**notes_v2)
     manifest_path = Path(manifest_path)
