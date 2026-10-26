@@ -361,6 +361,23 @@
         rows:quarantineRows(status),
         note:'Локальная проблема одной карточки или текста изолируется и не должна останавливать обновление остальных актуальных данных сайта.',
       },
+      ...(Number.isInteger(status.visible_paid_offer_count) ? [{
+        key:'offers',
+        title:'Отбор скидок Steam',
+        lastWriteAtUtc:null,
+        scopeLabel:'Опубликовано предложений из лучших 100',
+        denominatorKey:'visible_paid_offer_count',
+        denominator:field(status,'visible_paid_offer_count'),
+        rows:[
+          ['Подходящие предложения до ограничения','ranked_internal_paid_offer_count'],
+          ['Не вошли в видимую сотню','hidden_below_visible_line_count'],
+          ['Проверено строк Steam','paid_source_rows_seen'],
+          ['Не прошли минимальную скидку 50%','paid_source_removed_discount_below_50'],
+          ['Осталось после первичных фильтров','paid_source_unique_eligible_after_partition_dedupe'],
+        ].filter(([,key])=>Number.isInteger(status[key]))
+          .map(([label,key])=>({label,key,value:field(status,key)})),
+        note:'Ограничение до 100 применяется только к показу после итоговой сортировки. Остальные подходящие игры остаются в области глубокого разбора.',
+      }] : []),
     ];
   }
 
