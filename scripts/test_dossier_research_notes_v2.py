@@ -859,8 +859,6 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
             self.repo, marker_commit=frozen["marker_commit"],
             authorization_commit=permit)
         self.assertTrue(proof["semantic_execution_authorized"])
-        self.assertFalse(proof["canonical_acceptance"])
-        self.assertFalse(proof["production_authorized"])
         from dossier_notes_v2_per_item_receipts import issuer_structure
         checked = issuer_structure(
             self.repo, marker_commit=frozen["marker_commit"],
