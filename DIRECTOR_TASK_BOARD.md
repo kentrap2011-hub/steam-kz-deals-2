@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## НОВЫЕ ПАРАЛЛЕЛЬНЫЕ ПОРУЧЕНИЯ — 2026-10-26
+
+- **НОВЫЙ ЧАТ 1 — Steam KZ скидки ≥50% / топ-100:** `steam-50-top100` → `WORKER_TASK_STEAM_DISCOVERY_50_PERCENT_DISCOUNT_TOP100_IMPLEMENT_01.md`. Реализовать прежнее пользовательски согласованное предложение в существующем Steam discovery/selection/site пути, без второй очереди и без перезапуска Dossier. Не редактировать файлы giveaway identity и общие директорские файлы.
+- **НОВЫЙ ЧАТ 2 — ITAD для раздач Epic/GOG:** `giveaway-itad` → `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`. Реализовать ранее согласованный provider-neutral ITAD identity adapter для раздач; не менять Steam shortlist/top-100 filters, Dossier V2 и директорские файлы, не сохранять API secrets в Git.
+- **ЧАТ 3 — Dossier V2 original18:** отдельное ранее назначенное `dossier-v2-original18-real-pilot-end-to-end-route-implement-01`; НЕ переиспользовать его номер или пересекаться с issuer, Research/Assembly receipts и V2 contracts.
+- Ранее назначенные задачи нумерации ЧАТ 1 (report #306), provenance ЧАТ 2 (merged #266), overhead ЧАТ 4 (report #305) фактически завершены; их registry status приведён к `complete`. Это новые физические ЧАТЫ 1/2, а не продолжения старых контекстов. Работа ЧАТА 3 не блокирует задачи 1/2. Прежние записи ниже — исторические snapshots, не live назначения.
+
 ## НОВОЕ ИСПОЛНЕНИЕ — Dossier V2 на исходных 18 играх, 2026-10-26
 
 - **НОВЫЙ ЧАТ 3**: `dossier-v2-original18-real-pilot-end-to-end-route-implement-01` → `WORKER_TASK_DOSSIER_V2_ORIGINAL18_REAL_PILOT_END_TO_END_ROUTE_IMPLEMENT_01.md`. Задача — не RECON и не QA: реализовать и, при наличии инструментов, осуществить исполняемый one-shot scoped Research → Assembly → GitHub sandbox receipts/штатное сохранение для исходных 18 игр. Пользователь дал явное разрешение на это испытание; не повторять запрос, не включать production/V1. Не заявлять живой запуск без фактического GitHub run/semantic результата.

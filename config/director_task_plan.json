@@ -131,16 +131,16 @@
       "urgency": "высокая",
       "urgency_reason": "Большой поток Steam мешает обновлениям.",
       "task_file": "WORKER_TASK_STEAM_DISCOVERY_50_PERCENT_DISCOUNT_TOP100_IMPLEMENT_01.md",
-      "worker_slot": null,
+      "worker_slot": "ЧАТ 1",
       "order": {
         "track": "Очередь продукта",
         "position": 1
       },
       "depends_on": [],
-      "blocker": "",
-      "updated_on": "2026-10-08",
+      "blocker": "НОВЫЙ физический ЧАТ 1: внедрить существующее решение скидка ≥50% и витрина топ-100; не изменять Dossier V2, ITAD identity и общие директорские файлы.",
+      "updated_on": "2026-10-26",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-08T10:36:42Z"
+      "updated_at_utc": "2026-10-26T15:12:49.369Z"
     },
     {
       "id": "owned-dlc",
@@ -375,16 +375,16 @@
       "urgency": "низкая",
       "urgency_reason": "Отложенная доработка.",
       "task_file": "WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md",
-      "worker_slot": null,
+      "worker_slot": "ЧАТ 2",
       "order": {
         "track": "Позднее",
         "position": 4
       },
       "depends_on": [],
-      "blocker": "",
-      "updated_on": "2026-10-08",
+      "blocker": "НОВЫЙ физический ЧАТ 2: внедрить ITAD идентификацию Epic/GOG → Steam; не изменять Steam discount/top-100 selection, Dossier V2 и общие директорские файлы.",
+      "updated_on": "2026-10-26",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-08T10:36:42Z"
+      "updated_at_utc": "2026-10-26T15:12:49.369Z"
     },
     {
       "id": "architecture-cleanup",
@@ -2411,7 +2411,7 @@
       "id": "dossier-v2-pr266-remove-extra-freeze-provenance-gate-01",
       "title": "ЧАТ 2 — отменить избыточную проверку происхождения запуска Dossier V2",
       "goal": "По прямому решению пользователя убрать из №266 добавленную блокировку без внешней аттестации GitHub freeze-run, вернув работающий штатный разрешённый маршрут без изменения исходных 18 и V1.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Локальная правка недавно добавленного gate в №266 и существующих тестов; без новой архитектуры.",
       "urgency": "высокая",
@@ -2420,16 +2420,16 @@
       "worker_slot": "ЧАТ 2",
       "order": null,
       "depends_on": [],
-      "blocker": "НОВЫЙ физический ЧАТ 2 после завершённой прежней задачи №266; не запускать V2 без отдельного явного разрешения на конкретное испытание.",
-      "recent_completion": false,
+      "blocker": "PR #266 merged, report saved: original18 V2 additional provenance block removed; physical previous Chat 2 retired.",
+      "recent_completion": true,
       "updated_on": "2026-10-26",
-      "updated_at_utc": "2026-10-26T13:00:00Z"
+      "updated_at_utc": "2026-10-26T15:12:49.369Z"
     },
     {
       "id": "director-verification-overhead-operating-model-options-audit-01",
       "title": "ЧАТ 4 — предложить альтернативы громоздкой схеме директор/работники/проверяющие",
       "goal": "Независимо найти причины лишних QA/HEAD/merge loops и сравнить от минимальных правил до новой роли интегратора или полной перестройки процессов с преимуществами, ценой и рисками.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Глубокое сравнение нескольких моделей взаимодействия с ограниченным адресным чтением настоящих случаев и правил.",
       "urgency": "высокая",
@@ -2438,16 +2438,16 @@
       "worker_slot": "ЧАТ 4",
       "order": null,
       "depends_on": [],
-      "blocker": "НОВЫЙ физический ЧАТ 4 после отчёта №298; отчёт предлагает широкий спектр моделей, сам ничего не изменяет и не инициирует повторные проверки.",
-      "recent_completion": false,
+      "blocker": "Report completed in draft PR #305 (independent analysis of QA overhead); physical previous Chat 4 retired.",
+      "recent_completion": true,
       "updated_on": "2026-10-26",
-      "updated_at_utc": "2026-10-26T13:00:00Z"
+      "updated_at_utc": "2026-10-26T15:12:49.369Z"
     },
     {
       "id": "director-chat-numbering-cause-and-redesign-options-audit-01",
       "title": "ЧАТ 1 — разобраться в повторных ошибках нумерации и любых вариантах переустройства",
       "goal": "Установить доказуемые причины путаницы физических чатов, номеров и task ID, независимо сравнить несколько вариантов от минимального изменения правил до отказа от нынешней архитектуры, оценив плюсы, минусы и риски.",
-      "status": "planned",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Проверка конкретной цепочки и сравнение разных моделей управления без написания production-кода или рефакторинга.",
       "urgency": "высокая",
@@ -2456,10 +2456,10 @@
       "worker_slot": "ЧАТ 1",
       "order": null,
       "depends_on": [],
-      "blocker": "НОВЫЙ физический ЧАТ 1; прежний ЧАТ 1 завершён. ЧАТЫ 2 и 4 уже запущены пользователем, перенумеровывать их нельзя. Анализ не блокирует другие задачи и не является новой обязательной проверкой их кода.",
-      "recent_completion": false,
+      "blocker": "Report completed in draft PR #306, and lightweight rule changes merged in PR #308; physical previous Chat 1 retired.",
+      "recent_completion": true,
       "updated_on": "2026-10-26",
-      "updated_at_utc": "2026-10-26T18:00:00Z"
+      "updated_at_utc": "2026-10-26T15:12:49.369Z"
     },
     {
       "id": "dossier-v2-original18-real-pilot-end-to-end-route-implement-01",
