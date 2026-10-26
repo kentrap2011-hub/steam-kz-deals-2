@@ -7,6 +7,7 @@ import build_daily_visual_payload as base_builder
 import card_explanation_policy
 import duration_enrichment
 import giveaway_visual_handoff
+import giveaway_analysis_reuse
 import play_priority_context
 import priority_ranking
 import progressive_personalization
@@ -369,7 +370,7 @@ def refresh_existing_giveaways_only():
     ready = json.loads(before)
     paid_before = json.dumps(ready.get('items') or [], ensure_ascii=False, separators=(',', ':'))
 
-    giveaways = giveaway_visual_handoff.derive_from_path()
+    giveaways = giveaway_analysis_reuse.attach(giveaway_visual_handoff.derive_from_path(), ready.get('items') or [])
     ready['giveaways'] = giveaways
     contract = ready.setdefault('production_contract', {})
     contract['final_visual_producer_blob_sha'] = base_builder.git_sha('scripts/build_final_visual_payload.py')
@@ -548,7 +549,7 @@ def refresh_existing_media():
         'without_any_image': len(items) - with_any_image,
         'coverage_percent': round((with_any_image / len(items)) * 100, 1) if items else 100.0,
     }
-    ready['giveaways'] = giveaway_visual_handoff.derive_from_path()
+    ready['giveaways'] = giveaway_analysis_reuse.attach(giveaway_visual_handoff.derive_from_path(), ready.get('items') or [])
     contract = ready.setdefault('production_contract', {})
     contract['visual_builder_blob_sha'] = base_builder.git_sha('scripts/build_visual_feed_v2.py')
     contract['final_visual_producer_blob_sha'] = base_builder.git_sha('scripts/build_final_visual_payload.py')
@@ -731,7 +732,7 @@ def main():
         'without_any_image': len(refined) - with_any_image,
         'coverage_percent': round((with_any_image / len(refined)) * 100, 1) if refined else 100.0,
     }
-    ready['giveaways'] = giveaway_visual_handoff.derive_from_path()
+    ready['giveaways'] = giveaway_analysis_reuse.attach(giveaway_visual_handoff.derive_from_path(), ready.get('items') or [])
     duration_distribution = duration_source_distribution(refined)
     contract = ready.setdefault('production_contract', {})
     contract.clear()
