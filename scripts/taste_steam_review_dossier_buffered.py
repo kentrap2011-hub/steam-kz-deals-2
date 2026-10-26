@@ -1078,7 +1078,7 @@ def _drain_notes_v2_individual(
     if trial_sandbox:
         import os
         from dossier_notes_v2_per_item_receipts import issuer_structure, _github_get
-        from dossier_two_stage_staging import git, json_at
+        from dossier_two_stage_staging import git
         source = json.loads(
             (Path(__file__).resolve().parents[1] / "config" /
              "dossier_research_notes_v2_contract.json").read_text(encoding="utf-8"))
@@ -1103,12 +1103,10 @@ def _drain_notes_v2_individual(
                 or os.environ.get("GITHUB_RUN_ATTEMPT") != "1"):
             raise ValueError("only exact original18 owner manual GitHub sandbox trial may persist")
         path = "data/control/dossier_notes_v2/authorizations/" + trial_id + ".json"
-        authorization_commit = json_at(root, "HEAD", path)
-        authorization_commit = authorization_commit.get("marker_commit")  # checked below
+
         # The immutable authorizer is pinned as the marker's exact child and
         # must be an ancestor of the actual current sandbox HEAD.
-        from dossier_two_stage_staging import first_parent_contains
-        auth = git(root, "rev-list", "--first-parent", "--format=%H",
+        auth = git(root, "log", "--first-parent", "--format=%H",
                    "HEAD", "--", path).stdout.decode().splitlines()
         auth = [v for v in auth if len(v) == 40 and all(c in "0123456789abcdef" for c in v)]
         if len(auth) != 1:
