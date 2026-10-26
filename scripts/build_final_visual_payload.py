@@ -77,6 +77,60 @@ SEMANTIC_PRESERVED_FIELDS = (
 )
 
 
+def cap_visible_paid_offers(ready, *, full_ranked_scope):
+    """Publication-only cap after producer ranking; never truncate Deep work."""
+    rule = json.loads(
+        Path('config/mailing_policy.json').read_text(encoding='utf-8')
+    ).get('visible_paid_publication') or {}
+    maximum = rule.get('maximum_current_paid_offers')
+    if type(maximum) is not int or maximum != 100:
+        raise ValueError('canonical paid visual cap must be exactly 100')
+    if rule.get('cap_only_after_family_resolution_and_canonical_final_ranking') is not True:
+        raise ValueError('paid visual cap cannot be applied before canonical ranking')
+    if rule.get('reduces_eligible_deep_analysis_scope') is not False:
+        raise ValueError('paid visual cap cannot limit Deep scope')
+
+    ranked = ready.get('items') or []
+    for expected, item in enumerate(ranked, 1):
+        if item.get('priority_rank') != expected:
+            raise ValueError('paid visual cap requires finalized canonical priority ranks')
+
+    visible = ranked[:maximum]
+    # This is a fail-closed publication check, not a new discovery eligibility
+    # gate. Paid candidates outside the visible line stay in Deep's own scope.
+    for item in visible:
+        try:
+            discount = float(item.get('discount_percent'))
+            price = float(item.get('current_price_kzt'))
+        except (TypeError, ValueError):
+            raise ValueError('visible paid offer missing KZ price/discount')
+        if not (discount >= 50.0 and 0.0 < price <= 4500.0):
+            raise ValueError('visible paid offer violates current 50%/4500 KZT bound')
+
+    status = ready.setdefault('processing_status', {})
+    previous_internal = status.get('ranked_internal_paid_offer_count')
+    internal = (
+        len(ranked) if full_ranked_scope
+        else max(len(ranked), int(previous_internal or 0))
+    )
+    status['ranked_internal_paid_offer_count'] = internal
+    status['visible_paid_offer_count'] = len(visible)
+    status['visible_paid_offer_limit'] = maximum
+    status['hidden_below_visible_line_count'] = max(0, internal - len(visible))
+    ready['visible_paid_publication'] = {
+        'maximum': maximum,
+        'ranked_internal_count': internal,
+        'visible_count': len(visible),
+        'hidden_below_visible_line_count': max(0, internal - len(visible)),
+        'mode': 'rolling_after_canonical_ranking',
+        'full_ranked_scope_at_build': full_ranked_scope,
+        'deep_scope_truncated': False,
+    }
+    ready['items'] = visible
+    ready['item_count'] = len(visible)
+    return ready['visible_paid_publication']
+
+
 def normalize_media_url(value):
     if isinstance(value, str) and value.startswith('https://shared.fastly.steamstatic.com/'):
         return 'https://shared.akamai.steamstatic.com/' + value[len('https://shared.fastly.steamstatic.com/'):]
@@ -266,7 +320,12 @@ def apply_deterministic_purchase_refresh(ready):
     ready['items'] = ranked
     ready['item_count'] = len(ranked)
     if any(game.get('analysis_state') for game in ranked):
-        progressive_personalization.stamp_processing_status(ready)
+        # A commercial-only refresh has only the previously published 100
+        # cards. Preserve last full-build Deep scope statistics until the next
+        # normal full build rather than reporting off-screen games as excluded.
+        if 'visible_paid_publication' not in ready:
+            progressive_personalization.stamp_processing_status(ready)
+    cap_visible_paid_offers(ready, full_ranked_scope=False)
 
     contract = ready.setdefault('production_contract', {})
     contract.update({
@@ -721,6 +780,7 @@ def main():
     ready['items'] = refined
     ready['item_count'] = len(refined)
     processing_status = progressive_personalization.stamp_processing_status(ready)
+    cap_visible_paid_offers(ready, full_ranked_scope=True)
     refined = ready.get('items') or []
     with_screenshots = sum(bool(game.get('screenshots')) for game in refined)
     with_any_image = sum(bool(game.get('screenshots') or game.get('header_image')) for game in refined)
