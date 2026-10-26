@@ -61,6 +61,24 @@ def load_current_appids():
     return index, sorted(appids)
 
 
+def directly_discounted_subids(index):
+    """Recover all current Sub_ purchase candidates from the original on-sale
+    mailing feed, independent of whether a member is separately discounted."""
+    columns = index['columns']
+    ci = {name: i for i, name in enumerate(columns)}
+    ids = set()
+    for number in range(1, int(index['chunk_count']) + 1):
+        path = Path(index['chunk_pattern'].replace('NNN', f'{number:03d}'))
+        for line in path.read_text(encoding='utf-8').splitlines():
+            if not line.strip():
+                continue
+            cells = line.split('\t')
+            key = cells[ci['key']]
+            if key.startswith('Sub_') and key[4:].isdigit():
+                ids.add(int(key[4:]))
+    return sorted(ids)
+
+
 def fetch_raw_batch(batch):
     payload = {
         'ids': batch,
@@ -232,8 +250,13 @@ def classify_package(pid, store_item, source_appids, current_appids, observed_ep
 
     apps = included_appids(store_item)
     relevant = sorted(set(apps) & current_appids)
-    if len(relevant) < 2:
-        return None, 'fewer_than_two_current_app_candidates'
+    if len(apps) < 2:
+        return None, 'fewer_than_two_verified_package_members'
+    if discount < 50 or current > 4500:
+        return None, 'package_outside_current_50_percent_4500_kzt_scope'
+    # On-sale bundles are an independent candidate even when no constituent
+    # base game is on a standalone sale. Never count such members as Taste-fit
+    # or priced personalized value without their own semantic evidence.
 
     original = original_kzt(option)
     if original is None or original < current:
@@ -260,6 +283,9 @@ def classify_package(pid, store_item, source_appids, current_appids, observed_ep
         'all_included_appids': all_included_appids(store_item),
         'current_candidate_appids_in_package': relevant,
         'source_appids': sorted(source_appids),
+        'independent_current_sale_package': True,
+        'member_semantic_evidence_required': True,
+        'members_not_assumed_suitable': sorted(set(apps) - current_appids),
         'web_url': f'https://store.steampowered.com/sub/{pid}/',
         'source': 'IStoreBrowseService/GetItems',
     }, None
@@ -383,7 +409,9 @@ def main():
     index, appids = load_current_appids()
     app_items, app_request_count = fetch_app_items(appids)
     sources = package_ids_from_app_items(appids, app_items)
-
+    independent = directly_discounted_subids(index)
+    for pid in independent:
+        sources.setdefault(pid, set())
     package_ids = sorted(sources)
     package_items, package_request_count = (
         fetch_package_items(package_ids) if package_ids else ({}, 0)
@@ -429,6 +457,12 @@ def main():
         'network_source': 'IStoreBrowseService/GetItems',
         'current_app_candidate_count': len(appids),
         'discovered_packageid_count': len(package_ids),
+        'on_sale_independent_source_package_count': len(independent),
+        'direct_on_sale_package_candidates_without_discounted_member': sum(
+            not sources[pid] for pid in independent
+        ),
+        'verified_package_content_resolution_count': len(packages),
+        'package_content_source_does_not_imply_member_taste_fit': True,
         'eligible_package_count': len(packages),
         'classified_package_count': len(classifications),
         'classification_complete': len(classifications) == len(package_ids),
