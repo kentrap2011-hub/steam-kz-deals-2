@@ -75,7 +75,7 @@ def test_explicit_partitions_cover_supported_content_types_and_params():
         assert params['count'] == 100
         assert params['specials'] == 1
         assert params['category1'] == partition['category1']
-        assert params['category1'] != c['SEARCH_CATEGORY1']
+        assert params['category1'] == c['SEARCH_CATEGORY1']
         assert params['maxprice'] == 4500
         assert params['hidef2p'] == 1
         assert params['ignore_preferences'] == 1
