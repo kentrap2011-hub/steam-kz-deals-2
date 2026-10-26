@@ -309,8 +309,17 @@ def v2_freeze_chain(repo, *, marker_commit, trial_id,
                 "original_pins":cfg["immutable_original_pins"], "items":rows},
             "V2 manifest must be the exact previously approved original groups")
     if approved_main is not None:
-        require(first_parent_contains(repo, source, approved_main),
-                "V2 freeze source is not on approved current main first-parent ancestry")
+        from dossier_shadow_research_trial_publish import v2_scope
+        cfg, m, _ = v2_scope(repo)
+        scoped = (m["human_grant"]["commit"] is None
+                  and cfg.get("original18_trial_scoped_authorization", {}).get("enabled") is True)
+        approved = first_parent_contains(repo, source, approved_main)
+        # On the first-trial path, source is the immutable new owner grant
+        # child of an original main commit; newer main commits may follow.
+        if scoped:
+            previous = run(repo, "rev-parse", source + "^")
+            approved = approved or first_parent_contains(repo, previous, approved_main)
+        require(approved, "V2 freeze source is not on approved main first-parent ancestry")
     if grant_commit is not None:
         require(isinstance(grant_commit, str) and SHA40.fullmatch(grant_commit)
                 and first_parent_contains(repo, grant_commit, source),
@@ -319,11 +328,46 @@ def v2_freeze_chain(repo, *, marker_commit, trial_id,
             "marker_commit":marker_commit, "marker_path":marker_path}
 
 
+def v2_scoped_existing_grant(repo, marker_commit, env):
+    """Re-read a REAL immutable owner-dispatched grant from marker ancestry."""
+    from dossier_shadow_research_trial_publish import (
+        v2_scope, v2_scoped_owner_dispatch, assert_one_new_path,
+    )
+    cfg, m, _ = v2_scope(repo)
+    v2_scoped_owner_dispatch(cfg, env)
+    require(m["human_grant"]["commit"] is None,
+            "scoped mode cannot replace preapproved legacy human grant")
+    source = run(repo, "rev-parse", marker_commit + "^^")
+    path = m["human_grant"]["path"]
+    assert_one_new_path(repo, run(repo, "rev-parse", source + "^"), source, path)
+    original = json_git(repo, source, path)
+    expected = {
+        "schema":"DOSSIER-NOTES-V2-MANUAL-ISSUER-HUMAN-GRANT",
+        "schema_version":2,
+        "trial_id":m["trial_id"],
+        "original_buffer_blob_sha":m["frozen_original_buffer_blob_sha"],
+        "original_pins":cfg["immutable_original_pins"],
+        "original_groups":cfg["original_groups"],
+        "github_actor_id":env["GITHUB_ACTOR_ID"],
+        "scope":"issue_single_original18_V2_manifest_marker_then_separate_authorization_only",
+        "semantic_execution_approved":True,
+        "production_approved":False,
+    }
+    require(original == expected, "scoped original18 grant is not genuine owner consent")
+    grant = {"path":path, "commit":source,
+             "blob_sha":run(repo, "rev-parse", source + ":" + path),
+             "github_actor_id":env["GITHUB_ACTOR_ID"]}
+    return cfg, {**m,"human_grant":grant}
+
+
 def v2_expected_authorization(repo, *, marker_commit, trial_id,
                               grant_commit, grant_blob, actor_id, run_id):
     from dossier_research_notes_v2 import _manifest, _marker_nonce, blob as v2_blob
     m, manifest_blob = _manifest(repo, marker_commit, trial_id)
     parent = run(repo, "rev-parse", marker_commit + "^")
+    scoped = json_git(
+        repo, grant_commit, "config/dossier_notes_v2_issuer_human_grant.json"
+    ).get("semantic_execution_approved") is True
     return {
         "schema":"DOSSIER-NOTES-V2-MANUAL-RESEARCH-ISSUER-AUTHORIZATION",
         "schema_version":2, "trial_id":trial_id,
@@ -340,9 +384,10 @@ def v2_expected_authorization(repo, *, marker_commit, trial_id,
         "human_grant_commit":grant_commit,
         "human_grant_blob_sha":grant_blob,
         "github_actor_id":actor_id, "github_authorization_run_id":run_id,
-        "mode":"original18_inactive_V2_control_plane_issuance_only",
-        "semantic_execution_authorized":False,
-        "canonical_acceptance":False, "assembly_authorized":False,
+        "mode":("original18_scoped_nonproduction_semantic_trial" if scoped
+                else "original18_inactive_V2_control_plane_issuance_only"),
+        "semantic_execution_authorized":scoped,
+        "canonical_acceptance":False, "assembly_authorized":scoped,
         "production_authorized":False,
     }
 
@@ -398,6 +443,26 @@ def verify_v2_authorization(repo, *, marker_commit, authorization_commit):
     require(manifest["items"] == rows, "authorization changed original frozen 18")
     record = json_git(repo, authorization_commit, m["authorization_path"])
     grant = m["human_grant"]
+    if grant["commit"] is None:
+        # No actor assertions from a chat: source is a one-add immutable Git
+        # grant on the exact first-trial frozen ancestry.
+        sc = run(repo, "rev-parse", marker_commit + "^^")
+        gp = grant["path"]
+        assert_one_new_path(repo, run(repo, "rev-parse", sc + "^"), sc, gp)
+        scoped_doc = json_git(repo, sc, gp)
+        require(scoped_doc == {
+            "schema":"DOSSIER-NOTES-V2-MANUAL-ISSUER-HUMAN-GRANT",
+            "schema_version":2, "trial_id":trial_id,
+            "original_buffer_blob_sha":m["frozen_original_buffer_blob_sha"],
+            "original_pins":v2_scope(repo)[0]["immutable_original_pins"],
+            "original_groups":v2_scope(repo)[0]["original_groups"],
+            "github_actor_id":record.get("github_actor_id"),
+            "scope":"issue_single_original18_V2_manifest_marker_then_separate_authorization_only",
+            "semantic_execution_approved":True, "production_approved":False,
+        }, "owner grant must be exact original18 scoped Git document")
+        grant = {"path":gp, "commit":sc,
+                 "blob_sha":run(repo, "rev-parse", sc + ":" + gp),
+                 "github_actor_id":scoped_doc["github_actor_id"]}
     require(isinstance(record.get("github_actor_id"), str)
             and record["github_actor_id"].isdigit()
             and isinstance(record.get("github_authorization_run_id"), str)
@@ -421,7 +486,7 @@ def verify_v2_authorization(repo, *, marker_commit, authorization_commit):
             "manifest_blob_sha":manifest_blob,
             "github_actor_id":record["github_actor_id"],
             "github_authorization_run_id":record["github_authorization_run_id"],
-            "semantic_execution_authorized":False}
+            "semantic_execution_authorized":record["semantic_execution_authorized"]}
 
 
 def publish_v2_authorization(repo, *, expected_main, marker_commit):
@@ -433,7 +498,12 @@ def publish_v2_authorization(repo, *, expected_main, marker_commit):
             and remote_sha(repo, "refs/heads/main") == expected_main,
             "main checkout/remote drifted before V2 authorization")
     assert_clean(repo)
-    _, m, _ = v2_grant(repo, expected_main, os.environ)
+    from dossier_shadow_research_trial_publish import v2_scope
+    cfg, m, _ = v2_scope(repo)
+    if m["human_grant"]["commit"] is None:
+        cfg, m = v2_scoped_existing_grant(repo, marker_commit, os.environ)
+    else:
+        _, m, _ = v2_grant(repo, expected_main, os.environ)
     ref = "refs/heads/" + m["sandbox_branch"]
     require(remote_sha(repo, ref) == marker_commit,
             "V2 ref must be exactly marker HEAD; no second authorization/replay")
@@ -477,7 +547,9 @@ def publish_v2_authorization(repo, *, expected_main, marker_commit):
             "V2 authorization remote re-fetch failed")
     return {**proof, "sandbox_branch":m["sandbox_branch"],
             "human_grant_commit":m["human_grant"]["commit"],
-            "status":"issued_inactive_V2_authorization_not_semantics"}
+            "status":("issued_original18_scoped_nonproduction_semantic_trial"
+                      if proof["semantic_execution_authorized"]
+                      else "issued_inactive_V2_authorization_not_semantics")}
 
 
 def authorized_v2_structure_only(repo, *, marker_commit, authorization_commit):
@@ -492,7 +564,7 @@ def authorized_v2_structure_only(repo, *, marker_commit, authorization_commit):
             and first_parent_contains(repo, authorization_commit, remote)
             and first_parent_contains(repo, marker_commit, authorization_commit),
             "authorization not on actual V2 remote first-parent chain")
-    return {**proof, "remote_head":remote, "semantic_execution_authorized":False}
+    return {**proof, "remote_head":remote}
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
