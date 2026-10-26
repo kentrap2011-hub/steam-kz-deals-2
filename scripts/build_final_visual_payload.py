@@ -370,7 +370,10 @@ def apply_deterministic_purchase_refresh(ready):
         # normal full build rather than reporting off-screen games as excluded.
         if 'visible_paid_publication' not in ready:
             progressive_personalization.stamp_processing_status(ready)
-    cap_visible_paid_offers(ready, full_ranked_scope=False)
+    # Synthetic/helper-only callers without a bound production source use this
+    # scorer without publishing a paid visual snapshot.
+    if ready.get('source_mailing_updated_at_utc') or ready.get('visible_paid_publication'):
+        cap_visible_paid_offers(ready, full_ranked_scope=False)
 
     contract = ready.setdefault('production_contract', {})
     contract.update({
