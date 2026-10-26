@@ -7,7 +7,7 @@ import uuid
 from giveaway_http import HTTP_TIMEOUT_SECONDS
 
 API_DOC = "https://docs.isthereanydeal.com/"
-APP_ID = re.compile(r"app/([1-9][0-9]*)\\Z")
+APP_ID = re.compile(r"app/([1-9][0-9]*)\Z")
 
 
 class ITADUnavailable(RuntimeError):
