@@ -1,5 +1,8 @@
 """Regression: producer caps only the already ranked paid publication, never Deep."""
 import copy
+import json
+import tempfile
+from pathlib import Path
 
 import build_final_visual_payload as producer
 
@@ -69,13 +72,56 @@ def main():
     else:
         raise AssertionError('cap silently used Steam/unsorted first rows')
 
-    # CAP-06: freebies are not part of paid items/cap and remain unchanged.
+    # CAP-06: bound full source funnel only; stale or incoherent manifests
+    # must never be misrepresented as a current Statistics denominator.
+    source = '2026-10-26T12:00:00+00:00'
+    valid = {
+        'complete': True,
+        'country_code': 'kz',
+        'updated_at_utc': source,
+        'filtering_funnel': {
+            'source_reported_rows': 100,
+            'source_rows_seen': 100,
+            'parsed_rows': 100,
+            'eligible_rows_before_partition_dedupe': 70,
+            'removed_non_paid_or_missing_price': 1,
+            'removed_discount_below_50': 20,
+            'removed_price_above_4500': 3,
+            'removed_obvious_extras': 4,
+            'removed_software_only': 2,
+        },
+        'search_partitions': [
+            {'id': 'games', 'rows_seen': 60, 'eligible_rows_after_local_gate': 42},
+            {'id': 'dlc', 'rows_seen': 40, 'eligible_rows_after_local_gate': 28},
+        ],
+    }
+    with tempfile.TemporaryDirectory() as folder:
+        path = Path(folder) / 'manifest.json'
+        path.write_text(json.dumps(valid), encoding='utf-8')
+        snapshot = {'source_mailing_updated_at_utc': source}
+        stats = producer.bound_paid_source_funnel(snapshot, path)
+        assert stats['metrics']['paid_source_rows_seen'] == 100
+        assert len(stats['partitions']) == 2
+        assert producer.bound_paid_source_funnel(
+            {'source_mailing_updated_at_utc': 'old'}, path
+        ) is None
+        invalid = copy.deepcopy(valid)
+        invalid['search_partitions'][1]['rows_seen'] = 39
+        path.write_text(json.dumps(invalid), encoding='utf-8')
+        try:
+            producer.bound_paid_source_funnel(snapshot, path)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError('source funnel accepted inconsistent partition')
+
+    # CAP-07: freebies are not part of paid items/cap and remain unchanged.
     giveaways = {'state': 'ready', 'offers': [{'provider': 'Epic'}]}
     source = {'items': [game(i) for i in range(1, 105)],
               'giveaways': giveaways, 'processing_status': {}}
     producer.cap_visible_paid_offers(source, full_ranked_scope=True)
     assert source['giveaways'] is giveaways
-    print('visible paid offer cap CAP-01..06: ok')
+    print('visible paid offer cap CAP-01..07: ok')
 
 
 if __name__ == '__main__':
