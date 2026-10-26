@@ -871,6 +871,88 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
                 self.cfg, {**env, "GITHUB_ACTOR_ID": "3",
                            "GITHUB_REPOSITORY_OWNER_ID": "3"})
 
+    def test_scoped_original18_sandbox_writer_reuses_strict_item_path(self):
+        """Exactly one scoped original item: no production storage or Deep write."""
+        from unittest.mock import patch
+        from datetime import datetime, timezone
+        from taste_steam_review_dossier_test_fixture import web_dossier
+        from taste_steam_review_dossier_buffered import drain_buffered_groups
+        scoped_id = "315790060"
+        env = {
+            "GITHUB_ACTOR_ID": scoped_id,
+            "GITHUB_REPOSITORY_OWNER_ID": scoped_id,
+            "GITHUB_ACTOR": "kentrap2011-hub",
+            "GITHUB_TRIGGERING_ACTOR": "kentrap2011-hub",
+            "GITHUB_RUN_ATTEMPT": "1", "GITHUB_RUN_ID": "123456",
+            "GITHUB_ACTIONS": "true",
+            "GITHUB_EVENT_NAME": "workflow_dispatch",
+            "GITHUB_REF": "refs/heads/main",
+            "GITHUB_TOKEN": "disposable-Git-only-test-not-a-real-token",
+        }
+        run(self.repo, "branch", "main", self.initial)
+        run(self.repo, "checkout", "-b", self.m["sandbox_branch"])
+        grant = self.pub.local_v2_scoped_owner_grant(
+            self.repo, self.cfg, self.m, env)
+        frozen = self.pub.local_v2_freeze(
+            self.repo, self.m["trial_id"], self.rows, "f" * 32)
+        authorized = self.auth.local_v2_authorization(
+            self.repo, marker_commit=frozen["marker_commit"],
+            trial_id=self.m["trial_id"], grant_commit=grant["commit"],
+            grant_blob=grant["blob_sha"], actor_id=scoped_id, run_id="123456")
+        appid = self.rows[0]["appid"]
+        assignment = v2.frozen_assignment(
+            self.repo, marker_commit=frozen["marker_commit"],
+            trial_id=self.m["trial_id"], appid=appid)
+        write(self.repo, v2._path("research", assignment), {
+            "schema": "DOSSIER-RESEARCH-NOTES-V2", "schema_version": 2,
+            "assignment": assignment, "notes_text": "",
+            "source_log": [], "research_status": "no_verifiable_findings",
+        })
+        research = commit(self.repo, "synthetic scoped Research")
+        work = v2.assembly_work(
+            self.repo, marker_commit=frozen["marker_commit"],
+            trial_id=self.m["trial_id"], appid=appid, research_commit=research)
+        self.assertEqual(work["status"], "ready_for_autonomous_assembly")
+        final = v2.candidate_assembly(
+            work, outcome="assembled_candidate_ready",
+            final_dossier=web_dossier(
+                appid, datetime.now(timezone.utc), title=assignment["title"]))
+        write(self.repo, work["output_path"], final)
+        assembly = commit(self.repo, "synthetic scoped Assembly")
+        record = {
+            "repo": self.repo, "marker_commit": frozen["marker_commit"],
+            "trial_id": self.m["trial_id"],
+            "item_commits": {appid: {
+                "research_commit": research, "assembly_commit": assembly}},
+            "store_dir": self.repo / "data/control/dossier_notes_v2/pilot_store",
+            "accepted_dir": self.repo / "data/control/dossier_notes_v2/pilot_accepted",
+            "offline_fixture": False,
+            "trial_sandbox": True,
+        }
+        fake_run = {
+            "id":123456, "status":"completed", "conclusion":"success",
+            "event":"workflow_dispatch", "head_branch":"main",
+            "run_attempt":1,
+            "actor":{"id":315790060,"login":"kentrap2011-hub"},
+            "path":self.m["workflow_authorize"],
+        }
+        with patch.dict(os.environ, env), patch(
+            "dossier_notes_v2_per_item_receipts._github_get",
+            return_value=fake_run):
+            result = drain_buffered_groups(notes_v2=record)
+        item = next(v for v in result["items"] if v["appid"] == appid)
+        self.assertEqual(item["status"], "persisted_pending_github_commit")
+        self.assertEqual(len(result["items"]), 18)
+        self.assertFalse(result["canonical_acceptance"])
+        self.assertFalse((self.repo / "data/cache/taste_steam_review_dossiers").exists())
+        self.assertTrue((record["store_dir"] / ("App_" + appid + ".json")).is_file())
+        self.assertEqual(len(list(record["accepted_dir"].rglob("*.json"))), 1)
+        with patch.dict(os.environ, {**env, "GITHUB_ACTOR_ID": "9876"}), patch(
+            "dossier_notes_v2_per_item_receipts._github_get",
+            return_value=fake_run):
+            with self.assertRaises(ValueError):
+                drain_buffered_groups(notes_v2=record)
+
     def test_valid_original_freeze_issues_without_extra_run_attestation(self):
         from unittest.mock import patch
         # A genuine one-add scoped grant, frozen eighteen assignments and
