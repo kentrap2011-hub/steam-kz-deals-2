@@ -77,9 +77,9 @@ SEMANTIC_PRESERVED_FIELDS = (
 )
 
 
-def bound_paid_source_funnel(ready):
+def bound_paid_source_funnel(ready, path=None):
     """Expose only a complete manifest bound to this visual's discovery source."""
-    path = Path('data/production/manifest.json')
+    path = Path(path or 'data/production/manifest.json')
     if not path.is_file():
         return None
     manifest = json.loads(path.read_text(encoding='utf-8'))
@@ -113,6 +113,21 @@ def bound_paid_source_funnel(ready):
         if isinstance(row, dict) and row.get('id') in {'games', 'dlc'}
         and type(row.get('rows_seen')) is int
     ]
+    if metrics.get('paid_source_rows_seen') is not None:
+        if sum(row['rows_seen'] for row in partitions) != metrics['paid_source_rows_seen']:
+            raise ValueError('paid discovery partition row counts do not reconcile')
+    parsed = metrics.get('paid_source_parsed_rows')
+    accepted = metrics.get('paid_source_eligible_rows_before_partition_dedupe')
+    rejection_keys = (
+        'non_paid_or_missing_price', 'discount_below_50',
+        'price_above_4500', 'obvious_extras', 'software_only',
+    )
+    if parsed is not None and accepted is not None and all(
+        'paid_source_removed_' + key in metrics for key in rejection_keys
+    ):
+        rejected = sum(metrics['paid_source_removed_' + key] for key in rejection_keys)
+        if parsed != accepted + rejected:
+            raise ValueError('paid discovery filtering funnel does not reconcile')
     return {'metrics': metrics, 'partitions': partitions,
             'discovery_source_updated_at_utc': visual_source}
 
