@@ -483,6 +483,55 @@ def publish_receipt_remote(repo, *, branch, expected_remote_head,
     result["github_receipt_confirmed"] = result["authenticated_github_readback"]
     return result
 
+def publish_assembly_item_remote(repo, *, branch, expected_remote_head,
+                                 marker_commit, trial_id, appid,
+                                 authorization_commit, research_commit, document,
+                                 github_repository=None, github_token=None):
+    """Create-only second-stage result using the SAME checked remote Git lease.
+
+    The original Notes introduction must exist in the frozen issuer descendant
+    chain. A typed terminal Assembly result is valid transport, NOT acceptance.
+    Each item is independent; no scheduler, retry or final writer is invoked.
+    """
+    _sha(research_commit, "original Research introduction")
+    def plan(work_repo):
+        issuer_structure(work_repo, marker_commit=marker_commit,
+                         trial_id=trial_id,
+                         authorization_commit=authorization_commit)
+        if not first_parent_contains(work_repo, authorization_commit, research_commit):
+            v2.reject("wrong_binding", "Research introduction predates the exact V2 issuer")
+        work = v2.assembly_work(
+            work_repo, marker_commit=marker_commit, trial_id=trial_id,
+            appid=appid, research_commit=research_commit)
+        return v2.prepare_assembly_transport(work_repo, work, document)
+
+    def inspect(work_repo, commit_sha, planned):
+        checked = v2.inspect_assembly(
+            work_repo, marker_commit=marker_commit, trial_id=trial_id,
+            appid=appid, research_commit=research_commit, result_commit=commit_sha)
+        if checked["status"] not in (
+            "strict_item_valid_pending_existing_atomic_group_ingest",
+            "assembly_missing_evidence", "assembly_semantic_conflict",
+            "runtime_or_tool_interrupted", "assembly_technical_error",
+        ):
+            v2.reject("broken_git_provenance", "Assembly candidate failed V2 strict transport: "
+                      + str(checked["status"]))
+        if blob(work_repo, commit_sha, planned["output_path"]) != planned["blob_sha"]:
+            v2.reject("broken_git_provenance", "Assembly published blob differs from proposal")
+
+    result = _single_remote_add(
+        repo, branch=branch, expected_remote_head=expected_remote_head,
+        make_plan=plan, check_commit=inspect,
+        message="dossier notes v2: create-only independent Assembly item " + str(appid),
+        github_repository=github_repository, github_token=github_token)
+    result["status"] = ("github_assembly_transport_confirmed"
+                        if result["authenticated_github_readback"]
+                        else "disposable_remote_assembly_only")
+    result["github_assembly_transport_confirmed"] = result["authenticated_github_readback"]
+    result["research_commit"] = research_commit
+    return result
+
+
 def publish_one_research_item_remote(repo, *, branch, expected_remote_head,
                                      marker_commit, trial_id, appid,
                                      authorization_commit, document,
