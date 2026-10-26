@@ -842,7 +842,7 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
             "GITHUB_RUN_ATTEMPT": "1",
             "GITHUB_RUN_ID": "123456",
         }
-        run(self.repo, "branch", "main", self.initial)
+        run(self.repo, "checkout", "-B", "main", self.initial)
         run(self.repo, "checkout", "-b", self.m["sandbox_branch"])
         grant = self.pub.local_v2_scoped_owner_grant(
             self.repo, self.cfg, self.m, env)
@@ -889,7 +889,7 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
             "GITHUB_REF": "refs/heads/main",
             "GITHUB_TOKEN": "disposable-Git-only-test-not-a-real-token",
         }
-        run(self.repo, "branch", "main", self.initial)
+        run(self.repo, "checkout", "-B", "main", self.initial)
         run(self.repo, "checkout", "-b", self.m["sandbox_branch"])
         grant = self.pub.local_v2_scoped_owner_grant(
             self.repo, self.cfg, self.m, env)
