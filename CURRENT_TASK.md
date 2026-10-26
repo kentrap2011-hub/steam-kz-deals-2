@@ -1,10 +1,12 @@
 # CURRENT TASK
 
-## PARTIAL / BLOCKED — ЧАТ 1: Steam discount >=50%, rolling visible top-100 (2026-10-26)
-- Assignment: `WORKER_TASK_STEAM_DISCOVERY_50_PERCENT_DISCOUNT_TOP100_IMPLEMENT_01.md`; isolated draft [PR #311](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/311), **not ready to merge or deploy**.
-- Implemented: dedicated GitHub-owned Deep work-order policy and lexicographic purchase/review queue order; visible paid cap after canonical ranking, without limiting Deep scope; KZ price/discount publish checks; source-bound funnel-to-Statistics projection and deterministic PR regressions.
-- Pending hard requirements: safely verified eligible-base→DLC discovery, independent exceptional bundles/members not on sale, early obscure-signal escape and full cross-lane funnel; bounded live Steam evidence, ordinary full main production acceptance. The prior global DLC collector remains unchanged pending verified replacement, so product task is **not complete**.
-- Durable report: `reviews/worker_reports/steam-discovery-50-percent-discount-top100-implementation-01.md`. No Dossier V2 or giveaway provider changes, worker prompt change, new scheduler, production write or main merge.
+## IMPLEMENTED / LIVE ACCEPTANCE PENDING — ЧАТ 1: Steam >=50%, rolling top-100 (2026-10-26)
+- Existing draft [PR #311](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/311), branch `implement/steam-discovery-50-top100-01`; **not merged/deployed**.
+- Code: one live-capped games/Sub source; quality-gated base-game scope, exact targeted KZ DLC relations and offer gates (no global DLC), independent on-sale multi-game Sub package candidates (including entirely non-sale members), conservative low-signal quality/value rescue, canonical full Deep queue, rolling final 100, complete source-bound funnel/statistics.
+- Contract: unchanged Deep worker prompt, no second collector/queue/scheduler and no ITAD/Dossier V2 modifications. Deterministic PR regressions and targeted live KZ source probes completed.
+- **NOT runtime accepted:** final exact-head CI must be checked; full GitHub production collection/persistence and semantic membership/rolling-live publication still require separately authorized normal main activation after Director merge review. Do not present as deployed.
+- Report: `reviews/worker_reports/steam-discovery-50-percent-discount-top100-implementation-01.md`.
+
 
 ## BLOCKED — ЧАТ 3: Research Notes V2 remote persistence PR #270 (2026-10-24)
 - Task: `WORKER_TASK_DOSSIER_V2_RESEARCH_GITHUB_PERSISTENCE_FINISH_01.md`; existing draft PR #270 remains open and inactive.
