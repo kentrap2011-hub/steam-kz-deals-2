@@ -12,7 +12,6 @@ from pathlib import Path
 
 import dossier_research_notes_v2 as v2
 import dossier_notes_v2_per_item_receipts as transport
-from dossier_two_stage_staging import git
 
 REPOSITORY = "kentrap2011-hub/steam-kz-deals-2"
 
@@ -49,8 +48,7 @@ def run(args):
             "semantic_execution_authorized": False,
             "canonical_acceptance": False,
         }
-    if args.appid not in frozen:
-        v2.reject("wrong_binding", "item not in immutable original-18 pilot")
+    # Original GitHub issuer evidence is only structural: the already merged\n    # V2 contract intentionally denies live semantics. Never let a CLI flag or\n    # user-supplied document promote it to semantic authorization.\n    if (cfg.get("authorized_for_semantic_execution") is not True\n            or authorization.get("semantic_execution_authorized") is not True):\n        v2.reject("wrong_binding",\n                  "V2 semantic authorization is disabled; structural issuer is insufficient")\n    if args.appid not in frozen:\n        v2.reject("wrong_binding", "item not in immutable original-18 pilot")
     if args.expected_remote_head is None or len(args.expected_remote_head) != 40:
         v2.reject("wrong_binding", "fresh exact remote parent SHA required")
     if (not isinstance(args.document, str)
