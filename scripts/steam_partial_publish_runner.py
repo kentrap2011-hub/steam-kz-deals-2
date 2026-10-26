@@ -954,7 +954,7 @@ def run():
     failed_keys = set(failures.failed_game_keys_this_run)
     for item in items:
         try:
-            if core['needs_review_enrichment'](item, today):
+            if not item['key'].startswith('Sub_') and core['needs_review_enrichment'](item, today):
                 review_candidate_items.append(item)
         except Exception as exc:
             key = item['key']
