@@ -167,7 +167,7 @@ def main():
                 'mechanical_action': 'keep_for_ai_then_resolve_condition',
                 'package_appids': appids,
                 'representative_appid': row['appid'] or None,
-                'ai_condition_after_self_taste_include': 'at_least_one_contained_or_representative_app_is_same_run_taste_include',
+                'ai_condition_after_self_taste_include': 'independent_bundle_member_semantic_evaluation_required_without_forcing_individual_sale',
             }
         elif entity_kind == 'app' and app_type == 'game':
             rule = {
