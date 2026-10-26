@@ -12,6 +12,7 @@ from pathlib import Path
 import requests
 
 import steam_production_cached as accelerator
+import steam_targeted_paid_lanes as targeted
 from steam_partial_publish import (
     FailureQueue,
     catalog_run_is_publishable,
@@ -412,6 +413,10 @@ def collect_partial(core, failures, previous_by_key, partition, sort_by='Name_AS
                 continue
 
             parsed_rows += 1
+            if (not item['key'].startswith('Sub_')
+                    and targeted.candidate_needs_obscure_gate(item)):
+                rejection_counts['obscure_low_signal'] += 1
+                continue
             rejection = core['paid_source_rejection_reason'](item)
             if rejection:
                 rejection_counts[rejection] += 1
