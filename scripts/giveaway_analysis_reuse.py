@@ -5,6 +5,8 @@ If a canonical analyzed card is absent, no semantic facts are manufactured.
 """
 from __future__ import annotations
 
+from card_explanation_policy import GROUNDED_RISK_SOURCES
+
 
 def _exact_appid(value):
     if type(value) is int and value > 0:
@@ -46,6 +48,17 @@ def attach(giveaways, canonical_items):
                 # 'risks' on the canonical final card have already passed
                 # card_explanation_policy.visible_risk_payload(); do not synthesize cons.
                 risks = source.get("risks") if isinstance(source.get("risks"), list) else []
+                negative_provenance = source.get("risk_provenance")
+                negatives_grounded = (
+                    isinstance(negative_provenance, list)
+                    and len(negative_provenance) == len(risks)
+                    and all(
+                        isinstance(p, dict) and p.get("source") in GROUNDED_RISK_SOURCES
+                        for p in negative_provenance
+                    )
+                )
+                if not negatives_grounded:
+                    risks = []
                 analysis.update({
                     "summary": summary if isinstance(summary, str) and summary.strip() else None,
                     "why_fit": [v for v in why_fit if isinstance(v, str)],
@@ -56,10 +69,10 @@ def attach(giveaways, canonical_items):
                         "description_source_appid": source.get("description_source_appid"),
                         "description_source_path": source.get("description_source_path"),
                         "positive_evidence": source.get("why_fit_provenance"),
-                        "negative_evidence": source.get("risk_provenance"),
+                        "negative_evidence": negative_provenance if negatives_grounded else [],
                     },
                 })
-                if analysis["summary"] and analysis["why_fit"] and source.get("risk_status"):
+                if analysis["summary"] and analysis["why_fit"] and source.get("risk_status") and negatives_grounded:
                     analysis.update(status="ready", reason="canonical_precomputed_analysis")
                 else:
                     analysis["reason"] = "canonical_analysis_incomplete"
