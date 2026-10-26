@@ -299,6 +299,62 @@ def v2_grant(repo, expected, env):
     return cfg, m, rows
 
 
+def v2_scoped_owner_dispatch(cfg, env):
+    """Real GitHub owner/manual workflow identity, not a chat-supplied actor."""
+    p = cfg.get("original18_trial_scoped_authorization") or {}
+    check(p.get("enabled") is True
+          and p.get("exact_trial_id") == "dossier-notes-v2-original18-first"
+          and p.get("github_owner_login") == "kentrap2011-hub"
+          and p.get("github_owner_actor_id") == "315790060"
+          and p.get("semantic_phases") == ["research", "assembly"]
+          and p.get("isolated_sandbox_only") is True
+          and p.get("production") is False
+          and p.get("canonical_ingest") is False
+          and env.get("GITHUB_ACTOR") == p["github_owner_login"]
+          and env.get("GITHUB_TRIGGERING_ACTOR") == env.get("GITHUB_ACTOR")
+          and env.get("GITHUB_ACTOR_ID") == p["github_owner_actor_id"]
+          and env.get("GITHUB_REPOSITORY_OWNER_ID") == env.get("GITHUB_ACTOR_ID")
+          and env.get("GITHUB_RUN_ATTEMPT") == "1"
+          and str(env.get("GITHUB_RUN_ID", "")).isdigit(),
+          "original18 pilot requires actual first-attempt authenticated owner Actions dispatch")
+    return p
+
+
+def local_v2_scoped_owner_grant(repo, cfg, m, env):
+    """First sandbox commit: create-only owner grant, immutable in this Git tree.
+
+    No production/main write, no arbitrary human-provided actor identity.
+    A *separate* real GitHub manual authorization must follow the frozen marker.
+    """
+    v2_scoped_owner_dispatch(cfg, env)
+    path = m["human_grant"]["path"]
+    check(path == "config/dossier_notes_v2_issuer_human_grant.json"
+          and m["human_grant"]["commit"] is None
+          and m["human_grant"]["blob_sha"] is None
+          and m["human_grant"]["github_actor_id"] is None,
+          "scoped first-trial grant cannot replace preexisting authority")
+    record = {
+        "schema":"DOSSIER-NOTES-V2-MANUAL-ISSUER-HUMAN-GRANT",
+        "schema_version":2,
+        "trial_id":m["trial_id"],
+        "original_buffer_blob_sha":m["frozen_original_buffer_blob_sha"],
+        "original_pins":cfg["immutable_original_pins"],
+        "original_groups":cfg["original_groups"],
+        "github_actor_id":env["GITHUB_ACTOR_ID"],
+        "scope":"issue_single_original18_V2_manifest_marker_then_separate_authorization_only",
+        "semantic_execution_approved":True,
+        "production_approved":False,
+    }
+    raw = (json.dumps(record, sort_keys=True, separators=(",", ":")) + "\n").encode()
+    source = run(repo, "rev-parse", "HEAD")
+    check(not run(repo, "ls-files", "--", path), "scoped owner grant path already exists")
+    grant = commit_new(repo, path, raw, "Grant one original18 V2 pilot on sandbox only")
+    assert_one_new_path(repo, source, grant, path)
+    return {"path":path,"commit":grant,
+            "blob_sha":run(repo, "rev-parse", grant + ":" + path),
+            "github_actor_id":env["GITHUB_ACTOR_ID"]}
+
+
 def assert_v2_freeze_dispatch(expected, confirmation, env):
     check(isinstance(expected, str) and SHA40.fullmatch(expected),
           "V2 expected main SHA invalid")
@@ -350,11 +406,22 @@ def publish_v2(repo, expected):
           and remote_sha(repo, "refs/heads/main") == expected,
           "V2 exact remote main SHA drifted")
     assert_clean(repo)
-    cfg, m, rows = v2_grant(repo, expected, os.environ)
+    cfg, m, rows = v2_scope(repo)
+    check(m["enabled"] is True and m["enabled_by_default"] is False,
+          "scoped issuer not explicitly enabled")
     ref = "refs/heads/" + m["sandbox_branch"]
     check(remote_sha(repo, ref) is None, "V2 branch already exists; no second marker or replay")
-    # Directly reuse V1 create-only commit and exact empty-ref lease primitives.
-    run(repo, "checkout", "-b", m["sandbox_branch"])
+    if m["human_grant"]["commit"] is None:
+        # The first manual owner dispatch writes the immutable scoped grant to
+        # the NEW sandbox (never main); then immediately freezes the original18.
+        v2_scoped_owner_dispatch(cfg, os.environ)
+        run(repo, "checkout", "-b", m["sandbox_branch"])
+        m = {**m, "human_grant": local_v2_scoped_owner_grant(
+            repo, cfg, m, os.environ)}
+    else:
+        # Preserve the older verified, already-pinned issuer path unchanged.
+        cfg, m, rows = v2_grant(repo, expected, os.environ)
+        run(repo, "checkout", "-b", m["sandbox_branch"])
     proof = local_v2_freeze(repo, m["trial_id"], rows, secrets.token_hex(16))
     check(remote_sha(repo, "refs/heads/main") == expected
           and remote_sha(repo, ref) is None,
