@@ -840,6 +840,7 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
         run(self.repo, "push", "origin", proof["marker_commit"] + ":" + ref)
         # Synthetic GH main checkout with a proper source ancestor and grant.
         run(self.repo, "checkout", "-B", "main", self.initial)
+        run(self.repo, "push", "origin", "main:refs/heads/main")
         prospective = copy.deepcopy(self.m)
         prospective["human_grant"] = {
             "path":"config/dossier_notes_v2_issuer_human_grant.json",
