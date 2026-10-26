@@ -760,6 +760,100 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
         with self.assertRaises(v2.NotesV2Error):
             v2._manifest(self.repo, proof["marker_commit"], self.m["trial_id"])
 
+    def test_forged_manifest_parent_with_extra_file_is_rejected(self):
+        path = self.m["manifest_path"]
+        write(self.repo, path, {"schema":"DOSSIER-NOTES-V2-FROZEN-MANIFEST",
+              "schema_version":2, "trial_id":self.m["trial_id"],
+              "original_pins":self.cfg["immutable_original_pins"], "items":self.rows})
+        write(self.repo, "unapproved-extra.json", {"not_in_original_freeze":True})
+        fake_parent = commit(self.repo, "fixture: forged manifest with hidden extra")
+        nonce = "e" * 32
+        write(self.repo, "data/control/dossier_notes_v2/run_starts/" + nonce + ".json",
+              {"schema":"DOSSIER-NOTES-V2-RUN-START",
+               "schema_version":2, "trial_id":self.m["trial_id"], "nonce":nonce})
+        fake_marker = commit(self.repo, "fixture: otherwise valid one-add marker")
+        with self.assertRaisesRegex(RuntimeError, "unexpected or overwritten Git path"):
+            self.auth.v2_freeze_chain(self.repo, marker_commit=fake_marker,
+                trial_id=self.m["trial_id"], approved_main=self.initial,
+                grant_commit=self.initial)
+        self.assertNotEqual(fake_parent, self.initial)
+
+    def test_forged_manifest_merge_parent_is_rejected(self):
+        run(self.repo, "checkout", "-b", "unapproved-side", self.initial)
+        write(self.repo, "side-commit.json", {"side":True})
+        side = commit(self.repo, "fixture: unrelated second parent")
+        run(self.repo, "checkout", "main")
+        proof = self.freeze()
+        # Same correct manifest tree, but its commit has TWO parents.
+        merge = run(self.repo, "commit-tree", proof["manifest_commit"] + "^{tree}",
+                    "-p", self.initial, "-p", side, "-m", "fixture: fake merge parent")
+        run(self.repo, "checkout", "-b", "forged-merge", merge)
+        nonce = "f" * 32
+        write(self.repo, "data/control/dossier_notes_v2/run_starts/" + nonce + ".json",
+              {"schema":"DOSSIER-NOTES-V2-RUN-START",
+               "schema_version":2, "trial_id":self.m["trial_id"], "nonce":nonce})
+        fake_marker = commit(self.repo, "fixture: marker above merge parent")
+        with self.assertRaisesRegex(RuntimeError, "exactly one actual Git parent"):
+            self.auth.v2_freeze_chain(self.repo, marker_commit=fake_marker,
+                trial_id=self.m["trial_id"])
+
+    def test_foreign_source_and_plausible_remote_authorization_rejected(self):
+        from unittest.mock import patch
+        run(self.repo, "checkout", "-b", "foreign-freeze-source", self.initial)
+        write(self.repo, "foreign-branch-extra.json", {"not_on_approved_main":True})
+        foreign = commit(self.repo, "fixture: source off approved main")
+        proof = self.freeze()  # Legitimate-looking exactly two one-add commits
+        with self.assertRaisesRegex(RuntimeError, "not on approved current main"):
+            self.auth.v2_freeze_chain(self.repo,
+                marker_commit=proof["marker_commit"], trial_id=self.m["trial_id"],
+                approved_main=self.initial, grant_commit=self.initial)
+        prospective = copy.deepcopy(self.m)
+        prospective["human_grant"] = {
+            "path":"config/dossier_notes_v2_issuer_human_grant.json",
+            "commit":"c"*40, "blob_sha":"d"*40, "github_actor_id":"1234"}
+        with patch.object(self.pub, "v2_scope",
+                          return_value=(self.cfg, prospective, self.rows)):
+            fake_auth = self.auth.local_v2_authorization(
+                self.repo, marker_commit=proof["marker_commit"],
+                trial_id=self.m["trial_id"], grant_commit="c"*40,
+                grant_blob="d"*40, actor_id="1234", run_id="667")
+            bare = Path(self.tmp.name) / "forged-remote.git"
+            subprocess.run(["git", "init", "--bare", "-q", str(bare)], check=True)
+            run(self.repo, "remote", "add", "origin", str(bare))
+            ref = "refs/heads/" + self.m["sandbox_branch"]
+            run(self.repo, "push", "origin", fake_auth + ":" + ref)
+            self.assertEqual(self.pub.remote_sha(self.repo, ref), fake_auth)
+            with patch.object(self.auth, "assert_canonical_remote", return_value=None):
+                with self.assertRaisesRegex(RuntimeError, "not on approved current main"):
+                    self.auth.authorized_v2_structure_only(
+                        self.repo, marker_commit=proof["marker_commit"],
+                        authorization_commit=fake_auth)
+        self.assertNotEqual(foreign, self.initial)
+
+    def test_real_shape_without_independent_freeze_run_is_not_issuable(self):
+        from unittest.mock import patch
+        proof = self.freeze()
+        bare = Path(self.tmp.name) / "origin.git"
+        subprocess.run(["git", "init", "--bare", "-q", str(bare)], check=True)
+        run(self.repo, "remote", "add", "origin", str(bare))
+        ref = "refs/heads/" + self.m["sandbox_branch"]
+        run(self.repo, "push", "origin", proof["marker_commit"] + ":" + ref)
+        # Synthetic GH main checkout with a proper source ancestor and grant.
+        run(self.repo, "checkout", "-B", "main", self.initial)
+        prospective = copy.deepcopy(self.m)
+        prospective["human_grant"] = {
+            "path":"config/dossier_notes_v2_issuer_human_grant.json",
+            "commit":self.initial, "blob_sha":"d"*40, "github_actor_id":"1234"}
+        with patch.object(self.pub, "v2_grant",
+                          return_value=(self.cfg, prospective, self.rows)):
+            with patch.object(self.auth, "assert_canonical_remote", return_value=None):
+                with self.assertRaisesRegex(RuntimeError, "not independently attested"):
+                    self.auth.publish_v2_authorization(
+                        self.repo, expected_main=self.initial,
+                        marker_commit=proof["marker_commit"])
+        self.assertEqual(self.pub.remote_sha(self.repo, ref),
+                         proof["marker_commit"])  # No new authorization pushed.
+
     def test_create_only_ref_race_and_remote_second_marker(self):
         proof = self.freeze()
         bare = Path(self.tmp.name) / "remote.git"
