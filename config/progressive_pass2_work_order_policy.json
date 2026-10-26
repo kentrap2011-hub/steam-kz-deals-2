@@ -1,0 +1,38 @@
+{
+  "contract": "PROGRESSIVE-PASS2-WORK-ORDER-V1",
+  "status": "canonical",
+  "owner": "github_control_plane",
+  "scope": "normal_first_pass_for_current_eligible_unresolved_deep_candidates",
+  "precedence": [
+    "never_authoritatively_completed_under_any_profile_first",
+    "previously_completed_oldest_last_success_at_utc_first"
+  ],
+  "never_completed_order": [
+    "canonical_purchase_value_desc",
+    "steam_global_positive_percent_desc",
+    "steam_global_review_count_desc",
+    "family_id_asc"
+  ],
+  "purchase_value": {
+    "canonical_function": "priority_ranking.build_purchase_breakdown",
+    "score_field": "purchase_score",
+    "max_score": 40,
+    "source": "current_existing_progressive_candidate_context.purchase",
+    "requires_no_new_network_lookup": true
+  },
+  "steam_review_inputs": {
+    "positive_percent": "context_only.reviews.global_positive_percent",
+    "review_count": "context_only.reviews.global_count",
+    "missing_numeric_value": 0
+  },
+  "constraints": {
+    "full_eligible_deep_scope_preserved": true,
+    "hard_top_n": false,
+    "sale_expiry_used_for_order": false,
+    "changes_site_ranking": false,
+    "changes_eligibility": false,
+    "changes_worker_prompt": false,
+    "recovery_attempts_not_reordered": true
+  },
+  "output": "ordered_existing_github_prepared_progressive_pass2_work_manifest"
+}
