@@ -830,6 +830,49 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
                         authorization_commit=fake_auth)
         self.assertNotEqual(foreign, self.initial)
 
+    def test_scoped_original18_owner_grant_freeze_and_direct_authorizer(self):
+        # Exact first-trial Git authority modeled on disposable Git only.
+        # A forged run_id here is NOT evidence of a real GitHub Actions run.
+        grant_id = "315790060"
+        env = {
+            "GITHUB_ACTOR_ID": grant_id,
+            "GITHUB_REPOSITORY_OWNER_ID": grant_id,
+            "GITHUB_ACTOR": "kentrap2011-hub",
+            "GITHUB_TRIGGERING_ACTOR": "kentrap2011-hub",
+            "GITHUB_RUN_ATTEMPT": "1",
+            "GITHUB_RUN_ID": "123456",
+        }
+        run(self.repo, "branch", "main", self.initial)
+        run(self.repo, "checkout", "-b", self.m["sandbox_branch"])
+        grant = self.pub.local_v2_scoped_owner_grant(
+            self.repo, self.cfg, self.m, env)
+        self.assertEqual(grant["github_actor_id"], grant_id)
+        self.assertEqual(run(self.repo, "rev-parse", grant["commit"] + "^"),
+                         self.initial)
+        frozen = self.pub.local_v2_freeze(
+            self.repo, self.m["trial_id"], self.rows, "e" * 32)
+        permit = self.auth.local_v2_authorization(
+            self.repo, marker_commit=frozen["marker_commit"],
+            trial_id=self.m["trial_id"], grant_commit=grant["commit"],
+            grant_blob=grant["blob_sha"], actor_id=grant_id, run_id="123456")
+        proof = self.auth.verify_v2_authorization(
+            self.repo, marker_commit=frozen["marker_commit"],
+            authorization_commit=permit)
+        self.assertTrue(proof["semantic_execution_authorized"])
+        self.assertFalse(proof["canonical_acceptance"])
+        self.assertFalse(proof["production_authorized"])
+        from dossier_notes_v2_per_item_receipts import issuer_structure
+        checked = issuer_structure(
+            self.repo, marker_commit=frozen["marker_commit"],
+            trial_id=self.m["trial_id"], authorization_commit=permit)
+        self.assertTrue(checked["semantic_execution_authorized"])
+        self.assertFalse(checked["github_run_authenticated"])
+        # A different Actions actor can never get the same grant.
+        with self.assertRaises(RuntimeError):
+            self.pub.v2_scoped_owner_dispatch(
+                self.cfg, {**env, "GITHUB_ACTOR_ID": "3",
+                           "GITHUB_REPOSITORY_OWNER_ID": "3"})
+
     def test_valid_original_freeze_issues_without_extra_run_attestation(self):
         from unittest.mock import patch
         # A genuine one-add scoped grant, frozen eighteen assignments and
