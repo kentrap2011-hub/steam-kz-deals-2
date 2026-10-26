@@ -64,10 +64,20 @@
         activeOffers.push({...rawOffer,_end:end});
       }
       activeOffers.sort((a,b)=>a._end-b._end||String(a.storefront||'').localeCompare(String(b.storefront||''))||String(a.source_offer_id||'').localeCompare(String(b.source_offer_id||'')));
-      if(activeOffers.length)games.push({game_key:rawGame.game_key,title:rawGame.title,offers:activeOffers});
+      if(activeOffers.length) {
+        const identity=rawGame.analysis_identity||{};
+        const analysis=rawGame.analysis||{};
+        const trusted=identity.status==='resolved'
+          && Number.isSafeInteger(identity.steam_appid)&&identity.steam_appid>0
+          && analysis.status==='ready'&&analysis.steam_appid===identity.steam_appid;
+        games.push({game_key:rawGame.game_key,title:rawGame.title,offers:activeOffers,
+          analysis:trusted?analysis:null});
+      }
     }
     if(!games.length)return {state:'updating',message:UPDATING_COPY,games:[],fresh_until_utc:data.fresh_until_utc};
-    return {state:'active',message:null,games,fresh_until_utc:data.fresh_until_utc};
+    const credit=data.attribution&&data.attribution.url==='https://isthereanydeal.com/'
+      ?{url:'https://isthereanydeal.com/',label:'Game identity via IsThereAnyDeal'}:null;
+    return {state:'active',message:null,games,fresh_until_utc:data.fresh_until_utc,attribution:credit};
   }
 
   function navState(payload,nowMs=Date.now()){
@@ -91,7 +101,23 @@
     return `<div class="giveaway-list">${view.games.map(game=>{
       const offers=game.offers.map(offer=>offerMarkup(offer,nowMs,{compact:true})).join('');
       return `<article class="giveaway-list-card" data-giveaway-key="${escapeHtml(game.game_key)}"><div class="giveaway-list-main"><div class="giveaway-list-title">${escapeHtml(game.title)}</div><div class="giveaway-list-offers">${offers}</div></div><button class="small-btn giveaway-details" type="button" data-giveaway-detail="${escapeHtml(game.game_key)}">Подробнее</button></article>`;
-    }).join('')}</div>`;
+    }).join('')}</div>${creditMarkup(view)}`;
+  }
+
+  function creditMarkup(view){
+    const credit=view.attribution;
+    return credit?`<p class="giveaway-identity-credit"><a href="${escapeHtml(credit.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(credit.label)}</a></p>`:'';
+  }
+
+  function analysisMarkup(game){
+    const analysis=game.analysis;
+    if(!analysis)return `<section class="giveaway-analysis-incomplete" aria-label="Описание, плюсы и минусы пока недоступны"><div class="giveaway-analysis-labels"><span>Описание</span><span>Плюсы</span><span>Минусы</span></div><p>${escapeHtml(ANALYSIS_INCOMPLETE_COPY)}</p></section>`;
+    const summary=typeof analysis.summary==='string'?analysis.summary.trim():'';
+    const positives=Array.isArray(analysis.why_fit)?analysis.why_fit.filter(x=>typeof x==='string'&&x.trim()):[];
+    const negatives=Array.isArray(analysis.risks)?analysis.risks.filter(x=>typeof x==='string'&&x.trim()):[];
+    if(!summary||!positives.length)return `<section class="giveaway-analysis-incomplete"><p>${escapeHtml(ANALYSIS_INCOMPLETE_COPY)}</p></section>`;
+    const list=(values,empty)=>values.length?`<ul>${values.map(item=>`<li>${escapeHtml(item)}</li>`).join('')}</ul>`:`<p>${escapeHtml(empty)}</p>`;
+    return `<section class="giveaway-analysis-ready"><h3>Описание</h3><p>${escapeHtml(summary)}</p><h3>Плюсы</h3>${list(positives,'Пока не установлены')}<h3>Минусы</h3>${list(negatives,'Подтверждённых минусов пока нет')}</section>`;
   }
 
   function buildDetailMarkup(payload,gameKey,nowMs=Date.now()){
@@ -101,7 +127,7 @@
     const game=view.games.find(row=>String(row.game_key)===String(gameKey));
     if(!game)return `${back}<div class="giveaway-state giveaway-state-updating">${escapeHtml(UPDATING_COPY)}</div>`;
     const offers=game.offers.map(offer=>offerMarkup(offer,nowMs)).join('');
-    return `${back}<article class="giveaway-detail-card" data-giveaway-detail-key="${escapeHtml(game.game_key)}"><h2>${escapeHtml(game.title)}</h2><div class="giveaway-detail-offers">${offers}</div><section class="giveaway-analysis-incomplete" aria-label="Описание, плюсы и минусы пока недоступны"><div class="giveaway-analysis-labels"><span>Описание</span><span>Плюсы</span><span>Минусы</span></div><p>${escapeHtml(ANALYSIS_INCOMPLETE_COPY)}</p></section></article>`;
+    return `${back}<article class="giveaway-detail-card" data-giveaway-detail-key="${escapeHtml(game.game_key)}"><h2>${escapeHtml(game.title)}</h2><div class="giveaway-detail-offers">${offers}</div>${analysisMarkup(game)}${creditMarkup(view)}</article>`;
   }
 
   function nextBoundaryMs(payload,nowMs=Date.now()){
