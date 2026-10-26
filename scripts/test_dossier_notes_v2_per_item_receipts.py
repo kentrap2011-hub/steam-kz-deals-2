@@ -353,6 +353,17 @@ class PerItemReceiptGitTests(unittest.TestCase):
             result_commit=asm["remote_commit"])
         self.assertEqual(checked["status"],
                          "strict_item_valid_pending_existing_atomic_group_ingest")
+        typed = receipts.publish_assembly_receipt_remote(
+            self.repo, branch=branch, expected_remote_head=asm["remote_commit"],
+            **self.kw(research_commit=submitted["candidate_commit"],
+                      assembly_commit=asm["remote_commit"]))
+        self.assertEqual(typed["status"], "disposable_remote_assembly_receipt_only")
+        self.assertEqual(typed["disposition"],
+                         "strict_item_valid_pending_existing_atomic_group_ingest")
+        self.assertFalse(typed["github_assembly_receipt_confirmed"])
+        self.assertEqual(receipts._remote_tip(self.repo, branch), typed["remote_commit"])
+        run(self.repo, "fetch", "origin", "refs/heads/" + branch)
+        run(self.repo, "checkout", "--detach", typed["remote_commit"])
 
         (self.repo / ".dossier-final-offline-fixture").write_text("synthetic\n")
         with (self.repo / ".git/info/exclude").open("a") as handle:
