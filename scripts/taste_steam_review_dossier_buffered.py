@@ -1081,7 +1081,7 @@ def _drain_notes_v2_individual(
         from dossier_two_stage_staging import git
         source = json.loads(
             (Path(__file__).resolve().parents[1] / "config" /
-             "dossier_research_notes_v2_contract.json").read_text(encoding="utf-8"))
+             "dossier_research_notes_v2_contract.json").read_text(encoding="utf-8")
         )
         pilot = source.get("original18_trial_scoped_authorization", {})
         issuer = source.get("manual_v2_issuer", {})
