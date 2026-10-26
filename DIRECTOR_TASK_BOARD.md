@@ -5,6 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## НОВОЕ ИСПОЛНЕНИЕ — Dossier V2 на исходных 18 играх, 2026-10-26
+
+- **НОВЫЙ ЧАТ 3**: `dossier-v2-original18-real-pilot-end-to-end-route-implement-01` → `WORKER_TASK_DOSSIER_V2_ORIGINAL18_REAL_PILOT_END_TO_END_ROUTE_IMPLEMENT_01.md`. Задача — не RECON и не QA: реализовать и, при наличии инструментов, осуществить исполняемый one-shot scoped Research → Assembly → GitHub sandbox receipts/штатное сохранение для исходных 18 игр. Пользователь дал явное разрешение на это испытание; не повторять запрос, не включать production/V1. Не заявлять живой запуск без фактического GitHub run/semantic результата.
+- Уже в main №266 (исправлен issuer), №270 (14/14 тестов receipt), №274 (штатное изолированное сохранение). Главная недостающая часть — разрешённая связь с реальным semantic worker, а не очередная проверка тестов. Нельзя автоматически превращать offline tests в выполнение.
+- **ЧАТ 1:** завершён report-only draft [№306](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/306), причины путаницы нумерации и варианты модели. Это не зависимость и не gate для испытания 18 игр.
+
 ## НОВОЕ НЕЗАВИСИМОЕ ПОРУЧЕНИЕ — НУМЕРАЦИЯ И МОДЕЛЬ ЧАТОВ, 2026-10-26
 
 - **НОВЫЙ ЧАТ 1**: `director-chat-numbering-cause-and-redesign-options-audit-01` → `WORKER_TASK_DIRECTOR_CHAT_NUMBERING_CAUSE_AND_REDESIGN_OPTIONS_AUDIT_01.md`. Независимо выяснить причины повторной путаницы номеров, физического чата и task ID; сравнить любые варианты от точечной правки правил до отказа от самой модели Director/worker или введения другой роли; для каждого варианта плюсы, минусы, риски и цена внедрения. Только самостоятельный отчёт, не изменять текущую схему до решения пользователя.
