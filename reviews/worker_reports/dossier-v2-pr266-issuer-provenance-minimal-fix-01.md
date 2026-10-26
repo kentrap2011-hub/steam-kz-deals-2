@@ -21,7 +21,7 @@ Four additional disposable-Git tests in existing `scripts/test_dossier_research_
 
 CI code revision before this report: `5c3e7e7f67af4447166bb5ea891c46c1533cf609`.
 - [Notes V2 / Assembly run 40288614711](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40288614711): **50/50 synthetic tests PASS**, including all four new attack cases.
-- [Original V1 publisher run 40288614575](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40288614575): existing V1 offline suite triggered, check final workflow conclusion before acceptance.
+- [Original V1 publisher run 40288614575](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40288614575): SUCCESS — 12 feasibility + 7 publisher + 8 original Research trial = **27/27 V1-oriented tests PASS**, plus real disposable original six-group strict proposal/freeze step.
 - [Eventual chain 40288614470](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40288614470), [backlog 40288614541](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40288614541), [site task registry 40288614448](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40288614448): SUCCESS.
 - Tests run on GitHub Actions PR synthetic merge checkout, **not a detached direct HEAD**; connector runtime has no network-capable local GitHub clone. A first test run failed only because two test assertions expected RuntimeError while the existing `require` raises ValueError; corrected assertions and subsequent 50/50 PASS are verified in the later run.
 - Creating this report changes PR HEAD without changing implementation; recheck exact final HEAD and its CI before independent acceptance.
