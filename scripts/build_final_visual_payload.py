@@ -77,6 +77,46 @@ SEMANTIC_PRESERVED_FIELDS = (
 )
 
 
+def bound_paid_source_funnel(ready):
+    """Expose only a complete manifest bound to this visual's discovery source."""
+    path = Path('data/production/manifest.json')
+    if not path.is_file():
+        return None
+    manifest = json.loads(path.read_text(encoding='utf-8'))
+    if manifest.get('complete') is not True or manifest.get('country_code') != 'kz':
+        return None
+    visual_source = (ready.get('source_mailing_updated_at_utc')
+                     or ready.get('commercial_source_mailing_updated_at_utc'))
+    if not visual_source or manifest.get('updated_at_utc') != visual_source:
+        return None
+    funnel = manifest.get('filtering_funnel') or {}
+    fields = (
+        'source_reported_rows', 'source_rows_seen', 'parsed_rows',
+        'removed_non_paid_or_missing_price', 'removed_discount_below_50',
+        'removed_price_above_4500', 'removed_obvious_extras',
+        'removed_software_only', 'eligible_rows_before_partition_dedupe',
+        'unique_eligible_after_partition_dedupe', 'broad_shortlist_items',
+        'paid_shortlist_items',
+    )
+    metrics = {}
+    for key in fields:
+        value = funnel.get(key)
+        if type(value) is int and value >= 0:
+            metrics['paid_source_' + key] = value
+    partitions = [
+        {
+            'partition_id': row.get('id'),
+            'rows_seen': row.get('rows_seen'),
+            'eligible_rows_after_local_gate': row.get('eligible_rows_after_local_gate'),
+        }
+        for row in (manifest.get('search_partitions') or [])
+        if isinstance(row, dict) and row.get('id') in {'games', 'dlc'}
+        and type(row.get('rows_seen')) is int
+    ]
+    return {'metrics': metrics, 'partitions': partitions,
+            'discovery_source_updated_at_utc': visual_source}
+
+
 def cap_visible_paid_offers(ready, *, full_ranked_scope):
     """Publication-only cap after producer ranking; never truncate Deep work."""
     rule = json.loads(
@@ -108,6 +148,11 @@ def cap_visible_paid_offers(ready, *, full_ranked_scope):
             raise ValueError('visible paid offer violates current 50%/4500 KZT bound')
 
     status = ready.setdefault('processing_status', {})
+    if full_ranked_scope:
+        funnel = bound_paid_source_funnel(ready)
+        if funnel is not None:
+            status.update(funnel['metrics'])
+            ready['paid_source_partitions_funnel'] = funnel['partitions']
     previous_internal = status.get('ranked_internal_paid_offer_count')
     internal = (
         len(ranked) if full_ranked_scope
