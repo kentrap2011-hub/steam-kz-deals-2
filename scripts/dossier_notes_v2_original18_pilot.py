@@ -81,7 +81,7 @@ def run(args):
     if args.command == "assembly":
         if args.research_commit is None:
             v2.reject("wrong_binding", "original Research Git introduction SHA required")
-        return transport.publish_assembly_item_remote(
+        return transport.publish_one_assembly_item_remote(
             research_commit=args.research_commit, **kwargs)
     v2.reject("wrong_binding", "unrecognized phase")
 
