@@ -102,7 +102,7 @@ def bound_paid_source_funnel(ready, path=None):
     for key in fields:
         value = funnel.get(key)
         if type(value) is int and value >= 0:
-            metrics['paid_source_' + key] = value
+            metrics[('paid_' if key.startswith('source_') else 'paid_source_') + key] = value
     partitions = [
         {
             'partition_id': row.get('id'),
