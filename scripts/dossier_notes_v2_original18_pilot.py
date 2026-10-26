@@ -58,6 +58,21 @@ def run(args):
     token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
     if not token:
         v2.reject("wrong_binding", "authenticated GitHub readback token missing")
+    # Authenticated Actions evidence closes the gap between an immutable Git
+    # authorizer document and an actually successful human dispatch.
+    run_id = authorization["github_authorization_run_id"]
+    event = transport._github_get(REPOSITORY, "actions/runs/" + run_id, token)
+    identity = cfg["original18_trial_scoped_authorization"]
+    if (event.get("id") != int(run_id)
+            or event.get("event") != "workflow_dispatch"
+            or event.get("head_branch") != "main"
+            or event.get("run_attempt") != 1
+            or event.get("status") != "completed"
+            or event.get("conclusion") != "success"
+            or event.get("actor", {}).get("id") != int(identity["github_owner_actor_id"])
+            or event.get("actor", {}).get("login") != identity["github_owner_login"]
+            or event.get("path") != ".github/workflows/authorize-dossier-shadow-research-feasibility.yml"):
+        v2.reject("wrong_binding", "successful authenticated original18 authorizer run not proven")
     kwargs = {
         "repo": repo, "branch": branch, "expected_remote_head": args.expected_remote_head,
         "marker_commit": args.marker_commit, "trial_id": trial_id,
