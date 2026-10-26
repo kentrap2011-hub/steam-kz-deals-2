@@ -1,5 +1,11 @@
 # CURRENT TASK
 
+## PARTIAL / BLOCKED — ЧАТ 1: Steam discount >=50%, rolling visible top-100 (2026-10-26)
+- Assignment: `WORKER_TASK_STEAM_DISCOVERY_50_PERCENT_DISCOUNT_TOP100_IMPLEMENT_01.md`; isolated draft [PR #311](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/311), **not ready to merge or deploy**.
+- Implemented: dedicated GitHub-owned Deep work-order policy and lexicographic purchase/review queue order; visible paid cap after canonical ranking, without limiting Deep scope; KZ price/discount publish checks; source-bound funnel-to-Statistics projection and deterministic PR regressions.
+- Pending hard requirements: safely verified eligible-base→DLC discovery, independent exceptional bundles/members not on sale, early obscure-signal escape and full cross-lane funnel; bounded live Steam evidence, ordinary full main production acceptance. The prior global DLC collector remains unchanged pending verified replacement, so product task is **not complete**.
+- Durable report: `reviews/worker_reports/steam-discovery-50-percent-discount-top100-implementation-01.md`. No Dossier V2 or giveaway provider changes, worker prompt change, new scheduler, production write or main merge.
+
 ## BLOCKED — ЧАТ 3: Research Notes V2 remote persistence PR #270 (2026-10-24)
 - Task: `WORKER_TASK_DOSSIER_V2_RESEARCH_GITHUB_PERSISTENCE_FINISH_01.md`; existing draft PR #270 remains open and inactive.
 - Code: single-item create-only Git transport plus authenticated GitHub ref/content re-read, separate candidate/receipt, no semantic execution or final acceptance. Failures of A do not select or block B/C.
