@@ -233,18 +233,15 @@ def test_kz_maxprice_validation_fails_closed_if_capped_partition_leaks_over_cap(
     ):
         assert start == 0
         assert hidef2p is True
-        if maxprice_kzt == 4500 and sort_by == 'Price_DESC':
-            if category1 == '998':
-                return page(3, [result_row(1, 4500)])
-            if category1 == '21':
-                return page(2, [result_row(20, 4600)])
-        raise AssertionError('validator should fail on DLC leak before controls')
+        if maxprice_kzt == 4500 and sort_by == 'Price_DESC' and category1 == '998':
+            return page(3, [result_row(1, 4600)])
+        raise AssertionError('validator should fail on a games/Sub price leak before controls')
 
     c['get_page'] = fake_get_page
     try:
         runner.validate_kz_source_price_bound(c)
     except RuntimeError as exc:
-        assert 'dlc maxprice=4500 leaked 4600.0 KZT' in str(exc)
+        assert 'games maxprice=4500 leaked 4600.0 KZT' in str(exc)
     else:
         raise AssertionError('over-cap capped row must fail closed')
 
