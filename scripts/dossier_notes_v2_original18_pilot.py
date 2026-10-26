@@ -48,7 +48,13 @@ def run(args):
             "semantic_execution_authorized": False,
             "canonical_acceptance": False,
         }
-    # Original GitHub issuer evidence is only structural: the already merged\n    # V2 contract intentionally denies live semantics. Never let a CLI flag or\n    # user-supplied document promote it to semantic authorization.\n    if (cfg.get("authorized_for_semantic_execution") is not True\n            or authorization.get("semantic_execution_authorized") is not True):\n        v2.reject("wrong_binding",\n                  "V2 semantic authorization is disabled; structural issuer is insufficient")\n    if args.appid not in frozen:\n        v2.reject("wrong_binding", "item not in immutable original-18 pilot")
+    # The one-trial grant is independently checked against successful GitHub
+    # Actions below. Global V2 activation remains intentionally false.
+    scoped = cfg.get("original18_trial_scoped_authorization", {})
+    if (scoped.get("enabled") is not True
+            or authorization.get("semantic_execution_authorized") is not True):
+        v2.reject("wrong_binding", "original18 semantic grant not proven")
+    if args.appid not in frozen:\n        v2.reject("wrong_binding", "item not in immutable original-18 pilot")
     if args.expected_remote_head is None or len(args.expected_remote_head) != 40:
         v2.reject("wrong_binding", "fresh exact remote parent SHA required")
     if (not isinstance(args.document, str)
