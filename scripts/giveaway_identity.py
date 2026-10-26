@@ -16,9 +16,9 @@ import giveaway_identity_itad as itad
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "config/giveaway_identity_provider.json"
 CACHE = ROOT / "data/production/giveaways/v1/identity_cache.json"
-EPIC_ID = re.compile(r"[0-9a-fA-F]{32}:[0-9a-fA-F]{32}\\Z")
-GOG_ID = re.compile(r"[1-9][0-9]*\\Z")
-STEAM_ID = re.compile(r"[1-9][0-9]*\\Z")
+EPIC_ID = re.compile(r"[0-9a-fA-F]{32}:[0-9a-fA-F]{32}\Z")
+GOG_ID = re.compile(r"[1-9][0-9]*\Z")
+STEAM_ID = re.compile(r"[1-9][0-9]*\Z")
 
 
 def load_config(path=CONFIG):
