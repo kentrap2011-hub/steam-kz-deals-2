@@ -317,7 +317,6 @@ def v2_freeze_chain(repo, *, marker_commit, trial_id,
         # On the first-trial path, source is the immutable new owner grant
         # child of an original main commit; newer main commits may follow.
         if scoped and not approved:
-            from dossier_shadow_research_trial_publish import assert_one_new_path
             scoped_path = "config/dossier_notes_v2_issuer_human_grant.json"
             previous = run(repo, "rev-parse", source + "^")
             doc = None
