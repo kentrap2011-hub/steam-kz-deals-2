@@ -4,6 +4,7 @@ import tempfile
 from pathlib import Path
 
 import build_final_visual_payload as visual
+import build_pre_ai_family_graph as families
 import build_fixed_package_purchase_options as fixed
 import priority_ranking
 import steam_partial_publish_runner as collector
@@ -128,6 +129,28 @@ def check_five_middling_games_package_below_individual_cutoff():
     assert data['visible_paid_publication']['hidden_below_visible_line_count'] == 6
 
 
+def check_independent_package_family_needs_semantic_not_external_base():
+    contract = json.loads(Path('config/offer_family_contract.json').read_text(encoding='utf-8'))
+    rule = {'mechanical_kind': 'package',
+            'package_appids': ['501','502','503','504','505'],
+            'representative_appid': None}
+    selected = families.resolve(
+        {'Sub_42'},
+        {'Sub_42': {'appid': '', 'title': 'Five excellent games'}},
+        {'Sub_42': {
+            'final_kzt': 100, 'discount_percent': 95,
+            'discount_end_utc': None, 'discount_end_europe_berlin': None,
+        }},
+        {'Sub_42': {'store_name': 'Five excellent games'}},
+        {'Sub_42': rule}, contract
+    )
+    assert len(selected) == 1
+    assert selected[0]['family_type'] == 'package_without_candidate_base'
+    assert selected[0]['requires_ai_base_support'] is False
+    assert selected[0]['all_member_keys'] == ['Sub_42']
+    assert selected[0]['primary_final_kzt'] == 100
+
+
 def check_direct_subs_are_discoverable_without_current_app():
     with tempfile.TemporaryDirectory() as temp:
         root = Path(temp)
@@ -145,7 +168,8 @@ def main():
     check_conservative_obscure_rescue_and_package()
     check_five_middling_games_package_below_individual_cutoff()
     check_direct_subs_are_discoverable_without_current_app()
-    print('targeted Steam KZ DLC and independent package 4/4 PASS')
+    check_independent_package_family_needs_semantic_not_external_base()
+    print('targeted Steam KZ DLC and independent package 5/5 PASS')
 
 
 if __name__ == '__main__':
