@@ -830,30 +830,78 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
                         authorization_commit=fake_auth)
         self.assertNotEqual(foreign, self.initial)
 
-    def test_real_shape_without_independent_freeze_run_is_not_issuable(self):
+    def test_valid_original_freeze_issues_without_extra_run_attestation(self):
         from unittest.mock import patch
-        proof = self.freeze()
+        # A genuine one-add scoped grant, frozen eighteen assignments and
+        # existing GitHub-owned authorization path, all on disposable local Git.
+        grant_path = "config/dossier_notes_v2_issuer_human_grant.json"
+        write(self.repo, grant_path, {
+            "schema":"DOSSIER-NOTES-V2-MANUAL-ISSUER-HUMAN-GRANT",
+            "schema_version":2,
+            "trial_id":self.m["trial_id"],
+            "original_buffer_blob_sha":self.m["frozen_original_buffer_blob_sha"],
+            "original_pins":self.cfg["immutable_original_pins"],
+            "original_groups":self.cfg["original_groups"],
+            "github_actor_id":"1234",
+            "scope":"issue_single_original18_V2_manifest_marker_then_separate_authorization_only",
+            "semantic_execution_approved":False,
+            "production_approved":False,
+        })
+        grant_commit = commit(self.repo, "fixture: exact scoped human grant")
+        grant_blob = run(self.repo, "rev-parse", grant_commit + ":" + grant_path)
+        proof = self.freeze()  # Both frozen commits descend from the grant.
         bare = Path(self.tmp.name) / "origin.git"
         subprocess.run(["git", "init", "--bare", "-q", str(bare)], check=True)
         run(self.repo, "remote", "add", "origin", str(bare))
         ref = "refs/heads/" + self.m["sandbox_branch"]
         run(self.repo, "push", "origin", proof["marker_commit"] + ":" + ref)
-        # Synthetic GH main checkout with a proper source ancestor and grant.
-        run(self.repo, "checkout", "-B", "main", self.initial)
+        run(self.repo, "checkout", "-B", "main", grant_commit)
         run(self.repo, "push", "origin", "main:refs/heads/main")
+
         prospective = copy.deepcopy(self.m)
+        prospective["enabled"] = True
         prospective["human_grant"] = {
-            "path":"config/dossier_notes_v2_issuer_human_grant.json",
-            "commit":self.initial, "blob_sha":"d"*40, "github_actor_id":"1234"}
-        with patch.object(self.pub, "v2_grant",
+            "path":grant_path, "commit":grant_commit,
+            "blob_sha":grant_blob, "github_actor_id":"1234",
+        }
+        env = {
+            "GITHUB_ACTIONS":"true", "GITHUB_EVENT_NAME":"workflow_dispatch",
+            "GITHUB_REPOSITORY":self.auth.REPOSITORY,
+            "GITHUB_REF":"refs/heads/main",
+            "GITHUB_WORKFLOW_REF":self.auth.REPOSITORY + "/" + self.auth.WORKFLOW
+                                   + "@refs/heads/main",
+            "GITHUB_SHA":grant_commit, "GITHUB_RUN_ATTEMPT":"1",
+            "GITHUB_ACTOR_ID":"1234", "GITHUB_ACTOR":"approved-actor",
+            "GITHUB_TRIGGERING_ACTOR":"approved-actor", "GITHUB_RUN_ID":"667",
+        }
+        with patch.object(self.pub, "v2_scope",
                           return_value=(self.cfg, prospective, self.rows)):
-            with patch.object(self.auth, "assert_canonical_remote", return_value=None):
-                with self.assertRaisesRegex(ValueError, "not independently attested"):
+            # A local bare origin substitutes only the canonical GitHub URL;
+            # leave the real grant, freeze, ancestry and remote-lease checks on.
+            with patch.object(self.auth, "assert_canonical_remote",
+                              return_value=None), patch.dict(os.environ, env):
+                self.auth.assert_v2_authorizing_dispatch(
+                    grant_commit, proof["marker_commit"],
+                    prospective["authorization_confirmation"], os.environ)
+                issued = self.auth.publish_v2_authorization(
+                    self.repo, expected_main=grant_commit,
+                    marker_commit=proof["marker_commit"])
+                self.assertEqual(
+                    issued["status"], "issued_inactive_V2_authorization_not_semantics")
+                self.assertFalse(issued["semantic_execution_authorized"])
+                self.assertEqual(issued["human_grant_commit"], grant_commit)
+                self.assertEqual(self.pub.remote_sha(self.repo, ref),
+                                 issued["authorization_commit"])
+                self.assertEqual(run(self.repo, "rev-parse",
+                                     issued["authorization_commit"] + "^"),
+                                 proof["marker_commit"])
+                # A second invocation cannot silently issue again or overwrite.
+                run(self.repo, "checkout", "main")
+                with self.assertRaisesRegex(ValueError,
+                                            "V2 ref must be exactly marker HEAD"):
                     self.auth.publish_v2_authorization(
-                        self.repo, expected_main=self.initial,
+                        self.repo, expected_main=grant_commit,
                         marker_commit=proof["marker_commit"])
-        self.assertEqual(self.pub.remote_sha(self.repo, ref),
-                         proof["marker_commit"])  # No new authorization pushed.
 
     def test_create_only_ref_race_and_remote_second_marker(self):
         proof = self.freeze()
