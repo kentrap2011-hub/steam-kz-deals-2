@@ -215,6 +215,11 @@ class GiveawayCanonicalIdentityHandoffTests(unittest.TestCase):
         self.assertEqual(analysis["summary"], "Русское описание")
         self.assertEqual(analysis["risks"], ["Подтверждённый риск"])
         self.assertEqual(analysis["provenance"]["canonical_family_id"], "family-738520")
+        not_grounded = handoff.derive_giveaways(self._resolved(), NOW)
+        untrusted = {**canonical[0], "risk_provenance": [{"source": "derived"}]}
+        reuse.attach(not_grounded, [untrusted])
+        self.assertEqual(not_grounded["games"][0]["analysis"]["status"], "incomplete")
+        self.assertEqual(not_grounded["games"][0]["analysis"]["risks"], [])
         unknown = handoff.derive_giveaways(self._resolved(), NOW)
         reuse.attach(unknown, [{**canonical[0], "base_appids": ["10"], "title": "Untrusted Title"}])
         self.assertEqual(unknown["games"][0]["analysis"]["status"], "incomplete")
