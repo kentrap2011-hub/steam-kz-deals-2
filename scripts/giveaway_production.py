@@ -9,6 +9,7 @@ from giveaway_epic import collect as collect_epic
 from giveaway_gog import ENDPOINT as GOG_ENDPOINT
 from giveaway_gog import collect as collect_gog
 from giveaway_http import make_session
+from giveaway_identity import resolve_snapshot
 from giveaway_steam import collect as collect_steam
 
 
@@ -40,6 +41,9 @@ def main() -> int:
             collections[source_id] = failed_collection(source_id, endpoint, now, exc)
 
     snapshot, audit = build_snapshot(collections, now)
+    # Identity is optional enrichment, never a reason to accept an unverified offer.
+    # Only this canonical writer persists the provider-neutral result and its cache.
+    resolve_snapshot(snapshot, session, now)
     write_snapshot(snapshot, audit)
     print(json.dumps({
         "contract": snapshot["contract"],
