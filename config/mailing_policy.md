@@ -67,3 +67,7 @@ Cache hit возможен только при совпадении:
 - исключённые позиции пользователю не показываются;
 - upcoming — максимум одно ближайшее релевантное событие;
 - финальный автоматический `priority_rank` задаётся только `config/final_ranking_policy.json` и рассчитывается один раз после refinement; rationale см. `PROJECT_DECISIONS.md`.
+
+## Targeted current-sale lanes (STEAM-DISC-001)
+
+Canonical `paid_discovery.source_partitions` now traverses only live-bounded Kazakhstan games `category1=998`, including discounted `Sub_` package offers. `category1=21` global DLC and broad `category1=996` are never traversed. The same collector derives eligible base games using accepted existing review/quality gates, then verifies DLC app IDs by exact base-game `/api/appdetails` relationships, checks each related DLC's current KZT price and >=50% discount, and retains all matching offers for the existing personal Dossier/Deep pipeline. Incomplete relationships fail closed, never falsely mark coverage complete. Exceptionally high review quality or a deep cheap discount rescues some low-signal games; missing review data is not treated as proven poor quality. Standalone on-sale Sub_ identities remain independent candidates even when none of their components are separately discounted. The visible limit of 100 only applies after canonical ranking; the Deep-eligible universe never inherits that cap.
