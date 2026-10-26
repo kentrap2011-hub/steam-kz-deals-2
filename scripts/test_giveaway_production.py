@@ -289,7 +289,7 @@ class FakeITADSession:
     def get(self, url, **kwargs):
         self.calls.append(("GET", url, None))
         return FakeITADResponse([
-            {"id": 17, "title": "Epic Games Store"},
+            {"id": 17, "title": "Epic Game Store"},
             {"id": 42, "title": "GOG"},
             {"id": 61, "title": "Steam"},
         ])
