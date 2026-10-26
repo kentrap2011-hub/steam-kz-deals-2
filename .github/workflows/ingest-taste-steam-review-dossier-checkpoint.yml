@@ -60,6 +60,17 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Reject ambiguous manual V2 writer selections
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          CANONICAL_WRITER: ${{ inputs.notes_v2_writer }}
+          PILOT_WRITER: ${{ inputs.notes_v2_original18_pilot_writer }}
+        run: |
+          if [ "$CANONICAL_WRITER" = "true" ] && [ "$PILOT_WRITER" = "true" ]; then
+            echo "Original18 sandbox and production writer cannot be selected together"
+            exit 1
+          fi
+
       - name: Drain separately authorized V2 items through the existing shared writer
         if: github.event_name == 'workflow_dispatch' && inputs.notes_v2_writer == true
         env:
@@ -134,6 +145,12 @@ jobs:
           PY
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
+          if [ ! -d data/control/dossier_notes_v2/pilot_store ] && [ ! -d data/control/dossier_notes_v2/pilot_accepted ]; then
+            echo "No strict original18 item eligible for sandbox persistence"
+            exit 0
+          fi
+          test -d data/control/dossier_notes_v2/pilot_store
+          test -d data/control/dossier_notes_v2/pilot_accepted
           git add -- data/control/dossier_notes_v2/pilot_store/ data/control/dossier_notes_v2/pilot_accepted/
           git diff --cached --check
           if git diff --cached --quiet; then
