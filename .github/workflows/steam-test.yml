@@ -21,6 +21,10 @@ on:
       - "scripts/test_fresh_deal_discovery_refresh.py"
       - "scripts/test_steam_review_fallback.py"
       - "scripts/test_steam_discovery_scope_reduction.py"
+      - "scripts/test_visible_paid_offer_limit.py"
+      - "config/progressive_pass2_work_order_policy.json"
+      - "scripts/build_progressive_pass2_work.py"
+      - "scripts/test_semantic_queue_priority.py"
       - "scripts/test_expired_offer_guard.py"
       - "scripts/test_commercial_refresh.py"
       - "config/mailing_policy.json"
@@ -105,6 +109,9 @@ jobs:
             scripts/build_pre_ai_taste_projection.py \
             scripts/refresh_visual_commercial_fields.py \
             scripts/build_final_visual_payload.py \
+            scripts/build_progressive_pass2_work.py \
+            scripts/test_visible_paid_offer_limit.py \
+            scripts/test_semantic_queue_priority.py \
             scripts/test_discovery_freshness.py \
             scripts/test_fresh_deal_discovery_refresh.py \
             scripts/test_expired_offer_guard.py \
@@ -116,6 +123,8 @@ jobs:
           python scripts/test_fresh_deal_discovery_refresh.py
           python scripts/test_steam_review_fallback.py
           python scripts/test_steam_discovery_scope_reduction.py
+          python scripts/test_visible_paid_offer_limit.py
+          python scripts/test_semantic_queue_priority.py
           python scripts/test_expired_offer_guard.py
           python scripts/test_commercial_refresh.py
           python scripts/test_steam_partial_publish.py
