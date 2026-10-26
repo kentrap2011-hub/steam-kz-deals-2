@@ -9,7 +9,7 @@ Implementation branch: `implement/giveaway-itad-identity-01`
 
 ## Status
 
-**`complete` (implementation and deterministic regression), with explicit live-acceptance limitation.** No main production run, deployed website or live ITAD exact lookup was executed by this PR. Do not claim a current-game live mapping or real-device acceptance.
+**`complete` (implementation, deterministic regression and bounded live exact-ID API acceptance).** On 2026-10-26 the real ITAD API returned exact unique Steam mappings for both current Epic offers; a separate historical GOG shop-ID diagnostic also resolved, but is NOT a current production giveaway. No main production run, merged PR, deployed website or real-device acceptance was executed.
 
 ## 1. Provider-neutral switch / interface
 
@@ -29,7 +29,7 @@ Implementation branch: `implement/giveaway-itad-identity-01`
 
 ## 3. Authentication, permission and attribution
 
-Official API docs/OpenAPI: https://docs.isthereanydeal.com/ and https://github.com/IsThereAnyDeal/API/tree/master/docs/routes/lookup, namely `gid-by-shopid.v1.yaml` and `shopid-by-gid.v1.yaml`. Both lookup POST endpoints document unauthenticated `security: [{}]` as allowed, plus API-key query/header options. `GET /service/shops/map/v1` documents `security: []`. Thus **no secret is required under the current documented endpoints**. Optional `ITAD_API_KEY` env produces `ITAD-API-Key` header if explicitly provisioned for the producer, never hardcoded or logged; normal GitHub Action currently uses documented unauthenticated mode and no new secret is needed. If live endpoint rejects unauthenticated requests despite OpenAPI, that is a follow-up credential/provisioning issue, not proof of authorization failure.
+Official API docs/OpenAPI: https://docs.isthereanydeal.com/ and https://github.com/IsThereAnyDeal/API/tree/master/docs/routes/lookup, namely `gid-by-shopid.v1.yaml` and `shopid-by-gid.v1.yaml`. Both lookup POST endpoints document unauthenticated `security: [{}]` as allowed, plus API-key query/header options. `GET /service/shops/map/v1` documents `security: []`. Thus **no secret is required under the current documented endpoints**; actual 2026-10-26 unauthenticated live traffic confirmed HTTP 200 on the shop-map and both lookup methods. Optional `ITAD_API_KEY` env produces `ITAD-API-Key` header if explicitly provisioned for the producer, never hardcoded or logged; normal GitHub Action currently uses documented unauthenticated mode and no new secret is needed. If live endpoint rejects unauthenticated requests despite OpenAPI, that is a follow-up credential/provisioning issue, not proof of authorization failure.
 
 Provider permission: affirmative ITAD email 2026-09-03: “Hi, this is permitted. For details about authentication refer to docs.” Director classification `permission_confirmed`; preceding reports: `giveaway-identity-provider-alternatives-01.md`, `itad-terms-permission-prep-01.md`. UI conditionally displays a link **Game identity via IsThereAnyDeal** pointing to https://isthereanydeal.com/ on active giveaway list and details, without implying affiliation or republishing provider deals/prices. Real-device credit acceptance remains outstanding after deployment.
 
@@ -79,15 +79,35 @@ Values are illustrative **schema**, not a claimed live mapping. `steam_appid` is
 - `scripts/test_giveaway_production.py`: deterministic official-response-shape Epic exact offer-ID -> UUID -> `app/738520` fixture, cache reuse (zero further network), `igdb` switch (zero ITAD calls, explicit `provider_not_ready`), switch back to `itad`, GOG numeric-product fixture, ambiguous/missing/wrong-type/unexpected title input fail closed and no price endpoints.
 - `scripts/test_giveaway_visual_handoff.py`: exact receipt acceptance, provider/AppID mismatch rejection, ITAD credit, precomputed canonical Russian description/Taste positives/grounded negatives, title-only nonmatch, duplicate canonical card ambiguity, negative provenance fail closed.
 - `web/giveaway-ui.test.js`: ready analysis details only on matching exact appid, explicit unavailable fallback on mismatch/not-ready, ITAD credit and unchanged non-authoritative title data.
-- These fixture IDs are deliberately **not production evidence**. Current canonical giveaway snapshot `data/production/giveaways/v1/current.json` blob `a9c77ab39f887aa27767d664f403afecd08852d6`, generated `2026-10-25T22:38:21Z`, is **incomplete**; contains 2 Epic active offers (Home - A Unique Horror Adventure and Sker Ritual), 0 active GOG. There is no proven live ITAD mapping for either current Epic offer, and no fabricated GOG production mapping.
+- The original deterministic fixtures were not production evidence. **Subsequent live proof is recorded in Section 6A below.** Current canonical giveaway snapshot `data/production/giveaways/v1/current.json` blob `a9c77ab39f887aa27767d664f403afecd08852d6`, generated `2026-10-25T22:38:21Z`, is **incomplete** due to stale Steam candidate input; contains 2 Epic active offers (Home - A Unique Horror Adventure and Sker Ritual), 0 active GOG. These exact Epic IDs were validated live; there is no fabricated current GOG production mapping.
 - GitHub PR runs for initial implementation head `6f17a7321b5cce3371b51b264d4a86866cdf28f1`: Steam KZ production shortlist (regression), site publication resilience, Progressive PASS 2 core, package purchase value, task registry/page all **success**. Amended provenance tests are included in the succeeding dedicated PR test run `40351519439`; the superseded general Steam CI on the earlier intermediate commit was cancelled by the next push, not a test failure.
 - **Dedicated read-only PR CI added:** `.github/workflows/validate-giveaway-identity.yml`; no schedule, production collection, persistence or secret. Run [40351519439](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40351519439), based on source commit `2301072ab1b85a7b972fb2f22021176a6b478376`: **success**, including actual Python compilation, `scripts/test_giveaway_production.py`, `scripts/test_giveaway_visual_handoff.py`, `scripts/test_giveaway_igdb_identity_probe.py` and `node web/giveaway-ui.test.js`.
-- CI success is deterministic regression, **not** live endpoint proof or user/device acceptance.
+- Normal CI success is deterministic regression; the **separate, explicitly bounded live endpoint proof** is evidenced in Section 6A. Neither establishes main-production publication or user/device acceptance.
+
+## 6A. Actual live ITAD exact-ID acceptance — 2026-10-26
+
+**Execution and containment.** GitHub Actions run [40359222508](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40359222508), job `121699813953`, commit `53f96bbae574b7654121ee81406f60a5b0b4a380`: **success**, including all existing Python/Node deterministic regressions and one real, read-only bounded provider probe. UTC receipt: `2026-10-26T16:27:12.058171+00:00`. No application/Steam/GOG production source refresh, no snapshot/cache writing, no browser fetching, no new scheduler, no PR merge and no provider pricing/deal access. One map GET + six lookup POSTs = **7 requests, all HTTP 200**, with `auth_route=official_documented_none` and no credential. Only exact persisted Epic IDs from the existing main giveaway snapshot were production-scope candidates.
+
+**Shop-map discovery and necessary correction.** First bounded attempt [40358787597](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40358787597) returned `HTTP 200` on `/service/shops/map/v1` but failed `shop_id_missing_or_ambiguous:epic`: config incorrectly anticipated `Epic Games Store`. A diagnostic map read [40358968442](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40358968442) confirmed real exact names/IDs `Epic Game Store=16`, `GOG=35`, `Steam=61`. Changed only `config/giveaway_identity_provider.json` and its isolated matching regression fixture (`scripts/test_giveaway_production.py`) to the confirmed exact Epic title. No guessed ID hardcoded in the runtime.
+
+**Live lookups and actual responses:**
+
+| Source / production authority | Exact shop product ID used | ITAD UUID returned via `/lookup/id/shop/{shopId}/v1` | Exact `/lookup/shop/61/id/v1` Steam AppID | Verdict |
+|---|---|---|---|---|
+| Current Epic giveaway **Home - A Unique Horror Adventure**, `source_product_id=c7e46cce751b40b6937e878abd0fc531:06190191cede42afb633fe89ef08c27e` | Epic offer `06190191cede42afb633fe89ef08c27e`, shop `16` | `018d937e-efe0-70c4-a142-bd045d56c833` | `app/215670` | **resolved / exact_unique**, authenticated by exact provider ID rather than name |
+| Current Epic giveaway **Sker Ritual**, `source_product_id=156c17659ff0468bb533eba104a1f19f:6aab3ddef4f84fbc9dd81c60f9d8549c` | Epic offer `6aab3ddef4f84fbc9dd81c60f9d8549c`, shop `16` | `018d937f-65f6-715d-b82a-5cedffbe94c8` | `app/1492070` | **resolved / exact_unique**, authenticated by exact provider ID rather than name |
+| **Historical/noncanonical GOG API diagnostic only**, no active GOG giveaway in source snapshot | GOG product `2104548474`, shop `35` (from earlier bounded ITAD provider alternatives evidence) | `018d937f-2102-72e8-947d-71a97f46e99e` | `app/738520` | **resolved / exact_unique** transport proof; **NOT** a production-authorized current GOG giveaway |
+
+The historical GOG lookup is **strictly a disposable diagnostic**. It must not be introduced as an accepted giveaway, hand-mapped special case, durable canonical mapping, analysis authority or claim that GOG has an active giveaway. The only production sample was two exact Epic IDs persisted by the existing canonical writer.
+
+**What remains unproven:** snapshot `snapshot_status=incomplete` (Steam health failed because its discovery source was stale ~1129.9h at 2026-10-25 22:38 UTC); the actual GitHub-owned production writer on `main` has not been run with this branch, canonical cache/receipt persistence on real production is not verified, full refreshed visual delivery and phone browser acceptance are not verified. ITAD API auth/lookup and exact product map **are verified**, including current Epic cases. UI positives/negatives and Russian description depend on availability of a unique ready canonical analyzed Steam card; live mapping alone does not guarantee those facts.
+
+**One-off probe lifecycle.** The live request block was **removed from** `.github/workflows/validate-giveaway-identity.yml` after receiving the durable GitHub Actions receipt, in commit `50c9f28a8c6d970cc99247fb18dcf6061de345cf`. The normal deterministic PR validation remains, with **no further live provider requests or recurring probe**. The complete live evidence remains available in job logs `121699813953` (`ITAD_LIVE_PROBE_RECEIPT`) and in this report.
 
 ## 7. User action and acceptance
 
 - **User secret action required now: no**, official ITAD exact lookup permits unauthenticated use; no key requested.
-- **Ready for code review:** yes, PR #312. **Ready to assert live production success / device acceptance:** no. After review and merge, allow the existing GitHub-owned ordinary `Steam KZ production shortlist` run on `main` (no second scheduler) to attempt the two exact Epic ids; verify actual source status, `identity_resolution` including timestamp/Steam appid and cache; verify resulting complete snapshot, visual handoff and real device attribution/analysis behavior. If unmapped/ambiguous: retain unresolved; do not use title fallback. No live ITAD price lookup permitted.
+- **Ready for director code review, with current live provider verification:** yes, PR #312. **Ready to assert main production success or device acceptance:** no. After director review and authorized merge, only the existing GitHub-owned ordinary `Steam KZ production shortlist` run on `main` may persist the exact receipts and cache; verify real source health, provider-neutral per-offer `identity_resolution`, group identity, completed snapshot, visual handoff and real device attribution/analysis behavior. Stale or ambiguous cases stay unresolved; no title fallback or ITAD price lookup. No such production action was performed here.
 - Production main is not modified by this PR before merge; no manual per-game production writing or semantic worker was performed.
 
 ## 8. Boundaries, follow-up notes and navigation
@@ -101,7 +121,10 @@ Time spent: required source-of-truth protocol, exact API OpenAPI request/respons
 - PR: https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/312
 - Branch: `implement/giveaway-itad-identity-01`
 - Base main at implementation start: `6709956d5dc1d5b729d48de42ca727d33c149f16`
-- Last source/test change before this report: `29383cad6ca2f09b60482e4b127afb05d7334e34`
+- Last source/test change before the live probe: `29383cad6ca2f09b60482e4b127afb05d7334e34`
+- Verified Epic shop-name fix and matching test: `5a0ba48132e1e8871aaaa8c098f8d1a5f01e9dd5` and `53f96bbae574b7654121ee81406f60a5b0b4a380`
+- Real successful live API receipt: run `40359222508`, job `121699813953`, exact UTC `2026-10-26T16:27:12.058171+00:00`
+- One-shot external probe removed: `50c9f28a8c6d970cc99247fb18dcf6061de345cf`
 - Dedicated PR-only test workflow source commit: `2301072ab1b85a7b972fb2f22021176a6b478376`; passing run `40351519439`
 - New provider config: `config/giveaway_identity_provider.json`
 - Adapter: `scripts/giveaway_identity_itad.py`
@@ -116,4 +139,4 @@ Time spent: required source-of-truth protocol, exact API OpenAPI request/respons
 
 ## Final status
 
-`complete` — implementation and deterministic regression complete; live ITAD mapping / main publication / real-device credit require separate follow-up acceptance.
+`complete` — implementation, deterministic regression and bounded **real ITAD mapping** for both current Epic offers plus a non-production GOG transport case are confirmed. Main production writer/cache persistence, complete source snapshot, site publication and real-device credit still require separately authorized director acceptance.
