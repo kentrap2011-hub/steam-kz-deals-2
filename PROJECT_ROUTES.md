@@ -388,6 +388,8 @@ Currentness invariant after PPD-012:
 2. `config/execution_ownership_contract.json` — GitHub owns discovery scope, completeness, persistence and orchestration.
 3. `config/daily_execution_contract.json` — discovery remains inside the existing GitHub-owned daily production cycle.
 
+**PR #311 implementation continuation (2026-10-26, draft/unmerged):** `scripts/steam_targeted_paid_lanes.py` derives DLC only from review-approved base AppIDs through verified KZ appdetails and independent KZ current-sale Sub_ candidates; `scripts/steam_partial_publish_runner.py` owns all collection, with one games/Sub_ category1=998 traversal. `scripts/build_fixed_package_purchase_options.py` also enumerates current Sub_ from the mailing feed without requiring member games to be on sale; member fit remains semantic, never inferred. `config/progressive_pass2_work_order_policy.json` orders normal Deep work without reducing scope, `scripts/build_final_visual_payload.py` applies post-ranking paid top-100 and source-bound funnel counters. Tests: `scripts/test_steam_targeted_paid_lanes.py`, `scripts/test_visible_paid_offer_limit.py`, `scripts/test_semantic_queue_priority.py`. Existing `steam-test.yml` PR suite does not perform live collect; a normal main run remains an explicit acceptance gate. Do not reintroduce global category1=21 or 996. 
+
 **Быстрая точка входа:**
 1. `scripts/steam_partial_publish_runner.py` — production collector owner; validates the exact live KZ `maxprice=4500` filter with capped-vs-uncapped controls, traverses explicit partitions, deterministic App/Sub dedupe, early paid gate, review enrichment and funnel publication.
 2. `scripts/steam_production.py` — shared Steam Search parsing/rules and policy-derived paid gate.
