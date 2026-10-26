@@ -63,6 +63,7 @@ jobs:
           config = json.loads(Path("config/giveaway_identity_provider.json").read_text())
           session = make_session()
           http = []
+          shop_map_candidates = []
           for method in ("get", "post"):
               original = getattr(session, method)
               def tracked(url, *, _original=original, _method=method, **kwargs):
@@ -70,6 +71,15 @@ jobs:
                   try:
                       response = _original(url, **kwargs)
                       entry["status"] = response.status_code
+                      if _method == "get" and urlsplit(url).path == "/service/shops/map/v1" and response.status_code == 200:
+                          try:
+                              shop_map_candidates.extend([
+                                  {"id": row.get("id"), "title": row.get("title")}
+                                  for row in response.json() if isinstance(row, dict)
+                                  and any(token in str(row.get("title", "")).casefold() for token in ("epic", "gog", "steam"))
+                              ])
+                          except Exception:
+                              pass
                       http.append(entry)
                       return response
                   except Exception as exc:
@@ -130,6 +140,7 @@ jobs:
           except Exception as exc:
               receipt["blocker"] = type(exc).__name__
           receipt["http"] = http
+          receipt["observed_shop_titles"] = shop_map_candidates
           print("ITAD_LIVE_PROBE_RECEIPT=" + json.dumps(receipt, sort_keys=True))
           assert len(http) <= 7, "Live probe exceeded 7 HTTP requests"
           PY
