@@ -154,5 +154,74 @@ class GiveawayVisualHandoffTests(unittest.TestCase):
         self.assertEqual(raw, before)
 
 
+
+class GiveawayCanonicalIdentityHandoffTests(unittest.TestCase):
+    def _resolved(self):
+        o = offer("epic", "epic:resolved")
+        o["source_product_id"] = "a"*32 + ":" + "b"*32
+        o["identity_resolution"] = {
+            "schema_version": 1, "status": "resolved", "source_storefront": "epic",
+            "source_product_id": o["source_product_id"], "identity_provider": "itad",
+            "steam_appid": 738520
+        }
+        g = {
+            "canonical_game_key": "meta-v1:grouping-only", "title": "Untrusted Title",
+            "analysis_identity": {
+                "status": "resolved", "steam_appid": 738520, "identity_provider": "itad"
+            },
+            "offers": [o],
+        }
+        doc = snapshot([g])
+        doc["identity_provider"] = "itad"
+        return doc
+
+    def test_exact_provider_neutral_binding_and_credit(self):
+        doc = self._resolved()
+        view = handoff.derive_giveaways(doc, NOW)
+        self.assertEqual(view["games"][0]["analysis_identity"]["steam_appid"], 738520)
+        self.assertEqual(view["attribution"]["url"], "https://isthereanydeal.com/")
+
+    def test_conflicting_receipt_or_unresolved_identity_never_authorizes_analysis(self):
+        doc = self._resolved()
+        doc["games"][0]["offers"][0]["identity_resolution"]["steam_appid"] = 10
+        self.assertEqual(handoff.derive_giveaways(doc, NOW)["games"][0]
+                         ["analysis_identity"]["status"], "unresolved")
+        doc = self._resolved()
+        doc["games"][0]["offers"][0]["identity_resolution"]["identity_provider"] = "igdb"
+        self.assertEqual(handoff.derive_giveaways(doc, NOW)["games"][0]
+                         ["analysis_identity"]["status"], "unresolved")
+        doc = self._resolved()
+        doc["identity_provider"] = "igdb"
+        view = handoff.derive_giveaways(doc, NOW)
+        self.assertEqual(view["games"][0]["analysis_identity"]["status"], "unresolved")
+        self.assertIsNone(view.get("attribution"))
+
+    def test_analysis_reuses_exact_ready_canonical_card_and_no_title_heuristics(self):
+        import giveaway_analysis_reuse as reuse
+        view = handoff.derive_giveaways(self._resolved(), NOW)
+        canonical = [{
+            "id": "family-738520", "title": "Different Steam title",
+            "base_appids": ["738520"], "analysis_state": "analyzed_fit",
+            "description_status": "ready_ru", "summary": "Русское описание",
+            "why_fit": ["Обоснованный плюс"], "why_fit_status": {"grounding": "grounded"},
+            "why_fit_provenance": [{"source": "taste"}],
+            "risks": ["Подтверждённый риск"], "risk_status": {"grounding": "grounded"},
+            "risk_provenance": [{"source": "taste_negative_evidence"}],
+            "description_source_appid": "738520",
+        }]
+        reuse.attach(view, canonical)
+        analysis = view["games"][0]["analysis"]
+        self.assertEqual(analysis["status"], "ready")
+        self.assertEqual(analysis["summary"], "Русское описание")
+        self.assertEqual(analysis["risks"], ["Подтверждённый риск"])
+        self.assertEqual(analysis["provenance"]["canonical_family_id"], "family-738520")
+        unknown = handoff.derive_giveaways(self._resolved(), NOW)
+        reuse.attach(unknown, [{**canonical[0], "base_appids": ["10"], "title": "Untrusted Title"}])
+        self.assertEqual(unknown["games"][0]["analysis"]["status"], "incomplete")
+        self.assertIsNone(unknown["games"][0]["analysis"]["summary"])
+        conflicting = handoff.derive_giveaways(self._resolved(), NOW)
+        reuse.attach(conflicting, [canonical[0], canonical[0]])
+        self.assertEqual(conflicting["games"][0]["analysis"]["reason"], "canonical_card_missing_or_ambiguous")
+
 if __name__ == '__main__':
     unittest.main()
