@@ -15,6 +15,11 @@ on:
         type: boolean
         required: true
         default: false
+      notes_v2_original18_pilot_writer:
+        description: "One-shot isolated original18 V2 sandbox writer; never main or Deep"
+        type: boolean
+        required: true
+        default: false
       notes_v2_marker_commit:
         description: "Original frozen V2 run-start marker Git commit"
         type: string
@@ -40,7 +45,7 @@ concurrency:
 jobs:
   ingest:
     # Manual dispatch must never become an alternative way to run V1.
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.notes_v2_writer == true)
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && (inputs.notes_v2_writer == true || inputs.notes_v2_original18_pilot_writer == true))
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -48,7 +53,7 @@ jobs:
         with:
           # The triggering commit is only a wake-up signal. Always read current
           # main repository state when this serialized writer actually starts.
-          ref: main
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.notes_v2_original18_pilot_writer == true && 'sandbox/dossier-notes-v2-original18-first' || 'main' }}
           fetch-depth: 0
 
       - uses: actions/setup-python@v5
@@ -91,6 +96,60 @@ jobs:
           print(json.dumps(result, ensure_ascii=False, sort_keys=True))
           PY
 
+      - name: Persist strictly checked original18 V2 results in isolated sandbox only
+        if: github.event_name == 'workflow_dispatch' && inputs.notes_v2_original18_pilot_writer == true && inputs.notes_v2_writer != true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NOTES_V2_MARKER_COMMIT: ${{ inputs.notes_v2_marker_commit }}
+          NOTES_V2_TRIAL_ID: ${{ inputs.notes_v2_trial_id }}
+          NOTES_V2_ITEM_COMMITS_JSON: ${{ inputs.notes_v2_item_commits_json }}
+        run: |
+          set -euo pipefail
+          test "${GITHUB_REF}" = "refs/heads/main"
+          test "${NOTES_V2_TRIAL_ID}" = "dossier-notes-v2-original18-first"
+          test "$(git symbolic-ref --short HEAD)" = "sandbox/dossier-notes-v2-original18-first"
+          remote_before="$(git rev-parse HEAD)"
+          test "$(git ls-remote origin refs/heads/sandbox/dossier-notes-v2-original18-first | cut -f1)" = "$remote_before"
+          python - <<'PY'
+          import json
+          import os
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, str(Path.cwd() / "scripts"))
+          from taste_steam_review_dossier_buffered import drain_buffered_groups
+          items = json.loads(os.environ["NOTES_V2_ITEM_COMMITS_JSON"])
+          if type(items) is not dict:
+              raise ValueError("original18 writer requires frozen exact per-item Git commit map")
+          result = drain_buffered_groups(notes_v2={
+              "repo": Path.cwd(),
+              "marker_commit": os.environ["NOTES_V2_MARKER_COMMIT"],
+              "trial_id": os.environ["NOTES_V2_TRIAL_ID"],
+              "item_commits": items,
+              "store_dir": Path("data/control/dossier_notes_v2/pilot_store"),
+              "accepted_dir": Path("data/control/dossier_notes_v2/pilot_accepted"),
+              "offline_fixture": False,
+              "trial_sandbox": True,
+          })
+          print(json.dumps(result, ensure_ascii=False, sort_keys=True))
+          PY
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add -- data/control/dossier_notes_v2/pilot_store/ data/control/dossier_notes_v2/pilot_accepted/
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo "No new original18 strict item available; no replay"
+            exit 0
+          fi
+          if test -n "$(git status --porcelain --untracked-files=all | grep -vE '^(A |\?\?) data/control/dossier_notes_v2/pilot_(store|accepted)/')"; then
+            echo "Unexpected working-tree mutation in isolated writer"
+            exit 1
+          fi
+          git commit -m "Persist isolated original18 Dossier V2 strict items"
+          # Exactly one non-force push, never to main and never a retry.
+          test "$(git ls-remote origin refs/heads/sandbox/dossier-notes-v2-original18-first | cut -f1)" = "$remote_before"
+          git push origin HEAD:refs/heads/sandbox/dossier-notes-v2-original18-first
+          test "$(git ls-remote origin refs/heads/sandbox/dossier-notes-v2-original18-first | cut -f1)" = "$(git rev-parse HEAD)"
+
       - name: Apply explicit GitHub-owned dossier recovery if requested
         if: github.event_name == 'push'
         run: |
@@ -125,6 +184,7 @@ jobs:
           python scripts/build_progressive_pass2_work.py
 
       - name: Commit dossier recovery transport validation canonical progress and worker projection atomically
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.notes_v2_writer == true && inputs.notes_v2_original18_pilot_writer != true)
         shell: bash
         run: |
           set -euo pipefail
