@@ -2,6 +2,11 @@
 
 Repository: `kentrap2011-hub/steam-kz-deals-2`
 Base/source of truth: `main`
+Task ID: `steam-50-top100`
+Worker slot: **НОВЫЙ физический ЧАТ 1**
+
+Only repository `kentrap2011-hub/steam-kz-deals-2`; if a different repository opens, switch before taking any action. This assignment reuses this existing task — do not create a competing task or new scheduler. Concurrent fileset boundary: do not edit Dossier V2 Research/Assembly/issuer or giveaway identity-provider code, and do not update director Board/registry/handoff. Coordinate any demonstrably unavoidable shared change with Director before writing, rather than racing Chat 2/3.
+
 
 ## Mode
 IMPLEMENT / VALIDATE only after START gate and architecture preflight.
