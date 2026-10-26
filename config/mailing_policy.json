@@ -511,6 +511,17 @@
     "distinguish_confirmed_from_estimated_dates": true,
     "only_after_successful_main_ingest": true
   },
+  "visible_paid_publication": {
+    "maximum_current_paid_offers": 100,
+    "minimum_current_discount_percent": 50,
+    "maximum_current_paid_price_kzt": 4500,
+    "cap_only_after_family_resolution_and_canonical_final_ranking": true,
+    "raw_source_or_intermediate_top_n_allowed": false,
+    "reduces_eligible_deep_analysis_scope": false,
+    "rolling_rebuild_on_accepted_authoritative_deep": true,
+    "statistics_publish_pre_cap_and_visible_counts": true,
+    "paid_lane_only_giveaways_unchanged": true
+  },
   "output_visibility": {
     "show_only_included_recommendations": true,
     "silent_exclusions": true,
