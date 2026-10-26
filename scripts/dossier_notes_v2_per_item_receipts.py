@@ -587,6 +587,118 @@ def publish_assembly_item_remote(repo, *, branch, expected_remote_head,
     return result
 
 
+def _assembly_receipt(repo, *, marker_commit, trial_id, appid,
+                      authorization_commit, research_commit,
+                      assembly_commit, receipt_parent):
+    """Deterministic typed Assembly terminal or strict-ready receipt, never acceptance."""
+    anchor = issuer_structure(repo, marker_commit=marker_commit, trial_id=trial_id,
+                              authorization_commit=authorization_commit)
+    if not first_parent_contains(repo, assembly_commit, receipt_parent):
+        v2.reject("broken_git_provenance", "Assembly receipt cannot precede its result")
+    verdict = v2.inspect_assembly(
+        repo, marker_commit=marker_commit, trial_id=trial_id, appid=appid,
+        research_commit=research_commit, result_commit=assembly_commit)
+    disposition = verdict["status"]
+    if disposition not in (
+        "strict_item_valid_pending_existing_atomic_group_ingest",
+        "assembly_missing_evidence", "assembly_semantic_conflict",
+        "runtime_or_tool_interrupted", "assembly_technical_error",
+    ):
+        v2.reject("wrong_binding", "Assembly result cannot receive a success/terminal receipt")
+    doc = v2.item_receipt_blueprint(
+        repo, marker_commit=marker_commit, trial_id=trial_id, appid=appid,
+        phase="assembly", disposition=disposition,
+        source={
+            "issuer": anchor, "receipt_parent_commit": receipt_parent,
+            "research_commit": research_commit, "assembly_commit": assembly_commit,
+            "candidate_status": disposition, "canonical_acceptance": False,
+        })
+    a = doc["assignment"]
+    path = ("data/control/dossier_notes_v2/receipts/" + trial_id
+            + "/g%06d/" % a["group_sequence"] + appid
+            + "--" + a["assignment_id"] + "--assembly.json")
+    raw = v2._canonical(doc)
+    return {"status":"assembly_receipt_proposal_not_github_confirmed",
+            "receipt_path":path, "receipt_bytes":raw,
+            "receipt_blob_sha":blob_for(raw), "disposition":disposition,
+            "canonical_acceptance":False, "semantic_quality_accepted":False}
+
+
+def publish_assembly_receipt_remote(repo, *, branch, expected_remote_head,
+                                    marker_commit, trial_id, appid,
+                                    authorization_commit, research_commit,
+                                    assembly_commit,
+                                    github_repository=None, github_token=None):
+    """One-create-only typed mechanical receipt AFTER an Assembly Git introduction."""
+    verify_scoped_semantic_run(
+        repo, marker_commit=marker_commit, trial_id=trial_id,
+        authorization_commit=authorization_commit,
+        github_repository=github_repository, github_token=github_token)
+
+    def plan(work):
+        return _assembly_receipt(
+            work, marker_commit=marker_commit, trial_id=trial_id,
+            appid=appid, authorization_commit=authorization_commit,
+            research_commit=research_commit, assembly_commit=assembly_commit,
+            receipt_parent=git(work, "rev-parse", "HEAD").stdout.decode().strip())
+
+    def inspect(work, commit_sha, planned):
+        p = require_only_new(work, commit_sha, [planned["receipt_path"]])
+        exact = _assembly_receipt(
+            work, marker_commit=marker_commit, trial_id=trial_id,
+            appid=appid, authorization_commit=authorization_commit,
+            research_commit=research_commit, assembly_commit=assembly_commit,
+            receipt_parent=p)
+        if (file_at(work, commit_sha, planned["receipt_path"]) != exact["receipt_bytes"]
+                or blob(work, commit_sha, planned["receipt_path"])
+                != exact["receipt_blob_sha"]):
+            v2.reject("broken_git_provenance", "typed Assembly receipt bytes changed")
+
+    result = _single_remote_add(
+        repo, branch=branch, expected_remote_head=expected_remote_head,
+        make_plan=plan, check_commit=inspect,
+        message="dossier notes v2: create-only Assembly receipt " + str(appid),
+        github_repository=github_repository, github_token=github_token)
+    result["status"] = ("github_assembly_receipt_confirmed"
+                        if result["authenticated_github_readback"]
+                        else "disposable_remote_assembly_receipt_only")
+    result["github_assembly_receipt_confirmed"] = result["authenticated_github_readback"]
+    return result
+
+
+def publish_one_assembly_item_remote(repo, *, branch, expected_remote_head,
+                                     marker_commit, trial_id, appid,
+                                     authorization_commit, research_commit,
+                                     document, github_repository=None, github_token=None):
+    """Research-bound Assembly candidate and separately proven receipt, one attempt."""
+    shared = {
+        "repo": repo, "branch": branch,
+        "marker_commit": marker_commit, "trial_id": trial_id,
+        "appid": appid, "authorization_commit": authorization_commit,
+        "research_commit": research_commit,
+        "github_repository": github_repository, "github_token": github_token,
+    }
+    proposal = publish_assembly_item_remote(
+        expected_remote_head=expected_remote_head, document=document, **shared)
+    receipt = publish_assembly_receipt_remote(
+        expected_remote_head=proposal["remote_commit"],
+        assembly_commit=proposal["remote_commit"], **shared)
+    return {
+        "status": ("github_assembly_receipt_confirmed"
+                   if receipt["github_assembly_receipt_confirmed"]
+                   else "disposable_remote_assembly_item_only"),
+        "research_commit": research_commit,
+        "assembly_commit": proposal["remote_commit"],
+        "receipt_commit": receipt["remote_commit"],
+        "assembly_path": proposal["remote_path"],
+        "receipt_path": receipt["remote_path"],
+        "disposition": receipt["disposition"],
+        "github_assembly_receipt_confirmed": receipt["github_assembly_receipt_confirmed"],
+        "canonical_acceptance": False,
+        "semantic_quality_accepted": False,
+    }
+
+
 def publish_one_research_item_remote(repo, *, branch, expected_remote_head,
                                      marker_commit, trial_id, appid,
                                      authorization_commit, document,
