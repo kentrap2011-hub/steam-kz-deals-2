@@ -803,7 +803,7 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
         write(self.repo, "foreign-branch-extra.json", {"not_on_approved_main":True})
         foreign = commit(self.repo, "fixture: source off approved main")
         proof = self.freeze()  # Legitimate-looking exactly two one-add commits
-        with self.assertRaisesRegex(RuntimeError, "not on approved current main"):
+        with self.assertRaisesRegex(ValueError, "not on approved current main"):
             self.auth.v2_freeze_chain(self.repo,
                 marker_commit=proof["marker_commit"], trial_id=self.m["trial_id"],
                 approved_main=self.initial, grant_commit=self.initial)
@@ -824,7 +824,7 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
             run(self.repo, "push", "origin", fake_auth + ":" + ref)
             self.assertEqual(self.pub.remote_sha(self.repo, ref), fake_auth)
             with patch.object(self.auth, "assert_canonical_remote", return_value=None):
-                with self.assertRaisesRegex(RuntimeError, "not on approved current main"):
+                with self.assertRaisesRegex(ValueError, "not on approved current main"):
                     self.auth.authorized_v2_structure_only(
                         self.repo, marker_commit=proof["marker_commit"],
                         authorization_commit=fake_auth)
@@ -848,7 +848,7 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
         with patch.object(self.pub, "v2_grant",
                           return_value=(self.cfg, prospective, self.rows)):
             with patch.object(self.auth, "assert_canonical_remote", return_value=None):
-                with self.assertRaisesRegex(RuntimeError, "not independently attested"):
+                with self.assertRaisesRegex(ValueError, "not independently attested"):
                     self.auth.publish_v2_authorization(
                         self.repo, expected_main=self.initial,
                         marker_commit=proof["marker_commit"])
