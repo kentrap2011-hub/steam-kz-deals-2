@@ -80,7 +80,8 @@ Values are illustrative **schema**, not a claimed live mapping. `steam_appid` is
 - `scripts/test_giveaway_visual_handoff.py`: exact receipt acceptance, provider/AppID mismatch rejection, ITAD credit, precomputed canonical Russian description/Taste positives/grounded negatives, title-only nonmatch, duplicate canonical card ambiguity, negative provenance fail closed.
 - `web/giveaway-ui.test.js`: ready analysis details only on matching exact appid, explicit unavailable fallback on mismatch/not-ready, ITAD credit and unchanged non-authoritative title data.
 - These fixture IDs are deliberately **not production evidence**. Current canonical giveaway snapshot `data/production/giveaways/v1/current.json` blob `a9c77ab39f887aa27767d664f403afecd08852d6`, generated `2026-10-25T22:38:21Z`, is **incomplete**; contains 2 Epic active offers (Home - A Unique Horror Adventure and Sker Ritual), 0 active GOG. There is no proven live ITAD mapping for either current Epic offer, and no fabricated GOG production mapping.
-- GitHub PR runs for initial implementation head `6f17a7321b5cce3371b51b264d4a86866cdf28f1`: Steam KZ production shortlist (regression), site publication resilience, Progressive PASS 2 core, package purchase value, task registry/page all **success**. Final amended provenance test head `29383cad6ca2f09b60482e4b127afb05d7334e34` has separate CI run (inspect before merge).
+- GitHub PR runs for initial implementation head `6f17a7321b5cce3371b51b264d4a86866cdf28f1`: Steam KZ production shortlist (regression), site publication resilience, Progressive PASS 2 core, package purchase value, task registry/page all **success**. Amended provenance tests are included in the succeeding dedicated PR test run `40351519439`; the superseded general Steam CI on the earlier intermediate commit was cancelled by the next push, not a test failure.
+- **Dedicated read-only PR CI added:** `.github/workflows/validate-giveaway-identity.yml`; no schedule, production collection, persistence or secret. Run [40351519439](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40351519439), based on source commit `2301072ab1b85a7b972fb2f22021176a6b478376`: **success**, including actual Python compilation, `scripts/test_giveaway_production.py`, `scripts/test_giveaway_visual_handoff.py`, `scripts/test_giveaway_igdb_identity_probe.py` and `node web/giveaway-ui.test.js`.
 - CI success is deterministic regression, **not** live endpoint proof or user/device acceptance.
 
 ## 7. User action and acceptance
@@ -101,6 +102,7 @@ Time spent: required source-of-truth protocol, exact API OpenAPI request/respons
 - Branch: `implement/giveaway-itad-identity-01`
 - Base main at implementation start: `6709956d5dc1d5b729d48de42ca727d33c149f16`
 - Last source/test change before this report: `29383cad6ca2f09b60482e4b127afb05d7334e34`
+- Dedicated PR-only test workflow source commit: `2301072ab1b85a7b972fb2f22021176a6b478376`; passing run `40351519439`
 - New provider config: `config/giveaway_identity_provider.json`
 - Adapter: `scripts/giveaway_identity_itad.py`
 - Neutral boundary: `scripts/giveaway_identity.py`
