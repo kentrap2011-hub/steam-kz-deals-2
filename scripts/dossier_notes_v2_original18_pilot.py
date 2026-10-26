@@ -54,7 +54,8 @@ def run(args):
     if (scoped.get("enabled") is not True
             or authorization.get("semantic_execution_authorized") is not True):
         v2.reject("wrong_binding", "original18 semantic grant not proven")
-    if args.appid not in frozen:\n        v2.reject("wrong_binding", "item not in immutable original-18 pilot")
+    if args.appid not in frozen:
+        v2.reject("wrong_binding", "item not in immutable original-18 pilot")
     if args.expected_remote_head is None or len(args.expected_remote_head) != 40:
         v2.reject("wrong_binding", "fresh exact remote parent SHA required")
     if (not isinstance(args.document, str)
