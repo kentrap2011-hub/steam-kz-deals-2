@@ -279,6 +279,46 @@ def assert_v2_authorizing_dispatch(expected, marker_commit, confirmation, env):
             "only first-attempt GitHub manual main authorizer may issue V2")
 
 
+def v2_freeze_chain(repo, *, marker_commit, trial_id,
+                    approved_main=None, grant_commit=None):
+    """Independent original freeze proof; never a GitHub Actions run attestation.
+
+    Git author/committer labels and a later legitimate authorization do not
+    authenticate who created the earlier marker.  Caller must separately prove
+    the actual first-attempt GitHub freeze workflow/run before issuing V2.
+    """
+    from dossier_shadow_research_trial_publish import v2_scope
+    from dossier_research_notes_v2 import _marker_nonce
+    cfg, m, rows = v2_scope(repo)
+    require(trial_id == m["trial_id"], "V2 freeze trial differs from approved original 18")
+    require(isinstance(marker_commit, str) and SHA40.fullmatch(marker_commit),
+            "V2 marker SHA must be exact")
+    parent = run(repo, "rev-parse", marker_commit + "^")
+    source = run(repo, "rev-parse", parent + "^")
+    assert_one_new_path(repo, source, parent, m["manifest_path"])
+    nonce = _marker_nonce(repo, marker_commit)
+    marker_path = "data/control/dossier_notes_v2/run_starts/" + nonce + ".json"
+    assert_one_new_path(repo, parent, marker_commit, marker_path)
+    require(json_git(repo, marker_commit, marker_path) == {
+                "schema":"DOSSIER-NOTES-V2-RUN-START",
+                "schema_version":2, "trial_id":trial_id, "nonce":nonce},
+            "V2 freeze marker must be exact original one-add payload")
+    require(json_git(repo, parent, m["manifest_path"]) == {
+                "schema":"DOSSIER-NOTES-V2-FROZEN-MANIFEST",
+                "schema_version":2, "trial_id":trial_id,
+                "original_pins":cfg["immutable_original_pins"], "items":rows},
+            "V2 manifest must be the exact previously approved original groups")
+    if approved_main is not None:
+        require(first_parent_contains(repo, source, approved_main),
+                "V2 freeze source is not on approved current main first-parent ancestry")
+    if grant_commit is not None:
+        require(isinstance(grant_commit, str) and SHA40.fullmatch(grant_commit)
+                and first_parent_contains(repo, grant_commit, source),
+                "V2 freeze source does not descend from approved original human grant")
+    return {"source_commit":source, "manifest_commit":parent,
+            "marker_commit":marker_commit, "marker_path":marker_path}
+
+
 def v2_expected_authorization(repo, *, marker_commit, trial_id,
                               grant_commit, grant_blob, actor_id, run_id):
     from dossier_research_notes_v2 import _manifest, _marker_nonce, blob as v2_blob
@@ -350,6 +390,10 @@ def verify_v2_authorization(repo, *, marker_commit, authorization_commit):
                 authorization_commit).stdout.decode().splitlines()
     require(delta == ["A\t" + m["authorization_path"]],
             "authorization may add one predefined V2 path only")
+    # Verify the earlier Git parent and original one-add tree independently,
+    # not just the later authorization's own direct-child shape.
+    v2_freeze_chain(repo, marker_commit=marker_commit, trial_id=trial_id,
+                    approved_main=run(repo, "rev-parse", "refs/heads/main"))
     manifest, manifest_blob = _manifest(repo, marker_commit, trial_id)
     require(manifest["items"] == rows, "authorization changed original frozen 18")
     record = json_git(repo, authorization_commit, m["authorization_path"])
@@ -396,6 +440,20 @@ def publish_v2_authorization(repo, *, expected_main, marker_commit):
     run(repo, "fetch", "--no-tags", "origin", ref)
     require(run(repo, "rev-parse", "FETCH_HEAD") == marker_commit,
             "genuine V2 marker ref cannot be fetched")
+    # A remote ref is only a location, not proof of the freeze issuer.
+    # Anchor the exact two one-add commits to the granted MAIN first-parent
+    # lineage BEFORE even considering a new authorization commit.
+    v2_freeze_chain(repo, marker_commit=marker_commit, trial_id=m["trial_id"],
+                    approved_main=expected_main,
+                    grant_commit=m["human_grant"]["commit"])
+    # No authenticated original freeze workflow/run -> no V2 authorization.
+    # The available Git objects, author label, env of THIS later run and
+    # ordinary post-marker confirmation cannot supply that missing proof.
+    # A genuine independent first-attempt GitHub freeze run-to-marker
+    # attestation is needed before a separate follow-up may lift this gate.
+    require(False, "V2 original freeze GitHub workflow/run provenance is not "
+            "independently attested; separate real freeze-run-to-marker "
+            "confirmation required; refuse authorization")
     # Bind the authorizer to ALL immutable source contracts from marker parent.
     parent = run(repo, "rev-parse", marker_commit + "^")
     for path in ("config/dossier_research_notes_v2_contract.json",
