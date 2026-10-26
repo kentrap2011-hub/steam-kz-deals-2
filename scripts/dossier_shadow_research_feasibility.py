@@ -316,10 +316,27 @@ def v2_freeze_chain(repo, *, marker_commit, trial_id,
         approved = first_parent_contains(repo, source, approved_main)
         # On the first-trial path, source is the immutable new owner grant
         # child of an original main commit; newer main commits may follow.
-        if scoped:
+        if scoped and not approved:
+            from dossier_shadow_research_trial_publish import assert_one_new_path
+            scoped_path = "config/dossier_notes_v2_issuer_human_grant.json"
             previous = run(repo, "rev-parse", source + "^")
-            approved = approved or first_parent_contains(repo, previous, approved_main)
-        require(approved, "V2 freeze source is not on approved main first-parent ancestry")
+            doc = None
+            try:
+                assert_one_new_path(repo, previous, source, scoped_path)
+                doc = json_git(repo, source, scoped_path)
+            except (ValueError, RuntimeError):
+                pass
+            owner = cfg["original18_trial_scoped_authorization"]
+            approved = bool(
+                doc is not None
+                and doc.get("schema") == "DOSSIER-NOTES-V2-MANUAL-ISSUER-HUMAN-GRANT"
+                and doc.get("semantic_execution_approved") is True
+                and doc.get("github_actor_id") == owner["github_owner_actor_id"]
+                and doc.get("original_pins") == cfg["immutable_original_pins"]
+                and doc.get("original_groups") == cfg["original_groups"]
+                and first_parent_contains(repo, previous, approved_main)
+            )
+        require(approved, "V2 freeze source not on approved current main or scoped owner grant")
     if grant_commit is not None:
         require(isinstance(grant_commit, str) and SHA40.fullmatch(grant_commit)
                 and first_parent_contains(repo, grant_commit, source),
@@ -365,9 +382,14 @@ def v2_expected_authorization(repo, *, marker_commit, trial_id,
     from dossier_research_notes_v2 import _manifest, _marker_nonce, blob as v2_blob
     m, manifest_blob = _manifest(repo, marker_commit, trial_id)
     parent = run(repo, "rev-parse", marker_commit + "^")
-    scoped = json_git(
-        repo, grant_commit, "config/dossier_notes_v2_issuer_human_grant.json"
-    ).get("semantic_execution_approved") is True
+    # Legacy disposable issuer tests intentionally supply a non-existent
+    # grant ref; only an ACTUAL Git blob may ever produce scoped approval.
+    try:
+        scoped = json_git(
+            repo, grant_commit, "config/dossier_notes_v2_issuer_human_grant.json"
+        ).get("semantic_execution_approved") is True
+    except (ValueError, RuntimeError):
+        scoped = False
     return {
         "schema":"DOSSIER-NOTES-V2-MANUAL-RESEARCH-ISSUER-AUTHORIZATION",
         "schema_version":2, "trial_id":trial_id,
