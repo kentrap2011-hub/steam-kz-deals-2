@@ -5,6 +5,14 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## АКТУАЛЬНЫЕ ПАРАЛЛЕЛЬНЫЕ ЗАДАНИЯ — 2026-10-26
+
+- **НОВЫЙ ЧАТ 1**: `WORKER_TASK_DIRECTOR_PR299_PR300_FINAL_INDEPENDENT_ACCEPTANCE_01.md` — одно независимое заключение по двум уже готовым небольшим изменениям директора №299 и №300; не повторять полный аудит.
+- **НОВЫЙ ЧАТ 2**: `WORKER_TASK_DOSSIER_V2_PR266_ISSUER_PROVENANCE_MINIMAL_FIX_01.md` — исправление реальной ошибки происхождения исходного снимка из отчёта №269 в существующем №266. Не запускать V2 и не трогать V1.
+- **НОВЫЙ ЧАТ 3**: `WORKER_TASK_DOSSIER_V2_PR270_EXISTING_WORKFLOW_EXECUTE_RECEIPT_TESTS_01.md` — однократная реальная проверка существующих тестов №270 на существующем GitHub runner с файлами; без новых workflow, CI или общего аудита.
+- Это **новые физические диалоги**, не продолжение закончившихся новых ЧАТОВ 1–4 (отчёты №296, №294, №295, №298). Задачи независимы и могут выполняться одновременно. До принятия и отдельного разрешения настоящий Research/Assembly на 18 играх и production запрещены.
+- №299 и №300 пока **не объединены** с main; прежние назначения ниже исторические. Исправление live-учёта входит в №300, не дублировать его при регистрации.
+
 ## НОВОЕ НЕЗАВИСИМОЕ ПОРУЧЕНИЕ — 2026-10-25
 
 - **НОВЫЙ ЧАТ 4 — оценить, оправданы ли многочисленные проверки перехода Dossier на Research → Assembly.** `dossier-v2-process-value-and-review-overhead-audit-01` → `WORKER_TASK_DOSSIER_V2_PROCESS_VALUE_AND_REVIEW_OVERHEAD_AUDIT_01.md`. Только аудит практической пользы проверок и маршрут из 3–5 шагов к испытанию исходных 18 игр. Не назначать дополнительную цепочку проверок, не менять код/правила, не запускать Research или Assembly.
