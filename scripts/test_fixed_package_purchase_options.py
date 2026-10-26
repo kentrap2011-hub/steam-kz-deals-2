@@ -521,7 +521,7 @@ def main():
         test_family_is_counted_once_when_multiple_appids_map_to_same_family,
         test_best_package_prefers_strict_savings_then_larger_absolute_savings,
         test_returned_package_can_be_matched_by_exact_option,
-        test_package_classification_requires_two_current_apps,
+        test_package_classification_accepts_independent_discounted_multigame_sub,
         test_four_game_package_materially_improves_purchase_score_without_changing_taste,
         test_non_saving_package_stays_visible_but_does_not_boost_ranking,
         test_package_over_practical_price_ceiling_is_visible_but_does_not_boost_score,
