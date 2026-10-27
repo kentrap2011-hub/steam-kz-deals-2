@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "6d5a3576a646ad874ff91d2e4ebe49c5145d9312",
+  "run_start_authority_commit": "87688ef4d92c2f10c5ee5b6bcacaf4f369d6fb7d",
+  "run_started_at_utc": "2026-10-27T19:21:54+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+  "work_id": "bff20347d0954f3f6f51b8a8670fcb51cefe9feee90fc96b3b629deef270d479",
+  "family_id": "game:1025960",
+  "taste_subject_key": "App_1025960",
+  "appid": "1025960",
+  "taste_fingerprint": "a4b0126a4e28720df223b5b2dc01f6768d6813f6bca987dd6481fd8aefb15725",
+  "candidate_context_sha256": "685291a239ca67ea346a8302e9fe57abe2c85c4308bc978a5067b95e8e0bc0cb",
+  "dossier_content_sha256": "4e3c9577ebeb4dc170c000e747e928256ec429f650086ce8ac9e823827e6c464",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "9395b8d75f8faf5d36f828df40b6a8eaf72f8fd2493a6fbfc7a0a2197d65b8ef",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "not_fit_basis": "completed_below_threshold",
+  "confidence": "medium",
+  "not_fit_evidence": [
+    "Сильные персонажи, убийственная интрига и тематическое давление социальных сетей соответствуют интересу к выразительной сюжетной игре, однако геймплей преимущественно построен на неоднократном выборе реплик и ключевых тем у одних и тех же собеседников.",
+    "Многократное прохождение диалогов и поиск условий маршрутов, включая отсутствие удобного пропуска уже прочитанного, вероятно будут конфликтовать с особенно сильным предпочтением развивающегося игрового опыта без повторения почти одинаковых действий.",
+    "Непрозрачные триггеры концовок и спорная понятность некоторых вариантов реплик увеличивают риск рутины при раскрытии истории; при наличии сюжетной привлекательности совокупный основной цикл оценивается ниже предпочтительного уровня."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      },
+      {
+        "kind": "conflict",
+        "index": 1
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Для продвижения по маршрутам приходится вновь перебирать похожие разговорные темы и перечитывать длинные отрывки без удобного пропуска. При выраженной нелюбви к повторению одного и того же без изменения игрового опыта это существенный риск.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Связи между уликами и условия появления отдельных веток могут казаться непрозрачными; любопытная загадка не всегда сопровождается ясным следующим действием.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "В отзывах есть разногласия о точности английских формулировок реплик; это возможное затруднение при выборе ответа, а не подтверждённая проблема актуальной версии.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "conflict",
+            "index": 1
+          }
+        ]
+      }
+    ]
+  }
+}
