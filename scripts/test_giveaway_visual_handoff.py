@@ -279,7 +279,7 @@ class GiveawayOffscreenTop100CompatibilityTests(unittest.TestCase):
         }
         self.assertEqual(len(ready['items']), 100)
         # Equivalent to full producer at the exact point after the paid cap.
-        with patch.object(producer, 'giveaway_semantic_source_binding', return_value=bound), \\
+        with patch.object(producer, 'giveaway_semantic_source_binding', return_value=bound), \
              patch.object(producer.giveaway_visual_handoff, 'derive_from_path',
                           side_effect=lambda: self._giveaway()):
             full = producer.attach_precomputed_giveaway_analysis(ready)
@@ -290,10 +290,10 @@ class GiveawayOffscreenTop100CompatibilityTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             out = Path(folder) / 'visual.json'
             out.write_text(__import__('json').dumps(ready, ensure_ascii=False), encoding='utf-8')
-            with patch.object(producer, 'OUT', out), \\
-                 patch.object(producer, 'giveaway_semantic_source_binding', return_value=bound), \\
+            with patch.object(producer, 'OUT', out), \
+                 patch.object(producer, 'giveaway_semantic_source_binding', return_value=bound), \
                  patch.object(producer.giveaway_visual_handoff, 'derive_from_path',
-                              side_effect=lambda: self._giveaway()), \\
+                              side_effect=lambda: self._giveaway()), \
                  patch.object(producer.base_builder, 'git_sha', return_value='sha'):
                 changed, state, count = producer.refresh_existing_giveaways_only()
             self.assertTrue(changed)
@@ -305,23 +305,23 @@ class GiveawayOffscreenTop100CompatibilityTests(unittest.TestCase):
 
             # Force-media deterministic refresh uses the already persisted
             # bounded canonical index, not only the paid visible 100.
-            with patch.object(producer, 'OUT', out), \\
-                 patch.object(producer, 'giveaway_semantic_source_binding', return_value=bound), \\
+            with patch.object(producer, 'OUT', out), \
+                 patch.object(producer, 'giveaway_semantic_source_binding', return_value=bound), \
                  patch.object(producer.giveaway_visual_handoff, 'derive_from_path',
-                              side_effect=lambda: self._giveaway()), \\
-                 patch.object(producer.base_builder, 'git_sha', return_value='sha'), \\
-                 patch.object(producer, 'apply_visual_semantic_status'), \\
-                 patch.object(producer, 'load_duration_entries', return_value={}), \\
+                              side_effect=lambda: self._giveaway()), \
+                 patch.object(producer.base_builder, 'git_sha', return_value='sha'), \
+                 patch.object(producer, 'apply_visual_semantic_status'), \
+                 patch.object(producer, 'load_duration_entries', return_value={}), \
                  patch.object(producer, 'current_explanation_context',
-                              return_value=({}, {}, {})), \\
+                              return_value=({}, {}, {})), \
                  patch.object(producer.base_builder.visual_builder,
-                              'load_translation_cache', return_value={}), \\
+                              'load_translation_cache', return_value={}), \
                  patch.object(producer.base_builder.visual_builder,
-                              'load_content_metadata_by_appid', return_value={}), \\
+                              'load_content_metadata_by_appid', return_value={}), \
                  patch.object(producer.base_builder.visual_builder,
-                              'resolve_description_for_appids', return_value={}), \\
+                              'resolve_description_for_appids', return_value={}), \
                  patch.object(producer.progressive_personalization,
-                              'strip_unresolved_personalization'), \\
+                              'strip_unresolved_personalization'), \
                  patch.object(producer, 'apply_deterministic_purchase_refresh',
                               return_value=({}, False)):
                 changed, touched, media_count, stats = producer.refresh_existing_media()
@@ -330,10 +330,10 @@ class GiveawayOffscreenTop100CompatibilityTests(unittest.TestCase):
             self.assertEqual(after_media['giveaways']['games'][0]['analysis']['status'], 'ready')
 
             # No title-based carry-over when the exact resolved identity changes.
-            with patch.object(producer, 'OUT', out), \\
-                 patch.object(producer, 'giveaway_semantic_source_binding', return_value=bound), \\
+            with patch.object(producer, 'OUT', out), \
+                 patch.object(producer, 'giveaway_semantic_source_binding', return_value=bound), \
                  patch.object(producer.giveaway_visual_handoff, 'derive_from_path',
-                              side_effect=lambda: self._giveaway(99999999)), \\
+                              side_effect=lambda: self._giveaway(99999999)), \
                  patch.object(producer.base_builder, 'git_sha', return_value='sha'):
                 producer.refresh_existing_giveaways_only()
             changed_identity = __import__('json').loads(out.read_text(encoding='utf-8'))
