@@ -2,12 +2,12 @@
   "schema_version": 5,
   "purpose": "chatgpt_consumer_bundle_with_context_bound_price_blind_taste_fit_evidence_state_and_grounded_negative_readiness",
   "status": "degraded",
-  "source_mailing_updated_at_utc": "2026-10-25T22:38:20.965876+00:00",
+  "source_mailing_updated_at_utc": "2026-10-27T11:27:48.913108+00:00",
   "profile_binding": {
     "canonical_profile_blob_sha": "1d0a3aac67e798398683b8631dbd0eecae47c71d",
     "taste_model_version": "taste-v3",
     "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-    "content_metadata_blob_sha": "3f617e32601ae344dbedcef9c942d9a2ddb10734"
+    "content_metadata_blob_sha": "a2c5dbdde5bb74a171d954a5aeae87bb6627f0ba"
   },
   "wishlist_binding": {
     "blob_sha": "b2fcd4197d468b1ff41328cfb9b039b9658c7d43",
@@ -15,8 +15,8 @@
     "is_context_only_not_taste_proof": true
   },
   "fx_binding": {
-    "kzt_per_rub": 5.518497,
-    "provider_updated_at_utc": "2026-10-25T00:02:31+00:00"
+    "kzt_per_rub": 5.586436,
+    "provider_updated_at_utc": "2026-10-27T00:02:31+00:00"
   },
   "contract": {
     "minimum_taste_fit": "moderate",
@@ -76,40 +76,38 @@
     "purchase_context_jsonl": "data/production/pre_ai/chatgpt_purchase_context.jsonl",
     "line_alignment": "taste_queue line N == purchase_context line N for 1..ai_queue_count",
     "ready_context_start_line": null,
-    "progressive_candidate_context_jsonl": "data/production/pre_ai/progressive_candidate_context.jsonl",
-    "russian_description_translation_queue_jsonl": "data/production/pre_ai/chatgpt_ru_description_queue.jsonl",
-    "russian_description_translation_status_json": "data/production/pre_ai/chatgpt_ru_description_status.json"
+    "progressive_candidate_context_jsonl": "data/production/pre_ai/progressive_candidate_context.jsonl"
   },
-  "source_family_count": 385,
-  "candidate_description_known_count": 385,
+  "source_family_count": 660,
+  "candidate_description_known_count": 660,
   "candidate_description_missing_count": 0,
   "candidate_description_coverage": 1.0,
-  "ai_queue_count": 369,
+  "ai_queue_count": 642,
   "ready_without_ai_count": 0,
-  "purchase_context_line_count": 369,
-  "progressive_candidate_count": 369,
-  "deterministically_excluded_without_ai_count": 16,
+  "purchase_context_line_count": 642,
+  "progressive_candidate_count": 642,
+  "deterministically_excluded_without_ai_count": 18,
   "deterministic_exclusion_counts": {
-    "deal_excludes_even_if_strong": 13,
-    "package_member_taste_pending": 3
+    "deal_excludes_even_if_strong": 17,
+    "package_member_taste_pending": 1
   },
   "commercial_eligibility_bridge_counts": {},
   "fixed_package_bridge_evidence": {
     "status": "complete",
     "source_aligned": true,
-    "stable_positive_family_count": 127,
+    "stable_positive_family_count": 155,
     "reconsiderable_candidate_count": 0,
     "strict_savings_candidate_count": 0,
     "bridge_family_ids": []
   },
   "package_member_taste_aggregation_counts": {
-    "member_semantic_pending": 3
+    "member_semantic_pending": 1
   },
   "complete_family_partition": true,
   "negative_analysis": {
     "work_code": "resolve_grounded_negative_analysis",
     "negative_backfill_queue_count": 0,
-    "negative_full_evaluation_queue_count": 369,
+    "negative_full_evaluation_queue_count": 642,
     "negative_ready_without_ai_count": 0,
     "evidence_backfill_queue_count": 0,
     "normal_ready_requires_confirmed_negative": true
@@ -117,36 +115,38 @@
   "sale_end_coverage": 1.0,
   "sale_end_missing_count": 0,
   "sale_end_missing_primary_keys": [],
-  "source_pre_ai_artifact_bytes": 1489863,
+  "source_pre_ai_artifact_bytes": 2537331,
   "deterministically_excluded_primary_keys": [
-    "Sub_44162",
-    "Sub_55062",
     "Sub_87601",
     "App_1058450",
-    "App_1159690",
-    "App_2183650",
+    "App_1182900",
+    "App_1244090",
+    "App_1604030",
+    "App_214490",
     "App_2201320",
-    "App_2356560",
+    "App_2343900",
     "App_2438680",
+    "App_2695430",
+    "App_324160",
     "App_383980",
     "App_482400",
+    "App_534380",
     "App_587620",
     "App_678950",
-    "App_787480",
     "App_802880",
     "App_909660"
   ],
-  "elapsed_seconds": 0.205,
+  "elapsed_seconds": 0.293,
   "semantic_completeness": {
     "status": "degraded",
     "scope_partition_complete": true,
     "sufficiently_complete_for_publication": false,
-    "unresolved_semantic_count": 369,
+    "unresolved_semantic_count": 642,
     "resolved_semantic_count": 0,
-    "total_relevant_semantic_scope": 369,
-    "source_family_count": 385,
-    "unresolved_scope_source_mailing_updated_at_utc": "2026-10-25T22:38:20.965876+00:00",
-    "unresolved_scope_age_seconds": 70,
+    "total_relevant_semantic_scope": 642,
+    "source_family_count": 660,
+    "unresolved_scope_source_mailing_updated_at_utc": "2026-10-27T11:27:48.913108+00:00",
+    "unresolved_scope_age_seconds": 69,
     "unresolved_age_basis": "source_mailing_updated_at_utc"
   },
   "semantic_runtime_observability": {
@@ -160,33 +160,11 @@
     "last_successful_semantic_execution_at_utc": "2026-09-12T11:51:43+00:00",
     "last_accepted_semantic_progress_at_utc": "2026-09-12T11:51:43+00:00",
     "last_accepted_source_mailing_updated_at_utc": "2026-09-11T22:45:29.586278+00:00",
-    "current_scope_source_mailing_updated_at_utc": "2026-10-25T22:38:20.965876+00:00",
+    "current_scope_source_mailing_updated_at_utc": "2026-10-27T11:27:48.913108+00:00",
     "current_scope_progress_observed": false,
     "last_queue_before_count": 609,
     "last_queue_after_count": 608,
     "last_queue_delta_count": 1,
     "queue_presence_is_not_heartbeat": true
-  },
-  "semantic_work": {
-    "taste": {
-      "work_type": "taste",
-      "queue_path": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
-      "queue_count": 369,
-      "result_contract": "config/taste_result_contract.json"
-    },
-    "russian_description_translation": {
-      "work_type": "russian_description_translation",
-      "contract": "RUSSIAN-DESCRIPTION-TRANSLATION-V1",
-      "result_contract": "RUSSIAN-DESCRIPTION-TRANSLATION-RESULT-V1",
-      "cache_contract": "RUSSIAN-DESCRIPTION-TRANSLATION-CACHE-ENTRY-V1",
-      "queue_path": "data/production/pre_ai/chatgpt_ru_description_queue.jsonl",
-      "status_path": "data/production/pre_ai/chatgpt_ru_description_status.json",
-      "queue_count": 5,
-      "diagnostic_path": "data/cache/russian_description_translation_diagnostics.json",
-      "diagnostic_count": 0,
-      "submission_glob": "data/ai_inbox/russian_descriptions/*.json",
-      "runtime_owner": "scheduled_chatgpt_runtime_data_plane",
-      "control_plane_owner": "github_control_plane"
-    }
   }
 }
