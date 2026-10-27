@@ -5,6 +5,11 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## ЗАВЕРШЕНИЕ РАЗРАБОТКИ: совместная приёмка №311 + №312, 2026-10-27
+
+- **НОВЫЙ ЧАТ 4**: `steam-50-top100-itad-joint-production-acceptance-01` → `WORKER_TASK_STEAM_50_TOP100_ITAD_JOINT_PRODUCTION_ACCEPTANCE_01.md`. Одна независимая ограниченная L3-проверка производственных изменений PR #311 и #312, обоих уже прошедших CI, с совместной проверкой `scripts/build_final_visual_payload.py` и конкретным PASS/CHANGES_REQUIRED без второй цепочки проверок. Никаких правок runtime/production или принятия PR самим QA.
+- После положительного результата директор последовательно согласует и объединяет оба PR и выполняет **один штатный** `main` Steam production update с проверкой действительных результатов скидок, DLC, комплектов, ITAD, сайта. Не смешивать с отдельным PR #309 по Dossier V2 ЧАТА 3.
+
 ## НОВЫЕ ПАРАЛЛЕЛЬНЫЕ ПОРУЧЕНИЯ — 2026-10-26
 
 - **НОВЫЙ ЧАТ 1 — Steam KZ скидки ≥50% / топ-100:** `steam-50-top100` → `WORKER_TASK_STEAM_DISCOVERY_50_PERCENT_DISCOUNT_TOP100_IMPLEMENT_01.md`. Реализовать прежнее пользовательски согласованное предложение в существующем Steam discovery/selection/site пути, без второй очереди и без перезапуска Dossier. Не редактировать файлы giveaway identity и общие директорские файлы.
