@@ -256,5 +256,162 @@ class GiveawayTests(unittest.TestCase):
         self.assertEqual(audit[0]["classification_reason_codes"], ["PROMOTION_EXPIRED"])
 
 
+
+# Focused provider-neutral / ITAD adapter contract checks run in the existing
+# giveaway production regression job (no second workflow or live credentials).
+import copy
+import tempfile
+from pathlib import Path
+import giveaway_identity as identity
+
+
+EPIC_PRODUCT = "a" * 32 + ":" + "b" * 32
+ITAD_UUID = "018d937f-2102-72e8-947d-71a97f46e99e"
+
+
+class FakeITADResponse:
+    def __init__(self, payload):
+        self.payload = payload
+
+    def raise_for_status(self):
+        return None
+
+    def json(self):
+        return copy.deepcopy(self.payload)
+
+
+class FakeITADSession:
+    def __init__(self, *, steam_ids=None, forward=None):
+        self.calls = []
+        self.steam_ids = steam_ids if steam_ids is not None else ["app/738520", "sub/42"]
+        self.forward = forward
+
+    def get(self, url, **kwargs):
+        self.calls.append(("GET", url, None))
+        return FakeITADResponse([
+            {"id": 17, "title": "Epic Game Store"},
+            {"id": 42, "title": "GOG"},
+            {"id": 61, "title": "Steam"},
+        ])
+
+    def post(self, url, *, json=None, **kwargs):
+        self.calls.append(("POST", url, json))
+        if "/lookup/id/shop/" in url:
+            return FakeITADResponse({json[0]: ITAD_UUID if self.forward is None else self.forward})
+        if "/lookup/shop/" in url:
+            return FakeITADResponse({ITAD_UUID: self.steam_ids})
+        raise AssertionError("Unexpected provider route " + url)
+
+
+class GiveawayITADIdentityTests(unittest.TestCase):
+    def _snapshot(self, storefront="epic", product=EPIC_PRODUCT):
+        return {"games": [{
+            "canonical_game_key": "meta-v1:not-semantic-authority",
+            "title": "THE TITLE MUST NEVER BE LOOKED UP",
+            "offers": [{
+                "storefront": storefront, "source_product_id": product,
+                "source_offer_id": "exact-offer-1",
+            }],
+        }]}
+
+    def test_epic_exact_shop_id_uuid_steam_app_and_provenance(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            session = FakeITADSession()
+            snapshot = self._snapshot()
+            counts = identity.resolve_snapshot(snapshot, session, NOW, cache_path=Path(tmp)/"cache.json", api_key="")
+            self.assertEqual(counts["resolved"], 1)
+            self.assertEqual(snapshot["games"][0]["analysis_identity"]["steam_appid"], 738520)
+            result = snapshot["games"][0]["offers"][0]["identity_resolution"]
+            self.assertEqual(result["source_provider_product_id"], "b"*32)
+            self.assertEqual(result["provider_game_id"], ITAD_UUID)
+            self.assertEqual(result["status"], "resolved")
+            self.assertEqual(result["provenance"]["auth_route"], "none_documented")
+            self.assertEqual(result["provenance"]["source_shop_id"], 17)
+            self.assertEqual(result["provenance"]["steam_shop_id"], 61)
+            self.assertEqual(len(session.calls), 3)
+            self.assertEqual(session.calls[1][2], ["b"*32])
+            self.assertEqual(session.calls[2][2], [ITAD_UUID])
+            self.assertTrue(all("/lookup/" in url or "/service/shops/map" in url
+                                for _, url, _ in session.calls))
+            self.assertNotIn("THE TITLE MUST NEVER BE LOOKED UP", str(session.calls))
+            self.assertNotIn("price", str(session.calls).lower())
+
+            cached_snapshot = self._snapshot()
+            cached_counts = identity.resolve_snapshot(
+                cached_snapshot, session, NOW + timedelta(hours=1),
+                cache_path=Path(tmp)/"cache.json", api_key=""
+            )
+            self.assertEqual(cached_counts["cache_hits"], 1)
+            self.assertEqual(cached_counts["network_lookups"], 0)
+            self.assertEqual(len(session.calls), 3)
+            self.assertTrue(cached_snapshot["games"][0]["offers"][0]
+                            ["identity_resolution"]["provenance"]["cache_reused"])
+
+    def test_provider_switch_igdb_not_ready_does_not_call_itad_and_switch_back(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            config = identity.load_config()
+            cache = Path(tmp)/"cache.json"
+            session = FakeITADSession()
+            identity.resolve_snapshot(self._snapshot(), session, NOW, config=config, cache_path=cache, api_key="")
+            calls = len(session.calls)
+            future = copy.deepcopy(config)
+            future["giveaway_identity_provider"] = "igdb"
+            off = self._snapshot()
+            identity.resolve_snapshot(off, session, NOW, config=future, cache_path=cache, api_key="")
+            self.assertEqual(len(session.calls), calls)
+            self.assertEqual(off["games"][0]["offers"][0]["identity_resolution"]["reason"], "provider_not_ready")
+            self.assertEqual(off["games"][0]["analysis_identity"]["status"], "unresolved")
+            on = self._snapshot()
+            identity.resolve_snapshot(on, session, NOW, config=config, cache_path=cache, api_key="")
+            self.assertEqual(on["games"][0]["analysis_identity"]["steam_appid"], 738520)
+            self.assertEqual(len(session.calls), calls)
+
+    def test_ambiguity_zero_mapping_and_invalid_identity_fail_closed(self):
+        variants = [
+            (FakeITADSession(steam_ids=["app/10", "app/20"]), "ambiguous_steam_app"),
+            (FakeITADSession(steam_ids=[]), "no_exact_steam_app"),
+            (FakeITADSession(forward=None, steam_ids=["bundle/10"]), "no_exact_steam_app"),
+            (FakeITADSession(forward="bad-id"), "forward_identity_invalid"),
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            for index, (session, reason) in enumerate(variants):
+                row = self._snapshot()
+                identity.resolve_snapshot(row, session, NOW,
+                                          cache_path=Path(tmp)/f"v{index}.json", api_key="")
+                self.assertEqual(row["games"][0]["analysis_identity"]["status"], "unresolved")
+                self.assertEqual(row["games"][0]["offers"][0]["identity_resolution"]["reason"], reason)
+
+            bad_session = FakeITADSession()
+            bad_row = self._snapshot(product="not-an-exact-epic-id")
+            identity.resolve_snapshot(bad_row, bad_session, NOW,
+                                      cache_path=Path(tmp)/"bad.json", api_key="")
+            self.assertFalse(bad_session.calls)
+            self.assertEqual(bad_row["games"][0]["offers"][0]["identity_resolution"]["reason"], "source_id_invalid")
+
+    def test_gog_exact_numeric_product_id_contract(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            session = FakeITADSession()
+            snapshot = self._snapshot("gog", "2104548474")
+            identity.resolve_snapshot(snapshot, session, NOW, cache_path=Path(tmp)/"cache.json", api_key="")
+            self.assertEqual(session.calls[1][2], ["2104548474"])
+            self.assertEqual(snapshot["games"][0]["analysis_identity"]["steam_appid"], 738520)
+
+    def test_group_conflict_never_authorizes_semantic_identity(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            session = FakeITADSession()
+            snapshot = self._snapshot()
+            snapshot["games"][0]["offers"].append({
+                "storefront": "gog", "source_product_id": "2104548474", "source_offer_id": "gog:2"
+            })
+            identity.resolve_snapshot(snapshot, session, NOW,
+                                      cache_path=Path(tmp)/"cache.json", api_key="")
+            self.assertEqual(snapshot["games"][0]["analysis_identity"]["status"], "resolved")
+            # One offer becomes unresolved: title-based grouping must NOT substitute.
+            snapshot["games"][0]["offers"][1]["source_product_id"] = "GOG-title"
+            identity.resolve_snapshot(snapshot, session, NOW + timedelta(hours=1),
+                                      cache_path=Path(tmp)/"cache.json", api_key="")
+            self.assertEqual(snapshot["games"][0]["analysis_identity"]["status"], "unresolved")
+
+
 if __name__ == "__main__":
     unittest.main()

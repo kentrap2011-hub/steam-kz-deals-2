@@ -1,0 +1,50 @@
+name: Validate giveaway identity
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/giveaway_identity.py'
+      - 'scripts/giveaway_identity_itad.py'
+      - 'scripts/giveaway_analysis_reuse.py'
+      - 'scripts/giveaway_production.py'
+      - 'scripts/giveaway_visual_handoff.py'
+      - 'scripts/build_final_visual_payload.py'
+      - 'scripts/test_giveaway_production.py'
+      - 'scripts/test_giveaway_visual_handoff.py'
+      - 'config/giveaway_identity_provider.json'
+      - 'config/cross_platform_giveaway_contract.json'
+      - 'web/giveaway-ui.js'
+      - 'web/giveaway-ui.test.js'
+      - '.github/workflows/validate-giveaway-identity.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install test-only dependencies
+        run: pip install requests beautifulsoup4
+      - name: Compile giveaway modules
+        run: |
+          python -m py_compile scripts/giveaway_identity.py scripts/giveaway_identity_itad.py \
+            scripts/giveaway_analysis_reuse.py scripts/giveaway_production.py \
+            scripts/giveaway_visual_handoff.py scripts/build_final_visual_payload.py \
+            scripts/test_giveaway_production.py scripts/test_giveaway_visual_handoff.py
+      - name: Test canonical giveaway production and strict ITAD resolver
+        run: python scripts/test_giveaway_production.py
+      - name: Test source-neutral handoff and semantic reuse
+        run: python scripts/test_giveaway_visual_handoff.py
+      - name: Test existing IGDB read-only probe compatibility
+        run: python scripts/test_giveaway_igdb_identity_probe.py
+      - name: Test read-only giveaway website rendering
+        run: node web/giveaway-ui.test.js
