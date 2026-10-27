@@ -125,7 +125,7 @@
       "id": "steam-50-top100",
       "title": "Скидка от 50% и витрина топ-100",
       "goal": "Отбор Steam, DLC, наборов и видимых лучших предложений без урезания Deep.",
-      "status": "complete",
+      "status": "active",
       "effort": "высокая",
       "effort_reason": "Тесно связаны фильтры, поиск и публикация.",
       "urgency": "высокая",
@@ -137,10 +137,10 @@
         "position": 1
       },
       "depends_on": [],
-      "blocker": "PR #311 merged as 59b5aec1310ab356dd0950171dfc8f63620b7f2d; post-merge main Actions failures handled by separate bounded repair task.",
+      "blocker": "Реализация PR №311, CI green, отдельная L3 QA №314 PASS code; PR draft/unmerged; после согласования ITAD и общего visual producer — последовательный merge и один normal main production acceptance.",
       "updated_on": "2026-10-27",
-      "recent_completion": true,
-      "updated_at_utc": "2026-10-27T14:51:56.287Z"
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-27T10:44:28.839Z"
     },
     {
       "id": "owned-dlc",
@@ -369,7 +369,7 @@
       "id": "giveaway-itad",
       "title": "ITAD-идентификаторы раздач",
       "goal": "Улучшить правильность сопоставления игр раздач.",
-      "status": "complete",
+      "status": "active",
       "effort": "средняя",
       "effort_reason": "Нужна проверка конфликтующих идентификаторов.",
       "urgency": "низкая",
@@ -381,10 +381,10 @@
         "position": 4
       },
       "depends_on": [],
-      "blocker": "PR #312 merged into main (earlier merge ed2f9114fb57fca7c77a5234f018ac25a1a6fccc); post-merge checks assigned separately.",
+      "blocker": "PR №312 исправил потерю анализа игр вне топ-100 и прошёл целевые тесты. Прежний отказ совместной QA №314 относится к старому коду. Нужна только проверка исправления вместе с №311, затем последовательное принятие и настоящее обновление сайта.",
       "updated_on": "2026-10-27",
-      "recent_completion": true,
-      "updated_at_utc": "2026-10-27T14:51:56.287Z"
+      "recent_completion": false,
+      "updated_at_utc": "2026-10-27T10:44:28.839Z"
     },
     {
       "id": "architecture-cleanup",
