@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "d20d3109fc28b00f0658697a77abecf717678fd614cdbc9b13afc961554c8e69",
+  "prepared_required_sha256": "30c049989f6bd9e65e69e38b64e53e5ef2eb3278a9d60dd70f07535fee4d7d0d",
+  "group_plan_sha256": "f07fd67a3530b3b399ac604cd899ae602b8eb31c5c2898e1a827c36d36592363",
+  "group_count": 200,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 138,
+  "start_index": 411,
+  "end_index_exclusive": 414,
+  "appids": [
+    "4249100",
+    "4249110",
+    "4249120"
+  ],
+  "items_sha256": "54a24e964e8222b6cef73fcd8a006d6e2f902e8f3d685561aebbd4068e19bc14",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "b824a16cc49153c1ea0f6467e22c9182574549666e96f7b7504f95a5f8ba9636",
+  "items": [
+    {
+      "key": "App_4249100",
+      "appid": "4249100",
+      "title": "Resident Evil (1996)",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_4249100.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_4249110",
+      "appid": "4249110",
+      "title": "Resident Evil 2 (1998)",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_4249110.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_4249120",
+      "appid": "4249120",
+      "title": "Resident Evil 3 Nemesis (1999)",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_4249120.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "eb67672422297c8f4972a033c04193772ba0f928f2cfc2604c12baee7b0f0438"
+}
