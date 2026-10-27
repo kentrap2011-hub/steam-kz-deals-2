@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "6d5a3576a646ad874ff91d2e4ebe49c5145d9312",
+  "run_start_authority_commit": "87688ef4d92c2f10c5ee5b6bcacaf4f369d6fb7d",
+  "run_started_at_utc": "2026-10-27T19:21:54+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+  "work_id": "f4b5b154f2e73bc421c0a5ea46bdcbf90a1ac4667ea46fddcdae74880f9a2776",
+  "family_id": "game:1261040",
+  "taste_subject_key": "App_1261040",
+  "appid": "1261040",
+  "taste_fingerprint": "3da9df0b706d894e77512b37539efa9a687c4d376fb53b927773788a72bfac29",
+  "candidate_context_sha256": "8e9d25d16d2efa9de3a8f7fe37d55fc32894ced4f43c80a1207fb5b50703e25a",
+  "dossier_content_sha256": "c1d98064f209dac8b1c56659bd90bddd5dc9d2c7e02937a9dee1b9b09aecaa33",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "2b1ac4a662c57bcc004474e6cfa1f2ad63b0c5ae724910ebbe8bec0269b0d127",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_not_fit",
+  "not_fit_basis": "completed_below_threshold",
+  "confidence": "medium",
+  "not_fit_evidence": [
+    "Сборка стримерского ПК, заработок и улучшение оборудования дают понятную начальную прогрессию, а нелепые ситуации способны развлечь в первые сессии.",
+    "Но ключевой цикл постепенно включает поддержание бытовых нужд и пассивное ожидание стрима, а набор осмысленных новых занятий по отзывам исчерпывается довольно быстро. Для данного профиля особенно важны постоянное развитие опыта и вовлечённый активный процесс.",
+    "Жалобы на нестабильность сохранений и грубую реализацию усиливают риск, однако разнородные отзывы не позволяют утверждать, что все технические проблемы актуальны сейчас."
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      },
+      {
+        "kind": "conflict",
+        "index": 1
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "management_routine",
+        "text_ru": "Поддержание потребностей персонажа, длительное ожидание заработка и повторение стримерского распорядка могут превратить занятие в рутинное обслуживание вместо насыщенного игрового процесса.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "После нескольких игровых сессий новизна стриминга и набор значимых целей заметно сокращаются; при высокой потребности в развитии игровых ситуаций это существенный риск.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть сообщения об ошибках, потерянном прогрессе и нестабильной производительности; часть сведений устарела или расходится с противоположными отзывами, поэтому текущую частоту проблем установить нельзя.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          },
+          {
+            "kind": "conflict",
+            "index": 1
+          }
+        ]
+      }
+    ]
+  }
+}
