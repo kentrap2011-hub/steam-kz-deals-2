@@ -8,7 +8,7 @@
 ## АКТУАЛЬНО — Steam post-merge исправления, 2026-10-27
 
 - **СУЩЕСТВУЮЩИЙ ЧАТ 1**: `steam-postmerge-actions-failures-fix-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_FAILURES_FIX_01.md`. Два подтверждённых красных main GitHub Actions после принятия PR #311: `Validate mailing policy` (version/profile-binding check) и `Build offer family resolution` (`App_1492680` missing from mailing feed). Одна ограниченная исправляющая ветка/PR, только связанные regression/CI. Директор принимает результат; manual production НЕ запускать. Назначение готово только после merge регистрационного PR с успешным site tasks CI.
-- **Принятые PR #311 и #312** уже в `main`. Steam топ-100 и ITAD worker tasks завершены; код не пересоздавать. Real Steam collector после merge запущен штатно, а successful production acceptance ещё не доказан.
+- **Принятые PR #311 и #312** уже в `main`. Изменения кода объединены; задачи витрины и ITAD в реестре остаются активными до реальной production-приёмки. Не пересоздавать прежние PR. Реальный Steam collector после merge запущен штатно, но production acceptance ещё не доказан.
 - **Dossier V2 original18**: owner Freeze+Authorize уже успешно создали isolated sandbox; ЧАТ 4 ведёт отдельный настоящий Research. Старый Dossier/Deep остаются production-active по своим существующим контрактам; новую разработку/расписания не включать.
 
 ## ИСТОРИЯ — прежний handoff перед запуском original18, 2026-10-27
