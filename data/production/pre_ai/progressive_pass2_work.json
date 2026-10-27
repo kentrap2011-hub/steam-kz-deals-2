@@ -50,23 +50,23 @@
     "maximal_contiguous_prefix": false
   },
   "scope": {
-    "deep_total_current_coverage_target": 642,
+    "deep_total_current_coverage_target": 641,
     "deep_first_pass_attempted_count": 9,
     "deep_authoritative_completed_count": 9,
     "deep_completed_fit_count": 6,
     "deep_completed_not_fit_count": 3,
     "deep_incomplete_or_recovery_count": 0,
-    "deep_waiting_for_dossier_count": 597,
+    "deep_waiting_for_dossier_count": 596,
     "deep_ready_or_pending_count": 36,
-    "deep_normal_first_pass_remaining_count": 633,
-    "deep_remaining_until_all_authoritative_count": 633,
+    "deep_normal_first_pass_remaining_count": 632,
+    "deep_remaining_until_all_authoritative_count": 632,
     "deep_normal_first_pass_complete": false,
     "deep_all_current_authoritative_complete": false,
     "recovery_owned_count": 0,
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 0,
-    "dossier_waiting_count": 597,
+    "dossier_waiting_count": 596,
     "pass2_attempted_count": 9,
     "pass2_eligible_count": 36,
     "deep_history_contract": "PROGRESSIVE-DEEP-COMPLETED-HISTORY-V1",
@@ -82,13 +82,13 @@
       "legacy-unverified:d41271763e8db08a7a3bada5dba6b701ad912344e2cb1c58ce7b4d6ea127210f": 2
     },
     "deep_current_profile_content_version_id": "f86bfd78c52c58d092495b1b4dd14f6eead3c4babdd9c2216c6cbcf55cd8cf47",
-    "deep_current_version_target": 642,
+    "deep_current_version_target": 641,
     "deep_current_version_completed_count": 9,
     "deep_same_profile_historical_completed_count": 0,
     "deep_historical_only_not_current_compatible_count": 48,
     "deep_older_version_only_count": 48,
-    "deep_never_completed_count": 585,
-    "deep_current_version_remaining_count": 633,
+    "deep_never_completed_count": 584,
+    "deep_current_version_remaining_count": 632,
     "normal_pass2_eligible_count": 36,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
@@ -129,196 +129,6 @@
     }
   },
   "items": [
-    {
-      "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
-      "profile_semantic_sha256": "84f356df7b07f8ce57585909bacf79407667cf040b4e2cdb698e565da27996da",
-      "family_id": "game:1070550",
-      "taste_subject_key": "App_1070550",
-      "appid": "1070550",
-      "taste_fingerprint": "44c9dfe906b62aa06cf82f2263ab8cbd90a5b0a09fb42dc5e0903c8708ad82ab",
-      "candidate_context_sha256": "7ccc3a066230835ed34cacf5348fa7ce8843fa77097c788710af06ed411d9063",
-      "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
-      "work_id": "70cbf33ca652017f7971b5344a344f9e57897eebf1208c78ea5bd4ba22012909",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Don't Escape Trilogy",
-        "short_description": "In this classic point-and-click adventure anthology by award-winning indie developer Scriptwelder, you'll protect an unsuspecting hamlet from yourself, try to prepare for an incoming undead horde, and search a seemingly empty spaceship for answers to a gruesome mystery.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Adventure",
-          "Choices Matter",
-          "Horror",
-          "Singleplayer"
-        ],
-        "core_fit_count": 2,
-        "release_date": "29 Jul, 2019",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1070550"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1070550.json",
-      "dossier_content_sha256": "60cc54df61bbace5ad15c83904e53bee09d6cec983df60ea181b332d8c00ccfa",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-28T16:11:45Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "92b34b5d28fd528adb46afa95ae36d0c39fa6aa9f06ca0e5f9436c132b0bb462",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--70cbf33ca652017f7971b5344a344f9e57897eebf1208c78ea5bd4ba22012909--92b34b5d28fd528adb46afa95ae36d0c39fa6aa9f06ca0e5f9436c132b0bb462.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--70cbf33ca652017f7971b5344a344f9e57897eebf1208c78ea5bd4ba22012909--92b34b5d28fd528adb46afa95ae36d0c39fa6aa9f06ca0e5f9436c132b0bb462.json",
-      "sequence": 1
-    },
-    {
-      "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
-      "profile_semantic_sha256": "84f356df7b07f8ce57585909bacf79407667cf040b4e2cdb698e565da27996da",
-      "family_id": "game:24240",
-      "taste_subject_key": "App_24240",
-      "appid": "24240",
-      "taste_fingerprint": "b0d86d2612ab4547c936c9ab7f2940795b721ed8ce49843cdad80c1a486a1953",
-      "candidate_context_sha256": "5d76538a2dcc88cc80300f87e8270ae823380626ada81f6b451afb366fc5e618",
-      "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
-      "work_id": "afe42ba6a83f10626f8ea34ccf750e247dec8b99c0481176255c4f8f9af71e28",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "PAYDAY™ The Heist",
-        "short_description": "Take on the role of a hardened career criminal executing intense, dynamic heists in constant pursuit of the next “big score”",
-        "bundle_members": [],
-        "fit_tags": [
-          "Action",
-          "Crime"
-        ],
-        "core_fit_count": 1,
-        "release_date": "20 Oct, 2011",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "24240"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_24240.json",
-      "dossier_content_sha256": "65bcf6bcb2b4839bb5efa761bf206e3fece44f5ad16b9ff570bc1e3fa2aa5cb2",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-11-04T19:11:13.431Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "dcd98347de35a601c7d8743458d72d224cde7a00dc2b9bfcf9b2007f81d4549d",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--afe42ba6a83f10626f8ea34ccf750e247dec8b99c0481176255c4f8f9af71e28--dcd98347de35a601c7d8743458d72d224cde7a00dc2b9bfcf9b2007f81d4549d.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--afe42ba6a83f10626f8ea34ccf750e247dec8b99c0481176255c4f8f9af71e28--dcd98347de35a601c7d8743458d72d224cde7a00dc2b9bfcf9b2007f81d4549d.json",
-      "sequence": 2
-    },
-    {
-      "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
-      "profile_semantic_sha256": "84f356df7b07f8ce57585909bacf79407667cf040b4e2cdb698e565da27996da",
-      "family_id": "game:1261040",
-      "taste_subject_key": "App_1261040",
-      "appid": "1261040",
-      "taste_fingerprint": "3da9df0b706d894e77512b37539efa9a687c4d376fb53b927773788a72bfac29",
-      "candidate_context_sha256": "8e9d25d16d2efa9de3a8f7fe37d55fc32894ced4f43c80a1207fb5b50703e25a",
-      "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
-      "work_id": "f4b5b154f2e73bc421c0a5ea46bdcbf90a1ac4667ea46fddcdae74880f9a2776",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Streamer Life Simulator",
-        "short_description": "Streamer Life Simulator is a very comprehensive streamer life simulation game. Be the most popular streamer in the world.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Singleplayer"
-        ],
-        "core_fit_count": 0,
-        "release_date": "21 Aug, 2020",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1261040"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1261040.json",
-      "dossier_content_sha256": "c1d98064f209dac8b1c56659bd90bddd5dc9d2c7e02937a9dee1b9b09aecaa33",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-11-05T02:53:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "2b1ac4a662c57bcc004474e6cfa1f2ad63b0c5ae724910ebbe8bec0269b0d127",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--f4b5b154f2e73bc421c0a5ea46bdcbf90a1ac4667ea46fddcdae74880f9a2776--2b1ac4a662c57bcc004474e6cfa1f2ad63b0c5ae724910ebbe8bec0269b0d127.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--f4b5b154f2e73bc421c0a5ea46bdcbf90a1ac4667ea46fddcdae74880f9a2776--2b1ac4a662c57bcc004474e6cfa1f2ad63b0c5ae724910ebbe8bec0269b0d127.json",
-      "sequence": 3
-    },
     {
       "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
       "profile_semantic_sha256": "84f356df7b07f8ce57585909bacf79407667cf040b4e2cdb698e565da27996da",
@@ -382,7 +192,69 @@
       "authorization_id": "9395b8d75f8faf5d36f828df40b6a8eaf72f8fd2493a6fbfc7a0a2197d65b8ef",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--bff20347d0954f3f6f51b8a8670fcb51cefe9feee90fc96b3b629deef270d479--9395b8d75f8faf5d36f828df40b6a8eaf72f8fd2493a6fbfc7a0a2197d65b8ef.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--bff20347d0954f3f6f51b8a8670fcb51cefe9feee90fc96b3b629deef270d479--9395b8d75f8faf5d36f828df40b6a8eaf72f8fd2493a6fbfc7a0a2197d65b8ef.json",
-      "sequence": 4
+      "sequence": 1
+    },
+    {
+      "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+      "profile_semantic_sha256": "84f356df7b07f8ce57585909bacf79407667cf040b4e2cdb698e565da27996da",
+      "family_id": "game:1261040",
+      "taste_subject_key": "App_1261040",
+      "appid": "1261040",
+      "taste_fingerprint": "3da9df0b706d894e77512b37539efa9a687c4d376fb53b927773788a72bfac29",
+      "candidate_context_sha256": "8e9d25d16d2efa9de3a8f7fe37d55fc32894ced4f43c80a1207fb5b50703e25a",
+      "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+      "work_id": "f4b5b154f2e73bc421c0a5ea46bdcbf90a1ac4667ea46fddcdae74880f9a2776",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Streamer Life Simulator",
+        "short_description": "Streamer Life Simulator is a very comprehensive streamer life simulation game. Be the most popular streamer in the world.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Singleplayer"
+        ],
+        "core_fit_count": 0,
+        "release_date": "21 Aug, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1261040"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1261040.json",
+      "dossier_content_sha256": "c1d98064f209dac8b1c56659bd90bddd5dc9d2c7e02937a9dee1b9b09aecaa33",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-11-05T02:53:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "2b1ac4a662c57bcc004474e6cfa1f2ad63b0c5ae724910ebbe8bec0269b0d127",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--f4b5b154f2e73bc421c0a5ea46bdcbf90a1ac4667ea46fddcdae74880f9a2776--2b1ac4a662c57bcc004474e6cfa1f2ad63b0c5ae724910ebbe8bec0269b0d127.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--f4b5b154f2e73bc421c0a5ea46bdcbf90a1ac4667ea46fddcdae74880f9a2776--2b1ac4a662c57bcc004474e6cfa1f2ad63b0c5ae724910ebbe8bec0269b0d127.json",
+      "sequence": 2
     },
     {
       "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
@@ -445,7 +317,69 @@
       "authorization_id": "ad00995db80522d3543f5e729c391e83f8f20e2b22331f9b635ed50b9735faeb",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--b38dd9d466aa849429ebe0b8c312a242e822231244fab0f93beee38e776ffdca--ad00995db80522d3543f5e729c391e83f8f20e2b22331f9b635ed50b9735faeb.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--b38dd9d466aa849429ebe0b8c312a242e822231244fab0f93beee38e776ffdca--ad00995db80522d3543f5e729c391e83f8f20e2b22331f9b635ed50b9735faeb.json",
-      "sequence": 5
+      "sequence": 3
+    },
+    {
+      "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+      "profile_semantic_sha256": "84f356df7b07f8ce57585909bacf79407667cf040b4e2cdb698e565da27996da",
+      "family_id": "game:1563180",
+      "taste_subject_key": "App_1563180",
+      "appid": "1563180",
+      "taste_fingerprint": "2aff483cd6c8dc4e51afa560be8db842b64680da545c1bec908006a2ae8d1a76",
+      "candidate_context_sha256": "bb365d48701959a152570c48784f856c904fff3b503bf842de917ac461b2030e",
+      "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+      "work_id": "2d4d9019832595ec05d5fc5809843f0e18069baf7a5fa8eeb159a1cdc37dcd2b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Internet Cafe Simulator 2",
+        "short_description": "Internet Cafe Simulator 2 is an extremely comprehensive and detailed internet cafe business simulation game.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Exploration"
+        ],
+        "core_fit_count": 0,
+        "release_date": "7 Jan, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1563180"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1563180.json",
+      "dossier_content_sha256": "8efaaf89b8124f7773dc789de44f9f6a9e06f4f28a7860cf7ce89cf6890d8956",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-11-05T02:53:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "a0bd855a95d0f0daba05c4030b536fc6d4d437ebf6bd48d6e2d6c5e72bd8d965",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--2d4d9019832595ec05d5fc5809843f0e18069baf7a5fa8eeb159a1cdc37dcd2b--a0bd855a95d0f0daba05c4030b536fc6d4d437ebf6bd48d6e2d6c5e72bd8d965.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--2d4d9019832595ec05d5fc5809843f0e18069baf7a5fa8eeb159a1cdc37dcd2b--a0bd855a95d0f0daba05c4030b536fc6d4d437ebf6bd48d6e2d6c5e72bd8d965.json",
+      "sequence": 4
     },
     {
       "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
@@ -509,42 +443,108 @@
       "authorization_id": "56661fa45b0de63b03c5198067d828d265969f8a5d302e5cdb2c0b3d8a15b688",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--87236751bbd907ed1ceaac0e9dc4cd7b6726a527cd91fec4154aac35bbe3a74b--56661fa45b0de63b03c5198067d828d265969f8a5d302e5cdb2c0b3d8a15b688.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--87236751bbd907ed1ceaac0e9dc4cd7b6726a527cd91fec4154aac35bbe3a74b--56661fa45b0de63b03c5198067d828d265969f8a5d302e5cdb2c0b3d8a15b688.json",
+      "sequence": 5
+    },
+    {
+      "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+      "profile_semantic_sha256": "84f356df7b07f8ce57585909bacf79407667cf040b4e2cdb698e565da27996da",
+      "family_id": "game:1070550",
+      "taste_subject_key": "App_1070550",
+      "appid": "1070550",
+      "taste_fingerprint": "44c9dfe906b62aa06cf82f2263ab8cbd90a5b0a09fb42dc5e0903c8708ad82ab",
+      "candidate_context_sha256": "7ccc3a066230835ed34cacf5348fa7ce8843fa77097c788710af06ed411d9063",
+      "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+      "work_id": "70cbf33ca652017f7971b5344a344f9e57897eebf1208c78ea5bd4ba22012909",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Don't Escape Trilogy",
+        "short_description": "In this classic point-and-click adventure anthology by award-winning indie developer Scriptwelder, you'll protect an unsuspecting hamlet from yourself, try to prepare for an incoming undead horde, and search a seemingly empty spaceship for answers to a gruesome mystery.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Choices Matter",
+          "Horror",
+          "Singleplayer"
+        ],
+        "core_fit_count": 2,
+        "release_date": "29 Jul, 2019",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1070550"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1070550.json",
+      "dossier_content_sha256": "60cc54df61bbace5ad15c83904e53bee09d6cec983df60ea181b332d8c00ccfa",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-28T16:11:45Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "authorization_id": "92b34b5d28fd528adb46afa95ae36d0c39fa6aa9f06ca0e5f9436c132b0bb462",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--70cbf33ca652017f7971b5344a344f9e57897eebf1208c78ea5bd4ba22012909--92b34b5d28fd528adb46afa95ae36d0c39fa6aa9f06ca0e5f9436c132b0bb462.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--70cbf33ca652017f7971b5344a344f9e57897eebf1208c78ea5bd4ba22012909--92b34b5d28fd528adb46afa95ae36d0c39fa6aa9f06ca0e5f9436c132b0bb462.json",
       "sequence": 6
     },
     {
       "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
       "profile_semantic_sha256": "84f356df7b07f8ce57585909bacf79407667cf040b4e2cdb698e565da27996da",
-      "family_id": "game:1101450",
-      "taste_subject_key": "App_1101450",
-      "appid": "1101450",
-      "taste_fingerprint": "65dfae7aa627607a40efcc328115ce7a39c5e55d8799c6e4e109672f65386eaf",
-      "candidate_context_sha256": "16295cbed95a080a0602e4b32d55ad5fb00ca58bec3629e31b8b5d8921489b48",
+      "family_id": "game:24240",
+      "taste_subject_key": "App_24240",
+      "appid": "24240",
+      "taste_fingerprint": "b0d86d2612ab4547c936c9ab7f2940795b721ed8ce49843cdad80c1a486a1953",
+      "candidate_context_sha256": "5d76538a2dcc88cc80300f87e8270ae823380626ada81f6b451afb366fc5e618",
       "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
-      "work_id": "f393c288b6ad53e1c4b7b16bbe31cdbc95e7674ce27e4f213eae15c251fe8c0b",
+      "work_id": "afe42ba6a83f10626f8ea34ccf750e247dec8b99c0481176255c4f8f9af71e28",
       "taste_model_version": "taste-v3",
       "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
       "work_mode": "normal_first_pass",
       "semantic_input": {
-        "title": "Miss Neko",
-        "short_description": "Together the full picture of all the lovely beast ladies with your own hands, play Yakyuken with them, collect their portraits. Hope you have a relaxing and enjoyable game time:)",
+        "title": "PAYDAY™ The Heist",
+        "short_description": "Take on the role of a hardened career criminal executing intense, dynamic heists in constant pursuit of the next “big score”",
         "bundle_members": [],
         "fit_tags": [
-          "Action"
+          "Action",
+          "Crime"
         ],
-        "core_fit_count": 0,
-        "release_date": "13 Aug, 2019",
+        "core_fit_count": 1,
+        "release_date": "20 Oct, 2011",
         "release_year": null,
         "semantic_condition": {
           "ai_condition": "taste_subject_include_controls_purchase_family",
           "requires_ai_base_support": false,
           "base_appids": [
-            "1101450"
+            "24240"
           ]
         }
       },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1101450.json",
-      "dossier_content_sha256": "18e98cae2ece1874812ed259afff58095e858550637775d74dc88620f18b3da2",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_24240.json",
+      "dossier_content_sha256": "65bcf6bcb2b4839bb5efa761bf206e3fece44f5ad16b9ff570bc1e3fa2aa5cb2",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
         "evidence_contract_version": 2,
@@ -559,7 +559,7 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "dossier_expires_at_utc": "2026-10-29T09:11:13.613Z",
+      "dossier_expires_at_utc": "2026-11-04T19:11:13.431Z",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -568,45 +568,48 @@
         "contract": "DEEP-SCORE-EVIDENCE-V1",
         "required": true
       },
-      "authorization_id": "59fe229de6746a516776b3e58cf3401acd9ed4b713d94664bab96f410421f09d",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--f393c288b6ad53e1c4b7b16bbe31cdbc95e7674ce27e4f213eae15c251fe8c0b--59fe229de6746a516776b3e58cf3401acd9ed4b713d94664bab96f410421f09d.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--f393c288b6ad53e1c4b7b16bbe31cdbc95e7674ce27e4f213eae15c251fe8c0b--59fe229de6746a516776b3e58cf3401acd9ed4b713d94664bab96f410421f09d.json",
+      "authorization_id": "dcd98347de35a601c7d8743458d72d224cde7a00dc2b9bfcf9b2007f81d4549d",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--afe42ba6a83f10626f8ea34ccf750e247dec8b99c0481176255c4f8f9af71e28--dcd98347de35a601c7d8743458d72d224cde7a00dc2b9bfcf9b2007f81d4549d.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--afe42ba6a83f10626f8ea34ccf750e247dec8b99c0481176255c4f8f9af71e28--dcd98347de35a601c7d8743458d72d224cde7a00dc2b9bfcf9b2007f81d4549d.json",
       "sequence": 7
     },
     {
       "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
       "profile_semantic_sha256": "84f356df7b07f8ce57585909bacf79407667cf040b4e2cdb698e565da27996da",
-      "family_id": "game:1563180",
-      "taste_subject_key": "App_1563180",
-      "appid": "1563180",
-      "taste_fingerprint": "2aff483cd6c8dc4e51afa560be8db842b64680da545c1bec908006a2ae8d1a76",
-      "candidate_context_sha256": "bb365d48701959a152570c48784f856c904fff3b503bf842de917ac461b2030e",
+      "family_id": "game:1918450",
+      "taste_subject_key": "App_1918450",
+      "appid": "1918450",
+      "taste_fingerprint": "6e582ad2318b16d9f91978c1a9784d712192a1ff6aa665671d69f73a5eb550c5",
+      "candidate_context_sha256": "c1e45dcab5e94c728dc46ec76488154eaaf415caad7250d9742489fde34aad30",
       "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
-      "work_id": "2d4d9019832595ec05d5fc5809843f0e18069baf7a5fa8eeb159a1cdc37dcd2b",
+      "work_id": "9b5e4691aaa245775d4b4de68d798cf36ca9d3e248ed024ab5ee5d2ce48bc0ab",
       "taste_model_version": "taste-v3",
       "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
       "work_mode": "normal_first_pass",
       "semantic_input": {
-        "title": "Internet Cafe Simulator 2",
-        "short_description": "Internet Cafe Simulator 2 is an extremely comprehensive and detailed internet cafe business simulation game.",
+        "title": "HunterX",
+        "short_description": "HunterX is an action-adventure game full of spirited battles. \r\nUse various styles of weapons and magic to experience your own fighting style and explore a great world.",
         "bundle_members": [],
         "fit_tags": [
-          "Exploration"
+          "Action",
+          "Action RPG",
+          "Adventure",
+          "Souls-like"
         ],
-        "core_fit_count": 0,
-        "release_date": "7 Jan, 2022",
+        "core_fit_count": 2,
+        "release_date": "28 Apr, 2022",
         "release_year": null,
         "semantic_condition": {
           "ai_condition": "taste_subject_include_controls_purchase_family",
           "requires_ai_base_support": false,
           "base_appids": [
-            "1563180"
+            "1918450"
           ]
         }
       },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1563180.json",
-      "dossier_content_sha256": "8efaaf89b8124f7773dc789de44f9f6a9e06f4f28a7860cf7ce89cf6890d8956",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1918450.json",
+      "dossier_content_sha256": "56406592f154ca02830ba71141e037216d070905e9e99ec59fe363857c2a5d94",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
         "evidence_contract_version": 2,
@@ -621,7 +624,7 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "dossier_expires_at_utc": "2026-11-05T02:53:00Z",
+      "dossier_expires_at_utc": "2026-11-05T02:56:00Z",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -630,9 +633,9 @@
         "contract": "DEEP-SCORE-EVIDENCE-V1",
         "required": true
       },
-      "authorization_id": "a0bd855a95d0f0daba05c4030b536fc6d4d437ebf6bd48d6e2d6c5e72bd8d965",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--2d4d9019832595ec05d5fc5809843f0e18069baf7a5fa8eeb159a1cdc37dcd2b--a0bd855a95d0f0daba05c4030b536fc6d4d437ebf6bd48d6e2d6c5e72bd8d965.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--2d4d9019832595ec05d5fc5809843f0e18069baf7a5fa8eeb159a1cdc37dcd2b--a0bd855a95d0f0daba05c4030b536fc6d4d437ebf6bd48d6e2d6c5e72bd8d965.json",
+      "authorization_id": "b7148492d8bd5dbd421042830af4d87c4d227477ac24f2b93e5e393c7f816376",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--9b5e4691aaa245775d4b4de68d798cf36ca9d3e248ed024ab5ee5d2ce48bc0ab--b7148492d8bd5dbd421042830af4d87c4d227477ac24f2b93e5e393c7f816376.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--9b5e4691aaa245775d4b4de68d798cf36ca9d3e248ed024ab5ee5d2ce48bc0ab--b7148492d8bd5dbd421042830af4d87c4d227477ac24f2b93e5e393c7f816376.json",
       "sequence": 8
     },
     {
@@ -701,40 +704,37 @@
     {
       "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
       "profile_semantic_sha256": "84f356df7b07f8ce57585909bacf79407667cf040b4e2cdb698e565da27996da",
-      "family_id": "game:1918450",
-      "taste_subject_key": "App_1918450",
-      "appid": "1918450",
-      "taste_fingerprint": "6e582ad2318b16d9f91978c1a9784d712192a1ff6aa665671d69f73a5eb550c5",
-      "candidate_context_sha256": "c1e45dcab5e94c728dc46ec76488154eaaf415caad7250d9742489fde34aad30",
+      "family_id": "game:1101450",
+      "taste_subject_key": "App_1101450",
+      "appid": "1101450",
+      "taste_fingerprint": "65dfae7aa627607a40efcc328115ce7a39c5e55d8799c6e4e109672f65386eaf",
+      "candidate_context_sha256": "16295cbed95a080a0602e4b32d55ad5fb00ca58bec3629e31b8b5d8921489b48",
       "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
-      "work_id": "9b5e4691aaa245775d4b4de68d798cf36ca9d3e248ed024ab5ee5d2ce48bc0ab",
+      "work_id": "f393c288b6ad53e1c4b7b16bbe31cdbc95e7674ce27e4f213eae15c251fe8c0b",
       "taste_model_version": "taste-v3",
       "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
       "work_mode": "normal_first_pass",
       "semantic_input": {
-        "title": "HunterX",
-        "short_description": "HunterX is an action-adventure game full of spirited battles. \r\nUse various styles of weapons and magic to experience your own fighting style and explore a great world.",
+        "title": "Miss Neko",
+        "short_description": "Together the full picture of all the lovely beast ladies with your own hands, play Yakyuken with them, collect their portraits. Hope you have a relaxing and enjoyable game time:)",
         "bundle_members": [],
         "fit_tags": [
-          "Action",
-          "Action RPG",
-          "Adventure",
-          "Souls-like"
+          "Action"
         ],
-        "core_fit_count": 2,
-        "release_date": "28 Apr, 2022",
+        "core_fit_count": 0,
+        "release_date": "13 Aug, 2019",
         "release_year": null,
         "semantic_condition": {
           "ai_condition": "taste_subject_include_controls_purchase_family",
           "requires_ai_base_support": false,
           "base_appids": [
-            "1918450"
+            "1101450"
           ]
         }
       },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1918450.json",
-      "dossier_content_sha256": "56406592f154ca02830ba71141e037216d070905e9e99ec59fe363857c2a5d94",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1101450.json",
+      "dossier_content_sha256": "18e98cae2ece1874812ed259afff58095e858550637775d74dc88620f18b3da2",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
         "evidence_contract_version": 2,
@@ -749,7 +749,7 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "dossier_expires_at_utc": "2026-11-05T02:56:00Z",
+      "dossier_expires_at_utc": "2026-10-29T09:11:13.613Z",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -758,9 +758,9 @@
         "contract": "DEEP-SCORE-EVIDENCE-V1",
         "required": true
       },
-      "authorization_id": "b7148492d8bd5dbd421042830af4d87c4d227477ac24f2b93e5e393c7f816376",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--9b5e4691aaa245775d4b4de68d798cf36ca9d3e248ed024ab5ee5d2ce48bc0ab--b7148492d8bd5dbd421042830af4d87c4d227477ac24f2b93e5e393c7f816376.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--9b5e4691aaa245775d4b4de68d798cf36ca9d3e248ed024ab5ee5d2ce48bc0ab--b7148492d8bd5dbd421042830af4d87c4d227477ac24f2b93e5e393c7f816376.json",
+      "authorization_id": "59fe229de6746a516776b3e58cf3401acd9ed4b713d94664bab96f410421f09d",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--f393c288b6ad53e1c4b7b16bbe31cdbc95e7674ce27e4f213eae15c251fe8c0b--59fe229de6746a516776b3e58cf3401acd9ed4b713d94664bab96f410421f09d.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--f393c288b6ad53e1c4b7b16bbe31cdbc95e7674ce27e4f213eae15c251fe8c0b--59fe229de6746a516776b3e58cf3401acd9ed4b713d94664bab96f410421f09d.json",
       "sequence": 10
     },
     {
