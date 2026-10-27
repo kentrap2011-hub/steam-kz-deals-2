@@ -167,6 +167,21 @@ assert.deepStrictEqual(stats.map(x=>x.key),['fast','dossier','deep','translation
 assert.deepStrictEqual(stats.map(x=>x.lastWriteAtUtc),[
   stageTimes.fast,stageTimes.dossier,stageTimes.deep,null,'2026-10-07T10:45:00+00:00'
 ]);
+const offerSections=ui.statisticsSections({
+  visible_paid_offer_count:100,
+  ranked_internal_paid_offer_count:163,
+  hidden_below_visible_line_count:63,
+  paid_source_rows_seen:3000,
+  paid_source_removed_discount_below_50:1200,
+  paid_source_unique_eligible_after_partition_dedupe:174,
+});
+const offers=offerSections.find(section=>section.key==='offers');
+assert(offers);
+assert.strictEqual(offers.denominator,100);
+assert.deepStrictEqual(offers.rows.map(row=>row.value),[163,63,3000,1200,174]);
+assert(offers.note.includes('глубокого разбора'));
+assert(!ui.statisticsSections({}).some(section=>section.key==='offers'),
+  'older payload without current offer counters must not show invented numbers');
 const noWriteStats=ui.statisticsSections({});
 assert.deepStrictEqual(noWriteStats.map(x=>x.lastWriteAtUtc),[null,null,null,null,null]);
 assert.strictEqual(ui.formatLastWriteAt(null),'ещё не было записей');

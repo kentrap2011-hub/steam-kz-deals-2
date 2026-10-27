@@ -10,6 +10,7 @@ import progressive_deep_history
 
 
 OUT = Path('data/production/pre_ai/progressive_pass2_work.json')
+WORK_ORDER_POLICY = Path('config/progressive_pass2_work_order_policy.json')
 
 
 def parse_utc(value):
@@ -93,6 +94,67 @@ def semantic_queue_priority(context, ordering):
     }
 
 
+def load_work_order_policy(path=WORK_ORDER_POLICY):
+    policy = json.loads(Path(path).read_text(encoding='utf-8'))
+    if policy.get('contract') != 'PROGRESSIVE-PASS2-WORK-ORDER-V1':
+        raise ValueError('missing canonical Deep work ordering policy')
+    if policy.get('status') != 'canonical' or policy.get('owner') != 'github_control_plane':
+        raise ValueError('Deep work ordering must remain GitHub-owned')
+    expected = [
+        'canonical_purchase_value_desc',
+        'steam_global_positive_percent_desc',
+        'steam_global_review_count_desc',
+        'family_id_asc',
+    ]
+    if policy.get('never_completed_order') != expected:
+        raise ValueError('Deep normal-first-pass work ordering factors are invalid')
+    limits = policy.get('constraints') or {}
+    for key in ('full_eligible_deep_scope_preserved',):
+        if limits.get(key) is not True:
+            raise ValueError('Deep eligible scope cannot be reduced by work ordering')
+    for key in ('hard_top_n', 'sale_expiry_used_for_order', 'changes_site_ranking',
+                'changes_eligibility', 'changes_worker_prompt', 'recovery_attempts_not_reordered'):
+        if key == 'recovery_attempts_not_reordered':
+            if limits.get(key) is not True:
+                raise ValueError('Deep recovery ordering is owned by its existing manifest')
+        elif limits.get(key) is not False:
+            raise ValueError('Deep work order must not own site/eligibility/expiry')
+    return policy
+
+
+def _numeric_priority(value, *, upper=None):
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return 0.0
+    if not math.isfinite(number):
+        return 0.0
+    return min(max(number, 0.0), upper) if upper is not None else max(number, 0.0)
+
+
+def normal_first_pass_key(context, family_id, final_policy):
+    """Strict lexicographic operational order. Does not gate Deep or rank the site."""
+    purchase = context.get('purchase') or {}
+    reviews = ((context.get('context_only') or {}).get('reviews') or {})
+    game = {
+        'current_price_rub': purchase.get('current_price_rub_display'),
+        'original_price_rub': purchase.get('original_price_rub_display'),
+        'historical_minimum_rub': purchase.get('historical_minimum_rub_display'),
+        'history_quality': purchase.get('history_quality'),
+        'previously_free': purchase.get('previously_free'),
+    }
+    purchase_value = _numeric_priority(
+        priority_ranking.build_purchase_breakdown(game, final_policy)['purchase_score'],
+        upper=40.0,
+    )
+    return (
+        -purchase_value,
+        -_numeric_priority(reviews.get('global_positive_percent'), upper=100.0),
+        -_numeric_priority(reviews.get('global_count')),
+        str(family_id),
+    )
+
+
 def entry_has_authoritative_deep_completion(entry):
     return (
         isinstance(entry, dict)
@@ -136,12 +198,18 @@ def order_normal_items(items, context_by_family, pass2_state, contract):
     if ordering.get('sale_expiry_used_for_priority') is not False:
         raise ValueError('sale expiry must not be a semantic queue priority factor')
 
+    policy = load_work_order_policy()
+    if policy.get('precedence') != [
+        'never_authoritatively_completed_under_any_profile_first',
+        'previously_completed_oldest_last_success_at_utc_first',
+    ]:
+        raise ValueError('Deep historical first-pass precedence mismatch')
+    final_policy = priority_ranking.load_final_policy()
     ordered = []
     for source_item in items:
         item = dict(source_item)
         family_id = str(item.get('family_id') or '')
         context = context_by_family.get(family_id) or {}
-        priority = semantic_queue_priority(context, ordering)
         seen = has_authoritative_deep_history(pass2_state, family_id, item)
         last = progressive_deep_history.latest_completed(pass2_state, family_id, item)
         last_at = progressive_pass2.parse_utc(last['accepted_at_utc']) if last else None
@@ -150,12 +218,12 @@ def order_normal_items(items, context_by_family, pass2_state, contract):
         item['_last_completed_sort'] = (
             last_at.isoformat() if last_at else '9999-12-31T23:59:59+00:00'
         )
-        item['_semantic_queue_priority_score'] = float(priority['score'])
+        item['_work_order_key'] = normal_first_pass_key(context, family_id, final_policy)
         ordered.append(item)
 
     ordered.sort(key=lambda row: (
         int(row['_authoritative_deep_history_sort']),
-        -float(row['_semantic_queue_priority_score']) if not row['_authoritative_deep_history_sort'] else 0.0,
+        row['_work_order_key'] if not row['_authoritative_deep_history_sort'] else (),
         row['_last_completed_sort'] if row['_authoritative_deep_history_sort'] else '',
         str(row.get('appid') or ''),
         str(row.get('taste_subject_key') or ''),
@@ -165,7 +233,7 @@ def order_normal_items(items, context_by_family, pass2_state, contract):
         item['sequence'] = sequence
         item.pop('_authoritative_deep_history_sort', None)
         item.pop('_last_completed_sort', None)
-        item.pop('_semantic_queue_priority_score', None)
+        item.pop('_work_order_key', None)
     return ordered
 
 

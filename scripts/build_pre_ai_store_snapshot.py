@@ -397,6 +397,20 @@ def main():
             continue
         if original is None or original < current:
             raise SystemExit(f'Invalid original price for current discounted option {key}')
+        # A priced Steam option may change between Search and StoreBrowse.
+        # Keep the normal paid publication boundary fail-closed at observation;
+        # neither a Sub nor related DLC may bypass >=50% and <=4500 KZT.
+        if discount < 50 or current > 4500:
+            inactive_entries[key] = {
+                'key': key, 'appid': row['appid'] or None,
+                'title': row['title'],
+                'reason': 'observed_option_outside_paid_50_percent_4500_kzt_scope',
+                'observed_discount_percent': discount,
+                'observed_final_kzt': current,
+                'source_discount_percent': row['source_discount_percent'],
+                'source_final_kzt': row['source_final_kzt'],
+            }
+            continue
 
         end_values = sorted({
             int(d.get('discount_end_date') or 0)

@@ -234,7 +234,7 @@ def test_returned_package_can_be_matched_by_exact_option():
     assert packageid_for_returned_item(item, {127633}) == 127633
 
 
-def test_package_classification_requires_two_current_apps():
+def test_package_classification_accepts_independent_discounted_multigame_sub():
     item = {
         'id': 127633,
         'name': 'BioShock: The Collection',
@@ -248,8 +248,11 @@ def test_package_classification_requires_two_current_apps():
         }],
     }
     entry, reason = classify_package(127633, item, {409710}, {409710}, 1)
-    assert entry is None
-    assert reason == 'fewer_than_two_current_app_candidates'
+    assert reason is None
+    assert entry['independent_current_sale_package'] is True
+    assert entry['member_semantic_evidence_required'] is True
+    assert entry['current_candidate_appids_in_package'] == [409710]
+    assert entry['members_not_assumed_suitable'] == [8870, 409720]
 
 
 def test_four_game_package_materially_improves_purchase_score_without_changing_taste():
@@ -518,7 +521,7 @@ def main():
         test_family_is_counted_once_when_multiple_appids_map_to_same_family,
         test_best_package_prefers_strict_savings_then_larger_absolute_savings,
         test_returned_package_can_be_matched_by_exact_option,
-        test_package_classification_requires_two_current_apps,
+        test_package_classification_accepts_independent_discounted_multigame_sub,
         test_four_game_package_materially_improves_purchase_score_without_changing_taste,
         test_non_saving_package_stays_visible_but_does_not_boost_ranking,
         test_package_over_practical_price_ceiling_is_visible_but_does_not_boost_score,

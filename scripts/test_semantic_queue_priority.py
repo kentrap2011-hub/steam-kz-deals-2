@@ -220,6 +220,59 @@ def main():
     )
     assert history_state == state_before
 
+    # QUEUE-11: machine-owned strict lexicographic first pass: purchase,
+    # review percentage, review count and exact family ID. More Steam reviews
+    # cannot outrank a stronger canonical purchase score.
+    work_policy = producer.load_work_order_policy()
+    assert work_policy['never_completed_order'] == [
+        'canonical_purchase_value_desc',
+        'steam_global_positive_percent_desc',
+        'steam_global_review_count_desc',
+        'family_id_asc',
+    ]
+    candidates = [
+        item('game:cheap'), item('game:popular'), item('game:rating-high'),
+        item('game:rating-low'), item('game:review-low'), item('game:review-high'),
+    ]
+    examples = {
+        'game:cheap': context('game:cheap', price=100, rating=10, reviews=1),
+        'game:popular': context('game:popular', price=700, rating=99, reviews=100000),
+        'game:rating-high': context('game:rating-high', price=700, rating=95, reviews=1),
+        'game:rating-low': context('game:rating-low', price=700, rating=85, reviews=1000000),
+        'game:review-low': context('game:review-low', price=700, rating=95, reviews=2),
+        'game:review-high': context('game:review-high', price=700, rating=95, reviews=2000),
+    }
+    ordered_cases = producer.order_normal_items(candidates, examples, {'entries': {}}, CONTRACT)
+    positions = {r['family_id']: index for index, r in enumerate(ordered_cases)}
+    assert positions['game:cheap'] < positions['game:popular']
+    assert positions['game:rating-high'] < positions['game:rating-low']
+    assert positions['game:review-high'] < positions['game:review-low']
+    assert len(ordered_cases) == len(candidates)
+
+    # QUEUE-12: full eligible scope (not a provisional top-100); expiry
+    # dates may change without modifying exact work order.
+    all_items = [item(f'game:{n:03}') for n in range(155)]
+    all_contexts = {
+        entry['family_id']: context(entry['family_id'])
+        for entry in all_items
+    }
+    all_ordered = producer.order_normal_items(
+        all_items, all_contexts, {'entries': {}}, CONTRACT
+    )
+    assert len(all_ordered) == 155
+    assert [entry['sequence'] for entry in all_ordered] == list(range(1, 156))
+    before_order = [entry['family_id'] for entry in all_ordered]
+    for index, row in enumerate(all_contexts.values()):
+        row['purchase']['sale_end_utc'] = (
+            '2026-10-27T00:00:00Z' if index % 2 else '2099-12-30T00:00:00Z'
+        )
+    after_order = [
+        entry['family_id'] for entry in producer.order_normal_items(
+            all_items, all_contexts, {'entries': {}}, CONTRACT
+        )
+    ]
+    assert after_order == before_order
+
     # QUEUE-10: operational ordering does not reach into frozen Deep Stage 1/2
     # contracts or worker prompts.
     producer_text = Path('scripts/build_progressive_pass2_work.py').read_text(encoding='utf-8')
@@ -231,7 +284,7 @@ def main():
     ):
         assert forbidden not in producer_text
 
-    print('semantic queue priority QUEUE-01..10: ok')
+    print('semantic queue priority QUEUE-01..12: ok')
 
 
 if __name__ == '__main__':

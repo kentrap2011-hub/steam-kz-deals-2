@@ -158,7 +158,12 @@ def resolve(allowed_keys, feed, store, meta, rules, contract):
                 ],
                 'base_appids': [],
                 'package_appids': sorted(package_appids),
-                'requires_ai_base_support': True,
+                # A discounted independent multi-game Sub is a playable
+                # purchase option in its own right; missing standalone-sale
+                # member games are NOT an external-base DLC dependency.
+                # Semantic evaluation of member quality is still mandatory.
+                'requires_ai_base_support': len(package_appids) < 2,
+                'independent_member_semantic_evaluation_required': len(package_appids) >= 2,
             }
             family_of[key] = fid
 
