@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "6d5a3576a646ad874ff91d2e4ebe49c5145d9312",
+  "run_start_authority_commit": "87688ef4d92c2f10c5ee5b6bcacaf4f369d6fb7d",
+  "run_started_at_utc": "2026-10-27T19:21:54+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+  "work_id": "b38dd9d466aa849429ebe0b8c312a242e822231244fab0f93beee38e776ffdca",
+  "family_id": "game:1161580",
+  "taste_subject_key": "App_1161580",
+  "appid": "1161580",
+  "taste_fingerprint": "ddf96f14e8bee39c2d8cd13ded6d57b3a6ce832af20e17f054083eaf06293be0",
+  "candidate_context_sha256": "abb4dc1687f0b205838692233dea8d1d1be6fdc568cd23d3ead2539d642de87d",
+  "dossier_content_sha256": "05364908381edc284a090208f28ec78403ff3445b6e787adbe7988d6a0b3a935",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "ad00995db80522d3543f5e729c391e83f8f20e2b22331f9b635ed50b9735faeb",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "taste_factors": {
+    "gameplay_mastery": 81,
+    "development_variety": 49,
+    "structure_pacing_direction": 63,
+    "identity_hooks": 80,
+    "breadth_of_match": 71
+  },
+  "positive_evidence": [
+    "Нужно поэтапно разобрать корабль в невесомости: находить крепления, работать резаком и перемещать детали в нужный приёмник.",
+    "Опасности реакторов, электричества и разгерметизации превращают разборку в содержательную задачу на порядок действий и точность.",
+    "Механика управления в невесомости придаёт уникальный характер основному игровому процессу."
+  ],
+  "score_findings": [
+    {
+      "finding_id": "salvage_skill",
+      "text_ru": "Точная разборка корпуса с учётом креплений, невесомости и опасностей реакторов позволяет самостоятельно находить безопасную последовательность действий и совершенствовать навык.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/tactical_problem_solving",
+          "profile_value_sha256": "1c2855e92114f62124c256431e2bf883866821d3754de144171ae6b4cdfb39e6",
+          "match_text_ru": "Предпочтительны конкретные тактические задачи, где способ решения приходится находить самостоятельно."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 81
+        }
+      ]
+    },
+    {
+      "finding_id": "distinct_salvage",
+      "text_ru": "Работа космическим резаком и сортировка крупных обломков в невесомости создают редкую игровую фантазию, отличающую эту работу от типовых сражений и прогулок.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/13",
+          "profile_value_sha256": "c872c87eaf55c396b6be6b8099860a7a29496023e5ca2ae16758626dc9c60f15",
+          "match_text_ru": "Особенно ценится собственный запоминающийся крючок в механике или художественной идентичности."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 80
+        }
+      ]
+    },
+    {
+      "finding_id": "physical_handling",
+      "text_ru": "Маневрирование в невесомости и работа захватом добавляют активное ощущение управления предметами, хотя взаимодействия иногда требуют поправлять положение объектов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1",
+          "profile_value_sha256": "eea16e0b6b2de79dd07acac864c406860d99691433b9b2149e2b8492681fbcd8",
+          "match_text_ru": "Само необычное и выразительное перемещение может быть самостоятельной ценностью игрового процесса."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 71
+        }
+      ]
+    },
+    {
+      "finding_id": "ship_repetition",
+      "text_ru": "По мере продвижения повторяются конструкции корпусов и последовательности разборки, поэтому поздние заказы рискуют не давать достаточно новых механических ситуаций.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "b584a23bde72bbcacc284a93f33e49bda9cde0b89c7d750aa3d954ed1fef2055",
+          "match_text_ru": "Игра должна развивать опыт по ходу прохождения, а не повторять раскрытую формулу."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "lowers",
+          "normalized_value": 49
+        }
+      ]
+    },
+    {
+      "finding_id": "contract_interruptions",
+      "text_ru": "Заказы и финансовые цели удерживают понятную задачу, но долгие обязательные разговоры корпорации прерывают наиболее вовлекающую ручную разборку.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        },
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/active_core_loop_vs_low_stimulation_filler",
+          "profile_value_sha256": "83671dfe027cd2965b7807edf65c2f0a37897deda3c29950031de2633465f484",
+          "match_text_ru": "Долгие промежутки между содержательными активными действиями способны заметно снизить вовлечённость."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 63
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "К середине и концу игры разборка кораблей нередко повторяет одни и те же этапы на похожих корпусах; при высокой потребности в новых ситуациях это может утомить.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Невесомое управление иногда требует лишних корректировок, а финансовые ограничения и постепенные улучшения оборудования могут казаться рутиной.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Длинные неотключаемые сюжетные диалоги могут мешать привычному ритму разборки; старые претензии к русской локализации не доказывают проблемы текущей версии.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      }
+    ]
+  }
+}
