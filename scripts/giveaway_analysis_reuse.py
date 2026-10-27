@@ -16,6 +16,57 @@ def _exact_appid(value):
     return None
 
 
+
+# The final visual payload contains only the paid top-100 after publication cap.
+# Retain the smallest source-bound analysis projection of the *entire* canonical
+# ranked scope in that same payload, so refreshes need no new Taste computation.
+SOURCE_FIELDS = (
+    "id", "base_appids", "analysis_state", "description_status", "summary",
+    "why_fit", "why_fit_status", "why_fit_provenance", "risks", "risk_status",
+    "risk_provenance", "description_source_appid", "description_source_path",
+)
+
+
+def capture_canonical_sources(canonical_items, semantic_binding):
+    """Prepared non-commercial evidence index, never a second paid listing."""
+    if not isinstance(semantic_binding, dict) or not semantic_binding or not all(
+        isinstance(v, str) and v for v in semantic_binding.values()
+    ):
+        # An unbound cache must never acquire source authority during refresh.
+        return {"schema_version": 1, "semantic_binding": None, "cards": []}
+    cards = []
+    for card in canonical_items:
+        if isinstance(card, dict) and isinstance(card.get("base_appids"), list):
+            cards.append({key: card.get(key) for key in SOURCE_FIELDS})
+    return {"schema_version": 1, "semantic_binding": dict(semantic_binding), "cards": cards}
+
+
+def canonical_sources_for_refresh(saved, visible_items, semantic_binding):
+    """A matching full-build source index plus the freshest visible cards.
+
+    If semantic inputs have changed, do not reuse off-screen results until the
+    canonical full producer rebuilds them. A visible card supersedes its stored
+    family, preventing conflicting old/new evidence from being combined.
+    """
+    visible = [c for c in (visible_items or []) if isinstance(c, dict)]
+    if not (
+        isinstance(saved, dict) and saved.get("schema_version") == 1
+        and isinstance(semantic_binding, dict) and bool(semantic_binding)
+        and all(isinstance(v, str) and v for v in semantic_binding.values())
+        and saved.get("semantic_binding") == semantic_binding
+        and isinstance(saved.get("cards"), list)
+    ):
+        return visible
+    visible_ids = {c["id"] for c in visible if isinstance(c.get("id"), str) and c["id"]}
+    cached = []
+    for card in saved["cards"]:
+        if not isinstance(card, dict):
+            return visible  # invalid index is not authority
+        if card.get("id") not in visible_ids:
+            cached.append(card)
+    return cached + visible
+
+
 def attach(giveaways, canonical_items):
     if giveaways.get("state") != "active":
         return giveaways
