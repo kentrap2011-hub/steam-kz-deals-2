@@ -877,6 +877,7 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
         from datetime import datetime, timezone
         from taste_steam_review_dossier_test_fixture import web_dossier
         from taste_steam_review_dossier_buffered import drain_buffered_groups
+        import dossier_notes_v2_per_item_receipts as item_receipts
         scoped_id = "315790060"
         env = {
             "GITHUB_ACTOR_ID": scoped_id,
@@ -909,6 +910,21 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
             "source_log": [], "research_status": "no_verifiable_findings",
         })
         research = commit(self.repo, "synthetic scoped Research")
+        research_receipt = item_receipts.prepare_receipt(
+            self.repo, marker_commit=frozen["marker_commit"],
+            trial_id=self.m["trial_id"], appid=appid,
+            authorization_commit=authorized, introduction_commit=research)
+        receipt_path = self.repo / research_receipt["receipt_path"]
+        receipt_path.parent.mkdir(parents=True, exist_ok=True)
+        receipt_path.write_bytes(research_receipt["receipt_bytes"])
+        research_receipt_commit = commit(self.repo, "synthetic scoped Research Git receipt")
+        proved = item_receipts.inspect_receipt_commit(
+            self.repo, marker_commit=frozen["marker_commit"],
+            trial_id=self.m["trial_id"], appid=appid,
+            authorization_commit=authorized, introduction_commit=research,
+            receipt_commit=research_receipt_commit)
+        self.assertEqual(proved["disposition"], "safe_incomplete_research")
+        self.assertFalse(proved["github_receipt_confirmed"])
         work = v2.assembly_work(
             self.repo, marker_commit=frozen["marker_commit"],
             trial_id=self.m["trial_id"], appid=appid, research_commit=research)
@@ -919,6 +935,20 @@ class ExistingManualIssuerV2Tests(unittest.TestCase):
                 appid, datetime.now(timezone.utc), title=assignment["title"]))
         write(self.repo, work["output_path"], final)
         assembly = commit(self.repo, "synthetic scoped Assembly")
+        assembly_receipt = item_receipts._assembly_receipt(
+            self.repo, marker_commit=frozen["marker_commit"],
+            trial_id=self.m["trial_id"], appid=appid,
+            authorization_commit=authorized, research_commit=research,
+            assembly_commit=assembly, receipt_parent=assembly)
+        self.assertEqual(
+            assembly_receipt["disposition"],
+            "strict_item_valid_pending_existing_atomic_group_ingest")
+        a_path = self.repo / assembly_receipt["receipt_path"]
+        a_path.parent.mkdir(parents=True, exist_ok=True)
+        a_path.write_bytes(assembly_receipt["receipt_bytes"])
+        typed_commit = commit(self.repo, "synthetic scoped Assembly Git receipt")
+        self.assertEqual(run(self.repo,"rev-parse", typed_commit + "^"), assembly)
+        self.assertFalse(assembly_receipt["canonical_acceptance"])
         record = {
             "repo": self.repo, "marker_commit": frozen["marker_commit"],
             "trial_id": self.m["trial_id"],
