@@ -5,6 +5,10 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## НОВОЕ НАЗНАЧЕНИЕ — повторные ошибки директора, 2026-10-27
+
+- **НОВЫЙ физический ЧАТ 5**: `director-recurrent-long-prompts-slow-registration-audit-01` → `WORKER_TASK_DIRECTOR_RECURRENT_LONG_PROMPTS_AND_SLOW_REGISTRATION_AUDIT_01.md`. Независимое исследование повторения длинных директорских запусков и многоэтапной регистрации после прежних аудитов и частично принятых правок. Проверить фактический цикл предыдущего регистрационного задания и почему существующие правила не сработали; предложить несколько новых механизмов с сопоставлением цены/рисков и практичный вариант. Только один report-only draft PR. НЕ менять правила/CI/production, не назначать дополнительно другие аудиты. Запуск после подтверждения успешной регистрации в `main`.
+
 ## АКТУАЛЬНО — Steam post-merge исправления, 2026-10-27
 
 - **СУЩЕСТВУЮЩИЙ ЧАТ 1**: `steam-postmerge-actions-failures-fix-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_FAILURES_FIX_01.md`. Два подтверждённых красных main GitHub Actions после принятия PR #311: `Validate mailing policy` (version/profile-binding check) и `Build offer family resolution` (`App_1492680` missing from mailing feed). Одна ограниченная исправляющая ветка/PR, только связанные regression/CI. Директор принимает результат; manual production НЕ запускать. Назначение готово только после merge регистрационного PR с успешным site tasks CI.
