@@ -5,6 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## АКТУАЛЬНО — handoff новому директору и запуск original18, 2026-10-27
+
+- Сначала готовить пользователю **настоящий Dossier V2 Research launcher**, с ручными owner GitHub Actions freeze v2 + authorize v2 и только фактическими маркерами. PR #309 **merged** 27.10, main `3210d0fd58b9bad687ab8f70d529fdf0535e586b`, кодовая CI 68/68 зелёная, но реальный trial **0/18** и `sandbox/dossier-notes-v2-original18-first` пока отсутствует; глобальная семантика/production выключены. Нет отчёта независимой pre-merge L3 QA; не заявлять PASS, применять адресные рисковые запреты. Полный короткий запуск и актуальная последовательность в самом верху `DIRECTOR_HANDOFF_CURRENT.md`; без нового проекта.
+- **Затем ITAD:** #311 отдельный code PASS по QA #314, draft/unmerged; #312 уже исправил конкретную проблему offscreen analysis после топ-100, новый head `f27a85d4f6f3c22f682932a64d0026e633d01f60`, targeted CI success, всё ещё unmerged. Выполнить только узкую совместную проверку дельты, согласовать единый `scripts/build_final_visual_payload.py`, принять оба в main по gates, провести одно **штатное** real production обновление с проверкой метрик и UI. Не повторять зелёный общий QA и не назначать новый ЧАТ 2.
+- После merge №309 существующий main build имел **FAIL freshness** из-за stale Steam source, не из-за доказанного Dossier defect. Реальное коммерческое обновление должно закрыть freshness; не делать вид, что уже прошло.
+
 ## К ЗАВЕРШЕНИЮ PR №309 — финальная risk-based приёмка, 2026-10-27
 
 - **НОВЫЙ ЧАТ 4**: `dossier-v2-original18-pr309-final-l3-acceptance-01` → `WORKER_TASK_DOSSIER_V2_ORIGINAL18_PR309_FINAL_L3_ACCEPTANCE_01.md`. Пользователь прямо поручил принять готовый PR #309 original18 Dossier V2. Исходный ЧАТ 3 закончил реализацию; 68/68 целевых CI уже прошли. Одно узкое независимое L3 review только владельческого grant, GitHub workflows, scoped sandbox, typed Research/Assembly receipts и строгого writer; не повторять тесты, не запускать реальные 18, не создавать новую QA цепочку. После PASS директор объединяет тот же PR #309, затем владелец вручную выполняет actions freeze/authorization.
