@@ -5,6 +5,11 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## К ЗАВЕРШЕНИЮ PR №309 — финальная risk-based приёмка, 2026-10-27
+
+- **НОВЫЙ ЧАТ 4**: `dossier-v2-original18-pr309-final-l3-acceptance-01` → `WORKER_TASK_DOSSIER_V2_ORIGINAL18_PR309_FINAL_L3_ACCEPTANCE_01.md`. Пользователь прямо поручил принять готовый PR #309 original18 Dossier V2. Исходный ЧАТ 3 закончил реализацию; 68/68 целевых CI уже прошли. Одно узкое независимое L3 review только владельческого grant, GitHub workflows, scoped sandbox, typed Research/Assembly receipts и строгого writer; не повторять тесты, не запускать реальные 18, не создавать новую QA цепочку. После PASS директор объединяет тот же PR #309, затем владелец вручную выполняет actions freeze/authorization.
+- Прежний ЧАТ 4 по ITAD/Steam завершил report-only PR #314: #311 PASS standalone, combined CHANGES_REQUIRED из-за утраты анализов игр вне топ-100. Конкретная исправимая дельта направлена **существующему ЧАТУ 2 в PR #312**, никаких новых экспертиз для неё.
+
 ## ЗАВЕРШЕНИЕ РАЗРАБОТКИ: совместная приёмка №311 + №312, 2026-10-27
 
 - **НОВЫЙ ЧАТ 4**: `steam-50-top100-itad-joint-production-acceptance-01` → `WORKER_TASK_STEAM_50_TOP100_ITAD_JOINT_PRODUCTION_ACCEPTANCE_01.md`. Одна независимая ограниченная L3-проверка производственных изменений PR #311 и #312, обоих уже прошедших CI, с совместной проверкой `scripts/build_final_visual_payload.py` и конкретным PASS/CHANGES_REQUIRED без второй цепочки проверок. Никаких правок runtime/production или принятия PR самим QA.
