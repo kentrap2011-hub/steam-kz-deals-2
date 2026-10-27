@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-10-25",
+  "last_curated_on": "2026-10-27",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -125,7 +125,7 @@
       "id": "steam-50-top100",
       "title": "Скидка от 50% и витрина топ-100",
       "goal": "Отбор Steam, DLC, наборов и видимых лучших предложений без урезания Deep.",
-      "status": "active",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Тесно связаны фильтры, поиск и публикация.",
       "urgency": "высокая",
@@ -137,10 +137,10 @@
         "position": 1
       },
       "depends_on": [],
-      "blocker": "Реализация PR №311, CI green, отдельная L3 QA №314 PASS code; PR draft/unmerged; после согласования ITAD и общего visual producer — последовательный merge и один normal main production acceptance.",
+      "blocker": "PR #311 merged as 59b5aec1310ab356dd0950171dfc8f63620b7f2d; post-merge main Actions failures handled by separate bounded repair task.",
       "updated_on": "2026-10-27",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-27T10:44:28.839Z"
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-27T14:51:56.287Z"
     },
     {
       "id": "owned-dlc",
@@ -369,7 +369,7 @@
       "id": "giveaway-itad",
       "title": "ITAD-идентификаторы раздач",
       "goal": "Улучшить правильность сопоставления игр раздач.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Нужна проверка конфликтующих идентификаторов.",
       "urgency": "низкая",
@@ -381,10 +381,10 @@
         "position": 4
       },
       "depends_on": [],
-      "blocker": "PR №312 исправил потерю анализа игр вне топ-100 и прошёл целевые тесты. Прежний отказ совместной QA №314 относится к старому коду. Нужна только проверка исправления вместе с №311, затем последовательное принятие и настоящее обновление сайта.",
+      "blocker": "PR #312 merged into main (earlier merge ed2f9114fb57fca7c77a5234f018ac25a1a6fccc); post-merge checks assigned separately.",
       "updated_on": "2026-10-27",
-      "recent_completion": false,
-      "updated_at_utc": "2026-10-27T10:44:28.839Z"
+      "recent_completion": true,
+      "updated_at_utc": "2026-10-27T14:51:56.287Z"
     },
     {
       "id": "architecture-cleanup",
@@ -2514,6 +2514,24 @@
       "recent_completion": false,
       "updated_on": "2026-10-27",
       "updated_at_utc": "2026-10-27T10:44:28.839Z"
+    },
+    {
+      "id": "steam-postmerge-actions-failures-fix-01",
+      "title": "ЧАТ 1 — исправление ошибок GitHub Actions после объединения Steam топ-100",
+      "goal": "Ограниченное исправление подтверждённых сбоев mailing policy и offer family resolution на main после принятия PR #311; узкие тесты и один PR без ручного production.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Две точные ошибки воспроизведены журналами GitHub; правки должны сохранить строгие проверки и целостность списка.",
+      "urgency": "высокая",
+      "urgency_reason": "Автоматическое обновление сайта сталкивается с ошибками после объединения новой витрины.",
+      "task_file": "WORKER_TASK_STEAM_POSTMERGE_ACTIONS_FAILURES_FIX_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Директор сохранил ограниченное задание в GitHub; worker не запускается до принятия регистрационного PR и CI.",
+      "recent_completion": false,
+      "updated_on": "2026-10-27",
+      "updated_at_utc": "2026-10-27T14:51:56.287Z"
     }
   ]
 }
