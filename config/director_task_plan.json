@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-10-25",
+  "last_curated_on": "2026-10-27",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -2514,6 +2514,24 @@
       "recent_completion": false,
       "updated_on": "2026-10-27",
       "updated_at_utc": "2026-10-27T10:44:28.839Z"
+    },
+    {
+      "id": "steam-postmerge-actions-failures-fix-01",
+      "title": "ЧАТ 1 — исправление ошибок GitHub Actions после объединения Steam топ-100",
+      "goal": "Ограниченное исправление подтверждённых сбоев mailing policy и offer family resolution на main после принятия изменения №311; узкие тесты и один PR без ручного production.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Две точные ошибки воспроизведены журналами GitHub; правки должны сохранить строгие проверки и целостность списка.",
+      "urgency": "высокая",
+      "urgency_reason": "Автоматическое обновление сайта сталкивается с ошибками после объединения новой витрины.",
+      "task_file": "WORKER_TASK_STEAM_POSTMERGE_ACTIONS_FAILURES_FIX_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Директор сохранил ограниченное задание в GitHub; worker не запускается до принятия регистрационного PR и CI.",
+      "recent_completion": false,
+      "updated_on": "2026-10-27",
+      "updated_at_utc": "2026-10-27T14:51:56.287Z"
     }
   ]
 }

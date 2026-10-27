@@ -5,7 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## АКТУАЛЬНО — handoff новому директору и запуск original18, 2026-10-27
+## АКТУАЛЬНО — Steam post-merge исправления, 2026-10-27
+
+- **СУЩЕСТВУЮЩИЙ ЧАТ 1**: `steam-postmerge-actions-failures-fix-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_FAILURES_FIX_01.md`. Два подтверждённых красных main GitHub Actions после принятия PR #311: `Validate mailing policy` (version/profile-binding check) и `Build offer family resolution` (`App_1492680` missing from mailing feed). Одна ограниченная исправляющая ветка/PR, только связанные regression/CI. Директор принимает результат; manual production НЕ запускать. Назначение готово только после merge регистрационного PR с успешным site tasks CI.
+- **Принятые PR #311 и #312** уже в `main`. Изменения кода объединены; задачи витрины и ITAD в реестре остаются активными до реальной production-приёмки. Не пересоздавать прежние PR. Реальный Steam collector после merge запущен штатно, но production acceptance ещё не доказан.
+- **Dossier V2 original18**: owner Freeze+Authorize уже успешно создали isolated sandbox; ЧАТ 4 ведёт отдельный настоящий Research. Старый Dossier/Deep остаются production-active по своим существующим контрактам; новую разработку/расписания не включать.
+
+## ИСТОРИЯ — прежний handoff перед запуском original18, 2026-10-27
 
 - Сначала готовить пользователю **настоящий Dossier V2 Research launcher**, с ручными owner GitHub Actions freeze v2 + authorize v2 и только фактическими маркерами. PR #309 **merged** 27.10, main `3210d0fd58b9bad687ab8f70d529fdf0535e586b`, кодовая CI 68/68 зелёная, но реальный trial **0/18** и `sandbox/dossier-notes-v2-original18-first` пока отсутствует; глобальная семантика/production выключены. Нет отчёта независимой pre-merge L3 QA; не заявлять PASS, применять адресные рисковые запреты. Полный короткий запуск и актуальная последовательность в самом верху `DIRECTOR_HANDOFF_CURRENT.md`; без нового проекта.
 - **Затем ITAD:** #311 отдельный code PASS по QA #314, draft/unmerged; #312 уже исправил конкретную проблему offscreen analysis после топ-100, новый head `f27a85d4f6f3c22f682932a64d0026e633d01f60`, targeted CI success, всё ещё unmerged. Выполнить только узкую совместную проверку дельты, согласовать единый `scripts/build_final_visual_payload.py`, принять оба в main по gates, провести одно **штатное** real production обновление с проверкой метрик и UI. Не повторять зелёный общий QA и не назначать новый ЧАТ 2.
