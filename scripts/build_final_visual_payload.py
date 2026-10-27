@@ -7,6 +7,7 @@ import build_daily_visual_payload as base_builder
 import card_explanation_policy
 import duration_enrichment
 import giveaway_visual_handoff
+import giveaway_analysis_reuse
 import play_priority_context
 import priority_ranking
 import progressive_personalization
@@ -35,6 +36,35 @@ COMMERCIAL_CONTRACT_KEYS = {
     'family_graph_blob_sha': 'commercial_source_family_graph_blob_sha',
     'history_snapshot_blob_sha': 'commercial_source_history_snapshot_blob_sha',
 }
+# Only precomputed canonical semantic evidence, never off-screen paid offers.
+# Bind the preserved full-scope index to the same GitHub-owned semantic inputs.
+GIVEAWAY_SEMANTIC_SOURCE_PATHS = {
+    'payload': 'data/production/pre_ai/chatgpt_payload.json',
+    'progressive_context': 'data/production/pre_ai/progressive_candidate_context.jsonl',
+    'dossier': 'data/production/pre_ai/taste_steam_review_dossier_work.json',
+    'translation': 'data/production/pre_ai/chatgpt_ru_description_status.json',
+    'taste_queue': 'data/production/pre_ai/chatgpt_taste_queue.jsonl',
+    'deep_state': 'data/cache/progressive_pass2_state.json',
+    'explanation_policy': 'scripts/card_explanation_policy.py',
+}
+
+
+def giveaway_semantic_source_binding():
+    return {
+        key: base_builder.git_sha(path)
+        for key, path in GIVEAWAY_SEMANTIC_SOURCE_PATHS.items()
+    }
+
+
+def attach_precomputed_giveaway_analysis(ready):
+    cards = giveaway_analysis_reuse.canonical_sources_for_refresh(
+        ready.get('giveaway_analysis_source'),
+        ready.get('items') or [],
+        giveaway_semantic_source_binding(),
+    )
+    return giveaway_analysis_reuse.attach(giveaway_visual_handoff.derive_from_path(), cards)
+
+
 SEMANTIC_PRESERVED_FIELDS = (
     'fit',
     'source_fit',
@@ -516,7 +546,7 @@ def refresh_existing_giveaways_only():
     ready = json.loads(before)
     paid_before = json.dumps(ready.get('items') or [], ensure_ascii=False, separators=(',', ':'))
 
-    giveaways = giveaway_visual_handoff.derive_from_path()
+    giveaways = attach_precomputed_giveaway_analysis(ready)
     ready['giveaways'] = giveaways
     contract = ready.setdefault('production_contract', {})
     contract['final_visual_producer_blob_sha'] = base_builder.git_sha('scripts/build_final_visual_payload.py')
@@ -695,7 +725,7 @@ def refresh_existing_media():
         'without_any_image': len(items) - with_any_image,
         'coverage_percent': round((with_any_image / len(items)) * 100, 1) if items else 100.0,
     }
-    ready['giveaways'] = giveaway_visual_handoff.derive_from_path()
+    ready['giveaways'] = attach_precomputed_giveaway_analysis(ready)
     contract = ready.setdefault('production_contract', {})
     contract['visual_builder_blob_sha'] = base_builder.git_sha('scripts/build_visual_feed_v2.py')
     contract['final_visual_producer_blob_sha'] = base_builder.git_sha('scripts/build_final_visual_payload.py')
@@ -865,6 +895,10 @@ def main():
 
     refined, final_priority_order = progressive_personalization.apply_progressive_order(refined)
 
+    # Capture complete canonical analyzed scope before any paid top-100 cut.
+    ready['giveaway_analysis_source'] = giveaway_analysis_reuse.capture_canonical_sources(
+        refined, giveaway_semantic_source_binding(),
+    )
     ready['items'] = refined
     ready['item_count'] = len(refined)
     processing_status = progressive_personalization.stamp_processing_status(ready)
@@ -879,7 +913,7 @@ def main():
         'without_any_image': len(refined) - with_any_image,
         'coverage_percent': round((with_any_image / len(refined)) * 100, 1) if refined else 100.0,
     }
-    ready['giveaways'] = giveaway_visual_handoff.derive_from_path()
+    ready['giveaways'] = attach_precomputed_giveaway_analysis(ready)
     duration_distribution = duration_source_distribution(refined)
     contract = ready.setdefault('production_contract', {})
     contract.clear()

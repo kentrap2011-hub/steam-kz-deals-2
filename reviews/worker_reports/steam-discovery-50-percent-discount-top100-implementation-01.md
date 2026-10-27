@@ -39,3 +39,10 @@ This second work pass is a continuation of the same PR, not a new worker, schedu
 ### Avoided detours and context
 
 Work took time because legacy regression fixtures embodied obsolete assumptions of global DLC and bundles having two current game offers; we changed only the assertions whose approved semantics genuinely changed, while preserving leak/identity/completeness guards. Existing `PROJECT_ROUTES.md#Steam KZ discovery` remains the fast owner route; add the new helper and policy pointer there after accepted merge. ITAD, giveaway provider identity, Dossier V2 Research/Assembly/issuer, worker prompts, Director Board/registry and schedulers untouched.
+
+
+## PR #312 integration / merge-conflict resolution (2026-10-27)
+
+- Combined the current `main` giveaway-analysis implementation from merged PR #312 with PR #311's rolling top-100 changes in `scripts/build_final_visual_payload.py`: capture full canonical analyzed candidates before the paid cap; keep cached full-scope giveaway analysis for out-of-top-100 Steam-linked offers; cap only ranked paid `items` after status stamping.
+- Preserved both sides of `CURRENT_TASK.md` and `PROJECT_ROUTES.md`, retaining unrelated Dossier/Director handoff material from current `main`.
+- This is an existing PR #311 branch merge only. No merge into `main`, production collect, semantic worker, new task or scheduler is authorized. Run existing PR checks at exact final code HEAD and verify mergeability; live main-only acceptance remains pending.

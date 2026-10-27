@@ -125,7 +125,7 @@
       "id": "steam-50-top100",
       "title": "Скидка от 50% и витрина топ-100",
       "goal": "Отбор Steam, DLC, наборов и видимых лучших предложений без урезания Deep.",
-      "status": "planned",
+      "status": "active",
       "effort": "высокая",
       "effort_reason": "Тесно связаны фильтры, поиск и публикация.",
       "urgency": "высокая",
@@ -137,10 +137,10 @@
         "position": 1
       },
       "depends_on": [],
-      "blocker": "НОВЫЙ физический ЧАТ 1: внедрить существующее решение скидка ≥50% и витрина топ-100; не изменять Dossier V2, ITAD identity и общие директорские файлы.",
-      "updated_on": "2026-10-26",
+      "blocker": "Реализация PR №311, CI green, отдельная L3 QA №314 PASS code; PR draft/unmerged; после согласования ITAD и общего visual producer — последовательный merge и один normal main production acceptance.",
+      "updated_on": "2026-10-27",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-26T15:12:49.369Z"
+      "updated_at_utc": "2026-10-27T10:44:28.839Z"
     },
     {
       "id": "owned-dlc",
@@ -369,7 +369,7 @@
       "id": "giveaway-itad",
       "title": "ITAD-идентификаторы раздач",
       "goal": "Улучшить правильность сопоставления игр раздач.",
-      "status": "planned",
+      "status": "active",
       "effort": "средняя",
       "effort_reason": "Нужна проверка конфликтующих идентификаторов.",
       "urgency": "низкая",
@@ -381,10 +381,10 @@
         "position": 4
       },
       "depends_on": [],
-      "blocker": "НОВЫЙ физический ЧАТ 2: внедрить ITAD идентификацию Epic/GOG → Steam; не изменять Steam discount/top-100 selection, Dossier V2 и общие директорские файлы.",
-      "updated_on": "2026-10-26",
+      "blocker": "PR №312 исправил потерю анализа игр вне топ-100 и прошёл целевые тесты. Прежний отказ совместной QA №314 относится к старому коду. Нужна только проверка исправления вместе с №311, затем последовательное принятие и настоящее обновление сайта.",
+      "updated_on": "2026-10-27",
       "recent_completion": false,
-      "updated_at_utc": "2026-10-26T15:12:49.369Z"
+      "updated_at_utc": "2026-10-27T10:44:28.839Z"
     },
     {
       "id": "architecture-cleanup",
@@ -2465,7 +2465,7 @@
       "id": "dossier-v2-original18-real-pilot-end-to-end-route-implement-01",
       "title": "ЧАТ 3 — реальный маршрут Research → Assembly для исходных 18 игр",
       "goal": "Реализовать недостающий исполняемый end-to-end маршрут Dossier V2 original18, используя принятые issuer/Research receipts/Assembly writer; довести до live пробного запуска при наличии ручных GitHub/semantic capabilities, без production и очередного аудита.",
-      "status": "planned",
+      "status": "blocked",
       "effort": "высокая",
       "effort_reason": "Из уже имеющихся V2 модулей нужно выполнить scoped authorization/semantic handoff и реальную поигровую запись через GitHub, без дублирования архитектуры.",
       "urgency": "высокая",
@@ -2474,10 +2474,46 @@
       "worker_slot": "ЧАТ 3",
       "order": null,
       "depends_on": [],
-      "blocker": "НОВЫЙ ЧАТ 3. Пользователь разрешил однократное испытание исходных 18 игр. Запуск GitHub Actions или семантического работника может потребовать действия пользователя в интерфейсе. Не имитировать исполнение; ЧАТ 1 завершил отдельный анализ.",
+      "blocker": "Маршрут оригинальных 18 реализован и PR №309 принят в main 2026-10-27; настоящий запуск 0/18, sandbox ref отсутствует. Для начала необходимы два подлинных ручных owner GitHub Actions dispatch: freeze v2 и authorize v2. Физический прежний ЧАТ 3 закончил разработку, не запускал Research/Assembly.",
       "recent_completion": false,
-      "updated_on": "2026-10-26",
-      "updated_at_utc": "2026-10-26T18:30:00Z"
+      "updated_on": "2026-10-27",
+      "updated_at_utc": "2026-10-27T10:44:28.839Z"
+    },
+    {
+      "id": "steam-50-top100-itad-joint-production-acceptance-01",
+      "title": "ЧАТ 4 — совместная приёмка топ-100 Steam и ITAD",
+      "goal": "Один независимый review готовых производственных изменений Steam 50% и ITAD, их общего файла и критериев одного main production refresh.",
+      "status": "complete",
+      "effort": "средняя",
+      "effort_reason": "Два крупных PR уже с успешными CI, но с общим файлом и опасной производственной дельтой; нужна одна реальная совместная проверка.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь прямо поручил провести приёмку и обновление сайта без новых бюрократических этапов.",
+      "task_file": "WORKER_TASK_STEAM_50_TOP100_ITAD_JOINT_PRODUCTION_ACCEPTANCE_01.md",
+      "worker_slot": "ЧАТ 4",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Совместная ограниченная QA закончена: PR №314, #311 PASS code gate, #312 и combined CHANGES_REQUIRED: offscreen canonical analysis lost after top100 cap; exact fix assigned to existing Chat 2.",
+      "recent_completion": true,
+      "updated_on": "2026-10-27",
+      "updated_at_utc": "2026-10-27T09:43:13.892Z"
+    },
+    {
+      "id": "dossier-v2-original18-pr309-final-l3-acceptance-01",
+      "title": "ЧАТ 4 — точечная финальная независимая проверка маршрута Dossier V2 №309",
+      "goal": "Одна окончательная L3 QA неизменённого PR №309 на точном HEAD, с проверкой owner grants, frozen 18, typed receipts, изолированного writer и отсутствия активного production; дать директору PASS/BLOCKED.",
+      "status": "blocked",
+      "effort": "средняя",
+      "effort_reason": "Код уже проверен 68 тестами в CI; нужен лишь независимый содержательный review прав/публикации перед merge.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь прямо поручил принять PR №309; это единственное недостающее обязательное подтверждение безопасности.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_ORIGINAL18_PR309_FINAL_L3_ACCEPTANCE_01.md",
+      "worker_slot": "ЧАТ 4",
+      "order": null,
+      "depends_on": [],
+      "blocker": "PR №309 уже принят в main. Отдельный независимый итоговый L3-отчёт не найден; не заявлять PASS. Старую предварительную QA не запускать по инерции. Перед живым испытанием проверить узкие меры защиты и реальные полномочия.",
+      "recent_completion": false,
+      "updated_on": "2026-10-27",
+      "updated_at_utc": "2026-10-27T10:44:28.839Z"
     }
   ]
 }

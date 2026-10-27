@@ -136,7 +136,7 @@
     "edition_policy": "frozen exact original title including edition qualifier is authoritative; no independent alias, edition substitution or reassigned product permitted"
   },
   "manual_v2_issuer": {
-    "enabled": false,
+    "enabled": true,
     "trial_id": "dossier-notes-v2-original18-first",
     "sandbox_branch": "sandbox/dossier-notes-v2-original18-first",
     "manifest_path": "data/control/dossier_notes_v2/manifests/dossier-notes-v2-original18-first.json",
@@ -152,12 +152,31 @@
       "blob_sha": null,
       "github_actor_id": null
     },
-    "one_use": "separate_first_attempt_manual_dispatches_and_create_only_remote_branch_leases",
+    "one_use": "manual_owner_confirmed_grant_plus_one_create_only_marker_then_separate_authorization",
     "issuer_evidence": "verified GitHub Actions event/ref/main SHA/run attempt/actor ID plus an independently approved immutable grant Git commit; a chat prompt, Git committer label and original V1 authorization are not grants",
     "semantics_after_issuer": "separate future human authorization AND accepted authenticated GitHub workflow-run proof required; issuer commits alone never enable semantics",
     "canonical_acceptance": false,
     "assembly_authorized": false,
     "semantic_execution_authorized": false,
     "enabled_by_default": false
+  },
+  "original18_trial_scoped_authorization": {
+    "enabled": true,
+    "approved_on": "2026-10-26",
+    "task_id": "dossier-v2-original18-real-pilot-end-to-end-route-implement-01",
+    "exact_trial_id": "dossier-notes-v2-original18-first",
+    "github_owner_login": "kentrap2011-hub",
+    "github_owner_actor_id": "315790060",
+    "semantic_phases": [
+      "research",
+      "assembly"
+    ],
+    "isolated_sandbox_only": true,
+    "production": false,
+    "canonical_ingest": false,
+    "zero_retry": true,
+    "one_use_issuer": true,
+    "requires_actual_manual_actions_dispatch": true,
+    "requires_authenticated_authorization_run_success": true
   }
 }

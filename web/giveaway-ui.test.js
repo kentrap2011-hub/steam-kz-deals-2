@@ -69,6 +69,39 @@ function payload(state='active',games=[]){
   assert(detail.includes(GiveawayUI.ANALYSIS_INCOMPLETE_COPY));
 }
 
+
+{
+  const ready={
+    game_key:'g:verified',
+    title:'Verified',
+    analysis_identity:{status:'resolved',steam_appid:738520,identity_provider:'itad'},
+    analysis:{status:'ready',steam_appid:738520,summary:'Описание на русском',
+      why_fit:['Обоснованный плюс'],risks:['Подтверждённый минус']},
+    offers:[offer('epic','epic:verified')]
+  };
+  const p=payload('active',[ready]);
+  p.attribution={label:'Game identity via IsThereAnyDeal',url:'https://isthereanydeal.com/'};
+  const list=GiveawayUI.buildListMarkup(p,NOW);
+  const detail=GiveawayUI.buildDetailMarkup(p,'g:verified',NOW);
+  assert(!list.includes('Обоснованный плюс'));
+  assert(list.includes('https://isthereanydeal.com/'));
+  assert(detail.includes('Описание на русском'));
+  assert(detail.includes('Обоснованный плюс'));
+  assert(detail.includes('Подтверждённый минус'));
+  assert(detail.includes('https://isthereanydeal.com/'));
+  assert(!detail.includes(GiveawayUI.ANALYSIS_INCOMPLETE_COPY));
+
+  // No semantic facts are displayed from a mismatched or unproven Steam appid.
+  ready.analysis_identity.steam_appid=10;
+  const untrusted=GiveawayUI.buildDetailMarkup(p,'g:verified',NOW);
+  assert(untrusted.includes(GiveawayUI.ANALYSIS_INCOMPLETE_COPY));
+  assert(!untrusted.includes('Обоснованный плюс'));
+  ready.analysis_identity.steam_appid=738520;
+  ready.analysis.status='incomplete';
+  const notReady=GiveawayUI.buildDetailMarkup(p,'g:verified',NOW);
+  assert(notReady.includes(GiveawayUI.ANALYSIS_INCOMPLETE_COPY));
+}
+
 {
   const empty=payload('empty',[]);
   assert.equal(GiveawayUI.navState(empty,NOW).label,'(0)');

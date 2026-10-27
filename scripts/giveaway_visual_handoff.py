@@ -128,6 +128,25 @@ def _offer_defect(game_key, title, reason):
     }
 
 
+def _trusted_analysis_identity(raw_game, selected_provider):
+    """Only the provider-neutral per-offer receipts authorize Steam analysis reuse."""
+    raw = raw_game.get('analysis_identity') or {}
+    offers = raw_game.get('offers') or []
+    appid = raw.get('steam_appid')
+    if (raw.get('status') == 'resolved' and type(appid) is int and appid > 0
+            and raw.get('identity_provider') == selected_provider and offers
+            and all(isinstance(offer.get('identity_resolution'), dict)
+                    and offer['identity_resolution'].get('status') == 'resolved'
+                    and offer['identity_resolution'].get('identity_provider') == selected_provider
+                    and offer['identity_resolution'].get('steam_appid') == appid
+                    and offer['identity_resolution'].get('source_storefront') == offer.get('storefront')
+                    and offer['identity_resolution'].get('source_product_id') == offer.get('source_product_id')
+                    for offer in offers)):
+        return {'status': 'resolved', 'steam_appid': appid, 'identity_provider': selected_provider}
+    return {'status': 'unresolved', 'steam_appid': None, 'identity_provider': selected_provider}
+
+
+
 def derive_giveaways_with_diagnostics(snapshot, now=None):
     now = now or datetime.now(timezone.utc)
     if now.tzinfo is None:
@@ -181,6 +200,9 @@ def derive_giveaways_with_diagnostics(snapshot, now=None):
                 'game_key': game_key,
                 'title': title.strip(),
                 'offers': active_offers,
+                'analysis_identity': _trusted_analysis_identity(
+                    raw_game, snapshot.get('identity_provider')
+                ),
             })
 
     derived_games.sort(
@@ -200,6 +222,11 @@ def derive_giveaways_with_diagnostics(snapshot, now=None):
         'fresh_until_utc': snapshot.get('fresh_until_utc'),
         'derived_at_utc': utc_iso(now),
         'accepted_offer_count_at_build': active_offer_count,
+        'attribution': (
+            {'label': 'Game identity via IsThereAnyDeal',
+             'url': 'https://isthereanydeal.com/'}
+            if snapshot.get('identity_provider') == 'itad' else None
+        ),
         'games': derived_games,
     }, defects
 

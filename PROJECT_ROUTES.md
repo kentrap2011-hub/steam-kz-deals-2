@@ -557,6 +557,16 @@ Currentness invariant after PPD-012:
 
 **2026-10-22 QA hardening / independent PR #239 CHANGES_REQUIRED follow-up:** versioned original identity is now pinned through byte-identical original Research buffer `config/dossier_notes_v2_pinned_original_research_buffer_v1.json` (Git blob `c8a6b6f515162f431c0e3d86175376114c0acf7e`). `scripts/dossier_research_notes_v2.py::_original_rows` derives immutable exact work/title/edition-suffixed name/original assignment digest from it, and `_manifest` rejects forged names/IDs with otherwise correct AppIDs. Stage2 `assembly_work` uses typed `classify_research`, and `frozen_assembly_traversal` quarantines individual bad/unsafe/missing packages while keeping all 18 ordered siblings eligible. Tests in `scripts/test_dossier_research_notes_v2.py`: new poisoned Git manifest and multi-item unsafe/invalid UTF-8 A → B/C ready. Original old Research/year/PR232 still untouched.
 
+## Dossier V2 original18 executable scoped pilot (PR #309)
+
+**Checked:** 2026-10-27, implementation code HEAD `46a0ffbe041f9a64f99b7a520067a8866232b0f8`; existing [GitHub V2 validation 40462620881](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40462620881) SUCCESS (52 issuer/V2 + 15 Git transport + 1 existing writer). **Real semantics 0/18**, sandbox ref absent (404). No production authority; PR draft, not merged.
+
+**Minimal next-use route:** [PR #309](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/309) → `config/dossier_research_notes_v2_contract.json::original18_trial_scoped_authorization` → existing `.github/workflows/publish-dossier-shadow-research-freeze.yml` and `authorize-dossier-shadow-research-feasibility.yml` (owner manual Actions with original18 v2 confirmations) → `scripts/dossier_notes_v2_original18_pilot.py` plus unchanged `scripts/dossier_notes_v2_per_item_receipts.py` for exactly one Research candidate/receipt and one independent Assembly candidate/receipt per immutable item → existing `ingest-taste-steam-review-dossier-checkpoint.yml` with `notes_v2_original18_pilot_writer=true` and **sandbox-only** store/receipt. Both one-shot semantic prompts remain under `config/dossier_two_stage_*v2_worker_prompt.md`; full exact dispatch inputs, launcher prompts and blocker ledger in `reviews/worker_reports/dossier-v2-original18-real-pilot-end-to-end-route-implement-01.md`.
+
+**Boundaries:** global V2 flags and V1/Deep/production stay inactive/unchanged. Real manual GitHub Actions dispatch and authenticated GitHub readback cannot be impersonated by a developer chat; existing connector does not offer workflow_dispatch. Dispose/mock Git passes do not count toward the original 18 real items. No new workflow or scheduled task.
+
+---
+
 ## Site Pages deploy: independent optional sections (2026-10-21, base a2f734d15ddd)
 
 - Core source/staged Git-blob and SHA256 preflight: `scripts/stage_site_optional_sections.py::check_core`; canonical visual `data/production/visual/current.json` remains byte-identical in `web/data/current.json` and mandatory `scripts/visual_freshness_receipt.py verify-receipt` stays in `.github/workflows/deploy-visual.yml`.

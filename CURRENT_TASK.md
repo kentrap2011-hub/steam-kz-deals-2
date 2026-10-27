@@ -1,12 +1,16 @@
 # CURRENT TASK
 
-## IMPLEMENTED / LIVE ACCEPTANCE PENDING — ЧАТ 1: Steam >=50%, rolling top-100 (2026-10-26)
+## IMPLEMENTED / PR CONFLICT RESOLVED, LIVE ACCEPTANCE PENDING — ЧАТ 1: Steam >=50%, rolling top-100 (2026-10-26)
 - Existing draft [PR #311](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/311), branch `implement/steam-discovery-50-top100-01`; **not merged/deployed**.
 - Code: one live-capped games/Sub source; quality-gated base-game scope, exact targeted KZ DLC relations and offer gates (no global DLC), independent on-sale multi-game Sub package candidates (including entirely non-sale members), conservative low-signal quality/value rescue, canonical full Deep queue, rolling final 100, complete source-bound funnel/statistics.
 - Contract: unchanged Deep worker prompt, no second collector/queue/scheduler and no ITAD/Dossier V2 modifications. Deterministic PR regressions and targeted live KZ source probes completed.
 - **NOT runtime accepted:** final exact-head CI must be checked; full GitHub production collection/persistence and semantic membership/rolling-live publication still require separately authorized normal main activation after Director merge review. Do not present as deployed.
 - Report: `reviews/worker_reports/steam-discovery-50-percent-discount-top100-implementation-01.md`.
 
+## WAITING_OWNER_MANUAL_ACTIONS — ЧАТ 3: original18 Dossier V2 PR #309 (2026-10-27)
+- Task: `WORKER_TASK_DOSSIER_V2_ORIGINAL18_REAL_PILOT_END_TO_END_ROUTE_IMPLEMENT_01.md`. Implementation **completed for worker review** in [draft PR #309](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/309); no merge or execution by worker. Original18 scoped issuer, Git Research/Assembly receipts, isolated existing writer and exact launcher route added. Verified code HEAD `46a0ffbe041f9a64f99b7a520067a8866232b0f8`, Actions [40462620881](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40462620881) SUCCESS (52+15+1).
+- Actual original18 semantic run 0/18 Research, 0/18 Assembly, 0/18 isolated accepted. Sandbox `sandbox/dossier-notes-v2-original18-first` missing (GitHub ref 404). This connected GitHub interface cannot launch authenticated manual Actions workflows. Only next external step after Director PR merge: owner dispatches freeze + authorize v2 via exact UI parameters in worker report, then separately starts two one-shot semantic chats and existing sandbox writer. No retries, production, V1, or new scheduler.
+- Report: `reviews/worker_reports/dossier-v2-original18-real-pilot-end-to-end-route-implement-01.md`. Old #270 and #239 handoffs below are historical records, not current authority for this original18 pilot.
 
 ## BLOCKED — ЧАТ 3: Research Notes V2 remote persistence PR #270 (2026-10-24)
 - Task: `WORKER_TASK_DOSSIER_V2_RESEARCH_GITHUB_PERSISTENCE_FINISH_01.md`; existing draft PR #270 remains open and inactive.
