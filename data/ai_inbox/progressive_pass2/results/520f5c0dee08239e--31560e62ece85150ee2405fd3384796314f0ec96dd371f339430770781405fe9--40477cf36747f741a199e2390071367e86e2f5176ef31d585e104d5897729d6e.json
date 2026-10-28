@@ -1,0 +1,258 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "26f47af9727fa1c1c8260dbdbb00beaacf5ad579",
+  "run_start_authority_commit": "fa978416e5c762b40c7636bd7601aca3326c4cad",
+  "run_started_at_utc": "2026-10-28T05:59:29+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+  "work_id": "31560e62ece85150ee2405fd3384796314f0ec96dd371f339430770781405fe9",
+  "family_id": "game:2990",
+  "taste_subject_key": "App_2990",
+  "appid": "2990",
+  "taste_fingerprint": "0bcb989e74325551d515637b98f28d9b79cb31c2fbffaff5cbedc1ceb4bb7406",
+  "candidate_context_sha256": "e5f5e541dad35fb39495fe02738e04c83c66e029b3c940668e95e1ae6aeff301",
+  "dossier_content_sha256": "8e514e2c08c685e3f7a26a7e3a45c66427e4b3751737842f2b17b3818efa5986",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "40477cf36747f741a199e2390071367e86e2f5176ef31d585e104d5897729d6e",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "high",
+  "positive_evidence": [
+    "Быстрое агрессивное вождение, разрушаемые трассы и физические столкновения дают яркое ощущение управления и скорости.",
+    "Карьера с классами автомобилей, кубками и новыми трассами создаёт ясный цикл развития и улучшения гоночного навыка.",
+    "Гонки, дерби и трюковые испытания меняют тип активности, а хаотичные аварии и рок-саундтрек создают индивидуальный характер.",
+    "Гонки и трюки с друзьями могут порождать совместные комические моменты и соперничество."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 83,
+    "development_variety": 85,
+    "structure_pacing_direction": 85,
+    "identity_hooks": 85,
+    "breadth_of_match": 88
+  },
+  "score_findings": [
+    {
+      "finding_id": "flatout2-handling",
+      "text_ru": "Несмотря на хаотичные аварии, управляемость описывают как прямую и отзывчивую, так что удачный дрифт и точное прохождение опасного поворота дают удовольствие от контроля над машиной.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1",
+          "profile_value_sha256": "f62594bb547c5022f8701b8f32a3201b18aa94585e2772616746d116e84d80ce",
+          "match_text_ru": "Само выразительное перемещение и чувство управления может быть сильнейшим достоинством игры."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 83
+        }
+      ]
+    },
+    {
+      "finding_id": "flatout2-variety",
+      "text_ru": "Обычные гонки сменяются дерби на выживание и трюками с манекеном; эти режимы по-разному задействуют физику столкновений вместо бесконечного повторения одного типа заезда.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "63ad5474cf30f1e268e78c5ddd2f4216e61a252b220e098173866db5431a24ee",
+          "match_text_ru": "Новые форматы миссий и ситуаций особенно важны для сохранения интереса."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 85
+        }
+      ]
+    },
+    {
+      "finding_id": "flatout2-career",
+      "text_ru": "Кубки разных классов последовательно открывают автомобили и трассы, предоставляя понятные задачи и ощутимые этапы гоночного прогресса.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2",
+          "profile_value_sha256": "a3649c0bcd6d1f60e2bff84439498ccb1fe78509a96eabe6342d4efee4e951c7",
+          "match_text_ru": "Нравится ясная автомобильная прогрессия и конкретный результат приобретения новых возможностей."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 85
+        }
+      ]
+    },
+    {
+      "finding_id": "flatout2-identity",
+      "text_ru": "Скоростные аварии, разрушаемые препятствия и плотный панк-рок создают характерное взрывное настроение, которое запоминается не хуже отдельных трасс.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        },
+        {
+          "kind": "observation",
+          "index": 11
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7",
+          "profile_value_sha256": "8dc84c282177a1936aba1bff927b5d078c29ff12440a0acdc3370483afb923ff",
+          "match_text_ru": "Яркий стиль и выразительная звуковая атмосфера могут сделать игру запоминающейся."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 85
+        }
+      ]
+    },
+    {
+      "finding_id": "flatout2-friends",
+      "text_ru": "Соревновательные гонки и нелепые трюки с манекенами особенно смешны в компании и создают возможности для общего игрового опыта.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 8
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9",
+          "profile_value_sha256": "eb38e23e44e5b553a89215696b7a662e64da955d6cb147242968c320c851263f",
+          "match_text_ru": "Ценит совместное обсуждение решений, весёлые моменты и воспоминания от игры с друзьями и близкими."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 88
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 10
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Агрессивные соперники и внезапные столкновения некоторым кажутся несправедливыми, в том числе из-за возможного догоняющего поведения ИИ.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Трюковые испытания могут быстрее надоедать при одиночной игре, а энергичный рок-плейлист отдельным игрокам хотелось бы видеть длиннее.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Обсуждение конца 2025 года сообщало о сбросе графических и языковых настроек, но впоследствии автор отметил исправление; текущий массовый дефект не установлен.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 10
+          }
+        ]
+      }
+    ]
+  }
+}
