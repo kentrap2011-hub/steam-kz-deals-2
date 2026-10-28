@@ -388,8 +388,6 @@ class DossierManualOneShotTests(unittest.TestCase):
 
     def test_new_snapshot_valid_success_is_not_an_old_group_conflict(self):
         """A fresh legitimately planned success remains allowed after old attempts."""
-        from datetime import timedelta
-
         with tempfile.TemporaryDirectory() as td:
             h = FrozenInvocationHarness(td)
             old, _ = h.commit_snapshot([877001, 877002, 877003], "old work")
@@ -408,9 +406,9 @@ class DossierManualOneShotTests(unittest.TestCase):
 
             # The old cache now exceeds its canonical TTL. GitHub prepares a
             # genuinely new current group and can accept fresh success normally.
-            h.now += timedelta(days=25)
             fresh, _ = h.commit_snapshot(
-                [877001, 877002, 877003, 877004], "new due review"
+                [877001, 877002, 877003, 877004], "new due review",
+                day_offset=25,
             )
             self.assertNotEqual(fresh["snapshot_id"], old["snapshot_id"])
             self.assertEqual(fresh["submission_group_plan"]["groups"][0]["appids"],
