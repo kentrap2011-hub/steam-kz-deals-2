@@ -102,8 +102,9 @@ def check_lexical_inventory():
 
 def check_fast_canonical():
     projection = fast_fixture.projection()
-    _, bindings, queue = progressive_pass1.current_bindings(
-        fast_fixture.contexts(), projection, fast_fixture.queue_rows()
+    queue = fast_fixture.queue_rows()
+    _, bindings, _ = progressive_pass1.current_bindings(
+        fast_fixture.contexts(), projection, queue
     )
     item = fast_fixture.work_doc(bindings, queue)['items'][0]
     for example in SAFE:
