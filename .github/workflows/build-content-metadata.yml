@@ -7,6 +7,7 @@ on:
     paths:
       - "data/production/mailing/**"
       - "data/cache/taste_fit.index.json"
+      - "scripts/legacy_offer_scope.py"
       - ".github/workflows/build-content-metadata.yml"
 
 permissions:
@@ -37,6 +38,7 @@ jobs:
         run: |
           python - <<'PY'
           import json
+          import sys
           import subprocess
           import threading
           import time
@@ -54,6 +56,8 @@ jobs:
           mailing = json.loads(MAILING_INDEX.read_text(encoding='utf-8'))
           taste = json.loads(TASTE_INDEX.read_text(encoding='utf-8'))
           taste_entries = taste['entries']
+          sys.path.insert(0, str(Path('scripts').resolve()))
+          from legacy_offer_scope import put_feed, current_includes
           cols = mailing['columns']
           ci = {name:i for i,name in enumerate(cols)}
 
@@ -65,19 +69,17 @@ jobs:
                       continue
                   cells = line.split('\t')
                   key = cells[ci['key']]
-                  feed[key] = {
+                  put_feed(feed, {
                       'key': key,
                       'appid': cells[ci['appid']],
                       'title': cells[ci['title']],
-                  }
+                  })
 
-          included = []
-          for key, cached in taste_entries.items():
-              if cached[2] == 'INCLUDE':
-                  row = feed.get(key)
-                  if row is None:
-                      raise SystemExit(f'Included taste key missing from current feed: {key}')
-                  included.append(row)
+          if len(feed) != int(mailing['item_count']):
+              raise SystemExit('Current mailing item_count mismatch')
+          active_keys, out_of_current_feed_keys = current_includes(taste_entries, feed)
+          included = [feed[key] for key in active_keys]
+          print(f'Historical includes not on current offer feed: {len(out_of_current_feed_keys)}')
 
           old = {}
           if OUT.exists():
@@ -199,6 +201,9 @@ jobs:
               'profile_blob_sha': taste.get('profile_blob_sha'),
               'taste_model_version': taste.get('taste_model_version'),
               'required_include_count': len(required_keys),
+              'historical_taste_include_count': len(required_keys) + len(out_of_current_feed_keys),
+              'out_of_current_feed_count': len(out_of_current_feed_keys),
+              'out_of_current_feed_keys': out_of_current_feed_keys,
               'entry_count': len(current_entries),
               'entries': current_entries,
           }

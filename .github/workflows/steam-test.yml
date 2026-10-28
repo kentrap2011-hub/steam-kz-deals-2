@@ -32,6 +32,13 @@ on:
       - "scripts/test_expired_offer_guard.py"
       - "scripts/test_commercial_refresh.py"
       - "config/mailing_policy.json"
+      - "scripts/legacy_offer_scope.py"
+      - "scripts/test_legacy_offer_scope.py"
+      - "scripts/validate_mailing_policy.py"
+      - ".github/workflows/build-content-metadata.yml"
+      - ".github/workflows/build-content-eligibility-validation.yml"
+      - ".github/workflows/build-offer-family-resolution.yml"
+      - "config/content_eligibility_contract.json"
       - "config/mailing_policy.md"
       - ".github/workflows/steam-test.yml"
 
@@ -123,6 +130,11 @@ jobs:
             scripts/test_fresh_deal_discovery_refresh.py \
             scripts/test_expired_offer_guard.py \
             scripts/test_commercial_refresh.py
+
+      - name: Validate post-merge policy and historical/current offer scope
+        run: |
+          python scripts/validate_mailing_policy.py
+          python scripts/test_legacy_offer_scope.py
 
       - name: Run fresh discovery regressions
         run: |
