@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "24231baeba3dc2535bdf8c692752840f6dfe7dfc",
+  "run_start_authority_commit": "8c0fdc8ed638d82af29ed69ecec8abeb121d581e",
+  "run_started_at_utc": "2026-10-28T03:56:55+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+  "work_id": "8aedfd7b2967e1c24cec429614d09e255a2921c1b77aeb95cff8585d4320f0f1",
+  "family_id": "game:1033950",
+  "taste_subject_key": "App_1033950",
+  "appid": "1033950",
+  "taste_fingerprint": "1677c55d191da31afaffc2620de66697707292bd183c03ca9360716f46ca3ead",
+  "candidate_context_sha256": "9db5db9cdc59b103c475e9d7540f6c2bed3393d143f43e2971d73fc7df298371",
+  "dossier_content_sha256": "79c468d5976b7c603876b6fc801dba181832f8a41d8fd4f5b4f19c78f4f38550",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "0837f707fb323c6f3ad067b80d5687c50d77b221d38b74d6c7d18d2250b3c3b5",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "confidence": "medium",
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Неловкие удары, хитбоксы и монотонные схватки особенно заметны в более боевой финальной части.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Частые возвраты, ограниченные сохранения и неочевидные условия предметов способны сделать исследование утомительным.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Несколько концовок добавляют интерес, но некоторые отзывы отмечают затянутые и перегруженные поздние главы.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      }
+    ]
+  },
+  "outcome": "analyzed_not_fit",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Классический survival horror с тайной особняка и пиксельной атмосферой может зацепить, но боевой цикл описан как медленный и неточный.",
+    "Повторное исследование комнат с неясными условиями концовок и редкими сохранениями вступает в конфликт с потребностью в понятном продвижении.",
+    "Поздние боевые секции, однообразные столкновения и спорная отдача от новых оружий могут ослабить сильный старт."
+  ]
+}
