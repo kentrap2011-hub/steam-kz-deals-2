@@ -2517,7 +2517,7 @@
     },
     {
       "id": "steam-postmerge-actions-failures-fix-01",
-      "title": "ЧАТ 1 — исправление ошибок GitHub Actions после объединения Steam топ-100",
+      "title": "НЕ НАЗНАЧЕНО — исправление ошибок GitHub Actions после объединения Steam топ-100",
       "goal": "Ограниченное исправление подтверждённых сбоев mailing policy и offer family resolution на main после принятия изменения №311; узкие тесты и один PR без ручного production.",
       "status": "active",
       "effort": "средняя",
@@ -2525,13 +2525,13 @@
       "urgency": "высокая",
       "urgency_reason": "Автоматическое обновление сайта сталкивается с ошибками после объединения новой витрины.",
       "task_file": "WORKER_TASK_STEAM_POSTMERGE_ACTIONS_FAILURES_FIX_01.md",
-      "worker_slot": "ЧАТ 1",
+      "worker_slot": null,
       "order": null,
       "depends_on": [],
-      "blocker": "Директор сохранил ограниченное задание в GitHub; worker не запускается до принятия регистрационного PR и CI.",
+      "blocker": "Ранее закреплённый физический ЧАТ 1 закончил прежнюю работу по PR №311. Назначение на последующее исправление Actions не подтверждено как запущенное, поэтому слот снят без закрытия задачи. Ожидает отдельного director assignment; task-file не запускать без нового назначения.",
       "recent_completion": false,
-      "updated_on": "2026-10-27",
-      "updated_at_utc": "2026-10-27T14:51:56.287Z"
+      "updated_on": "2026-10-28",
+      "updated_at_utc": "2026-10-28T09:20:00Z"
     },
     {
       "id": "director-recurrent-long-prompts-slow-registration-audit-01",
@@ -2679,11 +2679,11 @@
     },
     {
       "id": "dossier-v1-pr322-frozen-rollover-collision-repair-01",
-      "title": "ЧАТ 2 — устранить конфликт frozen-rollover при ручном Dossier V1 в существующем изменении №322",
+      "title": "ЧАТ 1 — устранить конфликт frozen-rollover при ручном Dossier V1 в существующем изменении №322",
       "goal": "После независимой L3 QA №330 исправить только конфликт несовместимых результатов двух маркеров при rollover, сохранить оригинальный PR и штатную GitHub authority.",
       "task_file": "WORKER_TASK_DOSSIER_V1_PR322_FROZEN_ROLLOVER_COLLISION_REPAIR_01.md",
-      "worker_slot": "ЧАТ 2",
-      "blocker": "Новый физический ЧАТ 2; старые ЧАТ 7 и предыдущий QA ЧАТ 2 не продолжаются. Исправлять только existing PR №322. Независимая L3 проверка материальной дельты до принятия.",
+      "worker_slot": "ЧАТ 1",
+      "blocker": "Новый физический ЧАТ 1; старые ЧАТ 7 и предыдущий QA ЧАТ 2 не продолжаются. Исправлять только existing PR №322. Независимая L3 проверка материальной дельты до принятия.",
       "status": "active",
       "effort": "средняя",
       "effort_reason": "Точечная доработка выявленного блокера в ранее открытом PR, без нового проекта.",
@@ -2693,15 +2693,15 @@
       "depends_on": [],
       "recent_completion": false,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T09:05:00Z"
+      "updated_at_utc": "2026-10-28T09:20:00Z"
     },
     {
       "id": "progressive-deep-pr323-commercial-guard-targeted-repair-01",
-      "title": "ЧАТ 3 — устранить подтверждённые обходы коммерческой проверки в существующем изменении №323",
+      "title": "ЧАТ 2 — устранить подтверждённые обходы коммерческой проверки в существующем изменении №323",
       "goal": "После QA №329 закрыть USD100 и смешанные алфавиты, удалить лишние PR изменения, не потерять фиксы «руб» и сохранить исторический recovery untouched.",
       "task_file": "WORKER_TASK_PROGRESSIVE_DEEP_PR323_COMMERCIAL_GUARD_TARGETED_REPAIR_01.md",
-      "worker_slot": "ЧАТ 3",
-      "blocker": "Новый физический ЧАТ 3; старые ЧАТ 8 и предыдущий QA ЧАТ 3 не продолжаются. Исправлять только existing PR №323. Нужна адресная delta QA до принятия.",
+      "worker_slot": "ЧАТ 2",
+      "blocker": "Новый физический ЧАТ 2; старые ЧАТ 8 и предыдущий QA ЧАТ 3 не продолжаются. Исправлять только existing PR №323. Нужна адресная delta QA до принятия.",
       "status": "active",
       "effort": "средняя",
       "effort_reason": "Точечная доработка выявленного блокера в ранее открытом PR, без нового проекта.",
@@ -2711,7 +2711,7 @@
       "depends_on": [],
       "recent_completion": false,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T09:05:00Z"
+      "updated_at_utc": "2026-10-28T09:20:00Z"
     }
   ]
 }
