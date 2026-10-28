@@ -1,0 +1,276 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "26f47af9727fa1c1c8260dbdbb00beaacf5ad579",
+  "run_start_authority_commit": "fa978416e5c762b40c7636bd7601aca3326c4cad",
+  "run_started_at_utc": "2026-10-28T05:59:29+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+  "work_id": "1473867488476cc69736e58d4b6a2264001384e1a89e8ee3573e98e0433ce4e8",
+  "family_id": "game:1096530",
+  "taste_subject_key": "App_1096530",
+  "appid": "1096530",
+  "taste_fingerprint": "6d3b715e70af2d3ae2d9f7f2b294e94f25985af27607f309a61741fc2bf35637",
+  "candidate_context_sha256": "899f57c2854b567407388fe9b82d1f00a91e5b4158c8ad502d18597599f75b92",
+  "dossier_content_sha256": "a961e3ace995fb5245820cc6401da85e04a2205be8f588058b6022787e9792ae",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "d2c7c55248f87cb54a3d2b0a152cbf19239f8b3d8247a1251b526b329c50a035",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Пошаговые сражения в отряде из четырёх героев используют позиционирование, заклинания и управление ограниченными ресурсами классов.",
+    "Вертикальные арены, полёт, области заклинаний и разные построения персонажей создают содержательные тактические ситуации.",
+    "Продвижение по созданным вручную фэнтезийным локациям с добычей, заданиями и прокачкой даёт понятный каркас длительной кампании."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 86,
+    "development_variety": 75,
+    "structure_pacing_direction": 51,
+    "identity_hooks": 52,
+    "breadth_of_match": 62
+  },
+  "score_findings": [
+    {
+      "finding_id": "solasta-tactics",
+      "text_ru": "Позиции четырёх членов отряда, заклинания и ресурсы влияют на исход каждого серьёзного боя: такой осмысленный поиск тактики совпадает с интересом к освоению сложных систем.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "a8ee354b2c11e92d886bb4f23c0b798a5b6588857c7117b8529abbb2ba001105",
+          "match_text_ru": "Любит случаи, где правильные действия и освоение правил дают видимый прирост мастерства."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 86
+        }
+      ]
+    },
+    {
+      "finding_id": "solasta-builds",
+      "text_ru": "Классы, новые способности, добыча и крафт дают долгосрочное развитие состава, хотя часть дополнительных классов и рас вынесена в отдельный контент.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2",
+          "profile_value_sha256": "a3649c0bcd6d1f60e2bff84439498ccb1fe78509a96eabe6342d4efee4e951c7",
+          "match_text_ru": "Ценит понятную прокачку персонажей и возможность почувствовать эффект улучшений."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 75
+        }
+      ]
+    },
+    {
+      "finding_id": "solasta-encounters",
+      "text_ru": "Долгие похожие сражения и сравнительно однотипные побочные задания ослабляют темп между важными тактическими эпизодами.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8",
+          "profile_value_sha256": "0abb54a4c813b22d54eaaeeb901ed62ad0e996025b0ad44c59a7edf5728a4d7d",
+          "match_text_ru": "Не любит однообразные повторы, если они перестают приносить новые впечатления."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 51
+        }
+      ]
+    },
+    {
+      "finding_id": "solasta-story",
+      "text_ru": "Классическое фэнтези и общение отряда создают настроение приключения, но спорный линейный сюжет и слабые диалоги не дают особенно сильного персонажного крючка.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7",
+          "profile_value_sha256": "8dc84c282177a1936aba1bff927b5d078c29ff12440a0acdc3370483afb923ff",
+          "match_text_ru": "Выразительная личность мира и запоминающиеся персонажи повышают значение игры."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "qualifies",
+          "normalized_value": 52
+        }
+      ]
+    },
+    {
+      "finding_id": "solasta-spaces",
+      "text_ru": "Высота, полёт и размещение заклинаний по площади заставляют подходить к тактическим задачам по-разному; эти механики добавляют ценность сверх обычных числовых характеристик.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "a8ee354b2c11e92d886bb4f23c0b798a5b6588857c7117b8529abbb2ba001105",
+          "match_text_ru": "Особенно ценит поиск подхода к новой боевой ситуации и умелое использование инструментов."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 62
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Кампания может надолго задерживаться на похожих длительных пошаговых боях без достаточного обновления побочных задач; это риск усталости от даже хорошей боевой формулы.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 9
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Настольные правила, броски кубов и ограничения режимов усложняют вход, а часть классов доступна лишь с дополнительным контентом; глубина здесь не равнозначна понятности с первого часа.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Линейный сюжет, невыразительные диалоги и скромные анимации могут не создать нужной эмоциональной связи с персонажами.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Отдельный отзыв октября 2026 года сообщает о проблемах разметки целей и застрявшем ходе врага; масштаб таких технических случаев не установлен.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      }
+    ]
+  }
+}
