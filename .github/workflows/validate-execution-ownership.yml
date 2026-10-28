@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
+      - "config/taste_steam_review_dossier_manual_one_shot_prompt.md"
+      - "scripts/test_taste_dossier_manual_one_shot_authorization.py"
       - "config/execution_ownership_contract.json"
       - "config/daily_execution_contract.json"
       - "config/russian_description_translation_contract.json"
@@ -35,6 +37,8 @@ on:
   push:
     branches: [main]
     paths:
+      - "config/taste_steam_review_dossier_manual_one_shot_prompt.md"
+      - "scripts/test_taste_dossier_manual_one_shot_authorization.py"
       - "CHAT_CONTEXT.md"
       - "config/execution_ownership_contract.json"
       - "config/daily_execution_contract.json"
@@ -86,6 +90,9 @@ jobs:
 
       - name: Validate component ownership boundaries
         run: python scripts/validate_execution_ownership.py
+
+      - name: Test Dossier V1 isolated manual one-shot authorization (offline only)
+        run: python scripts/test_taste_dossier_manual_one_shot_authorization.py
 
       - name: Validate workflow-run production authority
         run: python scripts/test_workflow_run_production_authority.py
