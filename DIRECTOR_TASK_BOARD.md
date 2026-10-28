@@ -5,6 +5,10 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## НОВОЕ НАЗНАЧЕНИЕ — независимый разбор повторной путаницы номеров директора, 2026-10-28
+
+- **НОВЫЙ физический ЧАТ 9**: `director-chat-numbering-recurrent-after-fix-audit-01` → `WORKER_TASK_DIRECTOR_CHAT_NUMBERING_RECURRENT_AFTER_FIX_AUDIT_01.md`. Независимый report-only разбор новой ошибки «объявить 2–5 свободными по GitHub и предложить заменить только что назначенные 6–8» с сопоставлением предыдущего аудита нумерации (№306), реально принятого исправления (№308) и общего аудита директора (№319). Вывести отличающийся исполнимый способ предотвращения; один draft PR отчёта, никаких изменений правил или перераспределения физических чатов. ЧАТЫ 1–8 сохраняют свои назначения. Запуск только после merge регистрационного PR с успешными существующими CI.
+
 ## АКТУАЛЬНЫЕ НОВЫЕ НАЗНАЧЕНИЯ — 2026-10-28
 
 - **НОВЫЙ физический ЧАТ 6 — аудит нового Dossier V2**: `dossier-v2-real-original18-quality-audit-01` → `WORKER_TASK_DOSSIER_V2_REAL_ORIGINAL18_QUALITY_AUDIT_01.md`. Независимый report-only аудит реальных 14 сохранённых sandbox-досье и четырёх исключений, включая точную причину расхождения по AppID 206420. Без новых семантических запусков, изменений state и production.
