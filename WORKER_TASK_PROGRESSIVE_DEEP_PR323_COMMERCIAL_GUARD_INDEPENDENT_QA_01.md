@@ -1,9 +1,9 @@
-# ЧАТ 11 — независимая проверка защиты Fast/Deep от цен, PR #323
+# ЧАТ 3 — независимая проверка защиты Fast/Deep от цен, PR #323
 
 Repository: kentrap2011-hub/steam-kz-deals-2
 Source of truth: main
 Task ID: progressive-deep-pr323-commercial-guard-independent-qa-01
-Worker: НОВЫЙ физический ЧАТ 11, независимый от ЧАТА 8
+Worker: НОВЫЙ физический ЧАТ 3, независимый от ЧАТА 8
 Mode: narrow independent QA / report-only draft PR.
 Worker report: reviews/worker_reports/progressive-deep-pr323-commercial-guard-independent-qa-01.md
 
