@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "24231baeba3dc2535bdf8c692752840f6dfe7dfc",
+  "run_start_authority_commit": "8c0fdc8ed638d82af29ed69ecec8abeb121d581e",
+  "run_started_at_utc": "2026-10-28T03:56:55+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+  "work_id": "9b5e4691aaa245775d4b4de68d798cf36ca9d3e248ed024ab5ee5d2ce48bc0ab",
+  "family_id": "game:1918450",
+  "taste_subject_key": "App_1918450",
+  "appid": "1918450",
+  "taste_fingerprint": "6e582ad2318b16d9f91978c1a9784d712192a1ff6aa665671d69f73a5eb550c5",
+  "candidate_context_sha256": "c1e45dcab5e94c728dc46ec76488154eaaf415caad7250d9742489fde34aad30",
+  "dossier_content_sha256": "56406592f154ca02830ba71141e037216d070905e9e99ec59fe363857c2a5d94",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "b7148492d8bd5dbd421042830af4d87c4d227477ac24f2b93e5e393c7f816376",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      },
+      {
+        "kind": "conflict",
+        "index": 1
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Непредсказуемые попадания, резкие скачки урона и неясные окна защиты могут мешать честному освоению боя.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Дерево навыков не всегда объясняет пользу улучшений; связанный мир может давать мало новой ценности при обходе.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "conflict",
+            "index": 1
+          }
+        ]
+      }
+    ]
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Уклонения, блоки и парирования против разнообразных боссов дают пространство для освоения мастерства.",
+    "Снаряжение и навыки развиваются, хотя часть улучшений маловыразительна.",
+    "Художественная стилистика и музыка поддерживают запоминающуюся боевую атмосферу."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 70,
+    "development_variety": 52,
+    "structure_pacing_direction": 61,
+    "identity_hooks": 67,
+    "breadth_of_match": 51
+  },
+  "score_findings": [
+    {
+      "finding_id": "parry",
+      "text_ru": "Боссы требуют читать паттерны и подбирать уклонения и парирования, хотя некоторые удары воспринимаются нечестно.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Мастерство, паттерны и тайминги — сильные предпочтения пользователя."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 70
+        }
+      ]
+    },
+    {
+      "finding_id": "skilltree",
+      "text_ru": "Прокачка даёт развитие, но числовые узлы и неочевидные вложения в выносливость делают результат менее ясным.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/pattern",
+          "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+          "match_text_ru": "Интересна прокачка с понятным эффектом изменений."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 52
+        }
+      ]
+    },
+    {
+      "finding_id": "routes",
+      "text_ru": "Связанные локации с контрольными точками и открываемыми проходами задают маршрут, хотя значимость находок спорна.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/pattern",
+          "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+          "match_text_ru": "Тайна должна сочетаться с понятным направлением действий."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 61
+        }
+      ]
+    },
+    {
+      "finding_id": "style",
+      "text_ru": "Ретро-фэнтези, музыка и дизайн противников отмечаются даже критически настроенными игроками.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Узнаваемая художественная подача важна для впечатления."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 67
+        }
+      ]
+    },
+    {
+      "finding_id": "feedback",
+      "text_ru": "Неясные окна уклонений и сбои отклика могут сделать бой борьбой с управлением, а не мастерством.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/1/pattern",
+          "profile_value_sha256": "03ee46ab2d98957c01bd73fe09574b97f6da1eef6a0ceb054817add03d66d5e1",
+          "match_text_ru": "Удовольствие от управления — критически значимый критерий."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "lowers",
+          "normalized_value": 51
+        }
+      ]
+    }
+  ]
+}
