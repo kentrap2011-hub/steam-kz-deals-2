@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "26f47af9727fa1c1c8260dbdbb00beaacf5ad579",
+  "run_start_authority_commit": "fa978416e5c762b40c7636bd7601aca3326c4cad",
+  "run_started_at_utc": "2026-10-28T05:59:29+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+  "work_id": "e7637b3cb5f736ff0afacbe7cdc7a2a488aaf1bd5db66ebf915965c3cd21efc7",
+  "family_id": "game:1402110",
+  "taste_subject_key": "App_1402110",
+  "appid": "1402110",
+  "taste_fingerprint": "b1e041181a4dd4e8b8b39831c28ab617b5eee0cdd8fd05a0d5a8da95352f1e42",
+  "candidate_context_sha256": "86be283fc8ef6eb3000a693e9c6ba6f783d34105ae906472c72aecb8dd394168",
+  "dossier_content_sha256": "d518190163f98c9b727bcb54e7a1e84a1290f4e2548722cb86b86a221d888da9",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "5338fd8e6469c179ee67f8f3638bf1af5938ced6224bfbdf6be04b5e00992ba6",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Динамические бои с уклонениями и парированием чередуются с общением и развитием романтических связей.",
+    "Отношения, живые диалоги и персонажные решения дают эмоциональную мотивацию продвигаться через небольшую постапокалиптическую кампанию.",
+    "Боевая система имеет освоимые моменты уклонения и пробития защиты противника, хотя её глубина и отзывчивость оцениваются неоднозначно."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 66,
+    "development_variety": 55,
+    "structure_pacing_direction": 63,
+    "identity_hooks": 76,
+    "breadth_of_match": 60
+  },
+  "score_findings": [
+    {
+      "finding_id": "eternights-dodge",
+      "text_ru": "Уклонения, парирование и заряд атак по защищённым врагам дают возможность тренировать исполнение, хотя часть отзывов считает реакцию персонажа неровной.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "a8ee354b2c11e92d886bb4f23c0b798a5b6588857c7117b8529abbb2ba001105",
+          "match_text_ru": "Ценит понятные тайминги, освоение приёмов и рост личного навыка в сражениях."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 66
+        }
+      ]
+    },
+    {
+      "finding_id": "eternights-mix",
+      "text_ru": "Бой и встречи с героями меняют формат занятий, но повторяющиеся схватки и ограниченное раскрытие механик сдерживают ценимое разнообразие.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "63ad5474cf30f1e268e78c5ddd2f4216e61a252b220e098173866db5431a24ee",
+          "match_text_ru": "Сильнее всего увлекает последовательное раскрытие новых ситуаций и способов действия."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 55
+        }
+      ]
+    },
+    {
+      "finding_id": "eternights-calendar",
+      "text_ru": "Календарное чередование вылазок и свиданий задаёт ясный компактный ритм, не требуя огромного открытого мира.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2",
+          "profile_value_sha256": "a3649c0bcd6d1f60e2bff84439498ccb1fe78509a96eabe6342d4efee4e951c7",
+          "match_text_ru": "Предпочитает понятную цель и ощутимую отдачу от последующих действий."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 63
+        }
+      ]
+    },
+    {
+      "finding_id": "eternights-characters",
+      "text_ru": "Отношения с персонажами и живые реплики придают апокалипсису эмоциональную индивидуальность; ради этих связей хочется открывать следующие сцены.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3",
+          "profile_value_sha256": "5da9bef8fea95968a364663fb2ba30717ec04a0fa882f36e877f77530b9a40d1",
+          "match_text_ru": "Любит убедительные отношения героев и эмоциональные сюжетные развязки."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 76
+        }
+      ]
+    },
+    {
+      "finding_id": "eternights-story",
+      "text_ru": "Короткая история и финал делят игроков на тех, кому хватило эмоций, и тех, кто увидел спешку и недостаточную развязку; это ограничивает уверенность в целом.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3",
+          "profile_value_sha256": "5da9bef8fea95968a364663fb2ba30717ec04a0fa882f36e877f77530b9a40d1",
+          "match_text_ru": "Если в игре много сцен и отношений, качество истории особенно важно и должно компенсировать слабые занятия."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 60
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      },
+      {
+        "kind": "conflict",
+        "index": 1
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Повторяющиеся шаблоны боёв и скромная механическая эволюция могут наскучить между сильными сценами с персонажами.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Переход к другой романтической ветке требует повторения вводных уроков и некоторых сюжетных сцен; для короткой игры это заметная стоимость повторного прохождения.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Отзывчивость парирования и агрессивные защитные противники нравятся не всем; сюжет и финал также оцениваются противоречиво.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "conflict",
+            "index": 1
+          }
+        ]
+      }
+    ]
+  }
+}
