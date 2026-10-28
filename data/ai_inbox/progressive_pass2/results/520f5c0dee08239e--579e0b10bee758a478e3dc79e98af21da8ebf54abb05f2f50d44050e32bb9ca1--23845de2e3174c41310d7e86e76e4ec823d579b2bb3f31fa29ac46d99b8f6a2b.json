@@ -1,0 +1,246 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "26f47af9727fa1c1c8260dbdbb00beaacf5ad579",
+  "run_start_authority_commit": "fa978416e5c762b40c7636bd7601aca3326c4cad",
+  "run_started_at_utc": "2026-10-28T05:59:29+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+  "work_id": "579e0b10bee758a478e3dc79e98af21da8ebf54abb05f2f50d44050e32bb9ca1",
+  "family_id": "game:1092790",
+  "taste_subject_key": "App_1092790",
+  "appid": "1092790",
+  "taste_fingerprint": "e88022092f62f5c3fafc9b557554c9daaf916fa30a7ae6cb86f21ae6d3391b14",
+  "candidate_context_sha256": "8ef48d929d411551d3c8fe2c921916a8099ec64dc0cc216862cfe6903fea47c7",
+  "dossier_content_sha256": "9ead302f7a1cd868019563f14e110a2f5086dc1eaa9f9ce5e4a2bfdbe4fa5f7e",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "23845de2e3174c41310d7e86e76e4ec823d579b2bb3f31fa29ac46d99b8f6a2b",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "high",
+  "positive_evidence": [
+    "Карточные сражения строятся вокруг жертв, ресурсов и взаимодействующих эффектов, создавая содержательную тактическую задачу.",
+    "Последующие акты резко меняют стиль и карточные правила, обеспечивая постоянное обновление впечатлений.",
+    "Мистическая история хижины и персонажей развивается через необычные сюрпризы; режим Kaycee's Mod отдельно сохраняет усложнённый вариант излюбленных карточных боёв."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 84,
+    "development_variety": 90,
+    "structure_pacing_direction": 63,
+    "identity_hooks": 94,
+    "breadth_of_match": 86
+  },
+  "score_findings": [
+    {
+      "finding_id": "inscryption-tactics",
+      "text_ru": "Розыгрыш карт требует распоряжаться жертвами, ресурсами и комбинациями колоды; успех зависит от тактических решений, а не только от случайной награды.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "a8ee354b2c11e92d886bb4f23c0b798a5b6588857c7117b8529abbb2ba001105",
+          "match_text_ru": "Любит понятную глубину, освоение систем и ситуации, где выбор действия существенно меняет результат."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 84
+        }
+      ]
+    },
+    {
+      "finding_id": "inscryption-transformation",
+      "text_ru": "Правила и художественный язык радикально перестраиваются между актами, создавая именно ту эволюцию игрового опыта, которой пользователь часто недостаёт в других проектах.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "63ad5474cf30f1e268e78c5ddd2f4216e61a252b220e098173866db5431a24ee",
+          "match_text_ru": "Высоко ценит новые механики, ситуации и неожиданные открытия по ходу кампании."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 90
+        }
+      ]
+    },
+    {
+      "finding_id": "inscryption-pacing",
+      "text_ru": "Неожиданные смены стиля временами прерывают приятный ритм первого акта, а середина может ощущаться медленнее; на фоне сильного развития это всё же реальная оговорка.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/11",
+          "profile_value_sha256": "0881ff0cdec643119634a80856a308c371a1e994ad3ad9d0392d28de9ba8ffce",
+          "match_text_ru": "Может терпеть смены темпа, если игра раскрывает сильную новую часть, но скучные отрезки являются риском."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 63
+        }
+      ]
+    },
+    {
+      "finding_id": "inscryption-mystery",
+      "text_ru": "Тайны хижины, Лешего и карточного мира переплетены с нестандартной метаподачей — сюжетная загадочность сама удерживает желание раскрывать игру.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7",
+          "profile_value_sha256": "8dc84c282177a1936aba1bff927b5d078c29ff12440a0acdc3370483afb923ff",
+          "match_text_ru": "Отмечает узнаваемую атмосферу и необычную художественную идентичность как особые плюсы."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 94
+        }
+      ]
+    },
+    {
+      "finding_id": "inscryption-story",
+      "text_ru": "Игроки отдельно запоминают личности героев и финальное эмоциональное впечатление, поэтому сильная интрига дополняет тактическую систему, а не заменяет её.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 9
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3",
+          "profile_value_sha256": "5da9bef8fea95968a364663fb2ba30717ec04a0fa882f36e877f77530b9a40d1",
+          "match_text_ru": "Ценит личную историю, персонажей и эмоциональный финал наряду с содержательным геймплеем."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 86
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "После первой хижины резко меняются графика и набор карточных правил; некоторым игрокам приходится заново учиться в момент, когда прежняя система уже стала привычной.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Поздние акты могут проседать по темпу, а местами подбор колоды создаёт скачки сложности; это не доказательство неудачной игры в целом.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      }
+    ]
+  }
+}
