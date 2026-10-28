@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "24231baeba3dc2535bdf8c692752840f6dfe7dfc",
+  "run_start_authority_commit": "8c0fdc8ed638d82af29ed69ecec8abeb121d581e",
+  "run_started_at_utc": "2026-10-28T03:56:55+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+  "work_id": "acaad99e8a90da1843648ab7ed2e4be91b7307361d86a2f6226fd9a7376040ad",
+  "family_id": "game:1052990",
+  "taste_subject_key": "App_1052990",
+  "appid": "1052990",
+  "taste_fingerprint": "df634ab83081ef263aaf7d47cb6545930dc6f6ebff38f6335c4d75fc51252338",
+  "candidate_context_sha256": "1ff846d1378f923007a8220d3cd081b9b5671fa65e28c6132fc624909548a3c9",
+  "dossier_content_sha256": "ce75893c0e5991f44497af0cda83d959e4e49044d8c6198a2f797da20c90543d",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "f9d11aa0c53413a68a3d9f6725f471d65ca4bde7eb2cac12eadbc26800fd7262",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "confidence": "medium",
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 9
+      },
+      {
+        "kind": "observation",
+        "index": 10
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Повторяющиеся переносы брёвен между похожими островами могут ощущаться рутиной; это не отменяет продуманность отдельных загадок.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 10
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Иногда соседний остров выглядит доступным, но путь к нему неочевиден и требует долгих обходов или подсказок.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Юмор музейных заметок воспринимается по-разному; это скорее вопрос индивидуального вкуса.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 9
+          }
+        ]
+      }
+    ]
+  },
+  "outcome": "analyzed_not_fit",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "Локальные задачи с брёвнами и мостами требуют логики, но один и тот же тип перемещений остаётся центральной механикой почти на всём протяжении игры.",
+    "Для полного исследования архипелага приходится многократно повторять похожие операции и искать неочевидные обходные пути, что противоречит потребности в эволюции задач и понятном направлении.",
+    "Добрая эстетика, музейный юмор и ненапряжённый основной маршрут привлекательны, но сюжетных событий и новых видов активности недостаточно для устойчивого совпадения с профилем."
+  ]
+}
