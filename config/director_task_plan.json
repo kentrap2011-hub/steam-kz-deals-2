@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-10-27",
+  "last_curated_on": "2026-10-28",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -2550,6 +2550,60 @@
       "recent_completion": false,
       "updated_on": "2026-10-27",
       "updated_at_utc": "2026-10-27T15:33:23.478Z"
+    },
+    {
+      "id": "dossier-v2-real-original18-quality-audit-01",
+      "title": "ЧАТ 6 — независимая проверка качества реального Dossier V2",
+      "goal": "Оценить доказательность и полезность 14 изолированно сохранённых Dossier V2, объяснить отбраковку ещё одной игры и три проблемы недостатка источников; предложить точный путь к приёмке без повторных запусков.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Независимая содержательная проверка 14 реальных результатов, источников, V2 identity/Deep safety и одной конкретной ошибки приёмки.",
+      "urgency": "высокая",
+      "urgency_reason": "Исходные 18 игр уже завершили изолированную Research/Assembly; перед дальнейшим внедрением требуется независимая оценка качества.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_REAL_ORIGINAL18_QUALITY_AUDIT_01.md",
+      "worker_slot": "ЧАТ 6",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Только report-only; не запускать Research/Assembly/writer и не включать production.",
+      "recent_completion": false,
+      "updated_on": "2026-10-28",
+      "updated_at_utc": "2026-10-28T07:44:00Z"
+    },
+    {
+      "id": "dossier-v1-explicit-manual-one-shot-authorization-01",
+      "title": "ЧАТ 7 — явное разрешение ручного одноразового Dossier V1",
+      "goal": "Устранить отсутствующее в ownership контракте явное разрешение на user-launched одноразовый Dossier V1, сохранив GitHub-очередь, блокировки, публикацию и неизменный Scheduled Task.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Точечное изменение L3-полномочий на реальный семантический запуск требует проверки cross-contract и безопасности.",
+      "urgency": "высокая",
+      "urgency_reason": "Обычный ручной Dossier остановился до создания маркера при существующей необработанной очереди.",
+      "task_file": "WORKER_TASK_DOSSIER_V1_EXPLICIT_MANUAL_ONE_SHOT_AUTHORIZATION_01.md",
+      "worker_slot": "ЧАТ 7",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Разрешена только разработка в PR; до независимой L3 QA и принятия в main фактический ручной запуск остаётся запрещён.",
+      "recent_completion": false,
+      "updated_on": "2026-10-28",
+      "updated_at_utc": "2026-10-28T07:44:00Z"
+    },
+    {
+      "id": "progressive-deep-commercial-token-false-positives-fix-01",
+      "title": "ЧАТ 8 — исправление ложных коммерческих совпадений Deep",
+      "goal": "Исправить неверное обнаружение денежного фрагмента внутри обычного слова и системно устранить аналогичные ложные совпадения в той же проверке Deep, сохранив запрет на реальные цены.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Нужен анализ действующего валидатора и близких токенов/границ слов, правка и матрица регрессионных тестов.",
+      "urgency": "высокая",
+      "urgency_reason": "Ложное отклонение пользовательского результата Deep уже поглотило попытку, оставив восстановление GitHub.",
+      "task_file": "WORKER_TASK_PROGRESSIVE_DEEP_COMMERCIAL_TOKEN_FALSE_POSITIVES_FIX_01.md",
+      "worker_slot": "ЧАТ 8",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Только code/tests; никаких повторов Deep и изменений поглощённой попытки либо recovery state.",
+      "recent_completion": false,
+      "updated_on": "2026-10-28",
+      "updated_at_utc": "2026-10-28T07:44:00Z"
     }
   ]
 }
