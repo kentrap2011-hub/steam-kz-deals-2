@@ -5,6 +5,7 @@
 - **Status:** `READY_FOR_DIRECTOR_L3_QA` — proposed change only. **Independent L3 security QA and Director merge approval are mandatory; not self-accepted or activated on main.**
 - **Repository:** `kentrap2011-hub/steam-kz-deals-2`, base `main`.
 - **Branch:** `implement/dossier-v1-manual-one-shot-authorization-01`.
+- **Draft PR:** [#322](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/322).
 
 ## Root cause / bounded design
 
@@ -40,7 +41,7 @@ One bounded residual risk remains: simultaneous runs may duplicate **unpublished
 - Static scope review: no production files, existing semantic inputs, marker formats or scheduler changed. Existing Dossier runtime owns liveness and exact descriptor serialization.
 - Targeted regression: `python scripts/test_taste_dossier_manual_one_shot_authorization.py` (disposable Git fixture; no real Dossier or workflow dispatch).
 - Existing ownership regression: `python scripts/validate_execution_ownership.py`, plus unchanged existing Russian/Deep validations in the same workflow.
-- **GitHub CI:** to be verified on final PR head after report/PR creation. A green test suite is **not** independent L3 security acceptance.
+- **GitHub CI:** [Validate execution ownership run 40642145406](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40642145406) **SUCCESS** at implementation SHA `efb2733a734bb1a4ce51b9fac97b3968bb68f80e`: ownership validator, all five new Dossier manual one-shot tests, existing workflow-production authority and Russian description regressions PASS. Final report-only/workflow-path commit must also be verified against CI. A green suite is **not** independent L3 security acceptance.
 - **Required next gate:** Director registers a genuinely independent L3 reviewer; review exact final diff, real branch CI and collision/late-marker/terminal behavior. Only Director may subsequently choose merge. No merge/activation or semantic manual launch by this worker.
 
 ## Known operational constraint
