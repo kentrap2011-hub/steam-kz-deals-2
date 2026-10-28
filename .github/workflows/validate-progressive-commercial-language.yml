@@ -1,0 +1,32 @@
+name: Validate Progressive commercial lexical boundaries
+
+on:
+  pull_request:
+    paths:
+      - "scripts/progressive_commercial_language.py"
+      - "scripts/progressive_pass1.py"
+      - "scripts/progressive_pass2.py"
+      - "scripts/test_progressive_commercial_language.py"
+      - ".github/workflows/validate-progressive-commercial-language.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lexical-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile shared validators and focused tests
+        run: python -m py_compile scripts/progressive_commercial_language.py scripts/progressive_pass1.py scripts/progressive_pass2.py scripts/test_progressive_commercial_language.py
+      - name: Verify actual Fast and Deep ingest + lexical regression
+        run: python scripts/test_progressive_commercial_language.py
+      - name: Existing Fast contract regression
+        run: python scripts/test_progressive_pass1.py
+      - name: Existing Deep contract regression
+        run: python scripts/test_progressive_pass2.py
