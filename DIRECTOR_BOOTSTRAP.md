@@ -1,12 +1,29 @@
 # DIRECTOR BOOTSTRAP
 
-Last refreshed: 2026-10-25
+Last refreshed: 2026-10-28
 
 Purpose: compact restart context for a **NEW physical Director conversation** after the previous Director chat reached its context limit.
 
 This file is a bootstrap snapshot, not a replacement for canonical project truth. The new Director must read current `CHAT_PROTOCOL.md`, `DIRECTOR_PROTOCOL.md`, fresh `DIRECTOR_TASK_BOARD.md`, and current `main` first. Newer canonical GitHub state always wins over this file.
 
-## СВЕЖИЙ СТАРТ ДИРЕКТОРА — 2026-10-25
+## АКТУАЛЬНЫЙ СТАРТ НОВОГО ДИРЕКТОРА — 2026-10-28
+
+**Выполнить START gate** из `CHAT_PROTOCOL.md` в Director mode, прочитать `DIRECTOR_PROTOCOL.md`, верх `DIRECTOR_TASK_BOARD.md`, только **верхний блок 2026-10-28** файла `DIRECTOR_HANDOFF_CURRENT.md`. Ниже в обоих документах есть устаревшие указания за 25–27 октября: не выполнять их повторно. GitHub `main` — единственный source of truth; перед действиями проверить текущий SHA и нужные живые PR, не весь backlog.
+
+**Первый ответ пользователю:** пояснить, что задания **зарегистрированы, но физические чаты не открываются и сообщения не доставляются автоматически**. Выдать ровно 2 коротких копируемых запуска для **НОВЫХ ЧАТОВ 1 и 2**. Task files уже готовы в main после merged PR #334:
+- ЧАТ 1: `WORKER_TASK_DOSSIER_V1_PR322_FROZEN_ROLLOVER_COLLISION_REPAIR_01.md` → продолжение существующего source PR #322, L3 QA #330 CHANGES_REQUIRED, frozen rollover collision.
+- ЧАТ 2: `WORKER_TASK_PROGRESSIVE_DEEP_PR323_COMMERCIAL_GUARD_TARGETED_REPAIR_01.md` → продолжение существующего source PR #323, QA #329 CHANGES_REQUIRED, валютные префиксы/смешанные алфавиты.
+**НЕ** сообщать старые номера 2–3, 7–8, 10–12. Старые физические беседы закрытых заданий не продолжать, PR #322/#323 не заменять. Эти два запуска пользователь должен отправить сам в **новые** беседы. Если уже отправил — сначала проверить текущую работу и не дублировать.
+
+**Почему старый директор ротуируется:** повторно путал назначенный/завершённый task slot с реально открытой физической беседой. Аудит ЧАТА 9 принят PR #325; ограниченные поправки в `DIRECTOR_PROTOCOL.md` приняты PR #333; в PR #334 подтверждённо не запущенная Steam Actions задача отвязана от занятого по ошибке номера 1, но сама задача сохранена как active/worker_slot=null.
+
+**После двух запусков:** не проводить полную QA заново; проверить только новые материальные L3 дельты по принятым отчётам #330 и #329, exact HEAD/CI, принимать соответствующие source PR только при PASS. Старую Deep попытку не replay, ручной Dossier не запускать до L3 acceptance. Реальный Dossier V2 original18 **уже исследован**: 14 isolated sandbox dossiers, NO_GO production, отчёты #324/#331 приняты; никаких повторных 18 Research/Assembly и activation. Нерешённый Steam post-merge Actions task остаётся отдельным ожидающим заданием, не требует немедленного переименования этих двух чатов.
+
+**Подробности, точные команды запуска, ссылки и риски:** только свежий верх `DIRECTOR_HANDOFF_CURRENT.md` и актуальный верх Board. Не переписывать историю; не выдавать пользователю длинный multi-step prompt. После этого handoff прежний физический Director-чат — только архив.
+
+---
+
+## АРХИВНЫЙ СНИМОК — 2026-10-25 (НЕ АКТУАЛЬНАЯ ПЕРВАЯ РЕПЛИКА)
 
 Для актуального состояния чатов 1–5 и плана сперва прочитать **только верхнюю секцию 2026-10-25** файла `DIRECTOR_HANDOFF_CURRENT.md`, затем верх `DIRECTOR_TASK_BOARD.md` и нужные записи `config/director_task_plan.json`. Ниже в этом файле идут архивные снимки от 2026-10-20 — не использовать их как актуальную очередь.
 
