@@ -18,6 +18,14 @@ SAFE = (
     'Discountenance is an old English word for disapproval.',
     'Переоценка собственных решений меняет тактику.',
     'Конкретные действия приводят к переменам в игровом мире.',
+    'Сцeна с героем раскрывается постепенно.',  # Latin e, not цена
+    'Груbую фактуру передаёт анимация.',  # no word-interior rub
+    'The Sаlem setting is atmospheric.',  # Cyrillic a, not sale
+    'Diѕcountenance is a valid noncommercial English word.',
+    'Prіceless character growth is shown through choices.',
+    'RUBicon is the name of a landmark.',
+    'Символ ₽ на рисунке не сообщает сумму.',  # bare glyph is ambiguous
+    'R U B 500 is a sequence of separate letters, not a currency token.',
 )
 FORBIDDEN = (
     ('Цена 499 руб.', 'цена'),
@@ -49,6 +57,20 @@ FORBIDDEN = (
     ('20 долларов', 'доллар'),
     ('50 евро', 'евро'),
     ('KZT', 'kzt'),
+    ('USD100', 'usd'),
+    ('RUB100', 'rub'),
+    ('EUR100', 'eur'),
+    ('KZT100', 'kzt'),
+    ('ＵＳＤ１００', 'usd'),
+    ('100USD', 'usd'),
+    ('рубл. 500', 'руб'),
+    ('РУБЛ.500', 'руб'),
+    ('цeна 100', 'цена'),  # Latin e in Cyrillic token
+    ('cкидка 20%', 'скидк'),  # Latin c
+    ('prіce 100', 'price'),  # Cyrillic Ukrainian i
+    ('diѕcount 20%', 'discount'),  # Cyrillic dze
+    ('ѕale', 'sale'),
+    ('Рrice', 'price'),  # Cyrillic р
 )
 RANKING_ONLY = (
     'Personal score increased',
@@ -82,7 +104,7 @@ def check_lexical_inventory():
             'not_fit_evidence', [example], require_nonempty=True
         ) == [example]
     for example, expected in FORBIDDEN:
-        assert lexical.commercial_evidence_hit(example) is not None, (example, expected)
+        assert lexical.commercial_evidence_hit(example) == expected, (example, expected, lexical.commercial_evidence_hit(example))
         assert lexical.score_explanation_hit(example) is not None, example
         raises_commercial(lambda x=example: progressive_pass1._validate_text_list(
             'positive_evidence', [x], require_nonempty=True
@@ -124,6 +146,11 @@ def check_fast_canonical():
             not_fit_basis='completed_below_threshold', not_fit_evidence=[example]
         )
         raises_commercial(lambda d=doc: progressive_pass1.normalize_submission(d, item))
+        fit = fast_fixture.submission(
+            item, 'analyzed_fit', fit_level='moderate', confidence='medium',
+            positive_evidence=[example], taste_factors=fast_fixture.FACTOR_VALUES
+        )
+        raises_commercial(lambda d=fit: progressive_pass1.normalize_submission(d, item))
 
 
 def check_deep_canonical():
@@ -155,6 +182,9 @@ def check_deep_canonical():
             not_fit_basis='completed_below_threshold', not_fit_evidence=[example]
         )
         raises_commercial(lambda d=doc: progressive_pass2.normalize_result(d, item))
+        fit_evidence_bad = deep_fixture.fit_result(item)
+        fit_evidence_bad['positive_evidence'] = [example]
+        raises_commercial(lambda d=fit_evidence_bad: progressive_pass2.normalize_result(d, item))
         score_bad = deep_fixture.fit_result(item)
         score_bad['score_findings'][0]['text_ru'] = 'Механика помогает освоить навык. ' + example
         try:
@@ -185,15 +215,29 @@ def check_deep_canonical():
         [(name, good, None)], accepted_at_utc='2026-09-22T12:01:00+00:00'
     )
     assert receipts[0]['status'] == 'accepted', receipts[0]
-    bad = deep_fixture.result_doc(
-        item, outcome='analyzed_not_fit', confidence='medium',
-        not_fit_basis='completed_below_threshold', not_fit_evidence=['Цена 100 рублей']
-    )
-    _, receipts = progressive_pass2.process_result_documents(
-        deep_fixture.work_doc([item]), deep_fixture.empty_pass2_state(),
-        [(name, bad, None)], accepted_at_utc='2026-09-22T12:01:00+00:00'
-    )
-    assert receipts[0]['status'] == 'rejected_semantic_contract_result_attempt_consumed', receipts[0]
+    for example in (
+        'Цена 100 рублей', 'USD100', 'RUB100', 'EUR100', 'KZT100',
+        'цeна 100', 'cкидка 20%', 'prіce 100', 'diѕcount 20%', 'рубл. 500'
+    ):
+        bad = deep_fixture.result_doc(
+            item, outcome='analyzed_not_fit', confidence='medium',
+            not_fit_basis='completed_below_threshold', not_fit_evidence=[example]
+        )
+        _, receipts = progressive_pass2.process_result_documents(
+            deep_fixture.work_doc([item]), deep_fixture.empty_pass2_state(),
+            [(name, bad, None)], accepted_at_utc='2026-09-22T12:01:00+00:00'
+        )
+        assert receipts[0]['status'] == 'rejected_semantic_contract_result_attempt_consumed', (example, receipts[0])
+    for example in (SAFE[0], 'Сцeна с героем раскрывается постепенно.'):
+        safe_doc = deep_fixture.result_doc(
+            item, outcome='analyzed_not_fit', confidence='medium',
+            not_fit_basis='completed_below_threshold', not_fit_evidence=[example]
+        )
+        _, receipts = progressive_pass2.process_result_documents(
+            deep_fixture.work_doc([item]), deep_fixture.empty_pass2_state(),
+            [(name, safe_doc, None)], accepted_at_utc='2026-09-22T12:01:00+00:00'
+        )
+        assert receipts[0]['status'] == 'accepted', (example, receipts[0])
 
 
 if __name__ == '__main__':

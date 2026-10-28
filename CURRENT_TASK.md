@@ -1,10 +1,5 @@
 # CURRENT TASK
 
-## READY FOR DIRECTOR REVIEW — ЧАТ 8: Progressive Deep commercial lexical false positives (2026-10-28)
-- Task: `WORKER_TASK_PROGRESSIVE_DEEP_COMMERCIAL_TOKEN_FALSE_POSITIVES_FIX_01.md`, branch `fix/progressive-deep-commercial-token-false-positives-01` ([draft PR #323](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/323)); no merge or production execution by worker.
-- Shared Fast/Deep evidence and Deep score-finding commercial word-boundary fix, synthetic canonical ingest regression and PR-only read-only CI. Historical Streamer Life Simulator AppID 1261040 attempt remains consumed/recovery-owned and must not be replayed by this worker.
-- Report: `reviews/worker_reports/progressive-deep-commercial-token-false-positives-fix-01.md`. Director to accept only after exact-head PR CI review.
-
 ## IMPLEMENTED / PR CONFLICT RESOLVED, LIVE ACCEPTANCE PENDING — ЧАТ 1: Steam >=50%, rolling top-100 (2026-10-26)
 - Existing draft [PR #311](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/311), branch `implement/steam-discovery-50-top100-01`; **not merged/deployed**.
 - Code: one live-capped games/Sub source; quality-gated base-game scope, exact targeted KZ DLC relations and offer gates (no global DLC), independent on-sale multi-game Sub package candidates (including entirely non-sale members), conservative low-signal quality/value rescue, canonical full Deep queue, rolling final 100, complete source-bound funnel/statistics.
