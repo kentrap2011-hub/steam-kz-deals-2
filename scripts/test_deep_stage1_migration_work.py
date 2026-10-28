@@ -105,6 +105,35 @@ class MigrationTests(unittest.TestCase):
             self.assertNotIn("score", item)
             self.assertNotIn("wishlist", item["semantic_input"])
 
+    def test_zero_normal_pass2_items_still_allow_bounded_stage1_preview(self):
+        # All dossier-ready games already completed one-stage Deep; another
+        # game waits for Dossier. No normal first-pass item can be emitted,
+        # but an inactive Stage-1 migration preview must still reconcile scope.
+        self.legacy["items"] = []
+        self.legacy["scope"].update({
+            "deep_first_pass_attempted_count": 2,
+            "deep_waiting_for_dossier_count": 1,
+            "deep_normal_first_pass_remaining_count": 1,
+            "normal_pass2_eligible_count": 0,
+            "pass2_eligible_count": 0,
+        })
+        for fid in ("family-41", "family-42"):
+            binding = self.bindings[fid]
+            self.previous["entries"][fid] = {
+                "authoritative_completed": True,
+                "outcome": "analyzed_fit",
+                **{key: binding[key] for key in ("family_id", "taste_subject_key", "appid")},
+            }
+        plan = self.plan()
+        self.assertEqual(plan["current_scope_total"], 3)
+        self.assertEqual(plan["eligible_with_current_dossier"], 2)
+        self.assertEqual(plan["requires_stage1_semantics"], 2)
+        self.assertEqual(len(plan["blocked_or_waiting"]), 1)
+        self.assertEqual(len(plan["canonical_work_if_authorized"]["items"]), 2)
+        self.assertFalse(plan["executable_materialization_authorized"])
+        self.assertFalse(plan["semantic_execution_authorized"])
+        self.assertFalse(plan["production_cutover_performed"])
+
     def test_legacy_scores_cannot_become_stage1(self):
         self.previous["entries"]["family-41"] = {
             "authoritative_completed": True, "outcome": "analyzed_fit",

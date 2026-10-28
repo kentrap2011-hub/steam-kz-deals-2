@@ -58,7 +58,20 @@ def validate_pr_preview(preview_path):
     assert score["accepted_count"] == 42
     assert score["stale_or_missing_prior_count"] == 1
     assert len(fresh["items"]) == scope["pass2_eligible_count"]
-    assert len(fresh["items"]) == scope["normal_pass2_eligible_count"] > 0
+    # A valid GitHub-owned Deep snapshot may have zero runnable items while
+    # current identities wait for Dossier or have already consumed first pass.
+    # Check the full, recovery-aware accounting instead of requiring work > 0.
+    assert len(fresh["items"]) == scope["normal_pass2_eligible_count"]
+    assert scope["deep_ready_or_pending_count"] == len(fresh["items"])
+    assert 0 <= scope["recovery_pending_count"] <= len(fresh["items"])
+    assert scope["deep_normal_first_pass_remaining_count"] == (
+        scope["deep_waiting_for_dossier_count"]
+        + len(fresh["items"]) - scope["recovery_pending_count"]
+    )
+    assert scope["deep_total_current_coverage_target"] == (
+        scope["deep_first_pass_attempted_count"]
+        + scope["deep_normal_first_pass_remaining_count"]
+    )
     assert all(row["work_mode"] == "normal_first_pass" for row in fresh["items"])
     assert [row["sequence"] for row in fresh["items"]] == list(range(1, len(fresh["items"]) + 1))
     assert len({(row["family_id"], row["authorization_id"]) for row in fresh["items"]}) == len(fresh["items"])
