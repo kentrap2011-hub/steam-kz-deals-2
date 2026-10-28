@@ -202,5 +202,79 @@ class DossierManualOneShotTests(unittest.TestCase):
             self.assertFalse((h.store / "App_870011.json").exists())
 
 
+    def test_two_marker_old_snapshot_candidate_terminal_collision_is_fail_closed(self):
+        """Two valid separately frozen outcomes for one old group cannot coexist."""
+        with tempfile.TemporaryDirectory() as td:
+            h = FrozenInvocationHarness(td)
+            old, parent = h.commit_snapshot(
+                [871001, 871002, 871003, 872001, 872002, 872003],
+                "old snapshot with two independent groups",
+            )
+            _, candidate_anchor, candidate_nonce = h.marker("44444444444444444444444444444444")
+            _, terminal_anchor, terminal_nonce = h.marker("55555555555555555555555555555555")
+            self.assertEqual(commit_parent(candidate_anchor, h.repo), parent)
+            self.assertEqual(commit_parent(terminal_anchor, h.repo), candidate_anchor)
+
+            current, _ = h.commit_snapshot(
+                [871001, 871002, 871003, 872001, 872002, 872003, 873001],
+                "new compatible snapshot", day_offset=1,
+            )
+            self.assertNotEqual(old["snapshot_id"], current["snapshot_id"])
+            candidate_path, _ = h.candidate(old, candidate_anchor, candidate_nonce, sequence=1)
+            terminal_path, _ = h.terminal(old, terminal_anchor, terminal_nonce, sequence=1)
+            sibling_path, _ = h.candidate(old, candidate_anchor, candidate_nonce, sequence=2)
+            _commit_all(h.repo, "late conflicting transports plus independent sibling")
+
+            result = h.drain()
+            self.assertEqual(result["frozen_authority_accepted_count_this_run"], 1)
+            self.assertEqual(result["frozen_authority_terminal_count_this_run"], 0)
+            self.assertEqual(result["frozen_authority_rejected_count_this_run"], 2)
+            self.assertEqual(result["failed_group_count_this_run"], 0)
+            self.assertEqual(result["cache_reused_sequences"], [2])
+            self.assertFalse(candidate_path.exists())
+            self.assertFalse(terminal_path.exists())
+            self.assertFalse(sibling_path.exists())
+            quarantined = list((h.quarantine / "frozen_authority").glob("*"))
+            self.assertEqual(len(quarantined), 2)
+            self.assertEqual({p.name.split(".rejected-")[0] for p in quarantined},
+                             {candidate_path.name, terminal_path.name})
+            rejected = [json.loads(line) for line in h.rejection_audit.read_text(
+                encoding="utf-8"
+            ).splitlines()]
+            self.assertEqual(len(rejected), 2)
+            self.assertTrue(all(
+                r["validator_error"] == "conflicting_candidate_and_terminal_receipt_for_frozen_group"
+                and r["current_snapshot_progress_changed"] is False
+                for r in rejected
+            ))
+            self.assertFalse(h.failure_audit.exists())
+            self.assertFalse(list(h.terminal_archive.rglob("*.json")))
+            audit = [json.loads(line) for line in h.audit_path.read_text(
+                encoding="utf-8"
+            ).splitlines()]
+            self.assertEqual(len(audit), 1)
+            self.assertEqual(audit[0]["authority_sequence"], 2)
+            self.assertEqual(audit[0]["outcome"], "dossier_candidate_accepted_after_rollover")
+            for appid in (871001, 871002, 871003):
+                self.assertFalse((h.store / f"App_{appid}.json").exists())
+            for appid in (872001, 872002, 872003):
+                self.assertTrue((h.store / f"App_{appid}.json").exists())
+
+            manifest = json.loads(h.manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(manifest["snapshot_id"], current["snapshot_id"])
+            self.assertEqual([g["state"] for g in manifest["group_progress"]["groups"]],
+                             ["pending", "accepted", "pending"])
+            self.assertEqual(result["next_pending_sequence"], 1)
+
+            # The rejected conflict does not return as a consumed attempt on replay.
+            replay = h.drain()
+            self.assertEqual(replay["frozen_authority_accepted_count_this_run"], 0)
+            self.assertEqual(replay["frozen_authority_terminal_count_this_run"], 0)
+            self.assertEqual(replay["frozen_authority_rejected_count_this_run"], 0)
+            self.assertEqual(replay["cache_reused_sequences"], [])
+            self.assertEqual(replay["failed_group_count"], 0)
+            self.assertEqual(replay["next_pending_sequence"], 1)
+
+
 if __name__ == "__main__":
     unittest.main()
