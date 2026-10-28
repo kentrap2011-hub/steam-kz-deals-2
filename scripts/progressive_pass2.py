@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import progressive_pass1
+from progressive_commercial_language import score_explanation_hit
 import progressive_deep_history
 import progressive_work_authority
 from taste_cache_common import validate_taste_factors
@@ -39,13 +40,6 @@ SCORE_FACTOR_IDS = (
     'breadth_of_match',
 )
 SCORE_EFFECTS = {'supports', 'lowers', 'qualifies'}
-SCORE_EXPLANATION_FORBIDDEN_TEXT = (
-    'price', 'discount', 'wishlist', 'sale',
-    'personal score', 'total score', 'purchase score', 'deal score',
-    'ranking position', 'priority rank',
-    'цена', 'скидк', 'вишлист', 'распродаж',
-    'место в рейтинге', 'место в очеред', 'персональный балл', 'итоговый балл', 'оценка сделки',
-)
 GENERIC_SCORE_EXPLANATION_TEXT = {
     'отличная игра',
     'хорошая игра',
@@ -226,7 +220,7 @@ def normalize_score_findings(value, work_item, factors):
         if not text_ru or not re.search(r'[А-Яа-яЁё]', text_ru):
             raise ValueError(f'{field}.text_ru must be non-empty Russian user-facing text')
         lowered = text_ru.casefold()
-        if any(term in lowered for term in SCORE_EXPLANATION_FORBIDDEN_TEXT):
+        if score_explanation_hit(text_ru) is not None:
             raise ValueError(f'{field}.text_ru contains commercial/ranking-only language')
         if lowered.strip(' .,!?:;—-') in GENERIC_SCORE_EXPLANATION_TEXT:
             raise ValueError(f'{field}.text_ru is generic praise, not a concrete score reason')

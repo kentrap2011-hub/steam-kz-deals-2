@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import progressive_work_authority
+from progressive_commercial_language import commercial_evidence_hit
 from taste_cache_common import validate_taste_factors
 
 ROOT = Path('.')
@@ -51,12 +52,6 @@ SEMANTIC_GLOBAL_FIELDS = (
     'taste_model_version', 'taste_semantics_sha256', 'candidate_context_contract_blob_sha',
 )
 _HISTORICAL_MANIFEST_CACHE = {}
-
-FORBIDDEN_COMMERCIAL_TEXT = (
-    'price', 'discount', 'wishlist', 'steamdb', 'sale price', 'historical price',
-    'rub', 'kzt', 'цена', 'скидк', 'вишлист', 'руб', 'тенге',
-)
-
 
 def load_json(path):
     path = Path(path)
@@ -530,8 +525,7 @@ def _validate_text_list(name, values, *, require_nonempty):
         if not isinstance(value, str) or not value.strip():
             raise ValueError(f'{name}[{index}] must be non-empty text')
         text = ' '.join(value.strip().split())
-        folded = text.casefold()
-        hit = next((fragment for fragment in FORBIDDEN_COMMERCIAL_TEXT if fragment in folded), None)
+        hit = commercial_evidence_hit(text)
         if hit is not None:
             raise ValueError(f'{name}[{index}] contains forbidden commercial evidence fragment: {hit!r}')
         normalized.append(text)
