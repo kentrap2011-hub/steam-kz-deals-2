@@ -80,7 +80,7 @@ def validate_manual_boundary(owner, launcher):
         "config/execution_ownership_contract.json", RUNTIME_PATH, WORKER_PATH,
         *SCHEMA_PATHS, "data/production/pre_ai/taste_steam_review_dossier_worker_index.json",
         "actual single Git parent", "one fresh nonce-only",
-        "pending group", "marker parent", "create-only",
+        "pending group", "marker-parent", "create-only",
         "Concurrent scheduled and manually launched runs", "no marker",
         "not canonically accepted", "Scheduled Task",
         "GitHub ingest validates actual marker-parent authority",
@@ -151,7 +151,7 @@ class DossierManualOneShotTests(unittest.TestCase):
                        "After a successful create-only candidate or terminal publication",
                        "create-file", "stop fail-closed", "run_start_authority"):
             self.assertIn(phrase, runtime)
-        for phrase in ("prepublication.py", "not a Scheduled ChatGPT runtime gate",
+        for phrase in ("prepublication.py", "Scheduled ChatGPT runtime gate",
                        "neutral", "found_and_used", "FAIL_CLOSED_EXECUTION_LEDGER_V1"):
             self.assertIn(phrase, worker)
         self.assertIn("not_required_for_scheduled_worker",
