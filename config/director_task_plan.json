@@ -2573,7 +2573,7 @@
       "id": "dossier-v1-explicit-manual-one-shot-authorization-01",
       "title": "ЧАТ 7 — явное разрешение ручного одноразового Dossier V1",
       "goal": "Устранить отсутствующее в ownership контракте явное разрешение на user-launched одноразовый Dossier V1, сохранив GitHub-очередь, блокировки, публикацию и неизменный Scheduled Task.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Точечное изменение L3-полномочий на реальный семантический запуск требует проверки cross-contract и безопасности.",
       "urgency": "высокая",
@@ -2582,16 +2582,16 @@
       "worker_slot": "ЧАТ 7",
       "order": null,
       "depends_on": [],
-      "blocker": "Разрешена только разработка в PR; до независимой L3 QA и принятия в main фактический ручной запуск остаётся запрещён.",
-      "recent_completion": false,
+      "blocker": "Initial implementation complete, original change №322 remains draft and fails independent L3 QA №330; targeted continuation registered for a NEW physical ЧАТ 2. No manual Dossier authorization until corrected and approved.",
+      "recent_completion": true,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T07:44:00Z"
+      "updated_at_utc": "2026-10-28T09:05:00Z"
     },
     {
       "id": "progressive-deep-commercial-token-false-positives-fix-01",
       "title": "ЧАТ 8 — исправление ложных коммерческих совпадений Deep",
       "goal": "Исправить неверное обнаружение денежного фрагмента внутри обычного слова и системно устранить аналогичные ложные совпадения в той же проверке Deep, сохранив запрет на реальные цены.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Нужен анализ действующего валидатора и близких токенов/границ слов, правка и матрица регрессионных тестов.",
       "urgency": "высокая",
@@ -2600,10 +2600,10 @@
       "worker_slot": "ЧАТ 8",
       "order": null,
       "depends_on": [],
-      "blocker": "Только code/tests; никаких повторов Deep и изменений поглощённой попытки либо recovery state.",
-      "recent_completion": false,
+      "blocker": "Initial implementation complete, original change №323 remains draft and has QA findings №329; targeted continuation registered for a NEW physical ЧАТ 3. No Deep recovery or production execution.",
+      "recent_completion": true,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T07:44:00Z"
+      "updated_at_utc": "2026-10-28T09:05:00Z"
     },
     {
       "id": "director-chat-numbering-recurrent-after-fix-audit-01",
@@ -2676,6 +2676,42 @@
       "recent_completion": true,
       "updated_on": "2026-10-28",
       "updated_at_utc": "2026-10-28T08:27:45.812Z"
+    },
+    {
+      "id": "dossier-v1-pr322-frozen-rollover-collision-repair-01",
+      "title": "ЧАТ 2 — устранить конфликт frozen-rollover при ручном Dossier V1 в существующем изменении №322",
+      "goal": "После независимой L3 QA №330 исправить только конфликт несовместимых результатов двух маркеров при rollover, сохранить оригинальный PR и штатную GitHub authority.",
+      "task_file": "WORKER_TASK_DOSSIER_V1_PR322_FROZEN_ROLLOVER_COLLISION_REPAIR_01.md",
+      "worker_slot": "ЧАТ 2",
+      "blocker": "Новый физический ЧАТ 2; старые ЧАТ 7 и предыдущий QA ЧАТ 2 не продолжаются. Исправлять только existing PR №322. Независимая L3 проверка материальной дельты до принятия.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Точечная доработка выявленного блокера в ранее открытом PR, без нового проекта.",
+      "urgency": "высокая",
+      "urgency_reason": "Независимая проверка выявила конкретный неисправленный дефект, препятствующий приёмке.",
+      "order": null,
+      "depends_on": [],
+      "recent_completion": false,
+      "updated_on": "2026-10-28",
+      "updated_at_utc": "2026-10-28T09:05:00Z"
+    },
+    {
+      "id": "progressive-deep-pr323-commercial-guard-targeted-repair-01",
+      "title": "ЧАТ 3 — устранить подтверждённые обходы коммерческой проверки в существующем изменении №323",
+      "goal": "После QA №329 закрыть USD100 и смешанные алфавиты, удалить лишние PR изменения, не потерять фиксы «руб» и сохранить исторический recovery untouched.",
+      "task_file": "WORKER_TASK_PROGRESSIVE_DEEP_PR323_COMMERCIAL_GUARD_TARGETED_REPAIR_01.md",
+      "worker_slot": "ЧАТ 3",
+      "blocker": "Новый физический ЧАТ 3; старые ЧАТ 8 и предыдущий QA ЧАТ 3 не продолжаются. Исправлять только existing PR №323. Нужна адресная delta QA до принятия.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Точечная доработка выявленного блокера в ранее открытом PR, без нового проекта.",
+      "urgency": "высокая",
+      "urgency_reason": "Независимая проверка выявила конкретный неисправленный дефект, препятствующий приёмке.",
+      "order": null,
+      "depends_on": [],
+      "recent_completion": false,
+      "updated_on": "2026-10-28",
+      "updated_at_utc": "2026-10-28T09:05:00Z"
     }
   ]
 }
