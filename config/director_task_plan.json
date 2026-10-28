@@ -2631,15 +2631,15 @@
       "worker_slot": "ЧАТ 2",
       "effort_reason": "Изменение L3-авторизации требует предметной независимой проверки существующих ownership/marker/collision/transport границ.",
       "urgency_reason": "Только после независимого L3 PASS можно принять изменение №322 и разрешить пользователю штатный ручной Dossier.",
-      "blocker": "Target изменение №322 exact developer HEAD f2f69b38144ac28e31463e0a22035565e5c88bb4; QA report-only, никаких настоящих запусков.",
-      "status": "active",
+      "blocker": "Report-only change №330 merged in main (28e8dd9f5b07905aaab9036489b80ab64f1d79c6); CHANGES_REQUIRED; GitHub frozen-rollover candidate/terminal collision; corrections authorized on existing change №322; manual one-shot remains not approved.",
+      "status": "complete",
       "effort": "средняя",
       "urgency": "высокая",
       "order": null,
       "depends_on": [],
-      "recent_completion": false,
+      "recent_completion": true,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T08:15:00Z"
+      "updated_at_utc": "2026-10-28T08:27:45.812Z"
     },
     {
       "id": "progressive-deep-pr323-commercial-guard-independent-qa-01",
@@ -2649,15 +2649,15 @@
       "worker_slot": "ЧАТ 3",
       "effort_reason": "изменение №323 меняет живую validation/ingest политику Fast/Deep; требуется адресная независимая проверка ложных отказов и пропусков цен.",
       "urgency_reason": "Исправление расхождения «руб» готово и прошло собственные регрессионные тесты, но не принято.",
-      "blocker": "Target изменение №323 exact developer HEAD 7c60297d2936ee28c234dc5029efa2fe9e21f101; без replay или правок recovery.",
-      "status": "active",
+      "blocker": "Report-only change №329 merged in main (7198f33f86c81fc84f713e098fb5ce111069e0f6); CHANGES_REQUIRED; prefix currencies and Cyrillic/Latin mixed-script bypass; corrections in existing change №323, no semantic replay.",
+      "status": "complete",
       "effort": "средняя",
       "urgency": "высокая",
       "order": null,
       "depends_on": [],
-      "recent_completion": false,
+      "recent_completion": true,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T08:15:00Z"
+      "updated_at_utc": "2026-10-28T08:27:45.812Z"
     },
     {
       "id": "dossier-v2-original18-strict-mismatch-targeted-fix-01",
@@ -2667,15 +2667,15 @@
       "worker_slot": "ЧАТ 4",
       "effort_reason": "Требуется техническая реконструкция одного конкретного строгого отказа, одна схема и release-freshness без широкого повторного аудита.",
       "urgency_reason": "Независимый аудит принят, V2 production NO_GO до разбирательства в конкретных блокерах.",
-      "blocker": "V2 остается sandbox only; запрет на повтор original18 семантики, live writer и production activation.",
-      "status": "active",
+      "blocker": "Report-only change №331 merged in main (ec00f3b1f3788a3a6c4e26f05e24c1057cd1ffd2); DIAGNOSIS_COMPLETE_NO_SAFE_CODE_FIX; immutable invalid input not demonstrated validator bug; V2 stays isolated and not for production.",
+      "status": "complete",
       "effort": "средняя",
       "urgency": "высокая",
       "order": null,
       "depends_on": [],
-      "recent_completion": false,
+      "recent_completion": true,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T08:15:00Z"
+      "updated_at_utc": "2026-10-28T08:27:45.812Z"
     }
   ]
 }
