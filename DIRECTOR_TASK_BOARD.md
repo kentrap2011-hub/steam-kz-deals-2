@@ -5,13 +5,21 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## СЛЕДУЮЩИЕ ДЕЙСТВИЯ — после завершения ЧАТОВ 6–8, 2026-10-28
+
+- **НОВЫЙ физический ЧАТ 10**: `dossier-v1-pr322-manual-auth-l3-independent-qa-01` → `WORKER_TASK_DOSSIER_V1_PR322_MANUAL_AUTH_L3_INDEPENDENT_QA_01.md`. Независимая report-only проверка PR #322 с правом ручного Dossier V1: конкретно заморозка полномочий, одновременные Scheduled/Manual и create-only конфликт, точный final CI. Без запусков и изменения PR.
+- **НОВЫЙ физический ЧАТ 11**: `progressive-deep-pr323-commercial-guard-independent-qa-01` → `WORKER_TASK_PROGRESSIVE_DEEP_PR323_COMMERCIAL_GUARD_INDEPENDENT_QA_01.md`. Независимая report-only QA PR #323: контроль реальных цен при исправлении ложных совпадений в Fast и Deep, обязательная проверка точного scope, включая CURRENT_TASK.md и добавленный read-only workflow. Без исторического replay.
+- **НОВЫЙ физический ЧАТ 12**: `dossier-v2-original18-strict-mismatch-targeted-fix-01` → `WORKER_TASK_DOSSIER_V2_ORIGINAL18_STRICT_MISMATCH_TARGETED_FIX_01.md`. Адресно проверить причину pre-writer→writer отказа AppID 206420, enum AppID 1607130 и свежесть SULFUR; исправлять лишь доказанные V2-only дефекты. Не повторять исходный Research/Assembly и не активировать production.
+- **ЧАТ 6 / Dossier V2 аудит**: завершён; report-only PR #324 принят в main, commit `49b201b3e6f87ce12b8969929a56acdf8b83d0e5`, verdict NO_GO для production. PR #322 и #323 ещё открыты; никакого самостоятельного merge до независимой QA. ЧАТЫ 1–9 и их физические номера не переназначать.
+- Эти три задания запускаются только после merge текущей регистрации с успешным существующим site task/backlog CI; никаких дополнительных CI workflows для регистрации.
+
 ## НОВОЕ НАЗНАЧЕНИЕ — независимый разбор повторной путаницы номеров директора, 2026-10-28
 
 - **НОВЫЙ физический ЧАТ 9**: `director-chat-numbering-recurrent-after-fix-audit-01` → `WORKER_TASK_DIRECTOR_CHAT_NUMBERING_RECURRENT_AFTER_FIX_AUDIT_01.md`. Независимый report-only разбор новой ошибки «объявить 2–5 свободными по GitHub и предложить заменить только что назначенные 6–8» с сопоставлением предыдущего аудита нумерации (№306), реально принятого исправления (№308) и общего аудита директора (№319). Вывести отличающийся исполнимый способ предотвращения; один draft PR отчёта, никаких изменений правил или перераспределения физических чатов. ЧАТЫ 1–8 сохраняют свои назначения. Запуск только после merge регистрационного PR с успешными существующими CI.
 
 ## АКТУАЛЬНЫЕ НОВЫЕ НАЗНАЧЕНИЯ — 2026-10-28
 
-- **НОВЫЙ физический ЧАТ 6 — аудит нового Dossier V2**: `dossier-v2-real-original18-quality-audit-01` → `WORKER_TASK_DOSSIER_V2_REAL_ORIGINAL18_QUALITY_AUDIT_01.md`. Независимый report-only аудит реальных 14 сохранённых sandbox-досье и четырёх исключений, включая точную причину расхождения по AppID 206420. Без новых семантических запусков, изменений state и production.
+- **ЗАВЕРШЕНО — физический ЧАТ 6, аудит нового Dossier V2**: `dossier-v2-real-original18-quality-audit-01` → `WORKER_TASK_DOSSIER_V2_REAL_ORIGINAL18_QUALITY_AUDIT_01.md`. Независимый report-only аудит реальных 14 сохранённых sandbox-досье и четырёх исключений, включая точную причину расхождения по AppID 206420. Без новых семантических запусков, изменений state и production.
 - **НОВЫЙ физический ЧАТ 7 — ручной обычный Dossier**: `dossier-v1-explicit-manual-one-shot-authorization-01` → `WORKER_TASK_DOSSIER_V1_EXPLICIT_MANUAL_ONE_SHOT_AUTHORIZATION_01.md`. Ограниченное разрешение user-launched one-shot через существующий GitHub runtime, без новых scheduler/queue/retry; implementation PR и независимая L3 QA **до merge**, никаких настоящих ручных запусков во время разработки.
 - **НОВЫЙ физический ЧАТ 8 — Deep ложные денежные совпадения**: `progressive-deep-commercial-token-false-positives-fix-01` → `WORKER_TASK_PROGRESSIVE_DEEP_COMMERCIAL_TOKEN_FALSE_POSITIVES_FIX_01.md`. Исправить обнаружение валютного фрагмента внутри обычного слова и все подтверждённые аналогичные дефекты той же проверки; сохранить коммерческие запреты. Один ограниченный PR с регрессионными тестами; GitHub recovery не трогать.
 - Три независимых fileset/owner. Все задачи доступны к запуску **только после merge этого регистрационного PR и успешного существующего CI**. Прежние физические чаты и registry items не переназначаются.
