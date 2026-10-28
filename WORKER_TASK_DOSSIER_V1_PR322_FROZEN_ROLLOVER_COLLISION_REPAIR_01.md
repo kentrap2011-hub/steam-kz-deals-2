@@ -1,9 +1,9 @@
-# ЧАТ 2 — исправить L3 конфликт при ручном Dossier V1, продолжая PR #322
+# ЧАТ 1 — исправить L3 конфликт при ручном Dossier V1, продолжая PR #322
 
 Repository: kentrap2011-hub/steam-kz-deals-2
 Source of truth: main
 Task ID: dossier-v1-pr322-frozen-rollover-collision-repair-01
-Worker: НОВЫЙ физический ЧАТ 2, НЕ прежняя завершённая QA-беседа и НЕ старый ЧАТ 7.
+Worker: НОВЫЙ физический ЧАТ 1, НЕ прежняя завершённая QA-беседа и НЕ старый ЧАТ 7.
 Mode: narrowly bounded IMPLEMENT on EXISTING PR #322 only.
 Worker report: update existing reviews/worker_reports/dossier-v1-explicit-manual-one-shot-authorization-01.md **in PR #322** (no new report-only PR).
 
