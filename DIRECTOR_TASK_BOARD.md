@@ -5,6 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## АКТУАЛЬНЫЕ НОВЫЕ НАЗНАЧЕНИЯ — 2026-10-28
+
+- **НОВЫЙ физический ЧАТ 6 — аудит нового Dossier V2**: `dossier-v2-real-original18-quality-audit-01` → `WORKER_TASK_DOSSIER_V2_REAL_ORIGINAL18_QUALITY_AUDIT_01.md`. Независимый report-only аудит реальных 14 сохранённых sandbox-досье и четырёх исключений, включая точную причину расхождения по AppID 206420. Без новых семантических запусков, изменений state и production.
+- **НОВЫЙ физический ЧАТ 7 — ручной обычный Dossier**: `dossier-v1-explicit-manual-one-shot-authorization-01` → `WORKER_TASK_DOSSIER_V1_EXPLICIT_MANUAL_ONE_SHOT_AUTHORIZATION_01.md`. Ограниченное разрешение user-launched one-shot через существующий GitHub runtime, без новых scheduler/queue/retry; implementation PR и независимая L3 QA **до merge**, никаких настоящих ручных запусков во время разработки.
+- **НОВЫЙ физический ЧАТ 8 — Deep ложные денежные совпадения**: `progressive-deep-commercial-token-false-positives-fix-01` → `WORKER_TASK_PROGRESSIVE_DEEP_COMMERCIAL_TOKEN_FALSE_POSITIVES_FIX_01.md`. Исправить обнаружение валютного фрагмента внутри обычного слова и все подтверждённые аналогичные дефекты той же проверки; сохранить коммерческие запреты. Один ограниченный PR с регрессионными тестами; GitHub recovery не трогать.
+- Три независимых fileset/owner. Все задачи доступны к запуску **только после merge этого регистрационного PR и успешного существующего CI**. Прежние физические чаты и registry items не переназначаются.
+
 ## НОВОЕ НАЗНАЧЕНИЕ — повторные ошибки директора, 2026-10-27
 
 - **НОВЫЙ физический ЧАТ 5**: `director-recurrent-long-prompts-slow-registration-audit-01` → `WORKER_TASK_DIRECTOR_RECURRENT_LONG_PROMPTS_AND_SLOW_REGISTRATION_AUDIT_01.md`. Независимое исследование повторения длинных директорских запусков и многоэтапной регистрации после прежних аудитов и частично принятых правок. Проверить фактический цикл предыдущего регистрационного задания и почему существующие правила не сработали; предложить несколько новых механизмов с сопоставлением цены/рисков и практичный вариант. Только один report-only draft PR. НЕ менять правила/CI/production, не назначать дополнительно другие аудиты. Запуск после подтверждения успешной регистрации в `main`.
