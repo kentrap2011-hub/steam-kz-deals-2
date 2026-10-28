@@ -5,13 +5,22 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## АКТУАЛЬНО — системный разбор повторных ошибок директора, ЧАТ 3, 2026-10-28
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — новые физические ЧАТЫ 3–6, 2026-10-28
+
+- **НОВЫЙ ЧАТ 3**: `director-typed-registration-prewrite-implement-01` → `WORKER_TASK_DIRECTOR_TYPED_REGISTRATION_PREWRITE_IMPLEMENT_01.md`. Реализация системного предотвращения повторных ошибок директора до записи в GitHub по завершённому отчёту №342, без нового общего аудита.
+- **НОВЫЙ ЧАТ 4**: `dossier-v1-pr322-sequential-frozen-outcome-resolution-01` → `WORKER_TASK_DOSSIER_V1_PR322_SEQUENTIAL_FROZEN_OUTCOME_RESOLUTION_01.md`. Разграничить законный новый разбор и противоречивые результаты старой замороженной группы; не блокировать новые успехи, при доказанном дефекте минимально исправить исходный PR №322.
+- **НОВЫЙ ЧАТ 5**: `progressive-deep-pr323-stage1-ci-blocker-disposition-01` → `WORKER_TASK_PROGRESSIVE_DEEP_PR323_STAGE1_CI_BLOCKER_DISPOSITION_01.md`. Проверить только отдельную красную проверку подготовки Deep, а не уже успешно проверенные исправления цен в PR №323.
+- **НОВЫЙ ЧАТ 6**: существующее поручение `steam-postmerge-actions-failures-fix-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_FAILURES_FIX_01.md`. Две известные ошибки автообновления Steam, сначала проверить их актуальность на текущем main. Не создавать дубликат task ID.
+- Прежние QA ЧАТЫ 1 и 2 сдали отчёты в draft PR №339 и №340; физическое освобождение этих бесед пользователем не подтверждено. Прежний ЧАТ 3 завершён по сообщению пользователя; новый ЧАТ 3 — отдельная чистая беседа.
+- Запуски допустимы только после принятия этой регистрации в main и успешных существующих регистрационных CI. Источники PR №322/323 не слиты. Вне полномочий любые семантические запуски, Scheduled Tasks, production, самостоятельное слияние.
+
+## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
 - **Куда отправить: НОВЫЙ ЧАТ — ЧАТ 3.** `director-repeated-registration-failures-systemic-fix-01` → `WORKER_TASK_DIRECTOR_REPEATED_REGISTRATION_FAILURES_SYSTEMIC_FIX_01.md`. Независимый **read-only** системный разбор повторения регистрационных ошибок PR №338 после почти аналогичного случая PR №317 и уже подготовленного report-only аудита PR №319: точная причинность, принятые против оставшихся на бумаге рекомендации, несколько реально разных архитектурных вариантов, **один исполнимый план исправления**. Итог — один report-only draft PR, без самостоятельной реализации/очередного общего аудита/параллельного QA.
 - **Физические чаты:** пользователь подтвердил **запуск** новых ЧАТОВ 1 и 2 по заданиям PR №322 / PR №323. Они заняты независимой QA; назначенный новый ЧАТ 3 запускается отдельно после этой регистрации в `main` и успешной существующей CI. Ни одному из этих чатов не передавать Steam Actions или иные независимые задачи без нового назначения.
 - **Другое:** `steam-postmerge-actions-failures-fix-01` всё ещё без worker-слота; PR №319 — уже существующий черновой отчет по предыдущему схожему эпизоду, не дублировать его исследование. Настоящие Dossier/Deep/production и Scheduled Tasks не запускать.
 
-## АКТУАЛЬНО — новые независимые QA-чаты 1 и 2, 2026-10-28
+## СДАННЫЕ QA — прежние физические ЧАТЫ 1 и 2, 2026-10-28
 
 - **Куда отправить: НОВЫЙ ЧАТ — ЧАТ 1**. `dossier-v1-pr322-frozen-rollover-final-delta-l3-qa-01` → `WORKER_TASK_DOSSIER_V1_PR322_FROZEN_ROLLOVER_FINAL_DELTA_L3_QA_01.md`. Отдельная физическая беседа, **не** продолжение завершённого ЧАТА 1 разработчика: одна независимая L3-проверка **только материальной поправки** frozen old-snapshot candidate+terminal в исходном PR #322, точного HEAD/CI и ранее принятых замечаний QA #330. Один report-only PR, без запуска Dossier, без merge/production и без нового source PR.
 - **Куда отправить: НОВЫЙ ЧАТ — ЧАТ 2**. `progressive-deep-pr323-commercial-guard-final-delta-qa-01` → `WORKER_TASK_PROGRESSIVE_DEEP_PR323_COMMERCIAL_GUARD_FINAL_DELTA_QA_01.md`. Отдельная физическая беседа, **не** продолжение завершённого ЧАТА 2 разработчика: одна независимая проверка **только материальных изменений** Fast/Deep lexical guard в исходном PR #323 после QA #329, а также точное разбирательство красного Deep Stage 1 check в пределах merge gate. Один report-only PR, никаких повторных семантических Deep или общего аудита.

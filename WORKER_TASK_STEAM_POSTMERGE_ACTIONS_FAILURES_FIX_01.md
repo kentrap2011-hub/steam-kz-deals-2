@@ -1,9 +1,9 @@
-# WORKER TASK — Steam post-merge Actions failures fix 01
+# ЧАТ 6 — исправить две ошибки автоматического обновления сайта Steam
 
 Repository: `kentrap2011-hub/steam-kz-deals-2`
 Base/source of truth: `main`
 Task ID: `steam-postmerge-actions-failures-fix-01`
-Worker slot: **НЕ НАЗНАЧЕН — отложенная задача; до нового director assignment / sync Board+registry не запускать**
+Worker slot: **НОВЫЙ физический ЧАТ 6; назначение вступает в силу после принятия регистрации в main**
 
 Work only in `kentrap2011-hub/steam-kz-deals-2`. If another repository opens, stop and switch. Start with `CHAT_PROTOCOL.md` and its START gate, then `CHAT_CONTEXT.md`; use relevant `PROJECT_ROUTES.md`, canonical policies and architecture preflight before any workflow/source edits.
 
@@ -11,7 +11,7 @@ Work only in `kentrap2011-hub/steam-kz-deals-2`. If another repository opens, st
 
 IMPLEMENT + bounded VALIDATE the **confirmed post-merge GitHub Actions failures** after merged PR #311, not a redesign of Steam discovery.
 
-Observed failures on merge commit `59b5aec1310ab356dd0950171dfc8f63620b7f2d`:
+Сначала проверить, что эти две ошибки сохраняются на текущем main. Если они уже исправлены, сдать доказательство без лишней правки. Observed failures on merge commit `59b5aec1310ab356dd0950171dfc8f63620b7f2d`:
 
 1. [Validate mailing policy #40523125907](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40523125907): `Mailing policy invariant failure: version, projection_compares_exact_profile_blob`. At that commit `config/mailing_policy.json` says `1.22`, whereas `scripts/validate_mailing_policy.py` expects `1.21` plus an exact projection source string. Determine the proper current semantic contract and repair the consistency without weakening profile-binding validation or changing its meaning.
 2. [Build offer family resolution #40523125705](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/40523125705): `KeyError: 'App_1492680'` at family resolution, after content eligibility included this key but the mailing feed did not. The missing feed row was also present in the same pre-merge state, so do not blame it on PR #311. Identify the actual producer/consumer binding problem and fail closed or reconcile through the authoritative existing source; do not fabricate a price, discard an eligible key silently, or bypass family completeness.
