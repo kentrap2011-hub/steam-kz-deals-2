@@ -1,9 +1,9 @@
-# ЧАТ 10 — независимая L3 проверка ручного Dossier V1, PR #322
+# ЧАТ 2 — независимая L3 проверка ручного Dossier V1, PR #322
 
 Repository: kentrap2011-hub/steam-kz-deals-2
 Source of truth: main
 Task ID: dossier-v1-pr322-manual-auth-l3-independent-qa-01
-Worker: НОВЫЙ физический ЧАТ 10, независимый от ЧАТА 7
+Worker: НОВЫЙ физический ЧАТ 2, независимый от ЧАТА 7
 Mode: independent L3 QA, report-only draft PR; не разработчик и не исполнитель semantic one-shot.
 Worker report: reviews/worker_reports/dossier-v1-pr322-manual-auth-l3-independent-qa-01.md
 

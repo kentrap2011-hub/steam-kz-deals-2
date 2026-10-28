@@ -1,9 +1,9 @@
-# ЧАТ 12 — точечно исправить подтверждённые несоответствия Dossier V2 original18
+# ЧАТ 4 — точечно исправить подтверждённые несоответствия Dossier V2 original18
 
 Repository: kentrap2011-hub/steam-kz-deals-2
 Source of truth: main
 Task ID: dossier-v2-original18-strict-mismatch-targeted-fix-01
-Worker: НОВЫЙ физический ЧАТ 12
+Worker: НОВЫЙ физический ЧАТ 4
 Mode: bounded diagnosis + minimal IMPLEMENT only for proven reusable defects; one PR, no semantic rerun or production.
 Worker report: reviews/worker_reports/dossier-v2-original18-strict-mismatch-targeted-fix-01.md
 

@@ -2625,10 +2625,10 @@
     },
     {
       "id": "dossier-v1-pr322-manual-auth-l3-independent-qa-01",
-      "title": "ЧАТ 10 — независимая L3 проверка разрешения ручного Dossier V1 в изменение №322",
+      "title": "ЧАТ 2 — независимая L3 проверка разрешения ручного Dossier V1 в изменение №322",
       "goal": "Независимо проверить новое разрешение ручного Dossier на реальные границы исполнения и одновременность с Scheduled Dossier, дать PASS/CHANGES_REQUIRED без изменения кода.",
       "task_file": "WORKER_TASK_DOSSIER_V1_PR322_MANUAL_AUTH_L3_INDEPENDENT_QA_01.md",
-      "worker_slot": "ЧАТ 10",
+      "worker_slot": "ЧАТ 2",
       "effort_reason": "Изменение L3-авторизации требует предметной независимой проверки существующих ownership/marker/collision/transport границ.",
       "urgency_reason": "Только после независимого L3 PASS можно принять изменение №322 и разрешить пользователю штатный ручной Dossier.",
       "blocker": "Target изменение №322 exact developer HEAD f2f69b38144ac28e31463e0a22035565e5c88bb4; QA report-only, никаких настоящих запусков.",
@@ -2639,14 +2639,14 @@
       "depends_on": [],
       "recent_completion": false,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T07:41:00Z"
+      "updated_at_utc": "2026-10-28T08:15:00Z"
     },
     {
       "id": "progressive-deep-pr323-commercial-guard-independent-qa-01",
-      "title": "ЧАТ 11 — независимая проверка исправления ценовых ложных срабатываний Fast/Deep в изменение №323",
+      "title": "ЧАТ 3 — независимая проверка исправления ценовых ложных срабатываний Fast/Deep в изменение №323",
       "goal": "Оценить снижение ложных срабатываний без пропуска реальной коммерческой информации в активной проверке Fast/Deep и проверить отсутствие лишних изменений перед merge.",
       "task_file": "WORKER_TASK_PROGRESSIVE_DEEP_PR323_COMMERCIAL_GUARD_INDEPENDENT_QA_01.md",
-      "worker_slot": "ЧАТ 11",
+      "worker_slot": "ЧАТ 3",
       "effort_reason": "изменение №323 меняет живую validation/ingest политику Fast/Deep; требуется адресная независимая проверка ложных отказов и пропусков цен.",
       "urgency_reason": "Исправление расхождения «руб» готово и прошло собственные регрессионные тесты, но не принято.",
       "blocker": "Target изменение №323 exact developer HEAD 7c60297d2936ee28c234dc5029efa2fe9e21f101; без replay или правок recovery.",
@@ -2657,14 +2657,14 @@
       "depends_on": [],
       "recent_completion": false,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T07:41:00Z"
+      "updated_at_utc": "2026-10-28T08:15:00Z"
     },
     {
       "id": "dossier-v2-original18-strict-mismatch-targeted-fix-01",
-      "title": "ЧАТ 12 — диагностика и точечное исправление строгих несоответствий Dossier V2",
+      "title": "ЧАТ 4 — диагностика и точечное исправление строгих несоответствий Dossier V2",
       "goal": "Получить причину отказа Saints Row IV, выявить границу ошибки схемы Lust Theory и безопасную свежесть SULFUR; исправить только доказанные V2-only дефекты без повторов Research/Assembly.",
       "task_file": "WORKER_TASK_DOSSIER_V2_ORIGINAL18_STRICT_MISMATCH_TARGETED_FIX_01.md",
-      "worker_slot": "ЧАТ 12",
+      "worker_slot": "ЧАТ 4",
       "effort_reason": "Требуется техническая реконструкция одного конкретного строгого отказа, одна схема и release-freshness без широкого повторного аудита.",
       "urgency_reason": "Независимый аудит принят, V2 production NO_GO до разбирательства в конкретных блокерах.",
       "blocker": "V2 остается sandbox only; запрет на повтор original18 семантики, live writer и production activation.",
@@ -2675,7 +2675,7 @@
       "depends_on": [],
       "recent_completion": false,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T07:41:00Z"
+      "updated_at_utc": "2026-10-28T08:15:00Z"
     }
   ]
 }
