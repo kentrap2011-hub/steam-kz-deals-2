@@ -276,5 +276,156 @@ class DossierManualOneShotTests(unittest.TestCase):
             self.assertEqual(replay["next_pending_sequence"], 1)
 
 
+    def _exercise_sequential_old_group_opposites(self, first_kind):
+        """The durable old-group ledger, not one scan or marker, owns the outcome."""
+        with tempfile.TemporaryDirectory() as td:
+            h = FrozenInvocationHarness(td)
+            old, parent = h.commit_snapshot(
+                [874001, 874002, 874003, 875001, 875002, 875003],
+                "immutable old snapshot with sibling",
+            )
+            _, first_anchor, first_nonce = h.marker("66666666666666666666666666666666")
+            _, second_anchor, second_nonce = h.marker("77777777777777777777777777777777")
+            self.assertEqual(commit_parent(first_anchor, h.repo), parent)
+            self.assertEqual(commit_parent(second_anchor, h.repo), first_anchor)
+            current, _ = h.commit_snapshot(
+                [874001, 874002, 874003, 875001, 875002, 875003, 876001],
+                "compatible next snapshot", day_offset=1,
+            )
+            self.assertNotEqual(old["snapshot_id"], current["snapshot_id"])
+            first_path, _ = getattr(h, first_kind)(old, first_anchor, first_nonce)
+            _commit_all(h.repo, "first old-group outcome")
+            first = h.drain()
+            first_outcome = (
+                "dossier_candidate_accepted_after_rollover"
+                if first_kind == "candidate" else "semantic_exhaustion_consumed_after_rollover"
+            )
+            self.assertEqual(first["frozen_authority_accepted_count_this_run"],
+                             int(first_kind == "candidate"))
+            self.assertEqual(first["frozen_authority_terminal_count_this_run"],
+                             int(first_kind == "terminal"))
+            first_audit = [json.loads(line) for line in h.audit_path.read_text(
+                encoding="utf-8"
+            ).splitlines()]
+            self.assertEqual(len(first_audit), 1)
+            self.assertEqual(first_audit[0]["outcome"], first_outcome)
+            self.assertFalse(first_path.exists())
+            saved = {}
+            for appid in (874001, 874002, 874003):
+                path = h.store / f"App_{appid}.json"
+                saved[appid] = path.read_bytes() if path.exists() else None
+            archived = sorted(h.terminal_archive.rglob("*.json"))
+            self.assertEqual(len(archived), int(first_kind == "terminal"))
+            archived_bytes = [path.read_bytes() for path in archived]
+            first_manifest = json.loads(h.manifest_path.read_text(encoding="utf-8"))
+            first_group_state = first_manifest["group_progress"]["groups"][0]["state"]
+            self.assertEqual(first_group_state,
+                             "accepted" if first_kind == "candidate" else "pending")
+
+            opposite = "terminal" if first_kind == "candidate" else "candidate"
+            opposite_path, _ = getattr(h, opposite)(old, second_anchor, second_nonce)
+            sibling_path, _ = h.candidate(old, second_anchor, second_nonce, sequence=2)
+            _commit_all(h.repo, "opposite old-group outcome plus independent sibling")
+            second = h.drain()
+            self.assertEqual(second["frozen_authority_rejected_count_this_run"], 1)
+            self.assertEqual(second["frozen_authority_accepted_count_this_run"], 1)
+            self.assertEqual(second["frozen_authority_terminal_count_this_run"], 0)
+            self.assertEqual(second["failed_group_count_this_run"], 0)
+            self.assertEqual(second["cache_reused_sequences"], [2])
+            self.assertFalse(opposite_path.exists())
+            self.assertFalse(sibling_path.exists())
+            self.assertEqual([p.name.split(".rejected-")[0] for p in
+                              (h.quarantine / "frozen_authority").glob("*")],
+                             [opposite_path.name])
+            rejections = [json.loads(line) for line in h.rejection_audit.read_text(
+                encoding="utf-8"
+            ).splitlines()]
+            self.assertEqual(len(rejections), 1)
+            self.assertEqual(rejections[0]["validator_error"],
+                             "opposite_frozen_group_outcome_already_consumed")
+            self.assertIs(rejections[0]["current_snapshot_progress_changed"], False)
+            self.assertFalse(h.failure_audit.exists())
+            self.assertEqual([p.read_bytes() for p in sorted(
+                h.terminal_archive.rglob("*.json")
+            )], archived_bytes)
+            for appid, before in saved.items():
+                path = h.store / f"App_{appid}.json"
+                self.assertEqual(path.read_bytes() if path.exists() else None, before)
+            for appid in (875001, 875002, 875003):
+                self.assertTrue((h.store / f"App_{appid}.json").is_file())
+            current_manifest = json.loads(h.manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(current_manifest["snapshot_id"], current["snapshot_id"])
+            self.assertEqual([g["state"] for g in current_manifest["group_progress"]["groups"]],
+                             [first_group_state, "accepted", "pending"])
+            audit = [json.loads(line) for line in h.audit_path.read_text(
+                encoding="utf-8"
+            ).splitlines()]
+            self.assertEqual(len(audit), 2)
+            self.assertEqual(audit[0], first_audit[0])
+            self.assertEqual(audit[1]["authority_sequence"], 2)
+            self.assertEqual(audit[1]["outcome"], "dossier_candidate_accepted_after_rollover")
+
+            replay = h.drain()
+            self.assertEqual(replay["frozen_authority_rejected_count_this_run"], 0)
+            self.assertEqual(replay["frozen_authority_terminal_count_this_run"], 0)
+            self.assertEqual(replay["frozen_authority_accepted_count_this_run"], 0)
+            self.assertEqual(replay["cache_reused_sequences"], [])
+            # A replay from the original consumed marker is cleanup-only,
+            # even if another valid marker published a conflicting outcome.
+            replay_path, _ = getattr(h, first_kind)(old, first_anchor, first_nonce)
+            replay = h.drain()
+            self.assertEqual(replay["frozen_authority_replay_cleanup_count_this_run"], 1)
+            self.assertFalse(replay_path.exists())
+            self.assertEqual(len(h.audit_path.read_text(
+                encoding="utf-8"
+            ).splitlines()), 2)
+
+    def test_sequential_candidate_then_terminal_distinct_markers_fail_closed(self):
+        self._exercise_sequential_old_group_opposites("candidate")
+
+    def test_sequential_terminal_then_candidate_distinct_markers_fail_closed(self):
+        self._exercise_sequential_old_group_opposites("terminal")
+
+    def test_new_snapshot_valid_success_is_not_an_old_group_conflict(self):
+        """A fresh legitimately planned success remains allowed after old attempts."""
+        from datetime import timedelta
+
+        with tempfile.TemporaryDirectory() as td:
+            h = FrozenInvocationHarness(td)
+            old, _ = h.commit_snapshot([877001, 877002, 877003], "old work")
+            _, winner_anchor, winner_nonce = h.marker("88888888888888888888888888888888")
+            _, other_anchor, other_nonce = h.marker("99999999999999999999999999999999")
+            h.commit_snapshot([877001, 877002, 877003, 877004],
+                              "compatible rollover", day_offset=1)
+            h.candidate(old, winner_anchor, winner_nonce)
+            _commit_all(h.repo, "old candidate")
+            h.drain()
+            late_terminal, _ = h.terminal(old, other_anchor, other_nonce)
+            _commit_all(h.repo, "late opposite old terminal")
+            blocked = h.drain()
+            self.assertEqual(blocked["frozen_authority_rejected_count_this_run"], 1)
+            self.assertFalse(late_terminal.exists())
+
+            # The old cache now exceeds its canonical TTL. GitHub prepares a
+            # genuinely new current group and can accept fresh success normally.
+            h.now += timedelta(days=25)
+            fresh, _ = h.commit_snapshot(
+                [877001, 877002, 877003, 877004], "new due review"
+            )
+            self.assertNotEqual(fresh["snapshot_id"], old["snapshot_id"])
+            self.assertEqual(fresh["submission_group_plan"]["groups"][0]["appids"],
+                             ["877001", "877002", "877003"])
+            _, anchor, nonce = h.marker("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            current_path, _ = h.candidate(fresh, anchor, nonce)
+            _commit_all(h.repo, "fresh successful analysis")
+            result = h.drain()
+            self.assertEqual(result["accepted_group_count_this_run"], 1)
+            self.assertEqual(result["frozen_authority_rejected_count_this_run"], 0)
+            self.assertFalse(current_path.exists())
+            manifest = json.loads(h.manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(manifest["group_progress"]["groups"][0]["state"], "accepted")
+            self.assertEqual(manifest["snapshot_id"], fresh["snapshot_id"])
+
+
 if __name__ == "__main__":
     unittest.main()
