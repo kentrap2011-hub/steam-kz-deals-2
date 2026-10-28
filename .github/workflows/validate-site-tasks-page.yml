@@ -23,6 +23,8 @@ jobs:
         run: |
           set -euo pipefail
           python -m py_compile scripts/build_site_tasks.py scripts/test_site_tasks.py
+          node --check scripts/director_registration_prewrite.js
+          node scripts/test_director_registration_prewrite.js
           node --check web/tasks.js
           node web/tasks.test.js
           python scripts/test_site_tasks.py
