@@ -3,7 +3,7 @@
 Repository: `kentrap2011-hub/steam-kz-deals-2`
 Base/source of truth: `main`
 Task ID: `steam-postmerge-actions-failures-fix-01`
-Worker slot: **СУЩЕСТВУЮЩИЙ ЧАТ 1**
+Worker slot: **НЕ НАЗНАЧЕН — отложенная задача; до нового director assignment / sync Board+registry не запускать**
 
 Work only in `kentrap2011-hub/steam-kz-deals-2`. If another repository opens, stop and switch. Start with `CHAT_PROTOCOL.md` and its START gate, then `CHAT_CONTEXT.md`; use relevant `PROJECT_ROUTES.md`, canonical policies and architecture preflight before any workflow/source edits.
 

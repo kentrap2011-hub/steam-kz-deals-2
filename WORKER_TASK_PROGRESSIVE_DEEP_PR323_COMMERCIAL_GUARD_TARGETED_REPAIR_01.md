@@ -1,9 +1,9 @@
-# ЧАТ 3 — доработать защиту коммерческих терминов Fast/Deep в существующем PR #323
+# ЧАТ 2 — доработать защиту коммерческих терминов Fast/Deep в существующем PR #323
 
 Repository: kentrap2011-hub/steam-kz-deals-2
 Source of truth: main
 Task ID: progressive-deep-pr323-commercial-guard-targeted-repair-01
-Worker: НОВЫЙ физический ЧАТ 3, НЕ прежняя завершённая QA-беседа и НЕ старый ЧАТ 8.
+Worker: НОВЫЙ физический ЧАТ 2, НЕ прежняя завершённая QA-беседа и НЕ старый ЧАТ 8.
 Mode: bounded IMPLEMENT on EXISTING PR #323 only.
 Worker report: update existing reviews/worker_reports/progressive-deep-commercial-token-false-positives-fix-01.md **in PR #323**.
 
