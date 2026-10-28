@@ -51,15 +51,15 @@
   },
   "scope": {
     "deep_total_current_coverage_target": 641,
-    "deep_first_pass_attempted_count": 43,
-    "deep_authoritative_completed_count": 41,
-    "deep_completed_fit_count": 24,
+    "deep_first_pass_attempted_count": 45,
+    "deep_authoritative_completed_count": 43,
+    "deep_completed_fit_count": 26,
     "deep_completed_not_fit_count": 17,
     "deep_incomplete_or_recovery_count": 2,
     "deep_waiting_for_dossier_count": 596,
-    "deep_ready_or_pending_count": 2,
-    "deep_normal_first_pass_remaining_count": 598,
-    "deep_remaining_until_all_authoritative_count": 600,
+    "deep_ready_or_pending_count": 0,
+    "deep_normal_first_pass_remaining_count": 596,
+    "deep_remaining_until_all_authoritative_count": 598,
     "deep_normal_first_pass_complete": false,
     "deep_all_current_authoritative_complete": false,
     "recovery_owned_count": 2,
@@ -67,15 +67,15 @@
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 0,
     "dossier_waiting_count": 596,
-    "pass2_attempted_count": 43,
-    "pass2_eligible_count": 2,
+    "pass2_attempted_count": 45,
+    "pass2_eligible_count": 0,
     "deep_history_contract": "PROGRESSIVE-DEEP-COMPLETED-HISTORY-V1",
     "deep_profile_version_unique_game_counts": {
       "legacy-unverified:02873cd73be3f673db7c516da956ffcf13ea8b315216dbe4eaae9523716bf88a": 1,
       "legacy-unverified:28d31b27db505dfd35bd801b80404fd80855cadd4c2d2146205ddfe7076b8387": 27,
       "legacy-unverified:6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4": 2,
       "legacy-unverified:6b8496db72174998b724ea1f542568ce18b58c788ef84dd49210c622ae8c07d4": 8,
-      "legacy-unverified:82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568": 32,
+      "legacy-unverified:82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568": 34,
       "legacy-unverified:896d51d68161ac07e42e5bc387ed1b98a9e4c59a1ecef76c134ce1af98154edc": 12,
       "legacy-unverified:95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551": 5,
       "legacy-unverified:9de8120340928aedf78a4522ffd662f5a97a50656dd04f75af622a8e62014e21": 5,
@@ -84,13 +84,13 @@
     },
     "deep_current_profile_content_version_id": "f86bfd78c52c58d092495b1b4dd14f6eead3c4babdd9c2216c6cbcf55cd8cf47",
     "deep_current_version_target": 641,
-    "deep_current_version_completed_count": 41,
+    "deep_current_version_completed_count": 43,
     "deep_same_profile_historical_completed_count": 0,
-    "deep_historical_only_not_current_compatible_count": 24,
-    "deep_older_version_only_count": 24,
+    "deep_historical_only_not_current_compatible_count": 22,
+    "deep_older_version_only_count": 22,
     "deep_never_completed_count": 576,
-    "deep_current_version_remaining_count": 600,
-    "normal_pass2_eligible_count": 2,
+    "deep_current_version_remaining_count": 598,
+    "normal_pass2_eligible_count": 0,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": false,
     "legacy_full_reanalysis": {
@@ -129,128 +129,5 @@
       "exhausted": true
     }
   },
-  "items": [
-    {
-      "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
-      "profile_semantic_sha256": "84f356df7b07f8ce57585909bacf79407667cf040b4e2cdb698e565da27996da",
-      "family_id": "game:1835240",
-      "taste_subject_key": "App_1835240",
-      "appid": "1835240",
-      "taste_fingerprint": "020f38969cd1d0eac3b61468a98ed38ce6c8ede16ea14977a4539c5e8d8b619f",
-      "candidate_context_sha256": "80eb9ed424fa0b305c731be89a322f9a4af74e1a1098ceae1bdbd88a5cf13671",
-      "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
-      "work_id": "9ef6b5ee640b7f32cfe0ffebcc9188d3104e9cfaa5462419e9ee44bded2a323d",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Spiritfall",
-        "short_description": "Spiritfall is a fast-paced Action Roguelite with combat inspired by Platform Fighters. Slash, smash, launch, and wall-splat a multitude of enemies using an ever-changing arsenal of divine powers.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Hack and Slash"
-        ],
-        "core_fit_count": 1,
-        "release_date": "28 Feb, 2024",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1835240"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1835240.json",
-      "dossier_content_sha256": "4a94a75e9c01622780a784760be1708a8b685d57da64400f20208e5ede73c874",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-31T09:40:48.069Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "b3486593ddb8bd13c1c613d67d7de6afa80e82e84fd4d0b6232f25ef0a616422",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--9ef6b5ee640b7f32cfe0ffebcc9188d3104e9cfaa5462419e9ee44bded2a323d--b3486593ddb8bd13c1c613d67d7de6afa80e82e84fd4d0b6232f25ef0a616422.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--9ef6b5ee640b7f32cfe0ffebcc9188d3104e9cfaa5462419e9ee44bded2a323d--b3486593ddb8bd13c1c613d67d7de6afa80e82e84fd4d0b6232f25ef0a616422.json",
-      "sequence": 1
-    },
-    {
-      "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
-      "profile_semantic_sha256": "84f356df7b07f8ce57585909bacf79407667cf040b4e2cdb698e565da27996da",
-      "family_id": "game:2990",
-      "taste_subject_key": "App_2990",
-      "appid": "2990",
-      "taste_fingerprint": "0bcb989e74325551d515637b98f28d9b79cb31c2fbffaff5cbedc1ceb4bb7406",
-      "candidate_context_sha256": "e5f5e541dad35fb39495fe02738e04c83c66e029b3c940668e95e1ae6aeff301",
-      "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
-      "work_id": "31560e62ece85150ee2405fd3384796314f0ec96dd371f339430770781405fe9",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "FlatOut 2",
-        "short_description": "Experience the drive of your life as you throw yourself around on and off the track causing fences to shatter, tyre walls explode, water tanks and barrels fly across the track into other cars.",
-        "bundle_members": [],
-        "fit_tags": [],
-        "core_fit_count": 0,
-        "release_date": "13 Dec, 2011",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "2990"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2990.json",
-      "dossier_content_sha256": "8e514e2c08c685e3f7a26a7e3a45c66427e4b3751737842f2b17b3818efa5986",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-31T15:36:37.712Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "authorization_id": "40477cf36747f741a199e2390071367e86e2f5176ef31d585e104d5897729d6e",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/520f5c0dee08239e--31560e62ece85150ee2405fd3384796314f0ec96dd371f339430770781405fe9--40477cf36747f741a199e2390071367e86e2f5176ef31d585e104d5897729d6e.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/520f5c0dee08239e--31560e62ece85150ee2405fd3384796314f0ec96dd371f339430770781405fe9--40477cf36747f741a199e2390071367e86e2f5176ef31d585e104d5897729d6e.json",
-      "sequence": 2
-    }
-  ]
+  "items": []
 }
