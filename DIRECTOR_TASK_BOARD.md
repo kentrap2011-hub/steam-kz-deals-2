@@ -5,14 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — новые физические ЧАТЫ 3–6, 2026-10-28
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — независимые QA ЧАТЫ 1 и 2, 2026-10-28
 
-- **НОВЫЙ ЧАТ 3**: `director-typed-registration-prewrite-implement-01` → `WORKER_TASK_DIRECTOR_TYPED_REGISTRATION_PREWRITE_IMPLEMENT_01.md`. Реализация системного предотвращения повторных ошибок директора до записи в GitHub по завершённому отчёту №342, без нового общего аудита.
-- **НОВЫЙ ЧАТ 4**: `dossier-v1-pr322-sequential-frozen-outcome-resolution-01` → `WORKER_TASK_DOSSIER_V1_PR322_SEQUENTIAL_FROZEN_OUTCOME_RESOLUTION_01.md`. Разграничить законный новый разбор и противоречивые результаты старой замороженной группы; не блокировать новые успехи, при доказанном дефекте минимально исправить исходный PR №322.
-- **НОВЫЙ ЧАТ 5**: `progressive-deep-pr323-stage1-ci-blocker-disposition-01` → `WORKER_TASK_PROGRESSIVE_DEEP_PR323_STAGE1_CI_BLOCKER_DISPOSITION_01.md`. Проверить только отдельную красную проверку подготовки Deep, а не уже успешно проверенные исправления цен в PR №323.
-- **НОВЫЙ ЧАТ 6**: существующее поручение `steam-postmerge-actions-failures-fix-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_FAILURES_FIX_01.md`. Две известные ошибки автообновления Steam, сначала проверить их актуальность на текущем main. Не создавать дубликат task ID.
-- Прежние QA ЧАТЫ 1 и 2 сдали отчёты в draft PR №339 и №340; физическое освобождение этих бесед пользователем не подтверждено. Прежний ЧАТ 3 завершён по сообщению пользователя; новый ЧАТ 3 — отдельная чистая беседа.
-- Запуски допустимы только после принятия этой регистрации в main и успешных существующих регистрационных CI. Источники PR №322/323 не слиты. Вне полномочий любые семантические запуски, Scheduled Tasks, production, самостоятельное слияние.
+- **НОВЫЙ ЧАТ 1:** `dossier-v1-pr322-sequential-frozen-outcome-final-l3-delta-qa-01` → `WORKER_TASK_DOSSIER_V1_PR322_SEQUENTIAL_FROZEN_OUTCOME_FINAL_L3_DELTA_QA_01.md`. Независимая узкая L3 QA последней поправки Dossier в исходном PR №322. Не повторять общий аудит.
+- **НОВЫЙ ЧАТ 2:** `steam-postmerge-actions-failures-final-l3-qa-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_FAILURES_FINAL_L3_QA_01.md`. Независимая узкая L3 QA изменений цепочки актуальных предложений Steam в исходном PR №346. Без production запусков.
+- Исполнительские ЧАТЫ 3, 4 и 6 сдали свою работу; PR №345 уже принят директором в main, PR №322 и №346 ожидают независимую L3 QA. PR №323 и №344 ранее приняты.
+- Доступность физических ранее завершённых чатов не путать со статусом GitHub. Только новые физические ЧАТЫ 1/2 для указанной независимой проверки; отправка коротких prompt после зелёных CI и принятия этой регистрации в main.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
