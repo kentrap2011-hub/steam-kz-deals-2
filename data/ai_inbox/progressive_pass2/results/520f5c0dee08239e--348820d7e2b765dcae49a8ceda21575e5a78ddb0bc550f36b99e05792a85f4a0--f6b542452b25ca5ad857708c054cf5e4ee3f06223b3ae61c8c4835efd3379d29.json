@@ -1,0 +1,265 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "26f47af9727fa1c1c8260dbdbb00beaacf5ad579",
+  "run_start_authority_commit": "fa978416e5c762b40c7636bd7601aca3326c4cad",
+  "run_started_at_utc": "2026-10-28T05:59:29+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+  "work_id": "348820d7e2b765dcae49a8ceda21575e5a78ddb0bc550f36b99e05792a85f4a0",
+  "family_id": "game:1061090",
+  "taste_subject_key": "App_1061090",
+  "appid": "1061090",
+  "taste_fingerprint": "7a73bf4a42c88aedcc6457da6e5b7b074d312c68a68b05738a9f381cfa12d7a9",
+  "candidate_context_sha256": "1651a53d2aa84d0d80707e2301a83ea91d0c10c6274ce531341d4036b8c7061d",
+  "dossier_content_sha256": "2bd2bae98c3c7e00b3f41f21d3b57ed8eeedda4544036bad8b20b7fd7add89b3",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "f6b542452b25ca5ad857708c054cf5e4ee3f06223b3ae61c8c4835efd3379d29",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Точное дозирование длительности прыжка и освоение дистанций делают собственный навык главным источником прогресса.",
+    "Преодоление сложных участков даёт сильное ощущение лично заработанного достижения.",
+    "Платформенная геометрия и поздние испытания меняют конкретные задачи точного позиционирования, хотя базовые действия остаются простыми."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 88,
+    "development_variety": 35,
+    "structure_pacing_direction": 38,
+    "identity_hooks": 68,
+    "breadth_of_match": 48
+  },
+  "score_findings": [
+    {
+      "finding_id": "jk-mastery",
+      "text_ru": "Заряженный прыжок требует выработать точный тайминг и расстояние приземления: рост мастерства здесь ощущается напрямую, как в ценимых пользователем испытаниях на личный навык.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "a8ee354b2c11e92d886bb4f23c0b798a5b6588857c7117b8529abbb2ba001105",
+          "match_text_ru": "Любит понятные тайминги и совершенствование исполнения, а не просто формальное повышение сложности."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 88
+        }
+      ]
+    },
+    {
+      "finding_id": "jk-variety",
+      "text_ru": "Меняются платформы и характер точных приземлений, но почти весь путь строится на одном прыжке; для вкуса, которому требуется развитие игрового опыта, этого разнообразия немного.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "63ad5474cf30f1e268e78c5ddd2f4216e61a252b220e098173866db5431a24ee",
+          "match_text_ru": "Предпочитает появление новых ситуаций и механик, а не длительное повторение раскрытой формулы."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "qualifies",
+          "normalized_value": 35
+        }
+      ]
+    },
+    {
+      "finding_id": "jk-pacing",
+      "text_ru": "Одна ошибка может сбросить героя на много экранов вниз и заставить заново проходить знакомые участки: это противоречит предпочтению осмысленного прогресса без изматывающих повторов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8",
+          "profile_value_sha256": "0abb54a4c813b22d54eaaeeb901ed62ad0e996025b0ad44c59a7edf5728a4d7d",
+          "match_text_ru": "Повторение терпимо при сильном цикле, но утомляет, когда повторяется тот же путь без развития."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 38
+        }
+      ]
+    },
+    {
+      "finding_id": "jk-hook",
+      "text_ru": "Взятие сложной высоты после множества точных попыток — узнаваемый личный триумф, который может стать центральным запоминающимся крючком игры.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "a8ee354b2c11e92d886bb4f23c0b798a5b6588857c7117b8529abbb2ba001105",
+          "match_text_ru": "Высоко ценит чувство реального освоения трудного испытания собственными руками."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 68
+        }
+      ]
+    },
+    {
+      "finding_id": "jk-breadth",
+      "text_ru": "Вместо сюжета, разнообразных активностей и прокачки игра предлагает почти исключительно подъём и возврат на прежние участки после ошибок; сильное попадание в один аспект вкуса не покрывает остальные.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 7
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8",
+          "profile_value_sha256": "0abb54a4c813b22d54eaaeeb901ed62ad0e996025b0ad44c59a7edf5728a4d7d",
+          "match_text_ru": "Неоднократное прохождение одной и той же формулы не всегда компенсируется сильным основным действием."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "lowers",
+          "normalized_value": 48
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      },
+      {
+        "kind": "conflict",
+        "index": 1
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "difficulty_punishment",
+        "text_ru": "Потеря нескольких экранов прогресса из-за одного неточного прыжка заставляет многократно возвращаться через знакомые участки; это может превратить интересный вызов в утомительный цикл попыток.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Дополнительные маршруты и сложность Ghost of the Babe усиливают точность, но мнения о справедливости наказаний расходятся; они не гарантируют желанного роста разнообразия.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "conflict",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Сила заряда прыжка не показывается отдельным индикатором, а игроки спорят о предсказуемости управления; часть этого спора может разрешаться практикой.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      }
+    ]
+  }
+}
