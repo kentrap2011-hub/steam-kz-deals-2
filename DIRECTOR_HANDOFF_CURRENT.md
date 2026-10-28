@@ -3,7 +3,54 @@
 Repository: `kentrap2011-hub/steam-kz-deals-2`
 Source of truth: `main`
 
-## СВЕЖАЯ ПЕРЕДАЧА НОВОМУ ДИРЕКТОРУ — 2026-10-27 (ПРИОРИТЕТ ПЕРЕД ИСТОРИЕЙ)
+## СВЕЖАЯ ПЕРЕДАЧА НОВОМУ ДИРЕКТОРУ — 2026-10-28 (ЧИТАТЬ ТОЛЬКО ЭТОТ БЛОК, ДАЛЕЕ АДРЕСНО)
+
+**Предыдущий директорский чат выведен из дальнейшей проектной работы из-за лимита контекста и повторных ошибок нумерации.** Новый физический директорский чат начинает со свежего main, читает `CHAT_PROTOCOL.md`, выполняет START gate в Director mode, читает `DIRECTOR_PROTOCOL.md`, текущий верх `DIRECTOR_TASK_BOARD.md`, `DIRECTOR_BOOTSTRAP.md` и только этот верхний блок handoff. `config/director_task_plan.json` проверять по точным IDs; не сканировать все 139 задач или 90+ KB исторических разделов. Историческая инструкция ниже от 2026-10-27 «в первом ответе подготовить Dossier V2 freeze» УСТАРЕЛА: оригинальные 18 уже реально прошли isolated Research/Assembly, не повторять их.
+
+**Первая реплика нового директора:** ответить на ещё оставшийся вопрос пользователя: задачи только **зарегистрированы в GitHub**, ChatGPT не пересылает сообщения в другие физические беседы автоматически. Правильные и окончательно сохранённые в main номера после принятого PR [#334](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/334): **НОВЫЙ ЧАТ 1** — адресная доработка Dossier V1 прямо в открытом PR #322; **НОВЫЙ ЧАТ 2** — адресная доработка Progressive Fast/Deep прямо в открытом PR #323. НЕ использовать предыдущие варианты с новыми ЧАТАМИ 2–3, 10–12 или старые физические 7–8. Два запуска независимы; пользователь ещё не подтвердил, что новые ЧАТЫ 1 и 2 созданы/запущены. Не утверждать «работают» без его сообщения или свежих следов GitHub. В первом ответе вывести ДВА коротких копируемых launcher'а с точными именами ниже, **не создавать заново задания и не менять номера**.
+
+**Канонический запуск НОВОГО физического ЧАТА 1:**
+```text
+ЧАТ 1 — исправление конфликта ручного Dossier V1.
+
+Repository: kentrap2011-hub/steam-kz-deals-2
+Source of truth: main
+Работай только в указанном репозитории.
+
+Сначала прочитай CHAT_PROTOCOL.md и выполни START gate.
+
+Затем полностью выполни:
+WORKER_TASK_DOSSIER_V1_PR322_FROZEN_ROLLOVER_COLLISION_REPAIR_01.md
+```
+
+**Канонический запуск НОВОГО физического ЧАТА 2:**
+```text
+ЧАТ 2 — исправление оставшихся ошибок коммерческой проверки Fast/Deep.
+
+Repository: kentrap2011-hub/steam-kz-deals-2
+Source of truth: main
+Работай только в указанном репозитории.
+
+Сначала прочитай CHAT_PROTOCOL.md и выполни START gate.
+
+Затем полностью выполни:
+WORKER_TASK_PROGRESSIVE_DEEP_PR323_COMMERCIAL_GUARD_TARGETED_REPAIR_01.md
+```
+
+**Точная история последних директорских решений:**
+- [#325](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/325) — независимый повторный аудит ошибок нумерации ЧАТА 9, принят; [#333](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/333) — внедрены раздельные read-only CHAT_AVAILABILITY и запрет вывода «физический чат свободен» по GitHub статусу задачи. [#334](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/334) — исправил оставшуюся бронь ЧАТА 1: первоначальная физическая беседа ЧАТ 1 завершена пользователем; дальнейшая Steam post-merge Actions задача зарегистрирована, но не подтверждена как запущенная, поэтому её `worker_slot=null` при `status=active`, задача НЕ отменена. Новая пара PR-ремонтов получила номера 1 и 2.
+- [#329](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/329) и [#330](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/330) — принятые независимые QA отчёты, оба **CHANGES_REQUIRED**. PR #322 (manual Dossier) исправить только в исходной branch/PR: конфликт candidate+terminal на frozen old-snapshot при двух markers; добавить fail-closed карантин и targeted disposable-Git тест, потом independent L3 **только материальной дельты**. Не разрешать ручной one-shot до принятого L3. PR #323 (Fast/Deep) исправить в исходной branch/PR: `USD100`/`RUB100`, смешанные Cyrillic/Latin буквы в коммерческих токенах, лишний workflow_dispatch и посторонний CURRENT_TASK.md; сохранить исправление «грубую», историю попытки 1261040 не replay. Затем независимая QA только новой дельты; никаких новых implementation PR.
+- [#324](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/324) и [#331](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/331) — принятые аудит и диагностика реального Dossier V2 original18: **14 sandbox dossiers, 4 не приняты** (3 недостаточная evidence + 1 invalid), NO_GO production. `206420` исторические observations без обязательной historical/current-state evidence; `1607130` operation access вне схемы; `2124120` SULFUR pre-1.0 evidence. Не повторять исходные 18, не размывать strict validator, не создавать новые semantic attempts/recovery без отдельной авторизации. V2 remains isolated/non-production.
+- [#319](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/319): отдельный audit длинных запусков директора существует как report-only draft, не путать с #325; задача `director-recurrent-long-prompts-slow-registration-audit-01` за историческим ЧАТ 5. Не запускать его повторно без основания.
+- Steam: PR #311 и #312 merged 27.10; ограниченная нерешённая задача `steam-postmerge-actions-failures-fix-01` (две конкретные main workflow ошибки после merge) остаётся **active, без назначенного worker_slot**, не потерять её и не считать физический ЧАТ 1 занятым по этой записи. Разобрать отдельно после нынешних приоритетов/по решению пользователя.
+
+**Source of truth и дальнейшее управление:** актуальный main при начале handoff после #334 — `a38fa50d175bea848c0cc6f5beea2fd566022509`; после принятия этой передачи SHA снова изменится, всегда обновлять точный SHA. Регистр 139 task items (до этой передачи). `DIRECTOR_HANDOFF_CURRENT.md` ниже содержит архивные секции с устаревшими утверждениями об отсутствии V2 Research и не является authorization; `DIRECTOR_BOOTSTRAP.md` ниже также содержит старую историю, её игнорировать. Для статуса проверять PR HEAD/CI адресно, не называть открытый PR принятой реализацией. Не запускать production, semantic worker, GitHub workflow или Scheduled Tasks, не менять очередь, retries/markers/provenance без явного отдельного полномочия пользователя.
+
+**В конце первой реплики** коротко назвать, что физические чаты должен открыть сам пользователь. Дальше ждать их результатов и принимать по точным Gates; не начинать новую регистрацию и не раздавать другие номера самовольно.
+
+---
+
+## АРХИВНАЯ ПЕРЕДАЧА — 2026-10-27 (УСТАРЕЛА; НЕ ЗАПУСКАТЬ ПО НЕЙ)
 
 **Первая реплика нового Director-чата по прямой просьбе пользователя:** **сразу подготовить копируемый промпт для запуска настоящего Dossier V2 на исходных 18 играх**. Сначала прочесть актуальные `CHAT_PROTOCOL.md`, `DIRECTOR_PROTOCOL.md`, `DIRECTOR_BOOTSTRAP.md`, верх `DIRECTOR_TASK_BOARD.md` и этот свежий handoff; использовать exact текущий `main` и действующий финальный worker-report №309. Не начинать новую разработку, QA-серию или повторение зелёных тестов. В первом ответе дать краткие точные действия владельца (freeze → authorize) и **готовый короткий копируемый launcher первого самостоятельного Research V2 semantic worker** с честными placeholders для действительно полученных GitHub marker/authorization SHA. Затем, когда появятся реальные Research receipts, готовить отдельный launcher Assembly; не подменять его преждевременно фикстурами.
 
