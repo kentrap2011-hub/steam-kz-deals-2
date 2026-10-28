@@ -24,6 +24,7 @@ SAFE = (
     'Diѕcountenance is a valid noncommercial English word.',
     'Prіceless character growth is shown through choices.',
     'RUBicon is the name of a landmark.',
+    'USD100foo is a single noncommercial identifier.'
     'Символ ₽ на рисунке не сообщает сумму.',  # bare glyph is ambiguous
     'R U B 500 is a sequence of separate letters, not a currency token.',
 )
@@ -71,6 +72,8 @@ FORBIDDEN = (
     ('diѕcount 20%', 'discount'),  # Cyrillic dze
     ('ѕale', 'sale'),
     ('Рrice', 'price'),  # Cyrillic р
+    ('The rub feels abrasive', 'rub'),  # lexical homonym: conservative rejection
+    ('Sale is a character surname', 'sale'),  # lexical homonym: conservative rejection
 )
 RANKING_ONLY = (
     'Personal score increased',
