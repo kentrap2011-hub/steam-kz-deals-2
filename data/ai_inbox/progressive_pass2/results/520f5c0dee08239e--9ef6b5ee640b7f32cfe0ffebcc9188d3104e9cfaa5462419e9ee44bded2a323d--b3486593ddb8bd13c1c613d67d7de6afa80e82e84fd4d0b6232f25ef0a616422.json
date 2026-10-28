@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "26f47af9727fa1c1c8260dbdbb00beaacf5ad579",
+  "run_start_authority_commit": "fa978416e5c762b40c7636bd7601aca3326c4cad",
+  "run_started_at_utc": "2026-10-28T05:59:29+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+  "work_id": "9ef6b5ee640b7f32cfe0ffebcc9188d3104e9cfaa5462419e9ee44bded2a323d",
+  "family_id": "game:1835240",
+  "taste_subject_key": "App_1835240",
+  "appid": "1835240",
+  "taste_fingerprint": "020f38969cd1d0eac3b61468a98ed38ce6c8ede16ea14977a4539c5e8d8b619f",
+  "candidate_context_sha256": "80eb9ed424fa0b305c731be89a322f9a4af74e1a1098ceae1bdbd88a5cf13671",
+  "dossier_content_sha256": "4a94a75e9c01622780a784760be1708a8b685d57da64400f20208e5ede73c874",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "b3486593ddb8bd13c1c613d67d7de6afa80e82e84fd4d0b6232f25ef0a616422",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "high",
+  "positive_evidence": [
+    "Воздушные комбо, подбрасывания противников, отскоки от стен и точное перемещение делают бой самостоятельным источником мастерства.",
+    "Разные виды оружия и формы, случайные благословения и постоянные улучшения позволяют собирать новые способы вести бой в повторных забегах.",
+    "Выразительная рисованная графика и энергичная постановка боёв усиливают удовольствие от быстрого и отзывчивого управления."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 93,
+    "development_variety": 81,
+    "structure_pacing_direction": 74,
+    "identity_hooks": 80,
+    "breadth_of_match": 83
+  },
+  "score_findings": [
+    {
+      "finding_id": "spiritfall-mastery",
+      "text_ru": "Воздушные подбрасывания, удары от стены и выбор направления атаки требуют управлять высотой, расстоянием и временем — это прямое попадание в любовь к отточенным боевым навыкам.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "a8ee354b2c11e92d886bb4f23c0b798a5b6588857c7117b8529abbb2ba001105",
+          "match_text_ru": "Ценит изучение таймингов, комбо и исполнение сложных приёмов, особенно в динамичном экшене."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 93
+        }
+      ]
+    },
+    {
+      "finding_id": "spiritfall-builds",
+      "text_ru": "Разные наборы ударов оружия и комбинируемые благословения дают новые возможности для боевых сборок и экспериментов между забегами.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "63ad5474cf30f1e268e78c5ddd2f4216e61a252b220e098173866db5431a24ee",
+          "match_text_ru": "Особенно любит появление новых вариантов действий и развитие механик по мере игры."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 81
+        }
+      ]
+    },
+    {
+      "finding_id": "spiritfall-runs",
+      "text_ru": "Постепенное освоение движений и улучшения делают ранние тяжёлые забеги легче, но сама последовательность арен остаётся повторной и требует терпимости к одной структуре.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/8",
+          "profile_value_sha256": "0abb54a4c813b22d54eaaeeb901ed62ad0e996025b0ad44c59a7edf5728a4d7d",
+          "match_text_ru": "Повторы допустимы, когда сам игровой цикл увлекателен и в нём остаётся пространство для развития навыка."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 74
+        }
+      ]
+    },
+    {
+      "finding_id": "spiritfall-style",
+      "text_ru": "Рисованный фэнтезийный мир и выразительные анимации подчёркивают быстрые воздушные удары, создавая узнаваемое визуальное и игровое ощущение.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7",
+          "profile_value_sha256": "8dc84c282177a1936aba1bff927b5d078c29ff12440a0acdc3370483afb923ff",
+          "match_text_ru": "Яркий художественный стиль и узнаваемая атмосфера дополнительно усиливают интерес к игре."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 80
+        }
+      ]
+    },
+    {
+      "finding_id": "spiritfall-priority",
+      "text_ru": "Геймплей сосредоточен на непрерывном освоении боя; скромный сюжет не подменяет основное действие, а оставляет сильной механике ведущую роль.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3",
+          "profile_value_sha256": "5da9bef8fea95968a364663fb2ba30717ec04a0fa882f36e877f77530b9a40d1",
+          "match_text_ru": "В играх с увлекательным экшеном хороший непосредственный процесс способен компенсировать более простой сюжет."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 83
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Часть благословений может менять прежде всего цифры, а не действия, отчего последовательные забеги рискуют ощущаться похожими, несмотря на новые комбинации оружия.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Повторные забеги и поначалу высокая сложность требуют учиться таймингам; улучшения и знание синергий постепенно делают продвижение легче.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "История здесь играет второстепенную роль, а система алтарных улучшений описана не всем понятно; это может осложнять освоение сборок, хотя нынешний масштаб проблемы неизвестен.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          },
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
