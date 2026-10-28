@@ -484,6 +484,37 @@ def _frozen_rollover_transports(
         except (ValueError, KeyError, TypeError, OSError, json.JSONDecodeError, UnicodeDecodeError) as exc:
             rejected.append(_frozen_rejection(path, str(exc), retryable_rejection_root))
 
+    # Validate each immutable frozen transport first, then decide the outcome for
+    # its *group*, not for its marker. Different legitimate marker parents have
+    # different consumption keys but can authorize the same old-snapshot group.
+    # A candidate and semantic exhaustion cannot both be canonical for that
+    # group, even when their deterministic create-only paths are distinct.
+    def frozen_group_identity(entry):
+        proof = entry["proof"]
+        return (proof["snapshot_id"], int(proof["sequence"]), proof["group_sha256"])
+
+    conflicting_groups = (
+        {frozen_group_identity(entry) for entry in accepted}
+        & {frozen_group_identity(entry) for entry in terminals}
+    )
+    if conflicting_groups:
+        remaining_candidates = []
+        remaining_terminals = []
+        for entries, remaining in (
+            (accepted, remaining_candidates),
+            (terminals, remaining_terminals),
+        ):
+            for entry in entries:
+                if frozen_group_identity(entry) in conflicting_groups:
+                    rejected.append(_frozen_rejection(
+                        entry["path"],
+                        "conflicting_candidate_and_terminal_receipt_for_frozen_group",
+                        retryable_rejection_root,
+                    ))
+                else:
+                    remaining.append(entry)
+        accepted, terminals = remaining_candidates, remaining_terminals
+
     return accepted, terminals, rejected, replays
 
 
