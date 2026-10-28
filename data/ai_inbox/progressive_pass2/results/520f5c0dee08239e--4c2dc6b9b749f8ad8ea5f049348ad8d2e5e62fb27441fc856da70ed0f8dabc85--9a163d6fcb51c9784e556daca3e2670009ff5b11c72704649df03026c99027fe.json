@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "26f47af9727fa1c1c8260dbdbb00beaacf5ad579",
+  "run_start_authority_commit": "fa978416e5c762b40c7636bd7601aca3326c4cad",
+  "run_started_at_utc": "2026-10-28T05:59:29+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+  "work_id": "4c2dc6b9b749f8ad8ea5f049348ad8d2e5e62fb27441fc856da70ed0f8dabc85",
+  "family_id": "game:1084600",
+  "taste_subject_key": "App_1084600",
+  "appid": "1084600",
+  "taste_fingerprint": "7d954ac9546f7b01c6d8048a947f95a1774ce21c7c4c59ee74e88da4a8714008",
+  "candidate_context_sha256": "b732dccaff733e9cece84485b7b7eb3986e4b3080cbbcf18ed0beb6835dcc437",
+  "dossier_content_sha256": "1b75f8d3e765f24490d6b0fbb25a0da8f3ed75aee0b04b43ce10698fb0080ddf",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "9a163d6fcb51c9784e556daca3e2670009ff5b11c72704649df03026c99027fe",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Понятная цепочка заказов и восстановление поселения обеспечивает последовательные долгосрочные цели и заметную прокачку мастерской.",
+    "Новое оборудование, рецепты, горные выработки и отношения постепенно расширяют круг занятий.",
+    "Истории жителей, юмор, тёплый стиль и преображение пустынного городка дают не только рутину, но и характерное чувство места."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 41,
+    "development_variety": 84,
+    "structure_pacing_direction": 70,
+    "identity_hooks": 76,
+    "breadth_of_match": 78
+  },
+  "score_findings": [
+    {
+      "finding_id": "sandrock-challenge",
+      "text_ru": "Пустынные ограничения на воду и материалы требуют планирования хозяйства, но основной бой прост и не обеспечивает глубокого освоения экшен-навыка, которого профиль часто ищет.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6",
+          "profile_value_sha256": "a8ee354b2c11e92d886bb4f23c0b798a5b6588857c7117b8529abbb2ba001105",
+          "match_text_ru": "Ценит реальный рост навыка и понятные испытания; простая хозяйственная сложность не заменяет боевое мастерство."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 41
+        }
+      ]
+    },
+    {
+      "finding_id": "sandrock-growth",
+      "text_ru": "Новые станки, рецепты и возможности строительства постепенно расширяют работу мастерской; это даёт ценимое чувство содержательного развития, а не только повторение первого дня.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0",
+          "profile_value_sha256": "63ad5474cf30f1e268e78c5ddd2f4216e61a252b220e098173866db5431a24ee",
+          "match_text_ru": "Особенно любит, когда новые занятия и возможности появляются по ходу приключения."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 84
+        }
+      ]
+    },
+    {
+      "finding_id": "sandrock-goals",
+      "text_ru": "Главные заказы и восстановление города формируют понятную долгосрочную цель и видимый результат труда, что совпадает с потребностью видеть эффект прогрессии.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2",
+          "profile_value_sha256": "a3649c0bcd6d1f60e2bff84439498ccb1fe78509a96eabe6342d4efee4e951c7",
+          "match_text_ru": "Предпочитает понятную цель улучшения и наглядный результат прокачки."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 70
+        }
+      ]
+    },
+    {
+      "finding_id": "sandrock-place",
+      "text_ru": "Тёплый мультяшный образ пустынного поселения и наблюдаемое преображение окружающего мира дают узнаваемое эмоциональное место, а не абстрактную фабрику ресурсов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 9
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7",
+          "profile_value_sha256": "8dc84c282177a1936aba1bff927b5d078c29ff12440a0acdc3370483afb923ff",
+          "match_text_ru": "Выразительный стиль и атмосфера помогают игре оставить личный след."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 76
+        }
+      ]
+    },
+    {
+      "finding_id": "sandrock-community",
+      "text_ru": "Истории, отношения с горожанами и юмористические диалоги добавляют персонажный интерес поверх ремесленного цикла.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3",
+          "profile_value_sha256": "5da9bef8fea95968a364663fb2ba30717ec04a0fa882f36e877f77530b9a40d1",
+          "match_text_ru": "Высоко ценит убедительных персонажей и историю, способную поддерживать интерес к геймплею."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 78
+        }
+      ]
+    }
+  ],
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 7
+      },
+      {
+        "kind": "observation",
+        "index": 8
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "management_routine",
+        "text_ru": "Многочасовой сбор ресурсов, ожидание квестовых триггеров и повторяющиеся поручения могут превратить живую стройку в однообразное обслуживание хозяйства — конкретный риск для профиля.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "observation",
+            "index": 8
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "К концу длинной кампании отдельные улучшения могут исчерпаться раньше сюжета, и не вся огромная продолжительность сопровождается равномерным открытием возможностей.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Кооператив отличается от подробной одиночной сюжетной кампании и не обязан дать тот же общий опыт восстановления городка вдвоём.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 7
+          }
+        ]
+      }
+    ]
+  }
+}
