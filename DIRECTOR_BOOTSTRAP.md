@@ -1,12 +1,24 @@
 # DIRECTOR BOOTSTRAP
 
-Last refreshed: 2026-10-25
+Last refreshed: 2026-10-28
 
 Purpose: compact restart context for a **NEW physical Director conversation** after the previous Director chat reached its context limit.
 
+## ТЕКУЩИЙ СТАРТ НОВОГО ДИРЕКТОРА — 2026-10-28
+
+Source of truth: `main`, единственный репозиторий `kentrap2011-hub/steam-kz-deals-2`. **Сначала `CHAT_PROTOCOL.md` и START gate, `DIRECTOR_PROTOCOL.md`, затем ТОЛЬКО НОВЕЙШУЮ верхнюю секцию `DIRECTOR_HANDOFF_CURRENT.md` от 2026-10-28 и верх `DIRECTOR_TASK_BOARD.md`.** Ниже лежит архивный bootstrap от 2026-10-25 — его устаревшая инструкция начать с Dossier V2/ITAD уже выполнена и НЕ ДОЛЖНА запускаться.
+
+**Два правильных новых worker assignments после принятого PR #334:** `НОВЫЙ ЧАТ 1` — `WORKER_TASK_DOSSIER_V1_PR322_FROZEN_ROLLOVER_COLLISION_REPAIR_01.md`, исправляет ТОЛЬКО существующий PR #322; `НОВЫЙ ЧАТ 2` — `WORKER_TASK_PROGRESSIVE_DEEP_PR323_COMMERCIAL_GUARD_TARGETED_REPAIR_01.md`, исправляет ТОЛЬКО существующий PR #323. Никаких новых implementation PR, реальных Dossier/Deep запусков, production, scheduler/recovery. **Директор не может сам отправить prompt в другую беседу:** только пользователь вручную запускает каждого worker-а. PR #322 уже изменился на head `b2640095bbf17e45aa2f9c9c4207289bf6a7766a` и CI выполнялся во время handoff; перед призывом запускать ЧАТ 1 сперва проверить свежий PR/status, не создавать дубль.
+
+**Другие ключевые факты:** report-only QA #329/#330/#331 приняты, исходные PR #322/#323 остаются открыты и требуют узкой delta QA после исправлений; V2 original18 — 14 isolated dossiers, **NO_GO production**; PR #311/#312 уже merged; задача `steam-postmerge-actions-failures-fix-01` осталась без выделенного worker_slot, не была доказана как запущенная; принятый аудит нумерации #325 реализован в protocol PR #333. Не выводить доступность физической ChatGPT беседы из GitHub task status. Не возвращать пользователя в старые ЧАТЫ 7/8 и не перенумеровывать 1/2 снова по инерции.
+
+**Первый ответ нового директора** должен следовать **новому пользовательскому запросу**. Для вопроса о готовности назвать два номера 1/2, точные файлы и честно сообщить о необходимости ручного запуска; не переписывать 2026-10-27 launcher и не открывать весь исторический handoff.
+
+---
+
 This file is a bootstrap snapshot, not a replacement for canonical project truth. The new Director must read current `CHAT_PROTOCOL.md`, `DIRECTOR_PROTOCOL.md`, fresh `DIRECTOR_TASK_BOARD.md`, and current `main` first. Newer canonical GitHub state always wins over this file.
 
-## СВЕЖИЙ СТАРТ ДИРЕКТОРА — 2026-10-25
+## АРХИВ — СТАРТ ДИРЕКТОРА 2026-10-25 (УСТАРЕЛО; НЕ ЯВЛЯЕТСЯ ТЕКУЩИМ ПЛАНОМ)
 
 Для актуального состояния чатов 1–5 и плана сперва прочитать **только верхнюю секцию 2026-10-25** файла `DIRECTOR_HANDOFF_CURRENT.md`, затем верх `DIRECTOR_TASK_BOARD.md` и нужные записи `config/director_task_plan.json`. Ниже в этом файле идут архивные снимки от 2026-10-20 — не использовать их как актуальную очередь.
 
