@@ -2517,7 +2517,7 @@
     },
     {
       "id": "steam-postmerge-actions-failures-fix-01",
-      "title": "НЕ НАЗНАЧЕНО — исправление ошибок GitHub Actions после объединения Steam топ-100",
+      "title": "ЧАТ 6 — устранить ошибки автоматического обновления сайта Steam",
       "goal": "Ограниченное исправление подтверждённых сбоев mailing policy и offer family resolution на main после принятия изменения №311; узкие тесты и один PR без ручного production.",
       "status": "active",
       "effort": "средняя",
@@ -2525,13 +2525,13 @@
       "urgency": "высокая",
       "urgency_reason": "Автоматическое обновление сайта сталкивается с ошибками после объединения новой витрины.",
       "task_file": "WORKER_TASK_STEAM_POSTMERGE_ACTIONS_FAILURES_FIX_01.md",
-      "worker_slot": null,
+      "worker_slot": "ЧАТ 6",
       "order": null,
       "depends_on": [],
-      "blocker": "Ранее закреплённый физический ЧАТ 1 закончил прежнюю работу по PR №311. Назначение на последующее исправление Actions не подтверждено как запущенное, поэтому слот снят без закрытия задачи. Ожидает отдельного director assignment; task-file не запускать без нового назначения.",
+      "blocker": "Новый физический ЧАТ 6; существующая незапущенная задача без дублирования. Сперва подтвердить, что обе ошибки всё ещё актуальны для main.",
       "recent_completion": false,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T09:20:00Z"
+      "updated_at_utc": "2026-10-28T18:39:56.410Z"
     },
     {
       "id": "director-recurrent-long-prompts-slow-registration-audit-01",
@@ -2719,8 +2719,8 @@
       "goal": "Проверить только материальную поправку конфликта old-snapshot candidate/terminal через разные markers и точный HEAD/CI перед директорской приёмкой исходного PR №322.",
       "task_file": "WORKER_TASK_DOSSIER_V1_PR322_FROZEN_ROLLOVER_FINAL_DELTA_L3_QA_01.md",
       "worker_slot": "ЧАТ 1",
-      "blocker": "Новый физический ЧАТ 1; прежний разработчик ЧАТ 1 завершён пользователем. Один независимый report-only QA PR; никакого ручного semantic Dossier, source PR №322 оставлять открытым.",
-      "status": "active",
+      "blocker": "Отчёт сдан в draft PR №339; CHANGES_REQUIRED по последовательным противоположным результатам одной старой группы.",
+      "status": "complete",
       "effort": "низкая",
       "effort_reason": "Только материальная L3-доработка, уже принятый широкий QA #330 не повторяется.",
       "urgency": "высокая",
@@ -2729,9 +2729,9 @@
       "depends_on": [
         "dossier-v1-pr322-frozen-rollover-collision-repair-01"
       ],
-      "recent_completion": false,
+      "recent_completion": true,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T11:54:52.019Z"
+      "updated_at_utc": "2026-10-28T18:39:56.410Z"
     },
     {
       "id": "progressive-deep-pr323-commercial-guard-final-delta-qa-01",
@@ -2739,8 +2739,8 @@
       "goal": "Проверить только материальные исправления currency-adjacent/mixed-script, чистоту scope, точный HEAD/CI и blocker красного Deep Stage 1 check перед директорской приёмкой PR №323.",
       "task_file": "WORKER_TASK_PROGRESSIVE_DEEP_PR323_COMMERCIAL_GUARD_FINAL_DELTA_QA_01.md",
       "worker_slot": "ЧАТ 2",
-      "blocker": "Новый физический ЧАТ 2; прежний разработчик ЧАТ 2 завершён пользователем. Один независимый report-only QA PR; красный required CI нельзя игнорировать, historical recovery/replay запрещены.",
-      "status": "active",
+      "blocker": "Отчёт сдан в draft PR №340; lexical PASS, но существует отдельная красная проверка подготовки Deep.",
+      "status": "complete",
       "effort": "низкая",
       "effort_reason": "Только материальная поправка по принятой QA #329 и точечная оценка одного красного CI.",
       "urgency": "высокая",
@@ -2749,15 +2749,15 @@
       "depends_on": [
         "progressive-deep-pr323-commercial-guard-targeted-repair-01"
       ],
-      "recent_completion": false,
+      "recent_completion": true,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T11:54:52.019Z"
+      "updated_at_utc": "2026-10-28T18:39:56.410Z"
     },
     {
       "id": "director-repeated-registration-failures-systemic-fix-01",
       "title": "ЧАТ 3 — почему повторяются регистрационные ошибки директора и как устранить их системно",
       "goal": "Разобрать подтверждённые ошибки регистрации №338 после аналогичного случая №317, сопоставить прежние аудиты и предложить одно технически исполнимое устойчивое исправление.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Нужен адресный разбор двух CI-сбоев и ранее готовых директорских аудитов с техническим планом предотвращения повторений.",
       "urgency": "высокая",
@@ -2766,10 +2766,70 @@
       "worker_slot": "ЧАТ 3",
       "order": null,
       "depends_on": [],
-      "blocker": "Новый физический ЧАТ 3; ЧАТЫ 1/2 запущены пользователем и заняты независимой QA. Только один report-only draft PR, никаких изменений директорских правил, реестра, исходных PR или запусков.",
+      "blocker": "Отчёт сдан в draft PR №342; AUDIT_COMPLETE; предложена реализация технической prewrite-проверки.",
+      "recent_completion": true,
+      "updated_on": "2026-10-28",
+      "updated_at_utc": "2026-10-28T18:39:56.410Z"
+    },
+    {
+      "id": "director-typed-registration-prewrite-implement-01",
+      "title": "ЧАТ 3 — техническая защита регистрации задач",
+      "goal": "Разработать техническую проверку новых директорских заданий до записи в GitHub и запретить неразрешённые изменения старых заданий",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Точечное действие по конкретному отчёту с уже установленными границами.",
+      "urgency": "высокая",
+      "urgency_reason": "Текущий проектный результат блокирован или повторяющаяся ошибка управления всё ещё не устранена.",
+      "task_file": "WORKER_TASK_DIRECTOR_TYPED_REGISTRATION_PREWRITE_IMPLEMENT_01.md",
+      "worker_slot": "ЧАТ 3",
+      "order": null,
+      "depends_on": [
+        "director-repeated-registration-failures-systemic-fix-01"
+      ],
+      "blocker": "Новый физический ЧАТ 3; только адресная работа согласно именованному поручению, без самостоятельной приёмки или production.",
       "recent_completion": false,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T12:03:49.134Z"
+      "updated_at_utc": "2026-10-28T18:39:56.410Z"
+    },
+    {
+      "id": "dossier-v1-pr322-sequential-frozen-outcome-resolution-01",
+      "title": "ЧАТ 4 — последовательные результаты Dossier без потери успешного обзора",
+      "goal": "Выяснить, является ли повторный результат реальной угрозой успешному обзору, и минимально исправить подтверждённый дефект в прежнем PR №322",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Точечное действие по конкретному отчёту с уже установленными границами.",
+      "urgency": "высокая",
+      "urgency_reason": "Текущий проектный результат блокирован или повторяющаяся ошибка управления всё ещё не устранена.",
+      "task_file": "WORKER_TASK_DOSSIER_V1_PR322_SEQUENTIAL_FROZEN_OUTCOME_RESOLUTION_01.md",
+      "worker_slot": "ЧАТ 4",
+      "order": null,
+      "depends_on": [
+        "dossier-v1-pr322-frozen-rollover-final-delta-l3-qa-01"
+      ],
+      "blocker": "Новый физический ЧАТ 4; только адресная работа согласно именованному поручению, без самостоятельной приёмки или production.",
+      "recent_completion": false,
+      "updated_on": "2026-10-28",
+      "updated_at_utc": "2026-10-28T18:39:56.410Z"
+    },
+    {
+      "id": "progressive-deep-pr323-stage1-ci-blocker-disposition-01",
+      "title": "ЧАТ 5 — причина красной проверки подготовки Deep",
+      "goal": "Разобраться с отдельной красной проверкой подготовки Deep, не перепроверяя уже успешно исправленную защиту от цен",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Точечное действие по конкретному отчёту с уже установленными границами.",
+      "urgency": "высокая",
+      "urgency_reason": "Текущий проектный результат блокирован или повторяющаяся ошибка управления всё ещё не устранена.",
+      "task_file": "WORKER_TASK_PROGRESSIVE_DEEP_PR323_STAGE1_CI_BLOCKER_DISPOSITION_01.md",
+      "worker_slot": "ЧАТ 5",
+      "order": null,
+      "depends_on": [
+        "progressive-deep-pr323-commercial-guard-final-delta-qa-01"
+      ],
+      "blocker": "Новый физический ЧАТ 5; только адресная работа согласно именованному поручению, без самостоятельной приёмки или production.",
+      "recent_completion": false,
+      "updated_on": "2026-10-28",
+      "updated_at_utc": "2026-10-28T18:39:56.410Z"
     }
   ]
 }
