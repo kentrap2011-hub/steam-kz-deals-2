@@ -2683,17 +2683,17 @@
       "goal": "После независимой L3 QA №330 исправить только конфликт несовместимых результатов двух маркеров при rollover, сохранить оригинальный PR и штатную GitHub authority.",
       "task_file": "WORKER_TASK_DOSSIER_V1_PR322_FROZEN_ROLLOVER_COLLISION_REPAIR_01.md",
       "worker_slot": "ЧАТ 1",
-      "blocker": "Новый физический ЧАТ 1; старые ЧАТ 7 и предыдущий QA ЧАТ 2 не продолжаются. Исправлять только existing PR №322. Независимая L3 проверка материальной дельты до принятия.",
-      "status": "active",
+      "blocker": "Исполнитель завершил адресное исправление в существующем PR #322 (HEAD fb099b64); источник всё ещё unmerged и ждёт независимой финальной L3 delta QA.",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Точечная доработка выявленного блокера в ранее открытом PR, без нового проекта.",
       "urgency": "высокая",
       "urgency_reason": "Независимая проверка выявила конкретный неисправленный дефект, препятствующий приёмке.",
       "order": null,
       "depends_on": [],
-      "recent_completion": false,
+      "recent_completion": true,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T09:20:00Z"
+      "updated_at_utc": "2026-10-28T11:54:52.019Z"
     },
     {
       "id": "progressive-deep-pr323-commercial-guard-targeted-repair-01",
@@ -2701,17 +2701,57 @@
       "goal": "После QA №329 закрыть USD100 и смешанные алфавиты, удалить лишние PR изменения, не потерять фиксы «руб» и сохранить исторический recovery untouched.",
       "task_file": "WORKER_TASK_PROGRESSIVE_DEEP_PR323_COMMERCIAL_GUARD_TARGETED_REPAIR_01.md",
       "worker_slot": "ЧАТ 2",
-      "blocker": "Новый физический ЧАТ 2; старые ЧАТ 8 и предыдущий QA ЧАТ 3 не продолжаются. Исправлять только existing PR №323. Нужна адресная delta QA до принятия.",
-      "status": "active",
+      "blocker": "Исполнитель завершил адресное исправление в существующем PR #323 (HEAD 703e9242); источник unmerged, ждёт независимой delta QA и оценки красного Deep Stage 1 CI.",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Точечная доработка выявленного блокера в ранее открытом PR, без нового проекта.",
       "urgency": "высокая",
       "urgency_reason": "Независимая проверка выявила конкретный неисправленный дефект, препятствующий приёмке.",
       "order": null,
       "depends_on": [],
+      "recent_completion": true,
+      "updated_on": "2026-10-28",
+      "updated_at_utc": "2026-10-28T11:54:52.019Z"
+    },
+    {
+      "id": "dossier-v1-pr322-frozen-rollover-final-delta-l3-qa-01",
+      "title": "ЧАТ 1 — независимая финальная L3 delta QA исправления frozen rollover в PR №322",
+      "goal": "Проверить только материальную поправку конфликта old-snapshot candidate/terminal через разные markers и точный HEAD/CI перед директорской приёмкой исходного PR №322.",
+      "task_file": "WORKER_TASK_DOSSIER_V1_PR322_FROZEN_ROLLOVER_FINAL_DELTA_L3_QA_01.md",
+      "worker_slot": "ЧАТ 1",
+      "blocker": "Новый физический ЧАТ 1; прежний разработчик ЧАТ 1 завершён пользователем. Один независимый report-only QA PR; никакого ручного semantic Dossier, source PR #322 оставлять открытым.",
+      "status": "active",
+      "effort": "малая",
+      "effort_reason": "Только материальная L3-доработка, уже принятый широкий QA #330 не повторяется.",
+      "urgency": "высокая",
+      "urgency_reason": "Без независимой L3 delta QA нельзя объединять изменение полномочий ручного Dossier V1.",
+      "order": null,
+      "depends_on": [
+        "dossier-v1-pr322-frozen-rollover-collision-repair-01"
+      ],
       "recent_completion": false,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T09:20:00Z"
+      "updated_at_utc": "2026-10-28T11:54:52.019Z"
+    },
+    {
+      "id": "progressive-deep-pr323-commercial-guard-final-delta-qa-01",
+      "title": "ЧАТ 2 — независимая финальная delta QA коммерческой защиты Fast/Deep в PR №323",
+      "goal": "Проверить только материальные исправления currency-adjacent/mixed-script, чистоту scope, точный HEAD/CI и blocker красного Deep Stage 1 check перед директорской приёмкой PR №323.",
+      "task_file": "WORKER_TASK_PROGRESSIVE_DEEP_PR323_COMMERCIAL_GUARD_FINAL_DELTA_QA_01.md",
+      "worker_slot": "ЧАТ 2",
+      "blocker": "Новый физический ЧАТ 2; прежний разработчик ЧАТ 2 завершён пользователем. Один независимый report-only QA PR; красный required CI нельзя игнорировать, historical recovery/replay запрещены.",
+      "status": "active",
+      "effort": "малая",
+      "effort_reason": "Только материальная поправка по принятой QA #329 и точечная оценка одного красного CI.",
+      "urgency": "высокая",
+      "urgency_reason": "Source PR #323 ещё не принят: нужно исключить обходы коммерческой защиты и оценить обязательные CI.",
+      "order": null,
+      "depends_on": [
+        "progressive-deep-pr323-commercial-guard-targeted-repair-01"
+      ],
+      "recent_completion": false,
+      "updated_on": "2026-10-28",
+      "updated_at_utc": "2026-10-28T11:54:52.019Z"
     }
   ]
 }
