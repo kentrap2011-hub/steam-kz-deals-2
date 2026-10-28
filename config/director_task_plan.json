@@ -2519,7 +2519,7 @@
       "id": "steam-postmerge-actions-failures-fix-01",
       "title": "ЧАТ 6 — устранить ошибки автоматического обновления сайта Steam",
       "goal": "Ограниченное исправление подтверждённых сбоев mailing policy и offer family resolution на main после принятия изменения №311; узкие тесты и один PR без ручного production.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Две точные ошибки воспроизведены журналами GitHub; правки должны сохранить строгие проверки и целостность списка.",
       "urgency": "высокая",
@@ -2528,10 +2528,10 @@
       "worker_slot": "ЧАТ 6",
       "order": null,
       "depends_on": [],
-      "blocker": "Новый физический ЧАТ 6; существующая незапущенная задача без дублирования. Сперва подтвердить, что обе ошибки всё ещё актуальны для main.",
-      "recent_completion": false,
+      "blocker": "Разработка сдана в PR №346, ожидает независимой L3 QA.",
+      "recent_completion": true,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T18:39:56.410Z"
+      "updated_at_utc": "2026-10-28T19:49:31.319Z"
     },
     {
       "id": "director-recurrent-long-prompts-slow-registration-audit-01",
@@ -2775,7 +2775,7 @@
       "id": "director-typed-registration-prewrite-implement-01",
       "title": "ЧАТ 3 — техническая защита регистрации задач",
       "goal": "Разработать техническую проверку новых директорских заданий до записи в GitHub и запретить неразрешённые изменения старых заданий",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Точечное действие по конкретному отчёту с уже установленными границами.",
       "urgency": "высокая",
@@ -2786,16 +2786,16 @@
       "depends_on": [
         "director-repeated-registration-failures-systemic-fix-01"
       ],
-      "blocker": "Новый физический ЧАТ 3; только адресная работа согласно именованному поручению, без самостоятельной приёмки или production.",
-      "recent_completion": false,
+      "blocker": "Работа выполнена, исходный PR №345 принят в main.",
+      "recent_completion": true,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T18:39:56.410Z"
+      "updated_at_utc": "2026-10-28T19:49:31.319Z"
     },
     {
       "id": "dossier-v1-pr322-sequential-frozen-outcome-resolution-01",
       "title": "ЧАТ 4 — последовательные результаты Dossier без потери успешного обзора",
       "goal": "Выяснить, является ли повторный результат реальной угрозой успешному обзору, и минимально исправить подтверждённый дефект в прежнем PR №322",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Точечное действие по конкретному отчёту с уже установленными границами.",
       "urgency": "высокая",
@@ -2806,10 +2806,10 @@
       "depends_on": [
         "dossier-v1-pr322-frozen-rollover-final-delta-l3-qa-01"
       ],
-      "blocker": "Новый физический ЧАТ 4; только адресная работа согласно именованному поручению, без самостоятельной приёмки или production.",
-      "recent_completion": false,
+      "blocker": "Отчёт и исправление внесены в PR №322. Ожидает узкой независимой L3 QA.",
+      "recent_completion": true,
       "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T18:39:56.410Z"
+      "updated_at_utc": "2026-10-28T19:49:31.319Z"
     },
     {
       "id": "progressive-deep-pr323-stage1-ci-blocker-disposition-01",
@@ -2830,6 +2830,46 @@
       "recent_completion": false,
       "updated_on": "2026-10-28",
       "updated_at_utc": "2026-10-28T18:39:56.410Z"
+    },
+    {
+      "id": "dossier-v1-pr322-sequential-frozen-outcome-final-l3-delta-qa-01",
+      "title": "ЧАТ 1 — Независимая L3-проверка нового исправления Dossier V1",
+      "goal": "Проверить безопасное разрешение последовательных противоположных результатов одной старой группы в исходном изменении №322.",
+      "status": "active",
+      "effort": "низкая",
+      "effort_reason": "Узкая независимая проверка только последней дельты без повторения общего аудита.",
+      "urgency": "высокая",
+      "urgency_reason": "Исправление готово, но его безопасность ещё не подтверждена отдельной приёмкой.",
+      "task_file": "WORKER_TASK_DOSSIER_V1_PR322_SEQUENTIAL_FROZEN_OUTCOME_FINAL_L3_DELTA_QA_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-v1-pr322-sequential-frozen-outcome-resolution-01"
+      ],
+      "blocker": "Новый физический ЧАТ 1; только report-only проверка указанного исходного изменения. Самовольное объединение запрещено.",
+      "updated_on": "2026-10-28",
+      "updated_at_utc": "2026-10-28T19:49:31.319Z",
+      "recent_completion": false
+    },
+    {
+      "id": "steam-postmerge-actions-failures-final-l3-qa-01",
+      "title": "ЧАТ 2 — Независимая L3-проверка исправления автоматического обновления Steam",
+      "goal": "Проверить корректность связей актуальных предложений и исторических оценок при восстановлении обновления сайта Steam.",
+      "status": "active",
+      "effort": "низкая",
+      "effort_reason": "Узкая независимая проверка только последней дельты без повторения общего аудита.",
+      "urgency": "высокая",
+      "urgency_reason": "Исправление готово, но его безопасность ещё не подтверждена отдельной приёмкой.",
+      "task_file": "WORKER_TASK_STEAM_POSTMERGE_ACTIONS_FAILURES_FINAL_L3_QA_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "steam-postmerge-actions-failures-fix-01"
+      ],
+      "blocker": "Новый физический ЧАТ 2; только report-only проверка указанного исходного изменения. Самовольное объединение запрещено.",
+      "updated_on": "2026-10-28",
+      "updated_at_utc": "2026-10-28T19:49:31.319Z",
+      "recent_completion": false
     }
   ]
 }
