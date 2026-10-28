@@ -5,6 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
+## АКТУАЛЬНО — системный разбор повторных ошибок директора, ЧАТ 3, 2026-10-28
+
+- **Куда отправить: НОВЫЙ ЧАТ — ЧАТ 3.** `director-repeated-registration-failures-systemic-fix-01` → `WORKER_TASK_DIRECTOR_REPEATED_REGISTRATION_FAILURES_SYSTEMIC_FIX_01.md`. Независимый **read-only** системный разбор повторения регистрационных ошибок PR №338 после почти аналогичного случая PR №317 и уже подготовленного report-only аудита PR №319: точная причинность, принятые против оставшихся на бумаге рекомендации, несколько реально разных архитектурных вариантов, **один исполнимый план исправления**. Итог — один report-only draft PR, без самостоятельной реализации/очередного общего аудита/параллельного QA.
+- **Физические чаты:** пользователь подтвердил **запуск** новых ЧАТОВ 1 и 2 по заданиям PR №322 / PR №323. Они заняты независимой QA; назначенный новый ЧАТ 3 запускается отдельно после этой регистрации в `main` и успешной существующей CI. Ни одному из этих чатов не передавать Steam Actions или иные независимые задачи без нового назначения.
+- **Другое:** `steam-postmerge-actions-failures-fix-01` всё ещё без worker-слота; PR №319 — уже существующий черновой отчет по предыдущему схожему эпизоду, не дублировать его исследование. Настоящие Dossier/Deep/production и Scheduled Tasks не запускать.
+
 ## АКТУАЛЬНО — новые независимые QA-чаты 1 и 2, 2026-10-28
 
 - **Куда отправить: НОВЫЙ ЧАТ — ЧАТ 1**. `dossier-v1-pr322-frozen-rollover-final-delta-l3-qa-01` → `WORKER_TASK_DOSSIER_V1_PR322_FROZEN_ROLLOVER_FINAL_DELTA_L3_QA_01.md`. Отдельная физическая беседа, **не** продолжение завершённого ЧАТА 1 разработчика: одна независимая L3-проверка **только материальной поправки** frozen old-snapshot candidate+terminal в исходном PR #322, точного HEAD/CI и ранее принятых замечаний QA #330. Один report-only PR, без запуска Dossier, без merge/production и без нового source PR.
