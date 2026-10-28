@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "24231baeba3dc2535bdf8c692752840f6dfe7dfc",
+  "run_start_authority_commit": "8c0fdc8ed638d82af29ed69ecec8abeb121d581e",
+  "run_started_at_utc": "2026-10-28T03:56:55+00:00",
+  "semantic_generation_id": "520f5c0dee08239e5efa494f77052744c43678e2ba55f444f89cacaefeaea42a",
+  "profile_pin_sha256": "82a80748d5511b2dec58262f22858f25e3d00c37bf94b725b88c801478ae9568",
+  "work_id": "c7e26b9e37095deb79ffcdb1de6c72cacbec572a1a616a2a5f89184e9f59c4b7",
+  "family_id": "game:1045720",
+  "taste_subject_key": "App_1045720",
+  "appid": "1045720",
+  "taste_fingerprint": "86531bb9ef441d6bdce138f1da40346a48125dd4ec4f0e43b80d7c02a8f176fb",
+  "candidate_context_sha256": "02e120c9a2cd0b9cfbdfebec63a23bcab71dc4c112b146b38e9462e6a9ff7ba8",
+  "dossier_content_sha256": "22ea6fe4cc4200b41395bbcedb5bf1891dfb72b463dbf13ef2ca834ac71fe9fc",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "5aa6146dbaae5999953ab4ba6c3073df40cdb83bf313e192de1d653b10f00589",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "confidence": "medium",
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Повторение маршрутов и QTE-погонь иногда разрушает напряжение и заставляет переделывать одинаковые эпизоды.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "observation",
+            "index": 5
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Крафт и ограниченные ресурсы требуют подготовки: неудача в сюжетной встрече может создавать дополнительные потери.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "positive_evidence": [
+    "В расширенных районах города и сверхъестественного мира появляется больше мест и побочных задач, чем в первой части.",
+    "Иллюстрации, звук и корейский хоррор создают выразимый художественный и сюжетный крючок.",
+    "Укрытия, тайминги и подготовка расходников могут дать напряжённое прохождение, хотя повторные погони снижают разнообразие."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 60,
+    "development_variety": 65,
+    "structure_pacing_direction": 58,
+    "identity_hooks": 81,
+    "breadth_of_match": 58
+  },
+  "score_findings": [
+    {
+      "finding_id": "hide-timing",
+      "text_ru": "Укрытия, расход выносливости и уклонение от преследователя требуют таймингов, но не всегда дают ощущение честной обучаемости.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        },
+        {
+          "kind": "observation",
+          "index": 6
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/6/pattern",
+          "profile_value_sha256": "b3cafdb65f72533a4aaf8db1560a4ab0c259fc870b65f194a09f9e26e540e581",
+          "match_text_ru": "Интерес к мастерству не означает терпимости к непрозрачным потерям."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 60
+        }
+      ]
+    },
+    {
+      "finding_id": "bigger-districts",
+      "text_ru": "Путешествие выходит за пределы школы в городские и сверхъестественные районы с побочными заданиями.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Разнообразие окружения и ситуаций повышает интерес."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 65
+        }
+      ]
+    },
+    {
+      "finding_id": "chase-repeat",
+      "text_ru": "Повторные обходы комнат и проигранные погони могут затягивать продвижение между содержательными открытиями.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 4
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/repetition_and_revisiting/summary",
+          "profile_value_sha256": "901465f98796f76ad70fb5b3f75bee97d6bf0f46783634d16b81abf21561c52d",
+          "match_text_ru": "Важен новый опыт при повторе, а не прохождение прежних участков без изменений."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 58
+        }
+      ]
+    },
+    {
+      "finding_id": "korean-horror",
+      "text_ru": "Иллюстративная подача, звук и корейская мистика придают истории особую атмосферу.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Выразимая эстетическая идентичность является значимым крючком."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 81
+        }
+      ]
+    },
+    {
+      "finding_id": "stealth-pressure",
+      "text_ru": "Погони и обязательные укрытия поддерживают напряжение, но однотипные подсказки и движения могут раздражать.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 5
+        },
+        {
+          "kind": "conflict",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/contextual_preferences/approach_choice_and_stealth/summary",
+          "profile_value_sha256": "59486465b9f9bfa0520ca63524f3d29f616baf24cf6376f5e4419c753b0372dc",
+          "match_text_ru": "Стелс работает лучше, если действия осмысленны и правила читаемы."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "qualifies",
+          "normalized_value": 58
+        }
+      ]
+    }
+  ]
+}
