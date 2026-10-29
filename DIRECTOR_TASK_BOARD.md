@@ -5,12 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — досрочное завершение ручного Dossier V1, 2026-10-29
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — системный аудит директорской приёмки PR, 2026-10-29
 
-- **НОВЫЙ ЧАТ 2 — ожидает запуска:** `dossier-v1-manual-postgroup-stop-gate-01` → `WORKER_TASK_DOSSIER_V1_MANUAL_POSTGROUP_STOP_GATE_01.md`. Одно адресное исправление continuation/finalization gate для ручного one-shot после отправки группы №1, без повторного анализа, второго маркера или изменений scheduled runtime.
-- **НОВЫЙ ЧАТ 1 — назначен, запуск не подтверждён:** `steam-postmerge-actions-l3-final-delta-qa-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_L3_FINAL_DELTA_QA_01.md`. Узкая независимая L3 QA CR-1/2/3 в PR №346.
-- **ЧАТЫ 3, 4, 5 и 6:** прежние задания завершены, операционно свободны. Отдельный семантический one-shot Dossier не занимает номер рабочего чата и не превращается автоматически в новый запуск.
-- После выполнения ЧАТА 2 — независимая узкая L3 delta QA и решение директора по безопасной приёмке. Не запускать semantic, production, Scheduled Tasks, новые очереди или recovery.
+- **НОВЫЙ ЧАТ 1 — ожидает запуска:** `director-postqa-merge-followthrough-systemic-audit-01` → `WORKER_TASK_DIRECTOR_POSTQA_MERGE_FOLLOWTHROUGH_SYSTEMIC_AUDIT_01.md`. Независимый report-only аудит: почему директор после PASS QA №356 и GREEN CI снова не выполнил принятие исходного PR №346 без дополнительного запроса; сравнить старые аудиты директора №251/305/319/325/342/351 и реализованные изменения. Выдать одно узкое IMPLEMENT-предложение, без переписывания протокола самим аудитором.
+- **ЧАТ 1 (предыдущий) — завершён:** `steam-postmerge-actions-l3-final-delta-qa-01`, отчёт №356 PASS, исходный PR №346 **ПРИНЯТ** в main коммитом `3ea4749c2ce3880ed0034c8bded78334bed348f0`; ранее занятого номера больше нет. Live Steam production/site postmerge acceptance отдельно НЕ подтверждена.
+- **ЧАТ 2 — пользователь подтвердил запуск:** `dossier-v1-manual-postgroup-stop-gate-01` → `WORKER_TASK_DOSSIER_V1_MANUAL_POSTGROUP_STOP_GATE_01.md`. Выполняет узкое исправление преждевременной остановки ручного Dossier после группы №1; без семантического запуска.
+- **ЧАТЫ 3, 4, 5, 6 — свободны.** Рабочие номера освобождаются после итоговой сдачи независимо от незакрытых отчётных PR; отдельная семантика Dossier не занимает worker slot.
+- Следующая независимая L3 QA для Dossier — только после готового исправления ЧАТА 2. Для Steam запрещено считать успешное объединение исходного PR доказательством живого обновления сайта.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
