@@ -2936,7 +2936,7 @@
       "id": "steam-postmerge-actions-l3-final-delta-qa-01",
       "title": "ЧАТ 1 — независимая L3 QA последних трёх исправлений Steam",
       "goal": "Подтвердить устранение CR-1/CR-2/CR-3 в исходном PR №346 без повторения общего аудита или live production.",
-      "status": "active",
+      "status": "complete",
       "effort": "низкая",
       "effort_reason": "Только три конкретные материальные дельты и регрессии по прежнему QA №349.",
       "urgency": "высокая",
@@ -2947,10 +2947,10 @@
       "depends_on": [
         "steam-postmerge-actions-l3-targeted-repair-01"
       ],
-      "blocker": "Новый физический ЧАТ 1; одна независимая report-only L3 delta QA по исправлениям CR-1/CR-2/CR-3 в исходном PR №346.",
-      "recent_completion": false,
+      "blocker": "Итоговая независимая QA PR №356: PASS_FOR_DIRECTOR_MERGE на HEAD 8619ad1d; source PR №346 принят в main как 3ea4749c2ce3880ed0034c8bded78334bed348f0.",
+      "recent_completion": true,
       "updated_on": "2026-10-29",
-      "updated_at_utc": "2026-10-29T10:28:29.876Z"
+      "updated_at_utc": "2026-10-29T11:22:00.719Z"
     },
     {
       "id": "dossier-v1-manual-postgroup-stop-gate-01",
@@ -2970,6 +2970,27 @@
       "blocker": "Новый физический ЧАТ 2: узкое исправление manual launcher без запуска Dossier или расширения authority.",
       "updated_on": "2026-10-29",
       "updated_at_utc": "2026-10-29T10:54:10.912Z",
+      "recent_completion": false
+    },
+    {
+      "id": "director-postqa-merge-followthrough-systemic-audit-01",
+      "title": "ЧАТ 1 — системный аудит провалов директора на приёмке PR после QA",
+      "goal": "Разобрать повторение пропущенного Director MERGE после PASS_FOR_DIRECTOR_MERGE с учётом прошлых аудитов, разрешений и действительных исправлений.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Сопоставление центрального PR №346 с несколькими ранее сданными директорскими аудитами и протоколами, без нового кода.",
+      "urgency": "высокая",
+      "urgency_reason": "Неисполнение директором собственного финального шага после готовой QA повторяется и требует одного системного механизма устранения.",
+      "task_file": "WORKER_TASK_DIRECTOR_POSTQA_MERGE_FOLLOWTHROUGH_SYSTEMIC_AUDIT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "steam-postmerge-actions-l3-final-delta-qa-01",
+        "director-chat-completion-slot-release-recurrence-audit-01"
+      ],
+      "blocker": "Новый физический ЧАТ 1; независимый report-only аудит причин задержки/несовпадения permission и Director MERGE, без повторного принятия уже слитого PR №346.",
+      "updated_on": "2026-10-29",
+      "updated_at_utc": "2026-10-29T11:22:00.719Z",
       "recent_completion": false
     }
   ]
