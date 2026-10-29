@@ -5,13 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — исправление учёта свободных рабочих чатов, 2026-10-29
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — финальная адресная L3 QA Steam, 2026-10-29
 
-- **НОВЫЙ ЧАТ 1 — ожидает запуска:** `director-chat-slot-auto-release-protocol-implement-01` → `WORKER_TASK_DIRECTOR_CHAT_SLOT_AUTO_RELEASE_PROTOCOL_IMPLEMENT_01.md`. Одно L1 IMPLEMENT-поручение по принятому аудиту №351: заменить конфликтующие формулировки только в `DIRECTOR_PROTOCOL.md`; без второго аудита и без нового workflow.
-- **ЧАТ 3:** итоговый аудит `director-chat-completion-slot-release-recurrence-audit-01` сдан, PR №351 принят, номер **свободен**. Не держать номер из-за дальнейшего IMPLEMENT.
-- **НОВЫЙ ЧАТ 4 — назначен, запуск не подтверждён:** `steam-postmerge-actions-l3-targeted-repair-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_L3_TARGETED_REPAIR_01.md`. Три адресных замечания QA №349 в существующем PR №346.
-- **ЧАТ 2:** независимая QA №349 завершена, свободен. **ЧАТЫ 5 и 6:** ранее сдали отчёты, свободны.
-- Статус исходных PR, QA и director merge-gate отдельны от операционного release номера. Запуск нового ЧАТА 1 только после регистрации этого задания в main и всех обязательных GREEN checks. Никаких production/semantic/scheduler/automation действий.
+- **НОВЫЙ ЧАТ 1 — ожидает запуска:** `steam-postmerge-actions-l3-final-delta-qa-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_L3_FINAL_DELTA_QA_01.md`. Независимая report-only L3 проверка ТОЛЬКО трёх исправлений CR-1/2/3 из отчёта №349 внутри исходного PR №346. Не повторять общий аудит.
+- **ЧАТ 4 — сдал:** `steam-postmerge-actions-l3-targeted-repair-01`, его поправки уже внесены в PR №346 и имеют 3/3 GREEN финальных CI. Операционный номер свободен, хотя исходный PR ещё не принят.
+- **ЧАТ 1 (прежний) — сдал:** `director-chat-slot-auto-release-protocol-implement-01`, исходный PR №354 принят в main. Новый номер 1 относится к отдельному физическому чату QA.
+- **ЧАТЫ 2, 3, 5, 6 — свободны**, предыдущие работы сданы. Никаких других текущих новых назначений не выдаётся.
+- После отчёта нового ЧАТА 1 директор сам проверяет точный source HEAD, CI и при PASS принимает существующий PR №346. Live Steam collection/site publication — отдельная проверка; запрещены ручной production dispatch, семантические запуски и Scheduled Tasks.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
