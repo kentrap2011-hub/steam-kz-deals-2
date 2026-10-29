@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-10-28",
+  "last_curated_on": "2026-10-29",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -2870,6 +2870,27 @@
       "updated_on": "2026-10-28",
       "updated_at_utc": "2026-10-28T19:49:31.319Z",
       "recent_completion": false
+    },
+    {
+      "id": "director-chat-completion-slot-release-recurrence-audit-01",
+      "title": "ЧАТ 3 — аудит повторной ошибки учёта свободных рабочих чатов",
+      "goal": "Проверить конфликт правила освобождения слота по итоговому отчёту с текущим требованием подтверждать физическую доступность отдельно.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Адресный разбор канонических конфликтов и ранее внедрённых правок, один ограниченный план.",
+      "urgency": "высокая",
+      "urgency_reason": "Повторная путаница удерживает свободные рабочие чаты и вызывает лишние запросы к пользователю.",
+      "task_file": "WORKER_TASK_DIRECTOR_CHAT_COMPLETION_SLOT_RELEASE_RECURRENCE_AUDIT_01.md",
+      "worker_slot": "ЧАТ 3",
+      "order": null,
+      "depends_on": [
+        "director-chat-numbering-recurrent-after-fix-audit-01",
+        "director-typed-registration-prewrite-implement-01"
+      ],
+      "blocker": "Новый физический ЧАТ 3; read-only report и ровно одно предложение внедрения, без изменений правил исполнителем.",
+      "recent_completion": false,
+      "updated_on": "2026-10-29",
+      "updated_at_utc": "2026-10-29T02:34:58.226Z"
     }
   ]
 }
