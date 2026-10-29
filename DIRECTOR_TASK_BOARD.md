@@ -5,12 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — независимые QA ЧАТЫ 1 и 2, 2026-10-28
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — аудит освобождения рабочих чатов, 2026-10-29
 
-- **НОВЫЙ ЧАТ 1:** `dossier-v1-pr322-sequential-frozen-outcome-final-l3-delta-qa-01` → `WORKER_TASK_DOSSIER_V1_PR322_SEQUENTIAL_FROZEN_OUTCOME_FINAL_L3_DELTA_QA_01.md`. Независимая узкая L3 QA последней поправки Dossier в исходном PR №322. Не повторять общий аудит.
-- **НОВЫЙ ЧАТ 2:** `steam-postmerge-actions-failures-final-l3-qa-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_FAILURES_FINAL_L3_QA_01.md`. Независимая узкая L3 QA изменений цепочки актуальных предложений Steam в исходном PR №346. Без production запусков.
-- Исполнительские ЧАТЫ 3, 4 и 6 сдали свою работу; PR №345 уже принят директором в main, PR №322 и №346 ожидают независимую L3 QA. PR №323 и №344 ранее приняты.
-- Доступность физических ранее завершённых чатов не путать со статусом GitHub. Только новые физические ЧАТЫ 1/2 для указанной независимой проверки; отправка коротких prompt после зелёных CI и принятия этой регистрации в main.
+- **НОВЫЙ ЧАТ 3:** `director-chat-completion-slot-release-recurrence-audit-01` → `WORKER_TASK_DIRECTOR_CHAT_COMPLETION_SLOT_RELEASE_RECURRENCE_AUDIT_01.md`. Независимый адресный аудит конфликта правил освобождения номеров после сданных отчётов. Один report-only PR, без реализации.
+- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `dossier-v1-pr322-sequential-frozen-outcome-final-l3-delta-qa-01` → `WORKER_TASK_DOSSIER_V1_PR322_SEQUENTIAL_FROZEN_OUTCOME_FINAL_L3_DELTA_QA_01.md`. QA исходного PR №322.
+- **НОВЫЙ ЧАТ 2 — зарезервирован, ожидает запуска:** `steam-postmerge-actions-failures-final-l3-qa-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_FAILURES_FINAL_L3_QA_01.md`. QA исходного PR №346.
+- **ЧАТЫ 4, 5, 6** сдали предыдущие поручения и операционно свободны. Неслитые PR и ожидаемая директорская приёмка не занимают завершённые рабочие номера. Физическая доступность UI не используется как дополнительное обязательное подтверждение release.
+- Запуск нового ЧАТА 3 только после принятия данной регистрации в main и зелёных site/backlog CI. Никакой semantic/production/automation работы данная регистрация не разрешает.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
