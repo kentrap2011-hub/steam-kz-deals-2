@@ -5,13 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — системный аудит директорской приёмки PR, 2026-10-29
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Director post-QA closeout, 2026-10-29
 
-- **НОВЫЙ ЧАТ 1 — ожидает запуска:** `director-postqa-merge-followthrough-systemic-audit-01` → `WORKER_TASK_DIRECTOR_POSTQA_MERGE_FOLLOWTHROUGH_SYSTEMIC_AUDIT_01.md`. Независимый report-only аудит: почему директор после PASS QA №356 и GREEN CI снова не выполнил принятие исходного PR №346 без дополнительного запроса; сравнить старые аудиты директора №251/305/319/325/342/351 и реализованные изменения. Выдать одно узкое IMPLEMENT-предложение, без переписывания протокола самим аудитором.
-- **ЧАТ 1 (предыдущий) — завершён:** `steam-postmerge-actions-l3-final-delta-qa-01`, отчёт №356 PASS, исходный PR №346 **ПРИНЯТ** в main коммитом `3ea4749c2ce3880ed0034c8bded78334bed348f0`; ранее занятого номера больше нет. Live Steam production/site postmerge acceptance отдельно НЕ подтверждена.
-- **ЧАТ 2 — пользователь подтвердил запуск:** `dossier-v1-manual-postgroup-stop-gate-01` → `WORKER_TASK_DOSSIER_V1_MANUAL_POSTGROUP_STOP_GATE_01.md`. Выполняет узкое исправление преждевременной остановки ручного Dossier после группы №1; без семантического запуска.
-- **ЧАТЫ 3, 4, 5, 6 — свободны.** Рабочие номера освобождаются после итоговой сдачи независимо от незакрытых отчётных PR; отдельная семантика Dossier не занимает worker slot.
-- Следующая независимая L3 QA для Dossier — только после готового исправления ЧАТА 2. Для Steam запрещено считать успешное объединение исходного PR доказательством живого обновления сайта.
+- **НОВЫЙ ЧАТ 1, ожидает запуска:** `director-postqa-authorized-merge-closeout-01` → `WORKER_TASK_DIRECTOR_POSTQA_AUTHORIZED_MERGE_CLOSEOUT_01.md`. L1 протокол Director MERGE при ранее доказанном user grant по аудиту №360; не переписывать permission gate.
+- **ЧАТ 2 освободился после сдачи PR №358:** manual Dossier prompt исправлен, source PR №358 ещё ждёт независимую L3 QA; следующее новое назначение согласовать отдельно. 
+- **ЧАТЫ 3–6 свободны.** Исторический аудит №360 уже сдан, не удерживает старый физический чат 1.
+- Steam PR №346 принят, live postmerge production/site не подтверждён. Не выполнять semantic, production или Scheduled Tasks.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 

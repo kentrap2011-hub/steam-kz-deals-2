@@ -2956,7 +2956,7 @@
       "id": "dossier-v1-manual-postgroup-stop-gate-01",
       "title": "ЧАТ 2 — предотвратить досрочное завершение ручного Dossier после группы",
       "goal": "Ввести обязательную попытку следующей frozen группы либо подтверждённое основание остановки перед завершением ручного one-shot.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Один локальный prompt-level gate для известного сценария без изменения исполнения и очереди.",
       "urgency": "высокая",
@@ -2967,16 +2967,16 @@
       "depends_on": [
         "dossier-v1-pr322-sequential-frozen-outcome-final-l3-delta-qa-01"
       ],
-      "blocker": "Новый физический ЧАТ 2: узкое исправление manual launcher без запуска Dossier или расширения authority.",
+      "blocker": "ЧАТ 2 сдал source PR №358 READY_FOR_NARROW_L3_DELTA_QA; 3/3 GREEN CI, ожидает отдельного назначения независимой QA.",
       "updated_on": "2026-10-29",
-      "updated_at_utc": "2026-10-29T10:54:10.912Z",
-      "recent_completion": false
+      "updated_at_utc": "2026-10-29T14:00:00Z",
+      "recent_completion": true
     },
     {
       "id": "director-postqa-merge-followthrough-systemic-audit-01",
       "title": "ЧАТ 1 — системный аудит провалов директора на приёмке PR после QA",
       "goal": "Разобрать повторение пропущенного Director MERGE после PASS_FOR_DIRECTOR_MERGE с учётом прошлых аудитов, разрешений и действительных исправлений.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Сопоставление центрального PR №346 с несколькими ранее сданными директорскими аудитами и протоколами, без нового кода.",
       "urgency": "высокая",
@@ -2988,10 +2988,30 @@
         "steam-postmerge-actions-l3-final-delta-qa-01",
         "director-chat-completion-slot-release-recurrence-audit-01"
       ],
-      "blocker": "Новый физический ЧАТ 1; независимый report-only аудит причин задержки/несовпадения permission и Director MERGE, без повторного принятия уже слитого PR №346.",
+      "blocker": "Аудит сдан: PR №360 AUDIT_COMPLETE; одно ограниченное исправление director protocol назначено новому ЧАТУ 1.",
       "updated_on": "2026-10-29",
-      "updated_at_utc": "2026-10-29T11:22:00.719Z",
-      "recent_completion": false
+      "updated_at_utc": "2026-10-29T14:00:00Z",
+      "recent_completion": true
+    },
+    {
+      "id": "director-postqa-authorized-merge-closeout-01",
+      "title": "ЧАТ 1 — исправление директорского post-QA authorized MERGE",
+      "goal": "После подтверждённого пользовательского conditional MERGE завершать действие в том же ходе, а не только объявлять следующий шаг.",
+      "status": "active",
+      "effort": "низкая",
+      "effort_reason": "Узкая текстовая L1 правка decision route.",
+      "urgency": "высокая",
+      "urgency_reason": "Повторный пропуск директором исполнения уже разрешённого merge.",
+      "task_file": "WORKER_TASK_DIRECTOR_POSTQA_AUTHORIZED_MERGE_CLOSEOUT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "director-postqa-merge-followthrough-systemic-audit-01"
+      ],
+      "blocker": "НОВЫЙ ЧАТ 1; только bounded L1 protocol implementation audit #360, без самостоятельного L3 merge.",
+      "recent_completion": false,
+      "updated_on": "2026-10-29",
+      "updated_at_utc": "2026-10-29T14:00:00Z"
     }
   ]
 }
