@@ -3,7 +3,7 @@
 **Task:** `director-postqa-authorized-merge-closeout-01`  
 **Mode:** bounded L1 IMPLEMENT; source of truth `main`.  
 **Scope:** only `DIRECTOR_PROTOCOL.md` and this report.  
-**Provisional disposition:** implementation completed; final `READY_FOR_DIRECTOR_MERGE` requires existing site-task/backlog GREEN on exact final PR HEAD (verify live, do not infer from this text).
+**Verdict:** `READY_FOR_DIRECTOR_MERGE` **only after** existing site-task/backlog both succeed on the exact final PR HEAD, with no material source delta or new L3 risk. Live Actions, not this static declaration, are the authority for final gate.
 
 ## Verified facts
 - Canonical `CHAT_PROTOCOL.md` START, `CHAT_CONTEXT.md`, `DIRECTOR_PROTOCOL.md` §1, task and audit report from report-only PR #360 at `2255fb222ad827443200911e490d551fe9743a28` read. Audit is not in `main`, and #360 is still a separate DRAFT report PR; neither authorizes a source merge.
@@ -48,6 +48,6 @@ These are **decision walkthroughs, not claims of independent ChatGPT execution**
 - No independent live authorized harmless positive merge test (forbidden without fresh explicit permission).
 - User approval provenance from the old #346 conversation remains unproven; #346 already merged, do not re-merge.
 - Live Steam site / production acceptance is not verified or granted.
-- **Status:** `complete` for bounded protocol implementation, subject to final CI as above; **Verdict:** `READY_FOR_DIRECTOR_MERGE` only if exact-HEAD required checks GREEN, otherwise `BLOCKED_CONCRETE` with check evidence.
+- **Status:** `complete` for bounded protocol implementation; **merge disposition:** `READY_FOR_DIRECTOR_MERGE` after exact-final-HEAD site-task/backlog `success`, otherwise `BLOCKED_CONCRETE` with the exact failed/incomplete run. Worker does not self-merge.
 - **Recommended next step:** Director reviews this L1 PR and merges only after current final-HEAD existing CI GREEN and a valid user MERGE authorization; no new independent QA absent actual L3 risk.
 - **Efficiency / reusable lesson:** route/pitfall candidate is contained in audit #360 and addressed within existing §1, without adding a separate register, workflow or global checklist.
