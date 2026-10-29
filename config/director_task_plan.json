@@ -2997,7 +2997,7 @@
       "id": "director-postqa-authorized-merge-closeout-01",
       "title": "ЧАТ 1 — исправление директорского post-QA authorized MERGE",
       "goal": "После подтверждённого пользовательского conditional MERGE завершать действие в том же ходе, а не только объявлять следующий шаг.",
-      "status": "active",
+      "status": "complete",
       "effort": "низкая",
       "effort_reason": "Узкая текстовая L1 правка decision route.",
       "urgency": "высокая",
@@ -3008,16 +3008,16 @@
       "depends_on": [
         "director-postqa-merge-followthrough-systemic-audit-01"
       ],
-      "blocker": "НОВЫЙ ЧАТ 1; только bounded L1 protocol implementation audit #360, без самостоятельного L3 merge.",
-      "recent_completion": false,
+      "blocker": "Протокол исправлен ЧАТОМ 1 в source PR №363, директор принял в main e5f340745a70fcab410e9b2d57b92e6695113398.",
+      "recent_completion": true,
       "updated_on": "2026-10-29",
-      "updated_at_utc": "2026-10-29T14:00:00Z"
+      "updated_at_utc": "2026-10-29T13:19:33.812Z"
     },
     {
       "id": "dossier-v1-manual-postgroup-stop-final-l3-delta-qa-01",
       "title": "ЧАТ 2 — независимая L3 delta QA Dossier manual postgroup gate",
       "goal": "Подтвердить корректную и безопасную frozen progression ручного Dossier V1 после публикации группы в source PR №358.",
-      "status": "active",
+      "status": "complete",
       "effort": "низкая",
       "effort_reason": "Узкая L3 delta одной manual prompt и R1–R9, без живого семантического запуска.",
       "urgency": "высокая",
@@ -3028,10 +3028,30 @@
       "depends_on": [
         "dossier-v1-manual-postgroup-stop-gate-01"
       ],
-      "blocker": "НОВЫЙ физический ЧАТ 2; только report-only L3 QA, семантический запуск не разрешён.",
+      "blocker": "QA отчёт PR №364 PASS, source PR №358 принят в main b5d4586b55df96c6cb10e19d1b2193f9a39fd5a7. На новом semantic запуске candidate груп 1–9 отклонены identity validator.",
+      "recent_completion": true,
+      "updated_on": "2026-10-29",
+      "updated_at_utc": "2026-10-29T13:19:33.812Z"
+    },
+    {
+      "id": "dossier-v1-rejected-buffers-exact-product-binding-root-cause-01",
+      "title": "ЧАТ 1 — root cause девяти отклонённых Dossier V1 groups",
+      "goal": "Определить действительную причину exact_product_binding отклонений девяти Dossier V1 frozen group candidate и подготовить одно ограниченное исправление.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "9 immutable rejection entries, реальные quarantine candidates и соответствующий worker/validator, без исполнения semantic.",
+      "urgency": "высокая",
+      "urgency_reason": "0 из 9 групп принято GitHub; Deep не получает новые игры.",
+      "task_file": "WORKER_TASK_DOSSIER_V1_REJECTED_BUFFERS_EXACT_PRODUCT_BINDING_ROOT_CAUSE_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-v1-manual-postgroup-stop-gate-01"
+      ],
+      "blocker": "НОВЫЙ физический ЧАТ 1; read-only root cause exact_product_binding, не повторный запуск Dossier.",
       "recent_completion": false,
       "updated_on": "2026-10-29",
-      "updated_at_utc": "2026-10-29T14:00:00Z"
+      "updated_at_utc": "2026-10-29T13:19:33.812Z"
     }
   ]
 }

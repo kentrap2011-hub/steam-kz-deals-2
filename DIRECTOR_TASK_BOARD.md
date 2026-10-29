@@ -5,13 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Dossier V1 final L3 QA и директорский closeout, 2026-10-29
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — root cause отклонений Dossier V1, 2026-10-29
 
-- **НОВЫЙ ЧАТ 2 — зарезервирован, ожидает запуска:** `dossier-v1-manual-postgroup-stop-final-l3-delta-qa-01` → `WORKER_TASK_DOSSIER_V1_MANUAL_POSTGROUP_STOP_FINAL_L3_DELTA_QA_01.md`. Независимая узкая L3 QA source PR №358, только manual Dossier launcher; без запуска семантики и изменения GitHub runtime.
-- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `director-postqa-authorized-merge-closeout-01` → `WORKER_TASK_DIRECTOR_POSTQA_AUTHORIZED_MERGE_CLOSEOUT_01.md`. L1 исправление Director протокола по audit №360, регистрационный PR №361 принят в main.
-- **Предыдущие физические ЧАТЫ 1 и 2 завершили работы:** аудит №360 = AUDIT_COMPLETE, исходное Dossier исправление №358 = READY_FOR_NARROW_L3_DELTA_QA. Номера выдаются только для НОВЫХ бесед.
-- **ЧАТЫ 3–6 свободны.** Исходный Steam PR №346 принят; live production/site не подтверждён. Состояние независимого ручного Dossier semantic invocation определяется отдельно по его marker, данный QA-task его не запускает и не прерывает.
-- Директор после финального PASS по №358 проверяет source exact HEAD/CI и принимает, если все L3/authorization gates выполняются. Никаких новых ручных или Scheduled Dossier запусков по этому заданию.
+- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `dossier-v1-rejected-buffers-exact-product-binding-root-cause-01` → `WORKER_TASK_DOSSIER_V1_REJECTED_BUFFERS_EXACT_PRODUCT_BINDING_ROOT_CAUSE_01.md`. Независимая read-only диагностика девяти отвергнутых Dossier V1 group submissions 2026-10-29, exact_product_binding и GitHub strict acceptance. Не запускать семантику, recovery, новые очереди, V2.
+- **Последние физические ЧАТ 1 и ЧАТ 2 завершили работу и свободны:** director closeout исправлен и объединён PR №363 (`e5f340745a70fcab410e9b2d57b92e6695113398`); независимая QA Dossier V1 report PR №364 PASS, source PR №358 принят (`b5d4586b55df96c6cb10e19d1b2193f9a39fd5a7`). Новый ЧАТ 1 — только новая беседа.
+- **ЧАТЫ 2, 3, 4, 5 и 6 — свободны.** Отдельный manual semantic Dossier не является numbered worker. Отсутствие поздних коммитов не устанавливает UI hang; 9 submitted, 0 accepted, GitHub отклонил все 9.
+- **Dossier V2 остаётся inactive/nonproduction:** original18 shadow pilot с 14 sandbox dossiers, QA №324 NO_GO и анализ №331 DIAGNOSIS_COMPLETE_NO_SAFE_CODE_FIX. Не менять V1 или Deep и Scheduled Tasks ради переключения до отдельного успешного quality gate.
+- После RECON директора — одно минимальное implementation поручение при доказанном defect и последующая risk-based delta QA до любого нового user-authorized manual invocation.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
