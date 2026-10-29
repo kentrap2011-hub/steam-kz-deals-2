@@ -5,13 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — финальная адресная L3 QA Steam, 2026-10-29
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — досрочное завершение ручного Dossier V1, 2026-10-29
 
-- **НОВЫЙ ЧАТ 1 — ожидает запуска:** `steam-postmerge-actions-l3-final-delta-qa-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_L3_FINAL_DELTA_QA_01.md`. Независимая report-only L3 проверка ТОЛЬКО трёх исправлений CR-1/2/3 из отчёта №349 внутри исходного PR №346. Не повторять общий аудит.
-- **ЧАТ 4 — сдал:** `steam-postmerge-actions-l3-targeted-repair-01`, его поправки уже внесены в PR №346 и имеют 3/3 GREEN финальных CI. Операционный номер свободен, хотя исходный PR ещё не принят.
-- **ЧАТ 1 (прежний) — сдал:** `director-chat-slot-auto-release-protocol-implement-01`, исходный PR №354 принят в main. Новый номер 1 относится к отдельному физическому чату QA.
-- **ЧАТЫ 2, 3, 5, 6 — свободны**, предыдущие работы сданы. Никаких других текущих новых назначений не выдаётся.
-- После отчёта нового ЧАТА 1 директор сам проверяет точный source HEAD, CI и при PASS принимает существующий PR №346. Live Steam collection/site publication — отдельная проверка; запрещены ручной production dispatch, семантические запуски и Scheduled Tasks.
+- **НОВЫЙ ЧАТ 2 — ожидает запуска:** `dossier-v1-manual-postgroup-stop-gate-01` → `WORKER_TASK_DOSSIER_V1_MANUAL_POSTGROUP_STOP_GATE_01.md`. Одно адресное исправление continuation/finalization gate для ручного one-shot после отправки группы №1, без повторного анализа, второго маркера или изменений scheduled runtime.
+- **НОВЫЙ ЧАТ 1 — назначен, запуск не подтверждён:** `steam-postmerge-actions-l3-final-delta-qa-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_L3_FINAL_DELTA_QA_01.md`. Узкая независимая L3 QA CR-1/2/3 в PR №346.
+- **ЧАТЫ 3, 4, 5 и 6:** прежние задания завершены, операционно свободны. Отдельный семантический one-shot Dossier не занимает номер рабочего чата и не превращается автоматически в новый запуск.
+- После выполнения ЧАТА 2 — независимая узкая L3 delta QA и решение директора по безопасной приёмке. Не запускать semantic, production, Scheduled Tasks, новые очереди или recovery.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
