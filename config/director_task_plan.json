@@ -3012,6 +3012,26 @@
       "recent_completion": false,
       "updated_on": "2026-10-29",
       "updated_at_utc": "2026-10-29T14:00:00Z"
+    },
+    {
+      "id": "dossier-v1-manual-postgroup-stop-final-l3-delta-qa-01",
+      "title": "ЧАТ 2 — независимая L3 delta QA Dossier manual postgroup gate",
+      "goal": "Подтвердить корректную и безопасную frozen progression ручного Dossier V1 после публикации группы в source PR №358.",
+      "status": "active",
+      "effort": "низкая",
+      "effort_reason": "Узкая L3 delta одной manual prompt и R1–R9, без живого семантического запуска.",
+      "urgency": "высокая",
+      "urgency_reason": "Нужно независимое подтверждение безопасности до приёмки source PR №358.",
+      "task_file": "WORKER_TASK_DOSSIER_V1_MANUAL_POSTGROUP_STOP_FINAL_L3_DELTA_QA_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-v1-manual-postgroup-stop-gate-01"
+      ],
+      "blocker": "НОВЫЙ физический ЧАТ 2; только report-only L3 QA, семантический запуск не разрешён.",
+      "recent_completion": false,
+      "updated_on": "2026-10-29",
+      "updated_at_utc": "2026-10-29T14:00:00Z"
     }
   ]
 }

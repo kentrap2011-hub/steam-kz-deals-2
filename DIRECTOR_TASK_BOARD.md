@@ -5,12 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Director post-QA closeout, 2026-10-29
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Dossier V1 final L3 QA и директорский closeout, 2026-10-29
 
-- **НОВЫЙ ЧАТ 1, ожидает запуска:** `director-postqa-authorized-merge-closeout-01` → `WORKER_TASK_DIRECTOR_POSTQA_AUTHORIZED_MERGE_CLOSEOUT_01.md`. L1 протокол Director MERGE при ранее доказанном user grant по аудиту №360; не переписывать permission gate.
-- **ЧАТ 2 освободился после сдачи PR №358:** manual Dossier prompt исправлен, source PR №358 ещё ждёт независимую L3 QA; следующее новое назначение согласовать отдельно. 
-- **ЧАТЫ 3–6 свободны.** Исторический аудит №360 уже сдан, не удерживает старый физический чат 1.
-- Steam PR №346 принят, live postmerge production/site не подтверждён. Не выполнять semantic, production или Scheduled Tasks.
+- **НОВЫЙ ЧАТ 2 — зарезервирован, ожидает запуска:** `dossier-v1-manual-postgroup-stop-final-l3-delta-qa-01` → `WORKER_TASK_DOSSIER_V1_MANUAL_POSTGROUP_STOP_FINAL_L3_DELTA_QA_01.md`. Независимая узкая L3 QA source PR №358, только manual Dossier launcher; без запуска семантики и изменения GitHub runtime.
+- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `director-postqa-authorized-merge-closeout-01` → `WORKER_TASK_DIRECTOR_POSTQA_AUTHORIZED_MERGE_CLOSEOUT_01.md`. L1 исправление Director протокола по audit №360, регистрационный PR №361 принят в main.
+- **Предыдущие физические ЧАТЫ 1 и 2 завершили работы:** аудит №360 = AUDIT_COMPLETE, исходное Dossier исправление №358 = READY_FOR_NARROW_L3_DELTA_QA. Номера выдаются только для НОВЫХ бесед.
+- **ЧАТЫ 3–6 свободны.** Исходный Steam PR №346 принят; live production/site не подтверждён. Состояние независимого ручного Dossier semantic invocation определяется отдельно по его marker, данный QA-task его не запускает и не прерывает.
+- Директор после финального PASS по №358 проверяет source exact HEAD/CI и принимает, если все L3/authorization gates выполняются. Никаких новых ручных или Scheduled Dossier запусков по этому заданию.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
