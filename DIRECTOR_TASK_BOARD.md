@@ -5,14 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Steam targeted repair и аудит директора, 2026-10-29
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — исправление учёта свободных рабочих чатов, 2026-10-29
 
-- **НОВЫЙ ЧАТ 4:** `steam-postmerge-actions-l3-targeted-repair-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_L3_TARGETED_REPAIR_01.md`. Исправление только трёх замечаний CR-1/2/3 независимой Steam QA №349 в существующем исходном PR №346, без нового PR или production запуска. Отправить запуск только после регистрации в main.
-- **ЧАТ 3:** `director-chat-completion-slot-release-recurrence-audit-01` → `WORKER_TASK_DIRECTOR_CHAT_COMPLETION_SLOT_RELEASE_RECURRENCE_AUDIT_01.md`. Пользователь подтвердил запуск; выполняет аудит ошибки освобождения чатов.
-- **ЧАТ 1:** QA Dossier сдана, отчёт №348, source PR №322 принят в main; свободен.
-- **ЧАТ 2:** QA Steam сдана, отчёт №349, source PR №346 ещё не принят; свободен.
-- **ЧАТЫ 5 и 6:** ранее завершены, свободны.
-- Впоследствии проверить только три исправленных L3-дельты №346, затем решение директора о приёмке; не запускать semantic, production, workflow dispatch или Scheduled Tasks.
+- **НОВЫЙ ЧАТ 1 — ожидает запуска:** `director-chat-slot-auto-release-protocol-implement-01` → `WORKER_TASK_DIRECTOR_CHAT_SLOT_AUTO_RELEASE_PROTOCOL_IMPLEMENT_01.md`. Одно L1 IMPLEMENT-поручение по принятому аудиту №351: заменить конфликтующие формулировки только в `DIRECTOR_PROTOCOL.md`; без второго аудита и без нового workflow.
+- **ЧАТ 3:** итоговый аудит `director-chat-completion-slot-release-recurrence-audit-01` сдан, PR №351 принят, номер **свободен**. Не держать номер из-за дальнейшего IMPLEMENT.
+- **НОВЫЙ ЧАТ 4 — назначен, запуск не подтверждён:** `steam-postmerge-actions-l3-targeted-repair-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_L3_TARGETED_REPAIR_01.md`. Три адресных замечания QA №349 в существующем PR №346.
+- **ЧАТ 2:** независимая QA №349 завершена, свободен. **ЧАТЫ 5 и 6:** ранее сдали отчёты, свободны.
+- Статус исходных PR, QA и director merge-gate отдельны от операционного release номера. Запуск нового ЧАТА 1 только после регистрации этого задания в main и всех обязательных GREEN checks. Никаких production/semantic/scheduler/automation действий.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
