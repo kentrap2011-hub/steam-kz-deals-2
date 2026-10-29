@@ -57,7 +57,7 @@ jobs:
           taste = json.loads(TASTE_INDEX.read_text(encoding='utf-8'))
           taste_entries = taste['entries']
           sys.path.insert(0, str(Path('scripts').resolve()))
-          from legacy_offer_scope import put_feed, current_includes
+          from legacy_offer_scope import put_feed, current_includes, validate_metadata_identity
           cols = mailing['columns']
           ci = {name:i for i,name in enumerate(cols)}
 
@@ -168,6 +168,14 @@ jobs:
 
           entries = dict(old)
           required_keys = {row['key'] for row in included}
+          # A cache hit is reusable only for the exact Steam entity in this feed.
+          for row in included:
+              key = row['key']
+              if key in entries:
+                  try:
+                      validate_metadata_identity(key, entries[key], row)
+                  except ValueError as exc:
+                      raise SystemExit(f'Unsafe cached content metadata: {exc}') from exc
           missing = [row for row in included if row['key'] not in entries]
 
           print(f'Current taste includes={len(included)} cached_metadata_hits={len(included)-len(missing)} metadata_misses={len(missing)}')
@@ -192,6 +200,12 @@ jobs:
               print('unresolved=', unresolved)
               raise SystemExit('Content metadata is incomplete; refusing to persist partial current coverage')
 
+          # Validate freshly fetched rows too, before persisting future cache hits.
+          for row in included:
+              try:
+                  validate_metadata_identity(row['key'], entries[row['key']], row)
+              except ValueError as exc:
+                  raise SystemExit(f'Unsafe fetched content metadata: {exc}') from exc
           current_entries = {key: entries[key] for key in sorted(required_keys)}
           result = {
               'schema_version': 1,
