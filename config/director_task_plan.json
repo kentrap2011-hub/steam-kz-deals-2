@@ -2875,7 +2875,7 @@
       "id": "director-chat-completion-slot-release-recurrence-audit-01",
       "title": "ЧАТ 3 — аудит повторной ошибки учёта свободных рабочих чатов",
       "goal": "Проверить конфликт правила освобождения слота по итоговому отчёту с текущим требованием подтверждать физическую доступность отдельно.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Адресный разбор канонических конфликтов и ранее внедрённых правок, один ограниченный план.",
       "urgency": "высокая",
@@ -2887,10 +2887,10 @@
         "director-chat-numbering-recurrent-after-fix-audit-01",
         "director-typed-registration-prewrite-implement-01"
       ],
-      "blocker": "Новый физический ЧАТ 3; read-only report и ровно одно предложение внедрения, без изменений правил исполнителем.",
-      "recent_completion": false,
+      "blocker": "Итоговый аудит сдан и принят в main как отчёт №351; требуется одна короткая правка канонического протокола.",
+      "recent_completion": true,
       "updated_on": "2026-10-29",
-      "updated_at_utc": "2026-10-29T02:34:58.226Z"
+      "updated_at_utc": "2026-10-29T02:56:11.590Z"
     },
     {
       "id": "steam-postmerge-actions-l3-targeted-repair-01",
@@ -2911,6 +2911,26 @@
       "recent_completion": false,
       "updated_on": "2026-10-29",
       "updated_at_utc": "2026-10-29T02:47:19.040Z"
+    },
+    {
+      "id": "director-chat-slot-auto-release-protocol-implement-01",
+      "title": "ЧАТ 1 — исправить каноническое правило освобождения рабочих чатов",
+      "goal": "Заменить противоречивое требование подтверждения закрытия UI правилами автоматического освобождения номера после финального отчёта.",
+      "status": "active",
+      "effort": "низкая",
+      "effort_reason": "Одно точечное изменение действующего директорского протокола по принятому аудиту.",
+      "urgency": "высокая",
+      "urgency_reason": "Повторная ошибочная блокировка свободных чатов приводит к неправильным назначениям и лишним вопросам.",
+      "task_file": "WORKER_TASK_DIRECTOR_CHAT_SLOT_AUTO_RELEASE_PROTOCOL_IMPLEMENT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "director-chat-completion-slot-release-recurrence-audit-01"
+      ],
+      "blocker": "Новый физический ЧАТ 1; только минимальная L1 правка директорского протокола и отчёт без нового аудита.",
+      "recent_completion": false,
+      "updated_on": "2026-10-29",
+      "updated_at_utc": "2026-10-29T02:56:11.590Z"
     }
   ]
 }
