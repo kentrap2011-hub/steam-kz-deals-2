@@ -5,13 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — root cause отклонений Dossier V1, 2026-10-29
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — параллельные направления Dossier V1 и V2, 2026-10-29
 
-- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `dossier-v1-rejected-buffers-exact-product-binding-root-cause-01` → `WORKER_TASK_DOSSIER_V1_REJECTED_BUFFERS_EXACT_PRODUCT_BINDING_ROOT_CAUSE_01.md`. Независимая read-only диагностика девяти отвергнутых Dossier V1 group submissions 2026-10-29, exact_product_binding и GitHub strict acceptance. Не запускать семантику, recovery, новые очереди, V2.
-- **Последние физические ЧАТ 1 и ЧАТ 2 завершили работу и свободны:** director closeout исправлен и объединён PR №363 (`e5f340745a70fcab410e9b2d57b92e6695113398`); независимая QA Dossier V1 report PR №364 PASS, source PR №358 принят (`b5d4586b55df96c6cb10e19d1b2193f9a39fd5a7`). Новый ЧАТ 1 — только новая беседа.
-- **ЧАТЫ 2, 3, 4, 5 и 6 — свободны.** Отдельный manual semantic Dossier не является numbered worker. Отсутствие поздних коммитов не устанавливает UI hang; 9 submitted, 0 accepted, GitHub отклонил все 9.
-- **Dossier V2 остаётся inactive/nonproduction:** original18 shadow pilot с 14 sandbox dossiers, QA №324 NO_GO и анализ №331 DIAGNOSIS_COMPLETE_NO_SAFE_CODE_FIX. Не менять V1 или Deep и Scheduled Tasks ради переключения до отдельного успешного quality gate.
-- После RECON директора — одно минимальное implementation поручение при доказанном defect и последующая risk-based delta QA до любого нового user-authorized manual invocation.
+- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска, промпт выдан:** dossier-v1-rejected-buffers-exact-product-binding-root-cause-01 → WORKER_TASK_DOSSIER_V1_REJECTED_BUFFERS_EXACT_PRODUCT_BINDING_ROOT_CAUSE_01.md. Один read-only root cause 9 отклонённых V1 grouped buffers, exact_product_binding.
+- **НОВЫЙ ЧАТ 2 — зарезервирован, ожидает запуска:** dossier-v2-assembly-presubmit-evidence-quality-guard-01 → WORKER_TASK_DOSSIER_V2_ASSEMBLY_PRESUBMIT_EVIDENCE_QUALITY_GUARD_01.md. Независимый от V1 bounded inactive V2 Assembly pre-submit semantic evidence/shape prompt and offline tests по уже завершённым #324/#331, без новой попытки original18 и без активации.
+- **ЧАТЫ 3, 4, 5, 6 — свободны.** Старые физические ЧАТЫ 1/2 сдали результаты, новые чаты используют только зарегистрированные task files. V1 semantic one-shot отделён от numbered worker chats.
+- **Dossier V2 inactive/nonproduction:** original18 sandbox 14 stored, QA NO_GO, новая доработка не разрешает pilot rerun и не заменяет проверку независимых пользовательских отзывов. Не применять shared strict schema relaxation.
+- После ЧАТА 1 — решение об адресном V1 fix; после ЧАТА 2 — одна независимая narrow L3 delta QA V2 prompt/source и директорский merge gate. Ни одна линия не разрешает production, semantic, Scheduled Tasks или Deep.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
