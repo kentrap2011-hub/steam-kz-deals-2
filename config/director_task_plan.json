@@ -2835,7 +2835,7 @@
       "id": "dossier-v1-pr322-sequential-frozen-outcome-final-l3-delta-qa-01",
       "title": "ЧАТ 1 — Независимая L3-проверка нового исправления Dossier V1",
       "goal": "Проверить безопасное разрешение последовательных противоположных результатов одной старой группы в исходном изменении №322.",
-      "status": "active",
+      "status": "complete",
       "effort": "низкая",
       "effort_reason": "Узкая независимая проверка только последней дельты без повторения общего аудита.",
       "urgency": "высокая",
@@ -2846,16 +2846,16 @@
       "depends_on": [
         "dossier-v1-pr322-sequential-frozen-outcome-resolution-01"
       ],
-      "blocker": "Новый физический ЧАТ 1; только report-only проверка указанного исходного изменения. Самовольное объединение запрещено.",
-      "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T19:49:31.319Z",
-      "recent_completion": false
+      "blocker": "Итоговый отчёт №348 PASS; исходный PR №322 принят в main.",
+      "updated_on": "2026-10-29",
+      "updated_at_utc": "2026-10-29T02:47:19.040Z",
+      "recent_completion": true
     },
     {
       "id": "steam-postmerge-actions-failures-final-l3-qa-01",
       "title": "ЧАТ 2 — Независимая L3-проверка исправления автоматического обновления Steam",
       "goal": "Проверить корректность связей актуальных предложений и исторических оценок при восстановлении обновления сайта Steam.",
-      "status": "active",
+      "status": "complete",
       "effort": "низкая",
       "effort_reason": "Узкая независимая проверка только последней дельты без повторения общего аудита.",
       "urgency": "высокая",
@@ -2866,10 +2866,10 @@
       "depends_on": [
         "steam-postmerge-actions-failures-fix-01"
       ],
-      "blocker": "Новый физический ЧАТ 2; только report-only проверка указанного исходного изменения. Самовольное объединение запрещено.",
-      "updated_on": "2026-10-28",
-      "updated_at_utc": "2026-10-28T19:49:31.319Z",
-      "recent_completion": false
+      "blocker": "Итоговый отчёт №349 CHANGES_REQUIRED; три замечания переданы на адресное исправление в PR №346.",
+      "updated_on": "2026-10-29",
+      "updated_at_utc": "2026-10-29T02:47:19.040Z",
+      "recent_completion": true
     },
     {
       "id": "director-chat-completion-slot-release-recurrence-audit-01",
@@ -2891,6 +2891,26 @@
       "recent_completion": false,
       "updated_on": "2026-10-29",
       "updated_at_utc": "2026-10-29T02:34:58.226Z"
+    },
+    {
+      "id": "steam-postmerge-actions-l3-targeted-repair-01",
+      "title": "ЧАТ 4 — три адресные правки по результатам Steam QA",
+      "goal": "Исправить отсутствие проверки идентичности метаданных, совместно устаревшие источники и жёсткое число 101 в исходном изменении №346.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Три конкретных дефекта с негативными тестами и чётким исходным изменением.",
+      "urgency": "высокая",
+      "urgency_reason": "Ошибки проверок данных блокируют принятие исправления обновления каталога Steam.",
+      "task_file": "WORKER_TASK_STEAM_POSTMERGE_ACTIONS_L3_TARGETED_REPAIR_01.md",
+      "worker_slot": "ЧАТ 4",
+      "order": null,
+      "depends_on": [
+        "steam-postmerge-actions-failures-final-l3-qa-01"
+      ],
+      "blocker": "Новый физический ЧАТ 4; менять только существующий source PR №346, три замечания CR-1/2/3.",
+      "recent_completion": false,
+      "updated_on": "2026-10-29",
+      "updated_at_utc": "2026-10-29T02:47:19.040Z"
     }
   ]
 }

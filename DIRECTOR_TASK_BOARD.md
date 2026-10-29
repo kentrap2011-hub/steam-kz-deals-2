@@ -5,13 +5,14 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — аудит освобождения рабочих чатов, 2026-10-29
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Steam targeted repair и аудит директора, 2026-10-29
 
-- **НОВЫЙ ЧАТ 3:** `director-chat-completion-slot-release-recurrence-audit-01` → `WORKER_TASK_DIRECTOR_CHAT_COMPLETION_SLOT_RELEASE_RECURRENCE_AUDIT_01.md`. Независимый адресный аудит конфликта правил освобождения номеров после сданных отчётов. Один report-only PR, без реализации.
-- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `dossier-v1-pr322-sequential-frozen-outcome-final-l3-delta-qa-01` → `WORKER_TASK_DOSSIER_V1_PR322_SEQUENTIAL_FROZEN_OUTCOME_FINAL_L3_DELTA_QA_01.md`. QA исходного PR №322.
-- **НОВЫЙ ЧАТ 2 — зарезервирован, ожидает запуска:** `steam-postmerge-actions-failures-final-l3-qa-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_FAILURES_FINAL_L3_QA_01.md`. QA исходного PR №346.
-- **ЧАТЫ 4, 5, 6** сдали предыдущие поручения и операционно свободны. Неслитые PR и ожидаемая директорская приёмка не занимают завершённые рабочие номера. Физическая доступность UI не используется как дополнительное обязательное подтверждение release.
-- Запуск нового ЧАТА 3 только после принятия данной регистрации в main и зелёных site/backlog CI. Никакой semantic/production/automation работы данная регистрация не разрешает.
+- **НОВЫЙ ЧАТ 4:** `steam-postmerge-actions-l3-targeted-repair-01` → `WORKER_TASK_STEAM_POSTMERGE_ACTIONS_L3_TARGETED_REPAIR_01.md`. Исправление только трёх замечаний CR-1/2/3 независимой Steam QA №349 в существующем исходном PR №346, без нового PR или production запуска. Отправить запуск только после регистрации в main.
+- **ЧАТ 3:** `director-chat-completion-slot-release-recurrence-audit-01` → `WORKER_TASK_DIRECTOR_CHAT_COMPLETION_SLOT_RELEASE_RECURRENCE_AUDIT_01.md`. Пользователь подтвердил запуск; выполняет аудит ошибки освобождения чатов.
+- **ЧАТ 1:** QA Dossier сдана, отчёт №348, source PR №322 принят в main; свободен.
+- **ЧАТ 2:** QA Steam сдана, отчёт №349, source PR №346 ещё не принят; свободен.
+- **ЧАТЫ 5 и 6:** ранее завершены, свободны.
+- Впоследствии проверить только три исправленных L3-дельты №346, затем решение директора о приёмке; не запускать semantic, production, workflow dispatch или Scheduled Tasks.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
