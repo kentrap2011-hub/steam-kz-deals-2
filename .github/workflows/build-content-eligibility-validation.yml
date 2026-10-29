@@ -11,6 +11,7 @@ on:
       - "data/cache/taste_fit.index.json"
       - "data/cache/taste_fit.checkpoint_validation.json"
       - "data/cache/content_metadata.json"
+      - "scripts/legacy_offer_scope.py"
       - ".github/workflows/build-content-eligibility-validation.yml"
 
 permissions:
@@ -34,6 +35,7 @@ jobs:
         run: |
           python - <<'PY'
           import json
+          import sys
           import re
           import subprocess
           from collections import Counter
@@ -59,6 +61,8 @@ jobs:
           taste = json.loads(TASTE.read_text(encoding='utf-8'))
           checkpoint = json.loads(CHECKPOINT.read_text(encoding='utf-8'))
           metadata = json.loads(METADATA.read_text(encoding='utf-8'))
+          sys.path.insert(0, str(Path('scripts').resolve()))
+          from legacy_offer_scope import put_feed, current_includes, validate_metadata_identity
 
           if policy.get('status') != 'canonical':
               raise SystemExit('Policy is not canonical')
@@ -91,15 +95,22 @@ jobs:
                   if len(cells) != len(cols):
                       raise SystemExit(f'Column mismatch in {path}')
                   key = cells[ci['key']]
-                  feed[key] = {
+                  put_feed(feed, {
                       'key': key,
                       'appid': cells[ci['appid']],
                       'title': cells[ci['title']],
                       'feed_reasons': cells[ci['reasons']].split('|') if cells[ci['reasons']] else [],
                       'fit_tags': cells[ci['fit_tags']].split('|') if cells[ci['fit_tags']] else [],
-                  }
+                  })
 
-          include_keys = {key for key,value in taste_entries.items() if isinstance(value,list) and len(value)==5 and value[2]=='INCLUDE'}
+          if len(feed) != int(mailing['item_count']):
+              raise SystemExit('Current mailing item_count mismatch')
+          active_keys, out_of_current_feed_keys = current_includes(taste_entries, feed)
+          include_keys = set(active_keys)
+          if metadata.get('out_of_current_feed_keys') != out_of_current_feed_keys:
+              raise SystemExit('Metadata historical/current scope mismatch')
+          if metadata.get('historical_taste_include_count') != len(active_keys) + len(out_of_current_feed_keys):
+              raise SystemExit('Metadata historical include count mismatch')
           include_appids = {
               feed[key]['appid'] for key in include_keys
               if key in feed and key.startswith('App_') and feed[key]['appid']
@@ -126,6 +137,10 @@ jobs:
               if row is None or meta is None:
                   unresolved.append({'key':key,'reason':'missing_feed_or_metadata'})
                   continue
+              try:
+                  validate_metadata_identity(key, meta, row)
+              except ValueError as exc:
+                  raise SystemExit(f'Unsafe content metadata identity: {exc}') from exc
 
               title = (meta.get('store_name') or row['title'] or '').strip()
               entity_kind = meta.get('entity_kind')
@@ -264,6 +279,9 @@ jobs:
                   'taste_model_version': taste.get('taste_model_version')
               },
               'input_taste_include_count': processed,
+              'historical_taste_include_count': processed + len(out_of_current_feed_keys),
+              'out_of_current_feed_count': len(out_of_current_feed_keys),
+              'out_of_current_feed_keys': out_of_current_feed_keys,
               'eligible_count': len(eligible),
               'excluded_count': len(excluded),
               'unresolved_count': len(unresolved),

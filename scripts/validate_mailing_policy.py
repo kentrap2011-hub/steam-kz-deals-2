@@ -51,7 +51,7 @@ def main():
     checks = {
         'contract': p.get('contract') == 'GAME-DEALS-MAILING',
         'canonical': p.get('status') == 'canonical',
-        'version': p.get('version') == '1.21',
+        'version': p.get('version') == '1.22',
         'policy_first': p['policy_loading']['load_before_any_ingest'] is True,
         'fail_closed': p['policy_loading']['fail_closed_if_unavailable'] is True,
         'full_snapshot': p['delivery']['mode'] == 'full_daily_snapshot',
@@ -129,7 +129,7 @@ def main():
         'cache_requires_exact_profile_blob': 'exact_profile_blob_sha' in cache_hit_requirements,
         'old_profile_entries_not_hits': mixed_generation.get('old_generation_entries_are_preserved_but_are_not_cache_hits_for_a_new_binding') is True,
         'never_rebind_old_entry_without_ai': mixed_generation.get('never_upgrade_an_old_entry_fit_binding_or_add_factors_without_a_new_ai_verdict') is True,
-        'projection_compares_exact_profile_blob': "profile_ok = cached['profile_blob_sha'] == profile['blob_sha']" in projection_source,
+        'projection_compares_exact_profile_blob': "profile_ok = cached['profile_blob_sha'] == profile_blob_sha" in projection_source,
         'projection_requeues_profile_change': "canonical_profile_blob_changed_for_entry" in projection_source,
         'incremental_checkpoint': cp['mode'] == 'incremental_by_chosen_feed_chunk',
         'checkpoint_each_chunk': cp['checkpoint_after_each_chunk_final_post_audit_verdicts'] is True,

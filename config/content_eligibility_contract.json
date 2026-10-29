@@ -14,7 +14,9 @@
     "must_cover_every_current_taste_include": true,
     "must_be_bound_to_current_mailing_tree_and_taste_index": true,
     "app_type_source": "Steam Store appdetails",
-    "package_contents_source": "Steam Store packagedetails"
+    "package_contents_source": "Steam Store packagedetails",
+    "current_offer_scope": "current GitHub-bound mailing feed only; historical cache INCLUDE verdicts are retained but not current offers",
+    "historical_out_of_feed_keys_must_be_attested": true
   },
   "rules": {
     "game_app": "eligible",
@@ -42,8 +44,8 @@
     "producer_workflow": ".github/workflows/build-content-eligibility-validation.yml",
     "output": "data/cache/content_eligibility.validation.json",
     "pass_requires": [
-      "all 101 current taste includes are classified",
-      "eligible plus excluded equals 101",
+      "all current-feed taste includes are classified, while historical out-of-feed includes are listed separately",
+      "eligible plus excluded equals the current-feed INCLUDE count (dynamic, not a historical fixed count)",
       "unresolved_count is zero",
       "all exclusions use canonical content eligibility reason codes",
       "no wishlist ownership inference",

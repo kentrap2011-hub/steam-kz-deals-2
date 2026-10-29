@@ -10,6 +10,7 @@ on:
       - "data/production/mailing/**"
       - "data/cache/content_eligibility.validation.json"
       - "data/cache/content_metadata.json"
+      - "scripts/legacy_offer_scope.py"
       - ".github/workflows/build-offer-family-resolution.yml"
 
 permissions:
@@ -33,6 +34,7 @@ jobs:
         run: |
           python - <<'PY'
           import json
+          import sys
           import re
           import subprocess
           import unicodedata
@@ -54,6 +56,8 @@ jobs:
           mailing=json.loads(MAILING.read_text(encoding='utf-8'))
           elig=json.loads(ELIG.read_text(encoding='utf-8'))
           meta=json.loads(META.read_text(encoding='utf-8'))
+          sys.path.insert(0, str(Path('scripts').resolve()))
+          from legacy_offer_scope import put_feed, assert_family_inputs
 
           if policy.get('status')!='canonical': raise SystemExit('Policy not canonical')
           if contract.get('contract')!='OFFER-FAMILY-RESOLUTION-V1': raise SystemExit('Unexpected family contract')
@@ -72,13 +76,24 @@ jobs:
                   c=line.split('\t')
                   if len(c)!=len(cols): raise SystemExit(f'Column mismatch in {p}')
                   key=c[ci['key']]
-                  feed[key]={
+                  put_feed(feed, {
                       'key':key,
                       'appid':c[ci['appid']],
                       'title':c[ci['title']],
                       'discount_percent':int(float(c[ci['discount_percent']])),
                       'final_kzt':float(c[ci['final_kzt']]),
-                  }
+                  })
+
+          if len(feed) != int(mailing['item_count']):
+              raise SystemExit('Current mailing item_count mismatch')
+          try:
+              assert_family_inputs(elig, meta, feed,
+                  policy_sha=sha('config/mailing_policy.json'),
+                  mailing_sha=sha('data/production/mailing'),
+                  metadata_sha=sha('data/cache/content_metadata.json'),
+                  taste_index_sha=sha('data/cache/taste_fit.index.json'))
+          except ValueError as exc:
+              raise SystemExit(f'Unsafe family input authority: {exc}') from exc
 
           metadata=meta['entries']
           if not eligible_keys <= set(metadata): raise SystemExit('Metadata missing eligible keys')
