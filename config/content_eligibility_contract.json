@@ -45,7 +45,7 @@
     "output": "data/cache/content_eligibility.validation.json",
     "pass_requires": [
       "all current-feed taste includes are classified, while historical out-of-feed includes are listed separately",
-      "eligible plus excluded equals 101",
+      "eligible plus excluded equals the current-feed INCLUDE count (dynamic, not a historical fixed count)",
       "unresolved_count is zero",
       "all exclusions use canonical content eligibility reason codes",
       "no wishlist ownership inference",
