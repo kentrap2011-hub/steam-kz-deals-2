@@ -90,7 +90,8 @@ jobs:
               assert_family_inputs(elig, meta, feed,
                   policy_sha=sha('config/mailing_policy.json'),
                   mailing_sha=sha('data/production/mailing'),
-                  metadata_sha=sha('data/cache/content_metadata.json'))
+                  metadata_sha=sha('data/cache/content_metadata.json'),
+                  taste_index_sha=sha('data/cache/taste_fit.index.json'))
           except ValueError as exc:
               raise SystemExit(f'Unsafe family input authority: {exc}') from exc
 
