@@ -2896,7 +2896,7 @@
       "id": "steam-postmerge-actions-l3-targeted-repair-01",
       "title": "ЧАТ 4 — три адресные правки по результатам Steam QA",
       "goal": "Исправить отсутствие проверки идентичности метаданных, совместно устаревшие источники и жёсткое число 101 в исходном изменении №346.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Три конкретных дефекта с негативными тестами и чётким исходным изменением.",
       "urgency": "высокая",
@@ -2907,16 +2907,16 @@
       "depends_on": [
         "steam-postmerge-actions-failures-final-l3-qa-01"
       ],
-      "blocker": "Новый физический ЧАТ 4; менять только существующий source PR №346, три замечания CR-1/2/3.",
-      "recent_completion": false,
+      "blocker": "Итоговый repair-отчёт находится в PR №346, финальный HEAD 8619ad1dfcd88ea203f6d7e732f335e3597767db с 3/3 GREEN CI. Исправление ожидает отдельную узкую L3 QA.",
+      "recent_completion": true,
       "updated_on": "2026-10-29",
-      "updated_at_utc": "2026-10-29T02:47:19.040Z"
+      "updated_at_utc": "2026-10-29T10:28:29.876Z"
     },
     {
       "id": "director-chat-slot-auto-release-protocol-implement-01",
       "title": "ЧАТ 1 — исправить каноническое правило освобождения рабочих чатов",
       "goal": "Заменить противоречивое требование подтверждения закрытия UI правилами автоматического освобождения номера после финального отчёта.",
-      "status": "active",
+      "status": "complete",
       "effort": "низкая",
       "effort_reason": "Одно точечное изменение действующего директорского протокола по принятому аудиту.",
       "urgency": "высокая",
@@ -2927,10 +2927,30 @@
       "depends_on": [
         "director-chat-completion-slot-release-recurrence-audit-01"
       ],
-      "blocker": "Новый физический ЧАТ 1; только минимальная L1 правка директорского протокола и отчёт без нового аудита.",
+      "blocker": "Итоговый worker report сдан в PR №354; L1 governance-исправление принято в main (merge d561128cc40bce3f0096b7c3386da09ba1e3b50d). Номер чата освобождён.",
+      "recent_completion": true,
+      "updated_on": "2026-10-29",
+      "updated_at_utc": "2026-10-29T10:28:29.876Z"
+    },
+    {
+      "id": "steam-postmerge-actions-l3-final-delta-qa-01",
+      "title": "ЧАТ 1 — независимая L3 QA последних трёх исправлений Steam",
+      "goal": "Подтвердить устранение CR-1/CR-2/CR-3 в исходном PR №346 без повторения общего аудита или live production.",
+      "status": "active",
+      "effort": "низкая",
+      "effort_reason": "Только три конкретные материальные дельты и регрессии по прежнему QA №349.",
+      "urgency": "высокая",
+      "urgency_reason": "После адресной правки Steam автоматическое обновление сайта ожидает последнюю проверку перед директорской приёмкой.",
+      "task_file": "WORKER_TASK_STEAM_POSTMERGE_ACTIONS_L3_FINAL_DELTA_QA_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "steam-postmerge-actions-l3-targeted-repair-01"
+      ],
+      "blocker": "Новый физический ЧАТ 1; одна независимая report-only L3 delta QA по исправлениям CR-1/CR-2/CR-3 в исходном PR №346.",
       "recent_completion": false,
       "updated_on": "2026-10-29",
-      "updated_at_utc": "2026-10-29T02:56:11.590Z"
+      "updated_at_utc": "2026-10-29T10:28:29.876Z"
     }
   ]
 }
