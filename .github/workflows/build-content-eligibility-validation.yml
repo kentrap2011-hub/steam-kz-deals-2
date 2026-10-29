@@ -62,7 +62,7 @@ jobs:
           checkpoint = json.loads(CHECKPOINT.read_text(encoding='utf-8'))
           metadata = json.loads(METADATA.read_text(encoding='utf-8'))
           sys.path.insert(0, str(Path('scripts').resolve()))
-          from legacy_offer_scope import put_feed, current_includes
+          from legacy_offer_scope import put_feed, current_includes, validate_metadata_identity
 
           if policy.get('status') != 'canonical':
               raise SystemExit('Policy is not canonical')
@@ -137,6 +137,10 @@ jobs:
               if row is None or meta is None:
                   unresolved.append({'key':key,'reason':'missing_feed_or_metadata'})
                   continue
+              try:
+                  validate_metadata_identity(key, meta, row)
+              except ValueError as exc:
+                  raise SystemExit(f'Unsafe content metadata identity: {exc}') from exc
 
               title = (meta.get('store_name') or row['title'] or '').strip()
               entity_kind = meta.get('entity_kind')
