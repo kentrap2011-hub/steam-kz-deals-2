@@ -2951,6 +2951,26 @@
       "recent_completion": false,
       "updated_on": "2026-10-29",
       "updated_at_utc": "2026-10-29T10:28:29.876Z"
+    },
+    {
+      "id": "dossier-v1-manual-postgroup-stop-gate-01",
+      "title": "ЧАТ 2 — предотвратить досрочное завершение ручного Dossier после группы",
+      "goal": "Ввести обязательную попытку следующей frozen группы либо подтверждённое основание остановки перед завершением ручного one-shot.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Один локальный prompt-level gate для известного сценария без изменения исполнения и очереди.",
+      "urgency": "высокая",
+      "urgency_reason": "Ручной Dossier завершился после одной группы без попытки перехода к следующей и доказанного stop reason.",
+      "task_file": "WORKER_TASK_DOSSIER_V1_MANUAL_POSTGROUP_STOP_GATE_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-v1-pr322-sequential-frozen-outcome-final-l3-delta-qa-01"
+      ],
+      "blocker": "Новый физический ЧАТ 2: узкое исправление manual launcher без запуска Dossier или расширения authority.",
+      "updated_on": "2026-10-29",
+      "updated_at_utc": "2026-10-29T10:54:10.912Z",
+      "recent_completion": false
     }
   ]
 }
