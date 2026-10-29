@@ -352,11 +352,13 @@ def reconcile_current_pending_groups_from_cache(
     return next_manifest, reused
 
 
-def _read_frozen_audit(path):
+def _read_frozen_audit(path, *, include_group_outcomes=False):
+    """Read durable consumed marker keys and, when needed, exact old-group outcomes."""
     consumed = set()
+    group_outcomes = {}
     path = Path(path)
     if not path.exists():
-        return consumed
+        return (consumed, group_outcomes) if include_group_outcomes else consumed
     for line in path.read_text(encoding="utf-8").splitlines():
         if not line.strip():
             continue
@@ -370,8 +372,24 @@ def _read_frozen_audit(path):
             and isinstance(key, list)
             and len(key) == 4
         ):
-            consumed.add((str(key[0]), str(key[1]), int(key[2]), str(key[3])))
-    return consumed
+            normalized = (str(key[0]), str(key[1]), int(key[2]), str(key[3]))
+            consumed.add(normalized)
+            if include_group_outcomes:
+                outcome = record.get("outcome")
+                kind = (
+                    "candidate" if outcome in (
+                        "dossier_candidate_accepted_after_rollover",
+                        "dossier_candidate_accepted_current_snapshot",
+                    )
+                    else "terminal" if outcome in (
+                        "semantic_exhaustion_consumed_after_rollover",
+                        "semantic_exhaustion_consumed_current_snapshot",
+                    )
+                    else None
+                )
+                if kind is not None:
+                    group_outcomes.setdefault(normalized[1:], set()).add(kind)
+    return (consumed, group_outcomes) if include_group_outcomes else consumed
 
 
 def _frozen_rejection(path, validator_error, quarantine_root):
@@ -406,7 +424,9 @@ def _frozen_rollover_transports(
     terminals = []
     rejected = []
     replays = []
-    consumed = _read_frozen_audit(frozen_authority_audit_path)
+    consumed, consumed_group_outcomes = _read_frozen_audit(
+        frozen_authority_audit_path, include_group_outcomes=True
+    )
     if not root.exists():
         return accepted, terminals, rejected, replays
 
@@ -483,6 +503,44 @@ def _frozen_rollover_transports(
             })
         except (ValueError, KeyError, TypeError, OSError, json.JSONDecodeError, UnicodeDecodeError) as exc:
             rejected.append(_frozen_rejection(path, str(exc), retryable_rejection_root))
+
+    # Validate each immutable frozen transport first, then decide the outcome for
+    # its *group*, not for its marker. Different legitimate marker parents have
+    # different consumption keys but can authorize the same old-snapshot group.
+    # A candidate and semantic exhaustion cannot both be canonical for that
+    # group, even when their deterministic create-only paths are distinct.
+    def frozen_group_identity(entry):
+        proof = entry["proof"]
+        return (proof["snapshot_id"], int(proof["sequence"]), proof["group_sha256"])
+
+    conflicting_groups = (
+        {frozen_group_identity(entry) for entry in accepted}
+        & {frozen_group_identity(entry) for entry in terminals}
+    )
+    if conflicting_groups or consumed_group_outcomes:
+        remaining_candidates = []
+        remaining_terminals = []
+        for entries, remaining, opposite in (
+            (accepted, remaining_candidates, "terminal"),
+            (terminals, remaining_terminals, "candidate"),
+        ):
+            for entry in entries:
+                group = frozen_group_identity(entry)
+                if group in conflicting_groups:
+                    reason = "conflicting_candidate_and_terminal_receipt_for_frozen_group"
+                elif opposite in consumed_group_outcomes.get(group, set()):
+                    # A prior drain already committed the opposite outcome for
+                    # this exact immutable group, possibly using another marker.
+                    # Only reject the new transport; preserve last-good cache,
+                    # its consumed ledger, and all independent sibling groups.
+                    reason = "opposite_frozen_group_outcome_already_consumed"
+                else:
+                    remaining.append(entry)
+                    continue
+                rejected.append(_frozen_rejection(
+                    entry["path"], reason, retryable_rejection_root
+                ))
+        accepted, terminals = remaining_candidates, remaining_terminals
 
     return accepted, terminals, rejected, replays
 

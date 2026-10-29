@@ -349,6 +349,70 @@
         "create, edit, enable, disable, reschedule or emulate Scheduled Tasks or automations",
         "create a recurring scheduler, quota, second queue, retry daemon or backlog manager"
       ]
+    },
+    "dossier_v1_one_shot": {
+      "allowed": true,
+      "authorization_source": "WORKER_TASK_DOSSIER_V1_EXPLICIT_MANUAL_ONE_SHOT_AUTHORIZATION_01.md",
+      "canonical_launcher_prompt": "config/taste_steam_review_dossier_manual_one_shot_prompt.md",
+      "canonical_runtime_prompt": "config/taste_steam_review_dossier_runtime_prompt.md",
+      "canonical_worker_prompt": "config/taste_steam_review_dossier_worker_prompt.md",
+      "canonical_contract": "config/taste_steam_review_dossier_contract.json",
+      "required_evidence_contracts": [
+        "config/taste_steam_review_dossier_schema.json",
+        "config/taste_steam_review_dossier_web_evidence_contract.json",
+        "config/taste_steam_review_dossier_terminal_receipt_schema.json"
+      ],
+      "role": "isolated_user_launched_dossier_v1_semantic_data_plane_only",
+      "requires_fresh_explicit_user_launch_every_run": true,
+      "recurring_schedule_allowed": false,
+      "may_create_or_modify_scheduled_task": false,
+      "scheduled_dossier_role_unchanged": true,
+      "ordinary_interactive_developer_chat_role_unchanged": true,
+      "activation_requires": [
+        "one fresh explicit user request for exactly one isolated Dossier V1 semantic invocation",
+        "current GitHub-owned active TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V2 with normal first pass pending",
+        "exact existing canonical runtime, worker, schema, web evidence and terminal receipt contracts",
+        "one create-only nonce-only run-start marker and exact actual Git-parent frozen authority"
+      ],
+      "github_owns": [
+        "exact pending three-game group plan, descriptor identities, ordered traversal and cache compatibility",
+        "Git-parent frozen marker authority, immutable descriptor/work/evidence binding and liveness",
+        "strict buffered candidate and semantic-exhaustion terminal validation",
+        "create-only transport classification, canonical cache persistence and idempotent replay handling",
+        "per-group accepted/pending/failed and recovery eligibility, attempt accounting and completeness",
+        "daily projection, downstream Deep readiness and production publication"
+      ],
+      "worker_may": [
+        "perform one advisory current-main active/nonempty preflight, then create one fresh nonce-only Dossier V1 marker",
+        "freeze the exact pending group list, descriptors, runtime/worker/evidence bindings and compatible cache from the actual marker parent only",
+        "perform neutral, profile-agnostic research for uncached exact descriptor items using the unchanged semantic worker contract",
+        "submit one exact create-only buffered candidate or truly exhausted terminal receipt per frozen group in canonical order",
+        "continue independent frozen pending groups without waiting for GitHub ingest while safe runtime budget permits",
+        "report buffered/submitted independently from canonically accepted results"
+      ],
+      "concurrent_and_stale_invocation_guardrails": {
+        "scheduled_and_manual_invocations_may_overlap": true,
+        "manual_exclusive_lease_or_scheduler_lock_created": false,
+        "every_invocation_requires_fresh_nonce_marker": true,
+        "marker_parent_not_observed_main_is_authority": true,
+        "after_marker_mutable_main_rebinding_allowed": false,
+        "stale_or_inconsistent_marker_parent_fails_closed": true,
+        "deterministic_group_result_path_must_be_create_only": true,
+        "on_existing_path_or_create_failure": "stop affected path fail closed; no replacement, overwrite, alternate file, or self-authorized retry",
+        "group_acceptance_replay_and_recovery_owner": "github_control_plane",
+        "no_extra_manual_confirmation_or_receipt_mechanism": true
+      },
+      "forbidden": [
+        "convert an ordinary developer/operator session into Dossier backlog execution without a fresh one-shot request",
+        "choose or revise group scope, ordering, cache eligibility, descriptor identity or frozen marker-parent binding",
+        "choose a historical authority commit, reuse an old marker or rebind a stale frozen group to current main",
+        "overwrite, rename, delete or create alternate candidate/terminal paths after any collision or rejected transport",
+        "treat a successful create-file as canonical acceptance or self-authorize recovery or a semantic-exhaustion receipt on runtime failure",
+        "write directly to canonical Dossier cache, group state, worker index, recovery data or downstream production",
+        "create, edit, enable, disable, reschedule or emulate a Scheduled Task or automation",
+        "create a second scheduler, recurring manual stage, quota, queue, retry daemon or backlog manager",
+        "modify Dossier V2, Fast, Deep, taste ranking or the original Dossier semantics during invocation"
+      ]
     }
   },
   "site_publication_resilience": {
