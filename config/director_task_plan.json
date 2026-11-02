@@ -3249,6 +3249,24 @@
       "updated_on": "2026-11-02",
       "updated_at_utc": "2026-11-02T18:12:54.523Z",
       "recent_completion": false
+    },
+    {
+      "id": "steam-targeted-dlc-identity-blocker-restore-auto-dossier-01",
+      "title": "ЧАТ 2 — исправить DLC blocker и автоподготовку Dossier",
+      "goal": "Устранить подтверждённый upstream blocker Steam DLC, обеспечить безопасную автоматическую подготовку Dossier в существующем GitHub-конвейере.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Узкая правка существующего collector и адресные регрессионные тесты; не создавать новый pipeline.",
+      "urgency": "высокая",
+      "urgency_reason": "После сбоя Steam 1 ноября автоматическая очередь Dossier не обновляется с 27 октября.",
+      "task_file": "WORKER_TASK_STEAM_TARGETED_DLC_IDENTITY_BLOCKER_RESTORE_AUTO_DOSSIER_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Никаких semantic/production запусков; требуется code PR, CI, риск-адекватная независимая QA и Director merge.",
+      "recent_completion": false,
+      "updated_on": "2026-11-02",
+      "updated_at_utc": "2026-11-02T18:39:07.998Z"
     }
   ]
 }

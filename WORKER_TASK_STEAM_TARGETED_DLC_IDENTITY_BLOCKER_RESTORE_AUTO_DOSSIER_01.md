@@ -1,0 +1,31 @@
+# НОВЫЙ ЧАТ 2 — исправить upstream Steam DLC blocker и вернуть автоматическую очередь Dossier
+
+Repository: kentrap2011-hub/steam-kz-deals-2
+Source of truth: main
+Task ID: steam-targeted-dlc-identity-blocker-restore-auto-dossier-01
+Worker slot: НОВЫЙ физический ЧАТ 2
+Mode: bounded IMPLEMENT + targeted tests + GitHub PR and normal CI; NOT semantic worker
+Report: reviews/worker_reports/steam-targeted-dlc-identity-blocker-restore-auto-dossier-01.md
+
+## START and authority
+Полностью прочитай CHAT_PROTOCOL.md, выполни START gate; затем этот task, адресные CHAT_CONTEXT.md, DIRECTOR_PROTOCOL.md только если реально необходимы обязанности директорской приёмки, PROJECT_ROUTES.md, config/execution_ownership_contract.json, релевантный pipeline contract и WORKER_TASK files только по прямой потребности. Работай только в repo. После этого **исправляй в этом же чате** — не ограничивайся RECON/планом/отчётом, если implementation допустим. Архитектурный preflight ownership обязателен перед правкой pipeline; не переносить контроль в ChatGPT.
+
+## Подтверждённая причинная цепочка
+- GitHub production `Steam KZ production shortlist` scheduled 2026-11-01, https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/41362591621, failed at `targeted_dlc_relations` after ~1028.5s: `DLC relationship contains duplicates/invalid identities: 239140`. Commercial publisher correctly preserved last stable production.
+- Код `scripts/steam_targeted_paid_lanes.py::discover_dlc_for_bases` (main) builds `ids = sorted({str(value) for value in raw if str(value).isdigit()}, key=int)` and if len(ids) != len(raw) raises generic error; this conflates **benign exact duplicate IDs** and **invalid IDs/identities**. No raw response evidence yet establishes which happened for parent AppID 239140.
+- GitHub `Build pre-AI deterministic payload` run https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/41498105517 failed on 2026-11-02 at Store snapshot, `Fresh deal discovery prerequisite failed: discovery_source_older_than_allowed,candidate_universe_not_rebuilt_for_current_production_cycle`. All downstream steps, including `Prepare fixed daily full Steam review dossier backlog`, were skipped.
+- `data/production/pre_ai/taste_steam_review_dossier_worker_index.json` last refreshed 2026-10-27; its old `web_evidence_contract_binding.worker_prompt_sha256` no longer matches the worker prompt merged via source PR #371 on 2026-11-02. Manual semantic Dossier run against this stale projection must remain fail-closed.
+- The existing automatic chain `.github/workflows/steam-test.yml` scheduled Steam production -> mailing -> `.github/workflows/build-pre-ai-store-snapshot.yml` already owns daily Dossier projection. Do not invent manual repin ritual, direct worker-index edits or a new scheduler.
+
+## Required bounded IMPLEMENT
+1. Inspect exact producer, current target function, relevant upstream contracts, existing `scripts/test_steam_targeted_paid_lanes.py` and connected tests. Determine true failure class with real evidence when safe, otherwise distinguish observation vs hypothesis. Handle repeated exact valid DLC AppIDs as **set membership** (dedup with deterministic order) if safe under contract, while rejecting malformed/negative/non-integer/contradictory IDs, absent parent and unsafe relationship data. Preserve strict invariants, exact identity, bounded request concurrency, KZT pricing and conservative behavior. Do not blanket `except: continue` or silently drop unverifiable parents.
+2. Add focused regression fixtures for duplicate valid membership and malformed identity and existing fail-closed cases incl incorrect parent, invalid type, access failure, cross-parent siblings. Prove observed specific AppID 239140 class if verifiable; otherwise document exact lack of evidence and why safe normalization is allowed. Run existing targeted tests, syntax and applicable complete collector regressions. Fix any test failures in same scoped PR.
+3. Verify no new independent failure pathway is invented: source edit only on existing GitHub-owned collector, and existing daily/pre-AI chain should automatically regenerate fresh discovery and Dossier index (including new worker prompt binding) after next successful upstream run. Inspect trigger paths: if targeted file changes do not trigger existing collector on push, check that existing schedule is authoritative and do not claim immediate auto-refresh. If narrow non-production workflow trigger fix is required, include it only with explicit risk review, no forced production dispatch.
+4. Preserve safety: don't weaken `discovery_freshness.py` or freshness cutoff just to make red jobs green; don't rebuild generated Dossier queue manually, don't edit current canonical cache or run real semantic Dossier, Deep, V2, Scheduled ChatGPT, production reruns or GitHub workflow dispatch. No unsafe immediate replay/retry. User authorized a code correction, not a production semantic invocation.
+5. Implement via **one source branch + one source PR** in existing repo, not report-only. Run CI, address failures in this same PR without new worker-chats if possible. Deliver source PR URL, head SHA, exact changed files, tests PASS/FAIL, actual cause, what remains blocked and one next actor. Source PR is not equivalent to accepted fix until Director verifies risk-appropriate independent QA/CI and merges. For production-facing code identify L3 risk to Director; do not self-merge. If truly blocked by ownership, produce exact fail-closed reason with one very narrow path to implementation, rather than an open-ended audit.
+
+## Acceptance / closeout
+- One working code correction with regression tests, not just diagnosis;
+- Valid duplicate membership does not incorrectly stop entire commercial collector, truly invalid identity does still fail safely;
+- Existing no-manual queue preparation route preserved; downstream Dossier index only considered fresh after actual producer cycle and exact worker binding re-established;
+- Explicit next actor: Director to perform narrow risk-appropriate QA and adopt source PR, then observe a normally scheduled successful pipeline. Don't give user the old Dossier V1 one-shot launcher until freshness/bindings are actually confirmed.
