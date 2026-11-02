@@ -3138,97 +3138,117 @@
       "id": "director-durable-closeout-recovery-implement-01",
       "title": "ЧАТ 1 — непрерывное завершение и резерв задач",
       "goal": "Закрыть потери переходов между результатом worker, QA, принятием и сбоем регистрации при сохранении безопасных полномочий.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Адресный анализ существующих контрактов и минимальное проверяемое исправление.",
       "urgency": "высокая",
       "urgency_reason": "Подтверждены незакрытые готовые PR и отказ инструмента регистрации без канонической записи.",
       "task_file": "WORKER_TASK_DIRECTOR_DURABLE_CLOSEOUT_RECOVERY_IMPLEMENT_01.md",
-      "worker_slot": "ЧАТ 1",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "director-postdiagnosis-consent-handoff-continuity-implement-01"
       ],
-      "blocker": "Разрешён bounded safe recovery, но не автономные production или semantic действия.",
-      "recent_completion": false,
+      "blocker": "Отчёт и план опубликованы; основная реализация отложена до устранения перекрытия директорских правил.",
+      "recent_completion": true,
       "updated_on": "2026-11-02",
-      "updated_at_utc": "2026-11-02T17:01:23.457Z"
+      "updated_at_utc": "2026-11-02T18:12:54.523Z"
     },
     {
       "id": "dossier-v1-pr371-binding-independent-qa-01",
       "title": "ЧАТ 2 — независимая QA Dossier V1",
       "goal": "Проверить исправление масок источников и безопасность неизменяемых привязок до приёмки.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Один адресный source PR и набор регрессионных тестов с проверкой обязательных CI.",
       "urgency": "высокая",
       "urgency_reason": "Отклонённые группы не восстановлены, качество новой генерации требует независимого контроля.",
       "task_file": "WORKER_TASK_DOSSIER_V1_PR371_BINDING_INDEPENDENT_QA_01.md",
-      "worker_slot": "ЧАТ 2",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "dossier-v1-exact-product-binding-null-mask-implement-01"
       ],
-      "blocker": "Только report-only QA, нельзя запускать повторный semantic или recovery.",
+      "blocker": "Независимая проверка завершена, исходное исправление принято в основной ветке.",
       "updated_on": "2026-11-02",
-      "updated_at_utc": "2026-11-02T17:04:57.515Z",
-      "recent_completion": false
+      "updated_at_utc": "2026-11-02T18:12:54.523Z",
+      "recent_completion": true
     },
     {
       "id": "director-pr372-no-repeat-approval-implement-01",
       "title": "ЧАТ 3 — убрать повторный вопрос о принятии",
       "goal": "Обеспечить принятие проверенного результата согласованной разработки без второго разрешения.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Адресная правка одного существующего PR с проверочными сценариями для управления полномочиями.",
       "urgency": "высокая",
       "urgency_reason": "После готового результата директор необоснованно останавливается и перекладывает решение на пользователя.",
       "task_file": "WORKER_TASK_DIRECTOR_PR372_NO_REPEAT_APPROVAL_IMPLEMENT_01.md",
-      "worker_slot": "ЧАТ 3",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "director-postdiagnosis-consent-handoff-continuity-implement-01"
       ],
-      "blocker": "Продолжать исходный PR без реальных semantic или production действий; проверять риск разрешений.",
+      "blocker": "Изменение правил внесено в исходный PR, обязательная независимая L3 QA ещё выполняется.",
       "updated_on": "2026-11-02",
-      "updated_at_utc": "2026-11-02T17:04:57.515Z",
-      "recent_completion": false
+      "updated_at_utc": "2026-11-02T18:12:54.523Z",
+      "recent_completion": true
     },
     {
       "id": "director-recovery-fallback-existing-backup-independent-qa-01",
       "title": "ЧАТ 4 — независимая проверка резервного хранения",
       "goal": "Проверить фактическое независимое резервирование незавершённых задач, актуальность и восстановление при отказах GitHub.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Только адресные GitHub записи и один Library snapshot, безопасные сценарии без вызова отказов.",
       "urgency": "высокая",
       "urgency_reason": "Наличие файла не гарантирует доступность при полном отказе GitHub, синхронизацию или правильное восстановление.",
       "task_file": "WORKER_TASK_DIRECTOR_RECOVERY_FALLBACK_EXISTING_BACKUP_INDEPENDENT_QA_01.md",
-      "worker_slot": "ЧАТ 4",
+      "worker_slot": null,
       "order": null,
       "depends_on": [],
-      "blocker": "Независимая read-only QA существующего резерва, без проверки будущего кода ЧАТА 1.",
-      "recent_completion": false,
+      "blocker": "QA подтвердила только частичный резерв; полноценный recovery не внедрён.",
+      "recent_completion": true,
       "updated_on": "2026-11-02",
-      "updated_at_utc": "2026-11-02T17:46:49.838Z"
+      "updated_at_utc": "2026-11-02T18:12:54.523Z"
     },
     {
       "id": "director-worker-prompt-latency-target-60s-audit-01",
       "title": "ЧАТ 5 — аудит медленной выдачи промптов",
       "goal": "Найти подтверждённые причины долгой подготовки и регистрации коротких worker-промптов и практичный путь к обычной выдаче около минуты.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Адресные четыре регистрации и старые выводы, без полного аудита репозитория.",
       "urgency": "высокая",
       "urgency_reason": "Пользователь наблюдает повторные задержки в несколько минут при простой директорской операции.",
       "task_file": "WORKER_TASK_DIRECTOR_WORKER_PROMPT_LATENCY_TARGET_60S_AUDIT_01.md",
-      "worker_slot": "ЧАТ 5",
+      "worker_slot": null,
       "order": null,
       "depends_on": [],
-      "blocker": "Независимый read-only анализ; CI и проверка main остаются обязательными для новых заданий.",
-      "recent_completion": false,
+      "blocker": "Аудит закончен, предложения по сокращению задержек не внедрены.",
+      "recent_completion": true,
       "updated_on": "2026-11-02",
-      "updated_at_utc": "2026-11-02T17:52:38.483Z"
+      "updated_at_utc": "2026-11-02T18:12:54.523Z"
+    },
+    {
+      "id": "director-pr372-consent-gate-independent-l3-qa-01",
+      "title": "ЧАТ 1 — независимая L3 QA согласования и принятия",
+      "goal": "Независимо проверить исправленные границы полномочий директора в существующем source PR перед принятием без повторного согласия.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Адресная проверка source diff и точного CI, сценарии положительных и отрицательных разрешений.",
+      "urgency": "высокая",
+      "urgency_reason": "Правила завершения задач нельзя применять до независимой проверки авторизации.",
+      "task_file": "WORKER_TASK_DIRECTOR_PR372_CONSENT_GATE_INDEPENDENT_L3_QA_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "director-pr372-no-repeat-approval-implement-01"
+      ],
+      "blocker": "Без фактического запуска и без source merge исполнителем; только независимый report-only QA.",
+      "updated_on": "2026-11-02",
+      "updated_at_utc": "2026-11-02T18:12:54.523Z",
+      "recent_completion": false
     }
   ]
 }
