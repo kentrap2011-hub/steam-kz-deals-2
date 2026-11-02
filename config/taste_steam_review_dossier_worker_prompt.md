@@ -105,6 +105,22 @@ For both locatorless modes, `exact_product_binding` must be machine-checkable fr
 - `source_title_release`: exact title plus resolved release year unambiguously match the descriptor product;
 - `source_appid_title_release`: all three agree.
 
+Every `provenance.sources[].exact_product_binding` MUST serialize **all four keys** `basis`, `appid`, `title`, `release_year` even when a value is `null`. Use the **basis-specific null mask**, based only on what the **actually inspected source/result** proves (not what the dossier already knows):
+
+- `source_appid`: the actual source exposes the exact Steam AppID; set `title:null` and `release_year:null` even if the dossier's correct title/year are known.
+- `source_title_release`: the actual source exposes the exact product title **and release year**; set `appid:null` even if the dossier's Steam AppID is known.
+- `source_appid_title_release`: use only when that same inspected source/result genuinely proves **all three** exact AppID, title and release year, not when any field came from another page, search query, descriptor or dossier.
+
+Exact serialization examples (values are **illustrative synthetic source observations**, not a license to infer metadata):
+
+```json
+{"basis":"source_appid","appid":"910001","title":null,"release_year":null}
+{"basis":"source_title_release","appid":null,"title":"Example Game","release_year":2020}
+{"basis":"source_appid_title_release","appid":"910001","title":"Example Game","release_year":2020}
+```
+
+For the last two examples, the inspected source must independently show the actual title/year; for the last one it must independently show the AppID too. Extra non-null fields forbidden by the chosen basis are a **strict-ingest-rejecting error** even if their values happen to match the dossier. Do not invent an AppID from a search query, third-party URL or similar game; do not copy title/release_year from dossier identity to fill missing source evidence. Never mix the base game, DLC, edition, remake, remaster or sequel to satisfy a binding. If the actual source does not establish a valid exact binding, do not serialize it as an observed-feedback source.
+
 If a result belongs to the wrong base game, DLC/edition, sequel, remake/remaster, old release, or same-named different product, it is unusable. If identity remains ambiguous, fail closed. A query that mentions the target, a Russian locale parameter, an aggregate count, or a generic domain result is never enough.
 
 A target page **does not have to open successfully** after a `search_result_observation` has already exposed usable exact-product concrete player feedback. A later HTTP/access failure is a fact about the target page, not a reason to erase content already inspected in the search/discovery representation. Conversely, a result row with only title/domain/count/rating and no concrete player-authored content is discovery metadata only.

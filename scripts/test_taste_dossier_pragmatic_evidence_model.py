@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """PRAG-01..PRAG-15 regressions for pragmatic exact-product observed evidence."""
 import copy
+import hashlib
 import json
+import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
-from taste_steam_review_dossier_daily import load_contract
+from taste_steam_review_dossier_daily import BUFFER_GROUP_SCHEMA, build_daily_work_manifest, load_contract
+from taste_steam_review_dossier_buffered import validate_buffer_artifact
+from taste_steam_review_dossier_prepublication import validate_prepublication_artifact
+from taste_steam_review_dossier_worker_projection import WORKER_GROUP_SCHEMA, buffered_candidate_descriptor_projection
 from taste_steam_review_dossier_strict import derive_dossier_summary, validate_dossier_strict
 from taste_steam_review_dossier_test_fixture import web_dossier
 
@@ -94,6 +99,35 @@ def search_result_dossier(appid, now, *, title=None, release_year=2020, language
     }
     base["provenance"] = {"sources": [identity, source], "player_feedback_records": [record]}
     return base
+
+
+
+def observed_binding_fixture(appid, now, basis):
+    """Offline source-backed *synthetic* fixture, not proof of live web content."""
+    appid = str(appid)
+    observed_source_identity = {"appid": appid, "title": f"Game {appid}", "release_year": 2020}
+    doc = search_result_dossier(appid, now, title=observed_source_identity["title"])
+    source = doc["provenance"]["sources"][1]
+    if basis == "source_appid":
+        # Steam collection URL visibly embeds the source AppID; no title/year is asserted.
+        binding = {"basis": basis, "appid": observed_source_identity["appid"],
+                   "title": None, "release_year": None}
+    elif basis == "source_title_release":
+        # Synthetic third-party feedback result explicitly exposes title and year, not Steam AppID.
+        source.update({"source_type": "store_user_reviews", "domain": "example.org",
+                       "url": f"https://example.org/reviews/game-{appid}"})
+        binding = {"basis": basis, "appid": None,
+                   "title": observed_source_identity["title"],
+                   "release_year": observed_source_identity["release_year"]}
+    elif basis == "source_appid_title_release":
+        # Synthetic Steam Store result explicitly exposes all three; no cross-source stitching.
+        source.update({"source_type": "steam_reviews", "domain": "store.steampowered.com",
+                       "url": f"https://store.steampowered.com/app/{appid}/Game_{appid}/"})
+        binding = {"basis": basis, **observed_source_identity}
+    else:
+        raise ValueError("unsupported synthetic basis")
+    source["exact_product_binding"] = binding
+    return doc
 
 
 class PragmaticEvidenceModelRegressionTests(unittest.TestCase):
@@ -337,6 +371,155 @@ class PragmaticEvidenceModelRegressionTests(unittest.TestCase):
                 "all_groups_accepted_completeness",
             ],
         )
+
+
+    def test_prag_16_source_basis_null_masks_and_worker_examples(self):
+        rules = EVIDENCE["exact_product_observation_binding"]
+        self.assertIn("title and release_year must be null", rules["source_appid_rule"])
+        self.assertIn("appid must be null", rules["source_title_release_rule"])
+        self.assertIn("all exactly equal", rules["source_appid_title_release_rule"])
+        self.assertIn("all four keys", PROMPT)
+        for exact_example in (
+            '{"basis":"source_appid","appid":"910001","title":null,"release_year":null}',
+            '{"basis":"source_title_release","appid":null,"title":"Example Game","release_year":2020}',
+            '{"basis":"source_appid_title_release","appid":"910001","title":"Example Game","release_year":2020}',
+        ):
+            with self.subTest(example=exact_example):
+                self.assertIn(exact_example, PROMPT)
+        for warning in ("strict-ingest-rejecting error", "search query",
+                        "do not copy title/release_year", "DLC", "edition"):
+            self.assertIn(warning, PROMPT)
+
+    def test_prag_17_all_three_basis_masks_pass_strict_without_source_rewriting(self):
+        for i, basis in enumerate(("source_appid", "source_title_release", "source_appid_title_release")):
+            doc = observed_binding_fixture(970101 + i, self.now, basis)
+            binding = copy.deepcopy(doc["provenance"]["sources"][1]["exact_product_binding"])
+            with self.subTest(basis=basis):
+                self.assertEqual(set(binding), {"basis", "appid", "title", "release_year"})
+                self.assertIs(self.validate(doc), doc)
+                self.assertEqual(doc["provenance"]["sources"][1]["exact_product_binding"], binding)
+
+    def test_prag_18_historical_g1_g2_g7_and_g6_g9_masks_rejected(self):
+        # Incident-specific labels, synthetic AppIDs only: never freeze today's live work scope in CI.
+        for i, label in enumerate(("g1", "g2", "g7")):
+            doc = observed_binding_fixture(970111 + i, self.now, "source_appid")
+            binding = doc["provenance"]["sources"][1]["exact_product_binding"]
+            binding.update(title=doc["title"], release_year=2020)
+            with self.subTest(group=label), self.assertRaisesRegex(
+                ValueError, "exact_product_binding source_appid does not match exact dossier appid"
+            ):
+                self.validate(doc)
+        for i, label in enumerate(("g6", "g9")):
+            doc = observed_binding_fixture(970121 + i, self.now, "source_title_release")
+            binding = doc["provenance"]["sources"][1]["exact_product_binding"]
+            binding["appid"] = doc["appid"]
+            with self.subTest(group=label), self.assertRaisesRegex(
+                ValueError, "exact_product_binding title/release does not match exact dossier identity"
+            ):
+                self.validate(doc)
+
+    def test_prag_19_wrong_identity_missing_fields_query_only_and_one_bad_source(self):
+        cases = []
+        wrong_appid = observed_binding_fixture(970131, self.now, "source_appid")
+        wrong_appid["provenance"]["sources"][1]["exact_product_binding"]["appid"] = "970132"
+        cases.append(("wrong_appid", wrong_appid, "source_appid"))
+        wrong_edition = observed_binding_fixture(970133, self.now, "source_appid")
+        source = wrong_edition["provenance"]["sources"][1]
+        source["url"] = "https://steamcommunity.com/app/970134/reviews/"
+        source["exact_product_binding"]["appid"] = "970134"  # base/DLC or edition substitution
+        cases.append(("wrong_edition", wrong_edition, "source_appid"))
+        wrong_title = observed_binding_fixture(970135, self.now, "source_title_release")
+        wrong_title["provenance"]["sources"][1]["exact_product_binding"]["title"] = "Different Edition"
+        cases.append(("wrong_title", wrong_title, "title/release"))
+        wrong_year = observed_binding_fixture(970136, self.now, "source_title_release")
+        wrong_year["provenance"]["sources"][1]["exact_product_binding"]["release_year"] = 2019
+        cases.append(("wrong_year", wrong_year, "title/release"))
+        wrong_all_three = observed_binding_fixture(970137, self.now, "source_appid_title_release")
+        wrong_all_three["provenance"]["sources"][1]["exact_product_binding"]["appid"] = "970138"
+        cases.append(("wrong_all_three", wrong_all_three, "does not match exact dossier identity"))
+        missing_key = observed_binding_fixture(970139, self.now, "source_appid")
+        del missing_key["provenance"]["sources"][1]["exact_product_binding"]["title"]
+        cases.append(("missing_required_null", missing_key, "must contain only basis/appid/title/release_year"))
+        query_only = observed_binding_fixture(970140, self.now, "source_title_release")
+        source = query_only["provenance"]["sources"][1]
+        source["url"] = "https://example.org/search?q=Game+970140"
+        del source["exact_product_binding"]  # query is never a source-level identity proof
+        cases.append(("query_only", query_only, "exact_product_binding is required"))
+        one_bad_source = observed_binding_fixture(970141, self.now, "source_appid")
+        source = copy.deepcopy(one_bad_source["provenance"]["sources"][1])
+        source["source_id"] = "source-003"
+        source["url"] = "https://steamcommunity.com/app/970141/discussions/"
+        source["exact_product_binding"]["release_year"] = 2020
+        one_bad_source["provenance"]["sources"].append(source)
+        cases.append(("one_bad_among_correct", one_bad_source, "source_appid"))
+        for label, doc, expected in cases:
+            with self.subTest(label=label), self.assertRaisesRegex(ValueError, expected):
+                self.validate(doc)
+
+    def test_prag_20_frozen_three_dossier_group_prepublication_and_fail_closed(self):
+        # Local immutable descriptor, with no transport publication or canonical cache writes.
+        appids = (970151, 970152, 970153)
+        queued = [{
+            "taste_subject_key": f"App_{appid}_{i}",
+            "appid": str(appid),
+            "title": f"Game {appid}",
+            "taste_fingerprint": hashlib.sha256(f"taste:{appid}:{i}".encode()).hexdigest(),
+            "candidate_context_sha256": hashlib.sha256(f"ctx:{appid}:{i}".encode()).hexdigest(),
+            "work_required": ["resolve_grounded_negative_analysis"],
+        } for i, appid in enumerate(appids)]
+        with tempfile.TemporaryDirectory() as directory:
+            manifest = build_daily_work_manifest(queued, CONTROL, Path(directory) / "store", now=self.now)
+            immutable_before = copy.deepcopy(manifest)
+            descriptor = {"schema": WORKER_GROUP_SCHEMA, "schema_version": 1,
+                          **copy.deepcopy(manifest["submission_group_plan"]["groups"][0])}
+            artifact = {
+                "schema": BUFFER_GROUP_SCHEMA,
+                "schema_version": 1,
+                **buffered_candidate_descriptor_projection(descriptor, CONTROL),
+                "dossiers": [
+                    observed_binding_fixture(appid, self.now, basis)
+                    for appid, basis in zip(
+                        appids,
+                        ("source_appid", "source_title_release", "source_appid_title_release")
+                    )
+                ],
+            }
+            self.assertEqual(len(artifact["dossiers"]), 3)
+            accepted = validate_prepublication_artifact(copy.deepcopy(artifact), manifest, CONTROL)
+            docs = validate_buffer_artifact(
+                copy.deepcopy(artifact), manifest["submission_group_plan"]["groups"][0], manifest, CONTROL
+            )
+            self.assertEqual(accepted["status"], "valid")
+            self.assertEqual(accepted["dossier_count"], len(docs))
+            self.assertEqual(accepted["group_sha256"], descriptor["group_sha256"])
+
+            # One bad source among three complete dossiers rejects the entire transport.
+            bad = copy.deepcopy(artifact)
+            bad["dossiers"][1]["provenance"]["sources"][1]["exact_product_binding"]["appid"] = str(appids[1])
+            for validator in (
+                lambda x: validate_prepublication_artifact(x, manifest, CONTROL),
+                lambda x: validate_buffer_artifact(x, descriptor, manifest, CONTROL),
+            ):
+                with self.assertRaisesRegex(ValueError, "title/release does not match"):
+                    validator(copy.deepcopy(bad))
+
+            # Wrong descriptor metadata fails at the group boundary.
+            for field, value in (("items", []), ("group_sha256", "0" * 64)):
+                bad_descriptor = copy.deepcopy(artifact)
+                bad_descriptor[field] = value
+                with self.subTest(field=field), self.assertRaisesRegex(
+                    ValueError, "identity mismatch"
+                ):
+                    validate_prepublication_artifact(bad_descriptor, manifest, CONTROL)
+            # A stale content-complete worker prompt pin is checked *inside each dossier*.
+            stale_pin = copy.deepcopy(artifact)
+            stale_pin["dossiers"][0]["web_evidence_contract_binding"]["worker_prompt_sha256"] = "0" * 64
+            with self.assertRaisesRegex(ValueError, "web-evidence compatibility binding is missing or stale"):
+                validate_prepublication_artifact(stale_pin, manifest, CONTROL)
+            self.assertEqual(manifest, immutable_before)
+            self.assertEqual(manifest["group_progress"]["groups"][0]["state"], "pending")
+
+
 
 
 if __name__ == "__main__":
