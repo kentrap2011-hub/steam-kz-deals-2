@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — реализация доказанного V1 fix и V2, 2026-11-02
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — исправить непрерывность Director, 2026-11-02
 
-- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `dossier-v1-exact-product-binding-null-mask-implement-01` → `WORKER_TASK_DOSSIER_V1_EXACT_PRODUCT_BINDING_NULL_MASK_IMPLEMENT_01.md`. Только адресная правка V1 worker prompt и offline fixtures по завершённому отчёту PR 367; не запускать Dossier семантику.
-- **ЧАТ 2 — ЗАНЯТ, запуск подтверждён пользователем:** dossier-v2-assembly-presubmit-evidence-quality-guard-01 → WORKER_TASK_DOSSIER_V2_ASSEMBLY_PRESUBMIT_EVIDENCE_QUALITY_GUARD_01.md. Изолированный V2 Assembly evidence guard, production inactive.
-- **ЧАТЫ 3, 4, 5, 6 — свободны** до отдельных подтверждённых регистраций. Прежний физический ЧАТ 1 сдал DIAGNOSIS_COMPLETE report PR 367, новый ЧАТ 1 = новый диалог.
-- Директор отвечает за next assignment и source acceptance по live CI и risk-based QA; регистрация не разрешает real manual Dossier/Deep, retry, production и Scheduled Tasks.
+- **НОВЫЙ ЧАТ 3 — зарезервирован, ожидает запуска:** `director-postdiagnosis-consent-handoff-continuity-implement-01` → `WORKER_TASK_DIRECTOR_POSTDIAGNOSIS_CONSENT_HANDOFF_CONTINUITY_IMPLEMENT_01.md`. Адресно исправить конфликт STATUS/DECIDE/REGISTER; новый завершённый actionable отчёт → один вопрос, user «да» → оформить и выдать prompt в следующем ответе; уже разрешённый MERGE исполнять без повторного вопроса. Проверить все активные места.
+- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `dossier-v1-exact-product-binding-null-mask-implement-01` → `WORKER_TASK_DOSSIER_V1_EXACT_PRODUCT_BINDING_NULL_MASK_IMPLEMENT_01.md`. Ограниченная V1 prompt/test доработка; регистрация PR 369 принята в main. Новый physical chat 1, не предыдущий аналитик.
+- **ЧАТ 2 — ЗАНЯТ, запуск подтверждён пользователем:** `dossier-v2-assembly-presubmit-evidence-quality-guard-01` → `WORKER_TASK_DOSSIER_V2_ASSEMBLY_PRESUBMIT_EVIDENCE_QUALITY_GUARD_01.md`. Изолированное V2 quality, production выключен.
+- **ЧАТЫ 4, 5, 6 свободны.** Регистрация не разрешает live semantics, Deep, retries, Scheduled Tasks или production. ЧАТЫ 1 и 3 имеют независимый source write-set, могут работать параллельно.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
