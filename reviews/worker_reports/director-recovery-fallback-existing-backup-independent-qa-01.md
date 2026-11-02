@@ -1,0 +1,73 @@
+# ЧАТ 4 — independent QA существующего emergency backup (2026-11-02)
+
+**Task ID:** `director-recovery-fallback-existing-backup-independent-qa-01`  
+**Repository:** `kentrap2011-hub/steam-kz-deals-2`; **source of truth:** `main`.  
+**Mode:** read-only static QA + реальная проверка доступа к файлу Library, один report-only DRAFT PR.  
+**Verdict: `PARTIAL_BACKUP_ONLY`.** Наличие независимой читаемой резервной записи подтверждено. Полнота, свежесть, безопасная процедура восстановления в canonical main и автоматическое обновление/воспроизведение **НЕ подтверждены**. Это **не** QA ещё не реализованного исправления ЧАТА 1.
+
+## 1. Evidence и границы проверенного
+
+1. Прочитаны полностью `CHAT_PROTOCOL.md`, `CHAT_CONTEXT.md` и конкретный `WORKER_TASK_DIRECTOR_RECOVERY_FALLBACK_EXISTING_BACKUP_INDEPENDENT_QA_01.md` из `main`; просмотрены адресные `PROJECT_ROUTES.md`, `DIRECTOR_PROTOCOL.md`, `config/execution_ownership_contract.json`, текущий верх Board, адресные registry IDs и `scripts/director_registration_prewrite.js`. Не выполнялись ни semantic workers, ни workflows, ни скрипт регистрации.
+2. **Реальное отдельное хранилище:** ChatGPT Library `/Director Recovery/director-recovery-handoff-2026-11-02.md`, stable `library_file_id=libfile_f00828e9b7c08191b7faba8b0be16846`, read ref `file_00000000fdd082469b6e89cf2a35d21d`. Через Files/Library получены metadata **и полный текст** без `has_more`; provider `native`, MIME `text/markdown`, размер 2882 bytes, создан 2026-11-02 17:00:21 UTC, изменён 17:00:22 UTC. Это физическая запись вне репозитория, не GitHub issue и не только сообщение чата. Проверен доступ именно в отдельной рабочей беседе; работа Library при **одновременном полном outage GitHub** не испытывалась.
+3. GitHub [Issue #375](https://github.com/kentrap2011-hub/steam-kz-deals-2/issues/375), `OPEN`, обновлён 2026-11-02 17:06:27 UTC, содержит **LIVE RECOVERY STATUS** плюс помеченный архив исходного сбоя. Issue — GitHub-dependent outbox, **не** независимый от GitHub backup и **не** canonical registry.
+4. После адресного чтения исходных PR: [#368](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/368) **MERGED** `9ac9147250bc2e229c907bc6dcdd4eac68f5242c`; [#374](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/374) **MERGED** `fd0e6a3be5cc77e00f007ced23eb73a531fe85a9`; [#376](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/376) **MERGED** `cd39217716e63091721eb2d86fb0fff738998b51`; [#377](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/377) **MERGED** `bf867ece82302dadb7686abd166e31ab956c0141`. [#371](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/371) **OPEN DRAFT**, HEAD `56f59ce92b6e529fbccf3d0327b277d6338f8157`; [#372](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/372) **OPEN DRAFT**, HEAD `6021469f9cf47f1d369a3847c81b3893cba60a97`. Эти PR не автоматически разрешены к merge.
+5. Во время QA **реально сдвинулся `main`**: принят [PR #379](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/379) с merge HEAD `fe8456715d3243c42f68752082acc33b7543cbfd` в 17:53:52 UTC. Верх Board и адресные registry IDs повторно прочитаны после этого сдвига: версия Board `main` включает новый Chat 5, сообщает со слов пользователя о завершении физических ЧАТОВ 1–4, но **все четыре IDs остаются `active` до отчётов/доказательств**. Это особенно наглядный реальный пример, почему snapshot нельзя replay без свежей сверки.
+6. [Canonical Board](https://github.com/kentrap2011-hub/steam-kz-deals-2/blob/main/DIRECTOR_TASK_BOARD.md) + [plan](https://github.com/kentrap2011-hub/steam-kz-deals-2/blob/main/config/director_task_plan.json): проверены ровно IDs `director-durable-closeout-recovery-implement-01` (ЧАТ 1), `dossier-v1-pr371-binding-independent-qa-01` (ЧАТ 2), `director-pr372-no-repeat-approval-implement-01` (ЧАТ 3), `director-recovery-fallback-existing-backup-independent-qa-01` (ЧАТ 4). На проверенном `main` все имеют `status=active`. Статус registry не является доказательством действующей физической беседы или завершённости source PR.
+
+## 2. Что существует — и какие gaps
+
+| Свойство | Независимо подтверждено | Пробел / риск |
+|---|---|---|
+| Независимая долговечная копия | **ДА:** Library list + полный Files read из этой беседы | Нельзя доказать доступность без Files/аккаунта или при одновременном инциденте; пользовательская внешняя копия не проверена |
+| Идентификация исходной незакрытой работы | **ЧАСТИЧНО:** repo, Issue #375, номера #368/#371/#372/#374, HEAD #368, описания работ и запреты | Нет canonical task IDs, конкретных task-file paths/полных входных данных регистрации, текущих source HEAD #371/#372 и complete registry/Board state; по одному snapshot безопасно не восстановить весь набор задач |
+| Свежесть | **НЕТ:** Library утверждает, что #368/#374 OPEN; live GitHub уже MERGED | После 17:00 Library не обновлялась, в ней нет #376/#377/#379 и ЧАТА 4/5 как отдельных canonical registrations; replay создаст устаревшие поручения |
+| GitHub outbox | **ДА:** Issue #375 live body поправляет статус #368/#374 и содержит #376/#377, #371/#372 | Полностью недоступен при полном GitHub outage; обновлён раньше регистрации ЧАТА 4 и #379; текст Issue не заменяет `config/director_task_plan.json` |
+| Канонический план | **ДА:** ID всех 4 задач записаны в `main` | Library/Issue не синхронизируют статусы автоматически, а `DIRECTOR_HANDOFF_CURRENT.md` содержит исторический 2026-10-28 верх и не является live-статусом |
+| Дедуп/безопасная регистрация | **ЧАСТИЧНО:** `scripts/director_registration_prewrite.js` валидирует новые task IDs/files/slots, graph duplicates, exact base и повторно читает GitHub main перед записью | Никакой независимый reconciliation/replay из Library не был показан; script запрещает коллизию новых IDs, но не доказывает workflow восстановления с pending vs already-registered classification |
+| Автоматический recovery | **НЕ ДОКАЗАН** | Не найдено предъявленного работающего importer/monitor/test для этого snapshot; не заявлять auto-refresh, auto-replay, auto-detect или фоновую доставку |
+
+Library содержит исторический snapshot, не достаточный для *lossless* реконструкции новых task-file/registry entries. В частности, описание требования исправить PR #372 — это **не** exact task ID `director-pr372-no-repeat-approval-implement-01` и не гарантия, что цель не изменена. Корректная защита — восстановить намерение как **unverified pending**, сравнить c `main`, а не сразу выдавать worker launcher или делать регистрирующую запись.
+
+Отдельная ловушка: в Issue #375 присутствует специально помеченный **ARCHIVAL SNAPSHOT** с `OPEN/DRAFT` для уже merged PR. Алгоритм/человек должен читать `LIVE RECOVERY STATUS` как более позднее *наблюдение*, но при восстановлении всё равно заново получать authoritative GitHub facts. Board после #379 описывает завершение ЧАТОВ 1–4 как сообщение пользователя при отсутствии на момент записи PR/report; это **не** подтверждение source acceptance.
+
+## 3. Failures: где сохраняется, кто переносит и как не допустить дубль
+
+| Сбой | Доступное хранилище и оператор | Ошибка / безопасное восстановление |
+|---|---|---|
+| **(a) Невалидный prewrite input** | До write — пользовательский текст / Library при реальной нужде; GitHub остаётся доступен | `UNSAFE` в `director_registration_prewrite.js` запрещает публичное `PR #`; `prepare` возвращает ошибки до записи. Исправить **только input** и повторно провести complete dry validation и exact-base preflight. Исторический `writeCalls:0` сообщён Issue #375, в этом QA не симулировался |
+| **(b) OpenAI tool safety rejection** | Если tool отклонил **до вызова GitHub**, запись в main не подтверждена; при доступности независимый Library handoff или GitHub Issue #375 | Причина rejection **не установлена**; не называть outage и не пытаться обойти guard. Результат не считать `registered` до чтения main. Перенос — ручной директором после устранения запрета, проверка exact IDs и отсеивание уже registered |
+| **(c) GitHub writes blocked, reads succeed** | Ручная запись в Library (если Files работает); Issue нельзя считать гарантированно записываемым | Проверить reads главных PR, ветки и ID; не обещать Issue update/PR. После восстановления writes директор повторно сверяет current main, затем официальный REGISTER только для missing IDs |
+| **(d) Full GitHub outage** | Library accessible **в текущей сессии**, но доступ при совмещённом outage **UNVERIFIED**; можно передать пользователю copyable emergency text | Нет проверки PR/CI/mergeability или canonical write. Только временно сохранить факты с UTC/provenance и статусом pending; **не** исполнять pending, не merge/retry/semantic/production |
+| **(e) Files/Library unavailable** | При GitHub доступе — Issue #375 и main; при обоих отказах только явно сохранённая пользователем локальная копия (её существование не доказано) | Нельзя считать только названием Library path доказанным backup. Если ещё можно передать пользователю текст, явно указать сохранение им; иначе recovery **BLOCKED**, не обещать сохранённое состояние |
+| **(f) ChatGPT conversation lost/rotated** | Сохранённый Library файл можно найти по stable ID/path через Files из новой беседы — подтверждено текущим независимым чтением | При отсутствии Files нельзя восстановить из имени; после открытия обязательно обновить main/Issue/registry/PR, не доверять старым слоту, статусам и авторизациям |
+| **(g) Concurrent main movement during repair** | Истина — current main и точные PR HEAD/merge commits; Library только событие/подсказка | Фактический пример: PR #379 вошёл в main посреди проверки. Сверить `main SHA` непосредственно перед REGISTER и после принятия, exact task IDs, task-file existence, source PR state, CI; mismatch → STOP/recompute, не писать по старому base и не запускать заново зарегистрированное |
+
+**Owner и полномочия:** GitHub = canonical state/control plane, директор = ручное решение, подготовка официального REGISTER и сверка; Library/Issue = outbox, не альтернативные registry, авторизация merge или semantic/production. Отчёт QA не создаёт права делать ни один из этих запусков.
+
+## 4. Шесть безопасных сценариев
+
+1. **Real read positive — PASS (backup existence only).** Из отдельного ChatGPT Library namespace найдены точный ID, path и текст, не только название; исходные refs присутствуют. Одновременный GitHub outage не моделировался.
+2. **Static stale-PR check — FAIL freshness.** Library says #368/#374 OPEN/DRAFT, GitHub PR metadata says both MERGED; issue LIVE сообщает merged. Восстановление только из Library дало бы устаревшее решение.
+3. **Static omitted-registration check — FAIL completeness.** Registry main содержит ЧАТЫ 1–4, Library не хранит их canonical IDs и полный набор регистрационных артефактов; Issue updated before ЧАТ 4 registered. Нельзя надежно reconstruct без GitHub.
+4. **Static invalid prewrite / safety split — PASS classification, not execution.** Код regex/schema и issue history показывают две разные причины, обе не равны total outage; tool guard намеренно **не** воспроизводился и не обходился; fresh exact-base gate требуется.
+5. **Static dedup/concurrent main — PARTIAL safety.** В registry есть 4 IDs, current main уже #379; `prepare` отклоняет новый ID collision, `publish` сравнивает exact main SHA до writes. Но end-to-end Library → reconciliation → successful official REGISTER → main verified **не испытывался**.
+6. **Static permission / no auto-run — PASS guard, recovery unknown.** Library explicitly disclaims merge/semantic/production authorization; Director protocol требует фактические user grants/exact CI/QA. Нет выполнения replay/importer, поэтому автоматическое восстановление **не считать работающим**.
+
+Сценарии 2–6 — **static-only**; никаких outage injection, destructive tests, GitHub Action dispatch, registration prewrite execution, изменения Issue/Library/Board/registry, source merges или реальных semantic runs не было.
+
+## 5. Предметный минимальный follow-up без нового общего аудита
+
+**Следующий actor — существующий ЧАТ 1**, по уже зарегистрированной `WORKER_TASK_DIRECTOR_DURABLE_CLOSEOUT_RECOVERY_IMPLEMENT_01.md`. Использовать **этот** QA как конкретный fixture набора проверок, не открывать отдельный параллельный source PR:
+
+1. Привязать любую pending-копию к immutable `incident_id`, UTC, repo, attempted exact task IDs/filenames, source PR/HEAD, status **observed vs assumed**, authorization provenance и `main` ref; обновление snapshot должно быть явным, без ложного автообновления.
+2. Предусмотреть **ручную** операцию `RECONCILE`: сверить current main registry+Board, PR HEAD/state/CI, already registered task IDs/file paths, case-by-case вычислить `already_done / pending / blocked`; не replay без подтверждённого разрешения и canonical prewrite. Не дублировать Ids, write-set или продакшен-ответственность.
+3. Проверить bounded fixture-тестами отдельно invalid input, OpenAI safety rejection (mock/prewrite stop, **без bypass**), read-only GitHub, total outage, unavailable Files, conversation rotation и main moved during reconciliation. В тестах проверять отсутствие writes/autorun при недостаточных условиях, recover main only on exact authorized path.
+4. При наличии GitHub доступности показать end-to-end *safe test* только на тестовых объектах, где допустимо, и exact accepted main/CI; без этого маркировать результат как `BACKUP_ONLY` либо `BLOCKED_RECOVERY`. Фактические задачи #371/#372 и их исходные PR не менять в рамках этого QA.
+
+**Architecture preflight для рекомендации:** `config/execution_ownership_contract.json` закрепляет canonical orchestration в GitHub, `DIRECTOR_PROTOCOL.md` §2 и `scripts/director_registration_prewrite.js` определяют официальный validated REGISTER; предложено восстановление вручную с проверкой GitHub, а не перенос control plane в ChatGPT, recurring stage/queue/retry-loop/semantic execution **не создаётся**. Если расширение полномочий не следует из этих документов, сначала отдельный contract clarification, не implementation.
+
+## 6. Closeout и ограничения
+
+**`PARTIAL_BACKUP_ONLY`:** резервная независимая запись существует и читается, поэтому `FAIL_NO_INDEPENDENT_BACKUP` был бы неверен. Но отсутствие точных новых регистраций в snapshot, stale PR statuses и отсутствие проверенного recovery replay не позволяют выдать `PASS_CONFIRMED_RECOVERY`. Failure modes с outage/safety проверялись только аналитически; нельзя заявлять, что восстановление под ними протестировано.
+
+Этот PR — **только отчёт**, его merge по-прежнему решение директора. Никакая source ветка, включая PR #371/#372, не изменена и не объединена. Все checked SHA являются свидетельствами на указанное наблюдение; новая загрузка `main` обязательна перед любым действием.
