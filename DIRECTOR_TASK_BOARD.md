@@ -5,15 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — аудит времени директорских промптов, 2026-11-02
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — L3 QA и фактическое завершение решений, 2026-11-02
 
-- **ЧАТ 1 — занят, запуск подтверждён пользователем:** `director-durable-closeout-recovery-implement-01` → `WORKER_TASK_DIRECTOR_DURABLE_CLOSEOUT_RECOVERY_IMPLEMENT_01.md`. Ожидается финальный результат.
-- **ЧАТ 2 — занят, запуск подтверждён пользователем:** `dossier-v1-pr371-binding-independent-qa-01` → `WORKER_TASK_DOSSIER_V1_PR371_BINDING_INDEPENDENT_QA_01.md`. Ожидается финальный результат независимой QA.
-- **ЧАТ 3 — занят, запуск подтверждён пользователем:** `director-pr372-no-repeat-approval-implement-01` → `WORKER_TASK_DIRECTOR_PR372_NO_REPEAT_APPROVAL_IMPLEMENT_01.md`. Ожидается финальный результат.
-- **ЧАТ 4 — занят, запуск подтверждён пользователем:** `director-recovery-fallback-existing-backup-independent-qa-01` → `WORKER_TASK_DIRECTOR_RECOVERY_FALLBACK_EXISTING_BACKUP_INDEPENDENT_QA_01.md`. Ожидается финальный результат независимой QA резерва.
-- **ЧАТ 5 — занят, запуск подтверждён пользователем:** `director-worker-prompt-latency-target-60s-audit-01` → `WORKER_TASK_DIRECTOR_WORKER_PROMPT_LATENCY_TARGET_60S_AUDIT_01.md`. Ожидается финальный результат аудита задержек.
-- **ЧАТ 6 свободен.** Пользователь уточнил, что он **передал задания** чатам 1–5, а НЕ что они завершили работу. При появлении настоящего финального отчёта конкретного worker-а его физический чат сразу освобождается, независимо от QA/merge; исходная задача остаётся открытой до нужного закрытия. Не считать отсутствие нового PR доказательством завершения, а неподтверждённые промежуточные ответы — финальным результатом. Временная директорская запись в issue #375 скорректирована.
-
+- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `director-pr372-consent-gate-independent-l3-qa-01` → `WORKER_TASK_DIRECTOR_PR372_CONSENT_GATE_INDEPENDENT_L3_QA_01.md`. Независимая L3 проверка согласованного изменения правил в source PR #372; только report-only QA.
+- **ЧАТЫ 2, 3, 4, 5, 6 свободны:** прежние физические исполнители сдали финальные результаты. Source V1 PR #371 и QA PR #381 уже приняты в `main`; нельзя запускать старые immutable V1 groups без отдельно разрешённой подготовки/новых pins.
+- **НЕЗАВЕРШЁННАЯ ЗАВИСИМОСТЬ:** после PASS от независимой QA директор принимает исправленные правила source PR #372 при проверенных exact-HEAD CI и safety, без второго вопроса о ранее согласованной задаче. Затем отдельный bounded IMPLEMENT долговечного восстановления и непрерывного closeout по уже готовому report-only PR #380 и независимой QA частичного резерва PR #382. Факт публикации отчётов не означает завершения функциональных исправлений. Сохранить в recovery issue #375 до действительного закрытия.
+- **АУДИТ ЗАДЕРЖКИ:** отчёт PR #384 принят в main, его рекомендации требуют отдельной bounded реализации; не обещать 60 секунд, пока не измерен пользовательский end-to-end и не внесены изменения. Никаких real semantic, production, retry или Scheduled Tasks по этим поручениям.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
