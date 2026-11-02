@@ -5,13 +5,11 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — независимая QA резервного хранения, 2026-11-02
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — аудит времени директорских промптов, 2026-11-02
 
-- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `director-durable-closeout-recovery-implement-01` → `WORKER_TASK_DIRECTOR_DURABLE_CLOSEOUT_RECOVERY_IMPLEMENT_01.md`. Закрыть разрывы между результатом, проверкой и приёмкой; проработать безопасное восстановление регистрации.
-- **НОВЫЙ ЧАТ 2 — зарезервирован, ожидает запуска:** `dossier-v1-pr371-binding-independent-qa-01` → `WORKER_TASK_DOSSIER_V1_PR371_BINDING_INDEPENDENT_QA_01.md`. Независимая проверка PR #371.
-- **НОВЫЙ ЧАТ 3 — зарезервирован, ожидает запуска:** `director-pr372-no-repeat-approval-implement-01` → `WORKER_TASK_DIRECTOR_PR372_NO_REPEAT_APPROVAL_IMPLEMENT_01.md`. Доработать существующий PR #372.
-- **НОВЫЙ ЧАТ 4 — зарезервирован, ожидает запуска:** `director-recovery-fallback-existing-backup-independent-qa-01` → `WORKER_TASK_DIRECTOR_RECOVERY_FALLBACK_EXISTING_BACKUP_INDEPENDENT_QA_01.md`. Независимо проверить существующий emergency backup (Library и GitHub issue #375), фактическую доступность, устаревание, дедупликацию и восстановление. Это QA текущего резерва, не будущего исходного изменения ЧАТА 1.
-- **ЧАТЫ 5, 6 свободны.** Никакого production, semantic запусков, Scheduled Tasks или source merges по факту регистрации.
+- **НОВЫЙ ЧАТ 5 — зарезервирован, ожидает запуска:** `director-worker-prompt-latency-target-60s-audit-01` → `WORKER_TASK_DIRECTOR_WORKER_PROMPT_LATENCY_TARGET_60S_AUDIT_01.md`. Узко проверить задержки 3–5 минут при выдаче промптов; отделить читательскую нагрузку директора от CI/merge/регистрации, определить реальный путь к обычному handoff около минуты.
+- **ЧАТЫ 1–4 — пользователь сообщил о завершении работ:** их прежние задания: `director-durable-closeout-recovery-implement-01`, `dossier-v1-pr371-binding-independent-qa-01`, `director-pr372-no-repeat-approval-implement-01`, `director-recovery-fallback-existing-backup-independent-qa-01`. При адресной проверке новые PR/report ещё не обнаружены; физические номера свободны по сообщению пользователя, но сохранение worker outputs и итоговое закрытие источников не подтверждены. Registry IDs пока не переведены в complete без GitHub-доказательств.
+- **ЧАТ 6 свободен.** Незавершённые задачи и резерв находятся в issue #375; исходные PR #371 и #372 ещё требуют закрытия. Реальные semantic/production действия не разрешены.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 

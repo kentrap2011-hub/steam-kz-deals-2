@@ -3211,6 +3211,24 @@
       "recent_completion": false,
       "updated_on": "2026-11-02",
       "updated_at_utc": "2026-11-02T17:46:49.838Z"
+    },
+    {
+      "id": "director-worker-prompt-latency-target-60s-audit-01",
+      "title": "ЧАТ 5 — аудит медленной выдачи промптов",
+      "goal": "Найти подтверждённые причины долгой подготовки и регистрации коротких worker-промптов и практичный путь к обычной выдаче около минуты.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Адресные четыре регистрации и старые выводы, без полного аудита репозитория.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь наблюдает повторные задержки в несколько минут при простой директорской операции.",
+      "task_file": "WORKER_TASK_DIRECTOR_WORKER_PROMPT_LATENCY_TARGET_60S_AUDIT_01.md",
+      "worker_slot": "ЧАТ 5",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Независимый read-only анализ; CI и проверка main остаются обязательными для новых заданий.",
+      "recent_completion": false,
+      "updated_on": "2026-11-02",
+      "updated_at_utc": "2026-11-02T17:52:38.483Z"
     }
   ]
 }
