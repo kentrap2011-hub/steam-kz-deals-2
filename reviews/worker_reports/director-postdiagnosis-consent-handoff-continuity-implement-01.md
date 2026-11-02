@@ -61,3 +61,8 @@ All 12 scenario expectations matched against the proposed §1 rule, §8 pointer,
 - **Verdict:** `READY_FOR_DIRECTOR_MERGE` **only after** live exact-final-HEAD required CI, mergeability, actor rights and specific user grant, per §1.
 - **Recommended next step:** Director verifies this **source PR**, exact HEAD/CI and authorized acceptance, then merges if gates pass; do not treat a QA report-only PR as source acceptance.
 - Efficiency / reusable lesson: none.
+
+## Follow-up amendment on same PR #372 — 2026-11-02
+- The L1 classification above applies **only to the original report→choice→REGISTER continuity change**. A later task `director-pr372-no-repeat-approval-implement-01` extends this PR to conditional **source-merge consent** for explicitly approved bounded IMPLEMENT/QA. That amendment changes the authorization decision boundary and is **L3**, regardless of text-only diff.
+- Original report's `READY_FOR_DIRECTOR_MERGE` advice is superseded for the current PR: **independent narrow substantive L3 QA** on the amended final source HEAD is required before director merge review, in addition to required exact-HEAD CI, mergeability and actor permission. This note is not an approval for PR #372.
+- Canonical follow-up report: `reviews/worker_reports/director-pr372-no-repeat-approval-implement-01.md`. No registry/Board/ownership, semantic, production, Scheduled Task or source PR #371/#368 change is authorized by the amendment.
