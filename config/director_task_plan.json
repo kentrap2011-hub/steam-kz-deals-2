@@ -3078,61 +3078,81 @@
       "id": "dossier-v1-exact-product-binding-null-mask-implement-01",
       "title": "ЧАТ 1 — исправить binding null mask Dossier V1",
       "goal": "Исправить worker prompt basis-specific masks и offline regression tests по доказанной причине девяти отклонений.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Одна семантическая prompt delta и тесты без новых semantic runs.",
       "urgency": "высокая",
       "urgency_reason": "Девять групп отклонены, Deep не получает канонически принятые досье.",
       "task_file": "WORKER_TASK_DOSSIER_V1_EXACT_PRODUCT_BINDING_NULL_MASK_IMPLEMENT_01.md",
-      "worker_slot": "ЧАТ 1",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "dossier-v1-rejected-buffers-exact-product-binding-root-cause-01"
       ],
-      "blocker": "НОВЫЙ физический ЧАТ 1 — bounded V1 null-mask fix, реальный semantic/retry запрещён.",
-      "recent_completion": false,
+      "blocker": "Исправление V1 сдано, независимая QA ещё нужна.",
+      "recent_completion": true,
       "updated_on": "2026-11-02",
-      "updated_at_utc": "2026-11-02T11:40:47.112Z"
+      "updated_at_utc": "2026-11-02T17:01:23.457Z"
     },
     {
       "id": "director-postdiagnosis-consent-handoff-continuity-implement-01",
       "title": "ЧАТ 3 — непрерывность Director report → вопрос → подтверждённый handoff",
       "goal": "Исправить все действующие директорские правила, чтобы после итогового RECON спрашивать о следующем шаге, а после согласия сразу регистрировать и выдавать prompt.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Адресный multi-file governance correction и 12 проверочных сценариев, без новых approval mechanisms.",
       "urgency": "высокая",
       "urgency_reason": "После доказанной диагностики директор сообщил итог и потерял следующий шаг без вопроса пользователю.",
       "task_file": "WORKER_TASK_DIRECTOR_POSTDIAGNOSIS_CONSENT_HANDOFF_CONTINUITY_IMPLEMENT_01.md",
-      "worker_slot": "ЧАТ 3",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "director-postqa-authorized-merge-closeout-01"
       ],
-      "blocker": "НОВЫЙ физический ЧАТ 3 — действующие protocol/pre-send правила, без semantic/production или общих аудитов.",
-      "recent_completion": false,
+      "blocker": "Исходная работа сдана, правило второго approval осталось на исправление.",
+      "recent_completion": true,
       "updated_on": "2026-11-02",
-      "updated_at_utc": "2026-11-02T11:43:27.854Z"
+      "updated_at_utc": "2026-11-02T17:01:23.457Z"
     },
     {
       "id": "dossier-v2-pr368-evidence-guard-l3-qa-01",
       "title": "ЧАТ 2 — независимая L3-проверка V2 PR 368",
       "goal": "Независимо проверить точный source PR Dossier V2 evidence guard, позитивные и негативные тесты, неизменность защиты.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Ограниченная L3 QA по трем исходным файлам и exact-head CI.",
       "urgency": "высокая",
       "urgency_reason": "Семантическая инструкция качества досье требует независимой проверки до принятия.",
       "task_file": "WORKER_TASK_DOSSIER_V2_PR368_EVIDENCE_GUARD_L3_QA_01.md",
-      "worker_slot": "ЧАТ 2",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "dossier-v2-assembly-presubmit-evidence-quality-guard-01"
       ],
-      "blocker": "Только report-only QA, без изменения исходного PR, повторного V2 запуска и production.",
+      "blocker": "Независимая QA завершена, source PR ожидает директорского решения.",
       "updated_on": "2026-11-02",
-      "updated_at_utc": "2026-11-02T12:04:12.968Z",
-      "recent_completion": false
+      "updated_at_utc": "2026-11-02T17:01:23.457Z",
+      "recent_completion": true
+    },
+    {
+      "id": "director-durable-closeout-recovery-implement-01",
+      "title": "ЧАТ 1 — непрерывное завершение и резерв задач",
+      "goal": "Закрыть потери переходов между результатом worker, QA, принятием и сбоем регистрации при сохранении безопасных полномочий.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Адресный анализ существующих контрактов и минимальное проверяемое исправление.",
+      "urgency": "высокая",
+      "urgency_reason": "Подтверждены незакрытые готовые PR и отказ инструмента регистрации без канонической записи.",
+      "task_file": "WORKER_TASK_DIRECTOR_DURABLE_CLOSEOUT_RECOVERY_IMPLEMENT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "director-postdiagnosis-consent-handoff-continuity-implement-01"
+      ],
+      "blocker": "Разрешён bounded safe recovery, но не автономные production или semantic действия.",
+      "recent_completion": false,
+      "updated_on": "2026-11-02",
+      "updated_at_utc": "2026-11-02T17:01:23.457Z"
     }
   ]
 }

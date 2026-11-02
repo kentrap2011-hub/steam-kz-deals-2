@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — независимая L3 QA Dossier V2, 2026-11-02
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — восстановление непрерывной работы, 2026-11-02
 
-- **НОВЫЙ ЧАТ 2 — зарезервирован, ожидает запуска:** `dossier-v2-pr368-evidence-guard-l3-qa-01` → `WORKER_TASK_DOSSIER_V2_PR368_EVIDENCE_GUARD_L3_QA_01.md`. Независимая адресная проверка source PR #368 и точных CI; один report-only PR; без source merge и live V2.
-- **ЧАТ 1 — занят:** `dossier-v1-exact-product-binding-null-mask-implement-01` → `WORKER_TASK_DOSSIER_V1_EXACT_PRODUCT_BINDING_NULL_MASK_IMPLEMENT_01.md`. Отдельная V1 доработка.
-- **ЧАТ 3 — занят:** `director-postdiagnosis-consent-handoff-continuity-implement-01` → `WORKER_TASK_DIRECTOR_POSTDIAGNOSIS_CONSENT_HANDOFF_CONTINUITY_IMPLEMENT_01.md`. Отдельные директорские правила, write-set не пересекается с регистрацией.
-- **ЧАТЫ 4, 5, 6 свободны.** Прежний физический ЧАТ 2 сдал исходный source PR #368 и вышел из работы; статус ID `dossier-v2-assembly-presubmit-evidence-quality-guard-01` переведён в complete. QA выполняет НОВЫЙ физический ЧАТ 2, не старая беседа.
+- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `director-durable-closeout-recovery-implement-01` → `WORKER_TASK_DIRECTOR_DURABLE_CLOSEOUT_RECOVERY_IMPLEMENT_01.md`. Адресно устранить потерю переходов QA→решение→принятие и подготовить безопасное восстановление отказанной регистрации; входное сохранённое свидетельство issue #375.
+- **ЧАТ 2 — свободен:** независимая QA `dossier-v2-pr368-evidence-guard-l3-qa-01` завершена с PASS в report PR #374, исходный PR #368 ещё открыт. Старую беседу не переиспользовать.
+- **ЧАТ 3 — свободен:** реализация правил `director-postdiagnosis-consent-handoff-continuity-implement-01` сдана в PR #372, требуется адресное устранение повторного approval.
+- **ЧАТЫ 4, 5, 6 свободны.** Сданное V1 исправление PR #371 ожидает независимой QA. Резервные записи в GitHub issue #375 и Library остаются до переноса; не являются полномочиями production.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
