@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Synthetic adversarial Notes V2 proofs. No real Research/Assembly or GitHub writes."""
 import copy
+from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
