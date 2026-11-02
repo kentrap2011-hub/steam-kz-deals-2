@@ -503,15 +503,19 @@ class PragmaticEvidenceModelRegressionTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "title/release does not match"):
                     validator(copy.deepcopy(bad))
 
-            # Neither a wrong frozen descriptor nor an old content pin can pass.
-            for field, value in (("items", []), ("group_sha256", "0" * 64),
-                                 ("web_evidence_contract_binding", {"worker_prompt_sha256": "0" * 64})):
+            # Wrong descriptor metadata fails at the group boundary.
+            for field, value in (("items", []), ("group_sha256", "0" * 64)):
                 bad_descriptor = copy.deepcopy(artifact)
                 bad_descriptor[field] = value
                 with self.subTest(field=field), self.assertRaisesRegex(
                     ValueError, "identity mismatch"
                 ):
                     validate_prepublication_artifact(bad_descriptor, manifest, CONTROL)
+            # A stale content-complete worker prompt pin is checked *inside each dossier*.
+            stale_pin = copy.deepcopy(artifact)
+            stale_pin["dossiers"][0]["web_evidence_contract_binding"]["worker_prompt_sha256"] = "0" * 64
+            with self.assertRaisesRegex(ValueError, "web-evidence compatibility binding is missing or stale"):
+                validate_prepublication_artifact(stale_pin, manifest, CONTROL)
             self.assertEqual(manifest, immutable_before)
             self.assertEqual(manifest["group_progress"]["groups"][0]["state"], "pending")
 
