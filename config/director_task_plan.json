@@ -3093,6 +3093,26 @@
       "recent_completion": false,
       "updated_on": "2026-11-02",
       "updated_at_utc": "2026-11-02T11:40:47.112Z"
+    },
+    {
+      "id": "director-postdiagnosis-consent-handoff-continuity-implement-01",
+      "title": "ЧАТ 3 — непрерывность Director report → вопрос → подтверждённый handoff",
+      "goal": "Исправить все действующие директорские правила, чтобы после итогового RECON спрашивать о следующем шаге, а после согласия сразу регистрировать и выдавать prompt.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Адресный multi-file governance correction и 12 проверочных сценариев, без новых approval mechanisms.",
+      "urgency": "высокая",
+      "urgency_reason": "После доказанной диагностики директор сообщил итог и потерял следующий шаг без вопроса пользователю.",
+      "task_file": "WORKER_TASK_DIRECTOR_POSTDIAGNOSIS_CONSENT_HANDOFF_CONTINUITY_IMPLEMENT_01.md",
+      "worker_slot": "ЧАТ 3",
+      "order": null,
+      "depends_on": [
+        "director-postqa-authorized-merge-closeout-01"
+      ],
+      "blocker": "НОВЫЙ физический ЧАТ 3 — действующие protocol/pre-send правила, без semantic/production или общих аудитов.",
+      "recent_completion": false,
+      "updated_on": "2026-11-02",
+      "updated_at_utc": "2026-11-02T11:43:27.854Z"
     }
   ]
 }
