@@ -3057,22 +3057,22 @@
       "id": "dossier-v2-assembly-presubmit-evidence-quality-guard-01",
       "title": "ЧАТ 2 — V2 Assembly pre-submit evidence quality guard",
       "goal": "Исправить избегаемые проблемы доказательств и структуры V2 Assembly до immutable transport по известным original18 failures, без ослабления strict validator.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Одна изолированная V2 Assembly инструкция и целевые offline positive/negative tests.",
       "urgency": "высокая",
       "urgency_reason": "V2 original18 pilot NO_GO; можно независимо от V1 устранить конкретные предотвратимые ошибки перед следующим разрешённым испытанием.",
       "task_file": "WORKER_TASK_DOSSIER_V2_ASSEMBLY_PRESUBMIT_EVIDENCE_QUALITY_GUARD_01.md",
-      "worker_slot": "ЧАТ 2",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "dossier-v2-real-original18-quality-audit-01",
         "dossier-v2-original18-strict-mismatch-targeted-fix-01"
       ],
-      "blocker": "НОВЫЙ физический ЧАТ 2: inactive V2-only bounded prompt/test improvement; никакого semantic run или cutover.",
-      "recent_completion": false,
-      "updated_on": "2026-10-29",
-      "updated_at_utc": "2026-10-29T13:29:37.023Z"
+      "blocker": "Исходный PR сдан с итоговым отчётом; требуется независимая L3 проверка, прежний физический ЧАТ 2 освобождён.",
+      "recent_completion": true,
+      "updated_on": "2026-11-02",
+      "updated_at_utc": "2026-11-02T12:04:12.968Z"
     },
     {
       "id": "dossier-v1-exact-product-binding-null-mask-implement-01",
@@ -3113,6 +3113,26 @@
       "recent_completion": false,
       "updated_on": "2026-11-02",
       "updated_at_utc": "2026-11-02T11:43:27.854Z"
+    },
+    {
+      "id": "dossier-v2-pr368-evidence-guard-l3-qa-01",
+      "title": "ЧАТ 2 — независимая L3-проверка V2 PR 368",
+      "goal": "Независимо проверить точный source PR Dossier V2 evidence guard, позитивные и негативные тесты, неизменность защиты.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Ограниченная L3 QA по трем исходным файлам и exact-head CI.",
+      "urgency": "высокая",
+      "urgency_reason": "Семантическая инструкция качества досье требует независимой проверки до принятия.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_PR368_EVIDENCE_GUARD_L3_QA_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-assembly-presubmit-evidence-quality-guard-01"
+      ],
+      "blocker": "Только report-only QA, без изменения исходного PR, повторного V2 запуска и production.",
+      "updated_on": "2026-11-02",
+      "updated_at_utc": "2026-11-02T12:04:12.968Z",
+      "recent_completion": false
     }
   ]
 }
