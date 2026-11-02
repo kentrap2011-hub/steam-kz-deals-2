@@ -3193,6 +3193,24 @@
       "updated_on": "2026-11-02",
       "updated_at_utc": "2026-11-02T17:04:57.515Z",
       "recent_completion": false
+    },
+    {
+      "id": "director-recovery-fallback-existing-backup-independent-qa-01",
+      "title": "ЧАТ 4 — независимая проверка резервного хранения",
+      "goal": "Проверить фактическое независимое резервирование незавершённых задач, актуальность и восстановление при отказах GitHub.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Только адресные GitHub записи и один Library snapshot, безопасные сценарии без вызова отказов.",
+      "urgency": "высокая",
+      "urgency_reason": "Наличие файла не гарантирует доступность при полном отказе GitHub, синхронизацию или правильное восстановление.",
+      "task_file": "WORKER_TASK_DIRECTOR_RECOVERY_FALLBACK_EXISTING_BACKUP_INDEPENDENT_QA_01.md",
+      "worker_slot": "ЧАТ 4",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Независимая read-only QA существующего резерва, без проверки будущего кода ЧАТА 1.",
+      "recent_completion": false,
+      "updated_on": "2026-11-02",
+      "updated_at_utc": "2026-11-02T17:46:49.838Z"
     }
   ]
 }

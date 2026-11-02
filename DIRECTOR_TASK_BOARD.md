@@ -5,12 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — закрыть оставшиеся исправления, 2026-11-02
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — независимая QA резервного хранения, 2026-11-02
 
-- **ЧАТ 1 — зарезервирован, ожидает запуска:** `director-durable-closeout-recovery-implement-01` → `WORKER_TASK_DIRECTOR_DURABLE_CLOSEOUT_RECOVERY_IMPLEMENT_01.md`. Непрерывный результат→QA→приёмка и безопасный backup при отказе REGISTER.
-- **НОВЫЙ ЧАТ 2 — зарезервирован, ожидает запуска:** `dossier-v1-pr371-binding-independent-qa-01` → `WORKER_TASK_DOSSIER_V1_PR371_BINDING_INDEPENDENT_QA_01.md`. Независимая QA source PR #371, без rerun.
-- **НОВЫЙ ЧАТ 3 — зарезервирован, ожидает запуска:** `director-pr372-no-repeat-approval-implement-01` → `WORKER_TASK_DIRECTOR_PR372_NO_REPEAT_APPROVAL_IMPLEMENT_01.md`. Доработать именно существующий source PR #372; не потерять prior implemented bridge.
-- **ЧАТЫ 4, 5, 6 свободны.** Исходная QA PR #374 и source PR #368 уже приняты в main; Dossier V2 остаётся production-disabled. Незакрытые шаги отслеживаются в GitHub issue #375 до фактического закрытия.
+- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `director-durable-closeout-recovery-implement-01` → `WORKER_TASK_DIRECTOR_DURABLE_CLOSEOUT_RECOVERY_IMPLEMENT_01.md`. Закрыть разрывы между результатом, проверкой и приёмкой; проработать безопасное восстановление регистрации.
+- **НОВЫЙ ЧАТ 2 — зарезервирован, ожидает запуска:** `dossier-v1-pr371-binding-independent-qa-01` → `WORKER_TASK_DOSSIER_V1_PR371_BINDING_INDEPENDENT_QA_01.md`. Независимая проверка PR #371.
+- **НОВЫЙ ЧАТ 3 — зарезервирован, ожидает запуска:** `director-pr372-no-repeat-approval-implement-01` → `WORKER_TASK_DIRECTOR_PR372_NO_REPEAT_APPROVAL_IMPLEMENT_01.md`. Доработать существующий PR #372.
+- **НОВЫЙ ЧАТ 4 — зарезервирован, ожидает запуска:** `director-recovery-fallback-existing-backup-independent-qa-01` → `WORKER_TASK_DIRECTOR_RECOVERY_FALLBACK_EXISTING_BACKUP_INDEPENDENT_QA_01.md`. Независимо проверить существующий emergency backup (Library и GitHub issue #375), фактическую доступность, устаревание, дедупликацию и восстановление. Это QA текущего резерва, не будущего исходного изменения ЧАТА 1.
+- **ЧАТЫ 5, 6 свободны.** Никакого production, semantic запусков, Scheduled Tasks или source merges по факту регистрации.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
