@@ -5,7 +5,7 @@
 - **Base main SHA:** `32a427503a459c66173eb60de938c78cdefd08fc`
 - **Diagnosis authority:** PR #367 report at `e787c5df924f2255ad31e56b5472e95b00c12574`
 - **Allowed source writes:** worker prompt and one existing pragmatic evidence regression file; this report only
-- **Status:** CI / independent delta QA not yet recorded; do not merge
+- **Status:** implementation ready for independent L2/L3 delta QA; draft only; no merge
 
 ## Root cause / unchanged truth
 
@@ -29,10 +29,12 @@ Changing worker prompt content changes the content-complete `worker_prompt_sha25
 
 ## Test evidence
 
-- Local Python test execution: not yet verified.
-- GitHub Actions `Validate buffered Steam review dossier runtime`: awaiting exact final PR HEAD run.
-- Generic regression IDs are synthetic and do not pin current production AppIDs.
-- Zero accepted original groups is unchanged; these are offline simulated dossiers only.
+- GitHub Actions `Validate buffered Steam review dossier runtime` on tested code HEAD `32256ec9767b9cdf11255e12833f9a4b6b686cbf`: **SUCCESS** ([run #41440855037](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/41440855037); job `125262048143`). Actual GitHub-run Python regressions: **273/273 PASS** across 24 scripts, including PRAG-01..20 (20/20), prepublication parity (10/10), strict recovery (21/21), and frozen invocation rollover (8/8). Python compilation and ownership validation also passed.
+- Initial [run #41440714154](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/41440714154) failed because a **new test** incorrectly expected a content pin on the group transport descriptor; the real strict check correctly uses the **dossier** binding. The test was corrected in `32256ec` without changing runtime/validator code.
+- Local Python execution in this isolated conversation environment was not possible (GitHub checkout network unavailable). Actual offline Python tests executed in GitHub Actions, not locally.
+- This report update adds no source code. The **exact final PR HEAD** is verified via its own subsequent CI; final SHA/run evidence should be appended to the PR conversation rather than guessed inside a report commit that changes the HEAD.
+- Other executed checks on the code HEAD: site-task registry [run #41440854888](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/41440854888) SUCCESS and backlog dispositions [run #41440854960](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/41440854960) SUCCESS.
+- Generic test AppIDs are synthetic, not fixed to current production work; zero canonical accepted original groups and all immutable quarantined artifacts remain unchanged.
 
 ## Independent L2/L3 delta QA required
 
@@ -40,4 +42,4 @@ Changing worker prompt content changes the content-complete `worker_prompt_sha25
 - **L3, pin/recovery safety (high-impact mismatch risk):** reviewer verifies exact new GitHub-prepared `web_evidence_contract_binding` and marker-parent/descriptor parity after an eventual approved merge; old immutable candidates/quarantine and previous pins remain unchanged; validator rejects stale/wrong basis/edition/descriptor.
 - **Rollback:** revert only this prompt clarification and its matching regression additions through reviewed Git history if QA fails, preserving immutable rejected bytes, strict GitHub validation, audit and historical pin identity. A rollback also changes the content hash and requires the standard GitHub compatibility/reprepare route; never manually force an old descriptor into a new binding.
 
-**Provisional verdict:** `BLOCKED_EVIDENCE` until exact-head CI and independent reviewer gate. Developer worker does not self-merge or perform semantic execution.
+**Worker verdict:** `READY_FOR_INDEPENDENT_DELTA_QA` after successful exact final HEAD CI. Independent L2/L3 review remains required; no worker merge or semantic execution.
