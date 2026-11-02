@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Synthetic adversarial Notes V2 proofs. No real Research/Assembly or GitHub writes."""
 import copy
+from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
@@ -10,6 +11,8 @@ import unittest
 
 import dossier_research_notes_v2 as v2
 import dossier_two_stage_versioned as versions
+from taste_steam_review_dossier_strict import derive_dossier_summary
+from taste_steam_review_dossier_test_fixture import web_dossier
 
 C = json.loads(v2.CONTRACT_PATH.read_text(encoding="utf-8"))
 TRIAL = "notes-v2-shadow-calibration-20261021"
@@ -318,6 +321,109 @@ class NotesV2Tests(unittest.TestCase):
         ):
             with self.subTest(changes=changes),self.assertRaises(v2.NotesV2Error):
                 v2.prepare_assembly_transport(self.repo,work,dict(original,**changes))
+
+    def _synthetic_final_for_bound_work(self, work):
+        # Structural-only regression fixture. These are NOT real player reviews
+        # or a replacement for any immutable original18 candidate.
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        return web_dossier(work["assignment"]["appid"], now,
+                           title=work["assignment"]["title"])
+
+    def test_presubmit_206420_like_historical_needs_role_and_recent_current_feedback(self):
+        self.appid = "206420"
+        self.assignment = v2.frozen_assignment(
+            self.repo, marker_commit=self.marker, trial_id=TRIAL, appid=self.appid)
+        _, work = self.work()
+
+        unsupported = self._synthetic_final_for_bound_work(work)
+        unsupported["observations"][0]["evidence_status"] = "historical"
+        unsupported["observations"][0]["statement"] = (
+            "Older players described a change, but no current-state check was captured.")
+        unsupported["summary"] = derive_dossier_summary(
+            unsupported["observations"], unsupported["conflicts"])
+        # Real 206420 had historical status over durable_trait-only source-002.
+        bad = v2.candidate_assembly(
+            work, outcome="assembled_candidate_ready", final_dossier=unsupported)
+        with self.assertRaises(v2.NotesV2Error) as cm:
+            v2.prepare_assembly_transport(self.repo, work, bad)
+        self.assertEqual(cm.exception.code, "final_strict_or_group_rejected")
+        self.assertIn("historical claim lacks historical feedback", str(cm.exception))
+
+        missing_recent = copy.deepcopy(unsupported)
+        missing_recent["provenance"]["sources"][1]["evidence_role"] = "historical"
+        no_check = v2.candidate_assembly(
+            work, outcome="assembled_candidate_ready", final_dossier=missing_recent)
+        with self.assertRaises(v2.NotesV2Error) as cm:
+            v2.prepare_assembly_transport(self.repo, work, no_check)
+        self.assertEqual(cm.exception.code, "final_strict_or_group_rejected")
+        self.assertIn("historical/fixed claim lacks recent dated current-state check",
+                      str(cm.exception))
+
+        valid = copy.deepcopy(missing_recent)
+        valid["observations"][0]["source_ids"].append("source-003")
+        valid["observations"][0]["player_feedback_ids"].append("feedback-004")
+        valid["observations"][0]["mention_count"] = 4
+        valid["observations"][0]["evidence_languages"] = ["russian", "non_russian"]
+        valid["summary"] = derive_dossier_summary(
+            valid["observations"], valid["conflicts"])
+        ready = v2.candidate_assembly(
+            work, outcome="assembled_candidate_ready", final_dossier=valid)
+        preview = v2.prepare_assembly_transport(self.repo, work, ready)
+        self.assertEqual(preview["status"], "ready_for_create_only_submission")
+        self.assertFalse(preview["canonical_acceptance"])
+        self.assertFalse((self.repo / work["output_path"]).exists())
+
+    def test_presubmit_1607130_like_invalid_access_enum_rejected(self):
+        self.appid = "1607130"
+        self.assignment = v2.frozen_assignment(
+            self.repo, marker_commit=self.marker, trial_id=TRIAL, appid=self.appid)
+        _, work = self.work()
+        allowed = v2.candidate_assembly(
+            work, outcome="assembly_missing_evidence",
+            operations=[{"kind": "source_revisit", "access": "unknown",
+                         "summary": "Exact review collection was login gated; not inspected"}],
+            diagnostic="No independently inspectable balanced player feedback")
+        malformed = copy.deepcopy(allowed)
+        malformed["operations"][0]["access"] = "access_blocked"
+        with self.assertRaises(v2.NotesV2Error) as cm:
+            v2.prepare_assembly_transport(self.repo, work, malformed)
+        self.assertEqual(cm.exception.code, "unparseable")
+        self.assertFalse((self.repo / work["output_path"]).exists())
+
+        # Honest lack-of-evidence status is schema-valid, but never a dossier.
+        preview = v2.prepare_assembly_transport(self.repo, work, allowed)
+        self.assertEqual(preview["status"], "ready_for_create_only_submission")
+        self.assertIsNone(allowed["final_dossier"])
+        self.assertFalse(allowed["canonical_acceptance"])
+        write(self.repo, work["output_path"], allowed)
+        candidate_commit = commit(self.repo, "fixture: typed incomplete Assembly")
+        status = v2.inspect_assembly(
+            self.repo, marker_commit=self.marker, trial_id=TRIAL, appid=self.appid,
+            research_commit=work["research_transport"]["research_package_git_commit"],
+            result_commit=candidate_commit)
+        self.assertEqual(status["status"], "assembly_missing_evidence")
+        self.assertFalse(status["canonical_acceptance"])
+
+    def test_presubmit_final_dossier_cannot_rebind_original_appid_or_edition(self):
+        self.appid = "206420"
+        self.assignment = v2.frozen_assignment(
+            self.repo, marker_commit=self.marker, trial_id=TRIAL, appid=self.appid)
+        _, work = self.work()
+        for mismatch in ("appid", "title"):
+            with self.subTest(mismatch=mismatch):
+                final = self._synthetic_final_for_bound_work(work)
+                if mismatch == "appid":
+                    final["appid"] = "1607130"
+                    final["key"] = "App_1607130"
+                else:
+                    final["title"] = "Saints Row IV (wrong edition)"
+                    final["game_identity"]["work_title"] = final["title"]
+                invalid = v2.candidate_assembly(
+                    work, outcome="assembled_candidate_ready", final_dossier=final)
+                with self.assertRaises(v2.NotesV2Error) as cm:
+                    v2.prepare_assembly_transport(self.repo, work, invalid)
+                self.assertEqual(cm.exception.code, "final_strict_or_group_rejected")
+                self.assertFalse((self.repo / work["output_path"]).exists())
 
     def test_immutable_marker_and_manifest_are_not_rewritten(self):
         path=f"data/control/dossier_notes_v2/manifests/{TRIAL}.json"
