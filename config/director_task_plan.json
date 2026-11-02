@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-10-29",
+  "last_curated_on": "2026-11-02",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3037,7 +3037,7 @@
       "id": "dossier-v1-rejected-buffers-exact-product-binding-root-cause-01",
       "title": "ЧАТ 1 — root cause девяти отклонённых Dossier V1 groups",
       "goal": "Определить действительную причину exact_product_binding отклонений девяти Dossier V1 frozen group candidate и подготовить одно ограниченное исправление.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "9 immutable rejection entries, реальные quarantine candidates и соответствующий worker/validator, без исполнения semantic.",
       "urgency": "высокая",
@@ -3048,10 +3048,10 @@
       "depends_on": [
         "dossier-v1-manual-postgroup-stop-gate-01"
       ],
-      "blocker": "НОВЫЙ физический ЧАТ 1; read-only root cause exact_product_binding, не повторный запуск Dossier.",
-      "recent_completion": false,
-      "updated_on": "2026-10-29",
-      "updated_at_utc": "2026-10-29T13:19:33.812Z"
+      "blocker": "Диагностика завершена отчётом PR 367, 72 из 72 binding null-masks некорректны; пользователь согласовал отдельный фикс.",
+      "recent_completion": true,
+      "updated_on": "2026-11-02",
+      "updated_at_utc": "2026-11-02T11:40:47.112Z"
     },
     {
       "id": "dossier-v2-assembly-presubmit-evidence-quality-guard-01",
@@ -3073,6 +3073,26 @@
       "recent_completion": false,
       "updated_on": "2026-10-29",
       "updated_at_utc": "2026-10-29T13:29:37.023Z"
+    },
+    {
+      "id": "dossier-v1-exact-product-binding-null-mask-implement-01",
+      "title": "ЧАТ 1 — исправить binding null mask Dossier V1",
+      "goal": "Исправить worker prompt basis-specific masks и offline regression tests по доказанной причине девяти отклонений.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Одна семантическая prompt delta и тесты без новых semantic runs.",
+      "urgency": "высокая",
+      "urgency_reason": "Девять групп отклонены, Deep не получает канонически принятые досье.",
+      "task_file": "WORKER_TASK_DOSSIER_V1_EXACT_PRODUCT_BINDING_NULL_MASK_IMPLEMENT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-v1-rejected-buffers-exact-product-binding-root-cause-01"
+      ],
+      "blocker": "НОВЫЙ физический ЧАТ 1 — bounded V1 null-mask fix, реальный semantic/retry запрещён.",
+      "recent_completion": false,
+      "updated_on": "2026-11-02",
+      "updated_at_utc": "2026-11-02T11:40:47.112Z"
     }
   ]
 }
