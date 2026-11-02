@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — восстановление непрерывной работы, 2026-11-02
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — закрыть оставшиеся исправления, 2026-11-02
 
-- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `director-durable-closeout-recovery-implement-01` → `WORKER_TASK_DIRECTOR_DURABLE_CLOSEOUT_RECOVERY_IMPLEMENT_01.md`. Адресно устранить потерю переходов QA→решение→принятие и подготовить безопасное восстановление отказанной регистрации; входное сохранённое свидетельство issue #375.
-- **ЧАТ 2 — свободен:** независимая QA `dossier-v2-pr368-evidence-guard-l3-qa-01` завершена с PASS в report PR #374, исходный PR #368 ещё открыт. Старую беседу не переиспользовать.
-- **ЧАТ 3 — свободен:** реализация правил `director-postdiagnosis-consent-handoff-continuity-implement-01` сдана в PR #372, требуется адресное устранение повторного approval.
-- **ЧАТЫ 4, 5, 6 свободны.** Сданное V1 исправление PR #371 ожидает независимой QA. Резервные записи в GitHub issue #375 и Library остаются до переноса; не являются полномочиями production.
+- **ЧАТ 1 — зарезервирован, ожидает запуска:** `director-durable-closeout-recovery-implement-01` → `WORKER_TASK_DIRECTOR_DURABLE_CLOSEOUT_RECOVERY_IMPLEMENT_01.md`. Непрерывный результат→QA→приёмка и безопасный backup при отказе REGISTER.
+- **НОВЫЙ ЧАТ 2 — зарезервирован, ожидает запуска:** `dossier-v1-pr371-binding-independent-qa-01` → `WORKER_TASK_DOSSIER_V1_PR371_BINDING_INDEPENDENT_QA_01.md`. Независимая QA source PR #371, без rerun.
+- **НОВЫЙ ЧАТ 3 — зарезервирован, ожидает запуска:** `director-pr372-no-repeat-approval-implement-01` → `WORKER_TASK_DIRECTOR_PR372_NO_REPEAT_APPROVAL_IMPLEMENT_01.md`. Доработать именно существующий source PR #372; не потерять prior implemented bridge.
+- **ЧАТЫ 4, 5, 6 свободны.** Исходная QA PR #374 и source PR #368 уже приняты в main; Dossier V2 остаётся production-disabled. Незакрытые шаги отслеживаются в GitHub issue #375 до фактического закрытия.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 

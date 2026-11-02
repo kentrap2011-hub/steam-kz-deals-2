@@ -3153,6 +3153,46 @@
       "recent_completion": false,
       "updated_on": "2026-11-02",
       "updated_at_utc": "2026-11-02T17:01:23.457Z"
+    },
+    {
+      "id": "dossier-v1-pr371-binding-independent-qa-01",
+      "title": "ЧАТ 2 — независимая QA Dossier V1",
+      "goal": "Проверить исправление масок источников и безопасность неизменяемых привязок до приёмки.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Один адресный source PR и набор регрессионных тестов с проверкой обязательных CI.",
+      "urgency": "высокая",
+      "urgency_reason": "Отклонённые группы не восстановлены, качество новой генерации требует независимого контроля.",
+      "task_file": "WORKER_TASK_DOSSIER_V1_PR371_BINDING_INDEPENDENT_QA_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-v1-exact-product-binding-null-mask-implement-01"
+      ],
+      "blocker": "Только report-only QA, нельзя запускать повторный semantic или recovery.",
+      "updated_on": "2026-11-02",
+      "updated_at_utc": "2026-11-02T17:04:57.515Z",
+      "recent_completion": false
+    },
+    {
+      "id": "director-pr372-no-repeat-approval-implement-01",
+      "title": "ЧАТ 3 — убрать повторный вопрос о принятии",
+      "goal": "Обеспечить принятие проверенного результата согласованной разработки без второго разрешения.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Адресная правка одного существующего PR с проверочными сценариями для управления полномочиями.",
+      "urgency": "высокая",
+      "urgency_reason": "После готового результата директор необоснованно останавливается и перекладывает решение на пользователя.",
+      "task_file": "WORKER_TASK_DIRECTOR_PR372_NO_REPEAT_APPROVAL_IMPLEMENT_01.md",
+      "worker_slot": "ЧАТ 3",
+      "order": null,
+      "depends_on": [
+        "director-postdiagnosis-consent-handoff-continuity-implement-01"
+      ],
+      "blocker": "Продолжать исходный PR без реальных semantic или production действий; проверять риск разрешений.",
+      "updated_on": "2026-11-02",
+      "updated_at_utc": "2026-11-02T17:04:57.515Z",
+      "recent_completion": false
     }
   ]
 }
