@@ -1,9 +1,10 @@
 # CURRENT TASK
 
-## IN PROGRESS — ЧАТ 2: targeted Steam DLC membership identity blocker (2026-11-03)
+## IMPLEMENTED / IN L3 REVIEW — ЧАТ 2: targeted Steam DLC identity correction (2026-11-03)
 - Task: `WORKER_TASK_STEAM_TARGETED_DLC_IDENTITY_BLOCKER_RESTORE_AUTO_DOSSIER_01.md`.
-- Branch: `fix/steam-targeted-dlc-identity-blocker-01`; scoped code + deterministic regressions + one PR, no manual production or semantic worker.
-- GitHub collector owns the exact targeted DLC relation; scheduled main and canonical downstream Dossier preparation remain authoritative. Director L3 QA/merge required after CI.
+- PR: [#388](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/388), branch `fix/steam-targeted-dlc-identity-blocker-01`; code + deterministic regression fixtures committed. No manual production or semantic worker.
+- **Not production-accepted:** exact-head CI and Director independent L3 QA/merge required, then a normally scheduled complete Steam → mailing → pre-AI run must regenerate a fresh Dossier index and worker-prompt binding.
+- Report: `reviews/worker_reports/steam-targeted-dlc-identity-blocker-restore-auto-dossier-01.md`. Other worker tasks unaffected.
 
 ## IMPLEMENTED / PR CONFLICT RESOLVED, LIVE ACCEPTANCE PENDING — ЧАТ 1: Steam >=50%, rolling top-100 (2026-10-26)
 - Existing draft [PR #311](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/311), branch `implement/steam-discovery-50-top100-01`; **not merged/deployed**.
