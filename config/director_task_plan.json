@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-02",
+  "last_curated_on": "2026-11-03",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3234,39 +3234,59 @@
       "id": "director-pr372-consent-gate-independent-l3-qa-01",
       "title": "ЧАТ 1 — независимая L3 QA согласования и принятия",
       "goal": "Независимо проверить исправленные границы полномочий директора в существующем source PR перед принятием без повторного согласия.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Адресная проверка source diff и точного CI, сценарии положительных и отрицательных разрешений.",
       "urgency": "высокая",
       "urgency_reason": "Правила завершения задач нельзя применять до независимой проверки авторизации.",
       "task_file": "WORKER_TASK_DIRECTOR_PR372_CONSENT_GATE_INDEPENDENT_L3_QA_01.md",
-      "worker_slot": "ЧАТ 1",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "director-pr372-no-repeat-approval-implement-01"
       ],
-      "blocker": "Без фактического запуска и без source merge исполнителем; только независимый report-only QA.",
-      "updated_on": "2026-11-02",
-      "updated_at_utc": "2026-11-02T18:12:54.523Z",
-      "recent_completion": false
+      "blocker": "Независимая L3 QA и исходные правила приняты в main.",
+      "updated_on": "2026-11-03",
+      "updated_at_utc": "2026-11-03T05:25:00Z",
+      "recent_completion": true
     },
     {
       "id": "steam-targeted-dlc-identity-blocker-restore-auto-dossier-01",
       "title": "ЧАТ 2 — исправить DLC blocker и автоподготовку Dossier",
       "goal": "Устранить подтверждённый upstream blocker Steam DLC, обеспечить безопасную автоматическую подготовку Dossier в существующем GitHub-конвейере.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Узкая правка существующего collector и адресные регрессионные тесты; не создавать новый pipeline.",
       "urgency": "высокая",
       "urgency_reason": "После сбоя Steam 1 ноября автоматическая очередь Dossier не обновляется с 27 октября.",
       "task_file": "WORKER_TASK_STEAM_TARGETED_DLC_IDENTITY_BLOCKER_RESTORE_AUTO_DOSSIER_01.md",
-      "worker_slot": "ЧАТ 2",
+      "worker_slot": null,
       "order": null,
       "depends_on": [],
-      "blocker": "Никаких semantic/production запусков; требуется code PR, CI, риск-адекватная независимая QA и Director merge.",
+      "blocker": "Код и тесты сданы в исходный PR, ожидающий независимой QA и принятия директором.",
+      "recent_completion": true,
+      "updated_on": "2026-11-03",
+      "updated_at_utc": "2026-11-03T05:25:00Z"
+    },
+    {
+      "id": "steam-targeted-dlc-pr388-independent-l3-qa-01",
+      "title": "ЧАТ 3 — независимая проверка исправления Steam DLC",
+      "goal": "Проверить безопасность и корректность уже подготовленного исправления DLC в исходном PR до принятия.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Предметная независимая проверка узкого кода, регрессий и точных CI.",
+      "urgency": "высокая",
+      "urgency_reason": "Рабочий Steam collector блокирует автоматическое создание очереди Dossier.",
+      "task_file": "WORKER_TASK_STEAM_TARGETED_DLC_PR388_INDEPENDENT_L3_QA_01.md",
+      "worker_slot": "ЧАТ 3",
+      "order": null,
+      "depends_on": [
+        "steam-targeted-dlc-identity-blocker-restore-auto-dossier-01"
+      ],
+      "blocker": "Нельзя выполнять кодовые правки и запускать production или semantic; требуется только независимая report-only QA.",
       "recent_completion": false,
-      "updated_on": "2026-11-02",
-      "updated_at_utc": "2026-11-02T18:39:07.998Z"
+      "updated_on": "2026-11-03",
+      "updated_at_utc": "2026-11-03T05:25:00Z"
     }
   ]
 }

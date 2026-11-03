@@ -5,13 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — исправить подтверждённую причину остановки Dossier, 2026-11-02
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — независимая QA DLC, 2026-11-03
 
-- **НОВЫЙ ЧАТ 2 — зарезервирован, ожидает запуска:** `steam-targeted-dlc-identity-blocker-restore-auto-dossier-01` → `WORKER_TASK_STEAM_TARGETED_DLC_IDENTITY_BLOCKER_RESTORE_AUTO_DOSSIER_01.md`. Непосредственно исправить в одном source PR DLC identity blocker AppID 239140 в GitHub-owned Steam collector с адресными регрессиями, чтобы существующий автоматически запускаемый pre-AI pipeline мог опять формировать свежую очередь Dossier без ручной подготовки. Report-only вместо реализации не допускается при безопасно доступной правке. Production/semantic rerun не запускать.
-- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `director-pr372-consent-gate-independent-l3-qa-01` → `WORKER_TASK_DIRECTOR_PR372_CONSENT_GATE_INDEPENDENT_L3_QA_01.md`. Независимая L3 проверка source PR #372.
-- **ЧАТЫ 3, 4, 5, 6 свободны.** Оба поручения независимы: ЧАТ 2 не меняет директорские правила. После финального отчёта каждого слот освобождается, но parent source исправления закрываются только после CI/QA и принятия.
-- **Dossier V1:** 2 ноября PR #371 и независимая QA #381 уже merged. Автоподготовленная очередь stale с 27 октября из-за upstream Steam collection failure; не использовать прежнюю queue/pins, не запускать V1 semantic до свежей GitHub-owned projection/binding и отдельного явного пользовательского one-shot разрешения.
-- **Управление:** issue #375 держать открытым до проверенного закрытия восстановительных задач. Никаких новых Scheduled Tasks, полномочий, manual replay или V2 activation.
+- **НОВЫЙ ЧАТ 3 — зарезервирован, ожидает запуска:** `steam-targeted-dlc-pr388-independent-l3-qa-01` → `WORKER_TASK_STEAM_TARGETED_DLC_PR388_INDEPENDENT_L3_QA_01.md`. Независимая предметная L3 QA source PR #388, без повторной разработки и без запуска production/semantic. После PASS директор принимает source PR #388 по проверенным CI и merge gates без повторного согласования ранее разрешённого исправления.
+- **ЧАТЫ 1, 2, 4, 5, 6 свободны.** ЧАТ 1 сдал L3 QA правил, source PR #372 и отчёт приняты; ЧАТ 2 сдал код и тесты для source PR #388. Результат worker освобождает физический чат независимо от состояния source PR.
+- **Dossier V1:** очередь всё ещё старая, `prepared_for_date=2026-10-27`, содержит устаревшую привязку worker prompt. После успешного source merge дождаться штатного GitHub producer→pre-AI и убедиться в актуальных индексах и binding. Не запускать manual semantic Dossier до этого; Dossier V2 отдельно NO_GO.
+- **Отдельная незавершённая работа:** долговечное закрытие и recovery директорских задач по отчётам #380/#382 не реализованы; issue #375 остаётся открытым. Никаких новых дополнительных worker задач, расписаний, retries или реального semantic/production.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
