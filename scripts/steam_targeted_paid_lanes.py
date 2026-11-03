@@ -64,24 +64,48 @@ def suitable_base_ids(items, failed_keys, core, today):
     return sorted(set(admitted), key=lambda value: int(value))
 
 
+def _canonical_appid(value, context):
+    """Only positive canonical decimal AppIDs; reject bools and lossy coercion."""
+    if type(value) is int and value > 0:
+        return str(value)
+    if (type(value) is str and value.isascii() and value.isdecimal()
+            and value[0] != '0'):
+        return value
+    raise RuntimeError(f'{context} has invalid AppID identity')
+
+
+def _check_fetched_identity(data, appid, context):
+    if not isinstance(data, dict):
+        raise RuntimeError(f'{context} missing appdetails metadata')
+    if ('steam_appid' in data and
+            _canonical_appid(data['steam_appid'], context) != appid):
+        raise RuntimeError(f'{context} contradicts requested AppID {appid}')
+
+
 def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
                            reporter=None):
-    """Fail closed for any missing parent. Return only verified discounted DLC."""
-    bases = sorted({str(x) for x in base_appids}, key=int)
+    """Fail closed for missing/invalid parents; dedupe exact valid DLC membership."""
+    bases = sorted({_canonical_appid(x, 'targeted DLC parent')
+                    for x in base_appids}, key=int)
     relations = {}
     with ThreadPoolExecutor(max_workers=RELATION_WORKERS) as pool:
         futures = {pool.submit(fetch, base): base for base in bases}
         for future in as_completed(futures):
             base = futures[future]
             data = future.result()
+            _check_fetched_identity(data, base, f'DLC parent App_{base}')
             if data.get('type') != 'game':
                 raise RuntimeError(f'DLC parent {base} did not resolve to a base game')
-            raw = data.get('dlc') or []
+            # Missing 'dlc' means no known relations; an explicitly malformed
+            # relation is not equivalent to an empty verified membership.
+            raw = data.get('dlc', [])
             if not isinstance(raw, list):
                 raise RuntimeError(f'DLC relationship invalid for App_{base}')
-            ids = sorted({str(value) for value in raw if str(value).isdigit()}, key=int)
-            if len(ids) != len(raw):
-                raise RuntimeError(f'DLC relationship contains duplicates/invalid identities: {base}')
+            # Steam's parent list is set membership, not a cardinality proof.
+            # Repeated *valid* IDs are safe; any malformed identity still fails
+            # the entire parent instead of silently dropping a relationship.
+            ids = sorted({_canonical_appid(value, f'DLC relationship App_{base}')
+                          for value in raw}, key=int)
             relations[base] = ids
     candidates = {}
     reverse = {}
@@ -90,6 +114,7 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
             reverse.setdefault(appid, set()).add(base)
     for appid in sorted(reverse, key=int):
         data = fetch(appid)
+        _check_fetched_identity(data, appid, f'DLC App_{appid}')
         if data.get('type') != 'dlc':
             # Some pages list soundtrack/apps, not genuine DLC.
             continue
@@ -103,9 +128,13 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
         if not (0 < final <= int(core['PAID_MAX_PRICE_KZT'] * 100)
                 and percent >= core['PAID_MIN_DISCOUNT_PERCENT']):
             continue
-        parent = (data.get('fullgame') or {}).get('appid')
-        if parent is not None and str(parent) not in reverse[appid]:
-            raise RuntimeError(f'DLC App_{appid} contradicts verified parent relation')
+        fullgame = data.get('fullgame')
+        if fullgame is not None and not isinstance(fullgame, dict):
+            raise RuntimeError(f'DLC App_{appid} has invalid fullgame relationship')
+        if fullgame is not None and 'appid' in fullgame:
+            parent = _canonical_appid(fullgame['appid'], f'DLC App_{appid} fullgame')
+            if parent not in reverse[appid]:
+                raise RuntimeError(f'DLC App_{appid} contradicts verified parent relation')
         item = {
             'key': f'App_{appid}', 'appid': appid,
             'title': data.get('name') or f'DLC {appid}',
