@@ -1,5 +1,10 @@
 # CURRENT TASK
 
+## IN PROGRESS — ЧАТ 2: targeted Steam DLC membership identity blocker (2026-11-03)
+- Task: `WORKER_TASK_STEAM_TARGETED_DLC_IDENTITY_BLOCKER_RESTORE_AUTO_DOSSIER_01.md`.
+- Branch: `fix/steam-targeted-dlc-identity-blocker-01`; scoped code + deterministic regressions + one PR, no manual production or semantic worker.
+- GitHub collector owns the exact targeted DLC relation; scheduled main and canonical downstream Dossier preparation remain authoritative. Director L3 QA/merge required after CI.
+
 ## IMPLEMENTED / PR CONFLICT RESOLVED, LIVE ACCEPTANCE PENDING — ЧАТ 1: Steam >=50%, rolling top-100 (2026-10-26)
 - Existing draft [PR #311](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/311), branch `implement/steam-discovery-50-top100-01`; **not merged/deployed**.
 - Code: one live-capped games/Sub source; quality-gated base-game scope, exact targeted KZ DLC relations and offer gates (no global DLC), independent on-sale multi-game Sub package candidates (including entirely non-sale members), conservative low-signal quality/value rescue, canonical full Deep queue, rolling final 100, complete source-bound funnel/statistics.
