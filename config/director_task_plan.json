@@ -3292,19 +3292,37 @@
       "id": "steam-targeted-dlc-appdetails-429-bounded-recovery-01",
       "title": "ЧАТ 1 — ограниченная обработка Steam DLC HTTP 429",
       "goal": "Исправить временные ограничения Steam appdetails без потери полноты суточного сбора и с автообновлением очереди Dossier.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Узкая правка существующего HTTP клиента и детерминированные тесты ограниченного повтора.",
       "urgency": "высокая",
       "urgency_reason": "Подтверждённый HTTP 429 в рабочем коллекторе блокирует формирование свежей очереди.",
       "task_file": "WORKER_TASK_STEAM_TARGETED_DLC_APPDETAILS_429_BOUNDED_RECOVERY_01.md",
+      "worker_slot": null,
+      "order": null,
+      "depends_on": [],
+      "blocker": "Source PR принят и испытан в настоящем Actions; повторный рабочий запуск завершился HTTP 429, теперь требуется новое доказательное исследование.",
+      "recent_completion": true,
+      "updated_on": "2026-11-04",
+      "updated_at_utc": "2026-11-04T15:13:00Z"
+    },
+    {
+      "id": "steam-store-appdetails-429-external-evidence-research-01",
+      "title": "ЧАТ 1 — причины Steam Store HTTP 429 по документации и форумам",
+      "goal": "Подтвердить либо опровергнуть объяснение устойчивых 429 на Steam Store appdetails по официальным данным, прямым наблюдениям разработчиков и GitHub журналам.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Адресная внешняя техническая проверка 429 для одного endpoint, исходников и двух точных рабочих запусков; без правок.",
+      "urgency": "высокая",
+      "urgency_reason": "Неподтверждённая причина HTTP 429 блокирует реальные сборы и свежую очередь Dossier.",
+      "task_file": "WORKER_TASK_STEAM_STORE_APPDETAILS_429_EXTERNAL_EVIDENCE_RESEARCH_01.md",
       "worker_slot": "ЧАТ 1",
       "order": null,
       "depends_on": [],
-      "blocker": "После исходного PR требуется Director safety gate и live проверка main GitHub Actions. Semantic запуск запрещён.",
+      "blocker": "Только доказательное исследование и report-only PR; код, реальные API эксперименты и production операции не разрешены.",
       "recent_completion": false,
       "updated_on": "2026-11-04",
-      "updated_at_utc": "2026-11-04T14:01:00Z"
+      "updated_at_utc": "2026-11-04T15:13:00Z"
     }
   ]
 }
