@@ -1248,7 +1248,10 @@ def run():
             base_admitted_ids, core, reporter=reporter
         )
     except Exception as exc:
-        reporter.set_stage('targeted_dlc_relations_failed', error=str(exc))
+        reporter.set_stage(
+            'targeted_dlc_relations_failed', error=str(exc),
+            appdetails_diagnostics=targeted._appdetails_diagnostics.snapshot(),
+        )
         reporter.stop()
         failures.write()
         raise SystemExit(
