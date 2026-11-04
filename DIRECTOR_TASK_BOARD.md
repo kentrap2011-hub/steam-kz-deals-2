@@ -5,13 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Steam appdetails скользящий лимит, 2026-11-04
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Steam Search KZ maxprice sort-total validation, 2026-11-04
 
-- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `steam-store-appdetails-sliding-window-429-guard-01` → `WORKER_TASK_STEAM_STORE_APPDETAILS_SLIDING_WINDOW_429_GUARD_01.md`. Одно source IMPLEMENT на основании full main run `41861101779` (450 запросов, 428×200, 22×429; первая ошибка при 202 starts/300s, повторная при 213). Ограничение максимум 180 starts в любом скользящем 300s окне, общее для трёх потоков, parent/child/retries; сохранить bounded ожидание и 120s retry correctness; тесты + developer self-review в одном PR. Не назначать новые отдельные research/QA чаты.
-- **ЧАТЫ 2, 3, 4, 5, 6 свободны.** Предыдущий ЧАТ 1 сдал research и диагностический код, обе работы приняты в main; его старый физический номер освобождён и теперь зарезервирован для нового IMPLEMENT.
-- **Dossier V1:** GitHub upstream failed, worker index `prepared_for_date=2026-10-27` с устаревшей привязкой; до успешного полного GitHub main Steam→mailing→pre-AI и актуального exact prompt binding семантический one-shot запрещён. V2 отдельно NO_GO.
-- **Safety/owner:** GitHub владеет единственным daily production циклом; пользователь разрешил bounded correction и хочет один рабочий Actions acceptance без дополнительных QA worker. Директор проверяет реальный source PR/CI/безопасность, не объявляя self-review независимым L3. Не создавать новый workflow, Scheduled Task, backfill, ручную semantic работу.
-- **Отдельно:** #375 recovery остаётся открытым, без новых поручений.
+- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `steam-search-kz-maxprice-sort-total-drift-guard-01` → `WORKER_TASK_STEAM_SEARCH_KZ_MAXPRICE_SORT_TOTAL_DRIFT_GUARD_01.md`. Одно ограниченное IMPLEMENT: source validation `maxprice=4500` завершился `9593 != 9594` между `Price_DESC` и `Name_ASC` в main run `41873904803`. Разобраться, транзиентное ли это расхождение, добавить строго bounded повторный контроль с доказательством KZ cap, без допуска «±1=равенство». При persistent mismatch / ignored cap / price leak оставить fail-closed. Разработчик самостоятельно тестирует и сдаёт один PR, не нужны новые QA/research чаты.
+- **ЧАТЫ 2, 3, 4, 5, 6 свободны.** Предыдущий ЧАТ 1 закончил sliding physical cap для appdetails, source PR #397 merged в main; после реального ручного запуска `41873904803` упал ранее в `source_validation_failed`, поэтому sliding cap 180/300 ещё не проверен production. Новый физический ЧАТ 1 резервируется под отдельную KZ source-validation проблему.
+- **Dossier V1:** индекс `prepared_for_date=2026-10-27`, upstream Steam не подтверждён, mailing/pre-AI skipped. Semantic one-shot Dossier запрещён до успешного полного GitHub main collector→mailing→pre-AI и актуальной worker binding. V2 отдельно NO_GO.
+- **Safety/owner:** GitHub owns daily collection and exact KZ integrity. Нужно проверить exact source PR HEAD/CI/merge gate, затем один реальный main Actions. Не упрощать source price proof ради успеха и не назначать дополнительные QA, Scheduled Tasks, semantic workers.
+- **Отдельно:** issue #375 по durable recovery остаётся открыт; остальные поручения без нового пользовательского решения не создаются.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
