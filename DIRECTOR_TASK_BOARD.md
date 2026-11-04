@@ -5,13 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — исправление Steam appdetails HTTP 429, 2026-11-04
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — исследование причины Steam Store HTTP 429, 2026-11-04
 
-- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `steam-targeted-dlc-appdetails-429-bounded-recovery-01` → `WORKER_TASK_STEAM_TARGETED_DLC_APPDETAILS_429_BOUNDED_RECOVERY_01.md`. Одно узкое IMPLEMENT с самопроверкой и обычной CI: обработать временные 429 от appdetails, сохранить полноту DLC, fail-closed при исчерпании ожиданий, затем подготовить source PR. Пользователь просил **без новых QA-чатов**, а после принятия кода — один настоящий GitHub Actions на main; source PR-only CI не заменяет live сбор.
-- **ЧАТЫ 2, 3, 4, 5, 6 свободны.** ЧАТ 3 сдал independent L3 QA DLC #388; report PR #390 и source PR #388 уже приняты, рабочий слот освобождён. Никаких отдельных проверочных поручений сейчас не создавать.
-- **Dossier V1:** 2026-11-04 manual main workflow run `41844517992` failed at `targeted_dlc_relations` on Steam HTTP 429 for appdetails DLC `750920`; mailing and pre-AI skipped, worker index остаётся stale 2026-10-27. До успешного полного GitHub main production→pre-AI и свежей exact worker binding semantic one-shot запрещён. V2 отдельно NO_GO.
-- **Директорский merge gate:** обычные GitHub CI обязательны, risk L3/safety requirements не обходить. Запрос пользователя минимизировать дополнительное тестирование зарегистрирован; при конфликте с канонической independent L3 нормой явно сообщить без создания новой QA-задачи. Настоящий production workflow_dispatch пока не выполнялся после 429.
-- **Другие задачи:** долговечное восстановление директорских поручений (отчёты #380/#382) не реализовано; issue #375 открыто, никаких других разрешений на recovery/schedule/semantic.
+- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `steam-store-appdetails-429-external-evidence-research-01` → `WORKER_TASK_STEAM_STORE_APPDETAILS_429_EXTERNAL_EVIDENCE_RESEARCH_01.md`. По прямому запросу пользователя исследовать **внешнюю официальную документацию и прямые наблюдения разработчиков/форумы** для Storefront `appdetails` HTTP 429, сопоставить с реальными GitHub run #41844517992 и #41852566837 и выдать один обоснованный следующий шаг. **Только RESEARCH/report-only**; никаких правок кода и новых испытаний Steam API.
+- **ЧАТЫ 2, 3, 4, 5, 6 свободны.** Предыдущий физический ЧАТ 1 завершил кодовое исправление 429, source PR #392 принят, но реальный production по-прежнему failed из-за 429 для appid 755500. Его старый слот освобождён и теперь назначается НОВОМУ физическому ЧАТУ 1.
+- **Приоритет Dossier:** индекс всё ещё от 2026-10-27, рабочие GitHub upstream не завершились; semantic one-shot Dossier НЕ запускать. В прежних логах нет per-app retries/Retry-After/network egress identity, поэтому не утверждать точную гипотезу о квоте без доказательств. После исследования директор выбирает минимальный технически обоснованный шаг только с разрешения пользователя; не создавать QA-цепочки.
+- **Другие задачи:** director recovery отчёты #380/#382 не реализованы; issue #375 открыт. Без Scheduled Tasks, production/manual dispatch, повторного запуска pipeline или новых внеочередных задач.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
