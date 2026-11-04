@@ -166,97 +166,171 @@ def price_probe_summary(core, data):
     }
 
 
-def validate_kz_source_price_bound(core):
-    """
-    Prove that the exact live KZ maxprice=4500 filter is active without relying
-    on Steam's Price_ASC ordering being globally monotonic.
+# The threshold only admits extra checks; it never permits unequal totals.
+SOURCE_SORT_TOTAL_RECHECK_MAX_INITIAL_DELTA = 2
+SOURCE_SORT_TOTAL_RECHECK_ROUNDS = 2
+SOURCE_SORT_TOTAL_RECHECK_PAUSE_SECONDS = 1.8
+SOURCE_PRICE_VALIDATION_MAX_SECONDS = 180
 
-    Steam Search can return locally non-monotonic price ordering, so ordering is
-    not a completeness authority. Instead:
-      * every supported paid partition is probed with maxprice=4500 +
-        Price_DESC and must return no over-cap row;
-      * the games partition is checked with a second capped sort and must report
-        the same capped total;
-      * an otherwise-identical uncapped Price_DESC control must currently expose
-        an over-cap row and a larger total, directly proving that maxprice=4500
-        materially applies to the KZ response rather than being ignored.
 
-    Production still applies the local <=4500 KZT gate to every parsed row.
+def validate_kz_source_price_bound(core, *, clock=None, pause=None):
     """
+    Validate the exact paid KZ source accelerator, not Steam sort ordering.
+
+    A small first-sort total mismatch may be transient, but is NEVER accepted
+    by tolerance. In that case require two further exact-matching pairs
+    (Price_DESC and Name_ASC), with the SAME total across both pairs. Every
+    sampled capped row must be <= cap; an uncapped, otherwise identical
+    Price_DESC control must prove material filtering. Any unresolved
+    contradiction, unsafe sample or elapsed budget fails closed.
+
+    This is only an admission guard. Full, exact source completeness is proven
+    later by the existing partition traversal and targeted DLC validation.
+    Individual get_page HTTP retries/timeouts retain their existing bounds.
+    """
+    clock = clock or time.monotonic
+    pause = pause or time.sleep
+    started = clock()
     cap = core['PAID_MAX_PRICE_KZT']
+    partitions = core['SEARCH_PARTITIONS']
+    if (
+        cap != 4500
+        or core['PAID_DISCOVERY_POLICY'].get('country_code') != 'kz'
+        or tuple((p['id'], p['category1']) for p in partitions)
+        != (('games', '998'),)
+    ):
+        raise RuntimeError('Cannot validate KZ maxprice: country/cap/partition binding changed')
+
     partition_evidence = {}
     logical_requests = 0
 
-    for partition in core['SEARCH_PARTITIONS']:
-        data = core['get_page'](
-            0,
-            'Price_DESC',
-            category1=partition['category1'],
-            maxprice_kzt=cap,
-            hidef2p=True,
-        )
+    def checked_probe(partition, sort_by, *, capped):
+        nonlocal logical_requests
+        if clock() - started >= SOURCE_PRICE_VALIDATION_MAX_SECONDS:
+            raise RuntimeError('Cannot validate KZ maxprice: source proof deadline exceeded')
+
+        kwargs = {'category1': partition['category1'], 'hidef2p': True}
+        if capped:
+            kwargs['maxprice_kzt'] = cap
+
+        # Verify the actual Steam Search parameter builder before every call.
+        params = core['search_params'](0, sort_by, **kwargs)
+        if (
+            params.get('cc') != 'kz'
+            or params.get('category1') != partition['category1']
+            or params.get('sort_by') != sort_by
+            or params.get('start') != 0
+            or params.get('count') != core['PAGE_SIZE']
+            or params.get('specials') != 1
+            or params.get('hidef2p') != 1
+            or params.get('maxprice') != (cap if capped else None)
+            or (not capped and 'maxprice' in params)
+        ):
+            raise RuntimeError('Cannot validate KZ maxprice: Steam query binding changed')
+
         logical_requests += 1
+        data = core['get_page'](0, sort_by, **kwargs)
+        # A single existing get_page call has its own finite HTTP retry and
+        # timeout budget. Never admit a new call after our outer deadline.
+        if clock() - started > SOURCE_PRICE_VALIDATION_MAX_SECONDS:
+            raise RuntimeError('Cannot validate KZ maxprice: source proof deadline exceeded')
+        if not isinstance(data, dict):
+            raise RuntimeError('Cannot validate KZ maxprice: malformed probe response')
+
+        raw_total = data.get('total_count')
+        # int(True), int(3.5) and int(' 3 ') silently accept malformed totals.
+        if (
+            isinstance(raw_total, bool)
+            or not (
+                isinstance(raw_total, int)
+                or (isinstance(raw_total, str) and raw_total.isascii() and raw_total.isdecimal())
+            )
+        ):
+            raise RuntimeError('Cannot validate KZ maxprice: source total is unknown/malformed')
         summary = price_probe_summary(core, data)
         total = summary['total_count']
-        if total is None or total < 0:
+        if total is None or total < 0 or summary['row_count'] > total:
+            raise RuntimeError('Cannot validate KZ maxprice: source total is unknown/malformed')
+        if total > 0 and summary['row_count'] == 0:
+            raise RuntimeError('Cannot validate KZ maxprice: nonempty source has no probe rows')
+        if summary['row_count'] > core['PAGE_SIZE']:
+            raise RuntimeError('Cannot validate KZ maxprice: probe exceeds requested page size')
+        if capped and summary['max_price_kzt'] is not None and summary['max_price_kzt'] > cap:
+            scope = partition['id'] if sort_by == 'Price_DESC' else sort_by
             raise RuntimeError(
                 'Cannot validate KZ maxprice: '
-                f"{partition['id']} capped total is unknown"
+                f'{scope} maxprice={cap} leaked {summary["max_price_kzt"]} KZT'
             )
-        if (
-            summary['max_price_kzt'] is not None
-            and summary['max_price_kzt'] > cap
-        ):
-            raise RuntimeError(
-                'Cannot validate KZ maxprice: '
-                f"{partition['id']} maxprice={cap} leaked "
-                f"{summary['max_price_kzt']} KZT"
-            )
+        return summary
+
+    for partition in partitions:
+        summary = checked_probe(partition, 'Price_DESC', capped=True)
         partition_evidence[partition['id']] = {
             'category1': partition['category1'],
             **summary,
         }
 
-    games = next(
-        partition for partition in core['SEARCH_PARTITIONS']
-        if partition['id'] == 'games'
-    )
-    capped_games = partition_evidence['games']
+    games = partitions[0]
+    capped_desc = partition_evidence['games']
+    capped_name = checked_probe(games, 'Name_ASC', capped=True)
 
-    capped_name = core['get_page'](
-        0,
-        'Name_ASC',
-        category1=games['category1'],
-        maxprice_kzt=cap,
-        hidef2p=True,
-    )
-    logical_requests += 1
-    capped_name_summary = price_probe_summary(core, capped_name)
-    if capped_name_summary['total_count'] != capped_games['total_count']:
-        raise RuntimeError(
-            'Cannot validate KZ maxprice: capped total changes with sort '
-            f"({capped_games['total_count']} != "
-            f"{capped_name_summary['total_count']})"
-        )
-    if (
-        capped_name_summary['max_price_kzt'] is not None
-        and capped_name_summary['max_price_kzt'] > cap
-    ):
-        raise RuntimeError(
-            'Cannot validate KZ maxprice: Name_ASC capped sample leaked '
-            f"{capped_name_summary['max_price_kzt']} KZT"
-        )
+    def pair_receipt(round_name, desc, name):
+        return {
+            'round': round_name,
+            'price_desc': dict(desc),
+            'name_asc': dict(name),
+            'totals_match_exactly': desc['total_count'] == name['total_count'],
+        }
 
-    uncapped_games = core['get_page'](
-        0,
-        'Price_DESC',
-        category1=games['category1'],
-        hidef2p=True,
+    attempts = [pair_receipt('initial', capped_desc, capped_name)]
+    initial_delta = capped_name['total_count'] - capped_desc['total_count']
+
+    if initial_delta:
+        if abs(initial_delta) > SOURCE_SORT_TOTAL_RECHECK_MAX_INITIAL_DELTA:
+            raise RuntimeError(
+                'Cannot validate KZ maxprice: capped total changes with sort '
+                f'outside bounded recheck threshold ({capped_desc["total_count"]} != '
+                f'{capped_name["total_count"]})'
+            )
+
+        # Two entire pairs are required. A single matching pair following a
+        # contradiction is not accepted as stable/invariant source proof.
+        for round_number in range(1, SOURCE_SORT_TOTAL_RECHECK_ROUNDS + 1):
+            if clock() - started + SOURCE_SORT_TOTAL_RECHECK_PAUSE_SECONDS >= SOURCE_PRICE_VALIDATION_MAX_SECONDS:
+                raise RuntimeError('Cannot validate KZ maxprice: source proof deadline exceeded')
+            pause(SOURCE_SORT_TOTAL_RECHECK_PAUSE_SECONDS)
+            capped_desc = checked_probe(games, 'Price_DESC', capped=True)
+            capped_name = checked_probe(games, 'Name_ASC', capped=True)
+            attempts.append(pair_receipt(f'recheck_{round_number}', capped_desc, capped_name))
+
+        first, second = attempts[1:]
+        if not (
+            first['totals_match_exactly']
+            and second['totals_match_exactly']
+            and first['price_desc']['total_count'] == second['price_desc']['total_count']
+        ):
+            counts = [
+                (
+                    attempt['round'],
+                    attempt['price_desc']['total_count'],
+                    attempt['name_asc']['total_count'],
+                )
+                for attempt in attempts
+            ]
+            raise RuntimeError(
+                'Cannot validate KZ maxprice: capped total changes with sort '
+                f'or remains unstable after bounded recheck: {counts}'
+            )
+        partition_evidence['games'] = {'category1': games['category1'], **capped_desc}
+
+    uncapped_summary = checked_probe(games, 'Price_DESC', capped=False)
+    # A larger uncapped source must exceed *all* observed capped totals,
+    # including a transient higher count, not only the final passing pair.
+    highest_capped_total = max(
+        max(a['price_desc']['total_count'], a['name_asc']['total_count'])
+        for a in attempts
     )
-    logical_requests += 1
-    uncapped_summary = price_probe_summary(core, uncapped_games)
-    uncapped_total = uncapped_summary['total_count']
-    if uncapped_total is None or uncapped_total <= capped_games['total_count']:
+    if uncapped_summary['total_count'] <= highest_capped_total:
         raise RuntimeError(
             'Cannot validate KZ maxprice: uncapped games control does not '
             'have a larger source total than maxprice=4500'
@@ -276,19 +350,24 @@ def validate_kz_source_price_bound(core):
         'maxprice_kzt': cap,
         'hidef2p': True,
         'partition_price_desc_checks': partition_evidence,
-        'games_sort_invariant_check': {
-            'sort_by': 'Name_ASC',
-            **capped_name_summary,
-        },
+        'games_sort_invariant_check': {'sort_by': 'Name_ASC', **capped_name},
+        'games_sort_total_attempts': attempts,
+        'games_initial_sort_total_delta': initial_delta,
+        'games_final_capped_total': capped_desc['total_count'],
+        'games_sort_recheck_rounds': len(attempts) - 1,
         'games_uncapped_control': uncapped_summary,
         'logical_requests': logical_requests,
+        'logical_requests_max': len(partitions) + 2 + 2 * SOURCE_SORT_TOTAL_RECHECK_ROUNDS,
+        'source_proof_deadline_seconds': SOURCE_PRICE_VALIDATION_MAX_SECONDS,
         'proof': (
-            'all_capped_partition_price_desc_samples_at_or_below_kzt_cap;'
-            'games_capped_total_sort_invariant;'
-            'uncapped_games_control_has_larger_total_and_over_cap_row'
+            'all_capped_partition_price_desc_and_name_asc_samples_at_or_below_kzt_cap;'
+            'games_capped_total_sort_invariant_exact'
+            + ('_two_stable_recheck_pairs' if initial_delta else '_initial_pair')
+            + ';uncapped_games_control_has_larger_total_and_over_cap_row'
         ),
         'price_asc_monotonicity_required': False,
     }
+
 
 def collect_partial(core, failures, previous_by_key, partition, sort_by='Name_ASC', reporter=None):
     page_size = core['PAGE_SIZE']
