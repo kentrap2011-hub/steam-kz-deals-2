@@ -1,9 +1,11 @@
 """Deterministic Stage 1/3/4/5 tests: no global DLC, independent Sub value."""
+import io
 import json
 import tempfile
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import redirect_stdout
 from datetime import datetime, timedelta, timezone
 from email.utils import format_datetime
 from pathlib import Path
@@ -456,6 +458,100 @@ def check_appdetails_concurrent_shared_cooldown_no_fanout():
     assert sorted_seen[2][0] - sorted_seen[1][0] >= 0.017
 
 
+def check_appdetails_429_diagnostics_are_passive_and_safe():
+    """Capture response/window evidence without altering existing request logic."""
+    clock = _FakeClock()
+    diagnostics = targeted._AppdetailsDiagnostics()
+    diagnostics.set_stage('parent_relations')
+    output = io.StringIO()
+    seen = []
+    replies = iter([
+        _FakeResponse(429, retry_after='7'),
+        _FakeResponse(200),
+        _FakeResponse(403),
+    ])
+
+    def getter(url, **kwargs):
+        seen.append((url, kwargs['params'].copy()))
+        return next(replies)
+
+    with redirect_stdout(output):
+        result = targeted.get_appdetails(
+            '750920', getter=getter,
+            pacer=targeted._SharedAppdetailsPacer(),
+            clock=clock.clock, sleeper=clock.sleep,
+            diagnostics=diagnostics,
+        )
+        assert result['steam_appid'] == 750920
+        diagnostics.set_stage('dlc_price')
+        try:
+            targeted.get_appdetails(
+                '750920', getter=getter,
+                pacer=targeted._SharedAppdetailsPacer(),
+                clock=clock.clock, sleeper=clock.sleep,
+                diagnostics=diagnostics,
+            )
+        except requests.HTTPError:
+            pass
+        else:
+            raise AssertionError('403 must still fail closed')
+
+    events = []
+    for line in output.getvalue().splitlines():
+        prefix = '[steam-appdetails-diagnostic] '
+        assert line.startswith(prefix)
+        events.append(json.loads(line[len(prefix):]))
+    assert [x['status'] for x in events] == [429, 200, 403]
+    assert [x['attempt'] for x in events] == [1, 2, 1]
+    assert [x['rolling_300s_request_starts'] for x in events] == [1, 2, 3]
+    assert [x['stage'] for x in events] == [
+        'parent_relations', 'parent_relations', 'dlc_price'
+    ]
+    assert [x['first_429'] for x in events] == [True, False, False]
+    assert events[0]['retry_after_present'] is True
+    assert events[0]['retry_after_seconds'] == 7
+    assert events[0]['applied_cooldown_seconds'] == 7
+    assert len(seen) == 3
+    assert all(url == targeted.APPDETAILS_URL for url, _ in seen)
+    assert all(params == {'appids': '750920', 'cc': 'kz', 'l': 'english'}
+               for _, params in seen)
+    assert diagnostics.snapshot() == {
+        'request_starts': 3,
+        'response_status_counts': {'429': 1, '200': 1, '403': 1},
+        'first_429_seen': True,
+    }
+    # Only safe, allowlisted metadata are emitted; no URL or raw headers.
+    assert 'store.steampowered.com' not in output.getvalue()
+    assert "'Retry-After':" not in output.getvalue()
+
+    # A bounded in-memory rolling window expires starts; not a Valve quota.
+    rolling = targeted._AppdetailsDiagnostics()
+    assert rolling.started(0.0)['rolling_300s_request_starts'] == 1
+    assert rolling.started(299.0)['rolling_300s_request_starts'] == 2
+    assert rolling.started(301.0)['rolling_300s_request_starts'] == 2
+
+    # Network-error logging must preserve failure and redact raw exception.
+    output = io.StringIO()
+    def failing_getter(url, **kwargs):
+        raise requests.Timeout('PRIVATE-MESSAGE-MUST-NOT-APPEAR')
+    with redirect_stdout(output):
+        try:
+            targeted.get_appdetails(
+                '750920', getter=failing_getter,
+                pacer=targeted._SharedAppdetailsPacer(),
+                clock=clock.clock, sleeper=clock.sleep,
+                diagnostics=diagnostics,
+            )
+        except requests.Timeout:
+            pass
+        else:
+            raise AssertionError('transport error was suppressed')
+    assert 'PRIVATE-MESSAGE' not in output.getvalue()
+    event = json.loads(output.getvalue().split('] ', 1)[1])
+    assert event['status'] == 'transport_error'
+    assert event['transport_error_class'] == 'Timeout'
+
+
 def main():
     check_base_targeted_dlc()
     check_dlc_membership_identity_regressions()
@@ -467,7 +563,8 @@ def main():
     check_appdetails_429_persistent_fail_closed_and_budget()
     check_appdetails_retry_after_and_non429_fail_closed()
     check_appdetails_concurrent_shared_cooldown_no_fanout()
-    print('targeted Steam KZ DLC and independent package 10/10 PASS')
+    check_appdetails_429_diagnostics_are_passive_and_safe()
+    print('targeted Steam KZ DLC and independent package 11/11 PASS')
 
 
 if __name__ == '__main__':
