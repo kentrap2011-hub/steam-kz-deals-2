@@ -5,9 +5,11 @@ ordinary paid + review suitability rules before relation lookups. The Steam
 appdetails `dlc` membership is a verified relationship, never an inferred
 matching title or an owned-library entitlement.
 """
+from collections import deque
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, datetime, timezone
 from email.utils import parsedate_to_datetime
+import json
 from threading import Lock
 from time import monotonic, sleep
 
@@ -59,6 +61,83 @@ class _SharedAppdetailsPacer:
 _appdetails_pacer = _SharedAppdetailsPacer()
 
 
+class _AppdetailsDiagnostics:
+    """Safe per-request Storefront telemetry; never controls request behavior."""
+
+    def __init__(self):
+        self._lock = Lock()
+        self.reset()
+
+    def reset(self):
+        with self._lock:
+            self._stage = 'unassigned'
+            self._starts = deque()
+            self._first_start = None
+            self._request_total = 0
+            self._statuses = {}
+            self._first_429_seen = False
+
+    def set_stage(self, stage):
+        with self._lock:
+            self._stage = stage
+
+    def started(self, now):
+        with self._lock:
+            if self._first_start is None:
+                self._first_start = now
+            # Count physical starts in the process-local rolling 300s window.
+            # This does not claim a corresponding Valve or per-IP rate bucket.
+            while self._starts and now - self._starts[0] >= 300:
+                self._starts.popleft()
+            self._starts.append(now)
+            self._request_total += 1
+            return {
+                'stage': self._stage,
+                'request_index': self._request_total,
+                'rolling_300s_request_starts': len(self._starts),
+                'seconds_since_first_start': round(now - self._first_start, 3),
+            }
+
+    def completed(self, record, *, appid, attempt, status, elapsed,
+                  retry_after_present=False, retry_after_seconds=None,
+                  cooldown_seconds=None, transport_error=None):
+        with self._lock:
+            key = str(status)
+            self._statuses[key] = self._statuses.get(key, 0) + 1
+            first_429 = status == 429 and not self._first_429_seen
+            if first_429:
+                self._first_429_seen = True
+        # Only fixed numeric facts and allowlisted class names; no URLs, raw
+        # headers, request credentials, cookies or exception messages.
+        payload = {
+            'event': 'request',
+            **record,
+            'appid': appid,
+            'attempt': attempt,
+            'status': status,
+            'duration_ms': round(max(0.0, elapsed) * 1000, 1),
+            'first_429': first_429,
+            'retry_after_present': bool(retry_after_present),
+            'retry_after_seconds': retry_after_seconds,
+            'applied_cooldown_seconds': cooldown_seconds,
+        }
+        if transport_error is not None:
+            payload['transport_error_class'] = transport_error
+        print('[steam-appdetails-diagnostic]',
+              json.dumps(payload, sort_keys=True), flush=True)
+
+    def snapshot(self):
+        with self._lock:
+            return {
+                'request_starts': self._request_total,
+                'response_status_counts': dict(self._statuses),
+                'first_429_seen': self._first_429_seen,
+            }
+
+
+_appdetails_diagnostics = _AppdetailsDiagnostics()
+
+
 def _utc_now():
     return datetime.now(timezone.utc)
 
@@ -85,33 +164,68 @@ def _retry_after_seconds(response, *, wall_clock):
 
 
 def get_appdetails(appid, *, getter=requests.get, pacer=None,
-                   clock=monotonic, sleeper=sleep, wall_clock=_utc_now):
-    """Exact KZ appdetails with shared pacing and finite HTTP 429 recovery.
+                   clock=monotonic, sleeper=sleep, wall_clock=_utc_now,
+                   diagnostics=None):
+    """Exact KZ appdetails with existing pacing/retry and passive telemetry.
 
-    Any exhausted/invalid response still aborts the complete targeted lane;
-    no partial paid or Dossier publication is authorized by this function.
+    All failed/missing relations remain fail-closed; telemetry does not
+    alter retry attempts, network requests, deadlines or publication.
     """
     appid = _canonical_appid(appid, 'KZ appdetails request')
     pacer = pacer if pacer is not None else _appdetails_pacer
+    diagnostics = (diagnostics if diagnostics is not None
+                   else _appdetails_diagnostics)
     deadline = clock() + APPDETAILS_MAX_WAIT_SECONDS
     for attempt in range(APPDETAILS_MAX_ATTEMPTS):
         pacer.acquire(clock=clock, sleeper=sleeper, deadline=deadline)
-        response = getter(
-            APPDETAILS_URL,
-            params={'appids': appid, 'cc': 'kz', 'l': 'english'},
-            headers={'User-Agent': 'steam-kz-deals/1.0',
-                     'Accept': 'application/json'},
-            timeout=25,
-        )
-        if getattr(response, 'status_code', None) == 429:
+        started_at = clock()
+        record = diagnostics.started(started_at)
+        try:
+            response = getter(
+                APPDETAILS_URL,
+                params={'appids': appid, 'cc': 'kz', 'l': 'english'},
+                headers={'User-Agent': 'steam-kz-deals/1.0',
+                         'Accept': 'application/json'},
+                timeout=25,
+            )
+        except requests.RequestException as exc:
+            diagnostics.completed(
+                record, appid=appid, attempt=attempt + 1,
+                status='transport_error', elapsed=clock() - started_at,
+                transport_error=type(exc).__name__,
+            )
+            raise
+        status = getattr(response, 'status_code', None)
+        if status == 429:
+            retry_after_present = (
+                (getattr(response, 'headers', None) or {}).get('Retry-After')
+                is not None
+            )
             if attempt + 1 == APPDETAILS_MAX_ATTEMPTS:
+                diagnostics.completed(
+                    record, appid=appid, attempt=attempt + 1, status=status,
+                    elapsed=clock() - started_at,
+                    retry_after_present=retry_after_present,
+                )
                 response.raise_for_status()
                 raise RuntimeError(f'KZ appdetails HTTP 429 exhausted for App_{appid}')
             seconds = _retry_after_seconds(response, wall_clock=wall_clock)
+            from_header = seconds is not None
             if seconds is None:
                 seconds = APPDETAILS_BACKOFF_SECONDS[attempt]
+            diagnostics.completed(
+                record, appid=appid, attempt=attempt + 1, status=status,
+                elapsed=clock() - started_at,
+                retry_after_present=retry_after_present,
+                retry_after_seconds=seconds if from_header else None,
+                cooldown_seconds=seconds,
+            )
             pacer.throttle(seconds, clock=clock)
             continue
+        diagnostics.completed(
+            record, appid=appid, attempt=attempt + 1, status=status,
+            elapsed=clock() - started_at,
+        )
         # 5xx, connection failures and bad identity remain fail-closed.
         response.raise_for_status()
         body = response.json()
@@ -168,6 +282,8 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
     bases = sorted({_canonical_appid(x, 'targeted DLC parent')
                     for x in base_appids}, key=int)
     relations = {}
+    _appdetails_diagnostics.reset()
+    _appdetails_diagnostics.set_stage('parent_relations')
     with ThreadPoolExecutor(max_workers=RELATION_WORKERS) as pool:
         futures = {pool.submit(fetch, base): base for base in bases}
         for future in as_completed(futures):
@@ -192,6 +308,7 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
     for base in sorted(relations, key=int):
         for appid in relations[base]:
             reverse.setdefault(appid, set()).add(base)
+    _appdetails_diagnostics.set_stage('dlc_price')
     for appid in sorted(reverse, key=int):
         data = fetch(appid)
         _check_fetched_identity(data, appid, f'DLC App_{appid}')
@@ -242,7 +359,8 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
         'relation_complete': len(relations) == len(bases),
     }
     if reporter:
-        reporter.update(**stats, emit=True)
+        reporter.update(**stats, appdetails_diagnostics=_appdetails_diagnostics.snapshot(),
+                        emit=True)
     return candidates, stats
 
 
