@@ -1,10 +1,10 @@
 # CURRENT TASK
 
-## IN DEVELOPMENT — НОВЫЙ ЧАТ 1: Steam targeted DLC HTTP 429 bounded recovery (2026-11-04)
+## IMPLEMENTED / SOURCE PR CI SUCCESS — НОВЫЙ ЧАТ 1: Steam targeted DLC HTTP 429 bounded recovery (2026-11-04)
 - Task: `WORKER_TASK_STEAM_TARGETED_DLC_APPDETAILS_429_BOUNDED_RECOVERY_01.md`.
 - Branch: `fix/steam-targeted-dlc-appdetails-429-bounded-recovery-01`; single implementation source PR to `main`, no self-merge.
 - Collector `scripts/steam_targeted_paid_lanes.py`: shared cooldown/pacing for exact KZ appdetails, four total attempts, 120-second per-lookup retry/pacing deadline, bounded Retry-After (60 s per event), fail-closed network/5xx/identity. Regression tests added to `scripts/test_steam_targeted_paid_lanes.py`.
-- Pending: existing PR CI and exact final HEAD evidence; real Steam main workflow after Director merge remains an independent live acceptance gate. No semantic worker or schedule changed.
+- Source PR [#392](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/392) open, no self-merge. Implemented code HEAD `3900eab1496349285320b555f4388ee69b861973` passed Steam PR regression run [41849535988](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/41849535988), targeted 10/10; backlog [41849536054](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/41849536054) and registry [41849535957](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/41849535957) succeeded. Final documentation-only HEAD CI must also be verified. Real main Steam workflow after Director merge is an independent live gate. No semantic worker or schedule changed.
 - Report: `reviews/worker_reports/steam-targeted-dlc-appdetails-429-bounded-recovery-01.md`. Other worker tasks and their state below remain untouched.
 
 

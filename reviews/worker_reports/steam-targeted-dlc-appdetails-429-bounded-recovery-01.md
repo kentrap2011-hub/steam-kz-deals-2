@@ -23,7 +23,7 @@
 ## Tests / execution evidence
 
 - Deterministic tests added for 429-to-200 exact URL/params/identity, persistent 429, total attempt/window caps, numeric/date/invalid/oversized Retry-After, unrelated HTTP 503 and connection timeout, and two concurrent callers sharing cooldown/pacing.
-- Existing PR-only `.github/workflows/steam-test.yml` regression checks run without real Steam collection. Actual CI status and final HEAD must be verified at completion.
+- **Verified implementation-code HEAD:** `3900eab1496349285320b555f4388ee69b861973`; PR #392 `steam-test.yml` [run 41849535988](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/41849535988), regression job `126641800306` SUCCESS; `scripts/test_steam_targeted_paid_lanes.py` **10/10 PASS** in logs. The `collect` job was correctly SKIPPED for the PR.\n- Also SUCCESS: site-task registry [41849535957](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/41849535957), backlog dispositions [41849536054](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/41849536054). The final documentation-only HEAD must be rechecked after this report update.
 - Local checkout is unavailable in the current runtime: direct GitHub clone failed due to DNS resolution of `github.com`. No local full-suite execution is claimed.
 - A PR green regression is not live Steam rate-limit evidence; only a post-merge full normal `steam-test.yml` run on current main can establish fresh paid-source and Dossier worker-index/binding acceptance.
 
