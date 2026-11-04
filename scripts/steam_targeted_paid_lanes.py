@@ -62,9 +62,10 @@ class _SharedAppdetailsPacer:
                     if now >= deadline:
                         raise RuntimeError('KZ appdetails rate slot wait budget exhausted')
                     if self._waiters[0] is not ticket:
-                        # A follower cannot steal the head's slot. Wait for the
-                        # head to finish or cancel; timed wake checks deadline.
-                        self._condition.wait(timeout=min(0.25, deadline - now))
+                        # A follower cannot steal the head's slot. It parks
+                        # until the head reserves or cancels, with no polling.
+                        # The head always notifies; then recheck the deadline.
+                        self._condition.wait()
                         continue
                     # Half-open rolling window (now - 300, now]. Expired starts
                     # are removed only under the same lock used for reservation.
