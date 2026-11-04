@@ -552,6 +552,224 @@ def check_appdetails_429_diagnostics_are_passive_and_safe():
     assert event['transport_error_class'] == 'Timeout'
 
 
+def _assert_rolling_start_cap(starts, *, cap=180, window=300.0):
+    """Every half-open 300s suffix, not just fixed calendar buckets."""
+    ordered = sorted(starts)
+    left = 0
+    for right, now in enumerate(ordered):
+        while now - ordered[left] >= window:
+            left += 1
+        assert right - left + 1 <= cap, (right, now, ordered[left])
+    return ordered
+
+
+def check_appdetails_sliding_window_boundary_and_overlaps():
+    """180/300, exact t=300 expiry and overlapping non-aligned windows."""
+    assert targeted.APPDETAILS_MAX_STARTS_PER_WINDOW == 180
+    assert targeted.APPDETAILS_WINDOW_SECONDS == 300.0
+    clock = _FakeClock()
+    pacer = targeted._SharedAppdetailsPacer(spacing_seconds=0)
+    starts = []
+    for _ in range(120):
+        starts.append(pacer.acquire(
+            clock=clock.clock, sleeper=clock.sleep, deadline=900.0
+        ))
+    clock.now = 100.0
+    for _ in range(60):
+        starts.append(pacer.acquire(
+            clock=clock.clock, sleeper=clock.sleep, deadline=900.0
+        ))
+    assert starts == [0.0] * 120 + [100.0] * 60
+    # The 181st attempt at t=100 must wait for the oldest exact 300s edge.
+    starts.append(pacer.acquire(
+        clock=clock.clock, sleeper=clock.sleep, deadline=900.0
+    ))
+    assert starts[-1] == 300.0
+    assert clock.waits == [200.0]
+    for _ in range(119):
+        starts.append(pacer.acquire(
+            clock=clock.clock, sleeper=clock.sleep, deadline=900.0
+        ))
+    assert starts[-120:] == [300.0] * 120
+    # Now the remaining 60 t=100 calls still occupy the moving window.
+    starts.append(pacer.acquire(
+        clock=clock.clock, sleeper=clock.sleep, deadline=900.0
+    ))
+    assert starts[-1] == 400.0
+    assert clock.waits[-1] == 100.0
+    _assert_rolling_start_cap(starts)
+    assert max(starts) == 400.0
+
+    # Production spacing also applies: conservative sliding window cannot be
+    # replaced by a simple average at the 180th physical request.
+    clock = _FakeClock()
+    pacer = targeted._SharedAppdetailsPacer()
+    starts = [pacer.acquire(
+        clock=clock.clock, sleeper=clock.sleep, deadline=900.0
+    ) for _ in range(181)]
+    assert abs(starts[179] - (179 * 0.9)) < 1e-6
+    assert abs(starts[180] - 300.0) < 1e-6
+    _assert_rolling_start_cap(starts)
+
+
+def check_appdetails_sliding_window_three_threads_and_fairness():
+    """Three concurrent independent GETs cannot bypass an atomic start gate."""
+    class SharedClock:
+        def __init__(self):
+            self.now = 0.0
+            self.lock = threading.Lock()
+            self.waits = []
+
+        def clock(self):
+            with self.lock:
+                return self.now
+
+        def sleep(self, seconds):
+            assert seconds > 0
+            with self.lock:
+                self.waits.append(seconds)
+                self.now += seconds
+
+    class RecordedPacer(targeted._SharedAppdetailsPacer):
+        def __init__(self):
+            super().__init__(spacing_seconds=0)
+            self.record_lock = threading.Lock()
+            self.reservations = []
+
+        def acquire(self, **kwargs):
+            t = super().acquire(**kwargs)
+            with self.record_lock:
+                self.reservations.append(t)
+            return t
+
+    clock = SharedClock()
+    pacer = RecordedPacer()
+    barrier = threading.Barrier(3)
+    results = []
+    result_lock = threading.Lock()
+
+    def getter(url, **kwargs):
+        appid = kwargs['params']['appids']
+        assert kwargs['params']['cc'] == 'kz'
+        return _FakeResponse(200, appid=appid)
+
+    def worker(first_id):
+        barrier.wait()
+        for offset in range(85):
+            appid = str(first_id + offset)
+            data = targeted.get_appdetails(
+                appid, getter=getter, pacer=pacer, clock=clock.clock,
+                sleeper=clock.sleep
+            )
+            with result_lock:
+                results.append(data['steam_appid'])
+
+    # Avoid 255 diagnostic stdout events obscuring the deterministic assertion.
+    with redirect_stdout(io.StringIO()):
+        with ThreadPoolExecutor(max_workers=3) as pool:
+            jobs = [pool.submit(worker, 1000 + i * 100) for i in range(3)]
+            for job in jobs:
+                job.result(timeout=10)
+    assert len(results) == 255 and len(set(results)) == 255
+    assert len(pacer.reservations) == 255
+    times = _assert_rolling_start_cap(pacer.reservations)
+    assert times[:180] == [0.0] * 180
+    assert times[180:] == [300.0] * 75
+
+
+def check_appdetails_parent_child_and_retry_share_window():
+    """Parent retries and deduplicated DLC child GETs use the same pacer."""
+    clock = _FakeClock()
+    pacer = targeted._SharedAppdetailsPacer(spacing_seconds=0)
+    calls = []
+    lock = threading.Lock()
+    def getter(url, **kwargs):
+        appid = kwargs['params']['appids']
+        with lock:
+            calls.append(appid)
+            first_parent_100 = appid == '100' and calls.count('100') == 1
+        if first_parent_100:
+            return _FakeResponse(429, appid=appid, retry_after='7')
+        if appid in ('100', '200'):
+            return _FakeResponse(
+                200, appid=appid,
+                data={'steam_appid': int(appid), 'type': 'game',
+                      'dlc': [300, 300]},
+            )
+        return _FakeResponse(
+            200, appid=appid,
+            data={'steam_appid': 300, 'type': 'dlc',
+                  'fullgame': {'appid': 100}, 'name': 'Chapter',
+                  'price_overview': {'currency': 'KZT',
+                                     'final': 30000, 'discount_percent': 75}},
+        )
+
+    def fetch(appid):
+        return targeted.get_appdetails(
+            appid, getter=getter, pacer=pacer,
+            clock=clock.clock, sleeper=clock.sleep
+        )
+    with redirect_stdout(io.StringIO()):
+        dlc, stats = targeted.discover_dlc_for_bases(
+            ['100', '200'], collector.load_core(), fetch=fetch
+        )
+    assert sorted(calls) == ['100', '100', '200', '300']
+    assert stats['parent_relation_lookups'] == 2
+    assert stats['dlc_price_lookups'] == 1
+    assert stats['related_dlc_unique_ids'] == 1
+    assert dlc['App_300']['verified_base_appids'] == ['100', '200']
+    assert len(pacer._starts) == 4  # 2 parents, one 429 retry, one child
+
+    # Planned quota wait beyond 120s is not a retry failure; Retry-After
+    # and the shared cooldown also must not shortcut the sliding gate.
+    clock = _FakeClock()
+    pacer = targeted._SharedAppdetailsPacer(spacing_seconds=0)
+    for _ in range(180):
+        pacer.acquire(clock=clock.clock, sleeper=clock.sleep, deadline=900.0)
+    seen = []
+    responses = iter([_FakeResponse(429, retry_after='60'),
+                      _FakeResponse(200)])
+    def capped_getter(url, **kwargs):
+        seen.append(clock.clock())
+        return next(responses)
+    with redirect_stdout(io.StringIO()):
+        result = targeted.get_appdetails(
+            '750920', getter=capped_getter, pacer=pacer,
+            clock=clock.clock, sleeper=clock.sleep
+        )
+    assert result['steam_appid'] == 750920
+    assert seen == [300.0, 360.0] and clock.now == 360.0
+    assert clock.waits[0] == 300.0
+    _assert_rolling_start_cap([0.0] * 180 + seen)
+
+
+def check_appdetails_429_sliding_window_non429_fail_closed():
+    """The cap never converts 403, 503 or network errors into empty/success."""
+    for status in (403, 503, 'network'):
+        clock = _FakeClock()
+        pacer = targeted._SharedAppdetailsPacer(spacing_seconds=0)
+        for _ in range(180):
+            pacer.acquire(clock=clock.clock, sleeper=clock.sleep,
+                          deadline=900.0)
+        seen = []
+        def getter(url, **kwargs):
+            seen.append(clock.clock())
+            if status == 'network':
+                raise requests.Timeout('not a successful DLC lookup')
+            return _FakeResponse(status)
+        with redirect_stdout(io.StringIO()):
+            try:
+                targeted.get_appdetails(
+                    '750920', getter=getter, pacer=pacer,
+                    clock=clock.clock, sleeper=clock.sleep,
+                )
+            except (requests.HTTPError, requests.Timeout):
+                pass
+            else:
+                raise AssertionError('non-429 failure bypassed fail-closed')
+        assert seen == [300.0], (status, seen)
+
+
 def main():
     check_base_targeted_dlc()
     check_dlc_membership_identity_regressions()
@@ -564,7 +782,11 @@ def main():
     check_appdetails_retry_after_and_non429_fail_closed()
     check_appdetails_concurrent_shared_cooldown_no_fanout()
     check_appdetails_429_diagnostics_are_passive_and_safe()
-    print('targeted Steam KZ DLC and independent package 11/11 PASS')
+    check_appdetails_sliding_window_boundary_and_overlaps()
+    check_appdetails_sliding_window_three_threads_and_fairness()
+    check_appdetails_parent_child_and_retry_share_window()
+    check_appdetails_429_sliding_window_non429_fail_closed()
+    print('targeted Steam KZ DLC and independent package 15/15 PASS')
 
 
 if __name__ == '__main__':
