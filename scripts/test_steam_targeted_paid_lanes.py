@@ -69,6 +69,84 @@ def check_base_targeted_dlc():
     assert targeted.discover_dlc_for_bases([], core, fetch=lambda key: 1)[0] == {}
 
 
+
+def check_dlc_membership_identity_regressions():
+    """Duplicate exact membership is safe; malformed/contradictory identity is not."""
+    core = collector.load_core()
+    valid_dlc = {
+        'type': 'dlc', 'steam_appid': 300, 'name': 'Verified chapter',
+        'fullgame': {'appid': 100},
+        'price_overview': {'currency': 'KZT', 'final': 25000, 'discount_percent': 85},
+    }
+    fixtures = {
+        '100': {'type': 'game', 'steam_appid': 100,
+                'dlc': [301, 300, 300, '300', 301]},
+        '200': {'type': 'game', 'steam_appid': 200, 'dlc': [300, '300']},
+        '300': valid_dlc,
+        '301': dict(valid_dlc, steam_appid=301, fullgame={'appid': 100}),
+    }
+    calls = []
+
+    def fetch(appid):
+        calls.append(appid)
+        return fixtures[appid]
+
+    dlc, stats = targeted.discover_dlc_for_bases(['200', '100'], core, fetch=fetch)
+    assert list(sorted(dlc)) == ['App_300', 'App_301']
+    assert dlc['App_300']['verified_base_appids'] == ['100', '200']
+    assert dlc['App_301']['verified_base_appids'] == ['100']
+    assert stats['parent_relation_lookups'] == 2
+    assert stats['related_dlc_unique_ids'] == stats['dlc_price_lookups'] == 2
+    assert stats['relation_complete'] is True
+    assert calls.count('300') == calls.count('301') == 1
+
+    def fails_closed(parents, overrides, *, failure=None):
+        data = dict(fixtures, **overrides)
+
+        def checked_fetch(appid):
+            if appid == failure:
+                raise RuntimeError('upstream access failure (429)')
+            return data[appid]
+
+        try:
+            targeted.discover_dlc_for_bases(parents, core, fetch=checked_fetch)
+        except RuntimeError:
+            return
+        raise AssertionError('unsafe DLC identity/relationship was accepted')
+
+    # Do not silently filter a bad identity even when valid siblings exist.
+    for bad in (-1, 0, True, 300.0, None, '0300', '+300',
+                '٣٠٠', {'appid': 300}):
+        fails_closed(['100'], {
+            '100': {'type': 'game', 'dlc': [300, bad]}
+        })
+    for raw in (None, '300', {'appid': 300}, False):
+        fails_closed(['100'], {
+            '100': {'type': 'game', 'dlc': raw}
+        })
+    for base in ('0', '-100', '0100', True, 100.0):
+        fails_closed([base], {})
+    fails_closed(['100'], {'100': {'type': 'dlc', 'dlc': [300]}})
+    fails_closed(['100'], {'100': {'type': 'game', 'steam_appid': 999,
+                                   'dlc': [300]}})
+    fails_closed(['100'], {'300': dict(valid_dlc, steam_appid=999)})
+    fails_closed(['100'], {'300': dict(valid_dlc, fullgame={'appid': 999})})
+    fails_closed(['100'], {'300': dict(valid_dlc, fullgame={'appid': '0100'})})
+    fails_closed(['100'], {'300': dict(valid_dlc, fullgame='wrong type')})
+    fails_closed(['100'], {}, failure='100')
+    fails_closed(['100'], {}, failure='300')
+
+    # A non-DLC app in a parent list is not converted into a verified DLC.
+    not_dlc = dict(valid_dlc, type='music')
+    safe, stats = targeted.discover_dlc_for_bases(
+        ['100'], core, fetch=lambda key: (
+            {'type': 'game', 'dlc': [300]} if key == '100' else not_dlc
+        )
+    )
+    assert safe == {}
+    assert stats['dlc_accepted_after_paid_gate'] == 0
+    assert stats['dlc_rejected_after_paid_gate'] == 1
+
 def check_conservative_obscure_rescue_and_package():
     assert targeted.candidate_needs_obscure_gate(paid('App_1', reviews=20, percent=85))
     assert not targeted.candidate_needs_obscure_gate(paid('App_1', reviews=11, percent=95))
@@ -165,11 +243,12 @@ def check_direct_subs_are_discoverable_without_current_app():
 
 def main():
     check_base_targeted_dlc()
+    check_dlc_membership_identity_regressions()
     check_conservative_obscure_rescue_and_package()
     check_five_middling_games_package_below_individual_cutoff()
     check_direct_subs_are_discoverable_without_current_app()
     check_independent_package_family_needs_semantic_not_external_base()
-    print('targeted Steam KZ DLC and independent package 5/5 PASS')
+    print('targeted Steam KZ DLC and independent package 6/6 PASS')
 
 
 if __name__ == '__main__':
