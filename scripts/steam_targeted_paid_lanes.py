@@ -39,6 +39,8 @@ class _SharedAppdetailsPacer:
         while True:
             with self._lock:
                 now = clock()
+                if now > deadline:
+                    raise RuntimeError('KZ appdetails retry wait budget exhausted')
                 wait = max(0.0, self._next_request - now,
                            self._cooldown_until - now)
                 if wait == 0:
