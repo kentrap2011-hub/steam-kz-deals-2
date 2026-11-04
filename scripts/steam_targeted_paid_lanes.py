@@ -6,7 +6,8 @@ appdetails `dlc` membership is a verified relationship, never an inferred
 matching title or an owned-library entitlement.
 """
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import date
+from datetime import date, datetime, timezone
+from email.utils import parsedate_to_datetime
 from threading import Lock
 from time import monotonic, sleep
 
@@ -17,33 +18,112 @@ APPDETAILS_URL = 'https://store.steampowered.com/api/appdetails'
 # universe is the COMPLETE vetted base shortlist, never the visible top-100.
 RELATION_WORKERS = 3
 REQUEST_SPACING_SECONDS = 0.9
-_lock = Lock()
-_next_request = 0.0
+APPDETAILS_MAX_ATTEMPTS = 4  # 1 original request + up to 3 HTTP 429 retries
+APPDETAILS_MAX_WAIT_SECONDS = 120.0  # per lookup, including shared pacing
+APPDETAILS_MAX_RETRY_AFTER_SECONDS = 60.0
+APPDETAILS_BACKOFF_SECONDS = (5.0, 15.0, 30.0)
 
 
-def get_appdetails(appid, *, getter=requests.get):
-    """One narrowly selected KZ API request; caller handles fail-closed errors."""
-    global _next_request
-    with _lock:
-        wait = max(0.0, _next_request - monotonic())
-        if wait:
-            sleep(wait)
-        _next_request = monotonic() + REQUEST_SPACING_SECONDS
-    response = getter(
-        APPDETAILS_URL,
-        params={'appids': str(appid), 'cc': 'kz', 'l': 'english'},
-        headers={'User-Agent': 'steam-kz-deals/1.0', 'Accept': 'application/json'},
-        timeout=25,
-    )
-    response.raise_for_status()
-    body = response.json()
-    entry = body.get(str(appid))
-    if not isinstance(entry, dict) or entry.get('success') is not True:
-        raise RuntimeError(f'KZ appdetails missing identity {appid}')
-    data = entry.get('data')
-    if not isinstance(data, dict):
-        raise RuntimeError(f'KZ appdetails missing metadata {appid}')
-    return data
+class _SharedAppdetailsPacer:
+    """One rate-limit gate for all parent and DLC lookups, not a new queue."""
+
+    def __init__(self, spacing_seconds=REQUEST_SPACING_SECONDS):
+        self._lock = Lock()
+        self._next_request = 0.0
+        self._cooldown_until = 0.0
+        self._spacing_seconds = spacing_seconds
+
+    def acquire(self, *, clock, sleeper, deadline):
+        # Do not sleep holding the lock: an in-flight 429 must be able to
+        # extend cooldown while other threads are waiting for their slots.
+        while True:
+            with self._lock:
+                now = clock()
+                if now > deadline:
+                    raise RuntimeError('KZ appdetails retry wait budget exhausted')
+                wait = max(0.0, self._next_request - now,
+                           self._cooldown_until - now)
+                if wait == 0:
+                    self._next_request = now + self._spacing_seconds
+                    return
+            if wait > max(0.0, deadline - now):
+                raise RuntimeError('KZ appdetails retry wait budget exhausted')
+            sleeper(wait)
+            # Recheck the shared deadline/cooldown after every sleep.
+
+    def throttle(self, seconds, *, clock):
+        with self._lock:
+            self._cooldown_until = max(self._cooldown_until, clock() + seconds)
+
+
+_appdetails_pacer = _SharedAppdetailsPacer()
+
+
+def _utc_now():
+    return datetime.now(timezone.utc)
+
+
+def _retry_after_seconds(response, *, wall_clock):
+    """Accept only valid delta-seconds or HTTP dates; bound untrusted values."""
+    raw = (getattr(response, 'headers', None) or {}).get('Retry-After')
+    if not isinstance(raw, str):
+        return None
+    raw = raw.strip()
+    try:
+        if raw.isascii() and raw.isdecimal():
+            seconds = float(int(raw))
+        else:
+            when = parsedate_to_datetime(raw)
+            if when.tzinfo is None:
+                return None
+            seconds = (when - wall_clock()).total_seconds()
+    except (OverflowError, TypeError, ValueError, IndexError):
+        return None
+    if seconds <= 0:
+        return None
+    return min(seconds, APPDETAILS_MAX_RETRY_AFTER_SECONDS)
+
+
+def get_appdetails(appid, *, getter=requests.get, pacer=None,
+                   clock=monotonic, sleeper=sleep, wall_clock=_utc_now):
+    """Exact KZ appdetails with shared pacing and finite HTTP 429 recovery.
+
+    Any exhausted/invalid response still aborts the complete targeted lane;
+    no partial paid or Dossier publication is authorized by this function.
+    """
+    appid = _canonical_appid(appid, 'KZ appdetails request')
+    pacer = pacer if pacer is not None else _appdetails_pacer
+    deadline = clock() + APPDETAILS_MAX_WAIT_SECONDS
+    for attempt in range(APPDETAILS_MAX_ATTEMPTS):
+        pacer.acquire(clock=clock, sleeper=sleeper, deadline=deadline)
+        response = getter(
+            APPDETAILS_URL,
+            params={'appids': appid, 'cc': 'kz', 'l': 'english'},
+            headers={'User-Agent': 'steam-kz-deals/1.0',
+                     'Accept': 'application/json'},
+            timeout=25,
+        )
+        if getattr(response, 'status_code', None) == 429:
+            if attempt + 1 == APPDETAILS_MAX_ATTEMPTS:
+                response.raise_for_status()
+                raise RuntimeError(f'KZ appdetails HTTP 429 exhausted for App_{appid}')
+            seconds = _retry_after_seconds(response, wall_clock=wall_clock)
+            if seconds is None:
+                seconds = APPDETAILS_BACKOFF_SECONDS[attempt]
+            pacer.throttle(seconds, clock=clock)
+            continue
+        # 5xx, connection failures and bad identity remain fail-closed.
+        response.raise_for_status()
+        body = response.json()
+        entry = body.get(appid) if isinstance(body, dict) else None
+        if not isinstance(entry, dict) or entry.get('success') is not True:
+            raise RuntimeError(f'KZ appdetails missing identity {appid}')
+        data = entry.get('data')
+        if not isinstance(data, dict):
+            raise RuntimeError(f'KZ appdetails missing metadata {appid}')
+        _check_fetched_identity(data, appid, f'KZ appdetails App_{appid}')
+        return data
+    raise RuntimeError(f'KZ appdetails HTTP 429 exhausted for App_{appid}')
 
 
 def suitable_base_ids(items, failed_keys, core, today):
