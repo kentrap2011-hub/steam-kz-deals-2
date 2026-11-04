@@ -5,12 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — независимая QA DLC, 2026-11-03
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — исправление Steam appdetails HTTP 429, 2026-11-04
 
-- **НОВЫЙ ЧАТ 3 — зарезервирован, ожидает запуска:** `steam-targeted-dlc-pr388-independent-l3-qa-01` → `WORKER_TASK_STEAM_TARGETED_DLC_PR388_INDEPENDENT_L3_QA_01.md`. Независимая предметная L3 QA source PR #388, без повторной разработки и без запуска production/semantic. После PASS директор принимает source PR #388 по проверенным CI и merge gates без повторного согласования ранее разрешённого исправления.
-- **ЧАТЫ 1, 2, 4, 5, 6 свободны.** ЧАТ 1 сдал L3 QA правил, source PR #372 и отчёт приняты; ЧАТ 2 сдал код и тесты для source PR #388. Результат worker освобождает физический чат независимо от состояния source PR.
-- **Dossier V1:** очередь всё ещё старая, `prepared_for_date=2026-10-27`, содержит устаревшую привязку worker prompt. После успешного source merge дождаться штатного GitHub producer→pre-AI и убедиться в актуальных индексах и binding. Не запускать manual semantic Dossier до этого; Dossier V2 отдельно NO_GO.
-- **Отдельная незавершённая работа:** долговечное закрытие и recovery директорских задач по отчётам #380/#382 не реализованы; issue #375 остаётся открытым. Никаких новых дополнительных worker задач, расписаний, retries или реального semantic/production.
+- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `steam-targeted-dlc-appdetails-429-bounded-recovery-01` → `WORKER_TASK_STEAM_TARGETED_DLC_APPDETAILS_429_BOUNDED_RECOVERY_01.md`. Одно узкое IMPLEMENT с самопроверкой и обычной CI: обработать временные 429 от appdetails, сохранить полноту DLC, fail-closed при исчерпании ожиданий, затем подготовить source PR. Пользователь просил **без новых QA-чатов**, а после принятия кода — один настоящий GitHub Actions на main; source PR-only CI не заменяет live сбор.
+- **ЧАТЫ 2, 3, 4, 5, 6 свободны.** ЧАТ 3 сдал independent L3 QA DLC #388; report PR #390 и source PR #388 уже приняты, рабочий слот освобождён. Никаких отдельных проверочных поручений сейчас не создавать.
+- **Dossier V1:** 2026-11-04 manual main workflow run `41844517992` failed at `targeted_dlc_relations` on Steam HTTP 429 for appdetails DLC `750920`; mailing and pre-AI skipped, worker index остаётся stale 2026-10-27. До успешного полного GitHub main production→pre-AI и свежей exact worker binding semantic one-shot запрещён. V2 отдельно NO_GO.
+- **Директорский merge gate:** обычные GitHub CI обязательны, risk L3/safety requirements не обходить. Запрос пользователя минимизировать дополнительное тестирование зарегистрирован; при конфликте с канонической independent L3 нормой явно сообщить без создания новой QA-задачи. Настоящий production workflow_dispatch пока не выполнялся после 429.
+- **Другие задачи:** долговечное восстановление директорских поручений (отчёты #380/#382) не реализовано; issue #375 открыто, никаких других разрешений на recovery/schedule/semantic.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 

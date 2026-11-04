@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-03",
+  "last_curated_on": "2026-11-04",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3272,21 +3272,39 @@
       "id": "steam-targeted-dlc-pr388-independent-l3-qa-01",
       "title": "ЧАТ 3 — независимая проверка исправления Steam DLC",
       "goal": "Проверить безопасность и корректность уже подготовленного исправления DLC в исходном PR до принятия.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Предметная независимая проверка узкого кода, регрессий и точных CI.",
       "urgency": "высокая",
       "urgency_reason": "Рабочий Steam collector блокирует автоматическое создание очереди Dossier.",
       "task_file": "WORKER_TASK_STEAM_TARGETED_DLC_PR388_INDEPENDENT_L3_QA_01.md",
-      "worker_slot": "ЧАТ 3",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "steam-targeted-dlc-identity-blocker-restore-auto-dossier-01"
       ],
-      "blocker": "Нельзя выполнять кодовые правки и запускать production или semantic; требуется только независимая report-only QA.",
+      "blocker": "Независимая проверка сдана; исходное исправление принято, физический слот свободен.",
+      "recent_completion": true,
+      "updated_on": "2026-11-04",
+      "updated_at_utc": "2026-11-04T14:01:00Z"
+    },
+    {
+      "id": "steam-targeted-dlc-appdetails-429-bounded-recovery-01",
+      "title": "ЧАТ 1 — ограниченная обработка Steam DLC HTTP 429",
+      "goal": "Исправить временные ограничения Steam appdetails без потери полноты суточного сбора и с автообновлением очереди Dossier.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Узкая правка существующего HTTP клиента и детерминированные тесты ограниченного повтора.",
+      "urgency": "высокая",
+      "urgency_reason": "Подтверждённый HTTP 429 в рабочем коллекторе блокирует формирование свежей очереди.",
+      "task_file": "WORKER_TASK_STEAM_TARGETED_DLC_APPDETAILS_429_BOUNDED_RECOVERY_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [],
+      "blocker": "После исходного PR требуется Director safety gate и live проверка main GitHub Actions. Semantic запуск запрещён.",
       "recent_completion": false,
-      "updated_on": "2026-11-03",
-      "updated_at_utc": "2026-11-03T05:25:00Z"
+      "updated_on": "2026-11-04",
+      "updated_at_utc": "2026-11-04T14:01:00Z"
     }
   ]
 }
