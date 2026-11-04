@@ -10,7 +10,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, datetime, timezone
 from email.utils import parsedate_to_datetime
 import json
-from threading import Lock
+from threading import Condition, Lock
 from time import monotonic, sleep
 
 import requests
@@ -21,41 +21,86 @@ APPDETAILS_URL = 'https://store.steampowered.com/api/appdetails'
 RELATION_WORKERS = 3
 REQUEST_SPACING_SECONDS = 0.9
 APPDETAILS_MAX_ATTEMPTS = 4  # 1 original request + up to 3 HTTP 429 retries
-APPDETAILS_MAX_WAIT_SECONDS = 120.0  # per lookup, including shared pacing
+APPDETAILS_MAX_WAIT_SECONDS = 120.0  # cumulative own HTTP 429 cooldown, NOT rate-slot waiting
+APPDETAILS_MAX_TOTAL_SECONDS = 900.0  # finite per-lookup wall-clock guard, including rate slots
+APPDETAILS_WINDOW_SECONDS = 300.0
+APPDETAILS_MAX_STARTS_PER_WINDOW = 180  # conservative process-local guard, not a Valve quota
 APPDETAILS_MAX_RETRY_AFTER_SECONDS = 60.0
 APPDETAILS_BACKOFF_SECONDS = (5.0, 15.0, 30.0)
 
 
 class _SharedAppdetailsPacer:
-    """One rate-limit gate for all parent and DLC lookups, not a new queue."""
+    """FIFO, process-local gate for every physical KZ appdetails attempt.
 
-    def __init__(self, spacing_seconds=REQUEST_SPACING_SECONDS):
-        self._lock = Lock()
+    The 180/300s counter is shared by parent, child and 429 retry requests.
+    Tickets prevent three worker threads from overtaking a waiting request;
+    a condition parks followers without holding the lock or busy-spinning.
+    """
+
+    def __init__(self, spacing_seconds=REQUEST_SPACING_SECONDS,
+                 window_seconds=APPDETAILS_WINDOW_SECONDS,
+                 max_starts=APPDETAILS_MAX_STARTS_PER_WINDOW):
+        if spacing_seconds < 0 or window_seconds <= 0 or max_starts < 1:
+            raise ValueError('Invalid KZ appdetails physical-start pacing limits')
+        self._condition = Condition(Lock())
         self._next_request = 0.0
         self._cooldown_until = 0.0
         self._spacing_seconds = spacing_seconds
+        self._window_seconds = window_seconds
+        self._max_starts = max_starts
+        self._starts = deque()
+        self._waiters = deque()
 
     def acquire(self, *, clock, sleeper, deadline):
-        # Do not sleep holding the lock: an in-flight 429 must be able to
-        # extend cooldown while other threads are waiting for their slots.
-        while True:
-            with self._lock:
-                now = clock()
-                if now > deadline:
-                    raise RuntimeError('KZ appdetails retry wait budget exhausted')
-                wait = max(0.0, self._next_request - now,
-                           self._cooldown_until - now)
-                if wait == 0:
-                    self._next_request = now + self._spacing_seconds
-                    return
-            if wait > max(0.0, deadline - now):
-                raise RuntimeError('KZ appdetails retry wait budget exhausted')
-            sleeper(wait)
-            # Recheck the shared deadline/cooldown after every sleep.
+        ticket = object()
+        with self._condition:
+            self._waiters.append(ticket)
+        try:
+            while True:
+                with self._condition:
+                    now = clock()
+                    if now >= deadline:
+                        raise RuntimeError('KZ appdetails rate slot wait budget exhausted')
+                    if self._waiters[0] is not ticket:
+                        # A follower cannot steal the head's slot. Wait for the
+                        # head to finish or cancel; timed wake checks deadline.
+                        self._condition.wait(timeout=min(0.25, deadline - now))
+                        continue
+                    # Half-open rolling window (now - 300, now]. Expired starts
+                    # are removed only under the same lock used for reservation.
+                    while (self._starts and
+                           now - self._starts[0] >= self._window_seconds):
+                        self._starts.popleft()
+                    window_wait = (
+                        self._starts[0] + self._window_seconds - now
+                        if len(self._starts) >= self._max_starts else 0.0
+                    )
+                    wait = max(0.0, self._next_request - now,
+                               self._cooldown_until - now, window_wait)
+                    if wait <= 0.0:
+                        # Reserve a physical request start atomically. Callers
+                        # make exactly one GET immediately after this gate.
+                        self._starts.append(now)
+                        self._next_request = now + self._spacing_seconds
+                        self._waiters.popleft()
+                        self._condition.notify_all()
+                        return now
+                    if wait > deadline - now:
+                        raise RuntimeError('KZ appdetails rate slot wait budget exhausted')
+                # Never hold the lock across a wait: a 429 may extend cooldown
+                # and every wake-up must recheck the rolling window.
+                sleeper(wait)
+        finally:
+            # Timeouts/exceptions cannot strand a ticket or starve a follower.
+            with self._condition:
+                if ticket in self._waiters:
+                    self._waiters.remove(ticket)
+                    self._condition.notify_all()
 
     def throttle(self, seconds, *, clock):
-        with self._lock:
+        with self._condition:
             self._cooldown_until = max(self._cooldown_until, clock() + seconds)
+            self._condition.notify_all()
 
 
 _appdetails_pacer = _SharedAppdetailsPacer()
@@ -166,20 +211,24 @@ def _retry_after_seconds(response, *, wall_clock):
 def get_appdetails(appid, *, getter=requests.get, pacer=None,
                    clock=monotonic, sleeper=sleep, wall_clock=_utc_now,
                    diagnostics=None):
-    """Exact KZ appdetails with existing pacing/retry and passive telemetry.
+    """Exact KZ appdetails; a shared rolling start cap covers every attempt.
 
-    All failed/missing relations remain fail-closed; telemetry does not
-    alter retry attempts, network requests, deadlines or publication.
+    The 120s HTTP 429 retry-cooldown budget is separate from planned
+    window-slot waiting. A finite 900s lookup guard and the 60-minute
+    GitHub job timeout remain in force; all failures remain fail-closed.
     """
     appid = _canonical_appid(appid, 'KZ appdetails request')
     pacer = pacer if pacer is not None else _appdetails_pacer
     diagnostics = (diagnostics if diagnostics is not None
                    else _appdetails_diagnostics)
-    deadline = clock() + APPDETAILS_MAX_WAIT_SECONDS
+    deadline = clock() + APPDETAILS_MAX_TOTAL_SECONDS
+    own_429_wait_seconds = 0.0
     for attempt in range(APPDETAILS_MAX_ATTEMPTS):
-        pacer.acquire(clock=clock, sleeper=sleeper, deadline=deadline)
+        reserved_start = pacer.acquire(
+            clock=clock, sleeper=sleeper, deadline=deadline
+        )
         started_at = clock()
-        record = diagnostics.started(started_at)
+        record = diagnostics.started(reserved_start)
         try:
             response = getter(
                 APPDETAILS_URL,
@@ -213,6 +262,15 @@ def get_appdetails(appid, *, getter=requests.get, pacer=None,
             from_header = seconds is not None
             if seconds is None:
                 seconds = APPDETAILS_BACKOFF_SECONDS[attempt]
+            if own_429_wait_seconds + seconds > APPDETAILS_MAX_WAIT_SECONDS:
+                diagnostics.completed(
+                    record, appid=appid, attempt=attempt + 1, status=status,
+                    elapsed=clock() - started_at,
+                    retry_after_present=retry_after_present,
+                    retry_after_seconds=seconds if from_header else None,
+                )
+                raise RuntimeError('KZ appdetails retry wait budget exhausted')
+            own_429_wait_seconds += seconds
             diagnostics.completed(
                 record, appid=appid, attempt=attempt + 1, status=status,
                 elapsed=clock() - started_at,
