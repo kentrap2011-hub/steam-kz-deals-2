@@ -3310,19 +3310,37 @@
       "id": "steam-store-appdetails-429-external-evidence-research-01",
       "title": "ЧАТ 1 — причины Steam Store HTTP 429 по документации и форумам",
       "goal": "Подтвердить либо опровергнуть объяснение устойчивых 429 на Steam Store appdetails по официальным данным, прямым наблюдениям разработчиков и GitHub журналам.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Адресная внешняя техническая проверка 429 для одного endpoint, исходников и двух точных рабочих запусков; без правок.",
       "urgency": "высокая",
       "urgency_reason": "Неподтверждённая причина HTTP 429 блокирует реальные сборы и свежую очередь Dossier.",
       "task_file": "WORKER_TASK_STEAM_STORE_APPDETAILS_429_EXTERNAL_EVIDENCE_RESEARCH_01.md",
+      "worker_slot": null,
+      "order": null,
+      "depends_on": [],
+      "blocker": "Исследование и диагностическое наблюдение завершены; физический чат освобождён.",
+      "recent_completion": true,
+      "updated_on": "2026-11-04",
+      "updated_at_utc": "2026-11-04T16:32:00Z"
+    },
+    {
+      "id": "steam-store-appdetails-sliding-window-429-guard-01",
+      "title": "ЧАТ 1 — скользящий лимит Steam appdetails по диагностике 429",
+      "goal": "Исправить 429 ограничением всех физических appdetails запросов за скользящие пять минут без потери полноты суточного сбора.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Адресная реализация общего sliding-window limiter с тестами трёх потоков и временного бюджета.",
+      "urgency": "высокая",
+      "urgency_reason": "Настоящий основной сбор зафиксировал 429 на 202-м appdetails запросе и не создал свежую очередь Dossier.",
+      "task_file": "WORKER_TASK_STEAM_STORE_APPDETAILS_SLIDING_WINDOW_429_GUARD_01.md",
       "worker_slot": "ЧАТ 1",
       "order": null,
       "depends_on": [],
-      "blocker": "Только доказательное исследование и report-only PR; код, реальные API эксперименты и production операции не разрешены.",
+      "blocker": "Self-review и exact-head CI в одном PR; Director safety gate, затем один live main collect; semantic Dossier пока не разрешён.",
       "recent_completion": false,
       "updated_on": "2026-11-04",
-      "updated_at_utc": "2026-11-04T15:13:00Z"
+      "updated_at_utc": "2026-11-04T16:32:00Z"
     }
   ]
 }

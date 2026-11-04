@@ -5,12 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — исследование причины Steam Store HTTP 429, 2026-11-04
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Steam appdetails скользящий лимит, 2026-11-04
 
-- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `steam-store-appdetails-429-external-evidence-research-01` → `WORKER_TASK_STEAM_STORE_APPDETAILS_429_EXTERNAL_EVIDENCE_RESEARCH_01.md`. По прямому запросу пользователя исследовать **внешнюю официальную документацию и прямые наблюдения разработчиков/форумы** для Storefront `appdetails` HTTP 429, сопоставить с реальными GitHub run #41844517992 и #41852566837 и выдать один обоснованный следующий шаг. **Только RESEARCH/report-only**; никаких правок кода и новых испытаний Steam API.
-- **ЧАТЫ 2, 3, 4, 5, 6 свободны.** Предыдущий физический ЧАТ 1 завершил кодовое исправление 429, source PR #392 принят, но реальный production по-прежнему failed из-за 429 для appid 755500. Его старый слот освобождён и теперь назначается НОВОМУ физическому ЧАТУ 1.
-- **Приоритет Dossier:** индекс всё ещё от 2026-10-27, рабочие GitHub upstream не завершились; semantic one-shot Dossier НЕ запускать. В прежних логах нет per-app retries/Retry-After/network egress identity, поэтому не утверждать точную гипотезу о квоте без доказательств. После исследования директор выбирает минимальный технически обоснованный шаг только с разрешения пользователя; не создавать QA-цепочки.
-- **Другие задачи:** director recovery отчёты #380/#382 не реализованы; issue #375 открыт. Без Scheduled Tasks, production/manual dispatch, повторного запуска pipeline или новых внеочередных задач.
+- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `steam-store-appdetails-sliding-window-429-guard-01` → `WORKER_TASK_STEAM_STORE_APPDETAILS_SLIDING_WINDOW_429_GUARD_01.md`. Одно source IMPLEMENT на основании full main run `41861101779` (450 запросов, 428×200, 22×429; первая ошибка при 202 starts/300s, повторная при 213). Ограничение максимум 180 starts в любом скользящем 300s окне, общее для трёх потоков, parent/child/retries; сохранить bounded ожидание и 120s retry correctness; тесты + developer self-review в одном PR. Не назначать новые отдельные research/QA чаты.
+- **ЧАТЫ 2, 3, 4, 5, 6 свободны.** Предыдущий ЧАТ 1 сдал research и диагностический код, обе работы приняты в main; его старый физический номер освобождён и теперь зарезервирован для нового IMPLEMENT.
+- **Dossier V1:** GitHub upstream failed, worker index `prepared_for_date=2026-10-27` с устаревшей привязкой; до успешного полного GitHub main Steam→mailing→pre-AI и актуального exact prompt binding семантический one-shot запрещён. V2 отдельно NO_GO.
+- **Safety/owner:** GitHub владеет единственным daily production циклом; пользователь разрешил bounded correction и хочет один рабочий Actions acceptance без дополнительных QA worker. Директор проверяет реальный source PR/CI/безопасность, не объявляя self-review независимым L3. Не создавать новый workflow, Scheduled Task, backfill, ручную semantic работу.
+- **Отдельно:** #375 recovery остаётся открытым, без новых поручений.
 
 ## СДАННЫЙ АУДИТ — прежний физический ЧАТ 3, 2026-10-28
 
