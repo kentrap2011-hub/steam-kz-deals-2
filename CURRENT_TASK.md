@@ -1,5 +1,12 @@
 # CURRENT TASK
 
+## WORKER IMPLEMENTED / DIRECTOR ACCEPTANCE PENDING — НОВЫЙ ЧАТ 1: Steam appdetails sliding 180/300s (2026-11-04)
+- Task: `WORKER_TASK_STEAM_STORE_APPDETAILS_SLIDING_WINDOW_429_GUARD_01.md`. One source [PR #397](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/397), branch `fix/steam-appdetails-sliding-window-429-guard-01`, never self-merge.
+- Complete strict shared 180 starts / rolling 300s cap for parent/child/retry GETs; FIFO lock/condition, no follower polling; 120s bounded own 429 cooldown distinguished from 900s bounded lookup incl quota-slot wait. 4 attempts and fail-closed exact KZ identity unchanged. Deterministic offline tests in `scripts/test_steam_targeted_paid_lanes.py`.
+- Verified initial PR-only `regression` [41871628314](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/41871628314) and site registry [41871628337](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/41871628337) succeeded; final exact-HEAD CI must be checked after documentary commits. No PR `collect` by design. Actual full main recovery unverified; 60-minute job, 50-minute night-readiness, distinct child DLC count remain capacity gate.
+- Report: `reviews/worker_reports/steam-store-appdetails-sliding-window-429-guard-01.md`. Director is sole actor for source acceptance/merge; next is one live normal main production run and downstream exact binding verification. All unrelated active worker tasks preserved below.
+
+
 ## IMPLEMENTED / SOURCE PR CI SUCCESS — НОВЫЙ ЧАТ 1: Steam targeted DLC HTTP 429 bounded recovery (2026-11-04)
 - Task: `WORKER_TASK_STEAM_TARGETED_DLC_APPDETAILS_429_BOUNDED_RECOVERY_01.md`.
 - Branch: `fix/steam-targeted-dlc-appdetails-429-bounded-recovery-01`; single implementation source PR to `main`, no self-merge.
