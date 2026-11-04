@@ -3328,19 +3328,37 @@
       "id": "steam-store-appdetails-sliding-window-429-guard-01",
       "title": "ЧАТ 1 — скользящий лимит Steam appdetails по диагностике 429",
       "goal": "Исправить 429 ограничением всех физических appdetails запросов за скользящие пять минут без потери полноты суточного сбора.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Адресная реализация общего sliding-window limiter с тестами трёх потоков и временного бюджета.",
       "urgency": "высокая",
       "urgency_reason": "Настоящий основной сбор зафиксировал 429 на 202-м appdetails запросе и не создал свежую очередь Dossier.",
       "task_file": "WORKER_TASK_STEAM_STORE_APPDETAILS_SLIDING_WINDOW_429_GUARD_01.md",
+      "worker_slot": null,
+      "order": null,
+      "depends_on": [],
+      "blocker": "Source guard принят и проверен только до source validation; основной запуск прервался на независимом Steam Search KZ maxprice sort-total расхождении.",
+      "recent_completion": true,
+      "updated_on": "2026-11-04",
+      "updated_at_utc": "2026-11-04T17:31:00Z"
+    },
+    {
+      "id": "steam-search-kz-maxprice-sort-total-drift-guard-01",
+      "title": "ЧАТ 1 — устранить ложный сбой проверки Steam KZ maxprice при различии сортировок",
+      "goal": "Адресно исправить source validation Steam Search при малом различии total_count между сортировками, сохраняя доказательство ценового ограничения и fail-closed.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Локальный ограниченный контроль ответов Steam Search, сценарии транзиентного и постоянного рассогласования, существующая CI.",
+      "urgency": "высокая",
+      "urgency_reason": "После исправления Storefront 429 новый сбор остановился на KZ maxprice sort-total расхождении ещё до DLC и блокирует актуальную очередь Dossier.",
+      "task_file": "WORKER_TASK_STEAM_SEARCH_KZ_MAXPRICE_SORT_TOTAL_DRIFT_GUARD_01.md",
       "worker_slot": "ЧАТ 1",
       "order": null,
       "depends_on": [],
-      "blocker": "Self-review и exact-head CI в одном PR; Director safety gate, затем один live main collect; semantic Dossier пока не разрешён.",
+      "blocker": "Одно узкое IMPLEMENT и self-test в исходном PR; Director safety/merge gate, затем один настоящий main Actions; semantic Dossier до свежего index запрещён.",
       "recent_completion": false,
       "updated_on": "2026-11-04",
-      "updated_at_utc": "2026-11-04T16:32:00Z"
+      "updated_at_utc": "2026-11-04T17:31:00Z"
     }
   ]
 }
