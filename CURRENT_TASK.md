@@ -1,5 +1,13 @@
 # CURRENT TASK
 
+## IN DEVELOPMENT — НОВЫЙ ЧАТ 1: Steam targeted DLC HTTP 429 bounded recovery (2026-11-04)
+- Task: `WORKER_TASK_STEAM_TARGETED_DLC_APPDETAILS_429_BOUNDED_RECOVERY_01.md`.
+- Branch: `fix/steam-targeted-dlc-appdetails-429-bounded-recovery-01`; single implementation source PR to `main`, no self-merge.
+- Collector `scripts/steam_targeted_paid_lanes.py`: shared cooldown/pacing for exact KZ appdetails, four total attempts, 120-second per-lookup retry/pacing deadline, bounded Retry-After (60 s per event), fail-closed network/5xx/identity. Regression tests added to `scripts/test_steam_targeted_paid_lanes.py`.
+- Pending: existing PR CI and exact final HEAD evidence; real Steam main workflow after Director merge remains an independent live acceptance gate. No semantic worker or schedule changed.
+- Report: `reviews/worker_reports/steam-targeted-dlc-appdetails-429-bounded-recovery-01.md`. Other worker tasks and their state below remain untouched.
+
+
 ## IMPLEMENTED / IN L3 REVIEW — ЧАТ 2: targeted Steam DLC identity correction (2026-11-03)
 - Task: `WORKER_TASK_STEAM_TARGETED_DLC_IDENTITY_BLOCKER_RESTORE_AUTO_DOSSIER_01.md`.
 - PR: [#388](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/388), branch `fix/steam-targeted-dlc-identity-blocker-01`; code + deterministic regression fixtures committed. No manual production or semantic worker.
