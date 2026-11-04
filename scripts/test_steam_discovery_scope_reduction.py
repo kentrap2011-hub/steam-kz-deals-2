@@ -276,6 +276,167 @@ def test_kz_maxprice_validation_fails_closed_if_filter_is_not_material():
         raise AssertionError('ignored/non-material maxprice must fail closed')
 
 
+def scripted_price_probes(steps, *, clock=None):
+    """Offline Steam Search: explicit ordered request, sort and cap receipts."""
+    c = dict(core())
+    calls = []
+
+    def get_page(start, sort_by, *, category1=None, maxprice_kzt=None, hidef2p=False):
+        assert start == 0 and category1 == '998' and hidef2p is True
+        assert len(calls) < len(steps), 'validation exceeded scripted request budget'
+        expected_sort, expected_cap, response = steps[len(calls)]
+        assert (sort_by, maxprice_kzt) == (expected_sort, expected_cap)
+        calls.append((sort_by, maxprice_kzt))
+        if clock:
+            clock['value'] += clock.get('advance_per_call', 0)
+        return response
+
+    c['get_page'] = get_page
+    return c, calls
+
+
+def price_steps(*, totals, prices=None, uncapped_total=10000, uncapped_price=6000):
+    assert len(totals) in (2, 6)
+    prices = prices or [4500] * len(totals)
+    steps = [
+        (
+            'Price_DESC' if i % 2 == 0 else 'Name_ASC',
+            4500,
+            page(total, [result_row(1000 + i, prices[i])]),
+        )
+        for i, total in enumerate(totals)
+    ]
+    steps.append(
+        ('Price_DESC', None, page(uncapped_total, [result_row(9999, uncapped_price)]))
+    )
+    return steps
+
+
+def expect_price_bound_failure(c, message, **kwargs):
+    try:
+        runner.validate_kz_source_price_bound(c, pause=lambda _: None, **kwargs)
+    except RuntimeError as exc:
+        assert message in str(exc), str(exc)
+    else:
+        raise AssertionError(f'unsafe source proof must fail closed: {message}')
+
+
+def test_kz_maxprice_small_sort_drift_converges_only_after_two_matching_pairs():
+    steps = price_steps(totals=(9593, 9594, 9594, 9594, 9594, 9594))
+    c, calls = scripted_price_probes(steps)
+    proof = runner.validate_kz_source_price_bound(c, pause=lambda _: None)
+    assert proof['validated'] is True
+    assert calls == [(sort, cap) for sort, cap, _ in steps]
+    assert proof['logical_requests'] == 7
+    assert proof['logical_requests_max'] == 7
+    assert proof['games_initial_sort_total_delta'] == 1
+    assert proof['games_final_capped_total'] == 9594
+    assert proof['games_sort_recheck_rounds'] == 2
+    attempts = proof['games_sort_total_attempts']
+    assert [a['round'] for a in attempts] == ['initial', 'recheck_1', 'recheck_2']
+    assert [a['totals_match_exactly'] for a in attempts] == [False, True, True]
+    assert proof['partition_price_desc_checks']['games']['total_count'] == 9594
+    assert proof['games_uncapped_control']['total_count'] == 10000
+    assert 'two_stable_recheck_pairs' in proof['proof']
+
+
+def test_kz_maxprice_persistent_sort_conflict_or_unstable_matches_fail_closed():
+    for totals in (
+        (9593, 9594, 9593, 9594, 9593, 9594),
+        (9593, 9594, 9594, 9594, 9595, 9595),
+        (9593, 9594, 9594, 9594, 9595, 9594),
+    ):
+        c, calls = scripted_price_probes(price_steps(totals=totals))
+        expect_price_bound_failure(c, 'unstable after bounded recheck')
+        assert len(calls) == 6   # no uncapped control / traversal on failure
+
+
+def test_kz_maxprice_large_sort_drift_does_not_get_a_tolerance():
+    c, calls = scripted_price_probes(price_steps(totals=(9593, 9600)))
+    expect_price_bound_failure(c, 'outside bounded recheck threshold')
+    assert len(calls) == 2
+
+
+def test_kz_maxprice_drift_then_ignored_filter_still_fails_closed():
+    for uncapped_total, uncapped_price, message in (
+        (9594, 6000, 'uncapped games control does not have a larger source total'),
+        (10000, 4500, 'uncapped games control did not expose an over-cap KZT row'),
+        (9593, 6000, 'uncapped games control does not have a larger source total'),
+    ):
+        steps = price_steps(
+            totals=(9593, 9594, 9594, 9594, 9594, 9594),
+            uncapped_total=uncapped_total,
+            uncapped_price=uncapped_price,
+        )
+        c, calls = scripted_price_probes(steps)
+        expect_price_bound_failure(c, message)
+        assert len(calls) == 7
+
+
+def test_kz_maxprice_rechecks_never_ignore_overcap_or_malformed_total():
+    # A later sort or a later repeat cannot erase an unsafe capped row.
+    for index in (1, 2, 5):
+        prices = [4500] * 6
+        prices[index] = 4600
+        c, calls = scripted_price_probes(
+            price_steps(totals=(9593, 9594, 9594, 9594, 9594, 9594), prices=prices)
+        )
+        expect_price_bound_failure(c, 'leaked 4600.0 KZT')
+        assert len(calls) == index + 1
+
+    for bad_total in (None, -1, 3.5, True, '9594.0', 'unknown', ' 9594 '):
+        steps = price_steps(totals=(9593, bad_total))
+        c, calls = scripted_price_probes(steps)
+        expect_price_bound_failure(c, 'source total is unknown/malformed')
+        assert len(calls) == 2
+
+
+def test_kz_maxprice_source_country_and_partition_binding_fail_closed():
+    for patch in (
+        lambda c: c.update(PAID_DISCOVERY_POLICY={
+            **c['PAID_DISCOVERY_POLICY'], 'country_code': 'us'
+        }),
+        lambda c: c.update(SEARCH_PARTITIONS=({'id': 'games', 'category1': '21'},)),
+        lambda c: c.update(SEARCH_PARTITIONS=(
+            {'id': 'games', 'category1': '998'},
+            {'id': 'dlc', 'category1': '21'},
+        )),
+        lambda c: c.update(PAID_MAX_PRICE_KZT=4600),
+    ):
+        c = dict(core())
+        patch(c)
+        c['get_page'] = lambda *a, **k: (_ for _ in ()).throw(
+            AssertionError('no query should happen when binding is invalid')
+        )
+        expect_price_bound_failure(c, 'country/cap/partition binding changed')
+
+    c = dict(core())
+    normal_params = c['search_params']
+    c['search_params'] = lambda *a, **k: {
+        **normal_params(*a, **k), 'cc': 'us'
+    }
+    c['get_page'] = lambda *a, **k: (_ for _ in ()).throw(
+        AssertionError('invalid search params must be stopped before network')
+    )
+    expect_price_bound_failure(c, 'Steam query binding changed')
+
+
+def test_kz_maxprice_validation_deadline_prevents_more_probes_or_false_success():
+    # A test clock models slow existing HTTP calls without sleeping or Steam I/O.
+    model_clock = {'value': 0, 'advance_per_call': 90}
+    c, calls = scripted_price_probes(
+        price_steps(totals=(9593, 9594, 9594, 9594, 9594, 9594)),
+        clock=model_clock,
+    )
+    expect_price_bound_failure(
+        c, 'source proof deadline exceeded',
+        clock=lambda: model_clock['value'],
+    )
+    assert len(calls) == 2
+    assert runner.SOURCE_SORT_TOTAL_RECHECK_ROUNDS == 2
+    assert runner.SOURCE_PRICE_VALIDATION_MAX_SECONDS == 180
+
+
 def test_progress_reporter_exposes_stage_and_network_metrics():
     stats = {
         'search_http_requests': 21,
@@ -401,6 +562,13 @@ def main():
         test_kz_maxprice_validation_does_not_require_monotonic_price_asc,
         test_kz_maxprice_validation_fails_closed_if_capped_partition_leaks_over_cap,
         test_kz_maxprice_validation_fails_closed_if_filter_is_not_material,
+        test_kz_maxprice_small_sort_drift_converges_only_after_two_matching_pairs,
+        test_kz_maxprice_persistent_sort_conflict_or_unstable_matches_fail_closed,
+        test_kz_maxprice_large_sort_drift_does_not_get_a_tolerance,
+        test_kz_maxprice_drift_then_ignored_filter_still_fails_closed,
+        test_kz_maxprice_rechecks_never_ignore_overcap_or_malformed_total,
+        test_kz_maxprice_source_country_and_partition_binding_fail_closed,
+        test_kz_maxprice_validation_deadline_prevents_more_probes_or_false_success,
         test_progress_reporter_exposes_stage_and_network_metrics,
         test_core_network_stats_expose_retry_and_backoff_counters,
         test_search_pacing_matches_live_proven_rate_limit_safe_delay,
