@@ -80,6 +80,96 @@ def check_base_targeted_dlc():
 
 
 
+
+def check_dlc_no_price_skips_only_verified_absence():
+    """App_201877 fixture: no price is not foreign currency; siblings continue."""
+    core = collector.load_core()
+    sale = {
+        'steam_appid': 300, 'type': 'dlc', 'name': 'On-sale story DLC',
+        'fullgame': {'appid': 100},
+        'price_overview': {'currency': 'KZT', 'final': 25000,
+                           'discount_percent': 85},
+    }
+    parent = {'steam_appid': 100, 'type': 'game',
+              'dlc': [201877, 300, 301, 302, 300]}
+    no_price = {'steam_appid': 201877, 'type': 'dlc',
+                'name': 'App_201877 (synthetic no-price fixture)',
+                'fullgame': {'appid': 100}}
+    fixtures = {
+        '100': parent, '201877': no_price, '300': sale,
+        '301': dict(sale, steam_appid=301,
+                    price_overview={'currency': 'KZT', 'final': 550000,
+                                    'discount_percent': 90}),
+        '302': dict(sale, steam_appid=302,
+                    price_overview={'currency': 'KZT', 'final': 30000,
+                                    'discount_percent': 40}),
+    }
+    # Distinguish absent, explicit null and precisely empty object. No real
+    # Steam appdetails body for 201877 was preserved in the failing live run.
+    for variant in ('missing', 'null', 'empty'):
+        child = dict(no_price)
+        if variant == 'null':
+            child['price_overview'] = None
+        elif variant == 'empty':
+            child['price_overview'] = {}
+        current = dict(fixtures, **{'201877': child})
+        calls = []
+        def fetch(appid):
+            calls.append(appid)
+            return current[appid]
+        dlc, stats = targeted.discover_dlc_for_bases(['100'], core, fetch=fetch)
+        assert list(dlc) == ['App_300'], (variant, dlc)
+        assert dlc['App_300']['final_kzt'] == 250
+        assert dlc['App_300']['discount_percent'] == 85
+        assert dlc['App_300']['verified_base_appids'] == ['100']
+        assert calls.count('201877') == calls.count('300') == 1
+        assert set(calls) == set(current)  # no early abort; complete child scope
+        assert stats['admitted_base_count'] == stats['parent_relation_lookups'] == 1
+        assert stats['related_dlc_unique_ids'] == stats['dlc_price_lookups'] == 4
+        assert stats['dlc_accepted_after_paid_gate'] == 1
+        assert stats['dlc_rejected_after_paid_gate'] == 3
+        assert stats['relation_complete'] is True
+
+    def must_fail(child, label, *, parent_override=None):
+        data = dict(fixtures, **{'201877': child})
+        if parent_override is not None:
+            data['100'] = parent_override
+        try:
+            targeted.discover_dlc_for_bases(
+                ['100'], core, fetch=lambda appid: data[appid]
+            )
+        except RuntimeError:
+            return
+        raise AssertionError(f'{label}: unsafe DLC data was treated as no-price')
+
+    # A value/marker is NOT an empty price. Missing KZT fields, foreign currency,
+    # wrong types (including bool which is an int subclass), and malformed
+    # structures all retain the fail-closed collector behavior.
+    unsafe_prices = [
+        {'currency': 'RUB', 'final': 25000, 'discount_percent': 85},
+        {'currency': 'USD', 'final': 25000, 'discount_percent': 85},
+        {'currency': 'EUR'},
+        {'final': 25000, 'discount_percent': 85},
+        {'currency': 'KZT'},
+        {'currency': 'KZT', 'final': 25000},
+        {'currency': 'KZT', 'discount_percent': 85},
+        {'currency': 'KZT', 'final': None, 'discount_percent': 85},
+        {'currency': 'KZT', 'final': True, 'discount_percent': 85},
+        {'currency': 'KZT', 'final': 25000, 'discount_percent': False},
+        {'currency': 'KZT', 'final': 25000, 'discount_percent': '85'},
+        [], 'not a price', 0, False,
+    ]
+    for price in unsafe_prices:
+        must_fail(dict(no_price, price_overview=price), repr(price))
+    # Identity, parent relationship and base-game type must also fail even
+    # when the DLC is otherwise unpriced.
+    must_fail(dict(no_price, steam_appid=999), 'incorrect child AppID')
+    must_fail(dict(no_price, fullgame={'appid': 999}), 'contradictory fullgame')
+    must_fail(dict(no_price, fullgame='malformed'), 'invalid fullgame type')
+    must_fail(no_price, 'incorrect parent type',
+              parent_override={'steam_appid': 100, 'type': 'dlc',
+                               'dlc': [201877]})
+
 def check_dlc_membership_identity_regressions():
     """Duplicate exact membership is safe; malformed/contradictory identity is not."""
     core = collector.load_core()
@@ -772,6 +862,7 @@ def check_appdetails_429_sliding_window_non429_fail_closed():
 
 def main():
     check_base_targeted_dlc()
+    check_dlc_no_price_skips_only_verified_absence()
     check_dlc_membership_identity_regressions()
     check_conservative_obscure_rescue_and_package()
     check_five_middling_games_package_below_individual_cutoff()
@@ -786,7 +877,7 @@ def main():
     check_appdetails_sliding_window_three_threads_and_fairness()
     check_appdetails_parent_child_and_retry_share_window()
     check_appdetails_429_sliding_window_non429_fail_closed()
-    print('targeted Steam KZ DLC and independent package 15/15 PASS')
+    print('targeted Steam KZ DLC and independent package 16/16 PASS')
 
 
 if __name__ == '__main__':
