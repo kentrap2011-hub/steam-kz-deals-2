@@ -3,7 +3,7 @@
 - Role: NEW Chat 1; one bounded implementation, self-review and existing CI; no parallel QA or production.
 - Source PR: https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/404
 - Base: main @ 7776434bf827dc4f533527f809af976b81b6836f
-- Status: IMPLEMENTED_WAITING_DIRECTOR (conditional on final exact-HEAD CI verification recorded below).
+- Status: IMPLEMENTED_WAITING_DIRECTOR. Source and regression completed; final report-only HEAD recheck is recorded in the PR's verification comment.
 
 ## Root cause / known evidence / limits
 
@@ -33,9 +33,11 @@ Public Steam product pages explicitly describe App_201310 (X3: Albion Prelude) a
 ## Verification / gates
 
 - Local isolated execution in this chat: unavailable (repository not network-mountable in local container). Instead, the canonical GitHub PR runner executes the deterministic full regression with Python 3.12 and its existing dependencies.
-- `steam-test.yml / regression`: pending final exact-HEAD verification.
-- Existing `validate` and `backlog-disposition` checks: pending final exact-HEAD verification.
-- Exact final CI head: pending.
+- Verified source+report commit: `c5069dfb66880d9c0c3e894889c0813cb7121428` (the exact HEAD of this complete regression run).
+- `steam-test.yml / regression`: **SUCCESS**, run https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/42025982868 ; log says `targeted Steam KZ DLC and independent package 17/17 PASS`; full existing suite completed, including physical appdetails pacing, discovery, backlogs and pre-AI invariants. PR collect = skipped.
+- `validate`: **SUCCESS**, https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/42025982795 .
+- `backlog-disposition`: **SUCCESS**, https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/42025982817 .
+- Logs for all three jobs were retrieved and checked; no failures. The documentary update containing this receipt naturally creates a later SHA; the **final exact PR HEAD** and its second complete CI pass are to be recorded in the PR comment, avoiding a self-referential Git SHA inside this committed report.
 - Runtime main collector to mailing/pre-AI: **NOT RUN**, **NOT VERIFIED** (explicitly forbidden in this worker task).
 
 ## Director handoff
