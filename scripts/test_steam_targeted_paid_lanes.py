@@ -247,6 +247,149 @@ def check_dlc_membership_identity_regressions():
     assert stats['dlc_accepted_after_paid_gate'] == 0
     assert stats['dlc_rejected_after_paid_gate'] == 1
 
+def check_nested_dlc_exact_parent_proof():
+    """Synthetic cc=kz fixtures: actual 2026 API payload is not preserved."""
+    core = collector.load_core()
+    sale = {'currency': 'KZT', 'final': 25000, 'discount_percent': 85}
+    root = {'steam_appid': 2820, 'type': 'game',
+            'dlc': [201310, 235960, 600, 201310]}
+    middle = {'steam_appid': 201310, 'type': 'dlc',
+              'fullgame': {'appid': 2820}, 'dlc': [235960, 601, 601]}
+    fixtures = {
+        '2820': root,
+        '201310': middle,
+        '235960': {'steam_appid': 235960, 'type': 'dlc',
+                   'fullgame': {'appid': 201310}},
+        '600': {'steam_appid': 600, 'type': 'dlc',
+                'fullgame': {'appid': 2820}, 'price_overview': sale},
+        '601': {'steam_appid': 601, 'type': 'dlc',
+                'fullgame': {'appid': 201310}, 'price_overview': sale},
+    }
+
+    def run(data, bases=('2820',)):
+        calls = []
+        def fetch(appid):
+            calls.append(appid)
+            return data[appid]
+        result, stats = targeted.discover_dlc_for_bases(
+            list(bases), core, fetch=fetch
+        )
+        return result, stats, calls
+
+    result, stats, calls = run(fixtures)
+    assert sorted(result) == ['App_600', 'App_601']
+    assert result['App_600']['verified_parent_chains'] == [['2820', '600']]
+    assert result['App_601']['verified_parent_chains'] == [
+        ['2820', '201310', '601']
+    ]
+    assert stats['related_dlc_unique_ids'] == 4
+    assert stats['dlc_price_lookups'] == 4
+    assert stats['nested_intermediate_unique_ids'] == 1
+    assert stats['nested_child_unique_ids'] == 2
+    assert stats['relation_complete'] is True
+    assert set(calls) == set(fixtures) and len(calls) == len(fixtures)
+    # Free/no price nested App_235960 never becomes a paid card, regardless
+    # of whether its price field is absent, null or the empty object.
+    for price in ('missing', None, {}):
+        child = dict(fixtures['235960'])
+        if price != 'missing':
+            child['price_overview'] = price
+        updated = dict(fixtures, **{'235960': child})
+        assert sorted(run(updated)[0]) == ['App_600', 'App_601']
+    # The root may list only the intermediate, not the grandchild; the
+    # intermediate's own list still gives finite exact second-hop coverage.
+    nested_only = dict(fixtures, **{
+        '2820': dict(root, dlc=[201310, 600])
+    })
+    assert sorted(run(nested_only)[0]) == ['App_600', 'App_601']
+    # Steam Store labels Albion Prelude as DLC; Store metadata can surface
+    # a game-type intermediate, which remains only a link, never a DLC offer.
+    game_middle = dict(fixtures, **{
+        '201310': {'type': 'game', 'steam_appid': 201310,
+                   'dlc': [235960, 601]}
+    })
+    assert sorted(run(game_middle)[0]) == ['App_600', 'App_601']
+
+    def must_fail(label, data, bases=('2820',)):
+        try:
+            run(data, bases)
+        except (RuntimeError, KeyError):
+            return
+        raise AssertionError(f'{label}: unsafe nested DLC proof passed')
+
+    def variant(appid, **changes):
+        return dict(fixtures, **{
+            appid: dict(fixtures[appid], **changes)
+        })
+
+    must_fail('foreign fullgame', variant('235960', fullgame={'appid': 999}))
+    must_fail('missing intermediate', dict(fixtures, **{
+        '2820': dict(root, dlc=[235960, 600]),
+    }))
+    must_fail('missing intermediate child listing', variant(
+        '201310', dlc=[601]
+    ))
+    must_fail('forged nested child identity', variant(
+        '235960', steam_appid=999
+    ))
+    must_fail('forged intermediate identity', variant(
+        '201310', steam_appid=999
+    ))
+    must_fail('wrong intermediate type', variant('201310', type='music'))
+    must_fail('wrong root type', variant('2820', type='dlc'))
+    must_fail('intermediate with foreign base', variant(
+        '201310', fullgame={'appid': 999}
+    ))
+    must_fail('self-referential root', variant(
+        '2820', dlc=[2820, 201310]
+    ))
+    must_fail('self-referential intermediate', variant(
+        '201310', dlc=[201310, 235960]
+    ))
+    must_fail('nested edge back to base', variant(
+        '201310', dlc=[2820, 235960]
+    ))
+    must_fail('two-node cycle', variant(
+        '235960', dlc=[201310]
+    ))
+    for bad in (None, '235960', {'appid': 235960}, [True]):
+        must_fail('bad intermediate membership', variant('201310', dlc=bad))
+    for bad in (False, 0, '0201310', {}, 'other'):
+        must_fail('bad grandchild fullgame', variant(
+            '235960', fullgame={'appid': bad}
+        ))
+    # A second root must not acquire a child through an intermediate whose
+    # own fullgame explicitly says it belongs to the first root.
+    must_fail('cross-base intermediate', dict(fixtures, **{
+        '9990': {'steam_appid': 9990, 'type': 'game', 'dlc': [201310]},
+    }), bases=('2820', '9990'))
+
+    # Paid genuine nested DLC uses the same KZT final-minor-unit cap and
+    # discount, with no shortcut through a no-price/free intermediate.
+    for bad in ({'currency': 'USD', 'final': 1000, 'discount_percent': 80},
+                {'currency': 'KZT', 'final': 1000},
+                {'currency': 'KZT', 'final': True, 'discount_percent': 80},
+                {'currency': 'KZT', 'final': 1000, 'discount_percent': False},
+                ['bad'], 'bad'):
+        must_fail('malformed KZT nested price', variant(
+            '601', price_overview=bad
+        ))
+    low_price = variant('601', price_overview={
+        'currency': 'KZT', 'final': 450001, 'discount_percent': 80
+    })
+    assert sorted(run(low_price)[0]) == ['App_600']
+    small_discount = variant('601', price_overview={
+        'currency': 'KZT', 'final': 10000, 'discount_percent': 49
+    })
+    assert sorted(run(small_discount)[0]) == ['App_600']
+    # No implicit third hop, no repeated request, and no pretending that a
+    # partially expanded nested subtree is complete.
+    must_fail('unsupported third hop', dict(fixtures, **{
+        '601': dict(fixtures['601'], dlc=[700]),
+    }))
+    assert run(fixtures)[1]['dlc_price_lookups'] == len(fixtures) - 1
+
+
 def check_conservative_obscure_rescue_and_package():
     assert targeted.candidate_needs_obscure_gate(paid('App_1', reviews=20, percent=85))
     assert not targeted.candidate_needs_obscure_gate(paid('App_1', reviews=11, percent=95))
@@ -864,6 +1007,7 @@ def main():
     check_base_targeted_dlc()
     check_dlc_no_price_skips_only_verified_absence()
     check_dlc_membership_identity_regressions()
+    check_nested_dlc_exact_parent_proof()
     check_conservative_obscure_rescue_and_package()
     check_five_middling_games_package_below_individual_cutoff()
     check_direct_subs_are_discoverable_without_current_app()
@@ -877,7 +1021,7 @@ def main():
     check_appdetails_sliding_window_three_threads_and_fairness()
     check_appdetails_parent_child_and_retry_share_window()
     check_appdetails_429_sliding_window_non429_fail_closed()
-    print('targeted Steam KZ DLC and independent package 16/16 PASS')
+    print('targeted Steam KZ DLC and independent package 17/17 PASS')
 
 
 if __name__ == '__main__':
