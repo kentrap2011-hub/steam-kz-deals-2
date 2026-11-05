@@ -3364,19 +3364,19 @@
       "id": "steam-targeted-dlc-missing-price-guard-01",
       "title": "ЧАТ 1 — безопасно пропускать DLC без цены, не ослабляя KZT-проверку",
       "goal": "Устранить остановку суточного Steam KZ каталога на DLC без опубликованной цены (App_201877) после подтверждения ответа Steam; сохранить строгую блокировку реально неверной валюты и полноту пригодных предложений.",
-      "status": "active",
+      "status": "complete",
       "effort": "низкая",
       "effort_reason": "Локальная правка ветки price_overview в существующем targeted DLC collector, негативные и позитивные регрессии, один source PR.",
       "urgency": "высокая",
       "urgency_reason": "Production run 41944401178 прошёл 432 appdetails без 429, но прекратился на App_201877 non-KZT price; downstream подготовка свежих Dossier пропущена.",
       "task_file": "WORKER_TASK_STEAM_TARGETED_DLC_MISSING_PRICE_GUARD_01.md",
-      "worker_slot": "ЧАТ 1",
+      "worker_slot": null,
       "order": null,
       "depends_on": [],
-      "blocker": "Запуск нового физического ЧАТА 1 после регистрации в main и обязательных site-task CI. Один bounded IMPLEMENT + самостоятельные тесты в существующем GitHub CI, без отдельного QA-чата. После merge требуется один настоящий main production, чтобы доказать восстановление.",
-      "recent_completion": false,
+      "blocker": "Source PR №401 принят: exact final HEAD 492e045c, regression/validate/backlog-disposition PASS, финальная сдача worker завершена. Не проверено в настоящем суточном main Steam→mailing→pre-AI, подлинный raw cc=kz price_overview App_201877 неизвестен; это отдельный live acceptance gate.",
+      "recent_completion": true,
       "updated_on": "2026-11-05",
-      "updated_at_utc": "2026-11-05T10:05:59.772Z"
+      "updated_at_utc": "2026-11-05T10:30:47.366Z"
     }
   ]
 }
