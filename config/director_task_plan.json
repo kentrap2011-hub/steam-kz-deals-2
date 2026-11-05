@@ -3377,6 +3377,24 @@
       "recent_completion": true,
       "updated_on": "2026-11-05",
       "updated_at_utc": "2026-11-05T10:30:47.366Z"
+    },
+    {
+      "id": "steam-targeted-dlc-nested-parent-chain-guard-01",
+      "title": "ЧАТ 1 — исправить проверку вложенного DLC 235960 без ослабления родительских связей",
+      "goal": "Подтвердить и безопасно учесть строго доказанную цепочку родства base→DLC→DLC на App_235960 при сохранении полной Steam KZ source integrity и фильтров цен.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Локальная корректировка проверки parent/child отношения с моделированием цепочки и строгими негативными регрессиями.",
+      "urgency": "высокая",
+      "urgency_reason": "Ручной production run 42012646983 остановлен на App_235960 после 449 HTTP 200; mailing/pre-AI/Dossier снова не получили свежий complete snapshot.",
+      "task_file": "WORKER_TASK_STEAM_TARGETED_DLC_NESTED_PARENT_CHAIN_GUARD_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Один разрешённый bounded IMPLEMENT в новом физическом ЧАТЕ 1; подтвердить parent chain evidence, self-tests и существующую exact-HEAD CI. Source принятие и отдельный main live run только после risk gates; не обходить проверку и не создавать отдельные QA чаты автоматически.",
+      "recent_completion": false,
+      "updated_on": "2026-11-05",
+      "updated_at_utc": "2026-11-05T11:56:22.054Z"
     }
   ]
 }
