@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-04",
+  "last_curated_on": "2026-11-05",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3346,19 +3346,37 @@
       "id": "steam-search-kz-maxprice-sort-total-drift-guard-01",
       "title": "ЧАТ 1 — устранить ложный сбой проверки Steam KZ maxprice при различии сортировок",
       "goal": "Адресно исправить source validation Steam Search при малом различии total_count между сортировками, сохраняя доказательство ценового ограничения и fail-closed.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Локальный ограниченный контроль ответов Steam Search, сценарии транзиентного и постоянного рассогласования, существующая CI.",
       "urgency": "высокая",
       "urgency_reason": "После исправления Storefront 429 новый сбор остановился на KZ maxprice sort-total расхождении ещё до DLC и блокирует актуальную очередь Dossier.",
       "task_file": "WORKER_TASK_STEAM_SEARCH_KZ_MAXPRICE_SORT_TOTAL_DRIFT_GUARD_01.md",
+      "worker_slot": null,
+      "order": null,
+      "depends_on": [],
+      "blocker": "Исправление PR #399 принято в main 2026-11-04; production run #41944401178 2026-11-05 прошёл source validation и завершился на отдельном DLC App_201877 non-KZT-price guard. Физический слот освобождён после сдачи source PR.",
+      "recent_completion": true,
+      "updated_on": "2026-11-05",
+      "updated_at_utc": "2026-11-05T10:05:59.772Z"
+    },
+    {
+      "id": "steam-targeted-dlc-missing-price-guard-01",
+      "title": "ЧАТ 1 — безопасно пропускать DLC без цены, не ослабляя KZT-проверку",
+      "goal": "Устранить остановку суточного Steam KZ каталога на DLC без опубликованной цены (App_201877) после подтверждения ответа Steam; сохранить строгую блокировку реально неверной валюты и полноту пригодных предложений.",
+      "status": "active",
+      "effort": "низкая",
+      "effort_reason": "Локальная правка ветки price_overview в существующем targeted DLC collector, негативные и позитивные регрессии, один source PR.",
+      "urgency": "высокая",
+      "urgency_reason": "Production run 41944401178 прошёл 432 appdetails без 429, но прекратился на App_201877 non-KZT price; downstream подготовка свежих Dossier пропущена.",
+      "task_file": "WORKER_TASK_STEAM_TARGETED_DLC_MISSING_PRICE_GUARD_01.md",
       "worker_slot": "ЧАТ 1",
       "order": null,
       "depends_on": [],
-      "blocker": "Одно узкое IMPLEMENT и self-test в исходном PR; Director safety/merge gate, затем один настоящий main Actions; semantic Dossier до свежего index запрещён.",
+      "blocker": "Запуск нового физического ЧАТА 1 после регистрации в main и обязательных site-task CI. Один bounded IMPLEMENT + самостоятельные тесты в существующем GitHub CI, без отдельного QA-чата. После merge требуется один настоящий main production, чтобы доказать восстановление.",
       "recent_completion": false,
-      "updated_on": "2026-11-04",
-      "updated_at_utc": "2026-11-04T17:31:00Z"
+      "updated_on": "2026-11-05",
+      "updated_at_utc": "2026-11-05T10:05:59.772Z"
     }
   ]
 }
