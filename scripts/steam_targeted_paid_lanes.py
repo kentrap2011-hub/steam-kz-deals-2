@@ -374,16 +374,8 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
         if data.get('type') != 'dlc':
             # Some pages list soundtrack/apps, not genuine DLC.
             continue
-        price = data.get('price_overview') or {}
-        if price.get('currency') != 'KZT':
-            raise RuntimeError(f'DLC App_{appid} has non-KZT price')
-        final = price.get('final')
-        percent = price.get('discount_percent')
-        if type(final) is not int or type(percent) is not int:
-            continue
-        if not (0 < final <= int(core['PAID_MAX_PRICE_KZT'] * 100)
-                and percent >= core['PAID_MIN_DISCOUNT_PERCENT']):
-            continue
+        # Integrity precedes any price-based skip: a corrupt relationship is
+        # never silently converted into an ordinary unsold DLC.
         fullgame = data.get('fullgame')
         if fullgame is not None and not isinstance(fullgame, dict):
             raise RuntimeError(f'DLC App_{appid} has invalid fullgame relationship')
@@ -391,6 +383,26 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
             parent = _canonical_appid(fullgame['appid'], f'DLC App_{appid} fullgame')
             if parent not in reverse[appid]:
                 raise RuntimeError(f'DLC App_{appid} contradicts verified parent relation')
+        # An absent/null/empty object has no verified paid KZ offer. Do not
+        # mistake it for a foreign currency, or emit a made-up zero-price card.
+        if 'price_overview' not in data or data['price_overview'] is None:
+            continue
+        price = data['price_overview']
+        if type(price) is not dict:
+            raise RuntimeError(f'DLC App_{appid} has malformed price_overview')
+        if not price:
+            continue
+        # A nonempty object is price evidence, including partial/foreign
+        # markers: it must never take the no-price skip path.
+        if price.get('currency') != 'KZT':
+            raise RuntimeError(f'DLC App_{appid} has non-KZT price')
+        final = price.get('final')
+        percent = price.get('discount_percent')
+        if type(final) is not int or type(percent) is not int:
+            raise RuntimeError(f'DLC App_{appid} has incomplete KZT price')
+        if not (0 < final <= int(core['PAID_MAX_PRICE_KZT'] * 100)
+                and percent >= core['PAID_MIN_DISCOUNT_PERCENT']):
+            continue
         item = {
             'key': f'App_{appid}', 'appid': appid,
             'title': data.get('name') or f'DLC {appid}',
