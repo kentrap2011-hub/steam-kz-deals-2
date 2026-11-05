@@ -313,7 +313,7 @@ def check_nested_dlc_exact_parent_proof():
     def must_fail(label, data, bases=('2820',)):
         try:
             run(data, bases)
-        except (RuntimeError, KeyError):
+        except RuntimeError:
             return
         raise AssertionError(f'{label}: unsafe nested DLC proof passed')
 
