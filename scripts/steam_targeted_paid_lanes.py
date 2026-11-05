@@ -335,9 +335,32 @@ def _check_fetched_identity(data, appid, context):
         raise RuntimeError(f'{context} contradicts requested AppID {appid}')
 
 
+def _dlc_ids(data, owner):
+    raw = data.get('dlc', [])
+    if not isinstance(raw, list):
+        raise RuntimeError(f'DLC relationship invalid for App_{owner}')
+    ids = sorted({_canonical_appid(v, f'DLC relationship App_{owner}')
+                  for v in raw}, key=int)
+    if owner in ids:
+        raise RuntimeError(f'DLC App_{owner} has self-referential relationship')
+    return ids
+
+
+def _fullgame_id(data, appid):
+    fullgame = data.get('fullgame')
+    if fullgame is not None and not isinstance(fullgame, dict):
+        raise RuntimeError(f'DLC App_{appid} has invalid fullgame relationship')
+    if fullgame is None or 'appid' not in fullgame:
+        return None
+    parent = _canonical_appid(fullgame['appid'], f'DLC App_{appid} fullgame')
+    if parent == appid:
+        raise RuntimeError(f'DLC App_{appid} has self-referential fullgame')
+    return parent
+
+
 def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
                            reporter=None):
-    """Fail closed for missing/invalid parents; dedupe exact valid DLC membership."""
+    """Only exact base -> listed intermediate -> listed DLC, at most two hops."""
     bases = sorted({_canonical_appid(x, 'targeted DLC parent')
                     for x in base_appids}, key=int)
     relations = {}
@@ -351,40 +374,104 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
             _check_fetched_identity(data, base, f'DLC parent App_{base}')
             if data.get('type') != 'game':
                 raise RuntimeError(f'DLC parent {base} did not resolve to a base game')
-            # Missing 'dlc' means no known relations; an explicitly malformed
-            # relation is not equivalent to an empty verified membership.
-            raw = data.get('dlc', [])
-            if not isinstance(raw, list):
-                raise RuntimeError(f'DLC relationship invalid for App_{base}')
-            # Steam's parent list is set membership, not a cardinality proof.
-            # Repeated *valid* IDs are safe; any malformed identity still fails
-            # the entire parent instead of silently dropping a relationship.
-            ids = sorted({_canonical_appid(value, f'DLC relationship App_{base}')
-                          for value in raw}, key=int)
-            relations[base] = ids
-    candidates = {}
-    reverse = {}
+            relations[base] = _dlc_ids(data, base)
+
+    direct = {}
     for base in sorted(relations, key=int):
         for appid in relations[base]:
-            reverse.setdefault(appid, set()).add(base)
+            direct.setdefault(appid, set()).add(base)
+    fetched = {}
     _appdetails_diagnostics.set_stage('dlc_price')
-    for appid in sorted(reverse, key=int):
+    for appid in sorted(direct, key=int):
         data = fetch(appid)
         _check_fetched_identity(data, appid, f'DLC App_{appid}')
-        if data.get('type') != 'dlc':
-            # Some pages list soundtrack/apps, not genuine DLC.
+        fetched[appid] = data
+
+    # A nested lookup is permitted only from an exact AppID listed by a
+    # verified root. Steam may expose a Store-marked DLC as type game; its
+    # type alone proves nothing. Both list edges and child fullgame are needed.
+    nested = {}
+    intermediate_ids = set()
+    nested_edges = 0
+    for middle in sorted(direct, key=int):
+        data = fetched[middle]
+        if 'dlc' not in data:
             continue
-        # Integrity precedes any price-based skip: a corrupt relationship is
-        # never silently converted into an ordinary unsold DLC.
-        fullgame = data.get('fullgame')
-        if fullgame is not None and not isinstance(fullgame, dict):
-            raise RuntimeError(f'DLC App_{appid} has invalid fullgame relationship')
-        if fullgame is not None and 'appid' in fullgame:
-            parent = _canonical_appid(fullgame['appid'], f'DLC App_{appid} fullgame')
-            if parent not in reverse[appid]:
-                raise RuntimeError(f'DLC App_{appid} contradicts verified parent relation')
-        # An absent/null/empty object has no verified paid KZ offer. Do not
-        # mistake it for a foreign currency, or emit a made-up zero-price card.
+        if data.get('type') not in ('dlc', 'game'):
+            raise RuntimeError(f'DLC App_{middle} has invalid intermediate type')
+        children = _dlc_ids(data, middle)
+        if not children:
+            continue
+        parent = _fullgame_id(data, middle)
+        for base in direct[middle]:
+            if parent is not None and parent != base:
+                raise RuntimeError(
+                    f'DLC intermediate App_{middle} contradicts base {base}'
+                )
+            for child in children:
+                if child in relations:
+                    raise RuntimeError(
+                        f'DLC App_{middle} has cyclic base relationship'
+                    )
+                nested.setdefault(child, {}).setdefault(base, set()).add(middle)
+                nested_edges += 1
+        intermediate_ids.add(middle)
+
+    for appid in sorted(nested, key=int):
+        if appid not in fetched:
+            data = fetch(appid)
+            _check_fetched_identity(data, appid, f'DLC App_{appid}')
+            fetched[appid] = data
+
+    # Reject two-node loops, including those never used in a paid offer.
+    for child, by_base in nested.items():
+        if child in intermediate_ids:
+            for middles in by_base.values():
+                for middle in middles:
+                    if middle in _dlc_ids(fetched[child], child):
+                        raise RuntimeError('DLC relationship contains a cycle')
+
+    candidates = {}
+    all_ids = sorted(set(direct) | set(nested), key=int)
+    for appid in all_ids:
+        data = fetched[appid]
+        if data.get('type') != 'dlc':
+            # An intermediate game may validate a link, not a paid DLC.
+            continue
+        parent = _fullgame_id(data, appid)
+        direct_bases = direct.get(appid, set())
+        nested_bases = nested.get(appid, {})
+        paths = {}
+        if parent is None:
+            if nested_bases:
+                raise RuntimeError(f'DLC App_{appid} missing nested parent proof')
+            for base in direct_bases:
+                paths[base] = [base, appid]
+        elif parent in direct_bases:
+            if nested_bases:
+                raise RuntimeError(
+                    f'DLC App_{appid} has contradictory nested relation'
+                )
+            # Preserve explicitly linked multi-base parent attribution.
+            for base in direct_bases:
+                paths[base] = [base, appid]
+        else:
+            for base in sorted(direct_bases | set(nested_bases), key=int):
+                if parent not in nested_bases.get(base, set()):
+                    raise RuntimeError(
+                        f'DLC App_{appid} contradicts verified parent relation'
+                    )
+                if base not in direct.get(parent, set()):
+                    raise RuntimeError(
+                        f'DLC App_{appid} missing intermediate parent'
+                    )
+                paths[base] = [base, parent, appid]
+            if not paths:
+                raise RuntimeError(f'DLC App_{appid} has unverified parent')
+        if not paths:
+            raise RuntimeError(f'DLC App_{appid} has no verified base')
+
+        # Parent proof is required even for free/unpriced children.
         if 'price_overview' not in data or data['price_overview'] is None:
             continue
         price = data['price_overview']
@@ -392,8 +479,6 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
             raise RuntimeError(f'DLC App_{appid} has malformed price_overview')
         if not price:
             continue
-        # A nonempty object is price evidence, including partial/foreign
-        # markers: it must never take the no-price skip path.
         if price.get('currency') != 'KZT':
             raise RuntimeError(f'DLC App_{appid} has non-KZT price')
         final = price.get('final')
@@ -413,7 +498,8 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
             'search_review_positive': None, 'search_review_count': None,
             'tag_ids': [], 'release_date': '',
             'url': f'https://store.steampowered.com/app/{appid}/',
-            'verified_base_appids': sorted(reverse[appid], key=int),
+            'verified_base_appids': sorted(paths, key=int),
+            'verified_parent_chains': [paths[base] for base in sorted(paths, key=int)],
             'targeted_dlc_relation': True,
         }
         if core['paid_source_rejection_reason'](item):
@@ -422,11 +508,14 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
     stats = {
         'admitted_base_count': len(bases),
         'parent_relation_lookups': len(relations),
-        'related_dlc_unique_ids': len(reverse),
-        'dlc_price_lookups': len(reverse),
+        'related_dlc_unique_ids': len(all_ids),
+        'dlc_price_lookups': len(fetched),
+        'nested_intermediate_unique_ids': len(intermediate_ids),
+        'nested_relation_edges': nested_edges,
+        'nested_child_unique_ids': len(nested),
         'dlc_accepted_after_paid_gate': len(candidates),
-        'dlc_rejected_after_paid_gate': len(reverse) - len(candidates),
-        'relation_lookup_mode': 'verified_base_appdetails_kz_no_global_dlc_search',
+        'dlc_rejected_after_paid_gate': len(all_ids) - len(candidates),
+        'relation_lookup_mode': 'verified_base_appdetails_kz_two_hops_max',
         'relation_complete': len(relations) == len(bases),
     }
     if reporter:
