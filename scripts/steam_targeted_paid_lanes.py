@@ -423,6 +423,17 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
             _check_fetched_identity(data, appid, f'DLC App_{appid}')
             fetched[appid] = data
 
+    # A third hop cannot be silently truncated. A node also listed directly
+    # by the same root was already expanded as a first-hop intermediate.
+    for child, by_base in nested.items():
+        if any(base not in direct.get(child, set()) for base in by_base):
+            data = fetched[child]
+            if (data.get('type') in ('dlc', 'game')
+                    and 'dlc' in data and _dlc_ids(data, child)):
+                raise RuntimeError(
+                    f'DLC App_{child} exceeds verified two-hop relation scope'
+                )
+
     # Reject two-node loops, including those never used in a paid offer.
     for child, by_base in nested.items():
         if child in intermediate_ids:
