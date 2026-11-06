@@ -1,5 +1,11 @@
 # CURRENT TASK
 
+## IMPLEMENTED / PR CI & INDEPENDENT REVIEW — Steam Dying Light listed base alias 1697640 (2026-11-06)
+- User explicitly authorized IMPLEMENT in this worker conversation after RECON.
+- Branch: `fix/steam-listed-base-alias-1697640-01`; source change + offline deterministic tests only, report `reviews/worker_reports/steam-listed-base-alias-1697640-implement-01.md`.
+- Current API proof: requested `1697640`, `data.steam_appid=239140`, `type=game`, reverse `dlc` edge. Verified first-hop sole-base aliases excluded as independent DLC, unrelated contradictions remain fail-closed.
+- Await PR-only `steam-test.yml` regression at exact implementation HEAD, independent review, source merge decision and later normal main production acceptance. No manual production run or self-merge. Other tasks below unchanged.
+
 ## WORKER IMPLEMENTED / DIRECTOR ACCEPTANCE PENDING — НОВЫЙ ЧАТ 1: Steam appdetails sliding 180/300s (2026-11-04)
 - Task: `WORKER_TASK_STEAM_STORE_APPDETAILS_SLIDING_WINDOW_429_GUARD_01.md`. One source [PR #397](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/397), branch `fix/steam-appdetails-sliding-window-429-guard-01`, never self-merge.
 - Complete strict shared 180 starts / rolling 300s cap for parent/child/retry GETs; FIFO lock/condition, no follower polling; 120s bounded own 429 cooldown distinguished from 900s bounded lookup incl quota-slot wait. 4 attempts and fail-closed exact KZ identity unchanged. Deterministic offline tests in `scripts/test_steam_targeted_paid_lanes.py`.
