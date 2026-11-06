@@ -211,8 +211,10 @@ def _retry_after_seconds(response, *, wall_clock):
 
 def get_appdetails(appid, *, getter=requests.get, pacer=None,
                    clock=monotonic, sleeper=sleep, wall_clock=_utc_now,
-                   diagnostics=None):
-    """Exact KZ appdetails; a shared rolling start cap covers every attempt.
+                   diagnostics=None, verified_base_aliases=()):
+    """Exact KZ appdetails; verified listed root aliases are opt-in only.
+
+    A shared rolling start cap covers every physical attempt.
 
     The 120s HTTP 429 retry-cooldown budget is separate from planned
     window-slot waiting. A finite 900s lookup guard and the 60-minute
@@ -294,7 +296,12 @@ def get_appdetails(appid, *, getter=requests.get, pacer=None,
         data = entry.get('data')
         if not isinstance(data, dict):
             raise RuntimeError(f'KZ appdetails missing metadata {appid}')
-        _check_fetched_identity(data, appid, f'KZ appdetails App_{appid}')
+        # The sole exception is an exact listed root-game alias. The caller
+        # supplies only roots already checked against their own AppIDs.
+        # No unrelated mismatch, missing identity or DLC is ever admitted.
+        if not _is_verified_listed_base_alias(
+                data, appid, verified_base_aliases):
+            _check_fetched_identity(data, appid, f'KZ appdetails App_{appid}')
         return data
     raise RuntimeError(f'KZ appdetails HTTP 429 exhausted for App_{appid}')
 
@@ -333,6 +340,27 @@ def _check_fetched_identity(data, appid, context):
     if ('steam_appid' in data and
             _canonical_appid(data['steam_appid'], context) != appid):
         raise RuntimeError(f'{context} contradicts requested AppID {appid}')
+
+
+def _is_verified_listed_base_alias(data, requested, listed_bases):
+    """Recognize a game Store alias, not a second paid DLC identity.
+
+    Caller must have fetched and validated the sole root's own appdetails
+    listing of 'requested'. The alias response must independently resolve to
+    that same root and repeat the listing edge. No global ID allowlist.
+    """
+    if (len(listed_bases) != 1 or not isinstance(data, dict)
+            or data.get('type') != 'game'
+            or 'steam_appid' not in data
+            or data.get('fullgame') is not None):
+        return False
+    canonical = _canonical_appid(
+        data['steam_appid'], f'DLC alias App_{requested}'
+    )
+    if canonical == requested or canonical not in listed_bases:
+        return False
+    # Missing/malformed membership cannot prove a harmless alias.
+    return requested in _dlc_ids(data, canonical)
 
 
 def _dlc_ids(data, owner):
@@ -381,9 +409,19 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
         for appid in relations[base]:
             direct.setdefault(appid, set()).add(base)
     fetched = {}
+    excluded_base_aliases = set()
     _appdetails_diagnostics.set_stage('dlc_price')
     for appid in sorted(direct, key=int):
-        data = fetch(appid)
+        # The default Store fetch normally validates exact identity before
+        # returning data. Only first-hop, parent-verified listed IDs may
+        # request the narrow alias exception; test injectors return raw data.
+        if fetch is get_appdetails:
+            data = fetch(appid, verified_base_aliases=direct[appid])
+        else:
+            data = fetch(appid)
+        if _is_verified_listed_base_alias(data, appid, direct[appid]):
+            excluded_base_aliases.add(appid)
+            continue  # Never reuse a base game's price or create App_alias.
         _check_fetched_identity(data, appid, f'DLC App_{appid}')
         fetched[appid] = data
 
@@ -393,7 +431,7 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
     nested = {}
     intermediate_ids = set()
     nested_edges = 0
-    for middle in sorted(direct, key=int):
+    for middle in sorted(fetched, key=int):
         data = fetched[middle]
         if 'dlc' not in data:
             continue
@@ -409,6 +447,10 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
                     f'DLC intermediate App_{middle} contradicts base {base}'
                 )
             for child in children:
+                if child in excluded_base_aliases:
+                    raise RuntimeError(
+                        f'DLC App_{child} alias appeared in nested relationship'
+                    )
                 if child in relations:
                     raise RuntimeError(
                         f'DLC App_{middle} has cyclic base relationship'
@@ -443,7 +485,9 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
                         raise RuntimeError('DLC relationship contains a cycle')
 
     candidates = {}
-    all_ids = sorted(set(direct) | set(nested), key=int)
+    # Alias IDs were looked up and proven, but are not DLC identities.
+    all_ids = sorted((set(direct) | set(nested)) - excluded_base_aliases,
+                     key=int)
     for appid in all_ids:
         data = fetched[appid]
         if data.get('type') != 'dlc':
@@ -520,7 +564,8 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
         'admitted_base_count': len(bases),
         'parent_relation_lookups': len(relations),
         'related_dlc_unique_ids': len(all_ids),
-        'dlc_price_lookups': len(fetched),
+        'dlc_price_lookups': len(fetched) + len(excluded_base_aliases),
+        'verified_base_game_alias_exclusions': len(excluded_base_aliases),
         'nested_intermediate_unique_ids': len(intermediate_ids),
         'nested_relation_edges': nested_edges,
         'nested_child_unique_ids': len(nested),
