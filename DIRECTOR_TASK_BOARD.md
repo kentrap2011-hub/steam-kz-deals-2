@@ -5,7 +5,7 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## АКТУАЛЬНОЕ НАЗНАЧЕНИЕ — RECON AppID 1697640, 2026-11-06
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — RECON AppID 1697640, 2026-11-06
 
 - **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `steam-appdetails-1697640-identity-recon-01` → `WORKER_TASK_STEAM_APPDETAILS_1697640_IDENTITY_RECON_01.md`. Пользователь **разрешил только исследование причины** рассогласования Steam `appdetails` для AppID `1697640` (main run [42033530995](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/42033530995)). Запрошенный ID известен, **второе фактическое значение не сохранено в логе**. Нужен адресный поиск источника AppID и точных полей ответа (если достижимо), честное различение CONFIRMED/UNKNOWN, один report-only PR, показ вывода пользователю и запрос отдельного разрешения **до любого source IMPLEMENT**. Запрещены правки кода, тестов, workflow, runtime/production, новая автоматизация, retry/replay, source merge или самостоятельный запуск Dossier.
 - **ЧАТЫ 2–6 свободны.** Прежний ЧАТ 1 завершил вложенный DLC source PR [№404](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/404), его закрывающий PR [№405](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/405) принят; новая задача идёт в **НОВЫЙ физический ЧАТ 1**.
