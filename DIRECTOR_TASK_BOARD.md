@@ -5,11 +5,11 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — RECON AppID 1697640, 2026-11-06
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — независимая QA PR #408, 2026-11-06
 
-- **НОВЫЙ ЧАТ 1 — зарезервирован, ожидает запуска:** `steam-appdetails-1697640-identity-recon-01` → `WORKER_TASK_STEAM_APPDETAILS_1697640_IDENTITY_RECON_01.md`. Пользователь **разрешил только исследование причины** рассогласования Steam `appdetails` для AppID `1697640` (main run [42033530995](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/42033530995)). Запрошенный ID известен, **второе фактическое значение не сохранено в логе**. Нужен адресный поиск источника AppID и точных полей ответа (если достижимо), честное различение CONFIRMED/UNKNOWN, один report-only PR, показ вывода пользователю и запрос отдельного разрешения **до любого source IMPLEMENT**. Запрещены правки кода, тестов, workflow, runtime/production, новая автоматизация, retry/replay, source merge или самостоятельный запуск Dossier.
-- **ЧАТЫ 2–6 свободны.** Прежний ЧАТ 1 завершил вложенный DLC source PR [№404](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/404), его закрывающий PR [№405](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/405) принят; новая задача идёт в **НОВЫЙ физический ЧАТ 1**.
-- Пока не установлена причина, **не ослаблять exact Steam ID, KZ price и parent-chain integrity**. Старый каталог сохранён. Успех UI snapshot не означает успешного Steam→mailing→pre-AI.
+- **НОВЫЙ ЧАТ — ЧАТ 1, зарезервирован, ожидает запуска:** `steam-listed-base-alias-pr408-independent-qa-01` → `WORKER_TASK_STEAM_LISTED_BASE_ALIAS_PR408_INDEPENDENT_QA_01.md`. Пользователь разрешил независимую проверку source [PR №408](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/408) с исправлением alias `1697640 → 239140`. Только READ-ONLY QA exact source HEAD, parent/root/identity exception, KZT и fail-closed, существующие GitHub CI; один report-only draft PR. Код #408 не изменять, не объединять и production не запускать. Независимый исполнитель должен быть в **НОВОМ физическом ЧАТЕ 1**.
+- **Предыдущий ЧАТ 1 завершил RECON:** `steam-appdetails-1697640-identity-recon-01`, отчёт [PR #407](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/407); затем по отдельному согласию подготовил source PR #408. Операционный слот освобождён для нового проверяющего.
+- **ЧАТЫ 2–6 свободны.** До source QA PASS и отдельных Director gates никаких новых разрешений на merge/production/semantic Dossier не возникло.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 

@@ -3400,19 +3400,39 @@
       "id": "steam-appdetails-1697640-identity-recon-01",
       "title": "ЧАТ 1 — расследовать Steam appdetails AppID 1697640 без исправлений",
       "goal": "Доказать фактическую причину расхождения запрошенного AppID 1697640 с внутренним steam_appid в Steam KZ appdetails и представить пользователю безопасные варианты.",
-      "status": "active",
+      "status": "complete",
       "effort": "низкая",
       "effort_reason": "Только узкое чтение исходного кода, одного лога и при возможности одного внешнего appdetails ответа, без IMPLEMENT.",
       "urgency": "высокая",
       "urgency_reason": "Свежий полный Steam KZ snapshot остановился на AppID 1697640, mailing/pre-AI не выполнились.",
       "task_file": "WORKER_TASK_STEAM_APPDETAILS_1697640_IDENTITY_RECON_01.md",
-      "worker_slot": "ЧАТ 1",
+      "worker_slot": null,
       "order": null,
       "depends_on": [],
-      "blocker": "Разрешён только RECON: один отчёт с точными подтверждёнными полями и причиной либо честным UNKNOWN. Никаких source changes до отдельного явного одобрения пользователя.",
-      "recent_completion": false,
+      "blocker": "RECON завершён: пользователь подтвердил текущий Steam JSON 1697640→239140. Отчёт PR407, bounded IMPLEMENT PR408; для принятия source назначена независимая QA.",
+      "recent_completion": true,
       "updated_on": "2026-11-06",
-      "updated_at_utc": "2026-11-06T04:50:00Z"
+      "updated_at_utc": "2026-11-06T11:21:48.480Z"
+    },
+    {
+      "id": "steam-listed-base-alias-pr408-independent-qa-01",
+      "title": "ЧАТ 1 — независимая QA исключения Steam alias PR408",
+      "goal": "Проверить безопасность узкого исключения идентичности 1697640→239140 в source PR408, неизменность KZT/root fail-closed и exact-HEAD CI.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Независимый аудит ограниченного diff, реального caller, отрицательных сценариев и трёх существующих CI; только report-only PR.",
+      "urgency": "высокая",
+      "urgency_reason": "Пока не принят фикс ошибки идентичности, Steam KZ не формирует свежий полный каталог и downstream Dossier.",
+      "task_file": "WORKER_TASK_STEAM_LISTED_BASE_ALIAS_PR408_INDEPENDENT_QA_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "steam-appdetails-1697640-identity-recon-01"
+      ],
+      "blocker": "Ожидает независимую QA исходного PR408 на точном HEAD. Без изменений source, без самостоятельного merge и без production.",
+      "updated_on": "2026-11-06",
+      "updated_at_utc": "2026-11-06T11:21:48.480Z",
+      "recent_completion": false
     }
   ]
 }
