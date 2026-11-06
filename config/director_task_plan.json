@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-05",
+  "last_curated_on": "2026-11-06",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3395,6 +3395,24 @@
       "recent_completion": true,
       "updated_on": "2026-11-05",
       "updated_at_utc": "2026-11-05T13:04:57.445Z"
+    },
+    {
+      "id": "steam-appdetails-1697640-identity-recon-01",
+      "title": "ЧАТ 1 — расследовать Steam appdetails AppID 1697640 без исправлений",
+      "goal": "Доказать фактическую причину расхождения запрошенного AppID 1697640 с внутренним steam_appid в Steam KZ appdetails и представить пользователю безопасные варианты.",
+      "status": "active",
+      "effort": "низкая",
+      "effort_reason": "Только узкое чтение исходного кода, одного лога и при возможности одного внешнего appdetails ответа, без IMPLEMENT.",
+      "urgency": "высокая",
+      "urgency_reason": "Свежий полный Steam KZ snapshot остановился на AppID 1697640, mailing/pre-AI не выполнились.",
+      "task_file": "WORKER_TASK_STEAM_APPDETAILS_1697640_IDENTITY_RECON_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Разрешён только RECON: один отчёт с точными подтверждёнными полями и причиной либо честным UNKNOWN. Никаких source changes до отдельного явного одобрения пользователя.",
+      "recent_completion": false,
+      "updated_on": "2026-11-06",
+      "updated_at_utc": "2026-11-06T04:50:00Z"
     }
   ]
 }
