@@ -247,6 +247,130 @@ def check_dlc_membership_identity_regressions():
     assert stats['dlc_accepted_after_paid_gate'] == 0
     assert stats['dlc_rejected_after_paid_gate'] == 1
 
+
+def check_verified_listed_base_alias_1697640():
+    """The real Steam identity pair is a root alias, never a new priced DLC."""
+    core = collector.load_core()
+    # Identity-bearing fields copied from the user-observed KZ response. The
+    # price is deliberately adversarial: it must never be offered as alias DLC.
+    alias = {
+        'steam_appid': 239140, 'type': 'game', 'name': 'Dying Light',
+        'dlc': [325724, 1697640, 1702060, 1697640],
+        'price_overview': {
+            'currency': 'KZT', 'final': 10000, 'discount_percent': 95,
+        },
+    }
+    fixtures = {
+        '239140': {'steam_appid': 239140, 'type': 'game',
+                   'dlc': [1697640, 1700000, '1697640']},
+        '1697640': alias,
+        '1700000': {'steam_appid': 1700000, 'type': 'dlc',
+                    'fullgame': {'appid': 239140},
+                    'name': 'Real priced DLC',
+                    'price_overview': {
+                        'currency': 'KZT', 'final': 25000,
+                        'discount_percent': 85,
+                    }},
+    }
+    calls = []
+
+    def controlled_fetch(appid, *, verified_base_aliases=()):
+        # Simulate the *production* caller/fetch contract, not just a raw
+        # injected fixture which would bypass get_appdetails strict identity.
+        calls.append((appid, set(verified_base_aliases)))
+        data = fixtures[appid]
+        if not targeted._is_verified_listed_base_alias(
+                data, appid, verified_base_aliases):
+            targeted._check_fetched_identity(data, appid, f'KZ App_{appid}')
+        return data
+
+    with patch.object(targeted, 'get_appdetails', controlled_fetch):
+        result, stats = targeted.discover_dlc_for_bases(
+            ['239140'], core, fetch=controlled_fetch
+        )
+    assert sorted(result) == ['App_1700000']
+    assert result['App_1700000']['verified_parent_chains'] == [
+        ['239140', '1700000']
+    ]
+    assert result['App_1700000']['final_kzt'] == 250
+    assert calls == [
+        ('239140', set()), ('1697640', {'239140'}),
+        ('1700000', {'239140'}),
+    ]
+    assert stats['related_dlc_unique_ids'] == 1
+    assert stats['dlc_price_lookups'] == 2
+    assert stats['verified_base_game_alias_exclusions'] == 1
+    assert stats['dlc_accepted_after_paid_gate'] == 1
+    assert stats['dlc_rejected_after_paid_gate'] == 0
+    assert stats['relation_complete'] is True
+
+    # Prove the concrete network-level identity check is bypassed ONLY for a
+    # validated first-hop root alias. No new request, retry or price shortcut.
+    def getter(url, **kwargs):
+        assert url == targeted.APPDETAILS_URL
+        assert kwargs['params'] == {
+            'appids': '1697640', 'cc': 'kz', 'l': 'english',
+        }
+        return _FakeResponse(200, appid='1697640', data=alias)
+
+    def read_api(**kwargs):
+        clock = _FakeClock()
+        return targeted.get_appdetails(
+            '1697640', getter=getter,
+            pacer=targeted._SharedAppdetailsPacer(),
+            clock=clock.clock, sleeper=clock.sleep, **kwargs
+        )
+
+    with redirect_stdout(io.StringIO()):
+        assert read_api(verified_base_aliases={'239140'}) is alias
+        for allowed in ((), {'999999'}, {'239140', '999999'}):
+            try:
+                read_api(verified_base_aliases=allowed)
+            except RuntimeError as exc:
+                assert 'contradicts requested AppID' in str(exc)
+            else:
+                raise AssertionError('unverified alias bypassed appdetails')
+
+    def must_reject(label, altered_alias, *, roots=('239140',),
+                    other_roots=None):
+        records = dict(fixtures, **{'1697640': altered_alias})
+        if other_roots:
+            records.update(other_roots)
+        try:
+            targeted.discover_dlc_for_bases(
+                list(roots), core, fetch=lambda appid: records[appid]
+            )
+        except RuntimeError:
+            return
+        raise AssertionError(f'{label}: unsafe AppID alias silently accepted')
+
+    must_reject('foreign canonical game', dict(alias, steam_appid=999999))
+    must_reject('different alias type', dict(alias, type='dlc'))
+    must_reject('missing alias echo', dict(alias, dlc=[325724, 1702060]))
+    must_reject('invalid alias dlc list', dict(alias, dlc='1697640'))
+    must_reject('invalid alias dlc member', dict(alias, dlc=[1697640, True]))
+    must_reject('foreign fullgame proof', dict(
+        alias, fullgame={'appid': 999999}
+    ))
+    must_reject('two roots listing one ambiguous alias', alias,
+                roots=('239140', '239141'), other_roots={
+                    '239141': {'steam_appid': 239141, 'type': 'game',
+                               'dlc': [1697640]},
+                })
+    for bad_id in (None, True, 239140.0, '0239140', '-239140'):
+        must_reject(f'malformed inner ID {bad_id!r}', dict(
+            alias, steam_appid=bad_id
+        ))
+
+    # The alias may not be reintroduced as a nested-child path.
+    must_reject('nested alias overlap', alias, other_roots={
+        '239140': {'steam_appid': 239140, 'type': 'game',
+                   'dlc': [1697640, 1700000, 1700001]},
+        '1700001': {'steam_appid': 1700001, 'type': 'dlc',
+                    'fullgame': {'appid': 239140}, 'dlc': [1697640]},
+    })
+
+
 def check_nested_dlc_exact_parent_proof():
     """Synthetic cc=kz fixtures: actual 2026 API payload is not preserved."""
     core = collector.load_core()
@@ -1007,6 +1131,7 @@ def main():
     check_base_targeted_dlc()
     check_dlc_no_price_skips_only_verified_absence()
     check_dlc_membership_identity_regressions()
+    check_verified_listed_base_alias_1697640()
     check_nested_dlc_exact_parent_proof()
     check_conservative_obscure_rescue_and_package()
     check_five_middling_games_package_below_individual_cutoff()
@@ -1021,7 +1146,7 @@ def main():
     check_appdetails_sliding_window_three_threads_and_fairness()
     check_appdetails_parent_child_and_retry_share_window()
     check_appdetails_429_sliding_window_non429_fail_closed()
-    print('targeted Steam KZ DLC and independent package 17/17 PASS')
+    print('targeted Steam KZ DLC and independent package 18/18 PASS')
 
 
 if __name__ == '__main__':
