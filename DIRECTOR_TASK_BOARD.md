@@ -5,11 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — независимая QA PR #408, 2026-11-06
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Steam alias исправлен, 2026-11-06
 
-- **НОВЫЙ ЧАТ — ЧАТ 1, зарезервирован, ожидает запуска:** `steam-listed-base-alias-pr408-independent-qa-01` → `WORKER_TASK_STEAM_LISTED_BASE_ALIAS_PR408_INDEPENDENT_QA_01.md`. Пользователь разрешил независимую проверку source [PR №408](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/408) с исправлением alias `1697640 → 239140`. Только READ-ONLY QA exact source HEAD, parent/root/identity exception, KZT и fail-closed, существующие GitHub CI; один report-only draft PR. Код #408 не изменять, не объединять и production не запускать. Независимый исполнитель должен быть в **НОВОМ физическом ЧАТЕ 1**.
-- **Предыдущий ЧАТ 1 завершил RECON:** `steam-appdetails-1697640-identity-recon-01`, отчёт [PR #407](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/407); затем по отдельному согласию подготовил source PR #408. Операционный слот освобождён для нового проверяющего.
-- **ЧАТЫ 2–6 свободны.** До source QA PASS и отдельных Director gates никаких новых разрешений на merge/production/semantic Dossier не возникло.
+- **ЧАТЫ 1–6 свободны:** независимая source QA `steam-listed-base-alias-pr408-independent-qa-01` завершена новым физическим ЧАТОМ 1, результат PASS на exact `d3000e5cc66e1f2d1989232e97f0f55494068e04`. [QA report PR №411](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/411) принят; исходный [fix PR №408](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/408) после зелёных `regression` (targeted 18/18), `validate`, `backlog-disposition` принят в main `ac7c5a8a9c16`. Реальная цепочка DLC→Steam alias `1697640 → 239140` корректируется только для verified root-game alias без ослабления других несоответствий, KZT-цен и parent validation.
+- **Следующий отдельный gate:** полноценный штатный `main` Steam KZ collector→mailing→pre-AI и подтверждение свежих Dossier bindings. На PR `collect` штатно был skipped; green unit/PR CI не считается восстановлением production. Ручной запуск требует отдельного разрешения пользователя; самостоятельно не запускать Dossier/Deep/semantic/production/Scheduled Tasks.
+- **Историческое RECON** завершено (отчёт [PR №407](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/407)); draft report не является source PR, source fix уже принят отдельным PR №408. Новых worker-назначений без пользовательского решения нет.
+
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 

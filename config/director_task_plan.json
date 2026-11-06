@@ -3418,21 +3418,21 @@
       "id": "steam-listed-base-alias-pr408-independent-qa-01",
       "title": "ЧАТ 1 — независимая QA исключения Steam alias PR408",
       "goal": "Проверить безопасность узкого исключения идентичности 1697640→239140 в source PR408, неизменность KZT/root fail-closed и exact-HEAD CI.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Независимый аудит ограниченного diff, реального caller, отрицательных сценариев и трёх существующих CI; только report-only PR.",
       "urgency": "высокая",
       "urgency_reason": "Пока не принят фикс ошибки идентичности, Steam KZ не формирует свежий полный каталог и downstream Dossier.",
       "task_file": "WORKER_TASK_STEAM_LISTED_BASE_ALIAS_PR408_INDEPENDENT_QA_01.md",
-      "worker_slot": "ЧАТ 1",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "steam-appdetails-1697640-identity-recon-01"
       ],
-      "blocker": "Ожидает независимую QA исходного PR408 на точном HEAD. Без изменений source, без самостоятельного merge и без production.",
+      "blocker": "Независимая source QA PASS на d3000e5; report PR411 принят, fix PR408 принят в main ac7c5a8. Все exact-head обязательные CI зелёные. Настоящий Steam KZ collector→mailing→pre-AI после исправления ещё не проверен.",
       "updated_on": "2026-11-06",
-      "updated_at_utc": "2026-11-06T11:21:48.480Z",
-      "recent_completion": false
+      "updated_at_utc": "2026-11-06T12:07:07.953Z",
+      "recent_completion": true
     }
   ]
 }
