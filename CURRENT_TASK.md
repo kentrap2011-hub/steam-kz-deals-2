@@ -1,10 +1,10 @@
 # CURRENT TASK
 
-## IMPLEMENTED / PR CI & INDEPENDENT REVIEW — Steam Dying Light listed base alias 1697640 (2026-11-06)
+## IMPLEMENTED / PR-ONLY REGRESSION PASS / DIRECTOR ACCEPTANCE PENDING — Steam Dying Light listed base alias 1697640 (2026-11-06)
 - User explicitly authorized IMPLEMENT in this worker conversation after RECON.
 - Branch: `fix/steam-listed-base-alias-1697640-01`; source change + offline deterministic tests only, report `reviews/worker_reports/steam-listed-base-alias-1697640-implement-01.md`.
 - Current API proof: requested `1697640`, `data.steam_appid=239140`, `type=game`, reverse `dlc` edge. Verified first-hop sole-base aliases excluded as independent DLC, unrelated contradictions remain fail-closed.
-- Await PR-only `steam-test.yml` regression at exact implementation HEAD, independent review, source merge decision and later normal main production acceptance. No manual production run or self-merge. Other tasks below unchanged.
+- Draft source [PR #408](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/408); [PR-only steam-test CI run 42203029742](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/42203029742) PASS at code HEAD `f7b57fb`; targeted tests **18/18 PASS**, collect SKIPPED. Independent source review/merge and later normal main production acceptance remain. Do not self-merge or run production; other tasks below unchanged.
 
 ## WORKER IMPLEMENTED / DIRECTOR ACCEPTANCE PENDING — НОВЫЙ ЧАТ 1: Steam appdetails sliding 180/300s (2026-11-04)
 - Task: `WORKER_TASK_STEAM_STORE_APPDETAILS_SLIDING_WINDOW_429_GUARD_01.md`. One source [PR #397](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/397), branch `fix/steam-appdetails-sliding-window-429-guard-01`, never self-merge.
