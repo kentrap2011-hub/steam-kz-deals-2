@@ -3,7 +3,7 @@
 - **Task:** `steam-appdetails-1697640-identity-recon-01`
 - **Date checked:** 2026-11-06 UTC
 - **Source of truth:** `main`, RECON base `5e4fd5c553dc8ec83515a3eebb909e352611b1b8`; failing live run code `61d29f95582d74f83cf897c3fbe67c3d0d31139d`
-- **Status:** `RECON_BLOCKED_UNVERIFIED` — actual offending `data.steam_appid` value and the original parent JSON are not preserved/readable. A storefront alias is strongly indicated but historical API cause is not proven.
+- **Current status:** `RECON_COMPLETE_AWAITING_USER_DECISION` (updated 2026-11-06 following user-supplied actual API JSON; see §9). Current `data.steam_appid=239140` is **CONFIRMED** by the pasted response; the exact value in the 2026-11-05 historical run remains unlogged. Earlier `RECON_BLOCKED_UNVERIFIED` statements in §§1–8 describe the earlier state of investigation.
 - **Scope:** read-only analysis of original incident, exact code path, existing logs and limited public evidence. **No IMPLEMENT, tests, workflow/production dispatch, replay, backfill, source changes or report merge.**
 
 ## 1. Original incident and exact facts
@@ -92,3 +92,59 @@ The user authorized a *separate* limited evidence probe after RECON; they did **
 - Status remains **RECON_BLOCKED_UNVERIFIED**. **Recommended bounded follow-up for the user/operator**: open the exact URI above once from a network-accessible machine and provide only (a) requested appid and observed HTTP status/final URL/redirect count; (b) outer response keys; (c) exact `success` value/type; (d) `data.steam_appid` presence/value/type, `data.type`. Do not publish private tokens or cookies; do not treat a current result as the historical raw JSON. If those values independently prove the alias, propose a separately consented GitHub-owned surgical change preserving fail-closed.
 
 **No source change, policy adjustment, CI/workflow change, production invocation or merge occurred during this diagnostic.**
+
+
+## 9. Decisive user-supplied Steam API JSON evidence (2026-11-06)
+
+**Provenance and scope:** After the first diagnostic was blocked by network access, the user opened the corrected public `GET https://store.steampowered.com/api/appdetails?appids=1697640&cc=kz&l=english` link in their browser and pasted the JSON beginning of the response into this conversation on **2026-11-06**. The pasted excerpt is long and truncated in the conversation after the Mac requirements; **the fields below appear verbatim at the start**, and are sufficient for the identity diagnosis. The current JSON was supplied directly by the user; this worker did not independently observe its HTTP status, redirect history, or response headers. This observation is **not** a capture of the original 2026-11-05 production response.
+
+Exact proof-bearing response fragment:
+
+```json
+{
+  "1697640": {
+    "success": true,
+    "data": {
+      "type": "game",
+      "name": "Dying Light",
+      "steam_appid": 239140,
+      "dlc": [325724, 2971380, 3454290, 1300710, 748340, "...", 1697640, 1702060, "..."]
+    }
+  }
+}
+```
+
+The `dlc` array in the snippet above is **abbreviated for reporting**; the original user-provided JSON contains the positive integer **`1697640`** as an entry. The ellipses are report omissions, not literal API values.
+
+| Identity evidence in user-supplied JSON | Observed |
+| --- | --- |
+| Requested `appids` parameter | `1697640` |
+| Top-level response object key | `"1697640"` (string JSON object key) |
+| `success` | `true` (JSON boolean) |
+| `data` | JSON object |
+| `data.steam_appid` | `239140` (**JSON number**, positive canonical integer after Python parsing) |
+| `data.type` | `"game"` (JSON string) |
+| `data.name` | `"Dying Light"` |
+| `data.dlc` membership | includes `1697640` (JSON number) — the alias appears within the returned canonical game's own DLC list |
+| Current live HTTP response status | **UNKNOWN** from copied JSON alone; only the historical Actions request had observed HTTP `200` |
+| Current API redirect count/final URL | **UNKNOWN** |
+| `price_overview` | **NOT EVALUATED** from the truncated excerpt; not needed for this identity failure |
+
+### Status, mechanism and historical limitation
+
+1. **CONFIRMED CURRENT ALIAS:** Steam's exact requested outer key `1697640` contains `success: true` and `data.steam_appid: 239140`, `data.type: "game"`, `name:"Dying Light"`. These are **two different AppIDs**, not a string-vs-number formatting mistake. In the concrete source, `_canonical_appid(239140, ...)` returns `"239140"`, which differs from the original requested `"1697640"` and produces the **exact** `contradicts requested AppID 1697640` exception. It also demonstrates why the outer `1697640` key alone does not validate the identity of the inner `data`.
+2. **CONFIRMED HISTORICAL FAILURE CLASS:** The original 2026-11-05 job saw HTTP `200` on `dlc_price` request `1697640` and raised that exact strict-identity exception; therefore its *then-current* inner `steam_appid` was present and a different canonical positive ID. The original **numeric value is not logged**, so historical literal `239140` stays **LIKELY, NOT BYTE-FOR-BYTE CONFIRMED**. The 2026-11-06 raw user-pasted JSON makes it strongly evidenced without pretending it is the old body.
+3. **LIKELY ORIGINAL PARENT:** The same original run fetched `239140` at parent-relations request #39, and the latest alias-returned `dlc` list itself includes `1697640`. This corroborates an existing Dying Light parent-list alias, but the original `239140` parent `dlc` array was not persisted, so historical exact parent contribution remains **UNKNOWN**. Do not falsely describe the current alias-returned `dlc` as a separately fetched `239140` raw response.
+4. **Mismatch classification:** For this observed ID, the issue is a **Steam Store alias/canonical game identity presented in a DLC relation**, not an independent priced DLC. The system **correctly rejects mismatched IDs**, but its targeted DLC enumeration currently has no *narrowly proven alias exclusion path*; this makes an unrelated-to-price identity exception a global fail-closed blocker. This is not grounds to relax generic identity checks.
+
+### Recommended bounded solution — **proposal only, requires separate user IMPLEMENT consent**
+
+- In the **existing GitHub-owned targeted DLC discovery stage only**, recognize a **narrow verifiable base-game alias** when a listed child `requested_id` resolves to a different `data.steam_appid` which is **exactly one of that child's validated eligible root base IDs**, with `data.type == "game"` and an independently verified parent listing edge.
+- Mark the alias as **not an independent DLC candidate** and exclude it from DLC price/candidate creation; it must never inherit or copy the canonical game `239140` price, discount, purchase/ownership, metadata attribution or another game identity. The real base game `239140` remains in the normal base-game lane as applicable.
+- Keep **all other mismatching IDs, malformed/missing required metadata, contradictory links, cycles, third-hop violations and unrelated `game` substitutions fail-closed**. Do not introduce an arbitrary mapping of AppIDs or whitelist `1697640` by name alone, and do not widen discovery/scheduler/retry or price scope.
+- Add deterministic regression cases for the exact alias `1697640 → 239140`, unrelated mismatches, input key-vs-inner-ID differences, a legitimate priced DLC, repeat-listed DLC IDs, link validation and publication fail-closed. Follow the existing PR-only test path; **no live production run** until separately authorized through the normal control plane.
+- Alternative, observability-only option: log requested ID + actual `data.steam_appid` + type on **identity failure only**, in bounded safe diagnostics. That improves future evidence but does **not** itself fix the abort; it may accompany the eventual scoped correction if authorized.
+
+**Final RECON disposition:** `RECON_COMPLETE_AWAITING_USER_DECISION`. **Current API root-cause/alias mechanism CONFIRMED; original live failure mechanism CONFIRMED; historical exact JSON inner value and parent origin remain UNKNOWN.** Only this report file was modified in the existing **draft report-only PR #407**; no source code, algorithms, tests, CI/workflow, catalog, Registry, Board or production was changed or launched.
+
+**Approval gate:** present the findings and seek **separate explicit consent for a future bounded IMPLEMENT task**. Do not implement based on the user's earlier approval of diagnostic inspection.
