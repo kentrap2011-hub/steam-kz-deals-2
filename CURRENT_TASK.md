@@ -1,5 +1,11 @@
 # CURRENT TASK
 
+## IMPLEMENTED / PR REGRESSION PENDING — DLC fullgame.parent as primary authority (2026-11-07)
+- User explicitly authorized removing reverse DLC-list veto; keep Steam `fullgame.appid` as immediate parent, 2-hop ancestry to eligible root, strict KZ paid and AppID guards.
+- Live contradiction verified by targeted GitHub run 42398758928; source-only branch: `fix/steam-dlc-parent-fullgame-trust-01`. Existing diagnostic PR #415 is evidence only, never merge.
+- New implementation PR is draft/unmerged. Report: `reviews/worker_reports/steam-dlc-parent-fullgame-trust-implement-01.md`; relevant regression: `scripts/test_steam_targeted_paid_lanes.py`; `steam-test.yml` PR `collect` must remain skipped.
+- Director review, exact PR HEAD CI and optional independent QA remain; this is not verified production recovery. All other live tasks below preserved.
+
 ## IMPLEMENTED / PR-ONLY REGRESSION PASS / DIRECTOR ACCEPTANCE PENDING — Steam Dying Light listed base alias 1697640 (2026-11-06)
 - User explicitly authorized IMPLEMENT in this worker conversation after RECON.
 - Branch: `fix/steam-listed-base-alias-1697640-01`; source change + offline deterministic tests only, report `reviews/worker_reports/steam-listed-base-alias-1697640-implement-01.md`.
