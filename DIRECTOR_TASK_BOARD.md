@@ -5,12 +5,10 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Steam alias исправлен, 2026-11-06
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — RECON DLC 235960 и точечный live smoke, 2026-11-07
 
-- **ЧАТЫ 1–6 свободны:** независимая source QA `steam-listed-base-alias-pr408-independent-qa-01` завершена новым физическим ЧАТОМ 1, результат PASS на exact `d3000e5cc66e1f2d1989232e97f0f55494068e04`. [QA report PR №411](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/411) принят; исходный [fix PR №408](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/408) после зелёных `regression` (targeted 18/18), `validate`, `backlog-disposition` принят в main `ac7c5a8a9c16`. Реальная цепочка DLC→Steam alias `1697640 → 239140` корректируется только для verified root-game alias без ослабления других несоответствий, KZT-цен и parent validation.
-- **Следующий отдельный gate:** полноценный штатный `main` Steam KZ collector→mailing→pre-AI и подтверждение свежих Dossier bindings. На PR `collect` штатно был skipped; green unit/PR CI не считается восстановлением production. Ручной запуск требует отдельного разрешения пользователя; самостоятельно не запускать Dossier/Deep/semantic/production/Scheduled Tasks.
-- **Историческое RECON** завершено (отчёт [PR №407](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/407)); draft report не является source PR, source fix уже принят отдельным PR №408. Новых worker-назначений без пользовательского решения нет.
-
+- **НОВЫЙ ЧАТ — ЧАТ 1: зарезервирован, ожидает запуска.** `steam-nested-dlc-235960-root-cause-live-smoke-design-01` → `WORKER_TASK_STEAM_NESTED_DLC_235960_ROOT_CAUSE_LIVE_SMOKE_DESIGN_01.md`. Пользователь согласовал расследование повторной `DLC App_235960 contradicts verified parent relation` и проект адресной **реальной GitHub Actions smoke-проверки до merge** будущего исправления. Сейчас разрешён **только READ-ONLY RECON + предложение**, затем показать фактический root-cause и запросить отдельное согласие на IMPLEMENT. Не править source, tests/workflow, не запускать production/dispatch, не обходить KZT/exact identity/parent fail-closed. 7 ноября run [№42315924316](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/42315924316) остановился после 1817×HTTP 200; предыдущий collector run [№42262206049](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/42262206049) — HTTP 502 на 874344. Запись точного Steam relationship JSON не сохранена.
+- **ЧАТЫ 2–6 свободны.** Новый ЧАТ 1 — отдельный физический диалог, не прежний исполнитель PR #404/#408. Smoke с настоящим Steam до merge и затем полноценный main collector→mailing→pre-AI требуют отдельных gate/разрешений; semantic Dossier/Deep не запускать.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 

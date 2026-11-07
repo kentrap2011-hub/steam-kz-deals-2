@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-06",
+  "last_curated_on": "2026-11-07",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3433,6 +3433,27 @@
       "updated_on": "2026-11-06",
       "updated_at_utc": "2026-11-06T12:07:07.953Z",
       "recent_completion": true
+    },
+    {
+      "id": "steam-nested-dlc-235960-root-cause-live-smoke-design-01",
+      "title": "ЧАТ 1 — установить причину DLC 235960 и спроектировать короткую реальную GitHub smoke-проверку",
+      "goal": "Доказать root-cause повторного DLC235960 parent mismatch на полном релевантном evidence и разработать безопасный план PR-only живой проверки без полного Steam каталога.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Адресная диагностика уже известного лога и кода, ограниченные источники Steam, проект ограниченной GitHub smoke-проверки без IMPLEMENT.",
+      "urgency": "высокая",
+      "urgency_reason": "Последний ночной сбор 1817 раз ответил HTTP200, но остановился на DLC235960 без нового mailing/pre-AI.",
+      "task_file": "WORKER_TASK_STEAM_NESTED_DLC_235960_ROOT_CAUSE_LIVE_SMOKE_DESIGN_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "steam-targeted-dlc-nested-parent-chain-guard-01",
+        "steam-listed-base-alias-pr408-independent-qa-01"
+      ],
+      "blocker": "Сначала доказать причину и показать пользователю. Никаких исправлений алгоритма или Actions до отдельного разрешения на IMPLEMENT.",
+      "updated_on": "2026-11-07",
+      "updated_at_utc": "2026-11-07T12:29:02.981Z",
+      "recent_completion": false
     }
   ]
 }
