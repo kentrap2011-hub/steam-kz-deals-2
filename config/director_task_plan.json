@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-07",
+  "last_curated_on": "2026-11-08",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3438,21 +3438,41 @@
       "id": "steam-nested-dlc-235960-root-cause-live-smoke-design-01",
       "title": "ЧАТ 1 — установить причину DLC 235960 и спроектировать короткую реальную GitHub smoke-проверку",
       "goal": "Доказать root-cause повторного DLC235960 parent mismatch на полном релевантном evidence и разработать безопасный план PR-only живой проверки без полного Steam каталога.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Адресная диагностика уже известного лога и кода, ограниченные источники Steam, проект ограниченной GitHub smoke-проверки без IMPLEMENT.",
       "urgency": "высокая",
       "urgency_reason": "Последний ночной сбор 1817 раз ответил HTTP200, но остановился на DLC235960 без нового mailing/pre-AI.",
       "task_file": "WORKER_TASK_STEAM_NESTED_DLC_235960_ROOT_CAUSE_LIVE_SMOKE_DESIGN_01.md",
-      "worker_slot": "ЧАТ 1",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "steam-targeted-dlc-nested-parent-chain-guard-01",
         "steam-listed-base-alias-pr408-independent-qa-01"
       ],
-      "blocker": "Сначала доказать причину и показать пользователю. Никаких исправлений алгоритма или Actions до отдельного разрешения на IMPLEMENT.",
-      "updated_on": "2026-11-07",
-      "updated_at_utc": "2026-11-07T12:29:02.981Z",
+      "blocker": "RECON завершён report-only PR414; пользователь отдельно одобрил bounded fullgame parent IMPLEMENT PR416 и точечные живые диагностики PR415/417. Root-cause подтверждён, smoke PASS на 3 ID; для приёмки исходника назначена независимая QA.",
+      "updated_on": "2026-11-08",
+      "updated_at_utc": "2026-11-08T16:10:00Z",
+      "recent_completion": true
+    },
+    {
+      "id": "steam-dlc-parent-fullgame-pr416-independent-qa-01",
+      "title": "ЧАТ 1 — независимая QA проверки Steam DLC родителя PR416",
+      "goal": "Независимо проверить source PR416: доверие DLC fullgame.appid, двухуровневую связь, безопасность от тихой потери paid кандидатов, root/completeness и exact KZT gates.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Независимый review конкретной source-дельты, негативных сценариев, live smoke и exact-HEAD существующих GitHub CI; один report-only PR.",
+      "urgency": "высокая",
+      "urgency_reason": "Main collector блокируется на DLC 235960; источник исправления пока не принят, а изменение затрагивает полноту коммерческих DLC.",
+      "task_file": "WORKER_TASK_STEAM_DLC_PARENT_FULLGAME_PR416_INDEPENDENT_QA_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "steam-nested-dlc-235960-root-cause-live-smoke-design-01"
+      ],
+      "blocker": "Независимая QA PR416: подтвердить fail-closed, отсутствие тихой потери DLC и полноту; без source merge и запуска production до решения директора.",
+      "updated_on": "2026-11-08",
+      "updated_at_utc": "2026-11-08T16:10:00Z",
       "recent_completion": false
     }
   ]
