@@ -303,3 +303,39 @@ jobs:
       # is produced by Build mailing-optimized feed, then consumed by the
       # pre-AI workflow; Build daily visual payload is triggered only after that
       # canonical chain has completed.
+
+  # Transient smoke-only branch; never schedule/dispatch, push to main,
+  # run full collector or merge this diagnostic job to production.
+  dlc235960_pr416_live_smoke:
+    if: ${{ github.event_name == 'pull_request' && github.head_ref == 'diagnostic/dlc235960-pr416-live-smoke-01' && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout PR #416 code plus smoke harness
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install bounded smoke dependencies
+        run: python -m pip install requests beautifulsoup4
+
+      - name: Exercise actual collector logic on three live KZ AppIDs
+        env:
+          SMOKE_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: python scripts/steam_dlc_235960_pr416_live_smoke.py
+
+      - name: Keep redacted single-item evidence on PASS or failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dlc235960-pr416-kz-live-smoke
+          path: dlc235960-pr416-smoke.json
+          if-no-files-found: warn
+          retention-days: 3
