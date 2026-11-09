@@ -3492,6 +3492,24 @@
       "updated_on": "2026-11-09",
       "updated_at_utc": "2026-11-09T10:23:00Z",
       "recent_completion": false
+    },
+    {
+      "id": "steam-feed-needs-tuning-800-stale-review-failures-recon-01",
+      "title": "ЧАТ 1 — диагностика порога 800 и старых Steam Reviews 403",
+      "goal": "Установить происхождение needs_tuning при 907 играх, механизм старых unresolved review errors и действительный downstream scope, предложить безопасное исправление только на отдельное согласование.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Точечный анализ прежних GitHub логов, lifecycle fail queue, источника порога 800, pipeline и обязательных QA/contract gates; report-only.",
+      "urgency": "высокая",
+      "urgency_reason": "Новый Steam KZ collector завершился, но compact feed validation отклонил 907 предложений; требуется выяснить impact до исправления.",
+      "task_file": "WORKER_TASK_STEAM_FEED_NEEDS_TUNING_800_STALE_REVIEW_FAILURES_RECON_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Только диагностика и report-only draft PR; IMPLEMENT, изменение policy, повторный production и удаление старых ошибок запрещены до отдельного явного одобрения пользователя.",
+      "updated_on": "2026-11-09",
+      "updated_at_utc": "2026-11-09T11:45:00Z",
+      "recent_completion": false
     }
   ]
 }
