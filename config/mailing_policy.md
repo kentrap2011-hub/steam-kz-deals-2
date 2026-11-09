@@ -48,7 +48,7 @@ Cache hit возможен только при совпадении:
 ### 3. Остальные правила сохранены
 
 - полный daily snapshot, не delta и не raw TOP-N; **после** полной eligibility/family/ranking-обработки витрина публикует не больше 100 текущих платных предложений; внутренняя область Deep никогда не ограничена 100 и пересчитывается после принятых Deep-результатов;
-- платный Steam Kazakhstan discovery — полный детерминированный union явных `games` (`category1=998`) и `dlc` (`category1=21`) partitions только внутри текущего необходимого коммерческого scope: скидка >= 50%, цена <= 4500 KZT; KZ `maxprice` разрешено доверять только после bounded live boundary-validation; package/bundle `Sub_` identities сохраняются из games partition, а `category1=996` не используется как отдельный partition, потому что live-проверка показала, что это broad `Include Bundles`/untyped surface, а не bundle-only выборка;
+- платный Steam Kazakhstan discovery — полный детерминированный проход `games` (`category1=998`), включая независимые `Sub_` комплекты; **без** самостоятельного поиска `DLC` до подключения библиотеки купленных игр. Скидка >= 50%, цена <= 4500 KZT; KZ `maxprice` разрешено доверять только после bounded live boundary-validation; `category1=21` и `category1=996` не обходятся; содержимое комплектов (включая входящие DLC) по-прежнему проверяет независимый package route;
 - source-side minimum-discount параметр не предполагается: 50% применяется к распарсенной строке до review enrichment;
 - free/giveaway остаётся отдельным lane и не удаляется paid-only фильтрами;
 - completed не является auto-exclude;
@@ -68,6 +68,11 @@ Cache hit возможен только при совпадении:
 - upcoming — максимум одно ближайшее релевантное событие;
 - финальный автоматический `priority_rank` задаётся только `config/final_ranking_policy.json` и рассчитывается один раз после refinement; rationale см. `PROJECT_DECISIONS.md`.
 
-## Targeted current-sale lanes (STEAM-DISC-001)
+## Current games/Sub-only paid source (STEAM-DLC-SCOPE-002, 2026-11-09)
 
-Canonical `paid_discovery.source_partitions` now traverses only live-bounded Kazakhstan games `category1=998`, including discounted `Sub_` package offers. `category1=21` global DLC and broad `category1=996` are never traversed. The same collector derives eligible base games using accepted existing review/quality gates, then verifies DLC app IDs by exact base-game `/api/appdetails` relationships, checks each related DLC's current KZT price and >=50% discount, and retains all matching offers for the existing personal Dossier/Deep pipeline. Incomplete relationships fail closed, never falsely mark coverage complete. Exceptionally high review quality or a deep cheap discount rescues some low-signal games; missing review data is not treated as proven poor quality. Standalone on-sale Sub_ identities remain independent candidates even when none of their components are separately discounted. The visible limit of 100 only applies after canonical ranking; the Deep-eligible universe never inherits that cap.
+Canonical scope `game_and_independent_sub_without_standalone_dlc_v1` uses one complete KZ games sale partition `category1=998` (discount >=50%, price >0 <=4500 KZT), including independent `Sub_` package identities. The standalone DLC relation lane is explicitly disabled: zero `appdetails` parent or child calls and zero standalone DLC candidates. This is an intentional user-approved source-scope change, not a failed relation lookup: `relation_complete=null`, `scope_complete=true` only for the **new** games/Sub scope. `category1=21` and broad `category1=996` remain forbidden. Steam review/quality gates and the family/Deep top-100 semantics are unchanged. Verified package contents, which may include DLC members, remain in their separate source path. Future owned-game DLC lookup requires its own approved policy change; historical semantic caches are not removed. A fresh current source generation and matching downstream publication are required before declaring production cutover successful.
+
+## Historical targeted current-sale DLC lane (superseded in active paid discovery)
+
+The earlier `eligible_base_targeted_dlc_and_independent_sub_v3` scope traversed the same games/Sub partition and fetched parent-linked DLC `appdetails` for eligible bases. This path is retained only for historical diagnosis and future DLC-specific tests, and is **not** part of active paid source completeness after 2026-11-09.
+
