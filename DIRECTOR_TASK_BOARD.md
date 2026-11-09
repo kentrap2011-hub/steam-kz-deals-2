@@ -5,12 +5,11 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — DLC fullgame исправление принято, 2026-11-09
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — аудит скорости Steam KZ, 2026-11-09
 
-- **ЧАТ 1 свободен:** независимая QA `steam-dlc-parent-fullgame-pr416-independent-qa-01` завершилась **PASS в пределах исправления**, с явно сохранёнными двумя синтетическими сценариями неполноты в [QA PR #419](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/419), принятом в main. Исходный [PR #416](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/416) после exact-HEAD `regression` / `validate` / `backlog-disposition` PASS принят в main `03821064f146`. Сохранено доверие `fullgame.appid` как непосредственному DLC-родителю; потенциальные пропуски DLC при неподтверждённом root/parent нельзя объявлять отсутствующими.
-- **Подтверждён только адресный live smoke:** [PR #417 / run 42453666183](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/42453666183), `2820 → 201310 → 235960`, 3 HTTP 200, `NO_ABORT`, бесплатное/без цены `235960` не опубликовано. Временные диагностические PR #415/#417 не объединять. Полный штатный Steam KZ `main` collector→mailing→pre-AI и свежие Dossier bindings **не проверены**; следующий ручной запуск — только с отдельного разрешения пользователя, не повторять сейчас.
-- **ЧАТЫ 2–6:** новых назначений этой задачей нет. Не запускать semantic Dossier/Deep, Scheduled Tasks или production автоматически.
-
+- **НОВЫЙ ЧАТ — ЧАТ 2, зарезервирован, ожидает запуска:** `steam-kz-discovery-incremental-filter-speed-recon-01` → `WORKER_TASK_STEAM_KZ_DISCOVERY_INCREMENTAL_FILTER_SPEED_RECON_01.md`. Пользователь назначил независимый RECON всех способов ускорить получение скидок: лишние локальные проверки и их реальные CPU-замеры, повторные HTTP, сужение исходного Steam Search (скидка 50%, цена/категория), официальные Steam Query/Store API, обновления `since last run`, компромиссы по App/Sub/DLC и полноте; измеренный breakdown реальных старых GitHub runs. Сейчас **только report-only QA/RECON**, без source/production или новых live API проб. Сформировать согласуемый A/B эксперимент с нулём необъяснённых потерянных подходящих игр и точным сравнением wall time/request count; **запуск только после отдельного пользовательского согласия**.
+- **Текущий однократный ручной Steam KZ production run пользователя** уже выполнялся на `main` при назначении. ЧАТ 2 не вмешивается и не запускает повтор, не изменяет workflow или результаты. Изучать только завершённые run logs и исторические измерения.
+- **ЧАТ 1 свободен; ЧАТЫ 3–6 без новых назначений.** Предыдущее принятие DLC parent исходного PR #416 и scoped QA #419 остаётся действительным; независимая оптимизация не переоткрывает эти решения и не разрешает semantic/production.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
