@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "224c77209756274a5fee7677cabb9d7f441296aef1bbe30e84484b9e8d6952c4",
+  "prepared_required_sha256": "e097a844ee25900b142581fab8b4f2f1918970586591c6016116e87c9f21395f",
+  "group_plan_sha256": "077f4bf1caf70bce1bce7d4784c05e8e36a386a73fac668722ee59d422c38d9c",
+  "group_count": 115,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "b30aed8bd8768c9f9b074a655f1f15e82023363803bca5a4372aa662ef8285fb"
+  },
+  "sequence": 19,
+  "start_index": 54,
+  "end_index_exclusive": 57,
+  "appids": [
+    "12330",
+    "1233070",
+    "1282100"
+  ],
+  "items_sha256": "4a0150843f939d3a80ca429fe40c72062f6fc5b618f4977d566e40732b83eaa1",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "a6047ec256fb912cccd31a7b76f7424f1ea757dd9fd05d8ee2e7ed21c070d106",
+  "items": [
+    {
+      "key": "App_12330",
+      "appid": "12330",
+      "title": "Darkstar One",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_12330.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1233070",
+      "appid": "1233070",
+      "title": "Isles of Sea and Sky",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1233070.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1282100",
+      "appid": "1282100",
+      "title": "REMNANT II®",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1282100.json",
+      "reason": "refresh_required"
+    }
+  ],
+  "group_sha256": "879a6ab172818baeff579102d066409a748654641a4d7ac90921bf25b35cae09"
+}
