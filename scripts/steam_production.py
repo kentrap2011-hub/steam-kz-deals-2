@@ -59,6 +59,16 @@ if any(partition["category1"] == "996" for partition in SEARCH_PARTITIONS):
     raise RuntimeError(
         "Steam category1=996 is broad Include Bundles scope, not a standalone partition"
     )
+dlc_policy = PAID_DISCOVERY_POLICY.get("dlc_discovery") or {}
+if (
+    PAID_DISCOVERY_POLICY.get("source_scope_contract")
+    != "game_and_independent_sub_without_standalone_dlc_v1"
+    or dlc_policy.get("mode") != "disabled_until_owned_library"
+    or dlc_policy.get("standalone_offers_enabled") is not False
+    or dlc_policy.get("requires_complete_verified_relations") is not False
+    or dlc_policy.get("global_category1_21_traversal") is not False
+):
+    raise RuntimeError("Steam standalone DLC must remain disabled by canonical source scope")
 bundle_policy = PAID_DISCOVERY_POLICY.get("bundle_package_discovery") or {}
 if (
     bundle_policy.get("mode") != "embedded_sub_in_live_bounded_games_partition_independent"
