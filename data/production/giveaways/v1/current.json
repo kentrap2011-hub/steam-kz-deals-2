@@ -2,8 +2,8 @@
   "contract": "CROSS-PLATFORM-GIVEAWAY-V1",
   "schema_version": 1,
   "country_code": "KZ",
-  "generated_at_utc": "2026-10-27T11:27:49.345670Z",
-  "fresh_until_utc": "2026-10-28T17:27:49.345670Z",
+  "generated_at_utc": "2026-11-09T11:20:25.883294Z",
+  "fresh_until_utc": "2026-11-10T17:20:25.883294Z",
   "snapshot_status": "incomplete",
   "required_sources": [
     "steam",
@@ -15,25 +15,25 @@
       "required": true,
       "status": "failed",
       "complete": false,
-      "observed_at_utc": "2026-10-27T11:27:49.345670Z",
+      "observed_at_utc": "2026-11-09T11:20:25.883294Z",
       "endpoint": "existing KZ Steam catalog + targeted first-party validation",
       "candidate_count": 0,
       "accepted_count": 0,
       "rejected_count": 0,
       "unverified_count": 0,
       "error_code": "SOURCE_STALE",
-      "error": "Steam candidate snapshot is stale: 1166.7h",
+      "error": "Steam candidate snapshot is stale: 1478.6h",
       "details": {}
     },
     "epic": {
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-10-27T11:27:49.345670Z",
+      "observed_at_utc": "2026-11-09T11:20:25.883294Z",
       "endpoint": "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions",
       "candidate_count": 2,
-      "accepted_count": 2,
-      "rejected_count": 0,
+      "accepted_count": 1,
+      "rejected_count": 1,
       "unverified_count": 0,
       "error_code": null,
       "error": null,
@@ -49,7 +49,7 @@
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-10-27T11:27:49.345670Z",
+      "observed_at_utc": "2026-11-09T11:20:25.883294Z",
       "endpoint": "https://catalog.gog.com/v1/catalog",
       "candidate_count": 0,
       "accepted_count": 0,
@@ -67,33 +67,33 @@
       }
     }
   },
-  "accepted_offer_count": 2,
-  "game_group_count": 2,
-  "rejected_offer_count": 0,
+  "accepted_offer_count": 1,
+  "game_group_count": 1,
+  "rejected_offer_count": 1,
   "unverified_offer_count": 0,
   "games": [
     {
-      "canonical_game_key": "meta-v1:805e68aece137198166fff11",
+      "canonical_game_key": "meta-v1:395372812910514bdae63c2f",
       "identity_confidence": "high",
       "identity_evidence": {
         "basis": "exact_normalized_title_and_publishers",
         "publishers": [
-          "bancyco"
+          "pajama llama games"
         ]
       },
-      "title": "Home - A Unique Horror Adventure",
+      "title": "Flotsam",
       "offers": [
         {
           "source_id": "epic",
-          "source_offer_id": "epic:c7e46cce751b40b6937e878abd0fc531:06190191cede42afb633fe89ef08c27e:2026-10-29T15:00:00Z:2026-10-22T15:00:00Z",
-          "source_product_id": "c7e46cce751b40b6937e878abd0fc531:06190191cede42afb633fe89ef08c27e",
+          "source_offer_id": "epic:27e33143fc9e4de8bbf76782292933d4:3be0a0d8479946d78f60d90c9442a0b4:2026-11-12T16:00:00Z:2026-11-05T16:00:00Z",
+          "source_product_id": "27e33143fc9e4de8bbf76782292933d4:3be0a0d8479946d78f60d90c9442a0b4",
           "storefront": "epic",
-          "title": "Home - A Unique Horror Adventure",
-          "claim_url": "https://store.epicgames.com/en-US/p/home-19212a",
-          "promotion_start_utc": "2026-10-22T15:00:00Z",
-          "promotion_end_utc": "2026-10-29T15:00:00Z",
-          "observed_at_utc": "2026-10-27T11:27:49.345670Z",
-          "base_price": 92000,
+          "title": "Flotsam",
+          "claim_url": "https://store.epicgames.com/en-US/p/flotsam-266287",
+          "promotion_start_utc": "2026-11-05T16:00:00Z",
+          "promotion_end_utc": "2026-11-12T16:00:00Z",
+          "observed_at_utc": "2026-11-09T11:20:25.883294Z",
+          "base_price": 321000,
           "final_price": 0,
           "currency": "KZT",
           "discount_percent": 100,
@@ -110,11 +110,11 @@
           "identity_resolution": {
             "schema_version": 1,
             "source_storefront": "epic",
-            "source_product_id": "c7e46cce751b40b6937e878abd0fc531:06190191cede42afb633fe89ef08c27e",
-            "source_provider_product_id": "06190191cede42afb633fe89ef08c27e",
+            "source_product_id": "27e33143fc9e4de8bbf76782292933d4:3be0a0d8479946d78f60d90c9442a0b4",
+            "source_provider_product_id": "3be0a0d8479946d78f60d90c9442a0b4",
             "identity_provider": "itad",
-            "provider_game_id": "018d937e-efe0-70c4-a142-bd045d56c833",
-            "steam_appid": 215670,
+            "provider_game_id": "018d937e-e9ed-73e9-bb56-a4a8595c37a5",
+            "steam_appid": 821250,
             "status": "resolved",
             "reason": "exact_unique",
             "provenance": {
@@ -125,7 +125,7 @@
               "lookup_reverse": "/lookup/shop/{shopId}/id/v1",
               "shop_map": "/service/shops/map/v1",
               "auth_route": "none_documented",
-              "checked_at_utc": "2026-10-27T11:27:49.345670Z",
+              "checked_at_utc": "2026-11-09T11:20:25.883294Z",
               "api_docs": "https://docs.isthereanydeal.com/"
             }
           }
@@ -135,80 +135,10 @@
         "schema_version": 1,
         "status": "resolved",
         "reason": "all_offers_exact_same_steam_app",
-        "steam_appid": 215670,
+        "steam_appid": 821250,
         "identity_provider": "itad",
         "source_offer_ids": [
-          "epic:c7e46cce751b40b6937e878abd0fc531:06190191cede42afb633fe89ef08c27e:2026-10-29T15:00:00Z:2026-10-22T15:00:00Z"
-        ]
-      }
-    },
-    {
-      "canonical_game_key": "meta-v1:90614bb234ee8d57f23963ad",
-      "identity_confidence": "high",
-      "identity_evidence": {
-        "basis": "exact_normalized_title_and_publishers",
-        "publishers": [
-          "skybound game studios inc"
-        ]
-      },
-      "title": "Sker Ritual",
-      "offers": [
-        {
-          "source_id": "epic",
-          "source_offer_id": "epic:156c17659ff0468bb533eba104a1f19f:6aab3ddef4f84fbc9dd81c60f9d8549c:2026-10-29T15:00:00Z:2026-10-22T15:00:00Z",
-          "source_product_id": "156c17659ff0468bb533eba104a1f19f:6aab3ddef4f84fbc9dd81c60f9d8549c",
-          "storefront": "epic",
-          "title": "Sker Ritual",
-          "claim_url": "https://store.epicgames.com/en-US/p/sker-ritual-aac702",
-          "promotion_start_utc": "2026-10-22T15:00:00Z",
-          "promotion_end_utc": "2026-10-29T15:00:00Z",
-          "observed_at_utc": "2026-10-27T11:27:49.345670Z",
-          "base_price": 463000,
-          "final_price": 0,
-          "currency": "KZT",
-          "discount_percent": 100,
-          "content_type": "game",
-          "region_status": "available",
-          "classification_reason_codes": [
-            "ACTIVE_WINDOW",
-            "ZERO_PRICE",
-            "PAID_BASE_OR_EXPLICIT_GIVEAWAY",
-            "PERMANENT_GRANT",
-            "FULL_GAME",
-            "KZ_AVAILABLE"
-          ],
-          "identity_resolution": {
-            "schema_version": 1,
-            "source_storefront": "epic",
-            "source_product_id": "156c17659ff0468bb533eba104a1f19f:6aab3ddef4f84fbc9dd81c60f9d8549c",
-            "source_provider_product_id": "6aab3ddef4f84fbc9dd81c60f9d8549c",
-            "identity_provider": "itad",
-            "provider_game_id": "018d937f-65f6-715d-b82a-5cedffbe94c8",
-            "steam_appid": 1492070,
-            "status": "resolved",
-            "reason": "exact_unique",
-            "provenance": {
-              "authority": "source_exact_shop_id",
-              "source_shop_id": 16,
-              "steam_shop_id": 61,
-              "lookup_forward": "/lookup/id/shop/{shopId}/v1",
-              "lookup_reverse": "/lookup/shop/{shopId}/id/v1",
-              "shop_map": "/service/shops/map/v1",
-              "auth_route": "none_documented",
-              "checked_at_utc": "2026-10-27T11:27:49.345670Z",
-              "api_docs": "https://docs.isthereanydeal.com/"
-            }
-          }
-        }
-      ],
-      "analysis_identity": {
-        "schema_version": 1,
-        "status": "resolved",
-        "reason": "all_offers_exact_same_steam_app",
-        "steam_appid": 1492070,
-        "identity_provider": "itad",
-        "source_offer_ids": [
-          "epic:156c17659ff0468bb533eba104a1f19f:6aab3ddef4f84fbc9dd81c60f9d8549c:2026-10-29T15:00:00Z:2026-10-22T15:00:00Z"
+          "epic:27e33143fc9e4de8bbf76782292933d4:3be0a0d8479946d78f60d90c9442a0b4:2026-11-12T16:00:00Z:2026-11-05T16:00:00Z"
         ]
       }
     }
@@ -222,9 +152,9 @@
   },
   "identity_provider": "itad",
   "identity_resolution_counts": {
-    "resolved": 2,
+    "resolved": 1,
     "unresolved": 0,
     "cache_hits": 0,
-    "network_lookups": 2
+    "network_lookups": 1
   }
 }
