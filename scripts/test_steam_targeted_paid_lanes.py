@@ -1182,6 +1182,8 @@ def main():
     check_dlc_membership_identity_regressions()
     check_verified_listed_base_alias_1697640()
     check_nested_dlc_exact_parent_proof()
+    from test_steam_kz_no_dlc_saved_snapshot import main as verify_no_dlc_snapshot
+    verify_no_dlc_snapshot()
     check_conservative_obscure_rescue_and_package()
     check_five_middling_games_package_below_individual_cutoff()
     check_direct_subs_are_discoverable_without_current_app()
