@@ -3474,6 +3474,24 @@
       "updated_on": "2026-11-09",
       "updated_at_utc": "2026-11-09T07:52:28.103Z",
       "recent_completion": true
+    },
+    {
+      "id": "steam-kz-discovery-incremental-filter-speed-recon-01",
+      "title": "ЧАТ 2 — аудит и замеры оптимизации поиска скидок Steam KZ",
+      "goal": "Выявить измеренный выигрыш от устранения лишних проверок и запросов; проверить скидочные/дата-фильтры Steam и инкрементальное обновление, предложить безопасный A/B без потери App/Sub/DLC.",
+      "status": "active",
+      "effort": "высокая",
+      "effort_reason": "Несколько трасс реальных GitHub runs, offline microbenchmark, доказательная проверка API, сравнительная матрица рисков и точный A/B протокол без production изменений.",
+      "urgency": "обычная",
+      "urgency_reason": "Ежедневная полная загрузка каталога может быть избыточной; нужна доказательная оценка до любых рискованных изменений.",
+      "task_file": "WORKER_TASK_STEAM_KZ_DISCOVERY_INCREMENTAL_FILTER_SPEED_RECON_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Только READ-ONLY RECON и исторические замеры; live trial новых правил, их реализация, source merge и production запрещены до отдельного пользовательского согласия.",
+      "updated_on": "2026-11-09",
+      "updated_at_utc": "2026-11-09T10:23:00Z",
+      "recent_completion": false
     }
   ]
 }
