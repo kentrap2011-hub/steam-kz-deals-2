@@ -3510,6 +3510,24 @@
       "updated_on": "2026-11-09",
       "updated_at_utc": "2026-11-09T11:45:00Z",
       "recent_completion": false
+    },
+    {
+      "id": "steam-kz-no-standalone-dlc-pr428-independent-qa-01",
+      "title": "ЧАТ 3 — независимая QA DLC-off PR 428",
+      "goal": "Проверить отключение DLC в PR 428, сохранность KZ игр и Sub, поколение downstream и триггер нового Steam collector после merge.",
+      "status": "active",
+      "effort": "высокая",
+      "effort_reason": "Точный source PR HEAD, самостоятельная negative/offline QA, все downstream bindings и release trigger.",
+      "urgency": "высокая",
+      "urgency_reason": "Source изменение одобрено, но merge требует L3 независимой QA и безопасной активации.",
+      "task_file": "WORKER_TASK_STEAM_KZ_NO_STANDALONE_DLC_PR428_INDEPENDENT_QA_01.md",
+      "worker_slot": "ЧАТ 3",
+      "order": null,
+      "depends_on": [],
+      "blocker": "QA report only; source PR 428 не менять/не принимать, production не запускать, 800 не трогать.",
+      "updated_on": "2026-11-09",
+      "updated_at_utc": "2026-11-09T19:21:00Z",
+      "recent_completion": false
     }
   ]
 }
