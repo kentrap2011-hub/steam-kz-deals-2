@@ -32,6 +32,68 @@ def paid(key, *, reviews=8000, percent=95, price=1000, discount=75):
     )
 
 
+
+def check_disabled_standalone_dlc_source_and_packages():
+    """No paid DLC appdetails requests; independent Sub_ products remain."""
+    core = collector.load_core()
+    policy = core['PAID_DISCOVERY_POLICY']
+    assert policy['source_scope_contract'] == 'game_and_independent_sub_without_standalone_dlc_v1'
+    assert policy['dlc_discovery']['mode'] == 'disabled_until_owned_library'
+    assert policy['dlc_discovery']['standalone_offers_enabled'] is False
+    assert policy['dlc_discovery']['requires_complete_verified_relations'] is False
+    assert policy['dlc_discovery']['owned_base_expansion'] == 'separate_future_task'
+
+    with patch.object(targeted, 'get_appdetails', side_effect=AssertionError('Steam GET forbidden')):
+        got, stats = targeted.current_standalone_dlc_offers(['100', '200'], core)
+    assert got == {}
+    assert stats['admitted_base_count'] == 2
+    for name in (
+        'parent_relation_lookups', 'related_dlc_unique_ids', 'dlc_price_lookups',
+        'dlc_accepted_after_paid_gate', 'dlc_rejected_after_paid_gate',
+        'nested_intermediate_unique_ids', 'nested_relation_edges',
+        'nested_child_unique_ids', 'verified_base_game_alias_exclusions',
+    ):
+        assert stats[name] == 0, (name, stats)
+    assert stats['standalone_dlc_discovery_enabled'] is False
+    assert stats['scope_complete'] is True
+    assert stats['relation_complete'] is None  # relation metadata never queried
+
+    # Production cannot silently fall back to the old relation collector.
+    source = Path('scripts/steam_partial_publish_runner.py').read_text(encoding='utf-8')
+    assert 'targeted.current_standalone_dlc_offers(' in source
+    assert 'targeted.discover_dlc_for_bases(' not in source
+    with patch.object(targeted, 'discover_dlc_for_bases',
+                      side_effect=AssertionError('Legacy DLC discovery forbidden')):
+        got, stats = targeted.current_standalone_dlc_offers(['100'], core)
+    assert got == {} and stats['dlc_price_lookups'] == 0
+
+    # A future policy change must be explicit and fail closed.
+    for bad in (
+        {'mode': 'parent_appdetails_only'},
+        {'standalone_offers_enabled': True},
+        {'requires_complete_verified_relations': True},
+    ):
+        bad_core = dict(core, PAID_DISCOVERY_POLICY={
+            **policy, 'dlc_discovery': {**policy['dlc_discovery'], **bad},
+        })
+        try:
+            targeted.current_standalone_dlc_offers(['100'], bad_core)
+        except RuntimeError:
+            pass
+        else:
+            raise AssertionError(f'Unexpected DLC mode accepted: {bad}')
+
+    # The same games-partition input still supplies on-sale packages.
+    rows = [
+        paid('App_100'),
+        paid('Sub_76471', reviews=0, discount=80, price=250),
+    ]
+    packages, package_stats = targeted.classify_discounted_package_rows(rows, core)
+    assert sorted(packages) == ['Sub_76471']
+    assert package_stats['bundle_offers_seen'] == 1
+    assert package_stats['bundle_offers_survived_cheap_gate'] == 1
+
+
 def check_base_targeted_dlc():
     core = collector.load_core()
     assert tuple(core['SEARCH_CATEGORY_TYPES']) == ('games',)
@@ -1177,6 +1239,7 @@ def check_appdetails_429_sliding_window_non429_fail_closed():
 
 
 def main():
+    check_disabled_standalone_dlc_source_and_packages()
     check_base_targeted_dlc()
     check_dlc_no_price_skips_only_verified_absence()
     check_dlc_membership_identity_regressions()
@@ -1195,7 +1258,7 @@ def main():
     check_appdetails_sliding_window_three_threads_and_fairness()
     check_appdetails_parent_child_and_retry_share_window()
     check_appdetails_429_sliding_window_non429_fail_closed()
-    print('targeted Steam KZ DLC and independent package 18/18 PASS')
+    print('targeted Steam KZ DLC and independent package 19/19 PASS')
 
 
 if __name__ == '__main__':
