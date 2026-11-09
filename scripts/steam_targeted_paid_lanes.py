@@ -386,6 +386,48 @@ def _fullgame_id(data, appid):
     return parent
 
 
+def current_standalone_dlc_offers(base_appids, core, *, reporter=None):
+    """Explicitly disabled standalone DLC lane; no Steam appdetails requests.
+
+    The canonical product scope excludes DLC until user-owned base games
+    become an authorized separate discovery lane. Keep the legacy relation
+    parser for offline historical regression, not as an active fallback.
+    Unknown or reverted policy must fail closed, not silently enable DLC.
+    """
+    policy = core['PAID_DISCOVERY_POLICY']
+    dlc_policy = policy.get('dlc_discovery') or {}
+    if (
+        policy.get('source_scope_contract')
+        != 'game_and_independent_sub_without_standalone_dlc_v1'
+        or dlc_policy.get('mode') != 'disabled_until_owned_library'
+        or dlc_policy.get('standalone_offers_enabled') is not False
+        or dlc_policy.get('requires_complete_verified_relations') is not False
+        or dlc_policy.get('global_category1_21_traversal') is not False
+    ):
+        raise RuntimeError('Standalone DLC source-scope policy is not authorized')
+    stats = {
+        'admitted_base_count': len(base_appids),
+        'parent_relation_lookups': 0,
+        'related_dlc_unique_ids': 0,
+        'dlc_price_lookups': 0,
+        'verified_base_game_alias_exclusions': 0,
+        'nested_intermediate_unique_ids': 0,
+        'nested_relation_edges': 0,
+        'nested_child_unique_ids': 0,
+        'dlc_accepted_after_paid_gate': 0,
+        'dlc_rejected_after_paid_gate': 0,
+        'relation_lookup_mode': 'disabled_until_owned_library',
+        # No relation proof was attempted; completeness refers to the new
+        # games/Sub-only source scope, not to the old standalone DLC universe.
+        'relation_complete': None,
+        'scope_complete': True,
+        'standalone_dlc_discovery_enabled': False,
+    }
+    if reporter is not None:
+        reporter.update(**stats, emit=True)
+    return {}, stats
+
+
 def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
                            reporter=None):
     """Discover bounded roots, then attribute DLC by canonical fullgame parent.
