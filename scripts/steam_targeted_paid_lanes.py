@@ -388,7 +388,12 @@ def _fullgame_id(data, appid):
 
 def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
                            reporter=None):
-    """Only exact base -> listed intermediate -> listed DLC, at most two hops."""
+    """Discover bounded roots, then attribute DLC by canonical fullgame parent.
+
+    Steam's child fullgame.appid is authoritative for immediate parentage.
+    Root/intermediate dlc lists discover AppIDs, not veto valid child ancestry.
+    At most two parent hops from an eligible base are attributed.
+    """
     bases = sorted({_canonical_appid(x, 'targeted DLC parent')
                     for x in base_appids}, key=int)
     relations = {}
@@ -425,9 +430,9 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
         _check_fetched_identity(data, appid, f'DLC App_{appid}')
         fetched[appid] = data
 
-    # A nested lookup is permitted only from an exact AppID listed by a
-    # verified root. Steam may expose a Store-marked DLC as type game; its
-    # type alone proves nothing. Both list edges and child fullgame are needed.
+    # Expand exact first-hop AppIDs only. Intermediate lists are discovery
+    # sources, not mandatory reverse proofs of a child's fullgame.appid.
+    # Steam may expose a Store-marked DLC as type game.
     nested = {}
     intermediate_ids = set()
     nested_edges = 0
@@ -443,9 +448,9 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
         parent = _fullgame_id(data, middle)
         for base in direct[middle]:
             if parent is not None and parent != base:
-                raise RuntimeError(
-                    f'DLC intermediate App_{middle} contradicts base {base}'
-                )
+                # A root may list another root's intermediate. Believe its
+                # explicit fullgame parent instead of inventing a second base.
+                continue
             for child in children:
                 if child in excluded_base_aliases:
                     raise RuntimeError(
@@ -500,31 +505,32 @@ def discover_dlc_for_bases(base_appids, core, *, fetch=get_appdetails,
         if parent is None:
             if nested_bases:
                 raise RuntimeError(f'DLC App_{appid} missing nested parent proof')
+            # Legacy Store responses sometimes omit fullgame. In that case
+            # the listing game remains the only available origin evidence.
             for base in direct_bases:
                 paths[base] = [base, appid]
-        elif parent in direct_bases:
-            if nested_bases:
-                raise RuntimeError(
-                    f'DLC App_{appid} has contradictory nested relation'
-                )
-            # Preserve explicitly linked multi-base parent attribution.
-            for base in direct_bases:
-                paths[base] = [base, appid]
+        elif parent in relations:
+            # The DLC names an eligible root as its immediate parent. Other
+            # root/middle lists do not override that explicit declaration.
+            if parent in direct_bases or parent in nested_bases:
+                paths[parent] = [parent, appid]
         else:
-            for base in sorted(direct_bases | set(nested_bases), key=int):
-                if parent not in nested_bases.get(base, set()):
-                    raise RuntimeError(
-                        f'DLC App_{appid} contradicts verified parent relation'
-                    )
-                if base not in direct.get(parent, set()):
-                    raise RuntimeError(
-                        f'DLC App_{appid} missing intermediate parent'
-                    )
-                paths[base] = [base, parent, appid]
-            if not paths:
-                raise RuntimeError(f'DLC App_{appid} has unverified parent')
+            # Trust the child's canonical fullgame. It may name another DLC,
+            # even if that DLC's reverse 'dlc' list omits this child. Resolve
+            # the named intermediate through its own fetched fullgame parent.
+            middle_data = fetched.get(parent)
+            if middle_data is not None and middle_data.get('type') in ('dlc', 'game'):
+                middle_parent = _fullgame_id(middle_data, parent)
+                for base in sorted(direct.get(parent, set()), key=int):
+                    if middle_parent is not None and middle_parent != base:
+                        continue
+                    if base in direct_bases or base in nested_bases:
+                        paths[base] = [base, parent, appid]
         if not paths:
-            raise RuntimeError(f'DLC App_{appid} has no verified base')
+            # A foreign/unresolvable fullgame is not a relation to any
+            # admitted root. Ignore this DLC; never guess a base from a
+            # contradictory reverse listing or publish its price.
+            continue
 
         # Parent proof is required even for free/unpriced children.
         if 'price_overview' not in data or data['price_overview'] is None:

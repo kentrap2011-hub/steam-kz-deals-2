@@ -64,12 +64,11 @@ def check_base_targeted_dlc():
 
     wrong = dict(fixtures)
     wrong['300'] = dict(fixtures['300'], fullgame={'appid': 999})
-    try:
-        targeted.discover_dlc_for_bases(bases, core, fetch=lambda key: wrong[key])
-    except RuntimeError:
-        pass
-    else:
-        raise AssertionError('contradictory parent relation accepted')
+    # An unrelated fullgame must NOT be reassigned to a listed root.
+    unrelated, _ = targeted.discover_dlc_for_bases(
+        bases, core, fetch=lambda key: wrong[key]
+    )
+    assert unrelated == {}
     try:
         targeted.discover_dlc_for_bases(bases, core, fetch=lambda key: (_ for _ in ()).throw(RuntimeError('429')))
     except RuntimeError:
@@ -161,10 +160,18 @@ def check_dlc_no_price_skips_only_verified_absence():
     ]
     for price in unsafe_prices:
         must_fail(dict(no_price, price_overview=price), repr(price))
-    # Identity, parent relationship and base-game type must also fail even
-    # when the DLC is otherwise unpriced.
+    # Identity, malformed parent fields, and base-game type must still fail
+    # even when the DLC is otherwise unpriced.
     must_fail(dict(no_price, steam_appid=999), 'incorrect child AppID')
-    must_fail(dict(no_price, fullgame={'appid': 999}), 'contradictory fullgame')
+    # A valid but unrelated fullgame ID excludes the child; do not treat
+    # the root's reverse list as stronger than the child's own parent.
+    foreign = dict(fixtures, **{
+        '201877': dict(no_price, fullgame={'appid': 999})
+    })
+    excluded, _ = targeted.discover_dlc_for_bases(
+        ['100'], core, fetch=lambda appid: foreign[appid]
+    )
+    assert list(excluded) == ['App_300']
     must_fail(dict(no_price, fullgame='malformed'), 'invalid fullgame type')
     must_fail(no_price, 'incorrect parent type',
               parent_override={'steam_appid': 100, 'type': 'dlc',
@@ -193,7 +200,9 @@ def check_dlc_membership_identity_regressions():
 
     dlc, stats = targeted.discover_dlc_for_bases(['200', '100'], core, fetch=fetch)
     assert list(sorted(dlc)) == ['App_300', 'App_301']
-    assert dlc['App_300']['verified_base_appids'] == ['100', '200']
+    # Only the child's explicit parent 100 is attributed; root 200's
+    # reverse listing is not a second parent.
+    assert dlc['App_300']['verified_base_appids'] == ['100']
     assert dlc['App_301']['verified_base_appids'] == ['100']
     assert stats['parent_relation_lookups'] == 2
     assert stats['related_dlc_unique_ids'] == stats['dlc_price_lookups'] == 2
@@ -230,7 +239,13 @@ def check_dlc_membership_identity_regressions():
     fails_closed(['100'], {'100': {'type': 'game', 'steam_appid': 999,
                                    'dlc': [300]}})
     fails_closed(['100'], {'300': dict(valid_dlc, steam_appid=999)})
-    fails_closed(['100'], {'300': dict(valid_dlc, fullgame={'appid': 999})})
+    foreign = dict(fixtures, **{
+        '300': dict(valid_dlc, fullgame={'appid': 999})
+    })
+    foreign_items, _ = targeted.discover_dlc_for_bases(
+        ['100'], core, fetch=lambda appid: foreign[appid]
+    )
+    assert list(foreign_items) == ['App_301']
     fails_closed(['100'], {'300': dict(valid_dlc, fullgame={'appid': '0100'})})
     fails_closed(['100'], {'300': dict(valid_dlc, fullgame='wrong type')})
     fails_closed(['100'], {}, failure='100')
@@ -446,13 +461,38 @@ def check_nested_dlc_exact_parent_proof():
             appid: dict(fixtures[appid], **changes)
         })
 
-    must_fail('foreign fullgame', variant('235960', fullgame={'appid': 999}))
-    must_fail('missing intermediate', dict(fixtures, **{
+    # Trust a child's fullgame parent even when the intermediate does not
+    # list the child in its reverse dlc list (exact live Steam 235960 case).
+    absent_reverse_edge = variant('201310', dlc=[601])
+    assert sorted(run(absent_reverse_edge)[0]) == ['App_600', 'App_601']
+    priced_child = dict(fixtures['235960'], price_overview=sale)
+    missing_reverse_priced = dict(absent_reverse_edge, **{
+        '235960': priced_child
+    })
+    linked, _, _ = run(missing_reverse_priced)
+    assert sorted(linked) == ['App_235960', 'App_600', 'App_601']
+    assert linked['App_235960']['verified_base_appids'] == ['2820']
+    assert linked['App_235960']['verified_parent_chains'] == [
+        ['2820', '201310', '235960']
+    ]
+    # The intermediate can omit its entire dlc field; the root lists both
+    # identities and Steam explicitly specifies each fullgame parent.
+    no_middle_list = variant('201310', dlc=[])
+    assert sorted(run(dict(no_middle_list, **{
+        '235960': priced_child
+    }))[0]) == ['App_235960', 'App_600']
+
+    # Foreign/unknown fullgame is not attributed by a contradictory listing.
+    unrelated, _, _ = run(dict(fixtures, **{
+        '235960': dict(priced_child, fullgame={'appid': 999})
+    }))
+    assert sorted(unrelated) == ['App_600', 'App_601']
+    # If the named middle itself is not discovered, no path to the vetted
+    # base exists; the DLC is ignored rather than attached to the wrong root.
+    missing_mid, _, _ = run(dict(fixtures, **{
         '2820': dict(root, dlc=[235960, 600]),
     }))
-    must_fail('missing intermediate child listing', variant(
-        '201310', dlc=[601]
-    ))
+    assert sorted(missing_mid) == ['App_600']
     must_fail('forged nested child identity', variant(
         '235960', steam_appid=999
     ))
@@ -461,9 +501,9 @@ def check_nested_dlc_exact_parent_proof():
     ))
     must_fail('wrong intermediate type', variant('201310', type='music'))
     must_fail('wrong root type', variant('2820', type='dlc'))
-    must_fail('intermediate with foreign base', variant(
-        '201310', fullgame={'appid': 999}
-    ))
+    # An intermediate with a foreign fullgame cannot anchor its grandchild.
+    wrong_mid, _, _ = run(variant('201310', fullgame={'appid': 999}))
+    assert sorted(wrong_mid) == ['App_600']
     must_fail('self-referential root', variant(
         '2820', dlc=[2820, 201310]
     ))
@@ -482,11 +522,18 @@ def check_nested_dlc_exact_parent_proof():
         must_fail('bad grandchild fullgame', variant(
             '235960', fullgame={'appid': bad}
         ))
-    # A second root must not acquire a child through an intermediate whose
-    # own fullgame explicitly says it belongs to the first root.
-    must_fail('cross-base intermediate', dict(fixtures, **{
-        '9990': {'steam_appid': 9990, 'type': 'game', 'dlc': [201310]},
-    }), bases=('2820', '9990'))
+    # If another root also lists the intermediate, that must NOT
+    # overwrite its canonical parent or abort valid root 2820 processing.
+    cross_roots = dict(fixtures, **{
+        '9990': {'steam_appid': 9990, 'type': 'game',
+                 'dlc': [201310, 235960]},
+    })
+    cross, _, _ = run(dict(cross_roots, **{'235960': priced_child}),
+                      bases=('2820', '9990'))
+    assert cross['App_235960']['verified_base_appids'] == ['2820']
+    assert cross['App_235960']['verified_parent_chains'] == [
+        ['2820', '201310', '235960']
+    ]
 
     # Paid genuine nested DLC uses the same KZT final-minor-unit cap and
     # discount, with no shortcut through a no-price/free intermediate.
@@ -1074,7 +1121,9 @@ def check_appdetails_parent_child_and_retry_share_window():
     assert stats['parent_relation_lookups'] == 2
     assert stats['dlc_price_lookups'] == 1
     assert stats['related_dlc_unique_ids'] == 1
-    assert dlc['App_300']['verified_base_appids'] == ['100', '200']
+    # Only the child's explicit parent 100 is attributed; root 200's
+    # reverse listing is not a second parent.
+    assert dlc['App_300']['verified_base_appids'] == ['100']
     assert len(pacer._starts) == 4  # 2 parents, one 429 retry, one child
 
     # Planned quota wait beyond 120s is not a retry failure; Retry-After
