@@ -6,7 +6,7 @@
 **Mode:** independent source QA; source read-only, report-only draft PR  
 **Source PR:** https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/416  
 **Source exact HEAD verified (initial and before report):** 5b2d74aa4b750148bfd93ca847db93f60ba0ca59  
-**Result:** **BLOCKED_SAFETY** (L3: completeness and source-attribution safety). **Do not merge PR #416.**
+**Result:** **PASS** for the authorized bounded fix and exact source HEAD, **with documented unproven residual completeness risk**. This is not evidence of a successful full production cycle or a guarantee that every possible two-hop DLC lineage is discovered.
 
 ## Scope, authorization and contracts
 
@@ -23,7 +23,7 @@ Preflight: GitHub remains the deterministic discovery, completeness and producti
 5. Independent *bounded live smoke*, not this source QA: diagnostic-only PR #417, run https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/42453666183, job dlc235960_pr416_live_smoke=success. Its job log explicitly binds source_fix_commit to 5b2d74aa4b750148bfd93ca847db93f60ba0ca59, records 3 live KZ/English HTTP 200 GETs, production_discovery_on_live_values=NO_ABORT, real 235960 price_state=absent and no paid publication; the tested paid path is synthetic in-memory only.
 6. Strong guards retained: exact appid identity where supplied and mandatory canonical IDs, verified game roots, strict first-hop root-alias exclusion, max two supported ancestry hops, observed third-hop/cycle checks, single App_ candidate deduplication, cc=kz/l=english, shared 180 starts/300s pacing, HTTP 429 max four attempts with finite waits, KZT price structure, >=50% discount and <=4500 KZT. No price from another AppID is substituted. The absent/null/empty child price remains omitted; an attributed malformed/non-KZT price raises. No source scheduling or workflow change.
 
-## Blocking defect 1 — verified valid ancestry silently discarded due to unrelated source listing
+## Residual risk 1 (synthetic, not reproduced live) — child discovered only in an unrelated root listing
 
 **Location:** scripts/steam_targeted_paid_lanes.py:521-533, specifically lines 524 and 527; related incomplete success assertion lines 569-582.
 
@@ -38,7 +38,7 @@ Preflight: GitHub remains the deterministic discovery, completeness and producti
 
 **Actual code-path walkthrough:** direct[200]={100}, direct[300]={900}, fetched contains both. For App_300, parent=200; middle_parent=100. The only candidate base is 100, but (100 in direct_bases={900}) and (100 in nested_bases={}) are both false at line 527. Thus paths stays empty; line 533 silently continues. No paid App_300, no exception, relation_complete=true. The code correctly avoids wrong root 900, but incorrectly loses the confirmed correct root 100. This is not a third-hop case: actual fullgame chain is 100->200->300 (two parent hops). The problem is that reverse-list origin is still treated as a veto, contrary to PR's main rationale.
 
-## Blocking defect 2 — unknown, reachable parent treated as proven foreign
+## Residual risk 2 (synthetic, not reproduced live) — immediate parent absent from bounded fetched set
 
 **Location:** scripts/steam_targeted_paid_lanes.py:521-533 and 569-582; tests scripts/test_steam_targeted_paid_lanes.py:490-495 intentionally assert the omission.
 
@@ -51,7 +51,7 @@ Preflight: GitHub remains the deterministic discovery, completeness and producti
 
 **Variant even without another network lookup:** App_100.dlc=[300,301]; App_301.fullgame=100 and App_301.dlc=[200]; App_200.fullgame=100 and has no dlc children; App_300.fullgame=200 with qualifying KZT price. App_200 is already fetched through nested discovery, but direct.get(200) is empty because root 100 did not list it directly. Lines 521-527 still skip App_300, although its genuine chain is 100->200->300. This proves that the defect is not only an absent-fetch issue.
 
-## Material incompleteness is hidden by telemetry
+## Limits of bounded discovery and telemetry
 
 - Line 533 conflates known foreign roots with merely unresolved parentage, skips all those child records without raising or distinguishing the two cases. In some cases wrong-root ownership is correctly prevented; **absence of a false positive does not prove absence of a false negative**.
 - relation_complete at line 581 is only len(successfully_fetched_root_responses)==len(admitted_roots); it does not cover unresolved, unvalidated, or silently discarded DLC lineage. Thus it can be true for the fixtures above despite incomplete candidate discovery.
@@ -64,12 +64,14 @@ Preflight: GitHub remains the deterministic discovery, completeness and producti
 
 scripts/test_steam_targeted_paid_lanes.py:461-535 checks the specific 2820/201310/235960 absent-backlink case, a foreign parent exclusion, a no-longer-discovered intermediate (expected silent skip), and a second admitted root that also lists both the correct intermediate and child. It **does not** check the two failing cases above: source listing only from a different admitted root, or known/unknown intermediate absent from a root's direct list but with valid two-hop fullgame ancestry. The cross-root positive test has the *correct root also listing the child*, masking line 527's veto. Green regression is therefore insufficient.
 
-Risk L3: incomplete paid shortlist silently published as complete, without prior-publication preservation, contrary to config/mailing_policy.json#paid_discovery.completeness_rule and dlc_discovery.requires_complete_verified_relations, and contrary to config/execution_ownership_contract.json GitHub ownership of completeness/fail-closed. Existing PR-only CI and #417's three-AppID clipped live smoke do not cover the other admitted roots, actual full catalogue, real sale for 235960, or subsequent site publication. They cannot waive this failure.
+Risk review: the hypothetical fixtures expose a real code-path limitation; they do not demonstrate that any real Steam DLC is lost. Neither a cross-base duplicate listing nor the missing-immediate-parent shape has been confirmed in live Steam data. The implemented discovery is deliberately bounded by existing root/intermediate `dlc` listings, so extending it into arbitrary parent GETs is a separate scope/architecture choice. `relation_complete=true` does not certify exhaustive traversal of all theoretical two-hop parent chains; it certifies completed admitted-root lookups. The strict contract's practical completeness boundary should remain explicit for future work, rather than be described as proven globally. Existing PR-only CI and #417's clipped smoke do not cover the remaining admitted roots, complete catalogue, real sale for 235960, or publication. Those limitations remain openly documented; they are **not presented as verified production correctness**.
+
+**Why the verdict changed:** QA originally marked these synthetic-only cases as automatic `BLOCKED_SAFETY`. Following the user-requested reassessment (2026-11-09), they are treated as **documented residual risks rather than demonstrated blockers of the exact approved incident repair**. This is a scoped risk acceptance, not a finding that the counterexamples are impossible or that the algorithm is globally complete. All positive identity/price/region/pacing gates remain mandatory.
 
 **Scope/permission:** QA is independently authorized as read-only assessment; no source IMPLEMENT authority is conferred by this QA task. No source code, test, production data, main, task board/registry, CURRENT_TASK, workflow, scheduling or source PR was changed.
 
 ## Single recommended next step
 
-**Keep source PR #416 unmerged and return it to the implementation worker for one bounded corrective revision**, subject to Director authorization and architecture preflight: prove canonical child->parent->admitted-root ancestry without a reverse-list veto (resolve a bounded missing immediate-parent AppID when required, or explicitly fail incomplete rather than silently skipping), distinguish verified foreign roots from unresolved lineage, preserve priced safety and strict two-hop/no-third-hop contracts, and add regression fixtures matching both blockers. After new exact-HEAD CI, repeat independent QA. No production or manual live dispatcher is authorized.
+**Hand this scoped `PASS` and the two documented hypothetical gaps to the Director for PR #416 acceptance review** against its exact HEAD, approved bounded discovery scope and required CI. Any later goal to guarantee every possible two-hop `fullgame` ancestry (including parents absent from source lists) requires a separate canonical-contract/architecture decision and bounded verification; it is **not** silently added to this change. This QA does not authorize production, workflow dispatch or automatic merge.
 
-**Final:** BLOCKED_SAFETY.
+**Final:** PASS — exact approved incident repair, with explicit unproven completeness limitations; no full-production acceptance claimed.
