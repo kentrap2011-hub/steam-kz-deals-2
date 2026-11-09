@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-08",
+  "last_curated_on": "2026-11-09",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3459,21 +3459,21 @@
       "id": "steam-dlc-parent-fullgame-pr416-independent-qa-01",
       "title": "ЧАТ 1 — независимая QA проверки Steam DLC родителя PR416",
       "goal": "Независимо проверить source PR416: доверие DLC fullgame.appid, двухуровневую связь, безопасность от тихой потери paid кандидатов, root/completeness и exact KZT gates.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Независимый review конкретной source-дельты, негативных сценариев, live smoke и exact-HEAD существующих GitHub CI; один report-only PR.",
       "urgency": "высокая",
       "urgency_reason": "Main collector блокируется на DLC 235960; источник исправления пока не принят, а изменение затрагивает полноту коммерческих DLC.",
       "task_file": "WORKER_TASK_STEAM_DLC_PARENT_FULLGAME_PR416_INDEPENDENT_QA_01.md",
-      "worker_slot": "ЧАТ 1",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "steam-nested-dlc-235960-root-cause-live-smoke-design-01"
       ],
-      "blocker": "Независимая QA PR416: подтвердить fail-closed, отсутствие тихой потери DLC и полноту; без source merge и запуска production до решения директора.",
-      "updated_on": "2026-11-08",
-      "updated_at_utc": "2026-11-08T16:10:00Z",
-      "recent_completion": false
+      "blocker": "Независимая QA scoped PASS с двумя задокументированными синтетическими рисками неполноты; report PR419 и source PR416 приняты. Live smoke 3-ID PASS, полный main collector→mailing→pre-AI ещё не проверен.",
+      "updated_on": "2026-11-09",
+      "updated_at_utc": "2026-11-09T07:52:28.103Z",
+      "recent_completion": true
     }
   ]
 }
