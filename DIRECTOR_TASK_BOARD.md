@@ -5,11 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — независимая QA Steam DLC parent PR #416, 2026-11-08
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — DLC fullgame исправление принято, 2026-11-09
 
-- **НОВЫЙ ЧАТ — ЧАТ 1, зарезервирован, ожидает запуска:** `steam-dlc-parent-fullgame-pr416-independent-qa-01` → `WORKER_TASK_STEAM_DLC_PARENT_FULLGAME_PR416_INDEPENDENT_QA_01.md`. Пользователь явно назначил независимую source QA исходного [PR #416](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/416) об авторитетности `fullgame.appid` для вложенных DLC, особенно риск **тихой потери кандидатов** и ложного `relation_complete`, cross-root binding и неизменность KZT/identity/fail-closed. Проверить exact source HEAD, [живой smoke PR #417](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/417) (PASS только для трёх ID) и текущие GitHub CI. Единственный report-only PR; без source fixes, source merge или production. QA — в новом физическом ЧАТЕ 1, **не в прежнем исполнительском**.
-- **Предыдущее расследование и реализация сданы:** `steam-nested-dlc-235960-root-cause-live-smoke-design-01` → [RECON PR #414](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/414); отдельное согласие пользователя на `fullgame` trust привело к исходному draft PR #416, bounded diagnostic PR #415 и проверке PR #417. Все диагностические PR оставлять неслиянными.
-- **ЧАТЫ 2–6 свободны.** Никакого разрешения на полный Steam collector→mailing→pre-AI, semantic Dossier/Deep, новые Scheduled Tasks или автоматические production/retries эта QA не даёт.
+- **ЧАТ 1 свободен:** независимая QA `steam-dlc-parent-fullgame-pr416-independent-qa-01` завершилась **PASS в пределах исправления**, с явно сохранёнными двумя синтетическими сценариями неполноты в [QA PR #419](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/419), принятом в main. Исходный [PR #416](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/416) после exact-HEAD `regression` / `validate` / `backlog-disposition` PASS принят в main `03821064f146`. Сохранено доверие `fullgame.appid` как непосредственному DLC-родителю; потенциальные пропуски DLC при неподтверждённом root/parent нельзя объявлять отсутствующими.
+- **Подтверждён только адресный live smoke:** [PR #417 / run 42453666183](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/42453666183), `2820 → 201310 → 235960`, 3 HTTP 200, `NO_ABORT`, бесплатное/без цены `235960` не опубликовано. Временные диагностические PR #415/#417 не объединять. Полный штатный Steam KZ `main` collector→mailing→pre-AI и свежие Dossier bindings **не проверены**; следующий ручной запуск — только с отдельного разрешения пользователя, не повторять сейчас.
+- **ЧАТЫ 2–6:** новых назначений этой задачей нет. Не запускать semantic Dossier/Deep, Scheduled Tasks или production автоматически.
+
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
