@@ -303,3 +303,40 @@ jobs:
       # is produced by Build mailing-optimized feed, then consumed by the
       # pre-AI workflow; Build daily visual payload is triggered only after that
       # canonical chain has completed.
+
+
+  # One-off PR-only, read-only diagnostic. Never triggered on schedule, push,
+  # manual production dispatch, other PRs, or after merging this source branch.
+  dlc235960_live_diagnostic:
+    if: ${{ github.event_name == 'pull_request' && github.head_ref == 'diagnostic/steam-dlc-235960-kz-live-probe-01' && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout proposed diagnostic only
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install requests
+        run: python -m pip install requests
+
+      - name: Fetch three exact public KZ appdetails (maximum six physical GETs)
+        env:
+          DLC235960_PR_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: python scripts/steam_dlc_235960_live_probe.py
+
+      - name: Retain sanitized bounded diagnosis even if inconclusive
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dlc235960-kz-one-off-diagnostic
+          path: dlc235960-live-diagnostic.json
+          if-no-files-found: warn
+          retention-days: 3
