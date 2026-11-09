@@ -62,6 +62,19 @@ def main():
         'wishlist_not_discovery': p['taste_profile']['wishlist_is_discovery_source'] is False,
         'wishlist_not_taste': p['taste_profile']['wishlist_is_taste_proof'] is False,
         'wishlist_not_ownership': p['taste_profile']['wishlist_is_ownership_proof'] is False,
+        'standalone_dlc_off_by_current_source_contract': p['paid_discovery']['source_scope_contract'] == 'game_and_independent_sub_without_standalone_dlc_v1',
+        'standalone_dlc_off_pending_owned_library': (
+            p['paid_discovery']['dlc_discovery'].get('mode') == 'disabled_until_owned_library'
+            and p['paid_discovery']['dlc_discovery'].get('standalone_offers_enabled') is False
+            and p['paid_discovery']['dlc_discovery'].get('requires_complete_verified_relations') is False
+            and p['paid_discovery']['dlc_discovery'].get('global_category1_21_traversal') is False
+            and p['paid_discovery']['dlc_discovery'].get('owned_base_expansion') == 'separate_future_task'
+        ),
+        'standalone_dlc_off_preserves_independent_sub': (
+            p['paid_discovery']['bundle_package_discovery'].get('mode')
+            == 'embedded_sub_in_live_bounded_games_partition_independent'
+            and p['paid_discovery']['bundle_package_discovery'].get('standalone_category1_996_traversal') is False
+        ),
         'production_primary': p['paid_discovery']['production_feed_is_primary_discovery_source'] is True,
         'steamdb_not_discovery': p['paid_discovery']['steamdb_for_discovery'] is False,
         'all_chunks': p['paid_discovery']['read_all_chunks'] is True,
