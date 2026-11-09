@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — диагностика Steam KZ compact feed gate, 2026-11-09
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — независимая QA DLC-off PR 428, 2026-11-09
 
-- **НОВЫЙ ЧАТ — ЧАТ 1, зарезервирован, ожидает запуска:** `steam-feed-needs-tuning-800-stale-review-failures-recon-01` → `WORKER_TASK_STEAM_FEED_NEEDS_TUNING_800_STALE_REVIEW_FAILURES_RECON_01.md`. Пользователь разрешил только READ-ONLY RECON происхождения порога `len(selected) > 800`, провала compact feed QA после 907 предложений и сохранения четырёх сентябрьских Steam Reviews 403. Исследовать истинную зону отказа collector→mailing→pre-AI→compact validation→visual/site, историю/роль fail-closed и предложить безопасный scoped fix + тесты; **не исправлять до отдельного явного согласия пользователя**. Результат только report-only draft PR.
-- **НОВЫЙ ЧАТ — ЧАТ 2:** отдельная задача оптимизации Steam KZ `steam-kz-discovery-incremental-filter-speed-recon-01` → `WORKER_TASK_STEAM_KZ_DISCOVERY_INCREMENTAL_FILTER_SPEED_RECON_01.md`; worker создал report-only [PR #422](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/422), ещё не принят, без разрешения новых trial/production изменений. Работа независима от диагноза ЧАТ 1.
-- **Последний ручной Steam KZ collector** [run #42601207552](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/42601207552) закончен SUCCESS; 9122 source rows, 907 shortlisted, 0 новых game failures. Compact feed QA [run #42608339791](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/42608339791) провалился по `manifest_needs_tuning` и `source_needs_tuning`: по исходному коду это условие `len(selected)>800`, а не четыре старых нерешённых инцидента. Не заявлять полную недоступность сайта.
-- **ЧАТЫ 3–6 свободны** по этому назначению. Не запускать semantic Dossier/Deep, production, Scheduled Tasks или QA новых source изменений автоматически.
+- **НОВЫЙ ЧАТ — ЧАТ 3, зарезервирован, ожидает запуска:** steam-kz-no-standalone-dlc-pr428-independent-qa-01 → WORKER_TASK_STEAM_KZ_NO_STANDALONE_DLC_PR428_INDEPENDENT_QA_01.md. Независимая QA source PR #428, exact HEAD/CI, запрет standalone DLC запросов, сохранность App_/Sub_ включая комплектные DLC, downstream collector→mailing→compact feed QA→pre-AI→visual/site, порог 800 оставлен и main-push auto Steam collector trigger. Итог один report-only draft PR; source merge, production, workflow_dispatch не разрешены.
+- **ЧАТ 1:** диагностика 800/review 403 закончена, report PR #425; пользователь решил оставить hard gate 800, никакой IMPLEMENT по 800 не авторизован.
+- **ЧАТ 2:** оптимизационный RECON окончен, report PR #422; offline QA saved snapshot PR #427, source DLC-disable PR #428 ещё не принят и не проверен независимым ЧАТ 3.
+- **ЧАТЫ 4–6 свободны** для отдельных задач. Последний полный collector #42601207552, source 907 с 528 DLC; сохранённый snapshot даёт 379 App_/Sub_. Source #428 HEAD 8d9394dd418cac6f127c69df15eeec5383820202 с зелёными CI. Его merge может запустить новый Steam collector — не обходить activation gate.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 

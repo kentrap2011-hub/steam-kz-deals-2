@@ -1,0 +1,28 @@
+# НОВЫЙ ЧАТ 3 — независимая QA отключения standalone DLC
+
+Repository: kentrap2011-hub/steam-kz-deals-2
+Base branch / source of truth: main
+Task ID: steam-kz-no-standalone-dlc-pr428-independent-qa-01
+Assigned worker: НОВЫЙ физический ЧАТ 3
+Mode: INDEPENDENT QA ONLY; NO source merge / live production
+Source PR: https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/428
+Expected source HEAD: 8d9394dd418cac6f127c69df15eeec5383820202
+Main SHA at registration: d99ce24fce32ecab076f02c6039353d3be1de343
+Report: reviews/worker_reports/steam-kz-no-standalone-dlc-pr428-independent-qa-01.md
+
+## START / authority
+Сначала полностью прочитай CHAT_PROTOCOL.md из актуального main, выполни START gate, затем этот task, CHAT_CONTEXT.md, нужные PROJECT_ROUTES.md и PROJECT_DECISIONS.md (STEAM-DLC-SCOPE-002), config/execution_ownership_contract.json, config/mailing_policy.json, config/feed_integrity_contract.json, relevant daily/site publication contracts. Проведи архитектурный preflight. Работай строго ТОЛЬКО в kentrap2011-hub/steam-kz-deals-2, не читай/не используй другие репозитории. Если connector default ошибся, остановись и переключись на нужный target.
+
+Ты независимый reviewer, не исполнитель PR #428. Текущее разрешение пользователя — QA, без нового Steam collector и без ручной правки production. Запрещено модифицировать/принимать/закрывать source PR #428, main, source/config/workflow/schedule/queues/cache, live shortlist, mailing, pre-AI/visual/site artifacts, semantic workers. Запрещены Steam API live probes, workflow_dispatch и любой live collector. Разрешены только read-only GitHub evidence, bounded offline deterministic checks и безопасный PR-only CI. **Порог в 800 предложений оставить прежним, не отменять и не обходить**.
+
+## Independent QA scope
+1. Exact source PR #428 delta: зафиксируй current HEAD, BASE, changed files, все required exact-HEAD checks, compare with user-approved product decision. Standalone DLC предложения выключены до поиска по купленным играм, но ordinary App_ и independent Sub_ package offers сохраняются, члены пакетов (в том числе DLC) не удалены. Никаких незапрошенных изменений KZT <=4500, скидка >=50%, cc=kz, paid completeness, quality review, free lane, scheduling/retry/AI evidence. При изменившемся HEAD исследуй material delta.
+2. Исследуй active source path и independent dormant legacy path: отключённый DLC mode disabled_until_owned_library, source scope game_and_independent_sub_without_standalone_dlc_v1, ZERO KZ appdetails relation GET в current production, strict policy mismatch fail-closed. relation_complete=null не выдаётся за доказанную полноту старого DLC графа. Подтверди сохранение полного ограниченного Games/Search traversal, Sub_, KZT cap validation, current base suitability и отсутствие скрытого DLC invocation.
+3. Независимо сравни полный сохранённый snapshot 2026-11-09, PR #427 и raw saved source/mailing proof: 907 исходных записей, минус 528 standalone DLC = 365 сохранённых App_ и 14 независимых Sub_, всего 379; идентичность/цена/скидка каждого сохранённого предложения. Проверить actual price/KZT/discount/ID, lossless projection, package contents и family resolver. При необходимости сделай безопасные воспроизводимые offline tests; previous writer assertions не считать достаточными без собственной проверки.
+4. Самостоятельно проверь full downstream scope generation/binding collector→shortlist→mailing→compact feed validation→pre-AI/Store/content family/packages→visual/site. Не считать PR-only regression SUCCESS полным end-to-end. Старые данные 907, старый компактный proof на 703 и старые 100 visual не могут подменять новое поколение. Сохрани исторические semantic Dossier/Deep результаты, не оставляй удалённые DLC как новые коммерческие карточки. Считай unknown/untested явно; проверь отсутствие silent last-known-good DLC re-add, package/family drift и false missing App/Sub. Не переписывать prod artifacts вручную.
+5. Activation trigger: exact current .github/workflows/steam-test.yml main-push path matches PR #428 source files и автоматически запускает полный Steam collector при merge. Пользователь ранее хотел использовать сохранённые данные без повторного долгого сбора. QA не является разрешением запускать ещё один Steam run. Докажи, можно ли безопасно объединить source PR с таким триггером без нарушения прежней no-extra-run границы; если нет — BLOCKED_SAFETY, назови конкретный blocker и один узкий план без скрытого отключения workflow/ручного редактирования output. Не выполнять release.
+6. Independently evaluate deterministic negative cases: 800/801 behavior unchanged, malformed/no KZT price, <50% discount, >4500 KZT, missing Search page, Sub_ package, mismatched source/manifest SHA and timestamps, disabled DLC list/parentage, preserved historical semantic cache. Verify exact HEAD CI for source PR and report detailed CHECKED/UNVERIFIED/NOT_TESTED; PR-only skipped collect is expected, not proof of production.
+7. Назови exact HIGH/L3 risk и verdict PASS_FOR_DIRECTOR_MERGE only if all relevant safety/authorization/activation gates verified, otherwise BLOCKED_SAFETY with actionable evidence. Not a request for new production experiment or release. No source merge.
+
+## Deliverable / STOP
+Сдать один independent REPORT-ONLY draft PR с ЕДИНСТВЕННЫМ новым файлом reviews/worker_reports/steam-kz-no-standalone-dlc-pr428-independent-qa-01.md. Если тестовый код объективно необходим, используй отдельный isolated test-only QA PR/branch без production edits и не смешивай его с report-only PR; не изменяй исходный PR #428. В отчёте exact HEAD, независимые подтверждения, downstream, 800 unchanged, auto-collector consent boundary, CI refs, gaps and verdict. После отчёта остановись и передай директору ссылку/резюме.
