@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — независимая QA DLC-off PR 428, 2026-11-09
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — после приёмки DLC-off, 2026-11-10
 
-- **НОВЫЙ ЧАТ — ЧАТ 3, зарезервирован, ожидает запуска:** steam-kz-no-standalone-dlc-pr428-independent-qa-01 → WORKER_TASK_STEAM_KZ_NO_STANDALONE_DLC_PR428_INDEPENDENT_QA_01.md. Независимая QA source PR #428, exact HEAD/CI, запрет standalone DLC запросов, сохранность App_/Sub_ включая комплектные DLC, downstream collector→mailing→compact feed QA→pre-AI→visual/site, порог 800 оставлен и main-push auto Steam collector trigger. Итог один report-only draft PR; source merge, production, workflow_dispatch не разрешены.
-- **ЧАТ 1:** диагностика 800/review 403 закончена, report PR #425; пользователь решил оставить hard gate 800, никакой IMPLEMENT по 800 не авторизован.
-- **ЧАТ 2:** оптимизационный RECON окончен, report PR #422; offline QA saved snapshot PR #427, source DLC-disable PR #428 ещё не принят и не проверен независимым ЧАТ 3.
-- **ЧАТЫ 4–6 свободны** для отдельных задач. Последний полный collector #42601207552, source 907 с 528 DLC; сохранённый snapshot даёт 379 App_/Sub_. Source #428 HEAD 8d9394dd418cac6f127c69df15eeec5383820202 с зелёными CI. Его merge может запустить новый Steam collector — не обходить activation gate.
+- **ЧАТ 3 — свободен:** независимая L3 QA `steam-kz-no-standalone-dlc-pr428-independent-qa-01` завершена, отчёт PR #430 принят в main (`ef1474f6`), итог PASS с прямо принятыми переходными рисками. Исходный PR #428 принят в main (`9c6ca495`) после exact-HEAD CI. Порог 800 сохранён. Новый реальный Steam и downstream требуют отдельной проверки результатов.
+- **ЧАТ 1 — свободен:** диагностика 800 / Steam Reviews 403 сдана (отчёт PR #425). Пользователь решил оставить hard gate 800, никаких изменений лимита не разрешено.
+- **ЧАТ 2 — свободен:** диагностический разбор оптимизации PR #422 и saved-snapshot offline QA PR #427 завершены. Реальное ускорение после отключения DLC пока не замерено на новом main.
+- **ЧАТЫ 4–6 свободны.** Непосредственно после source merge штатный Steam KZ collector run #42789896082 запущен автоматически; при проверке был in_progress. Параллельные main-push Build deal quality #42789896173 и Build compact final self-check #42789896353 завершились failure; причина не установлена, нельзя автоматически считать их вызванными DLC-off. Не запускать повторный collector без отдельного разрешения.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
