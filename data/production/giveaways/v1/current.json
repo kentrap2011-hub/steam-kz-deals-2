@@ -2,8 +2,8 @@
   "contract": "CROSS-PLATFORM-GIVEAWAY-V1",
   "schema_version": 1,
   "country_code": "KZ",
-  "generated_at_utc": "2026-11-09T11:20:25.883294Z",
-  "fresh_until_utc": "2026-11-10T17:20:25.883294Z",
+  "generated_at_utc": "2026-11-10T03:17:44.535351Z",
+  "fresh_until_utc": "2026-11-11T09:17:44.535351Z",
   "snapshot_status": "incomplete",
   "required_sources": [
     "steam",
@@ -15,21 +15,21 @@
       "required": true,
       "status": "failed",
       "complete": false,
-      "observed_at_utc": "2026-11-09T11:20:25.883294Z",
+      "observed_at_utc": "2026-11-10T03:17:44.535351Z",
       "endpoint": "existing KZ Steam catalog + targeted first-party validation",
       "candidate_count": 0,
       "accepted_count": 0,
       "rejected_count": 0,
       "unverified_count": 0,
       "error_code": "SOURCE_STALE",
-      "error": "Steam candidate snapshot is stale: 1478.6h",
+      "error": "Steam candidate snapshot is stale: 1494.5h",
       "details": {}
     },
     "epic": {
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-11-09T11:20:25.883294Z",
+      "observed_at_utc": "2026-11-10T03:17:44.535351Z",
       "endpoint": "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions",
       "candidate_count": 2,
       "accepted_count": 1,
@@ -49,7 +49,7 @@
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-11-09T11:20:25.883294Z",
+      "observed_at_utc": "2026-11-10T03:17:44.535351Z",
       "endpoint": "https://catalog.gog.com/v1/catalog",
       "candidate_count": 0,
       "accepted_count": 0,
@@ -92,8 +92,8 @@
           "claim_url": "https://store.epicgames.com/en-US/p/flotsam-266287",
           "promotion_start_utc": "2026-11-05T16:00:00Z",
           "promotion_end_utc": "2026-11-12T16:00:00Z",
-          "observed_at_utc": "2026-11-09T11:20:25.883294Z",
-          "base_price": 321000,
+          "observed_at_utc": "2026-11-10T03:17:44.535351Z",
+          "base_price": 330000,
           "final_price": 0,
           "currency": "KZT",
           "discount_percent": 100,
@@ -108,26 +108,27 @@
             "KZ_AVAILABLE"
           ],
           "identity_resolution": {
-            "schema_version": 1,
-            "source_storefront": "epic",
-            "source_product_id": "27e33143fc9e4de8bbf76782292933d4:3be0a0d8479946d78f60d90c9442a0b4",
-            "source_provider_product_id": "3be0a0d8479946d78f60d90c9442a0b4",
             "identity_provider": "itad",
-            "provider_game_id": "018d937e-e9ed-73e9-bb56-a4a8595c37a5",
-            "steam_appid": 821250,
-            "status": "resolved",
-            "reason": "exact_unique",
             "provenance": {
+              "api_docs": "https://docs.isthereanydeal.com/",
+              "auth_route": "none_documented",
               "authority": "source_exact_shop_id",
-              "source_shop_id": 16,
-              "steam_shop_id": 61,
+              "checked_at_utc": "2026-11-09T11:20:25.883294Z",
               "lookup_forward": "/lookup/id/shop/{shopId}/v1",
               "lookup_reverse": "/lookup/shop/{shopId}/id/v1",
               "shop_map": "/service/shops/map/v1",
-              "auth_route": "none_documented",
-              "checked_at_utc": "2026-11-09T11:20:25.883294Z",
-              "api_docs": "https://docs.isthereanydeal.com/"
-            }
+              "source_shop_id": 16,
+              "steam_shop_id": 61,
+              "cache_reused": true
+            },
+            "provider_game_id": "018d937e-e9ed-73e9-bb56-a4a8595c37a5",
+            "reason": "exact_unique",
+            "schema_version": 1,
+            "source_product_id": "27e33143fc9e4de8bbf76782292933d4:3be0a0d8479946d78f60d90c9442a0b4",
+            "source_provider_product_id": "3be0a0d8479946d78f60d90c9442a0b4",
+            "source_storefront": "epic",
+            "status": "resolved",
+            "steam_appid": 821250
           }
         }
       ],
@@ -154,7 +155,7 @@
   "identity_resolution_counts": {
     "resolved": 1,
     "unresolved": 0,
-    "cache_hits": 0,
-    "network_lookups": 1
+    "cache_hits": 1,
+    "network_lookups": 0
   }
 }
