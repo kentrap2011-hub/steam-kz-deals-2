@@ -48,7 +48,7 @@
     "steamdb_for_discovery": false,
     "web_search_may_replace_failed_ingest": false,
     "read_all_chunks": true,
-    "source_scope_contract": "eligible_base_targeted_dlc_and_independent_sub_v3",
+    "source_scope_contract": "game_and_independent_sub_without_standalone_dlc_v1",
     "minimum_discount_percent": 50,
     "maximum_final_price_kzt": 4500,
     "raw_source_top_n": null,
@@ -72,8 +72,8 @@
       "reject_obvious_extras": true,
       "reject_software_only_without_game_tags": true
     },
-    "merge_identity": "games App_/Sub_ from single live-bounded KZ partition, plus exact parent-appdetails DLC relation after eligible-base review gates",
-    "completeness_rule": "complete bounded KZ on-sale games/Sub_ traversal plus complete exact DLC lookup from all suitable eligible bases; no global category1=21 or 996, no source/intermediate/Deep top-N",
+    "merge_identity": "games App_/Sub_ from one complete live-bounded KZ search partition; no standalone DLC appdetails discovery",
+    "completeness_rule": "complete bounded KZ on-sale games/Sub_ traversal; standalone DLC is outside approved current source scope until the owned-game feature; preserve independent Sub_ packages and package content, no global category1=21 or 996, no source/intermediate/Deep top-N",
     "free_or_giveaway_lane_is_separate": true,
     "paid_filters_must_not_remove_free_or_giveaway_lane": true,
     "bundle_package_discovery": {
@@ -87,9 +87,10 @@
       "requires_complete_verified_content_before_positive_semantic_value": true
     },
     "dlc_discovery": {
-      "mode": "parent_appdetails_only",
-      "parent_gate": "canonical_refined_paid_review_suitability",
-      "requires_complete_verified_relations": true,
+      "mode": "disabled_until_owned_library",
+      "standalone_offers_enabled": false,
+      "parent_gate": "not_applicable_while_disabled",
+      "requires_complete_verified_relations": false,
       "owned_base_expansion": "separate_future_task",
       "global_category1_21_traversal": false
     },

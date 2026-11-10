@@ -1,5 +1,14 @@
 # CURRENT TASK
 
+## IMPLEMENTED IN DRAFT PR / PRODUCTION NOT ACTIVATED — Standalone Steam KZ DLC pause (2026-11-09)
+- User approved changing the paid source from base-targeted standalone DLC to games + independent Sub_ packages until owned-game discovery is available.
+- Source draft [PR #428](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/428), branch `feature/steam-kz-disable-standalone-dlc-20261109`; canonical policy, source guard, disabled zero-GET lane, regression and durable decision/report included.
+- Snapshot replay baseline: [PR #427](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/427) 907 → 379 retained (365 App_ + 14 Sub_), no data loss in retained prices, 368 family-eligible. No production catalog, semantic cache or site changed.
+- PR-only code CI passed on source head `8a94837f` ([run 42681638405](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/42681638405)); collect skipped. Final report commit and exact-HEAD PR checks to verify before acceptance.
+- **BLOCKER:** merge to main itself starts a full collector via existing steam-test.yml main push paths, contrary to user's desire to reuse today's saved Steam results without repeating the long action. Do not merge until activation/trigger plan is independently authorized and downstream scope-rebinding gates satisfied. Scheduled original production continues until then.
+- Report: `reviews/worker_reports/steam-kz-standalone-dlc-disabled-implement-20261109.md`; no new worker/scheduler created, older task entries preserved.
+
+
 ## IMPLEMENTED / PR REGRESSION PENDING — DLC fullgame.parent as primary authority (2026-11-07)
 - User explicitly authorized removing reverse DLC-list veto; keep Steam `fullgame.appid` as immediate parent, 2-hop ancestry to eligible root, strict KZ paid and AppID guards.
 - Live contradiction verified by targeted GitHub run 42398758928; source-only branch: `fix/steam-dlc-parent-fullgame-trust-01`. Existing diagnostic PR #415 is evidence only, never merge.

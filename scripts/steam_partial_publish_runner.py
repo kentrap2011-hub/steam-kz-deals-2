@@ -1313,29 +1313,28 @@ def run():
             item['russian_review_positive'] = result['russian']['positive']
             item['russian_review_count'] = result['russian']['count']
 
-    # After the normal review/suitability route has decided which BASE games
-    # qualify, look up only the DLC that Steam explicitly associates with them.
-    # The package lane is sourced independently from on-sale Sub_ search rows.
+    # Separate standalone DLC offers are disabled until the owned-game
+    # feature exists. Package Sub_ discovery and package contents continue
+    # through their independent existing route; no appdetails DLC lookup.
     base_admitted_ids = targeted.suitable_base_ids(items, failed_keys, core, today)
     packages, package_stats = targeted.classify_discounted_package_rows(items, core)
-    reporter.set_stage('targeted_dlc_relations',
+    reporter.set_stage('standalone_dlc_disabled',
                        admitted_base_count=len(base_admitted_ids),
                        bundle_surviving_cheap_gate=len(packages))
     relation_started = time.monotonic()
     try:
-        targeted_dlc, dlc_stats = targeted.discover_dlc_for_bases(
+        targeted_dlc, dlc_stats = targeted.current_standalone_dlc_offers(
             base_admitted_ids, core, reporter=reporter
         )
     except Exception as exc:
         reporter.set_stage(
-            'targeted_dlc_relations_failed', error=str(exc),
-            appdetails_diagnostics=targeted._appdetails_diagnostics.snapshot(),
+            'standalone_dlc_scope_policy_failed', error=str(exc)
         )
         reporter.stop()
         failures.write()
         raise SystemExit(
-            'Verified parent-targeted DLC discovery incomplete; prior paid '
-            f'publication kept unchanged: {exc}'
+            'Standalone DLC source policy mismatch; prior paid publication '
+            f'kept unchanged: {exc}'
         )
     stage_timings_seconds['targeted_dlc_relations'] = round(
         time.monotonic() - relation_started, 3
