@@ -52,9 +52,12 @@ concurrency:
 jobs:
   deploy:
     if: >
-      github.event_name != 'workflow_run' ||
-      (github.event.workflow_run.conclusion == 'success' &&
-       github.event.workflow_run.head_branch == 'main')
+      (github.event_name != 'workflow_run' ||
+       (github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.head_branch == 'main')) &&
+      (github.event_name != 'workflow_dispatch' ||
+       inputs.visual_producer_run_id == '' ||
+       github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -80,6 +83,10 @@ jobs:
           fi
           if [ -z "$PRODUCER_RUN_ID" ] && [ -n "$PRODUCER_ATTEMPT" ]; then
             echo "producer attempt without run ID is forbidden" >&2
+            exit 1
+          fi
+          if [ -n "$PRODUCER_RUN_ID" ] && [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "direct visual dispatch must run from main" >&2
             exit 1
           fi
 
@@ -122,6 +129,7 @@ jobs:
           BEFORE_SHA: ${{ github.event.before }}
           AFTER_SHA: ${{ github.sha }}
           TRIGGER_WORKFLOW: ${{ github.event.workflow_run.name }}
+          DIRECT_PRODUCER_RUN_ID: ${{ inputs.visual_producer_run_id }}
         shell: bash
         run: |
           set -euo pipefail
@@ -216,7 +224,16 @@ jobs:
           # player-facing semantics/descriptions, or touch the giveaway sibling.
           receipt = {}
           receipt_path = Path('/tmp/visual-freshness-artifact/visual-freshness-receipt.json')
-          if os.environ.get('EVENT_NAME') == 'workflow_run' and receipt_path.exists():
+          if (
+              receipt_path.exists()
+              and (
+                  os.environ.get('EVENT_NAME') == 'workflow_run'
+                  or (
+                      os.environ.get('EVENT_NAME') == 'workflow_dispatch'
+                      and os.environ.get('DIRECT_PRODUCER_RUN_ID')
+                  )
+              )
+          ):
               receipt = json.loads(receipt_path.read_text(encoding='utf-8'))
 
           produced = receipt.get('produced_visual') or {}
