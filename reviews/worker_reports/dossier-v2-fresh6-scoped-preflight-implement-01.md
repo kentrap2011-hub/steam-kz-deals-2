@@ -38,7 +38,7 @@ Source grouping and index order are provenance, **not issued V2 authority**. Thr
 ## Measured vs unmeasured / final boundary
 
 - Mechanical static source contract and code committed into this draft PR: **implemented**, but automated test result must be checked at exact final PR HEAD.
-- GitHub Actions PR CI: **NOT YET ATTESTED** in the initial report text; verify the actual run/jobs against final HEAD before acceptance.
+- GitHub Actions PR CI on implemented-code HEAD `7fed09c54eb4b11f23b208c0f739b854eab48d3f`: **SUCCESS** for [inactive V2 run #43064000073](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43064000073); actual `synthetic-v2` steps for prepared fresh6 source, existing V2 Research/Assembly tests, per-item receipts, strict writer transaction and inactive flags are all successful. Three other associated PR workflows ([eventual chain #43063999388](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43063999388), [backlog #43063999542](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43063999542), [site task #43063999431](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43063999431)) also report success. A final **report-only commit will advance PR HEAD** and must be rechecked, not misreported as exactly the prior code SHA. These are mechanical/offline source checks, **not** real-player semantic quality evidence.
 - Fresh6 Research 0/6, Assembly 0/6, GitHub-accepted sandbox dossiers 0/6, canonical V2 0/6: **NOT_TESTED** (no authority or execution).
 - Research time, Assembly time, published GitHub transport time, source quality / V2 versus V1 cost and quality: **NOT_MEASURED**.
 - Original18 immutable results and all present-day V1/Deep/site/production: **unchanged**.
