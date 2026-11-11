@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import dossier_notes_v2_fresh6_preflight as preflight
 import dossier_notes_v2_fresh6_route as fresh
 import dossier_notes_v2_per_item_receipts as receipts
+import dossier_notes_v2_fresh6_issuer as issuer
 import dossier_research_notes_v2 as v2
 from dossier_two_stage_staging import blob, parent
 
@@ -176,6 +177,56 @@ class Fresh6IssuerTests(unittest.TestCase):
             receipts._require_fresh6_target(fresh.TRIAL, "sandbox/forged-six")
         receipts._require_fresh6_target("dossier-notes-v2-original18-first",
                                         "sandbox/dossier-notes-v2-original18-first")
+
+    def test_full_two_dispatch_issuer_local_bare_git_fixture_only(self):
+        # This deliberately invokes the pure issuer functions without the
+        # real GitHub Actions dispatch gate. It tests the deterministic Git
+        # chain against a disposable local bare remote, never claims consent.
+        with tempfile.TemporaryDirectory(prefix="fresh6-bare-issuer-") as tmp:
+            origin = Path(tmp) / "origin.git"
+            work = Path(tmp) / "work"
+            subprocess.run(["git","init","--bare","--quiet",str(origin)],
+                           check=True, capture_output=True)
+            subprocess.run(["git","clone","--quiet","--shared",str(ROOT),str(work)],
+                           check=True, capture_output=True)
+            git(work,"config","user.name","fixture")
+            git(work,"config","user.email","fixture@example.invalid")
+            git(work,"remote","set-url","origin",str(origin))
+            git(work,"checkout","-B","main")
+            base = git(work,"rev-parse","HEAD")
+            git(work,"push","origin","HEAD:refs/heads/main")
+            result = issuer.freeze(work, base)
+            self.assertFalse(result["semantic_execution_authorized"])
+            self.assertIsNone(result["authorization_commit"])
+            with self.assertRaises(ValueError):
+                issuer.freeze(work, base)
+            git(work,"checkout","main")
+            authorized = issuer.authorize(
+                work, base, result["marker_commit"],
+                {"GITHUB_RUN_ID":"22334455"})
+            self.assertTrue(authorized["semantic_execution_authorized"])
+            self.assertEqual(authorized["github_authorization_run_id"], "22334455")
+            self.assertEqual(git(work,"ls-remote","origin",
+                                 "refs/heads/" + fresh.BRANCH).split()[0],
+                             authorized["authorization_commit"])
+            git(work,"checkout","main")
+            with self.assertRaises(ValueError):
+                issuer.authorize(work, base, result["marker_commit"],
+                                 {"GITHUB_RUN_ID":"22334456"})
+            fake_env = {
+                "GITHUB_ACTIONS":"true", "GITHUB_EVENT_NAME":"workflow_dispatch",
+                "GITHUB_REPOSITORY":fresh.REPOSITORY,
+                "GITHUB_REPOSITORY_OWNER_ID":fresh.OWNER_ID,
+                "GITHUB_ACTOR_ID":fresh.OWNER_ID,
+                "GITHUB_ACTOR":fresh.OWNER_LOGIN,
+                "GITHUB_TRIGGERING_ACTOR":fresh.OWNER_LOGIN,
+                "GITHUB_REF":"refs/heads/main",
+                "GITHUB_WORKFLOW_REF":fresh.REPOSITORY + "/" + fresh.ISSUE_WORKFLOW + "@refs/heads/main",
+                "GITHUB_SHA":base,
+                "GITHUB_RUN_ATTEMPT":"1", "GITHUB_RUN_ID":"123456",
+            }
+            with self.assertRaisesRegex(ValueError, "canonical GitHub repository"):
+                issuer.guard(work,"freeze",base,issuer.FREEZE_CONFIRM,fake_env)
 
     def test_no_automatic_real_semantic_or_production_power_from_contract(self):
         c = fresh.scope(self.repo)
