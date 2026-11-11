@@ -3,9 +3,11 @@
 
 All commits are in a disposable local repo. No GitHub API calls or semantics.
 """
+import itertools
 import json
 import os
 import subprocess
+import textwrap
 import sys
 import tempfile
 import unittest
@@ -178,6 +180,28 @@ class Fresh6IssuerTests(unittest.TestCase):
             receipts._require_fresh6_target(fresh.TRIAL, "sandbox/forged-six")
         receipts._require_fresh6_target("dossier-notes-v2-original18-first",
                                         "sandbox/dossier-notes-v2-original18-first")
+
+    def test_exactly_one_writer_mode_actual_bash_matrix(self):
+        workflow = (ROOT / ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml").read_text()
+        section = workflow.split(
+            "      - name: Reject ambiguous manual V2 writer selections", 1
+        )[1].split("      - name: Drain separately authorized V2 items", 1)[0]
+        shell = section.split("        run: |\n", 1)[1]
+        shell = textwrap.dedent(shell)
+        for flags in itertools.product(("false", "true"), repeat=3):
+            with self.subTest(flags=flags):
+                environment = {
+                    **os.environ,
+                    "CANONICAL_WRITER": flags[0],
+                    "PILOT_WRITER": flags[1],
+                    "FRESH6_WRITER": flags[2],
+                }
+                executed = subprocess.run(
+                    ["bash", "-euc", shell], env=environment,
+                    capture_output=True, text=True)
+                self.assertEqual(executed.returncode == 0,
+                                 flags.count("true") == 1,
+                                 executed.stdout + "\n" + executed.stderr)
 
     def test_fresh6_isolated_writer_rejects_wrong_ref_then_keeps_empty_safe(self):
         from taste_steam_review_dossier_buffered import drain_buffered_groups
