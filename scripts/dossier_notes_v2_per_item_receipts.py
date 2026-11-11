@@ -475,11 +475,20 @@ def verify_scoped_semantic_run(repo, *, marker_commit, trial_id,
     return {**anchor, "github_run_authenticated": True}
 
 
+def _require_fresh6_target(trial_id, branch):
+    """Prevent direct transport helpers from reusing fresh6 issuer on any other ref."""
+    if trial_id == "dossier-notes-v2-fresh6-20261111-first":
+        from dossier_notes_v2_fresh6_route import BRANCH
+        if branch != BRANCH:
+            v2.reject("wrong_binding", "fresh6 transport cannot publish outside its exact one-use sandbox")
+
+
 def publish_candidate_remote(repo, *, branch, expected_remote_head,
                              marker_commit, trial_id, appid,
                              authorization_commit, document,
                              github_repository=None, github_token=None):
     """Publish ONE preexisting semantic document; never generate Research."""
+    _require_fresh6_target(trial_id, branch)
     verify_scoped_semantic_run(
         repo, marker_commit=marker_commit, trial_id=trial_id,
         authorization_commit=authorization_commit,
@@ -513,6 +522,7 @@ def publish_receipt_remote(repo, *, branch, expected_remote_head,
                            authorization_commit, introduction_commit,
                            github_repository=None, github_token=None):
     """Publish ONE typed receipt after candidate introduction is on remote."""
+    _require_fresh6_target(trial_id, branch)
     _sha(introduction_commit, "candidate introduction")
     def plan(work):
         proof = inspect_candidate(work, marker_commit=marker_commit, trial_id=trial_id,
@@ -552,6 +562,7 @@ def publish_assembly_item_remote(repo, *, branch, expected_remote_head,
     chain. A typed terminal Assembly result is valid transport, NOT acceptance.
     Each item is independent; no scheduler, retry or final writer is invoked.
     """
+    _require_fresh6_target(trial_id, branch)
     _sha(research_commit, "original Research introduction")
     verify_scoped_semantic_run(
         repo, marker_commit=marker_commit, trial_id=trial_id,
@@ -638,6 +649,7 @@ def publish_assembly_receipt_remote(repo, *, branch, expected_remote_head,
                                     assembly_commit,
                                     github_repository=None, github_token=None):
     """One-create-only typed mechanical receipt AFTER an Assembly Git introduction."""
+    _require_fresh6_target(trial_id, branch)
     verify_scoped_semantic_run(
         repo, marker_commit=marker_commit, trial_id=trial_id,
         authorization_commit=authorization_commit,
