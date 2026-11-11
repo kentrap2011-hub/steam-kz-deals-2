@@ -153,10 +153,10 @@ def authorize(repo, expected, marker_commit, env):
     grant_commit = execute(repo, "rev-parse", marker_commit + "^^")
     manifest_commit = parent(repo, marker_commit)
     base = parent(repo, grant_commit)
-    fresh.require(execute(repo, "merge-base", "--is-ancestor",
-                          base, expected) == "" and
-                  execute(repo, "rev-parse", base) == base,
-                  "marker issuer base is not an ancestor of current main")
+    from dossier_two_stage_staging import first_parent_contains
+    fresh.require(first_parent_contains(repo, base, expected)
+                  and execute(repo, "rev-parse", base) == base,
+                  "marker issuer base must be on current main FIRST-parent history")
     fresh.require(require_only_new(repo, grant_commit, [fresh.GRANT_PATH]) == base
                   and require_only_new(repo, manifest_commit, [fresh.MANIFEST_PATH]) == grant_commit,
                   "grant/manifest Git chain differs")
