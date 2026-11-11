@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — диагностика публикации 83 вместо 100, 2026-11-11
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Dossier V2 pilot readiness и Pages 83/100, 2026-11-11
 
-- **НОВЫЙ ЧАТ — ЧАТ 1, зарезервирован (ожидает запуска):** `site-nov11-83-vs-100-pages-deploy-recon-01` → `WORKER_TASK_SITE_NOV11_83_VS_100_PAGES_DEPLOY_RECON_01.md`. Только READ-ONLY RECON причин вчерашней витрины 83 при сегодняшних 100 в каноническом visual; одна report-only draft PR, без изменения сайта, workflow, manual deploy, rerun или production. После отчёта директор принимает решение о возможном точечном исправлении.
-- **ЧАТ 2 — свободен:** оптимизационное исследование PR №422 и offline QA PR №427 сданы; отдельная реализация оптимизаций не разрешена.
-- **ЧАТ 3 — свободен:** независимая проверка PR №430 и исходное отключение standalone DLC PR №428 приняты в main; дальнейшие semantic/production запуски не следуют из этого статуса.
-- **ЧАТЫ 4–6 — свободны.** В GitHub 11 ноября сформирован новый visual из 100; факт его публикации Pages проверит ЧАТ 1. Пользователь видит 83 в старом наборе после удаления 17 завершённых скидок.
+- **ЧАТ 1 — завершена диагностика, открыты отчёт/исправление:** `site-nov11-83-vs-100-pages-deploy-recon-01` → `WORKER_TASK_SITE_NOV11_83_VS_100_PAGES_DEPLOY_RECON_01.md`; report-only PR №433 с итогом RECON_COMPLETE: ночная публикация Pages пропущена из-за 4-го workflow_run hop. После независимого push Pages выбрал новую сотню, прямой browser/CDN readback неизвестен. Отдельный source PR №434 о depth-safe dispatch открыт, draft, не объединён, обязательна независимая QA; его принятие этим назначением не разрешается. Учитывать физическое продолжение ЧАТА 1, не считать слот свободным без подтверждения.
+- **НОВЫЙ ЧАТ — ЧАТ 2, зарезервирован, ожидает запуска:** `dossier-v2-six-game-fresh-pilot-readiness-recon-01` → `WORKER_TASK_DOSSIER_V2_SIX_GAME_FRESH_PILOT_READINESS_RECON_01.md`. Только RECON/CONTRACT readiness шести новых игр Dossier V2 после source PR №368; точные GitHub grants и метрики реальной проверки; один report-only draft PR без запуска Research/Assembly, sandbox, owner Actions или V2 production.
+- **ЧАТ 3 — свободен:** source PR №428 и независимый L3 №430 ранее приняты, штатный Steam KZ collector успешен.
+- **ЧАТЫ 4–6 — свободны.** Нет разрешения запускать новый V2 pilot, менять active flags или отключать Dossier V1/Deep. Реальную работу можно предлагать только после отчёта ЧАТА 2 и отдельного решения пользователя.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
