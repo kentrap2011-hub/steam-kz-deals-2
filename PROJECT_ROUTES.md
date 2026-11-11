@@ -579,3 +579,14 @@ Currentness invariant after PPD-012:
 - Core source/staged Git-blob and SHA256 preflight: `scripts/stage_site_optional_sections.py::check_core`; canonical visual `data/production/visual/current.json` remains byte-identical in `web/data/current.json` and mandatory `scripts/visual_freshness_receipt.py verify-receipt` stays in `.github/workflows/deploy-visual.yml`.
 - Optional site-status/task/giveaway presentation dispositions: `scripts/stage_site_optional_sections.py`, `web/data/publication-disposition.json`; failed task page must remove its index navigation; failed optional giveaway presentation is hidden by `web/app.js` without mutating canonical JSON. Status-only and giveaway-only continue to require exact valid own section.
 - Synthetic regression suite moved out of Deploy: `.github/workflows/validate-site-deploy-isolation.yml` and `scripts/test_site_deploy_isolation.py`, plus existing visual receipt/material + task UI tests. Live Pages read-back remains separate QA; no publication attested by PR tests.
+
+
+---
+
+## Nightly visual → Pages depth-safe handoff (2026-11-11, PR #434)
+
+- Diagnosis: reviews/worker_reports/site-nov11-83-vs-100-pages-deploy-recon-01.md — normal scheduled Steam → Feed → Pre-AI → Visual = three workflow_run links; the fourth visual → Deploy workflow_run never fires. The 11 Nov 83-card display is explained by 17 expired offers from the 10 Nov snapshot (live CDN read-back not independently confirmed).
+- Producer: .github/workflows/build-daily-visual-payload.yml::dispatch_deploy — after scope and one successful main-branch full/giveaway/commercial producer job; job-local actions:write; gh workflow run deploy-visual.yml with exact run ID/attempt.
+- Consumer: .github/workflows/deploy-visual.yml — workflow_dispatch paired inputs; downloads same producer visual-freshness-receipt; scripts/visual_deploy_dispatch.py verifies GitHub run metadata and completed producing job; scripts/visual_freshness_receipt.py verify-receipt verifies staged canonical bytes. Existing Build site current status workflow_run and manual/push paths remain.
+- CI: scripts/test_visual_deploy_dispatch.py via .github/workflows/validate-execution-ownership.yml, plus scripts/test_site_publication_resilience.py and validate-site-deploy-isolation workflow.
+- Decision: PROJECT_DECISIONS.md VISUAL-003. Implementation report: reviews/worker_reports/visual-depth-safe-direct-pages-dispatch-implement-01.md. Draft PR #434 is unmerged/unactivated; independent QA, then actual scheduled nightly Pages + live read-back required. No recurring schedule, second queue, ChatGPT production publisher or Steam rerun.
