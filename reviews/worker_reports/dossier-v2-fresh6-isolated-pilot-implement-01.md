@@ -1,6 +1,6 @@
 # Dossier Notes V2 — isolated fresh-six executable route (IMPLEMENT, source PR)
 
-**Status:** IMPLEMENTED_IN_DRAFT_PR, **QA PENDING**, **NO LIVE SEMANTIC OR SANDBOX ACTIONS AUTHORIZED BY THIS PR**.
+**Status:** IMPLEMENTED_IN_DRAFT_PR, **PR-ONLY CI PASS AT CODE HEAD; INDEPENDENT L3 QA PENDING**, **NO LIVE SEMANTIC OR SANDBOX ACTIONS AUTHORIZED BY THIS PR**.
 
 **Dependency:** stacked on [PR #439](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/439) source-only fresh6 preflight. The source of truth remains `main`; #439 and this PR are not merged. Candidate provenance source is historical `main@665f5d0202859a6bac20566671f10158538e4764`. User separately said “Реализовывай” to implement missing mechanism, **not** to dispatch pilot, authorize semantic workers or promote production.
 
@@ -30,4 +30,10 @@
 
 Six (original source groups g000001 and g000070): Crown Trick (1000010); Orcs Must Die! (102600); Sniper Elite 5 (1029690); Borderlands 2 (49520); Braid, Anniversary Edition (499180); Bulletstorm: Full Clip Edition (501590).
 
-CI: **PENDING exact PR HEAD**. Any static green result is not live semantic or GitHub-owner workflow attestation. Record failure details and fix before acceptance.
+**Proven mechanical CI at code commit `b9f9e9bb79f4194b7022b86c56e660f279d3a3c8`: all seven PR-only checks SUCCESS.** Main Notes V2 [run #43094673333](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43094673333) executed 55 existing V2 tests + 12 earlier fresh6 preparation + **9 fresh6 issuer/transport/writer security tests** + 15 receipts and existing strict writer regression. Tests include disposable actual local bare Git `freeze → authorize`, attempted duplicate authorization, real pinned edition and AppID, original18 mix-in rejection, other-branch transport refusal, fake owner/failed GitHub authorizer run, wrong owner checkout and false empty writer results. Other PR-only workflows: buffered dossier [#43094673435](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43094673435), final GitHub acceptance [#43094673408](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43094673408), eventual chain [#43094673363](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43094673363), PASS2 [#43094673540](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43094673540), backlog [#43094673478](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43094673478), site registry [#43094673141](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43094673141) all successful. All claims are mechanical/synthetic; **real GitHub Actions owner run was NOT dispatched**, real source evidence NOT read, and actual time/quality are NOT measured. After this documentation-only change the PR HEAD advances and should be rechecked.
+
+## Repository navigation and concurrency safety (2026-11-11)
+
+Source-first route: PR #439 exact historical source gate → this PR separate `dossier_notes_v2_fresh6_route.py` and `dossier_notes_v2_fresh6_issuer.py` → two **manual owner** GitHub workflows → frozen `data/control/dossier_notes_v2/{grants,manifests,run_starts,authorizations}` fresh6 Git chain on its dedicated sandbox → one-item `dossier_notes_v2_fresh6_pilot.py` / existing transport under owner-run readback → existing serialized checkpoint writer with the fresh6-only option and strict independent item validation → isolated `fresh6_pilot_store` / `fresh6_pilot_accepted` and never canonical. No source changes to original18 grant or raw original source.
+
+The shared 168k+ `CURRENT_TASK.md` handoff and `PROJECT_ROUTES.md` are intentionally not rewritten by this stacked draft (other worker work is concurrent); this dedicated report is the stable bounded handoff/route. An accepted follow-up can add a compact route pointer without overwriting active tasks.
