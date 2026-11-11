@@ -190,10 +190,10 @@ jobs:
         run: |
           set -euo pipefail
           test "${GITHUB_REF}" = "refs/heads/main"
-          test "${NOTES_V2_TRIAL_ID}" = "dossier-notes-v2-fresh6-first"
-          test "$(git symbolic-ref --short HEAD)" = "sandbox/dossier-notes-v2-fresh6-first"
+          test "${NOTES_V2_TRIAL_ID}" = "dossier-notes-v2-fresh6-20261111-first"
+          test "$(git symbolic-ref --short HEAD)" = "sandbox/dossier-notes-v2-fresh6-20261111-first"
           remote_before="$(git rev-parse HEAD)"
-          test "$(git ls-remote origin refs/heads/sandbox/dossier-notes-v2-fresh6-first | cut -f1)" = "$remote_before"
+          test "$(git ls-remote origin refs/heads/sandbox/dossier-notes-v2-fresh6-20261111-first | cut -f1)" = "$remote_before"
           python - <<'PY'
           import json
           import os
@@ -236,9 +236,9 @@ jobs:
           fi
           git commit -m "Persist isolated fresh6 Dossier V2 strict items"
           # Exactly one non-force push, never to main and never a retry.
-          test "$(git ls-remote origin refs/heads/sandbox/dossier-notes-v2-fresh6-first | cut -f1)" = "$remote_before"
-          git push origin HEAD:refs/heads/sandbox/dossier-notes-v2-fresh6-first
-          test "$(git ls-remote origin refs/heads/sandbox/dossier-notes-v2-fresh6-first | cut -f1)" = "$(git rev-parse HEAD)"
+          test "$(git ls-remote origin refs/heads/sandbox/dossier-notes-v2-fresh6-20261111-first | cut -f1)" = "$remote_before"
+          git push origin HEAD:refs/heads/sandbox/dossier-notes-v2-fresh6-20261111-first
+          test "$(git ls-remote origin refs/heads/sandbox/dossier-notes-v2-fresh6-20261111-first | cut -f1)" = "$(git rev-parse HEAD)"
 
       - name: Apply explicit GitHub-owned dossier recovery if requested
         if: github.event_name == 'push'
