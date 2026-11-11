@@ -168,6 +168,15 @@ class Fresh6IssuerTests(unittest.TestCase):
         with self.assertRaises(v2.NotesV2Error):
             v2.manifest_blueprint(fresh.TRIAL, v2._original_rows())
 
+    def test_public_transport_fails_wrong_fresh6_remote_branch(self):
+        receipts._require_fresh6_target(fresh.TRIAL, fresh.BRANCH)
+        with self.assertRaises(v2.NotesV2Error):
+            receipts._require_fresh6_target(fresh.TRIAL, "sandbox/dossier-notes-v2-original18-first")
+        with self.assertRaises(v2.NotesV2Error):
+            receipts._require_fresh6_target(fresh.TRIAL, "sandbox/forged-six")
+        receipts._require_fresh6_target("dossier-notes-v2-original18-first",
+                                        "sandbox/dossier-notes-v2-original18-first")
+
     def test_no_automatic_real_semantic_or_production_power_from_contract(self):
         c = fresh.scope(self.repo)
         for name in preflight.OFF_FLAGS:
