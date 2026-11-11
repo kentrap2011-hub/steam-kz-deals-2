@@ -29,7 +29,7 @@ def execute(repo, *args):
 
 
 def remote(repo, ref):
-    p = git(repo, "ls-remote", "--exit-code", "origin", ref, check=False)
+    p = git(repo, "ls-remote", "--exit-code", "origin", ref, required=False)
     if p.returncode == 2:
         return None
     fresh.require(p.returncode == 0, "remote ref lookup failed")
