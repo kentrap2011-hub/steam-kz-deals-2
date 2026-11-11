@@ -77,10 +77,16 @@ jobs:
           PILOT_WRITER: ${{ inputs.notes_v2_original18_pilot_writer }}
           FRESH6_WRITER: ${{ inputs.notes_v2_fresh6_pilot_writer }}
         run: |
-          if [ "$CANONICAL_WRITER" = "true" ] && [ "$PILOT_WRITER" = "true" ] || \
-             [ "$CANONICAL_WRITER" = "true" ] && [ "$FRESH6_WRITER" = "true" ] || \
-             [ "$PILOT_WRITER" = "true" ] && [ "$FRESH6_WRITER" = "true" ]; then
-            echo "V1 original18, fresh6 and canonical writer modes must remain mutually exclusive"
+          selected=0
+          for mode in "$CANONICAL_WRITER" "$PILOT_WRITER" "$FRESH6_WRITER"; do
+            case "$mode" in
+              true) selected=$((selected + 1)) ;;
+              false) ;;
+              *) echo "Invalid boolean writer mode"; exit 1 ;;
+            esac
+          done
+          if [ "$selected" -ne 1 ]; then
+            echo "Exactly one of canonical, original18 or fresh6 writer modes must be selected"
             exit 1
           fi
 
