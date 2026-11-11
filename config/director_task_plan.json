@@ -3564,6 +3564,24 @@
       "updated_on": "2026-11-11",
       "updated_at_utc": "2026-11-11T15:22:33Z",
       "recent_completion": false
+    },
+    {
+      "id": "visual-depth-safe-direct-deploy-pr434-independent-l3-qa-01",
+      "title": "ЧАТ 3 — независимая L3 QA исправления публикации 83/100 в PR №434",
+      "goal": "Независимо проверить точный PR №434: безопасную прямую передачу visual→Pages, привязку receipt и исходного GitHub run, отсутствие дублирования и сохранение старых путей, прежде чем разрешать merge.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Ограниченная security/functional проверка двух workflows, одного helper и offline regressions, с exact HEAD CI; report-only.",
+      "urgency": "высокая",
+      "urgency_reason": "Отсутствующая ночная публикация скрывает новые скидки, а неправильно разрешённый dispatch может опубликовать устаревшие данные.",
+      "task_file": "WORKER_TASK_VISUAL_DEPTH_SAFE_DIRECT_DEPLOY_PR434_INDEPENDENT_L3_QA_01.md",
+      "worker_slot": "ЧАТ 3",
+      "order": null,
+      "depends_on": [],
+      "blocker": "READ-ONLY independent L3 + один report-only draft PR; без запуска workflow/Steam, исправлений source, слияний или Pages публикации.",
+      "updated_on": "2026-11-11",
+      "updated_at_utc": "2026-11-11T15:49:43Z",
+      "recent_completion": false
     }
   ]
 }
