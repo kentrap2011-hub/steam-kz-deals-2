@@ -74,7 +74,7 @@ def reject(change, *, scope="full_visual", deterministic=False, expect=""):
     run, jobs, receipt = fixture(scope, deterministic)
     run_id, attempt, repository = RUN_ID, ATTEMPT, REPOSITORY
     result = change(run, jobs, receipt)
-    if result:
+    if isinstance(result, tuple):
         run_id, attempt, repository = result
     try:
         check(run, jobs, receipt, run_id=run_id, attempt=attempt, repository=repository)
