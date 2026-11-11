@@ -5,6 +5,11 @@ from __future__ import annotations
 
 from copy import deepcopy
 from pathlib import Path
+import json
+import os
+import subprocess
+import sys
+import tempfile
 
 from visual_deploy_dispatch import verify_dispatch_authority
 
@@ -127,6 +132,89 @@ def test_negative() -> None:
     reject(lambda run, jobs, receipt: jobs["jobs"][0].update(name="commercial_refresh"), scope="giveaway_only", expect="job")
 
 
+def test_direct_dispatch_main_ref_guard() -> None:
+    """Exercise the exact bash guard, including legacy inputless manual use."""
+    deploy = (ROOT / ".github/workflows/deploy-visual.yml").read_text(encoding="utf-8")
+    section = deploy.split("      - name: Validate direct dispatch input pair\n", 1)[1]
+    section = section.split("\n      - name: ", 1)[0]
+    script = section.split("        run: |\n", 1)[1]
+    script = "\n".join(line.removeprefix("          ") for line in script.splitlines())
+
+    def run(ref: str, run_id: str, attempt: str) -> int:
+        env = dict(os.environ, GITHUB_REF=ref, PRODUCER_RUN_ID=run_id, PRODUCER_ATTEMPT=attempt)
+        result = subprocess.run(["bash", "-c", script], env=env, capture_output=True, text=True)
+        return result.returncode
+
+    assert run("refs/heads/main", RUN_ID, ATTEMPT) == 0
+    assert run("refs/heads/feature", RUN_ID, ATTEMPT) != 0
+    assert run("refs/heads/main", "", "") == 0
+    assert run("refs/heads/feature", "", "") == 0  # Existing manual entrypoint.
+    assert run("refs/heads/main", RUN_ID, "") != 0
+    assert run("refs/heads/main", "", ATTEMPT) != 0
+
+
+def test_commercial_receipt_on_direct_dispatch() -> None:
+    """Run the deploy workflow's *actual* embedded classifier against a tiny Git history."""
+    deploy = (ROOT / ".github/workflows/deploy-visual.yml").read_text(encoding="utf-8")
+    section = deploy.split("          python - <<'PY' | tee /tmp/visual-scope.txt\n", 1)[1]
+    section = section.split("\n          PY\n", 1)[0]
+    code = "\n".join(line.removeprefix("          ") for line in section.splitlines())
+    receipt_literal = "'/tmp/visual-freshness-artifact/visual-freshness-receipt.json'"
+    assert receipt_literal in code
+
+    with tempfile.TemporaryDirectory() as tmp:
+        temp = Path(tmp)
+        visual_path = temp / "data/production/visual/current.json"
+        visual_path.parent.mkdir(parents=True)
+        def git(*args: str) -> str:
+            return subprocess.check_output(["git", *args], cwd=temp, text=True).strip()
+
+        git("init", "-q")
+        git("config", "user.email", "qa@example.invalid")
+        git("config", "user.name", "QA fixture")
+        visual = {
+            "items": [{"id": "game:1", "summary": "Unchanged grounded description", "price": 100}],
+            "giveaways": {"schema_version": 1, "source_contract": "CROSS-PLATFORM-GIVEAWAY-V1"},
+            "paid_list_freshness": {"status": "published", "scope": "commercial_only"},
+            "production_contract": {},
+        }
+        def commit_visual(message: str) -> str:
+            visual_path.write_text(json.dumps(visual), encoding="utf-8")
+            git("add", "data/production/visual/current.json")
+            git("commit", "-qm", message)
+            return git("rev-parse", "HEAD")
+
+        commit_visual("fixture base")
+        visual["items"][0]["price"] = 70
+        commit_sha = commit_visual("fixture price-only refresh")
+        receipt_path = temp / "receipt.json"
+        receipt_path.write_text(json.dumps({
+            "fresh_build": True,
+            "freshness_scope": "commercial_only",
+            "full_visual_freshness": False,
+            "produced_visual": {"commit_sha": commit_sha},
+        }), encoding="utf-8")
+        test_code = code.replace(receipt_literal, repr(str(receipt_path)))
+
+        def classify(event: str, producer_id: str = "", trigger: str = "") -> str:
+            env = dict(
+                os.environ, EVENT_NAME=event, DIRECT_PRODUCER_RUN_ID=producer_id,
+                TRIGGER_WORKFLOW=trigger, BEFORE_SHA="", AFTER_SHA="",
+            )
+            result = subprocess.run(
+                [sys.executable, "-c", test_code], cwd=temp, env=env,
+                check=True, capture_output=True, text=True,
+            )
+            return result.stdout
+
+        assert "VISUAL_DEPLOY_SCOPE=commercial_only" in classify("workflow_dispatch", RUN_ID)
+        assert "VISUAL_DEPLOY_SCOPE=general" in classify("workflow_dispatch")
+        assert "VISUAL_DEPLOY_SCOPE=general" in classify("push")
+        assert "VISUAL_DEPLOY_SCOPE=status_only" in classify(
+            "workflow_run", trigger="Build site current status"
+        )
+
+
 def test_wiring() -> None:
     build = (ROOT / ".github/workflows/build-daily-visual-payload.yml").read_text(encoding="utf-8")
     deploy = (ROOT / ".github/workflows/deploy-visual.yml").read_text(encoding="utf-8")
@@ -143,6 +231,11 @@ def test_wiring() -> None:
     assert '- "Build daily visual payload"' not in deploy
     assert '- "Build site current status"' in deploy
     assert "      - name: Validate direct dispatch input pair" in deploy
+    assert "inputs.visual_producer_run_id == '' ||" in deploy
+    assert "github.ref == 'refs/heads/main'" in deploy
+    assert 'if [ -n "$PRODUCER_RUN_ID" ] && [ "$GITHUB_REF" != "refs/heads/main" ]; then' in deploy
+    assert "DIRECT_PRODUCER_RUN_ID: ${{ inputs.visual_producer_run_id }}" in deploy
+    assert "os.environ.get('EVENT_NAME') == 'workflow_dispatch'" in deploy
     assert "scripts/visual_deploy_dispatch.py" in deploy
     assert "scripts/visual_freshness_receipt.py verify-receipt" in deploy
     assert 'elif [ "$EVENT_NAME" = "workflow_run" ] || [ -n "$DIRECT_PRODUCER_RUN_ID" ]; then' in deploy
@@ -153,4 +246,6 @@ if __name__ == "__main__":
     test_positive()
     test_negative()
     test_wiring()
+    test_direct_dispatch_main_ref_guard()
+    test_commercial_receipt_on_direct_dispatch()
     print("VISUAL_DIRECT_DEPLOY_DISPATCH_TESTS=PASS")
