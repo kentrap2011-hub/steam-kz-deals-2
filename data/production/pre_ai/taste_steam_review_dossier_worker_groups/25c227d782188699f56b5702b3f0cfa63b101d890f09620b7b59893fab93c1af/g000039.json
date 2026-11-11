@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "25c227d782188699f56b5702b3f0cfa63b101d890f09620b7b59893fab93c1af",
+  "prepared_required_sha256": "20e2ea74a2543e4775c5697e7561add14a18ddd8909e2f11df719997cb0cccb2",
+  "group_plan_sha256": "31f8b4324bb4a0e4210700f358498c34784bd4529ea06ffd1f04703d1ad34c7f",
+  "group_count": 91,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "b30aed8bd8768c9f9b074a655f1f15e82023363803bca5a4372aa662ef8285fb"
+  },
+  "sequence": 39,
+  "start_index": 114,
+  "end_index_exclusive": 117,
+  "appids": [
+    "238090",
+    "2393160",
+    "242860"
+  ],
+  "items_sha256": "dd8761569589e1795e6643adeda323c581da78a8dddf7186420f14056bbf5712",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "66b1751644c2f26d2fcb62586b7f6028f2e775c39cebdcd9893d9f253d13151a",
+  "items": [
+    {
+      "key": "App_238090",
+      "appid": "238090",
+      "title": "Sniper Elite 3",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_238090.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2393160",
+      "appid": "2393160",
+      "title": "Nice Day for Fishing",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2393160.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_242860",
+      "appid": "242860",
+      "title": "Verdun",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_242860.json",
+      "reason": "refresh_required"
+    }
+  ],
+  "group_sha256": "b179f804f9ccb1ffaaa5fb0dd607f620721ee0eac76b49bd9e60d073a8c31d70"
+}
