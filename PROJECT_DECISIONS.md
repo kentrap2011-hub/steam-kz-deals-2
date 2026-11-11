@@ -1084,3 +1084,20 @@ A canonical Dossier/profile/work/repository write that lands **before** the mark
 
 
 **QA amendment 2026-10-22 / PR #239:** independent QA found that merely pinning 18 AppIDs is insufficient if titles/edition and original assignment IDs can be rewritten. V2 now verifies against the *exact original frozen Research buffer Git blob* using immutable byte-for-byte source and per-item original full-assignment digest. Unlike the old original year, the frozen exact title (including edition suffix) must never be rewritten for a different product, while factual year conflicts remain Stage2 research questions. Stage2 isolates Research transport failure per AppID using typed `classify_research` and retains immutable 18 traversal without sibling stoppage. No third semantic stage, retry manager, new scheduler, V1 mutation or production privilege is introduced. Reason: preserve product identity and independent liveness simultaneously.
+
+
+---
+
+## VISUAL-003 — Depth-safe visual-to-Pages publication uses exact direct dispatch
+
+**Дата:** 2026-11-11. **Статус:** реализация предложена в draft PR #434; не активирована до принятия и проверенного production deploy.
+
+**Причина:** нормальный ночной граф Steam → Feed → Pre-AI → Visual → Pages содержит четыре последовательных workflow_run перехода. GitHub допускает не больше трёх; поэтому готовые 100 игр остаются не опубликованы, хотя отдельные push/manual-triggered Pages deploy иногда скрывали дефект (83 = 100 старых − 17 истекших).
+
+**Решение пользователя:** оставить сборку и публикацию отдельными GitHub Actions, после успешного фактического build/giveaway/commercial producer job явно запускать Deploy через workflow_dispatch с точным run ID и attempt. Не объединять рабочие производящие стадии и не добавлять отдельное расписание.
+
+**Гарантии:** только main; job-local actions:write; deploy проверяет точный GitHub producer workflow/run/attempt, успешно завершённый producer job, оригинальный freshness receipt и исходный/стадийный Git blob через неизменённый visual_freshness_receipt verifier. Детерминированно сохранённый visual с незавершённой semantic history допускается только с точным observed_visual, без ложного статуса полной свежести. Отдельная workflow_run подписка на Build daily visual payload удаляется во избежание двойного запуска; status-only workflow_run, push и manual входы остаются.
+
+**Границы:** GitHub владеет control plane и публикацией; нет нового worker, scheduler, retry loop, Steam re-fetch, live браузерного перерасчёта. PR CI и независимая QA не являются подтверждением доставки: отдельно требуется штатный ночной запуск и HTTP read-back опубликованного JSON.
+
+**Места:** .github/workflows/build-daily-visual-payload.yml, .github/workflows/deploy-visual.yml, scripts/visual_deploy_dispatch.py, scripts/test_visual_deploy_dispatch.py, reviews/worker_reports/visual-depth-safe-direct-pages-dispatch-implement-01.md.
