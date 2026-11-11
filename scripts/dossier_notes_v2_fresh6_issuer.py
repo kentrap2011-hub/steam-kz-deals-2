@@ -63,6 +63,14 @@ def guard(repo, mode, sha, confirmation, env):
                   and execute(repo, "rev-parse", "HEAD") == sha
                   and remote(repo, "refs/heads/main") == sha,
                   "main SHA or branch changed during owner confirmation")
+    origin = execute(repo, "remote", "get-url", "origin")
+    fresh.require(origin in {
+        "https://github.com/" + fresh.REPOSITORY,
+        "https://github.com/" + fresh.REPOSITORY + ".git",
+        "git@github.com:" + fresh.REPOSITORY + ".git",
+        "git@github.com:" + fresh.REPOSITORY,
+        "ssh://git@github.com/" + fresh.REPOSITORY + ".git",
+    }, "only canonical GitHub repository remote may receive issuer commits")
     fresh.require(not execute(repo, "status", "--porcelain", "--untracked-files=all"),
                   "dirty Git checkout cannot issue authority")
     fresh.scope(repo)
