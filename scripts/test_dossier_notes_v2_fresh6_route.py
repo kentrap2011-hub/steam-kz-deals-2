@@ -4,6 +4,7 @@
 All commits are in a disposable local repo. No GitHub API calls or semantics.
 """
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -177,6 +178,43 @@ class Fresh6IssuerTests(unittest.TestCase):
             receipts._require_fresh6_target(fresh.TRIAL, "sandbox/forged-six")
         receipts._require_fresh6_target("dossier-notes-v2-original18-first",
                                         "sandbox/dossier-notes-v2-original18-first")
+
+    def test_fresh6_isolated_writer_rejects_wrong_ref_then_keeps_empty_safe(self):
+        from taste_steam_review_dossier_buffered import drain_buffered_groups
+        options = {
+            "repo": self.repo, "marker_commit": self.marker,
+            "trial_id": fresh.TRIAL, "item_commits": {},
+            "store_dir": self.repo / "data/control/dossier_notes_v2/fresh6_pilot_store",
+            "accepted_dir": self.repo / "data/control/dossier_notes_v2/fresh6_pilot_accepted",
+            "offline_fixture": False, "trial_sandbox": True,
+        }
+        with self.assertRaisesRegex(ValueError, "fresh6 writer needs real owner"):
+            drain_buffered_groups(notes_v2=options)
+        git(self.repo, "checkout", "-b", fresh.BRANCH)
+        env = {
+            "GITHUB_ACTIONS":"true",
+            "GITHUB_EVENT_NAME":"workflow_dispatch",
+            "GITHUB_REF":"refs/heads/main",
+            "GITHUB_WORKFLOW_REF":fresh.REPOSITORY + "/.github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml@refs/heads/main",
+            "GITHUB_REPOSITORY":fresh.REPOSITORY,
+            "GITHUB_ACTOR_ID":fresh.OWNER_ID,
+            "GITHUB_REPOSITORY_OWNER_ID":fresh.OWNER_ID,
+            "GITHUB_ACTOR":fresh.OWNER_LOGIN,
+            "GITHUB_TRIGGERING_ACTOR":fresh.OWNER_LOGIN,
+            "GITHUB_RUN_ATTEMPT":"1",
+            "GITHUB_TOKEN":"synthetic-no-network",
+        }
+        try:
+            with patch.dict(os.environ, env), patch.object(
+                    fresh, "authenticated_owner_run", return_value=True):
+                result = drain_buffered_groups(notes_v2=options)
+            self.assertEqual(len(result["items"]), 6)
+            self.assertTrue(all(i["status"] == "missing" for i in result["items"]))
+            self.assertIs(result["canonical_acceptance"], False)
+            self.assertFalse(options["store_dir"].exists())
+            self.assertFalse(options["accepted_dir"].exists())
+        finally:
+            git(self.repo,"checkout","fixture/fresh6")
 
     def test_full_two_dispatch_issuer_local_bare_git_fixture_only(self):
         # This deliberately invokes the pure issuer functions without the
