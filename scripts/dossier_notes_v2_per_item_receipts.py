@@ -40,6 +40,10 @@ def issuer_structure(repo, *, marker_commit, trial_id, authorization_commit):
     """
     _sha(marker_commit, "V2 marker")
     _sha(authorization_commit, "V2 issuer")
+    if trial_id == "dossier-notes-v2-fresh6-20261111-first":
+        from dossier_notes_v2_fresh6_route import issuer_structure as fresh_structure
+        return fresh_structure(repo, marker_commit=marker_commit,
+                               authorization_commit=authorization_commit)
     c = v2._contract()  # remains inactive
     assignment_manifest, manifest_sha = v2._manifest(repo, marker_commit, trial_id)
     if authorization_commit == marker_commit or authorization_commit in (
@@ -446,6 +450,10 @@ def verify_scoped_semantic_run(repo, *, marker_commit, trial_id,
                               authorization_commit=authorization_commit)
     if not anchor["semantic_execution_authorized"]:
         return anchor
+    if trial_id == "dossier-notes-v2-fresh6-20261111-first":
+        from dossier_notes_v2_fresh6_route import authenticated_owner_run
+        authenticated_owner_run(anchor, github_token, github_repository)
+        return {**anchor, "github_run_authenticated": True}
     config = v2._contract()
     pilot = config.get("original18_trial_scoped_authorization") or {}
     if (github_repository != "kentrap2011-hub/steam-kz-deals-2"
