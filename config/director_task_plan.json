@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-09",
+  "last_curated_on": "2026-11-11",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3528,6 +3528,24 @@
       "updated_on": "2026-11-10",
       "updated_at_utc": "2026-11-10T09:20:30Z",
       "recent_completion": true
+    },
+    {
+      "id": "site-nov11-83-vs-100-pages-deploy-recon-01",
+      "title": "ЧАТ 1 — почему на сайте 83 игры вместо 100",
+      "goal": "Установить точную причину отсутствия свежих 100 карточек 11 ноября: GitHub visual, Pages deploy и клиентское исключение завершившихся скидок; предложить один безопасный следующий шаг.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Нужна адресная сверка уже существующих GitHub workflow, опубликованного Pages artifact и клиентского фильтра, без новых запусков.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь видит 83 вместо 100 при подтверждённой свежей сборке и рискует пропустить актуальные предложения.",
+      "task_file": "WORKER_TASK_SITE_NOV11_83_VS_100_PAGES_DEPLOY_RECON_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Только READ-ONLY RECON и один report-only draft PR; без кода, повторных workflow, Steam запросов, публикации и исправлений.",
+      "updated_on": "2026-11-11",
+      "updated_at_utc": "2026-11-11T10:18:21Z",
+      "recent_completion": false
     }
   ]
 }

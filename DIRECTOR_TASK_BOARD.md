@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — после приёмки DLC-off, 2026-11-10
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — диагностика публикации 83 вместо 100, 2026-11-11
 
-- **ЧАТ 3 — свободен:** независимая L3 QA `steam-kz-no-standalone-dlc-pr428-independent-qa-01` завершена, отчёт PR #430 принят в main (`ef1474f6`), итог PASS с прямо принятыми переходными рисками. Исходный PR #428 принят в main (`9c6ca495`) после exact-HEAD CI. Порог 800 сохранён. Новый реальный Steam и downstream требуют отдельной проверки результатов.
-- **ЧАТ 1 — свободен:** диагностика 800 / Steam Reviews 403 сдана (отчёт PR #425). Пользователь решил оставить hard gate 800, никаких изменений лимита не разрешено.
-- **ЧАТ 2 — свободен:** диагностический разбор оптимизации PR #422 и saved-snapshot offline QA PR #427 завершены. Реальное ускорение после отключения DLC пока не замерено на новом main.
-- **ЧАТЫ 4–6 свободны.** Непосредственно после source merge штатный Steam KZ collector run #42789896082 запущен автоматически; при проверке был in_progress. Параллельные main-push Build deal quality #42789896173 и Build compact final self-check #42789896353 завершились failure; причина не установлена, нельзя автоматически считать их вызванными DLC-off. Не запускать повторный collector без отдельного разрешения.
+- **НОВЫЙ ЧАТ — ЧАТ 1, зарезервирован (ожидает запуска):** `site-nov11-83-vs-100-pages-deploy-recon-01` → `WORKER_TASK_SITE_NOV11_83_VS_100_PAGES_DEPLOY_RECON_01.md`. Только READ-ONLY RECON причин вчерашней витрины 83 при сегодняшних 100 в каноническом visual; одна report-only draft PR, без изменения сайта, workflow, manual deploy, rerun или production. После отчёта директор принимает решение о возможном точечном исправлении.
+- **ЧАТ 2 — свободен:** оптимизационное исследование PR №422 и offline QA PR №427 сданы; отдельная реализация оптимизаций не разрешена.
+- **ЧАТ 3 — свободен:** независимая проверка PR №430 и исходное отключение standalone DLC PR №428 приняты в main; дальнейшие semantic/production запуски не следуют из этого статуса.
+- **ЧАТЫ 4–6 — свободны.** В GitHub 11 ноября сформирован новый visual из 100; факт его публикации Pages проверит ЧАТ 1. Пользователь видит 83 в старом наборе после удаления 17 завершённых скидок.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
