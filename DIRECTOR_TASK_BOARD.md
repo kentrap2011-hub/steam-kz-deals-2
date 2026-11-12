@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Dossier V2 и финальная QA Pages, 2026-11-12
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — reusable Dossier V2 → первый isolated six pilot, 2026-11-12
 
-- **ЧАТ 1 — физический диалог удалён пользователем, задач не ждёт.** Отчёт Pages RECON сохранён в draft PR №433, source fix PR №434 открыт. Если понадобится новая работа — только НОВЫЙ физический ЧАТ 1.
-- **ЧАТ 2 — пользователь отправил задание, результат пока не подтверждён:** `dossier-v2-six-game-fresh-pilot-readiness-recon-01` → `WORKER_TASK_DOSSIER_V2_SIX_GAME_FRESH_PILOT_READINESS_RECON_01.md`. Подготовка 6 новых игр для изолированного V2 пилота, без реальной семантики.
-- **СУЩЕСТВУЮЩИЙ ЧАТ 3 — назначена финальная delta L3:** `visual-pr434-f1-f2-final-delta-l3-qa-01` → `WORKER_TASK_VISUAL_PR434_F1_F2_FINAL_DELTA_L3_QA_01.md`. Предыдущий QA report PR №437 — CHANGES_REQUIRED на старом HEAD `25bedb4f`; source PR №434 обновлён до `c4ea30ba` с локальными F1/F2 исправлениями и 7 зелёными CI. Только узкая независимая delta QA новой версии, один report-only PR, без source правок, повторной публикации или merge.
-- **ЧАТЫ 4–6 — свободны.** Реальный V2 пилот не разрешён; принятие PR №434 только после exact HEAD independent PASS и director gates, полноценная night-to-Pages live приёмка отдельно.
+- **ЧАТ 1 — НОВЫЙ физический чат, зарезервирован после выдачи launcher:** `dossier-v2-reusable-batches-fresh6-launch-ready-implement-01` → `WORKER_TASK_DOSSIER_V2_REUSABLE_BATCHES_FRESH6_LAUNCH_READY_IMPLEMENT_01.md`. Реализовать повторно используемые batch issuer/Research→Assembly/sandbox writer из draft PR №439/440, сохранить original18/V1/Deep, один итоговый source PR и exact CI. Затем отдельная независимая L3 и по данному user approval — один реальный isolated pilot 6 игр с доказанным owner GitHub grant; не автоматическое семантическое выполнение разработчиком.
+- **ЧАТ 2 — финальный отчёт сдан, слот свободен:** `dossier-v2-six-game-fresh-pilot-readiness-recon-01`; report-only draft PR №438, есть шесть точных AppID и criterion для проверки, V2 новых результатов 0/6. Не повторять RECON.
+- **ЧАТ 3 — финальный отчёт сдан, слот свободен:** PR №442 об исправлениях Pages F1/F2. Исходный Pages PR №434 принят в main `41db04914e5d1f1ffddf3da39c65a4ae6dba0f06` по явному user merge grant; отсутствие независимой новой delta QA задокументировано как принятый риск, не объявлять его PASS. Обычный ночной Pages handoff ещё не проверен.
+- **ЧАТЫ 4–6 — свободны.** Для нового reusable V2 L3 потребуется другой физический проверяющий после exact implementation HEAD; новый source/semantic может запускаться только в рамках текущего явного user grant + обязательных GitHub issuer permissions, без production и scheduled execution.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
