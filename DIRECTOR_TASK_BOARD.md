@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Dossier V2 и независимая проверка Pages, 2026-11-11
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Dossier V2 и финальная QA Pages, 2026-11-12
 
-- **ЧАТ 1 — диагноз Pages завершён, исходный fix ожидает QA:** RECON `site-nov11-83-vs-100-pages-deploy-recon-01` и отчёт draft PR №433: ночной Pages deploy пропущен на четвёртом `workflow_run`, прежняя сотня минус 17 завершённых скидок = 83. Source PR №434 draft, HEAD `25bedb4f01ff7c85cb2e038c2fd15b2106bdaa43`, все известные exact-HEAD CI SUCCESS; merge/production не выполнять до независимой QA. Физическое продолжение ЧАТА 1 не выводить только по GitHub статусу.
-- **НОВЫЙ ЧАТ — ЧАТ 2, зарезервирован, ожидает запуска:** `dossier-v2-six-game-fresh-pilot-readiness-recon-01` → `WORKER_TASK_DOSSIER_V2_SIX_GAME_FRESH_PILOT_READINESS_RECON_01.md`. Только подготовка новой когорты 6 игр V2, pilot authority и измерения, один report-only draft PR; никакого Research/Assembly или активации production.
-- **НОВЫЙ ЧАТ — ЧАТ 3, зарезервирован, ожидает запуска:** `visual-depth-safe-direct-deploy-pr434-independent-l3-qa-01` → `WORKER_TASK_VISUAL_DEPTH_SAFE_DIRECT_DEPLOY_PR434_INDEPENDENT_L3_QA_01.md`. Независимый L3 exact HEAD QA PR №434, только report-only draft PR, без изменения source/Pages/workflows, semantic worker, dispatch или merge.
-- **ЧАТЫ 4–6 — свободны.** Ни V2 pilot, ни source PR №434 не имеют дополнительного разрешения на запуск/merge из-за одной регистрации. После независимого QA директор проверяет exact HEAD/CI и остающиеся production gates.
+- **ЧАТ 1 — физический диалог удалён пользователем, задач не ждёт.** Отчёт Pages RECON сохранён в draft PR №433, source fix PR №434 открыт. Если понадобится новая работа — только НОВЫЙ физический ЧАТ 1.
+- **ЧАТ 2 — пользователь отправил задание, результат пока не подтверждён:** `dossier-v2-six-game-fresh-pilot-readiness-recon-01` → `WORKER_TASK_DOSSIER_V2_SIX_GAME_FRESH_PILOT_READINESS_RECON_01.md`. Подготовка 6 новых игр для изолированного V2 пилота, без реальной семантики.
+- **СУЩЕСТВУЮЩИЙ ЧАТ 3 — назначена финальная delta L3:** `visual-pr434-f1-f2-final-delta-l3-qa-01` → `WORKER_TASK_VISUAL_PR434_F1_F2_FINAL_DELTA_L3_QA_01.md`. Предыдущий QA report PR №437 — CHANGES_REQUIRED на старом HEAD `25bedb4f`; source PR №434 обновлён до `c4ea30ba` с локальными F1/F2 исправлениями и 7 зелёными CI. Только узкая независимая delta QA новой версии, один report-only PR, без source правок, повторной публикации или merge.
+- **ЧАТЫ 4–6 — свободны.** Реальный V2 пилот не разрешён; принятие PR №434 только после exact HEAD independent PASS и director gates, полноценная night-to-Pages live приёмка отдельно.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
