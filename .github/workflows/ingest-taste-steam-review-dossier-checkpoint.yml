@@ -250,8 +250,8 @@ jobs:
             echo "No strict reusable batch item eligible for sandbox persistence"
             exit 0
           fi
-          test -d data/control/dossier_notes_v2/batch_pilot_store
-          test -d data/control/dossier_notes_v2/batch_pilot_accepted
+          test -d "data/control/dossier_notes_v2/batch_pilot_store/${NOTES_V2_TRIAL_ID}"
+          test -d "data/control/dossier_notes_v2/batch_pilot_accepted/${NOTES_V2_TRIAL_ID}"
           git add -- "data/control/dossier_notes_v2/batch_pilot_store/${NOTES_V2_TRIAL_ID}/" "data/control/dossier_notes_v2/batch_pilot_accepted/${NOTES_V2_TRIAL_ID}/"
           git diff --cached --check
           if git diff --cached --quiet; then
