@@ -282,6 +282,9 @@ class ReusableBatchTests(unittest.TestCase):
             w=v2.assembly_work(repo,marker_commit=f["marker"],trial_id=self.trial,
                   appid=first["appid"],research_commit=entries[first["appid"]]["research_commit"])
             dossier=web_dossier(first["appid"],datetime.now(timezone.utc),title=first["title"])
+            with self.assertRaises(v2.NotesV2Error):
+                v2.candidate_assembly(w,outcome="invented_assembly_enum",
+                                      diagnostic="synthetic invalid terminal")
             ready=v2.candidate_assembly(w,outcome="assembled_candidate_ready",final_dossier=dossier)
             entries[first["appid"]]["assembly_commit"]=add(repo,w["output_path"],ready,"fixture strict")
             w=v2.assembly_work(repo,marker_commit=f["marker"],trial_id=self.trial,
@@ -370,6 +373,72 @@ class ReusableBatchTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,"noncanonical GitHub remote"):
                 issuer.guard(repo,"freeze",self.trial,base,
                              issuer.FREEZE_CONFIRM+self.trial,fake)
+
+    def test_owner_guard_stale_main_actor_attempt_and_confirmation_fail_closed(self):
+        temp,repo=source_copy()
+        try:
+            git(repo,"checkout","-B","main")
+            sha=git(repo,"rev-parse","HEAD")
+            git(repo,"remote","set-url","origin","https://github.com/"+batch.REPOSITORY+".git")
+            env={
+                "GITHUB_ACTIONS":"true","GITHUB_EVENT_NAME":"workflow_dispatch",
+                "GITHUB_REPOSITORY":batch.REPOSITORY,
+                "GITHUB_REPOSITORY_OWNER_ID":batch.OWNER_ID,
+                "GITHUB_ACTOR_ID":batch.OWNER_ID,
+                "GITHUB_ACTOR":batch.OWNER_LOGIN,
+                "GITHUB_TRIGGERING_ACTOR":batch.OWNER_LOGIN,
+                "GITHUB_REF":"refs/heads/main",
+                "GITHUB_WORKFLOW_REF":batch.REPOSITORY+"/"+batch.ISSUE_WORKFLOW+"@refs/heads/main",
+                "GITHUB_SHA":sha,
+                "GITHUB_RUN_ATTEMPT":"1","GITHUB_RUN_ID":"99887766"}
+            confirm=issuer.FREEZE_CONFIRM+self.trial
+            with patch.object(issuer,"remote",return_value=sha):
+                issuer.guard(repo,"freeze",self.trial,sha,confirm,env)
+                with self.assertRaises(ValueError):
+                    issuer.guard(repo,"freeze",self.trial,"0"*40,confirm,env)
+                with self.assertRaises(ValueError):
+                    issuer.guard(repo,"freeze",self.trial,sha,confirm,{**env,"GITHUB_ACTOR_ID":"4"})
+                with self.assertRaises(ValueError):
+                    issuer.guard(repo,"freeze",self.trial,sha,confirm,{**env,"GITHUB_RUN_ATTEMPT":"2"})
+                with self.assertRaises(ValueError):
+                    issuer.guard(repo,"freeze",self.trial,sha,confirm+"again",env)
+                with self.assertRaises(ValueError):
+                    issuer.guard(repo,"authorize",self.trial,sha,
+                                 issuer.AUTH_CONFIRM+self.trial,env)
+            with patch.object(issuer,"remote",return_value="1"*40):
+                with self.assertRaises(ValueError):
+                    issuer.guard(repo,"freeze",self.trial,sha,confirm,env)
+        finally:
+            temp.cleanup()
+
+    def test_reject_wrong_descriptor_blob_original18_and_unbounded_cohort(self):
+        temp,repo=source_copy()
+        try:
+            c=batch.scope(repo,self.trial)
+            index,docs,original=self._prepared(repo,self.trial)
+            policy=scope.policy(repo)
+            bad=copy.deepcopy(c)
+            bad["candidates"]=bad["candidates"]*5
+            with self.assertRaises(ValueError):
+                scope.validate_scope(bad,index,docs,original,policy)
+            bad=copy.deepcopy(c)
+            bad["candidates"][0]["appid"]="2124120"
+            with self.assertRaises(ValueError):
+                scope.validate_scope(bad,index,docs,original,policy)
+            bad=copy.deepcopy(c)
+            bad["provenance"]["group_descriptors"][0]["blob_sha"]="a"*40
+            path=repo/batch.paths(self.trial)["contract"]
+            raw=path.read_bytes()
+            try:
+                path.write_bytes(batch.canonical(bad))
+                with self.assertRaises(ValueError):
+                    batch.scope(repo,self.trial)
+            finally:
+                path.write_bytes(raw)
+            # The original cohort remains byte-for-byte equal to the reviewed contract.
+            self.assertEqual(batch.scope(repo,self.trial),c)
+        finally:
+            temp.cleanup()
 
     def test_no_authority_from_contract_flags(self):
         c=batch.scope(self.repo,self.trial)
