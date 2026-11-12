@@ -1133,7 +1133,7 @@ def _drain_notes_v2_individual(
     root = Path(repo).resolve()
     if offline_fixture and trial_sandbox:
         raise ValueError("nonproduction GitHub pilot must not use offline fixture mode")
-    if trial_sandbox and trial_id != "dossier-notes-v2-original18-first":
+    if trial_sandbox and trial_id.startswith("dossier-notes-v2-") and trial_id != "dossier-notes-v2-original18-first":
         import os
         from dossier_notes_v2_batch_route import (
             OWNER_ID, OWNER_LOGIN, REPOSITORY, WRITER_WORKFLOW,

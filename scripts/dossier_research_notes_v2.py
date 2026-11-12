@@ -262,7 +262,7 @@ def _manifest(repo, marker_commit, trial_id):
                 or file_at(repo, "HEAD", path) != file_at(repo, p, path)):
             reject("broken_git_provenance", "V2 frozen manifest was overwritten")
         _assert_unchanged_since(repo, p, path)
-        if trial_id == c["manual_v2_issuer"]["trial_id"]:
+        if not (trial_id.startswith("dossier-notes-v2-") and trial_id != c["manual_v2_issuer"]["trial_id"]):
             expected_pins = c["immutable_original_pins"]
             expected_rows = _original_rows()
         else:
@@ -488,7 +488,7 @@ def manifest_blueprint(trial_id, prepared_rows):
     c = _contract()
     if not TRIAL.fullmatch(str(trial_id)) or not isinstance(prepared_rows, list):
         reject("wrong_binding", "invalid future GitHub trial or prepared rows")
-    if trial_id != c["manual_v2_issuer"]["trial_id"]:
+    if trial_id.startswith("dossier-notes-v2-") and trial_id != c["manual_v2_issuer"]["trial_id"]:
         from dossier_notes_v2_batch_route import rows, manifest_blueprint as batch_blueprint
         if prepared_rows != rows(Path.cwd(), trial_id):
             reject("wrong_binding", "batch must preserve exact GitHub-prepared AppID/title/edition/digest")

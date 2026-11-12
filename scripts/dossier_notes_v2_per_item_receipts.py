@@ -40,7 +40,7 @@ def issuer_structure(repo, *, marker_commit, trial_id, authorization_commit):
     """
     _sha(marker_commit, "V2 marker")
     _sha(authorization_commit, "V2 issuer")
-    if trial_id != v2._contract()["manual_v2_issuer"]["trial_id"]:
+    if trial_id.startswith("dossier-notes-v2-") and trial_id != v2._contract()["manual_v2_issuer"]["trial_id"]:
         from dossier_notes_v2_batch_route import issuer_structure as batch_structure
         return batch_structure(repo, trial_id=trial_id, marker_commit=marker_commit,
                                authorization_commit=authorization_commit)
@@ -450,7 +450,7 @@ def verify_scoped_semantic_run(repo, *, marker_commit, trial_id,
                               authorization_commit=authorization_commit)
     if not anchor["semantic_execution_authorized"]:
         return anchor
-    if trial_id != v2._contract()["manual_v2_issuer"]["trial_id"]:
+    if trial_id.startswith("dossier-notes-v2-") and trial_id != v2._contract()["manual_v2_issuer"]["trial_id"]:
         from dossier_notes_v2_batch_route import authenticated_owner_run
         authenticated_owner_run(anchor, github_token, github_repository)
         return {**anchor, "github_run_authenticated": True}
@@ -477,7 +477,7 @@ def verify_scoped_semantic_run(repo, *, marker_commit, trial_id,
 
 def _require_batch_target(repo, trial_id, branch):
     """Prevent direct transport helpers from using a different cohort sandbox."""
-    if trial_id != v2._contract()["manual_v2_issuer"]["trial_id"]:
+    if trial_id.startswith("dossier-notes-v2-") and trial_id != v2._contract()["manual_v2_issuer"]["trial_id"]:
         from dossier_notes_v2_batch_route import paths, scope
         scope(repo, trial_id)
         if branch != paths(trial_id)["branch"]:
