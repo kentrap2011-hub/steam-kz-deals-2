@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-11",
+  "last_curated_on": "2026-11-12",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3569,7 +3569,7 @@
       "id": "visual-depth-safe-direct-deploy-pr434-independent-l3-qa-01",
       "title": "ЧАТ 3 — независимая L3 QA исправления публикации 83/100 в PR №434",
       "goal": "Независимо проверить точный PR №434: безопасную прямую передачу visual→Pages, привязку receipt и исходного GitHub run, отсутствие дублирования и сохранение старых путей, прежде чем разрешать merge.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Ограниченная security/functional проверка двух workflows, одного helper и offline regressions, с exact HEAD CI; report-only.",
       "urgency": "высокая",
@@ -3578,9 +3578,29 @@
       "worker_slot": "ЧАТ 3",
       "order": null,
       "depends_on": [],
-      "blocker": "READ-ONLY independent L3 + один report-only draft PR; без запуска workflow/Steam, исправлений source, слияний или Pages публикации.",
-      "updated_on": "2026-11-11",
-      "updated_at_utc": "2026-11-11T15:49:43Z",
+      "blocker": "Первичная независимая QA завершена отчётом draft PR №437 с замечаниями F1/F2 на прежнем HEAD; новое дельта-задание зарегистрировано отдельно.",
+      "updated_on": "2026-11-12",
+      "updated_at_utc": "2026-11-12T15:01:33Z",
+      "recent_completion": true
+    },
+    {
+      "id": "visual-pr434-f1-f2-final-delta-l3-qa-01",
+      "title": "ЧАТ 3 — финальная независимая delta L3 QA двух исправлений PR №434",
+      "goal": "На новом HEAD PR №434 независимо перепроверить F1 commercial_only и F2 ограничение main для парного direct dispatch с регрессионными тестами и текущими CI, не повторяя общий аудит.",
+      "status": "active",
+      "effort": "низкая",
+      "effort_reason": "Две локализованные поправки в уже изученном workflow, старый независимый отчёт и новые exact-HEAD CI; без повторного полного аудита.",
+      "urgency": "высокая",
+      "urgency_reason": "Без заключения об исправленных F1/F2 нельзя безопасно принять ремонт отсутствующей ночной публикации Pages.",
+      "task_file": "WORKER_TASK_VISUAL_PR434_F1_F2_FINAL_DELTA_L3_QA_01.md",
+      "worker_slot": "ЧАТ 3",
+      "order": null,
+      "depends_on": [
+        "visual-depth-safe-direct-deploy-pr434-independent-l3-qa-01"
+      ],
+      "blocker": "Только независимая READ-ONLY delta L3 и один report-only draft PR; без source правок, production dispatch, rerun, merge или дополнительного полного аудита.",
+      "updated_on": "2026-11-12",
+      "updated_at_utc": "2026-11-12T15:01:33Z",
       "recent_completion": false
     }
   ]
