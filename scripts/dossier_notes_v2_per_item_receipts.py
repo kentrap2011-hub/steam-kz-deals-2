@@ -40,9 +40,9 @@ def issuer_structure(repo, *, marker_commit, trial_id, authorization_commit):
     """
     _sha(marker_commit, "V2 marker")
     _sha(authorization_commit, "V2 issuer")
-    if trial_id == "dossier-notes-v2-fresh6-20261111-first":
-        from dossier_notes_v2_fresh6_route import issuer_structure as fresh_structure
-        return fresh_structure(repo, marker_commit=marker_commit,
+    if trial_id != v2._contract()["manual_v2_issuer"]["trial_id"]:
+        from dossier_notes_v2_batch_route import issuer_structure as batch_structure
+        return batch_structure(repo, trial_id=trial_id, marker_commit=marker_commit,
                                authorization_commit=authorization_commit)
     c = v2._contract()  # remains inactive
     assignment_manifest, manifest_sha = v2._manifest(repo, marker_commit, trial_id)
@@ -450,8 +450,8 @@ def verify_scoped_semantic_run(repo, *, marker_commit, trial_id,
                               authorization_commit=authorization_commit)
     if not anchor["semantic_execution_authorized"]:
         return anchor
-    if trial_id == "dossier-notes-v2-fresh6-20261111-first":
-        from dossier_notes_v2_fresh6_route import authenticated_owner_run
+    if trial_id != v2._contract()["manual_v2_issuer"]["trial_id"]:
+        from dossier_notes_v2_batch_route import authenticated_owner_run
         authenticated_owner_run(anchor, github_token, github_repository)
         return {**anchor, "github_run_authenticated": True}
     config = v2._contract()
@@ -475,12 +475,13 @@ def verify_scoped_semantic_run(repo, *, marker_commit, trial_id,
     return {**anchor, "github_run_authenticated": True}
 
 
-def _require_fresh6_target(trial_id, branch):
-    """Prevent direct transport helpers from reusing fresh6 issuer on any other ref."""
-    if trial_id == "dossier-notes-v2-fresh6-20261111-first":
-        from dossier_notes_v2_fresh6_route import BRANCH
-        if branch != BRANCH:
-            v2.reject("wrong_binding", "fresh6 transport cannot publish outside its exact one-use sandbox")
+def _require_batch_target(repo, trial_id, branch):
+    """Prevent direct transport helpers from using a different cohort sandbox."""
+    if trial_id != v2._contract()["manual_v2_issuer"]["trial_id"]:
+        from dossier_notes_v2_batch_route import paths, scope
+        scope(repo, trial_id)
+        if branch != paths(trial_id)["branch"]:
+            v2.reject("wrong_binding", "batch transport cannot publish outside its one-use sandbox")
 
 
 def publish_candidate_remote(repo, *, branch, expected_remote_head,
@@ -488,7 +489,7 @@ def publish_candidate_remote(repo, *, branch, expected_remote_head,
                              authorization_commit, document,
                              github_repository=None, github_token=None):
     """Publish ONE preexisting semantic document; never generate Research."""
-    _require_fresh6_target(trial_id, branch)
+    _require_batch_target(repo, trial_id, branch)
     verify_scoped_semantic_run(
         repo, marker_commit=marker_commit, trial_id=trial_id,
         authorization_commit=authorization_commit,
@@ -522,7 +523,7 @@ def publish_receipt_remote(repo, *, branch, expected_remote_head,
                            authorization_commit, introduction_commit,
                            github_repository=None, github_token=None):
     """Publish ONE typed receipt after candidate introduction is on remote."""
-    _require_fresh6_target(trial_id, branch)
+    _require_batch_target(repo, trial_id, branch)
     _sha(introduction_commit, "candidate introduction")
     def plan(work):
         proof = inspect_candidate(work, marker_commit=marker_commit, trial_id=trial_id,
@@ -562,7 +563,7 @@ def publish_assembly_item_remote(repo, *, branch, expected_remote_head,
     chain. A typed terminal Assembly result is valid transport, NOT acceptance.
     Each item is independent; no scheduler, retry or final writer is invoked.
     """
-    _require_fresh6_target(trial_id, branch)
+    _require_batch_target(repo, trial_id, branch)
     _sha(research_commit, "original Research introduction")
     verify_scoped_semantic_run(
         repo, marker_commit=marker_commit, trial_id=trial_id,
@@ -649,7 +650,7 @@ def publish_assembly_receipt_remote(repo, *, branch, expected_remote_head,
                                     assembly_commit,
                                     github_repository=None, github_token=None):
     """One-create-only typed mechanical receipt AFTER an Assembly Git introduction."""
-    _require_fresh6_target(trial_id, branch)
+    _require_batch_target(repo, trial_id, branch)
     verify_scoped_semantic_run(
         repo, marker_commit=marker_commit, trial_id=trial_id,
         authorization_commit=authorization_commit,

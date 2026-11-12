@@ -1133,48 +1133,51 @@ def _drain_notes_v2_individual(
     root = Path(repo).resolve()
     if offline_fixture and trial_sandbox:
         raise ValueError("nonproduction GitHub pilot must not use offline fixture mode")
-    if trial_sandbox and trial_id == "dossier-notes-v2-fresh6-20261111-first":
+    if trial_sandbox and trial_id != "dossier-notes-v2-original18-first":
         import os
-        from dossier_notes_v2_fresh6_route import (
-            TRIAL as FRESH_TRIAL, BRANCH as FRESH_BRANCH,
-            OWNER_ID as FRESH_OWNER_ID, OWNER_LOGIN as FRESH_OWNER_LOGIN,
-            issuer_structure as fresh_issuer_structure,
-            authenticated_owner_run as fresh_auth_run,
+        from dossier_notes_v2_batch_route import (
+            OWNER_ID, OWNER_LOGIN, REPOSITORY, WRITER_WORKFLOW,
+            paths as batch_paths, scope as batch_scope,
+            issuer_structure as batch_issuer_structure,
+            authenticated_owner_run as batch_auth_run,
         )
-        from dossier_two_stage_staging import git as fresh_git
+        from dossier_two_stage_staging import git as sandbox_git
+        path_set = batch_paths(trial_id)
+        batch_scope(root, trial_id)
         source = json.loads(
             (Path(__file__).resolve().parents[1] / "config" /
              "dossier_research_notes_v2_contract.json").read_text(encoding="utf-8")
         )
-        if (trial_id != FRESH_TRIAL
-                or source.get("active") is not False
+        if (source.get("active") is not False
                 or source.get("authorized_for_canonical_ingest") is not False
                 or source.get("production_enabled") is not False
-                or fresh_git(root, "symbolic-ref", "--short", "HEAD").stdout.decode().strip()
-                   != FRESH_BRANCH
+                or source.get("authorized_for_semantic_execution") is not False
+                or sandbox_git(root, "symbolic-ref", "--short", "HEAD").stdout.decode().strip()
+                   != path_set["branch"]
                 or os.environ.get("GITHUB_ACTIONS") != "true"
                 or os.environ.get("GITHUB_EVENT_NAME") != "workflow_dispatch"
                 or os.environ.get("GITHUB_REF") != "refs/heads/main"
                 or os.environ.get("GITHUB_WORKFLOW_REF")
-                   != "kentrap2011-hub/steam-kz-deals-2/.github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml@refs/heads/main"
-                or os.environ.get("GITHUB_REPOSITORY") != "kentrap2011-hub/steam-kz-deals-2"
-                or os.environ.get("GITHUB_ACTOR_ID") != FRESH_OWNER_ID
-                or os.environ.get("GITHUB_REPOSITORY_OWNER_ID") != FRESH_OWNER_ID
-                or os.environ.get("GITHUB_ACTOR") != FRESH_OWNER_LOGIN
-                or os.environ.get("GITHUB_TRIGGERING_ACTOR") != FRESH_OWNER_LOGIN
-                or os.environ.get("GITHUB_RUN_ATTEMPT") != "1"):
-            raise ValueError("fresh6 writer needs real owner one-shot GitHub sandbox dispatch")
-        path = "data/control/dossier_notes_v2/authorizations/" + trial_id + ".json"
-        authorizers = fresh_git(root, "log", "--first-parent",
-                               "--format=%H", "HEAD", "--", path).stdout.decode().splitlines()
+                   != REPOSITORY + "/" + WRITER_WORKFLOW + "@refs/heads/main"
+                or os.environ.get("GITHUB_REPOSITORY") != REPOSITORY
+                or os.environ.get("GITHUB_ACTOR_ID") != OWNER_ID
+                or os.environ.get("GITHUB_REPOSITORY_OWNER_ID") != OWNER_ID
+                or os.environ.get("GITHUB_ACTOR") != OWNER_LOGIN
+                or os.environ.get("GITHUB_TRIGGERING_ACTOR") != OWNER_LOGIN
+                or os.environ.get("GITHUB_RUN_ATTEMPT") != "1"
+                or not str(os.environ.get("GITHUB_RUN_ID", "")).isdigit()):
+            raise ValueError("reusable batch writer needs real owner first-attempt sandbox dispatch")
+        authorizers = sandbox_git(root, "log", "--first-parent",
+                               "--format=%H", "HEAD", "--", path_set["authorization"]).stdout.decode().splitlines()
         if len(authorizers) != 1:
-            raise ValueError("fresh6 immutable authorizer must be unique")
-        anchor = fresh_issuer_structure(
-            root, marker_commit=marker_commit, authorization_commit=authorizers[0])
+            raise ValueError("immutable cohort authorizer must be unique")
+        anchor = batch_issuer_structure(
+            root, trial_id=trial_id, marker_commit=marker_commit,
+            authorization_commit=authorizers[0])
         token = os.environ.get("GITHUB_TOKEN")
         if not token or anchor["semantic_execution_authorized"] is not True:
-            raise ValueError("fresh6 authenticated semantic issuer missing")
-        fresh_auth_run(anchor, token)
+            raise ValueError("batch authenticated semantic issuer missing")
+        batch_auth_run(anchor, token)
     elif trial_sandbox:
         import os
         from dossier_notes_v2_per_item_receipts import issuer_structure, _github_get
@@ -1260,10 +1263,12 @@ def _drain_notes_v2_individual(
             or store.is_relative_to(accepted) or accepted.is_relative_to(store)):
         raise ValueError("V2 single-item paths must be separate writer-owned subdirectories")
     if trial_sandbox:
-        if trial_id == "dossier-notes-v2-fresh6-20261111-first":
-            if (store != root / "data/control/dossier_notes_v2/fresh6_pilot_store"
-                    or accepted != root / "data/control/dossier_notes_v2/fresh6_pilot_accepted"):
-                raise ValueError("fresh6 pilot may persist only in its separate sandbox store")
+        if trial_id != "dossier-notes-v2-original18-first":
+            from dossier_notes_v2_batch_route import paths as batch_paths
+            destinations = batch_paths(trial_id)
+            if (store != root / destinations["store"]
+                    or accepted != root / destinations["accepted"]):
+                raise ValueError("batch pilot may write only its own isolated sandbox namespace")
         elif (store != root / "data/control/dossier_notes_v2/pilot_store"
                 or accepted != root / "data/control/dossier_notes_v2/pilot_accepted"):
             raise ValueError("V2 original18 pilot may persist only in sandbox data/control")
