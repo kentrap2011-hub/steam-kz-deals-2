@@ -211,7 +211,9 @@ class ReusableBatchTests(unittest.TestCase):
                "status":"completed","conclusion":"success","run_attempt":1,
                "path":batch.AUTHORIZE_WORKFLOW,
                "actor":{"id":int(batch.OWNER_ID),"login":batch.OWNER_LOGIN},
-               "head_sha":f["base"]}
+               "head_sha":f["base"],
+               "display_title":"Authorize isolated Notes V2 batch "
+                               + self.trial + " marker " + f["marker"]}
         with patch.object(receipts,"_github_get",return_value=event):
             self.assertTrue(receipts.verify_scoped_semantic_run(self.repo,
                 marker_commit=f["marker"],trial_id=self.trial,
@@ -221,6 +223,7 @@ class ReusableBatchTests(unittest.TestCase):
             {"actor":{"id":1,"login":"forger"}},{"run_attempt":2},{"event":"push"},
             {"path":"wrong_workflow.yml"},{"head_branch":"sandbox/forged"},
             {"status":"in_progress"},{"conclusion":"failure"},{"head_sha":"fake"},
+            {"display_title":"Authorize isolated Notes V2 batch another marker "+f["marker"]},
         ):
             with self.subTest(change=change):
                 with patch.object(receipts,"_github_get",return_value={**event,**change}):
@@ -310,7 +313,7 @@ class ReusableBatchTests(unittest.TestCase):
             self.assertFalse(done["canonical_acceptance"])
             self.assertTrue((repo/ps["store"]/("App_"+first["appid"]+".json")).is_file())
             self.assertFalse((repo/ps["store"]/("App_"+second["appid"]+".json")).exists())
-            receipt=repo/ps["accepted"]/f"g{first['group_sequence']:06d}"/(
+            receipt=repo/ps["accepted"]/self.trial/f"g{first['group_sequence']:06d}"/(
                 first["appid"]+"--"+first["assignment_id"]+".json")
             self.assertTrue(receipt.is_file())
             git(repo,"add","--",ps["store"],ps["accepted"])
@@ -364,7 +367,7 @@ class ReusableBatchTests(unittest.TestCase):
                 "GITHUB_WORKFLOW_REF":batch.REPOSITORY+"/"+batch.ISSUE_WORKFLOW+"@refs/heads/main",
                 "GITHUB_SHA":base,
                 "GITHUB_RUN_ATTEMPT":"1","GITHUB_RUN_ID":"123456"}
-            with self.assertRaisesRegex(ValueError,"canonical GitHub repository"):
+            with self.assertRaisesRegex(ValueError,"noncanonical GitHub remote"):
                 issuer.guard(repo,"freeze",self.trial,base,
                              issuer.FREEZE_CONFIRM+self.trial,fake)
 

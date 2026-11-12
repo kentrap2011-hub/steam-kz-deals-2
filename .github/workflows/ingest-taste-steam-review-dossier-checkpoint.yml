@@ -238,7 +238,7 @@ jobs:
               "trial_id": os.environ["NOTES_V2_TRIAL_ID"],
               "item_commits": items,
               "store_dir": Path("data/control/dossier_notes_v2/batch_pilot_store") / os.environ["NOTES_V2_TRIAL_ID"],
-              "accepted_dir": Path("data/control/dossier_notes_v2/batch_pilot_accepted") / os.environ["NOTES_V2_TRIAL_ID"],
+              "accepted_dir": Path("data/control/dossier_notes_v2/batch_pilot_accepted"),
               "offline_fixture": False,
               "trial_sandbox": True,
           })

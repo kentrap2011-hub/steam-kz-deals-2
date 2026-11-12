@@ -51,7 +51,7 @@ def paths(trial_id):
         "manifest": "data/control/dossier_notes_v2/manifests/" + trial_id + ".json",
         "authorization": "data/control/dossier_notes_v2/authorizations/" + trial_id + ".json",
         "store": "data/control/dossier_notes_v2/batch_pilot_store/" + trial_id,
-        "accepted": "data/control/dossier_notes_v2/batch_pilot_accepted/" + trial_id,
+        "accepted": "data/control/dossier_notes_v2/batch_pilot_accepted",
     }
 
 
@@ -300,6 +300,9 @@ def authenticated_owner_run(anchor,token,github_repository=REPOSITORY):
             and doc.get("run_attempt")==1
             and doc.get("head_branch")=="main"
             and doc.get("path")==AUTHORIZE_WORKFLOW
+            and doc.get("display_title")==(
+                "Authorize isolated Notes V2 batch "
+                + anchor["trial_id"] + " marker " + anchor["marker_commit"])
             and doc.get("actor",{}).get("id")==int(OWNER_ID)
             and doc.get("actor",{}).get("login")==OWNER_LOGIN
             and isinstance(doc.get("head_sha"),str)
