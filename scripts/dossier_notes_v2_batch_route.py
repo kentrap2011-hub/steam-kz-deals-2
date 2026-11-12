@@ -160,6 +160,24 @@ def _base_contract_proof(repo,base,trial_id):
     require(not git(repo,"log","--first-parent","--format=%H",
                     f"{base}..HEAD","--",policy_path).stdout.strip(),
             "batch policy updated after freeze")
+    # A semantic result must not be able to alter the Python/Actions source
+    # executed by a future manual sandbox writer. Cohort transport is create-only.
+    executable_paths = (
+        "scripts/dossier_notes_v2_batch_preflight.py",
+        "scripts/dossier_notes_v2_batch_route.py",
+        "scripts/dossier_notes_v2_batch_issuer.py",
+        "scripts/dossier_notes_v2_batch_pilot.py",
+        "scripts/dossier_research_notes_v2.py",
+        "scripts/dossier_notes_v2_per_item_receipts.py",
+        "scripts/taste_steam_review_dossier_buffered.py",
+        ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml",
+    )
+    for executable in executable_paths:
+        require(file_at(repo,base,executable)==file_at(repo,"HEAD",executable),
+                "sandbox executable differs from frozen GitHub main source")
+        require(not git(repo,"log","--first-parent","--format=%H",
+                        f"{base}..HEAD","--",executable).stdout.strip(),
+                "sandbox executable modified after GitHub owner issuance")
     return {"contract_blob_sha":blob(repo,base,path),
             "policy_blob_sha":blob(repo,base,policy_path)}
 

@@ -261,8 +261,8 @@ class ReusableBatchTests(unittest.TestCase):
         from taste_steam_review_dossier_test_fixture import web_dossier
         from taste_steam_review_dossier_buffered import drain_buffered_groups
         f=self.fixture
-        # This isolated test mutates only its own disposable clone.
-        temp,repo=source_copy()
+        # Reuse the disposable issuer clone where its Git commits exist.
+        repo=self.repo
         try:
             git(repo,"checkout","-B",batch.paths(self.trial)["branch"],f["auth"])
             first,second=f["rows"][:2]
@@ -323,7 +323,7 @@ class ReusableBatchTests(unittest.TestCase):
             self.assertEqual(repeated["items"][0]["status"],"already_persisted_same_binding")
             self.assertEqual(git(repo,"status","--porcelain"),"")
         finally:
-            temp.cleanup()
+            git(repo,"checkout","fixture/batch")
 
     def test_two_manual_owner_dispatches_no_reissue_disposable_remote(self):
         with tempfile.TemporaryDirectory(prefix="batch-owner-issuer-") as tmp:

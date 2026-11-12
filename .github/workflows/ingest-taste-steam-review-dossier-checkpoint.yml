@@ -258,7 +258,7 @@ jobs:
             echo "No new reusable batch strict item available; no replay"
             exit 0
           fi
-          if test -n "$(git status --porcelain --untracked-files=all | grep -vE '^(A |\?\?) data/control/dossier_notes_v2/reusable batch_pilot_(store|accepted)/${NOTES_V2_TRIAL_ID}/')"; then
+          if test -n "$(git status --porcelain --untracked-files=all | grep -vE "^(A |\\?\\?) data/control/dossier_notes_v2/batch_pilot_(store|accepted)/${NOTES_V2_TRIAL_ID}/")"; then
             echo "Unexpected working-tree mutation in isolated writer"
             exit 1
           fi
