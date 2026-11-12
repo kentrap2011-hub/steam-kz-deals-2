@@ -3551,7 +3551,7 @@
       "id": "dossier-v2-six-game-fresh-pilot-readiness-recon-01",
       "title": "ЧАТ 2 — подготовить новый пилот Dossier V2 на шести играх",
       "goal": "Спроектировать безопасное независимое испытание шести новых игр Research → Assembly после последнего V2 pre-submit guard, выбрать доказуемые критерии качества и точные GitHub разрешения без запуска семантики.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Точечная сверка существующего пилота, V2 границ разрешений и реальных ошибок, без нового исследования кода и live semantic runs.",
       "urgency": "высокая",
@@ -3560,10 +3560,10 @@
       "worker_slot": "ЧАТ 2",
       "order": null,
       "depends_on": [],
-      "blocker": "Только RECON и report-only draft PR. Новый Research/Assembly, owner dispatch, release, promotion, production, контрактные или workflow правки не разрешены.",
-      "updated_on": "2026-11-11",
-      "updated_at_utc": "2026-11-11T15:22:33Z",
-      "recent_completion": false
+      "blocker": "Final RECON report PR №438 сдан: шесть candidate AppID, blockers owner authorization и критерии; реализация назначена отдельным ЧАТ 1.",
+      "updated_on": "2026-11-12",
+      "updated_at_utc": "2026-11-12T17:51:31Z",
+      "recent_completion": true
     },
     {
       "id": "visual-depth-safe-direct-deploy-pr434-independent-l3-qa-01",
@@ -3601,6 +3601,26 @@
       "blocker": "Только независимая READ-ONLY delta L3 и один report-only draft PR; без source правок, production dispatch, rerun, merge или дополнительного полного аудита.",
       "updated_on": "2026-11-12",
       "updated_at_utc": "2026-11-12T15:01:33Z",
+      "recent_completion": false
+    },
+    {
+      "id": "dossier-v2-reusable-batches-fresh6-launch-ready-implement-01",
+      "title": "НОВЫЙ ЧАТ 1 — сделать Dossier V2 переиспользуемым и готовым к запуску первых 6 игр",
+      "goal": "На базе уже начатых PR №439/440 реализовать повторно используемый GitHub-owned Dossier V2 batch pipeline, довести isolated fresh6 до проверяемого first-launch gate без новых подготовительных проектов.",
+      "status": "active",
+      "effort": "высокая",
+      "effort_reason": "Применить и обобщить существующий issuer, per-item Git transport и sandbox writer вместо новой разработки; нужны адресные regressions и согласование сложенных PR.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь одобрил непосредственную реализацию и один последующий изолированный пилот шести игр, чтобы перестать откладывать проверку качества V2.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_REUSABLE_BATCHES_FRESH6_LAUNCH_READY_IMPLEMENT_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-six-game-fresh-pilot-readiness-recon-01"
+      ],
+      "blocker": "Только IMPLEMENT/тесты/готовность GitHub grant; семантика и owner Actions после merge и отдельной независимой L3, исключительно isolated fresh6; без production и Scheduled Tasks.",
+      "updated_on": "2026-11-12",
+      "updated_at_utc": "2026-11-12T17:51:31Z",
       "recent_completion": false
     }
   ]
