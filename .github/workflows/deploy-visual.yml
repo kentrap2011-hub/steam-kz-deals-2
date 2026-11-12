@@ -2,9 +2,17 @@ name: Deploy visual mailing
 
 on:
   workflow_dispatch:
+    inputs:
+      visual_producer_run_id:
+        description: "Exact Build daily visual payload run ID (empty for legacy manual deploy)"
+        required: false
+        type: string
+      visual_producer_run_attempt:
+        description: "Exact Build daily visual payload run attempt"
+        required: false
+        type: string
   workflow_run:
     workflows:
-      - "Build daily visual payload"
       - "Build site current status"
     types:
       - completed
@@ -44,9 +52,12 @@ concurrency:
 jobs:
   deploy:
     if: >
-      github.event_name != 'workflow_run' ||
-      (github.event.workflow_run.conclusion == 'success' &&
-       github.event.workflow_run.head_branch == 'main')
+      (github.event_name != 'workflow_run' ||
+       (github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.head_branch == 'main')) &&
+      (github.event_name != 'workflow_dispatch' ||
+       inputs.visual_producer_run_id == '' ||
+       github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -58,15 +69,58 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Download exact triggering build freshness receipt
-        if: github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Build daily visual payload'
+      - name: Validate direct dispatch input pair
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          PRODUCER_RUN_ID: ${{ inputs.visual_producer_run_id }}
+          PRODUCER_ATTEMPT: ${{ inputs.visual_producer_run_attempt }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -n "$PRODUCER_RUN_ID" ] && [ -z "$PRODUCER_ATTEMPT" ]; then
+            echo "direct visual dispatch requires producer attempt" >&2
+            exit 1
+          fi
+          if [ -z "$PRODUCER_RUN_ID" ] && [ -n "$PRODUCER_ATTEMPT" ]; then
+            echo "producer attempt without run ID is forbidden" >&2
+            exit 1
+          fi
+          if [ -n "$PRODUCER_RUN_ID" ] && [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "direct visual dispatch must run from main" >&2
+            exit 1
+          fi
+
+      - name: Download exact producing visual freshness receipt
+        if: github.event_name == 'workflow_dispatch' && inputs.visual_producer_run_id != ''
         uses: actions/download-artifact@v4
         with:
           name: visual-freshness-receipt
           path: /tmp/visual-freshness-artifact
           github-token: ${{ github.token }}
           repository: ${{ github.repository }}
-          run-id: ${{ github.event.workflow_run.id }}
+          run-id: ${{ inputs.visual_producer_run_id }}
+
+      - name: Attest exact completed producer job and receipt for direct dispatch
+        if: github.event_name == 'workflow_dispatch' && inputs.visual_producer_run_id != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PRODUCER_RUN_ID: ${{ inputs.visual_producer_run_id }}
+          PRODUCER_ATTEMPT: ${{ inputs.visual_producer_run_attempt }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s /tmp/visual-freshness-artifact/visual-freshness-receipt.json
+          [[ "$PRODUCER_RUN_ID" =~ ^[1-9][0-9]*$ ]]
+          [[ "$PRODUCER_ATTEMPT" =~ ^[1-9][0-9]*$ ]]
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$PRODUCER_RUN_ID" > /tmp/visual-producer-run.json
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$PRODUCER_RUN_ID/attempts/$PRODUCER_ATTEMPT/jobs?per_page=100" > /tmp/visual-producer-jobs.json
+          python scripts/visual_deploy_dispatch.py \
+            --run-json /tmp/visual-producer-run.json \
+            --jobs-json /tmp/visual-producer-jobs.json \
+            --receipt /tmp/visual-freshness-artifact/visual-freshness-receipt.json \
+            --run-id "$PRODUCER_RUN_ID" \
+            --attempt "$PRODUCER_ATTEMPT" \
+            --repository "$GITHUB_REPOSITORY"
 
       - name: Classify canonical visual mutation
         id: visual_scope
@@ -75,6 +129,7 @@ jobs:
           BEFORE_SHA: ${{ github.event.before }}
           AFTER_SHA: ${{ github.sha }}
           TRIGGER_WORKFLOW: ${{ github.event.workflow_run.name }}
+          DIRECT_PRODUCER_RUN_ID: ${{ inputs.visual_producer_run_id }}
         shell: bash
         run: |
           set -euo pipefail
@@ -169,7 +224,16 @@ jobs:
           # player-facing semantics/descriptions, or touch the giveaway sibling.
           receipt = {}
           receipt_path = Path('/tmp/visual-freshness-artifact/visual-freshness-receipt.json')
-          if os.environ.get('EVENT_NAME') == 'workflow_run' and receipt_path.exists():
+          if (
+              receipt_path.exists()
+              and (
+                  os.environ.get('EVENT_NAME') == 'workflow_run'
+                  or (
+                      os.environ.get('EVENT_NAME') == 'workflow_dispatch'
+                      and os.environ.get('DIRECT_PRODUCER_RUN_ID')
+                  )
+              )
+          ):
               receipt = json.loads(receipt_path.read_text(encoding='utf-8'))
 
           produced = receipt.get('produced_visual') or {}
@@ -298,15 +362,16 @@ jobs:
         id: freshness
         env:
           EVENT_NAME: ${{ github.event_name }}
-          TRIGGER_RUN_ID: ${{ github.event.workflow_run.id }}
+          TRIGGER_RUN_ID: ${{ inputs.visual_producer_run_id || github.event.workflow_run.id }}
           STATUS_ONLY: ${{ steps.visual_scope.outputs.status_only }}
+          DIRECT_PRODUCER_RUN_ID: ${{ inputs.visual_producer_run_id }}
         shell: bash
         run: |
           set -euo pipefail
           if [ "$STATUS_ONLY" = "true" ]; then
             classification='status_only/current_status'
             echo "VISUAL_FRESHNESS=$classification event=$EVENT_NAME"
-          elif [ "$EVENT_NAME" = "workflow_run" ]; then
+          elif [ "$EVENT_NAME" = "workflow_run" ] || [ -n "$DIRECT_PRODUCER_RUN_ID" ]; then
             RECEIPT=/tmp/visual-freshness-artifact/visual-freshness-receipt.json
             test -s "$RECEIPT"
             python scripts/visual_freshness_receipt.py verify-receipt \
@@ -323,7 +388,7 @@ jobs:
       - name: Expose publication freshness outcome
         env:
           CLASSIFICATION: ${{ steps.freshness.outputs.classification }}
-          TRIGGER_RUN_ID: ${{ github.event.workflow_run.id }}
+          TRIGGER_RUN_ID: ${{ inputs.visual_producer_run_id || github.event.workflow_run.id }}
         shell: bash
         run: |
           set -euo pipefail

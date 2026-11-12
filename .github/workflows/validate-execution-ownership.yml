@@ -27,6 +27,9 @@ on:
       - "scripts/test_russian_translation_partial_accept_diagnostics.py"
       - "scripts/validate_russian_descriptions.py"
       - "scripts/test_workflow_run_production_authority.py"
+      - "scripts/visual_deploy_dispatch.py"
+      - "scripts/test_visual_deploy_dispatch.py"
+      - ".github/workflows/deploy-visual.yml"
       - ".github/workflows/build-mailing-feed.yml"
       - ".github/workflows/build-feed-ingest-validation.yml"
       - ".github/workflows/build-feed.yml"
@@ -63,6 +66,9 @@ on:
       - "scripts/test_russian_translation_partial_accept_diagnostics.py"
       - "scripts/validate_russian_descriptions.py"
       - "scripts/test_workflow_run_production_authority.py"
+      - "scripts/visual_deploy_dispatch.py"
+      - "scripts/test_visual_deploy_dispatch.py"
+      - ".github/workflows/deploy-visual.yml"
       - ".github/workflows/build-mailing-feed.yml"
       - ".github/workflows/build-feed-ingest-validation.yml"
       - ".github/workflows/build-feed.yml"
@@ -98,6 +104,9 @@ jobs:
 
       - name: Validate workflow-run production authority
         run: python scripts/test_workflow_run_production_authority.py
+
+      - name: Test exact visual-to-Pages direct dispatch (offline only)
+        run: python scripts/test_visual_deploy_dispatch.py
 
       - name: Validate Russian description translation contract
         run: python scripts/validate_russian_description_translation_contract.py

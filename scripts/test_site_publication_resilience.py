@@ -146,7 +146,11 @@ class SitePublicationResilienceTests(unittest.TestCase):
     def test_status_workflow_has_independent_pages_wakeup(self):
         deploy = Path('.github/workflows/deploy-visual.yml').read_text(encoding='utf-8')
         self.assertIn('- "Build site current status"', deploy)
-        self.assertIn("github.event.workflow_run.name == 'Build daily visual payload'", deploy)
+        # Visual publication now uses a verified direct dispatch, not an
+        # unsupported fourth workflow_run hop. Status stays independent.
+        self.assertNotIn('- "Build daily visual payload"', deploy)
+        self.assertIn('inputs.visual_producer_run_id', deploy)
+        self.assertIn('scripts/visual_deploy_dispatch.py', deploy)
         self.assertIn("TRIGGER_WORKFLOW: ${{ github.event.workflow_run.name }}", deploy)
         self.assertIn("Build site current status", deploy)
         self.assertIn("VISUAL_DEPLOY_SCOPE=status_only trigger=site_current_status", deploy)
