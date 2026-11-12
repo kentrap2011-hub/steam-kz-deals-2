@@ -240,6 +240,160 @@ class Fresh6IssuerTests(unittest.TestCase):
         finally:
             git(self.repo,"checkout","fixture/fresh6")
 
+    def test_fresh6_mixed_ready_and_incomplete_persists_only_ready_in_sandbox(self):
+        """A real strict-ready item survives a sibling's typed incomplete result.
+
+        This is a disposable Git fixture, not actual player evidence or live
+        semantic authorization. Test the fresh6-specific writer, not a mock
+        of its item selection or persistence.
+        """
+        from datetime import datetime, timezone
+        from taste_steam_review_dossier_test_fixture import web_dossier
+        from taste_steam_review_dossier_buffered import drain_buffered_groups
+
+        first, second = self.items[:2]
+        branch = "fixture/fresh6-mixed-outcomes"
+        git(self.repo, "checkout", "-b", branch, self.authorizer)
+        try:
+            commits = {}
+            for item in (first, second):
+                appid = item["appid"]
+                assignment = v2.frozen_assignment(
+                    self.repo, marker_commit=self.marker,
+                    trial_id=fresh.TRIAL, appid=appid)
+                note = {
+                    "schema": "DOSSIER-RESEARCH-NOTES-V2",
+                    "schema_version": 2, "assignment": assignment,
+                    "notes_text": "", "source_log": [],
+                    "research_status": "no_verifiable_findings",
+                }
+                commits[appid] = {
+                    "research_commit": add(
+                        self.repo, v2._path("research", assignment), note,
+                        "fixture: safe fresh6 Research " + appid),
+                    "assembly_commit": None,
+                }
+
+            work_first = v2.assembly_work(
+                self.repo, marker_commit=self.marker, trial_id=fresh.TRIAL,
+                appid=first["appid"],
+                research_commit=commits[first["appid"]]["research_commit"])
+            self.assertEqual(work_first["status"], "ready_for_autonomous_assembly")
+            dossier = web_dossier(
+                first["appid"], datetime.now(timezone.utc),
+                title=first["title"])
+            ready = v2.candidate_assembly(
+                work_first, outcome="assembled_candidate_ready",
+                final_dossier=dossier)
+            commits[first["appid"]]["assembly_commit"] = add(
+                self.repo, work_first["output_path"], ready,
+                "fixture: strict-ready fresh6 Assembly")
+
+            work_second = v2.assembly_work(
+                self.repo, marker_commit=self.marker, trial_id=fresh.TRIAL,
+                appid=second["appid"],
+                research_commit=commits[second["appid"]]["research_commit"])
+            self.assertEqual(work_second["status"], "ready_for_autonomous_assembly")
+            incomplete = v2.candidate_assembly(
+                work_second, outcome="assembly_missing_evidence",
+                diagnostic="Synthetic fixture: independently verified evidence unavailable")
+            commits[second["appid"]]["assembly_commit"] = add(
+                self.repo, work_second["output_path"], incomplete,
+                "fixture: incomplete fresh6 Assembly")
+
+            self.assertEqual(v2.inspect_assembly(
+                self.repo, marker_commit=self.marker, trial_id=fresh.TRIAL,
+                appid=first["appid"],
+                research_commit=commits[first["appid"]]["research_commit"],
+                result_commit=commits[first["appid"]]["assembly_commit"])["status"],
+                "strict_item_valid_pending_existing_atomic_group_ingest")
+            self.assertEqual(v2.inspect_assembly(
+                self.repo, marker_commit=self.marker, trial_id=fresh.TRIAL,
+                appid=second["appid"],
+                research_commit=commits[second["appid"]]["research_commit"],
+                result_commit=commits[second["appid"]]["assembly_commit"])["status"],
+                "assembly_missing_evidence")
+
+            store = self.repo / "data/control/dossier_notes_v2/fresh6_pilot_store"
+            accepted = self.repo / "data/control/dossier_notes_v2/fresh6_pilot_accepted"
+            options = {
+                "repo": self.repo, "marker_commit": self.marker,
+                "trial_id": fresh.TRIAL, "item_commits": commits,
+                "store_dir": store, "accepted_dir": accepted,
+                "offline_fixture": False, "trial_sandbox": True,
+            }
+            env = {
+                "GITHUB_ACTIONS": "true",
+                "GITHUB_EVENT_NAME": "workflow_dispatch",
+                "GITHUB_REF": "refs/heads/main",
+                "GITHUB_WORKFLOW_REF": fresh.REPOSITORY
+                    + "/.github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml@refs/heads/main",
+                "GITHUB_REPOSITORY": fresh.REPOSITORY,
+                "GITHUB_REPOSITORY_OWNER_ID": fresh.OWNER_ID,
+                "GITHUB_ACTOR_ID": fresh.OWNER_ID,
+                "GITHUB_ACTOR": fresh.OWNER_LOGIN,
+                "GITHUB_TRIGGERING_ACTOR": fresh.OWNER_LOGIN,
+                "GITHUB_RUN_ATTEMPT": "1",
+                "GITHUB_TOKEN": "synthetic-no-network",
+            }
+            with patch.dict(os.environ, env), patch.object(
+                    fresh, "authenticated_owner_run", return_value=True):
+                result = drain_buffered_groups(notes_v2=options)
+
+            by_appid = {row["appid"]: row for row in result["items"]}
+            self.assertEqual(len(by_appid), 6)
+            self.assertEqual(by_appid[first["appid"]]["status"],
+                             "persisted_pending_github_commit")
+            self.assertEqual(by_appid[second["appid"]]["status"], "invalid")
+            self.assertEqual(by_appid[second["appid"]]["source_status"]
+                             if "source_status" in by_appid[second["appid"]]
+                             else "assembly_missing_evidence",
+                             "assembly_missing_evidence")
+            self.assertTrue(all(
+                row["status"] == "missing" for row in result["items"][2:]))
+            self.assertIs(result["canonical_acceptance"], False)
+
+            cache = store / ("App_" + first["appid"] + ".json")
+            rejected_cache = store / ("App_" + second["appid"] + ".json")
+            receipt = accepted / fresh.TRIAL / "g000001" / (
+                first["appid"] + "--" + first["assignment_id"] + ".json")
+            self.assertTrue(cache.is_file())
+            self.assertEqual(json.loads(cache.read_text(encoding="utf-8")), dossier)
+            self.assertTrue(receipt.is_file())
+            saved = json.loads(receipt.read_text(encoding="utf-8"))
+            self.assertEqual(saved["schema"], "DOSSIER-NOTES-V2-ISOLATED-TRIAL-RECEIPT-V1")
+            self.assertEqual(saved["assignment"]["appid"], first["appid"])
+            self.assertEqual(saved["assembly_commit"],
+                             commits[first["appid"]]["assembly_commit"])
+            self.assertFalse(rejected_cache.exists())
+
+            # Same two-path atomic sandbox commit as the manual writer workflow.
+            git(self.repo, "add", "--", str(store.relative_to(self.repo)),
+                str(accepted.relative_to(self.repo)))
+            staged = set(git(self.repo, "diff", "--cached", "--name-only").splitlines())
+            self.assertEqual(staged, {
+                str(cache.relative_to(self.repo)),
+                str(receipt.relative_to(self.repo)),
+            })
+            git(self.repo, "commit", "-m", "fixture: persist one isolated fresh6 item")
+            self.assertEqual(set(git(
+                self.repo, "diff-tree", "--no-commit-id", "--name-only",
+                "-r", "HEAD").splitlines()), staged)
+            self.assertEqual(git(self.repo, "status", "--porcelain"), "")
+
+            # The same immutable binding must not generate a second receipt.
+            with patch.dict(os.environ, env), patch.object(
+                    fresh, "authenticated_owner_run", return_value=True):
+                repeated = drain_buffered_groups(notes_v2=options)
+            again = {row["appid"]: row for row in repeated["items"]}
+            self.assertEqual(again[first["appid"]]["status"],
+                             "already_persisted_same_binding")
+            self.assertEqual(again[second["appid"]]["status"], "invalid")
+            self.assertEqual(git(self.repo, "status", "--porcelain"), "")
+        finally:
+            git(self.repo, "checkout", "fixture/fresh6")
+
+
     def test_full_two_dispatch_issuer_local_bare_git_fixture_only(self):
         # This deliberately invokes the pure issuer functions without the
         # real GitHub Actions dispatch gate. It tests the deterministic Git
