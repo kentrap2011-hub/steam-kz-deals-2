@@ -27,7 +27,7 @@ def execute(args):
             or c.get("authorized_for_canonical_ingest") is not False
             or scope["trial_id"] != trial_id
             or scope["proposed_sandbox_branch"] != paths["branch"]):
-        v2.reject("wrong_binding", "only inactive isolated six-game trial is allowed")
+        v2.reject("wrong_binding", "only inactive isolated GitHub-issued batch is allowed")
     head_branch = git(repo, "symbolic-ref", "--short", "HEAD").stdout.decode().strip()
     if head_branch != paths["branch"]:
         v2.reject("wrong_binding", "not on exact separately issued batch Git sandbox")
@@ -37,7 +37,7 @@ def execute(args):
     manifest, manifest_blob = v2._manifest(repo, args.marker_commit, trial_id)
     if (not 1 <= len(manifest["items"]) <= 24 or len(set(i["appid"] for i in manifest["items"])) != len(manifest["items"])
             or manifest_blob != anchor["manifest_blob_sha"]):
-        v2.reject("wrong_binding", "frozen batch issuer does not bind exactly six games")
+        v2.reject("wrong_binding", "frozen batch issuer does not bind the bounded exact cohort")
     if args.command == "inspect":
         return {
             "status": "batch_issuer_structure_only_not_run_authentication",
@@ -50,7 +50,7 @@ def execute(args):
             "production_authorized": False, "canonical_acceptance": False,
         }
     if args.appid not in {i["appid"] for i in manifest["items"]}:
-        v2.reject("wrong_binding", "AppID not in exact six frozen GitHub assignments")
+        v2.reject("wrong_binding", "AppID not in exact frozen cohort assignments")
     if not (isinstance(args.expected_remote_head, str)
             and re.fullmatch(r"[0-9a-f]{40}", args.expected_remote_head)):
         v2.reject("wrong_binding", "explicit exact new remote SHA required")
@@ -99,7 +99,7 @@ def main():
     try:
         print(json.dumps(execute(args), ensure_ascii=False, indent=2, sort_keys=True))
     except (ValueError, OSError, KeyError, v2.NotesV2Error) as exc:
-        p.exit(2, "FRESH6_PILOT_REFUSED: " + str(exc) + "\n")
+        p.exit(2, "BATCH_PILOT_REFUSED: " + str(exc) + "\n")
 
 
 if __name__ == "__main__":
