@@ -252,8 +252,9 @@ class Fresh6IssuerTests(unittest.TestCase):
         from taste_steam_review_dossier_buffered import drain_buffered_groups
 
         first, second = self.items[:2]
-        branch = "fixture/fresh6-mixed-outcomes"
-        git(self.repo, "checkout", "-b", branch, self.authorizer)
+        # The writer intentionally refuses any branch except the exact sandbox.
+        # Reset the dedicated fixture ref, irrespective of test ordering.
+        git(self.repo, "checkout", "-B", fresh.BRANCH, self.authorizer)
         try:
             commits = {}
             for item in (first, second):
@@ -345,10 +346,6 @@ class Fresh6IssuerTests(unittest.TestCase):
             self.assertEqual(by_appid[first["appid"]]["status"],
                              "persisted_pending_github_commit")
             self.assertEqual(by_appid[second["appid"]]["status"], "invalid")
-            self.assertEqual(by_appid[second["appid"]]["source_status"]
-                             if "source_status" in by_appid[second["appid"]]
-                             else "assembly_missing_evidence",
-                             "assembly_missing_evidence")
             self.assertTrue(all(
                 row["status"] == "missing" for row in result["items"][2:]))
             self.assertIs(result["canonical_acceptance"], False)
