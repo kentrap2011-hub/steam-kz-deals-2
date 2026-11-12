@@ -173,7 +173,11 @@ def _base_contract_proof(repo,base,trial_id):
         ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml",
     )
     for executable in executable_paths:
-        require(file_at(repo,base,executable)==file_at(repo,"HEAD",executable),
+        # The legacy file_at() intentionally supports only config/ and data/.
+        # These are STATIC trusted source paths, so compare Git show bytes
+        # without broadening that legacy validator's namespace.
+        require(git(repo,"show",f"{base}:{executable}").stdout==
+                git(repo,"show",f"HEAD:{executable}").stdout,
                 "sandbox executable differs from frozen GitHub main source")
         require(not git(repo,"log","--first-parent","--format=%H",
                         f"{base}..HEAD","--",executable).stdout.strip(),
