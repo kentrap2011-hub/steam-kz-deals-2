@@ -590,3 +590,15 @@ Currentness invariant after PPD-012:
 - Consumer: .github/workflows/deploy-visual.yml — workflow_dispatch paired inputs; downloads same producer visual-freshness-receipt; scripts/visual_deploy_dispatch.py verifies GitHub run metadata and completed producing job; scripts/visual_freshness_receipt.py verify-receipt verifies staged canonical bytes. Existing Build site current status workflow_run and manual/push paths remain.
 - CI: scripts/test_visual_deploy_dispatch.py via .github/workflows/validate-execution-ownership.yml, plus scripts/test_site_publication_resilience.py and validate-site-deploy-isolation workflow.
 - Decision: PROJECT_DECISIONS.md VISUAL-003. Implementation report: reviews/worker_reports/visual-depth-safe-direct-pages-dispatch-implement-01.md. Draft PR #434 is unmerged/unactivated; independent QA, then actual scheduled nightly Pages + live read-back required. No recurring schedule, second queue, ChatGPT production publisher or Steam rerun.
+
+---
+
+## Dossier V2 connected GitHub tokenless manual Research/Assembly (2026-11-13)
+
+- **Source PR:** [#445](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/445), based on `main` commit `60641c5b5d4cf40dd0447316e7af0c186f542721` (not active production).
+- **Route:** `config/dossier_notes_v2_connector_transport_manual_runbook.md` → `scripts/dossier_notes_v2_connector_transport.mjs::connectorPreflight/connectorPublishItem` → connected GitHub Git objects + nonforce expected-HEAD CAS → independent one-add Git readback → existing immutable typed receipt and strict sandbox-only Python writer.
+- **Operator prompts:** `config/dossier_notes_v2_batch_research_manual_one_shot_prompt.md` and `config/dossier_notes_v2_batch_assembly_manual_one_shot_prompt.md`. No separate `GH_TOKEN` in connector path. Existing `scripts/dossier_notes_v2_batch_pilot.py` remains token-backed for checkout environments and must not be tricked into anonymous writes.
+- **Authority:** both authenticated first-attempt owner issue/authorize Actions, exact branch parent chain/manifest/actor/login/source, timestamps, exact GitHub repo push permission, immutable AppID/title/edition/assignment. The existing GitHub strict writer, not ChatGPT, remains the acceptance and canonical truth.
+- **Tests:** `scripts/test_dossier_notes_v2_connector_transport.mjs` + unchanged `scripts/test_dossier_notes_v2_batch_route.py` and `scripts/test_dossier_notes_v2_per_item_receipts.py`; CI `.github/workflows/validate-dossier-research-notes-v2.yml`. This is a synthetic transport regression, not live semantic evidence.
+- **STOP:** any tool/proof absence, wrong issuer, moved SHA, duplicate path, CAS mismatch, unconfirmed readback, missing Research typed receipt. No retry or separate queue, no Freeze/Authorize reissue, no V1/Deep/production mutation.
+- **Worker report:** `reviews/worker_reports/dossier-v2-connector-transport-no-gh-token-implement-01.md`.
