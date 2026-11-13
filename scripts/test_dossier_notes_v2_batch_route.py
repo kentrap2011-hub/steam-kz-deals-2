@@ -276,9 +276,16 @@ class ReusableBatchTests(unittest.TestCase):
                 doc={"schema":"DOSSIER-RESEARCH-NOTES-V2","schema_version":2,
                      "assignment":a,"notes_text":"","source_log":[],
                      "research_status":"no_verifiable_findings"}
-                entries[item["appid"]]={"research_commit":add(repo,v2._path("research",a),doc,
-                                          "fixture Research "+item["appid"]),
+                research_commit=add(repo,v2._path("research",a),doc,
+                                    "fixture Research "+item["appid"])
+                entries[item["appid"]]={"research_commit":research_commit,
                                          "assembly_commit":None}
+                recipe=receipts.prepare_receipt(
+                    repo,marker_commit=f["marker"],trial_id=self.trial,
+                    appid=item["appid"],authorization_commit=f["auth"],
+                    introduction_commit=research_commit)
+                add(repo,recipe["receipt_path"],recipe["receipt_bytes"],
+                    "fixture typed Research receipt "+item["appid"])
             w=v2.assembly_work(repo,marker_commit=f["marker"],trial_id=self.trial,
                   appid=first["appid"],research_commit=entries[first["appid"]]["research_commit"])
             dossier=web_dossier(first["appid"],datetime.now(timezone.utc),title=first["title"])
@@ -292,6 +299,16 @@ class ReusableBatchTests(unittest.TestCase):
             incomplete=v2.candidate_assembly(w,outcome="assembly_missing_evidence",
                          diagnostic="Synthetic unavailable independent evidence")
             entries[second["appid"]]["assembly_commit"]=add(repo,w["output_path"],incomplete,"fixture incomplete")
+            for item in (first, second):
+                appid=item["appid"]
+                recipe=receipts._assembly_receipt(
+                    repo,marker_commit=f["marker"],trial_id=self.trial,
+                    appid=appid,authorization_commit=f["auth"],
+                    research_commit=entries[appid]["research_commit"],
+                    assembly_commit=entries[appid]["assembly_commit"],
+                    receipt_parent=git(repo,"rev-parse","HEAD"))
+                add(repo,recipe["receipt_path"],recipe["receipt_bytes"],
+                    "fixture typed Assembly receipt "+appid)
             ps=batch.paths(self.trial)
             env={
                 "GITHUB_ACTIONS":"true","GITHUB_EVENT_NAME":"workflow_dispatch",
@@ -437,6 +454,58 @@ class ReusableBatchTests(unittest.TestCase):
                 path.write_bytes(raw)
             # The original cohort remains byte-for-byte equal to the reviewed contract.
             self.assertEqual(batch.scope(repo,self.trial),c)
+        finally:
+            temp.cleanup()
+
+    def test_missing_typed_stage_receipts_are_not_sufficient_for_next_stage(self):
+        temp,repo=source_copy()
+        try:
+            f=synthetic_issuer(repo,self.trial)
+            game=f["rows"][0]
+            appid=game["appid"]
+            assignment=v2.frozen_assignment(
+                repo,marker_commit=f["marker"],trial_id=self.trial,appid=appid)
+            notes={"schema":"DOSSIER-RESEARCH-NOTES-V2","schema_version":2,
+                   "assignment":assignment,"notes_text":"","source_log":[],
+                   "research_status":"no_verifiable_findings"}
+            research=add(repo,v2._path("research",assignment),notes,"fixture Research without receipt")
+            with self.assertRaisesRegex(v2.NotesV2Error,"Research typed receipt"):
+                receipts.require_batch_research_receipt(
+                    repo,marker_commit=f["marker"],trial_id=self.trial,
+                    appid=appid,authorization_commit=f["auth"],research_commit=research)
+            research_receipt=receipts.prepare_receipt(
+                repo,marker_commit=f["marker"],trial_id=self.trial,
+                appid=appid,authorization_commit=f["auth"],
+                introduction_commit=research)
+            add(repo,research_receipt["receipt_path"],research_receipt["receipt_bytes"],
+                "fixture: valid Research typed receipt")
+            self.assertIsInstance(receipts.require_batch_research_receipt(
+                repo,marker_commit=f["marker"],trial_id=self.trial,
+                appid=appid,authorization_commit=f["auth"],
+                research_commit=research),str)
+            from taste_steam_review_dossier_test_fixture import web_dossier
+            w=v2.assembly_work(repo,marker_commit=f["marker"],trial_id=self.trial,
+                               appid=appid,research_commit=research)
+            dossier=web_dossier(appid,datetime.now(timezone.utc),title=game["title"])
+            assembled=v2.candidate_assembly(
+                w,outcome="assembled_candidate_ready",final_dossier=dossier)
+            assembly=add(repo,w["output_path"],assembled,"fixture Assembly without receipt")
+            with self.assertRaisesRegex(v2.NotesV2Error,"Assembly typed receipt"):
+                receipts.require_batch_terminal_receipts(
+                    repo,marker_commit=f["marker"],trial_id=self.trial,
+                    appid=appid,authorization_commit=f["auth"],
+                    research_commit=research,assembly_commit=assembly)
+            assembly_receipt=receipts._assembly_receipt(
+                repo,marker_commit=f["marker"],trial_id=self.trial,
+                appid=appid,authorization_commit=f["auth"],research_commit=research,
+                assembly_commit=assembly,receipt_parent=git(repo,"rev-parse","HEAD"))
+            add(repo,assembly_receipt["receipt_path"],assembly_receipt["receipt_bytes"],
+                "fixture: valid Assembly typed receipt")
+            proven=receipts.require_batch_terminal_receipts(
+                repo,marker_commit=f["marker"],trial_id=self.trial,
+                appid=appid,authorization_commit=f["auth"],
+                research_commit=research,assembly_commit=assembly)
+            self.assertEqual(len(proven),2)
         finally:
             temp.cleanup()
 

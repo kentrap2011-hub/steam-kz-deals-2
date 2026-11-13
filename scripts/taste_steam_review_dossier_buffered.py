@@ -1299,6 +1299,13 @@ def _drain_notes_v2_individual(
         try:
             # Do not trust the readiness projection. Reinspect exact immutable
             # Git history at the writer boundary before reading original bytes.
+            if trial_sandbox and trial_id.startswith("dossier-notes-v2-") and trial_id != "dossier-notes-v2-original18-first":
+                from dossier_notes_v2_per_item_receipts import require_batch_terminal_receipts
+                require_batch_terminal_receipts(
+                    root, marker_commit=marker_commit, trial_id=trial_id,
+                    appid=appid, authorization_commit=anchor["authorization_commit"],
+                    research_commit=pair["research_commit"],
+                    assembly_commit=pair["assembly_commit"])
             checked = inspect_assembly(
                 root, marker_commit=marker_commit, trial_id=trial_id,
                 appid=appid, research_commit=pair["research_commit"],

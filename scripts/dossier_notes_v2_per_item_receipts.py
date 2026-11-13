@@ -278,6 +278,82 @@ def inspect_receipt_commit(repo, *, marker_commit, trial_id, appid,
             "receipt_commit": receipt_commit, "github_receipt_confirmed": False}
 
 
+def require_batch_research_receipt(repo, *, marker_commit, trial_id, appid,
+                                   authorization_commit, research_commit):
+    """Only new reusable cohorts require a durable, typed Research receipt.
+
+    Original18 has its own historical execution/receipt contract. We do not
+    modify it. The GitHub remote tip is authenticated by the existing transport
+    lease before Assembly publication, or by the owner workflow before writing.
+    """
+    if not (trial_id.startswith("dossier-notes-v2-")
+            and trial_id != v2._contract()["manual_v2_issuer"]["trial_id"]):
+        return None
+    assignment = v2.frozen_assignment(
+        repo, marker_commit=marker_commit, trial_id=trial_id, appid=appid)
+    path = ("data/control/dossier_notes_v2/receipts/" + trial_id
+            + "/g%06d/" % assignment["group_sequence"] + assignment["appid"]
+            + "--" + assignment["assignment_id"] + "--research.json")
+    history = git(repo, "log", "--first-parent", "--format=%H",
+                  "HEAD", "--", path).stdout.decode().splitlines()
+    if len(history) != 1:
+        v2.reject("broken_git_provenance",
+                  "exactly one immutable Research typed receipt required before Assembly")
+    receipt_commit = history[0]
+    proven = inspect_receipt_commit(
+        repo, marker_commit=marker_commit, trial_id=trial_id,
+        appid=appid, authorization_commit=authorization_commit,
+        introduction_commit=research_commit, receipt_commit=receipt_commit)
+    if (proven["disposition"] != "safe_incomplete_research"
+            or proven["technical_acceptance_proposed"] is not True):
+        v2.reject("wrong_binding", "Research receipt is not a verified stage-1 transport")
+    return receipt_commit
+
+
+def require_batch_terminal_receipts(repo, *, marker_commit, trial_id, appid,
+                                    authorization_commit, research_commit,
+                                    assembly_commit):
+    """The isolated writer requires BOTH single-add receipts before persistence.
+
+    This is Git-proven transport, not semantic quality acceptance. Older
+    original18 paths are deliberately unchanged.
+    """
+    research_receipt = require_batch_research_receipt(
+        repo, marker_commit=marker_commit, trial_id=trial_id,
+        appid=appid, authorization_commit=authorization_commit,
+        research_commit=research_commit)
+    if research_receipt is None:
+        return None
+    assignment = v2.frozen_assignment(
+        repo, marker_commit=marker_commit, trial_id=trial_id, appid=appid)
+    path = ("data/control/dossier_notes_v2/receipts/" + trial_id
+            + "/g%06d/" % assignment["group_sequence"] + appid
+            + "--" + assignment["assignment_id"] + "--assembly.json")
+    history = git(repo, "log", "--first-parent", "--format=%H",
+                  "HEAD", "--", path).stdout.decode().splitlines()
+    if len(history) != 1:
+        v2.reject("broken_git_provenance",
+                  "exactly one immutable Assembly typed receipt required before writer")
+    commit = history[0]
+    p = require_only_new(repo, commit, [path])
+    exact = _assembly_receipt(
+        repo, marker_commit=marker_commit, trial_id=trial_id,
+        appid=appid, authorization_commit=authorization_commit,
+        research_commit=research_commit, assembly_commit=assembly_commit,
+        receipt_parent=p)
+    if (exact["disposition"] !=
+            "strict_item_valid_pending_existing_atomic_group_ingest"
+            or file_at(repo, commit, path) != exact["receipt_bytes"]
+            or blob(repo, commit, path) != exact["receipt_blob_sha"]
+            or blob(repo, "HEAD", path) != exact["receipt_blob_sha"]
+            or file_at(repo, "HEAD", path) != exact["receipt_bytes"]):
+        v2.reject("broken_git_provenance",
+                  "Assembly receipt is not exact strict-ready Git transport")
+    v2._assert_unchanged_since(repo, commit, path)
+    return {"research_receipt_commit": research_receipt,
+            "assembly_receipt_commit": commit}
+
+
 # This is a transport primitive, not an executor or a second acceptance path.
 # The caller/GitHub owner must separately authorize the invocation and its
 # immutable trial; a structurally valid inactive issuer grants NO semantics.
@@ -575,6 +651,10 @@ def publish_assembly_item_remote(repo, *, branch, expected_remote_head,
                          authorization_commit=authorization_commit)
         if not first_parent_contains(work_repo, authorization_commit, research_commit):
             v2.reject("wrong_binding", "Research introduction predates the exact V2 issuer")
+        require_batch_research_receipt(
+            work_repo, marker_commit=marker_commit, trial_id=trial_id,
+            appid=appid, authorization_commit=authorization_commit,
+            research_commit=research_commit)
         work = v2.assembly_work(
             work_repo, marker_commit=marker_commit, trial_id=trial_id,
             appid=appid, research_commit=research_commit)
