@@ -1,5 +1,16 @@
 # CURRENT TASK
 
+
+## ЧАТ 2 — Dossier V2 GitHub connector transport no GH_TOKEN (2026-11-13)
+
+- Status: `implemented_in_source_pr_final_ci_pending_director_review`; not merged/activated.
+- Task: `WORKER_TASK_DOSSIER_V2_CONNECTOR_TRANSPORT_NO_GH_TOKEN_IMPLEMENT_01.md`.
+- Source: [PR #445](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/445), branch `implement/dossier-v2-connector-no-gh-token-01`.
+- Reusable tokenless interactive GitHub connector owner-run proof, frozen V2 JSON schema, exact-head Git one-add CAS and typed Research/Assembly receipts; legacy Python token path preserved.
+- Canonical runbook: `config/dossier_notes_v2_connector_transport_manual_runbook.md`. Existing strict accepted-only GitHub writer remains unchanged.
+- No Freeze/Authorize, Research/Assembly, writer, Scheduled Tasks, production, V1 or Deep changes or runs.
+- Final CI/HEAD and operator runtime boundaries to verify before Director acceptance; report `reviews/worker_reports/dossier-v2-connector-transport-no-gh-token-implement-01.md`.
+
 ## IMPLEMENTED IN DRAFT PR / PRODUCTION NOT ACTIVATED — Standalone Steam KZ DLC pause (2026-11-09)
 - User approved changing the paid source from base-targeted standalone DLC to games + independent Sub_ packages until owned-game discovery is available.
 - Source draft [PR #428](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/428), branch `feature/steam-kz-disable-standalone-dlc-20261109`; canonical policy, source guard, disabled zero-GET lane, regression and durable decision/report included.
