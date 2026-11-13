@@ -15,7 +15,7 @@ PR: see the branch pull request; exact HEAD/CI to be recorded after final verifi
 
 ## Changes
 
-- `scripts/dossier_notes_v2_connector_transport.mjs`: a reusable direct GitHub-connector-only implementation with no injected token; immutable exact cohort identities, two real owner GitHub Actions run metadata, verified branch/git parent tree/one-add change sets, repo permission check, strict trial isolation, stage binding, exact one-blob tree/commit, `update_ref(expected_sha, force=false)`, remote content/blob readback, and separate typed Research/Assembly receipts. The immutable source route remains GitHub-owned.
+- `scripts/dossier_notes_v2_connector_transport.mjs`: a reusable direct GitHub-connector-only implementation with no injected token; immutable exact cohort identities, two real owner GitHub Actions run metadata, verified branch/git parent tree/one-add change sets, repo permission check, strict trial isolation, stage binding, live frozen V2 JSON schema validation, exact one-blob tree/commit, `update_ref(expected_sha, force=false)`, remote content/blob readback, and separate typed Research/Assembly receipts. The immutable source route remains GitHub-owned.
 - `config/dossier_notes_v2_connector_transport_manual_runbook.md`: a concrete interactive ChatGPT Code Mode adapter and manual invocation spec. This is **not** a standalone Python connector or a new scheduler.
 - Both reusable manual one-shot prompts point at the connector route; legacy token-backed Python CLI remains functional and deliberately refuses missing token.
 - Existing V2 PR CI adds synthetic Node connector adversarial coverage; Python V2 source and existing strict writer remain unchanged except explanatory docstrings.
