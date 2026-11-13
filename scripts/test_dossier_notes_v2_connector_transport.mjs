@@ -3,6 +3,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {createHash} from "node:crypto";
+import {readFileSync} from "node:fs";
 import {connectorPreflight,connectorPublishItem,v2Sha256} from "./dossier_notes_v2_connector_transport.mjs";
 
 const REPO="kentrap2011-hub/steam-kz-deals-2";
@@ -64,6 +65,14 @@ function makeFixture(n=6) {
     cohort_contract_path:"config/dossier_notes_v2_batches/"+TRIAL+".json"};
   setFile(grant,paths.grant,g);
   const af=f.files.get(grant+"|"+paths.grant);
+  for(const file of [
+    "dossier_research_notes_v2.schema.json",
+    "dossier_autonomous_assembly_result_v2.schema.json",
+    "dossier_notes_v2_item_receipt.schema.json"
+  ]){
+    const path="config/"+file;
+    setFile(base,path,readFileSync(new URL("../config/"+file,import.meta.url),"utf8"));
+  }
   setFile(AUTH,paths.authorization,{
     schema:"DOSSIER-NOTES-V2-BATCH-OWNER-AUTHORIZATION",schema_version:1,
     scope:"one_manual_batch_research_assembly_sandbox_only",
@@ -161,7 +170,7 @@ function researchDoc(ctx,appid){
   const row=ctx.manifest.items.find(r=>r.appid===appid);
   return {schema:"DOSSIER-RESEARCH-NOTES-V2",schema_version:2,
     assignment:{...row,trial_id:TRIAL,marker_commit:MARKER,
-      manifest_blob_sha:ctx.anchor.manifest_blob_sha},source_log:[],
+      manifest_blob_sha:ctx.anchor.manifest_blob_sha},notes_text:"No verifiable sources",source_log:[],
     research_status:"no_verifiable_findings"};
 }
 test("portable SHA256 equals standard UTF-8 digest",()=>{
@@ -253,6 +262,19 @@ test("wrong AppID or edition fails before Git object is created",async()=>{
   await assert.rejects(()=>connectorPublishItem(f.api,ctx,{
     phase:"research",appid:"1000010",expectedHead:AUTH,document:doc
   }),/BATCH_V2_CONNECTOR_STOP/);
+  const missing=researchDoc(ctx,"1000010");delete missing.notes_text;
+  await assert.rejects(()=>connectorPublishItem(f.api,ctx,{
+    phase:"research",appid:"1000010",expectedHead:AUTH,document:missing
+  }),/schema required field/);
+  const extra=researchDoc(ctx,"1000010");extra.unapproved_field="bad";
+  await assert.rejects(()=>connectorPublishItem(f.api,ctx,{
+    phase:"research",appid:"1000010",expectedHead:AUTH,document:extra
+  }),/schema unknown field/);
+  const malformed=researchDoc(ctx,"1000010");
+  malformed.source_log=[{locator:{url:"a",public_ref:"foo"},access:"opened",observation:"test"}];
+  await assert.rejects(()=>connectorPublishItem(f.api,ctx,{
+    phase:"research",appid:"1000010",expectedHead:AUTH,document:malformed
+  }),/schema oneOf mismatch/);
   assert.equal(f.calls.some(x=>x[0]==="createBlob"),false);
 });
 test("parallel branch movement rejects CAS; never retries candidate or publishes receipt",async()=>{
