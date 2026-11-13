@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Inactive Notes V2 per-item Research transport and receipt validation.
 
-The optional, explicitly invoked single-item Git writer uses the existing Git
-transport; it never runs semantics, schedules work or accepts final Dossier.
+The optional, explicitly invoked single-item token-backed Python Git writer
+uses the existing Git transport; it never runs semantics, schedules work or
+accepts final Dossier. Interactive tokenless connector writes use the separate
+Git-object/CAS adapter but the SAME GitHub-owned strict V2 receipt validators.
 Authenticated GitHub REST read-back is required for a GitHub receipt claim.
 A V2 issuer commit alone expressly does NOT authorize Research semantics.
 """
