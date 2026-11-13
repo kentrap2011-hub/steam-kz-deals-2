@@ -74,6 +74,59 @@ export function v2Sha256(input) {
   }
   return h.map(n=>n.toString(16).padStart(8,"0")).join("");
 }
+// Evaluate the exact existing Python-owned JSON schemas, not a new
+// cohort-specific model. Only the keywords used by these V2 schemas are
+// supported; unknown validation keywords fail closed rather than being ignored.
+function v2SchemaCheck(value,schema,label="$") {
+  v2Assert(schema && typeof schema==="object" && !Array.isArray(schema),
+    "invalid canonical schema at "+label);
+  const known=new Set(["$schema","title","description","type","additionalProperties",
+    "required","properties","const","enum","minLength","maxLength",
+    "minItems","maxItems","items","oneOf"]);
+  v2Assert(Object.keys(schema).every(k=>known.has(k)),"unsupported canonical JSON schema keyword");
+  const typeOf=value===null?"null":Array.isArray(value)?"array":typeof value;
+  const isType=t=>t==="integer"?typeof value==="number"&&Number.isInteger(value):
+    t==="number"?typeof value==="number"&&Number.isFinite(value):
+    t===typeOf;
+  if(schema.type!==undefined){
+    const options=Array.isArray(schema.type)?schema.type:[schema.type];
+    v2Assert(options.some(isType),"schema type mismatch at "+label);
+  }
+  if(Object.hasOwn(schema,"const"))
+    v2Assert(v2Canonical(value)===v2Canonical(schema.const),"schema const mismatch at "+label);
+  if(schema.enum!==undefined)
+    v2Assert(Array.isArray(schema.enum)&&schema.enum.some(v=>
+      v2Canonical(v)===v2Canonical(value)),"schema enum mismatch at "+label);
+  if(schema.oneOf!==undefined){
+    v2Assert(Array.isArray(schema.oneOf),"invalid oneOf canonical schema");
+    let matches=0;
+    for(const alt of schema.oneOf){
+      try {v2SchemaCheck(value,alt,label);matches++;}
+      catch(e){if(!String(e).includes("BATCH_V2_CONNECTOR_STOP"))throw e;}
+    }
+    v2Assert(matches===1,"schema oneOf mismatch at "+label);
+  }
+  if(typeOf==="string"){
+    const len=[...value].length;
+    if(schema.minLength!==undefined)v2Assert(len>=schema.minLength,"schema string too short at "+label);
+    if(schema.maxLength!==undefined)v2Assert(len<=schema.maxLength,"schema string too long at "+label);
+  }
+  if(typeOf==="array"){
+    if(schema.minItems!==undefined)v2Assert(value.length>=schema.minItems,"schema array too short at "+label);
+    if(schema.maxItems!==undefined)v2Assert(value.length<=schema.maxItems,"schema array too long at "+label);
+    if(schema.items)for(let i=0;i<value.length;i++)v2SchemaCheck(value[i],schema.items,label+"["+i+"]");
+  }
+  if(typeOf==="object"){
+    const required=schema.required||[];
+    v2Assert(required.every(k=>Object.hasOwn(value,k)),"schema required field missing at "+label);
+    const props=schema.properties||{};
+    if(schema.additionalProperties===false)
+      v2Assert(Object.keys(value).every(k=>Object.hasOwn(props,k)),
+        "schema unknown field at "+label);
+    for(const key of Object.keys(props))
+      if(Object.hasOwn(value,key))v2SchemaCheck(value[key],props[key],label+"."+key);
+  }
+}
 function v2Json(o) {
   const doc=typeof o==="string"?JSON.parse(o):o;
   v2Assert(doc && typeof doc==="object" && !Array.isArray(doc),"GitHub JSON object required");
@@ -252,6 +305,12 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
   const current=await v2BranchTip(api,branch);
   v2Assert(current===expectedHead,"sandbox remote HEAD differs from explicit expected SHA");
   const seen=await v2Lineage(api,current,authorizationCommit,trialId);
+  const schemas={};
+  for(const [phase,path] of Object.entries({
+    research:"config/dossier_research_notes_v2.schema.json",
+    assembly:"config/dossier_autonomous_assembly_result_v2.schema.json",
+    receipt:"config/dossier_notes_v2_item_receipt.schema.json"
+  }))schemas[phase]=v2Json((await v2File(api,path,base)).content);
   const anchor={
     trial_id:trialId,marker_commit:markerCommit,
     authorization_commit:authorizationCommit,
@@ -262,7 +321,7 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
     semantic_execution_authorized:true,
     issuer_structural_only:true,github_run_authenticated:false
   };
-  return {branch,head:current,manifest,anchor,existing:seen,
+  return {branch,head:current,manifest,anchor,schemas,existing:seen,
     github_owner_runs_authenticated:true,production_authorized:false};
 }
 async function v2NoPath(api,path,head) {
@@ -310,7 +369,8 @@ function v2Assignment(ctx,appid){
     marker_commit:ctx.anchor.marker_commit,
     manifest_blob_sha:ctx.anchor.manifest_blob_sha};
 }
-function v2DocumentCheck(doc,assignment,phase){
+function v2DocumentCheck(doc,assignment,phase,schema){
+  v2SchemaCheck(doc,schema);
   v2Assert(doc && typeof doc==="object" && !Array.isArray(doc) &&
     v2Canonical(doc.assignment)===v2Canonical(assignment),"candidate frozen assignment mismatch");
   if(phase==="research") {
@@ -333,7 +393,7 @@ export async function connectorPublishItem(api,ctx,{phase,appid,document,researc
   v2Assert(expectedHead===ctx.head &&
     expectedHead===await v2BranchTip(api,ctx.branch),"stale or unverified sandbox HEAD");
   const assignment=v2Assignment(ctx,appid);
-  v2DocumentCheck(document,assignment,phase);
+  v2DocumentCheck(document,assignment,phase,ctx.schemas[phase]);
   let researchTransport=null,disposition=null;
   if(phase==="assembly"){
     const researchPath=v2DocumentPath("research",assignment);
@@ -389,6 +449,7 @@ export async function connectorPublishItem(api,ctx,{phase,appid,document,researc
       candidate_status:disposition,canonical_acceptance:false};
   }
   const receiptDoc=v2Receipt(assignment,phase,disposition,source);
+  v2SchemaCheck(receiptDoc,ctx.schemas.receipt);
   // If this second write fails, DO NOT re-publish the candidate. Inspect GitHub,
   // report unpaired state, stop; no implicit attempt/auto-retry.
   const receipt=await v2Add(api,ctx,receiptPath,receiptDoc,candidate.commit,
