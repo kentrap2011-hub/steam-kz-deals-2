@@ -140,6 +140,19 @@ async function v2Lineage(api,head,auth,trialId,max=104) {
   }
   throw Error("BATCH_V2_CONNECTOR_STOP: sandbox does not descend from exact authorization");
 }
+function v2OwnerRunTimestamps(run,commits) {
+  const first=Date.parse(run.run_started_at),last=Date.parse(run.updated_at);
+  v2Assert(Number.isFinite(first) && Number.isFinite(last) &&
+    first<=last && last-first<=15*60*1000,
+    "owner Actions run does not have bounded actual run timestamps");
+  for(const c of commits) {
+    const clock=Date.parse(c.committer?.date);
+    v2Assert(c.committer?.name==="github-actions[bot]" &&
+      c.committer?.email==="41898282+github-actions[bot]@users.noreply.github.com" &&
+      Number.isFinite(clock) && clock>=first && clock<=last,
+      "issuer Git object not attested by the exact owner's Actions run window");
+  }
+}
 function v2OwnerRun(doc,id,path,title,sha) {
   v2Assert(doc.id===Number(id) && doc.run_attempt===1 &&
    doc.status==="completed" && doc.conclusion==="success" &&
@@ -194,14 +207,21 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
   const manifest=v2Json(manifestFile.content);
   const authFile=await v2File(api,paths.authorization,authorizationCommit);
   const auth=v2Json(authFile.content);
-  v2Assert(grant.trial_id===trialId && grant.base_main_sha===base &&
+  v2Assert(grant.schema==="DOSSIER-NOTES-V2-BATCH-OWNER-GRANT" &&
+    grant.schema_version===1 && grant.scope==="one_git_owner_issued_reusable_batch_sandbox_only" &&
+    grant.manifest_path===paths.manifest &&
+    grant.source_pins && manifest.original_pins &&
+    v2Canonical(grant.source_pins)===v2Canonical(manifest.original_pins) &&
+    grant.trial_id===trialId && grant.base_main_sha===base &&
     grant.manifest_blob_sha===manifestFile.sha &&
     grant.owner_login===V2_OWNER_LOGIN && String(grant.owner_actor_id)===String(V2_OWNER_ID) &&
     grant.semantic_execution_approved===false && grant.production_approved===false &&
     grant.canonical_ingest_approved===false &&
     grant.cohort_contract_path==="config/dossier_notes_v2_batches/"+trialId+".json",
     "frozen owner grant inconsistent");
-  v2Assert(auth.trial_id===trialId && auth.marker_commit===markerCommit &&
+  v2Assert(auth.schema==="DOSSIER-NOTES-V2-BATCH-OWNER-AUTHORIZATION" &&
+    auth.schema_version===1 && auth.scope==="one_manual_batch_research_assembly_sandbox_only" &&
+    auth.trial_id===trialId && auth.marker_commit===markerCommit &&
     auth.marker_parent===manifestCommit && auth.human_grant_commit===grantCommit &&
     auth.human_grant_blob_sha===(await v2File(api,paths.grant,grantCommit)).sha &&
     auth.manifest_blob_sha===manifestFile.sha &&
@@ -223,6 +243,8 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
     "Issue one exact batch Dossier Notes V2 frozen sandbox (manual only)",base);
   v2OwnerRun(author,auth.github_authorization_run_id,V2_AUTHORIZE,
     "Authorize isolated Notes V2 batch "+trialId+" marker "+markerCommit);
+  v2OwnerRunTimestamps(freeze,[grantGit,manifestGit,marker]);
+  v2OwnerRunTimestamps(author,[authGit]);
   const cmp=await v2Get(api,"compare/"+base+"..."+author.head_sha);
   v2Assert(["identical","ahead"].includes(cmp.status) && cmp.base_commit?.sha===base,
     "authorizer main source is not descended from frozen base");
