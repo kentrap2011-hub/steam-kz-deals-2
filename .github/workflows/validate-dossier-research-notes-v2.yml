@@ -12,6 +12,9 @@ on:
       - "scripts/dossier_notes_v2_batch_route.py"
       - "scripts/dossier_notes_v2_batch_issuer.py"
       - "scripts/dossier_notes_v2_batch_pilot.py"
+      - "scripts/dossier_notes_v2_connector_transport.mjs"
+      - "scripts/test_dossier_notes_v2_connector_transport.mjs"
+      - "config/dossier_notes_v2_connector_transport_manual_runbook.md"
       - "scripts/test_dossier_notes_v2_batch_route.py"
       - ".github/workflows/issue-dossier-notes-v2-batch.yml"
       - ".github/workflows/authorize-dossier-notes-v2-batch.yml"
@@ -54,6 +57,8 @@ jobs:
           python-version: "3.11"
       - name: Install offline validator dependency
         run: python -m pip install jsonschema==4.23.0
+      - name: Tokenless GitHub Connector transport and CAS adversarial regressions
+        run: node --test scripts/test_dossier_notes_v2_connector_transport.mjs
       - name: Adversarial synthetic Notes V2 and assembly
         run: python scripts/test_dossier_research_notes_v2.py -v
       - name: Prepared fresh6 scope and no-authority adversarial tests (no semantic execution)
