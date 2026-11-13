@@ -27,6 +27,9 @@ function makeFixture(n=6) {
   }));
   const base=sha(10),grant=sha(11),manifestCommit=sha(12);
   const cp=(id,parent,path)=>f.commits.set(id,{
+    committer:{name:"github-actions[bot]",
+      email:"41898282+github-actions[bot]@users.noreply.github.com",
+      date:id===AUTH?"2026-11-13T16:54:14Z":"2026-11-13T16:46:29Z"},
     sha:id,tree:{sha:sha(100+Number.parseInt(id,16))},
     parents:parent?[{sha:parent}]:[],files:path?[{filename:path,status:"added"}]:[]
   });
@@ -45,10 +48,16 @@ function makeFixture(n=6) {
   };
   setFile(MARKER,paths.nonce,{schema:"DOSSIER-NOTES-V2-RUN-START",schema_version:2,
     trial_id:TRIAL,nonce:"ab".repeat(16)});
-  const m={schema:"DOSSIER-NOTES-V2-FROZEN-MANIFEST",schema_version:2,trial_id:TRIAL,items};
+  const sourcePins={source_main_sha:base,source_snapshot_id:"synthetic",
+    source_queue_sha256:"a".repeat(64)};
+  const m={schema:"DOSSIER-NOTES-V2-FROZEN-MANIFEST",schema_version:2,
+    trial_id:TRIAL,original_pins:sourcePins,items};
   setFile(manifestCommit,paths.manifest,m);
   const gf=f.files.get(manifestCommit+"|"+paths.manifest);
-  const g={trial_id:TRIAL,base_main_sha:base,owner_login:"kentrap2011-hub",
+  const g={schema:"DOSSIER-NOTES-V2-BATCH-OWNER-GRANT",schema_version:1,
+    scope:"one_git_owner_issued_reusable_batch_sandbox_only",
+    manifest_path:paths.manifest,source_pins:sourcePins,
+    trial_id:TRIAL,base_main_sha:base,owner_login:"kentrap2011-hub",
     owner_actor_id:"315790060",manifest_blob_sha:gf.sha,
     semantic_execution_approved:false,production_approved:false,
     canonical_ingest_approved:false,
@@ -56,6 +65,8 @@ function makeFixture(n=6) {
   setFile(grant,paths.grant,g);
   const af=f.files.get(grant+"|"+paths.grant);
   setFile(AUTH,paths.authorization,{
+    schema:"DOSSIER-NOTES-V2-BATCH-OWNER-AUTHORIZATION",schema_version:1,
+    scope:"one_manual_batch_research_assembly_sandbox_only",
     trial_id:TRIAL,marker_commit:MARKER,marker_parent:manifestCommit,
     human_grant_commit:grant,human_grant_blob_sha:af.sha,
     manifest_blob_sha:gf.sha,github_authorization_run_id:String(AUTHOR_ID),
@@ -63,7 +74,10 @@ function makeFixture(n=6) {
     sandbox_writer_authorized:true,production_authorized:false,
     canonical_acceptance:false,owner_login:"kentrap2011-hub",
     owner_actor_id:"315790060"});
-  const makeRun=(id,path,title)=>({id,run_attempt:1,status:"completed",
+  const makeRun=(id,path,title)=>({id,run_attempt:1,
+    run_started_at:id===FREEZE_ID?"2026-11-13T16:46:11Z":"2026-11-13T16:53:47Z",
+    updated_at:id===FREEZE_ID?"2026-11-13T16:46:34Z":"2026-11-13T16:54:22Z",
+    status:"completed",
     conclusion:"success",event:"workflow_dispatch",head_branch:"main",head_sha:base,
     path,display_title:title,
     actor:{login:"kentrap2011-hub",id:315790060},
@@ -223,6 +237,12 @@ test("wrong actor, attempt, workflow, marker, run-name and ref all stop prefligh
   const f=makeFixture();
   f.head=sha(999);
   await assert.rejects(()=>preflight(f),/BATCH_V2_CONNECTOR_STOP/);
+  const g=makeFixture();
+  g.runs.get(FREEZE_ID).run_started_at="2026-11-13T16:50:00Z";
+  await assert.rejects(()=>preflight(g),/Git object not attested/);
+  const h=makeFixture();
+  h.commits.get(AUTH).committer.date="2026-11-13T00:00:00Z";
+  await assert.rejects(()=>preflight(h),/Git object not attested/);
 });
 test("wrong AppID or edition fails before Git object is created",async()=>{
   const f=makeFixture(),ctx=await preflight(f);
