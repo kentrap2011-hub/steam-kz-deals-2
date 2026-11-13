@@ -1,0 +1,105 @@
+{
+  "schema": "DOSSIER-NOTES-V2-COHORT-PREPARATION-CONTRACT",
+  "schema_version": 1,
+  "status": "github_prepared_scope_only_requires_distinct_owner_grant",
+  "repository": "kentrap2011-hub/steam-kz-deals-2",
+  "owner": "github_control_plane",
+  "intended_semantic_phases": [
+    "research",
+    "assembly"
+  ],
+  "trial_id": "dossier-notes-v2-fresh6-20261111-first",
+  "proposed_sandbox_branch": "sandbox/dossier-notes-v2-fresh6-20261111-first",
+  "original18_unchanged": true,
+  "owner_actions_authorized": false,
+  "semantic_execution_authorized": false,
+  "sandbox_writer_authorized": false,
+  "canonical_ingest_authorized": false,
+  "production_enabled": false,
+  "scheduled_tasks_enabled": false,
+  "automated_retry_enabled": false,
+  "provenance": {
+    "main_commit": "665f5d0202859a6bac20566671f10158538e4764",
+    "worker_index_path": "data/production/pre_ai/taste_steam_review_dossier_worker_index.json",
+    "worker_index_blob_sha": "d33497a9501d68c6a38e8fa076651f663a5ebec2",
+    "snapshot_id": "25c227d782188699f56b5702b3f0cfa63b101d890f09620b7b59893fab93c1af",
+    "prepared_for_date": "2026-11-11",
+    "source_queue_sha256": "66b1751644c2f26d2fcb62586b7f6028f2e775c39cebdcd9893d9f253d13151a",
+    "group_plan_sha256": "31f8b4324bb4a0e4210700f358498c34784bd4529ea06ffd1f04703d1ad34c7f",
+    "group_descriptors": [
+      {
+        "path": "data/production/pre_ai/taste_steam_review_dossier_worker_groups/25c227d782188699f56b5702b3f0cfa63b101d890f09620b7b59893fab93c1af/g000001.json",
+        "blob_sha": "dedcec0fa09197d88551c388d707d5b28fad4015",
+        "sequence": 1,
+        "group_sha256": "f4e4fd79522da375882c34aafb56352d06f9e0e79d0009045742558e434fd104"
+      },
+      {
+        "path": "data/production/pre_ai/taste_steam_review_dossier_worker_groups/25c227d782188699f56b5702b3f0cfa63b101d890f09620b7b59893fab93c1af/g000070.json",
+        "blob_sha": "7369b4b1c7b4d461285dde76d69e7e9eeaad11e2",
+        "sequence": 70,
+        "group_sha256": "9b48e5fe8a6ef49b61556c8648ea8a00f487c7b7a9d6aa5367933083f56b2e21"
+      }
+    ]
+  },
+  "candidates": [
+    {
+      "appid": "1000010",
+      "title": "Crown Trick",
+      "source_group_sequence": 1,
+      "source_item_index": 0,
+      "source_reason": "refresh_required",
+      "baseline_blob_sha": "adedf896c4b33a5a41d0d16f4226b7dfabc65c0a"
+    },
+    {
+      "appid": "102600",
+      "title": "Orcs Must Die!",
+      "source_group_sequence": 1,
+      "source_item_index": 1,
+      "source_reason": "refresh_required",
+      "baseline_blob_sha": "98a8bcadca78c0e6c2f7f2f69dfb6a7581ad0aad"
+    },
+    {
+      "appid": "1029690",
+      "title": "Sniper Elite 5",
+      "source_group_sequence": 1,
+      "source_item_index": 2,
+      "source_reason": "refresh_required",
+      "baseline_blob_sha": "5533d987a697e2da80bb9ce988c3c1b74f3874e2"
+    },
+    {
+      "appid": "49520",
+      "title": "Borderlands 2",
+      "source_group_sequence": 70,
+      "source_item_index": 0,
+      "source_reason": "missing_dossier",
+      "baseline_blob_sha": null
+    },
+    {
+      "appid": "499180",
+      "title": "Braid, Anniversary Edition",
+      "source_group_sequence": 70,
+      "source_item_index": 1,
+      "source_reason": "missing_dossier",
+      "baseline_blob_sha": null
+    },
+    {
+      "appid": "501590",
+      "title": "Bulletstorm: Full Clip Edition",
+      "source_group_sequence": 70,
+      "source_item_index": 2,
+      "source_reason": "missing_dossier",
+      "baseline_blob_sha": null
+    }
+  ],
+  "required_future_authority": [
+    "separate explicit user approval for live semantic pilot after source implementation and independent QA",
+    "one authenticated first-attempt owner GitHub Actions freeze for NEW unique trial ID/branch (not original18)",
+    "one separate authenticated first-attempt owner GitHub Actions authorize, direct-child of NEW marker",
+    "new immutable N-row manifest and assignment IDs issued by GitHub from pinned verified source only",
+    "fresh GitHub verified readback; original18 grant/marker/credentials not accepted",
+    "two separately invoked one-shot semantic Research and Assembly workers only",
+    "existing shared-lock strict sandbox-only writer with a separate this cohort opt-in; no canonical or Deep writes"
+  ],
+  "max_items": 24,
+  "manifest_issued": false
+}

@@ -262,12 +262,19 @@ def _manifest(repo, marker_commit, trial_id):
                 or file_at(repo, "HEAD", path) != file_at(repo, p, path)):
             reject("broken_git_provenance", "V2 frozen manifest was overwritten")
         _assert_unchanged_since(repo, p, path)
+        if not (trial_id.startswith("dossier-notes-v2-") and trial_id != c["manual_v2_issuer"]["trial_id"]):
+            expected_pins = c["immutable_original_pins"]
+            expected_rows = _original_rows()
+        else:
+            from dossier_notes_v2_batch_route import pins, scope, rows
+            expected_pins = pins(scope(repo, trial_id))
+            expected_rows = rows(repo, trial_id)
         if (not isinstance(m, dict) or set(m) != {"schema","schema_version","trial_id","original_pins","items"}
                 or m["schema"] != "DOSSIER-NOTES-V2-FROZEN-MANIFEST"
                 or m["schema_version"] != 2 or m["trial_id"] != trial_id
-                or m["original_pins"] != c["immutable_original_pins"]):
+                or m["original_pins"] != expected_pins):
             reject("wrong_binding", "incorrect frozen GitHub manifest/pins")
-        if m["items"] != _original_rows():
+        if m["items"] != expected_rows:
             reject("wrong_binding", "title, edition, assignment ID or source binding differs from original frozen Git buffer")
         return m, blob(repo, p, path)
     except NotesV2Error:
@@ -481,6 +488,13 @@ def manifest_blueprint(trial_id, prepared_rows):
     c = _contract()
     if not TRIAL.fullmatch(str(trial_id)) or not isinstance(prepared_rows, list):
         reject("wrong_binding", "invalid future GitHub trial or prepared rows")
+    if trial_id.startswith("dossier-notes-v2-") and trial_id != c["manual_v2_issuer"]["trial_id"]:
+        from dossier_notes_v2_batch_route import rows, manifest_blueprint as batch_blueprint
+        if prepared_rows != rows(Path.cwd(), trial_id):
+            reject("wrong_binding", "batch must preserve exact GitHub-prepared AppID/title/edition/digest")
+        built = batch_blueprint(Path.cwd(), trial_id)
+        return {"output_path": built["path"], "bytes": built["bytes"],
+                "blob_sha": built["blob_sha"], "authorizes_semantic_execution": False}
     if prepared_rows != _original_rows():
         reject("wrong_binding", "future manifest must preserve exact original AppID, title/edition and Research assignment digest")
     obj = {"schema":"DOSSIER-NOTES-V2-FROZEN-MANIFEST",

@@ -3,6 +3,20 @@ name: Validate inactive Research Notes V2 and autonomous Assembly
 on:
   pull_request:
     paths:
+      - "config/dossier_notes_v2_fresh6_preparation_contract.json"
+      - "scripts/dossier_notes_v2_fresh6_preflight.py"
+      - "scripts/test_dossier_notes_v2_fresh6_preflight.py"
+      - "config/dossier_notes_v2_batch_policy.json"
+      - "config/dossier_notes_v2_batches/*.json"
+      - "scripts/dossier_notes_v2_batch_preflight.py"
+      - "scripts/dossier_notes_v2_batch_route.py"
+      - "scripts/dossier_notes_v2_batch_issuer.py"
+      - "scripts/dossier_notes_v2_batch_pilot.py"
+      - "scripts/test_dossier_notes_v2_batch_route.py"
+      - ".github/workflows/issue-dossier-notes-v2-batch.yml"
+      - ".github/workflows/authorize-dossier-notes-v2-batch.yml"
+      - "config/dossier_notes_v2_batch_research_manual_one_shot_prompt.md"
+      - "config/dossier_notes_v2_batch_assembly_manual_one_shot_prompt.md"
       - "config/dossier_research_notes_v2_contract.json"
       - "config/dossier_notes_v2_pinned_original_research_buffer_v1.json"
       - "config/dossier_research_notes_v2.schema.json"
@@ -34,6 +48,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          fetch-depth: 0 # offline fresh6 scope guard verifies pinned historical main Git blobs
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -41,17 +56,26 @@ jobs:
         run: python -m pip install jsonschema==4.23.0
       - name: Adversarial synthetic Notes V2 and assembly
         run: python scripts/test_dossier_research_notes_v2.py -v
+      - name: Prepared fresh6 scope and no-authority adversarial tests (no semantic execution)
+        run: |
+          python scripts/test_dossier_notes_v2_fresh6_preflight.py -v
+          python scripts/dossier_notes_v2_fresh6_preflight.py --check
+      - name: Reusable Git-issuer, second cohort, item writer and adversarial tests
+        run: python scripts/test_dossier_notes_v2_batch_route.py -v
       - name: Inactive V2 per-item Git receipt regression (14 tests)
         run: python scripts/test_dossier_notes_v2_per_item_receipts.py -v
       - name: Existing strict V2 isolated writer transaction regression
         run: python scripts/test_dossier_two_stage_final_acceptance.py NotesV2IndividualReadinessTests.test_v2_github_writer_hookup_single_transaction -v
       - name: Syntax and PR activation guard
         run: |
-          python -m py_compile scripts/dossier_research_notes_v2.py scripts/dossier_two_stage_versioned.py scripts/dossier_notes_v2_per_item_receipts.py scripts/dossier_notes_v2_original18_pilot.py scripts/taste_steam_review_dossier_buffered.py scripts/dossier_shadow_research_trial_publish.py scripts/dossier_shadow_research_feasibility.py
+          python -m py_compile scripts/dossier_notes_v2_batch_preflight.py scripts/dossier_notes_v2_batch_route.py scripts/dossier_notes_v2_batch_issuer.py scripts/dossier_notes_v2_batch_pilot.py scripts/test_dossier_notes_v2_batch_route.py
+          python -m py_compile scripts/dossier_notes_v2_fresh6_preflight.py scripts/test_dossier_notes_v2_fresh6_preflight.py scripts/dossier_research_notes_v2.py scripts/dossier_two_stage_versioned.py scripts/dossier_notes_v2_per_item_receipts.py scripts/dossier_notes_v2_original18_pilot.py scripts/taste_steam_review_dossier_buffered.py scripts/dossier_shadow_research_trial_publish.py scripts/dossier_shadow_research_feasibility.py
           python - <<'PY'
           import json
-          for name in ('dossier_research_notes_v2_contract.json','dossier_research_notes_v2.schema.json','dossier_autonomous_assembly_result_v2.schema.json','dossier_notes_v2_item_receipt.schema.json'):
+          for name in ('dossier_notes_v2_batch_policy.json','dossier_notes_v2_fresh6_preparation_contract.json','dossier_research_notes_v2_contract.json','dossier_research_notes_v2.schema.json','dossier_autonomous_assembly_result_v2.schema.json','dossier_notes_v2_item_receipt.schema.json'):
               with open('config/'+name,encoding='utf-8') as f: json.load(f)
+          with open('config/dossier_notes_v2_batches/dossier-notes-v2-fresh6-20261111-first.json', encoding='utf-8') as f: batch=json.load(f)
+          assert batch['manifest_issued'] is False and batch['production_enabled'] is False
           c=json.load(open('config/dossier_research_notes_v2_contract.json'))
           assert c['active'] is False and c['authorized_for_semantic_execution'] is False
           assert c['authorized_for_canonical_ingest'] is False and c['production_enabled'] is False
