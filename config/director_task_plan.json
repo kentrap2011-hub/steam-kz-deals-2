@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-12",
+  "last_curated_on": "2026-11-13",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3607,7 +3607,7 @@
       "id": "dossier-v2-reusable-batches-fresh6-launch-ready-implement-01",
       "title": "НОВЫЙ ЧАТ 1 — сделать Dossier V2 переиспользуемым и готовым к запуску первых 6 игр",
       "goal": "На базе уже начатых PR №439/440 реализовать повторно используемый GitHub-owned Dossier V2 batch pipeline, довести isolated fresh6 до проверяемого first-launch gate без новых подготовительных проектов.",
-      "status": "active",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Применить и обобщить существующий issuer, per-item Git transport и sandbox writer вместо новой разработки; нужны адресные regressions и согласование сложенных PR.",
       "urgency": "высокая",
@@ -3618,9 +3618,29 @@
       "depends_on": [
         "dossier-v2-six-game-fresh-pilot-readiness-recon-01"
       ],
-      "blocker": "Только IMPLEMENT/тесты/готовность GitHub grant; семантика и owner Actions после merge и отдельной независимой L3, исключительно isolated fresh6; без production и Scheduled Tasks.",
-      "updated_on": "2026-11-12",
-      "updated_at_utc": "2026-11-12T17:51:31Z",
+      "blocker": "Implemented reusable V2 in merged source PR №440; owner freeze and authorize succeeded; new tokenless connector transport fix assigned.",
+      "updated_on": "2026-11-13",
+      "updated_at_utc": "2026-11-13T17:15:30Z",
+      "recent_completion": true
+    },
+    {
+      "id": "dossier-v2-connector-transport-no-gh-token-implement-01",
+      "title": "НОВЫЙ ЧАТ 2 — убрать отдельный GH_TOKEN из Dossier V2 Research/Assembly",
+      "goal": "Реализовать в существующей V2 pipeline GitHub-коннекторный защищённый create-only transport без личного GH_TOKEN, повторно используя уже выданный owner grant и freeze для шести игр.",
+      "status": "active",
+      "effort": "высокая",
+      "effort_reason": "Заменить Python REST/git token-bound transport на доказуемый connector-native Git object commit CAS + точный typed receipt и readback, тесты конкурентных и отказных сценариев.",
+      "urgency": "высокая",
+      "urgency_reason": "Исследование разрешённой шестерки блокируется отсутствием отдельного токена у ChatGPT worker при действующих владельческих GitHub authorizations.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_CONNECTOR_TRANSPORT_NO_GH_TOKEN_IMPLEMENT_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-reusable-batches-fresh6-launch-ready-implement-01"
+      ],
+      "blocker": "Только bounded IMPLEMENT с единственным source PR и CI; не отключать auth/branch/binding/receipts, не исследовать игры в developer-чате, не менять original18/V1/Deep/production.",
+      "updated_on": "2026-11-13",
+      "updated_at_utc": "2026-11-13T17:15:30Z",
       "recent_completion": false
     }
   ]

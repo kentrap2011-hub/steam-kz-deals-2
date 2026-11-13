@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — reusable Dossier V2 → первый isolated six pilot, 2026-11-12
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — GitHub connector transport Dossier V2, 2026-11-13
 
-- **ЧАТ 1 — НОВЫЙ физический чат, зарезервирован после выдачи launcher:** `dossier-v2-reusable-batches-fresh6-launch-ready-implement-01` → `WORKER_TASK_DOSSIER_V2_REUSABLE_BATCHES_FRESH6_LAUNCH_READY_IMPLEMENT_01.md`. Реализовать повторно используемые batch issuer/Research→Assembly/sandbox writer из draft PR №439/440, сохранить original18/V1/Deep, один итоговый source PR и exact CI. Затем отдельная независимая L3 и по данному user approval — один реальный isolated pilot 6 игр с доказанным owner GitHub grant; не автоматическое семантическое выполнение разработчиком.
-- **ЧАТ 2 — финальный отчёт сдан, слот свободен:** `dossier-v2-six-game-fresh-pilot-readiness-recon-01`; report-only draft PR №438, есть шесть точных AppID и criterion для проверки, V2 новых результатов 0/6. Не повторять RECON.
-- **ЧАТ 3 — финальный отчёт сдан, слот свободен:** PR №442 об исправлениях Pages F1/F2. Исходный Pages PR №434 принят в main `41db04914e5d1f1ffddf3da39c65a4ae6dba0f06` по явному user merge grant; отсутствие независимой новой delta QA задокументировано как принятый риск, не объявлять его PASS. Обычный ночной Pages handoff ещё не проверен.
-- **ЧАТЫ 4–6 — свободны.** Для нового reusable V2 L3 потребуется другой физический проверяющий после exact implementation HEAD; новый source/semantic может запускаться только в рамках текущего явного user grant + обязательных GitHub issuer permissions, без production и scheduled execution.
+- **ЧАТ 1 — прежний semantic Research запуск остановился до семантики из-за отсутствия GH_TOKEN;** ни одного Research/Assembly результата не записано. Это не developer task. Слот не используется для нового задания, пока пользователь не решит продолжать тот физический Research-чат после исправления.
+- **ЧАТ 2 — НОВЫЙ физический worker, зарезервирован:** `dossier-v2-connector-transport-no-gh-token-implement-01` → `WORKER_TASK_DOSSIER_V2_CONNECTOR_TRANSPORT_NO_GH_TOKEN_IMPLEMENT_01.md`. Один bounded source IMPLEMENT: заменить обязательный отдельный GH_TOKEN на GitHub connector с exact owner run proof и CAS/typed receipt Git write/readback. Существующий owner grant и sandbox fresh6 сохранить; никаких новых owner Actions/semantics/production. После self-test+CI source PR → решения директора и resume реального Research.
+- **ЧАТ 3 — свободен:** исторический PR №442 Pages QA report сдан; исходный PR №434 принят ранее.
+- **ЧАТЫ 4–6 — свободны.** Никаких Scheduled Tasks. Исторический верх Board от 2026-11-12 заменён этим текущим назначением; прошлые registry active-записи не являются физически занятыми чатами.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
