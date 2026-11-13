@@ -226,8 +226,9 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
   const cmp=await v2Get(api,"compare/"+base+"..."+author.head_sha);
   v2Assert(["identical","ahead"].includes(cmp.status) && cmp.base_commit?.sha===base,
     "authorizer main source is not descended from frozen base");
+  v2Assert(V2_HEX.test(expectedHead),"explicit 40-character sandbox HEAD required");
   const current=await v2BranchTip(api,branch);
-  if(expectedHead)v2Assert(current===expectedHead,"sandbox remote HEAD differs from explicit expected SHA");
+  v2Assert(current===expectedHead,"sandbox remote HEAD differs from explicit expected SHA");
   const seen=await v2Lineage(api,current,authorizationCommit);
   const anchor={
     trial_id:trialId,marker_commit:markerCommit,
