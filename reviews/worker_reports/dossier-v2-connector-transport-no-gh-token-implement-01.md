@@ -4,7 +4,7 @@ Task: `dossier-v2-connector-transport-no-gh-token-implement-01`
 Role: **developer IMPLEMENT**, not Research/Assembly.
 Source: current `main` baseline `60641c5b5d4cf40dd0447316e7af0c186f542721`.
 Branch: `implement/dossier-v2-connector-no-gh-token-01`.
-PR: see the branch pull request; exact HEAD/CI to be recorded after final verification.
+PR: [#445](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/445), open draft. Verified implementation+handoff source HEAD `19139be186b6d4c6b74f3a0bd5171c787d4511c5` prior to final reporting-only amendments. Exact final PR HEAD and CI are tracked in the PR description after documentation-only commits.
 
 ## Architecture preflight
 
@@ -29,6 +29,14 @@ Observed through connected GitHub in this developer chat:
 - Owner login `kentrap2011-hub`, numeric ID `315790060`; actual sandbox ref at registration `87a8f4149a736ba797824c59698552766f71799b`.
 - Correct original first six AppIDs: `1000010,102600,1029690,49520,499180,501590`.
 - No live Research/Assembly/issuer/strict writer runs from this implementation chat. No canonical cache/production/V1/Deep mutation.
+
+## Measured GitHub CI (tested implementation head `19139be186b6d4c6b74f3a0bd5171c787d4511c5`)
+
+- [Validate inactive Research Notes V2 and autonomous Assembly — run 43478040301](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43478040301): **SUCCESS**. Synthetic Node GitHub Connector 12/12, existing V2 55/55, fresh6 preflight 12/12, reusable batch route 14/14, per-item receipts 15/15, existing strict writer 1/1; source syntax/activation guard PASS.
+- [Validate inactive Dossier GitHub eventual chain acceptance QA — run 43478040299](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43478040299): **SUCCESS**.
+- [Validate backlog dispositions — run 43478040252](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43478040252): **SUCCESS**.
+- [Validate site task registry and page — run 43478040366](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43478040366): **SUCCESS**.
+- Actual GitHub connector `update_ref` was probed on this source branch without publishing semantic artifacts: correct expected current SHA accepted, stale expected SHA rejected/error, ref remained unchanged. It does not substitute for first genuine semantic pilot.
 
 ## STOP and remaining validation
 
