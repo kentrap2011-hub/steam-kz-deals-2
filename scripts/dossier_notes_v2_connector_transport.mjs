@@ -120,7 +120,7 @@ function v2ReceiptPath(phase,assignment) {
     "/g"+String(assignment.group_sequence).padStart(6,"0")+
     "/"+assignment.appid+"--"+assignment.assignment_id+"--"+phase+".json";
 }
-async function v2Lineage(api,head,auth,max=104) {
+async function v2Lineage(api,head,auth,trialId,max=104) {
   const paths=new Map();
   let current=head;
   for(let n=0;n<max;n++){
@@ -131,9 +131,9 @@ async function v2Lineage(api,head,auth,max=104) {
     v2Assert(rest.sha===current && rest.files?.length===1 &&
       rest.files[0].status==="added","sandbox after auth must contain only one-add commits");
     const p=rest.files[0].filename;
-    v2Assert(p.startsWith("data/ai_inbox/dossier_notes_v2/") ||
-      p.startsWith("data/ai_inbox/dossier_assembly_v2/") ||
-      p.startsWith("data/control/dossier_notes_v2/receipts/"),
+    v2Assert(p.startsWith("data/ai_inbox/dossier_notes_v2/"+trialId+"/") ||
+      p.startsWith("data/ai_inbox/dossier_assembly_v2/"+trialId+"/") ||
+      p.startsWith("data/control/dossier_notes_v2/receipts/"+trialId+"/"),
       "sandbox contains out-of-scope write "+p);
     v2Assert(!paths.has(p),"sandbox has duplicate/replaced path");
     paths.set(p,current);current=commit.parents[0].sha;
@@ -229,7 +229,7 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
   v2Assert(V2_HEX.test(expectedHead),"explicit 40-character sandbox HEAD required");
   const current=await v2BranchTip(api,branch);
   v2Assert(current===expectedHead,"sandbox remote HEAD differs from explicit expected SHA");
-  const seen=await v2Lineage(api,current,authorizationCommit);
+  const seen=await v2Lineage(api,current,authorizationCommit,trialId);
   const anchor={
     trial_id:trialId,marker_commit:markerCommit,
     authorization_commit:authorizationCommit,
