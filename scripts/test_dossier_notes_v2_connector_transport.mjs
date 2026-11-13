@@ -247,7 +247,7 @@ test("wrong actor, attempt, workflow, marker, run-name and ref all stop prefligh
   f.head=sha(999);
   await assert.rejects(()=>preflight(f),/BATCH_V2_CONNECTOR_STOP/);
   const g=makeFixture();
-  g.runs.get(FREEZE_ID).run_started_at="2026-11-13T16:50:00Z";
+  g.runs.get(FREEZE_ID).run_started_at="2026-11-13T16:46:31Z";
   await assert.rejects(()=>preflight(g),/Git object not attested/);
   const h=makeFixture();
   h.commits.get(AUTH).committer.date="2026-11-13T00:00:00Z";
