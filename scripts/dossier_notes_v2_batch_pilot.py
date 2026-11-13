@@ -2,6 +2,10 @@
 """Bounded one-game-at-a-time batch Research/Assembly GitHub transport.
 
 No semantic generation, retry, queue walking, new schedules or canonical writes.
+Legacy Python authenticated transport still requires a token by design.
+Interactive ChatGPT's separate tokenless GitHub Connector route is
+scripts/dossier_notes_v2_connector_transport.mjs (see the canonical runbook).
+Do not pretend a standalone Python process can invoke the connector.
 Run ONLY after a separately authenticated successful owner manual authorizer.
 """
 import argparse
