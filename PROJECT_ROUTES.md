@@ -602,3 +602,13 @@ Currentness invariant after PPD-012:
 - **Tests:** `scripts/test_dossier_notes_v2_connector_transport.mjs` + unchanged `scripts/test_dossier_notes_v2_batch_route.py` and `scripts/test_dossier_notes_v2_per_item_receipts.py`; CI `.github/workflows/validate-dossier-research-notes-v2.yml`. This is a synthetic transport regression, not live semantic evidence.
 - **STOP:** any tool/proof absence, wrong issuer, moved SHA, duplicate path, CAS mismatch, unconfirmed readback, missing Research typed receipt. No retry or separate queue, no Freeze/Authorize reissue, no V1/Deep/production mutation.
 - **Worker report:** `reviews/worker_reports/dossier-v2-connector-transport-no-gh-token-implement-01.md`.
+
+---
+
+## Dossier V2 lean connector transport optimization (2026-11-14)
+
+- **Scope:** `scripts/dossier_notes_v2_connector_transport.mjs` only, runbook and related semantic worker prompts; no change to token-backed Python, issuers, writer, V1/Deep/production.
+- **Reason:** Code Mode per-execution tool-call cap and repeated checks; see `PROJECT_DECISIONS.md` DOSSIER-CONNECTOR-001.
+- **Fast path:** first read the exact `config/dossier_notes_v2_connector_transport_manual_runbook.md`. `connectorPreflight(phase:"research"|"assembly")` authenticates two owner Actions, exact immutable issuer/manifest and current branch **once per invocation**. On later sandbox HEAD it uses a single GitHub compare rather than one Git commit read per ancestor. For one item `connectorPublishItem` performs two create-only non-force CAS commits, each with one remote HEAD readback (10 GitHub tool operations total, assuming preflight already completed).
+- **Mandatory survivors:** owner Actions proof and grant/manifest/marker parent, frozen AppID/title/edition/assignment, phase schema and typed Research/Assembly receipts, stale-HEAD CAS, no duplicate/overwrite, strict GitHub-only writer's independent byte/one-add/privacy acceptance.
+- **Tests:** `scripts/test_dossier_notes_v2_connector_transport.mjs`; `.github/workflows/validate-dossier-research-notes-v2.yml`. Source branch `optimize/dossier-v2-connector-checks-20261114`; verify final PR HEAD and CI before merge.
