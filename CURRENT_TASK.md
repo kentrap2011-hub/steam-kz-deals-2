@@ -1,9 +1,18 @@
 # CURRENT TASK
 
 
+## Dossier V2 lean GitHub Connector checks — source PR #446 (2026-11-14)
+
+- Status: `self_review_found_real_20_call_cap; corrected_split_session_handoff_in_draft_PR; final_exact_head_CI_and_source_review_pending`.
+- Explicit user approval: remove redundant/duplicated connector checks without breaking the rest of the project. Source PR: https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/446 ; branch `optimize/dossier-v2-connector-checks-20261114`.
+- `scripts/dossier_notes_v2_connector_transport.mjs`: owner proof once per invocation, one compare for resumed path set, phase-only schemas, one create-only CAS+branch-readback per file; 10 GitHub calls per Research candidate+typed receipt rather than ~29, plus **one** HEAD recheck via `connectorResumeHandoff` in a separate invocation. Actual 20-call Code Mode cap verified; one preflight+publication cannot fit in one call, so the runbook requires preflight-only first call then one game per next call.
+- Tests: prior 4/4 PR CI at code head `74fa118a25f088d056f543423d23185254f3de9f` SUCCESS, but self-QA found the still-broken runtime limit afterward. Corrected Node synthetic tests now check actual 14-call preflight and 11-call handoff+publish. **Fresh PR exact-final-HEAD CI required**. Report: `reviews/worker_reports/dossier-v2-connector-lean-checks-implement-20261114.md`.
+- Legacy Python token transport, GitHub strict writer, issuer, V1, Deep, production and sandbox are unchanged. No live Research/Assembly; separate worker execution follows code review/acceptance.
+
+
 ## ЧАТ 2 — Dossier V2 GitHub connector transport no GH_TOKEN (2026-11-13)
 
-- Status: `implementation_complete_pr_only_ready_for_director_review`; not merged/activated; exact final PR HEAD CI still required after report-only commit.
+- Status: `merged_source_reference`; PR #445 merged on 2026-11-14; tokenless source itself is not production activation.
 - Task: `WORKER_TASK_DOSSIER_V2_CONNECTOR_TRANSPORT_NO_GH_TOKEN_IMPLEMENT_01.md`.
 - Source: [PR #445](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/445), branch `implement/dossier-v2-connector-no-gh-token-01`.
 - Reusable tokenless interactive GitHub connector owner-run proof, frozen V2 JSON schema, exact-head Git one-add CAS and typed Research/Assembly receipts; legacy Python token path preserved.

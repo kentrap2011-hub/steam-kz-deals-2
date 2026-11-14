@@ -4,7 +4,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {createHash} from "node:crypto";
 import {readFileSync} from "node:fs";
-import {connectorPreflight,connectorPublishItem,v2Sha256} from "./dossier_notes_v2_connector_transport.mjs";
+import {connectorPreflight,connectorHandoff,connectorResumeHandoff,connectorPublishItem,v2Sha256} from "./dossier_notes_v2_connector_transport.mjs";
 
 const REPO="kentrap2011-hub/steam-kz-deals-2";
 const sha=n=>n.toString(16).padStart(40,"0");
@@ -98,8 +98,6 @@ function makeFixture(n=6) {
     ".github/workflows/authorize-dossier-notes-v2-batch.yml",
     "Authorize isolated Notes V2 batch "+TRIAL+" marker "+MARKER));
   f.api={
-    async getRepo(){return {result:{repository_full_name:REPO,
-      owner:{login:"kentrap2011-hub",id:315790060},permissions:{push:true}}};},
     async fetch({url}){
       f.calls.push(["fetch",url]);
       const prefix="https://api.github.com/repos/"+REPO+"/";
@@ -113,9 +111,29 @@ function makeFixture(n=6) {
       }
       else if(ep.startsWith("actions/runs/")){value=f.runs.get(Number(ep.slice(13)));}
       else if(ep.startsWith("git/ref/heads/")){
-        value={ref:"refs/heads/sandbox/"+TRIAL,object:{sha:f.head}};
+        value={ref:"refs/heads/sandbox/"+TRIAL,
+          object:{sha:f.malformReadback &&
+            f.calls.some(x=>x[0]==="updateRef")?sha(999):f.head}};
       }
-      else if(ep.startsWith("compare/")){value={status:"identical",base_commit:{sha:base}};}
+      else if(ep.startsWith("compare/")){
+        const files=[];
+        let tip=f.head;
+        while(tip!==AUTH){
+          const c=f.commits.get(tip);
+          assert.ok(c,"broken synthetic commit ancestry");
+          files.push(...c.files);
+          tip=c.parents[0].sha;
+        }
+        value={status:files.length?"ahead":"identical",base_commit:{sha:AUTH},
+          head_commit:{sha:f.head},files};
+      }
+      else if(ep.startsWith("commits?")){
+        const search=new URL(url).searchParams;
+        const path=search.get("path");
+        const match=[...f.commits.values()].reverse().find(c=>
+          c.files.some(x=>x.filename===path));
+        value=match?[{sha:match.sha}]:[];
+      }
       assert.ok(value,"missing fixture GitHub "+ep);
       return {result:{content:JSON.stringify(value)}};
     },
@@ -194,7 +212,7 @@ test("Research candidate and typed receipt are separate one-add CAS commits",asy
   const out=await connectorPublishItem(f.api,ctx,{phase:"research",appid:"1000010",
     expectedHead:AUTH,document:researchDoc(ctx,"1000010")});
   assert.notEqual(out.candidate_commit,out.receipt_commit);
-  assert.equal(out.github_git_readback_confirmed,true);
+  assert.equal(out.github_branch_readback_confirmed,true);
   assert.equal(out.canonical_acceptance,false);
   const adds=f.calls.filter(a=>a[0]==="updateRef");
   assert.equal(adds.length,2);
@@ -222,7 +240,8 @@ test("Assembly requires original candidate and typed Research receipt, terminal 
     outcome:"assembly_missing_evidence",final_dossier:null,
     operations:[],mechanical_corrections:[],diagnostic:"insufficient evidence",
     staged_only:true,canonical_acceptance:false};
-  const result=await connectorPublishItem(f.api,ctx,{phase:"assembly",appid:"1000010",
+  const assemblyCtx=await preflight(f,{phase:"assembly",expectedHead:research.receipt_commit});
+  const result=await connectorPublishItem(f.api,assemblyCtx,{phase:"assembly",appid:"1000010",
     researchCommit:research.candidate_commit,expectedHead:research.receipt_commit,
     document:doc});
   assert.equal(result.disposition,"assembly_missing_evidence");
@@ -246,12 +265,11 @@ test("wrong actor, attempt, workflow, marker, run-name and ref all stop prefligh
   const f=makeFixture();
   f.head=sha(999);
   await assert.rejects(()=>preflight(f),/BATCH_V2_CONNECTOR_STOP/);
+  // Untrusted Git committer timestamps must not block valid owner Actions.
   const g=makeFixture();
+  g.commits.get(AUTH).committer.date="2026-11-13T00:00:00Z";
   g.runs.get(FREEZE_ID).run_started_at="2026-11-13T16:46:31Z";
-  await assert.rejects(()=>preflight(g),/Git object not attested/);
-  const h=makeFixture();
-  h.commits.get(AUTH).committer.date="2026-11-13T00:00:00Z";
-  await assert.rejects(()=>preflight(h),/Git object not attested/);
+  await preflight(g);
 });
 test("wrong AppID or edition fails before Git object is created",async()=>{
   const f=makeFixture(),ctx=await preflight(f);
@@ -306,7 +324,7 @@ test("incomplete A is not sibling B blocker; bad B is refused before write",asyn
     expectedHead:a.receipt_commit,document:researchDoc(ctx,"102600")});
   assert.ok(b.receipt_commit);
 });
-test("ambiguous GitHub content readback fails closed with no second write",async()=>{
+test("ambiguous GitHub branch readback fails closed with no second write",async()=>{
   const f=makeFixture(),ctx=await preflight(f);
   f.malformReadback=true;
   await assert.rejects(()=>connectorPublishItem(f.api,ctx,{phase:"research",appid:"1000010",
@@ -324,4 +342,132 @@ test("no canonical, production or original18 publication interface exists",async
     expectedHead:AUTH,document:doc});
   assert.match(out.candidate_path,/^data\/ai_inbox\/dossier_notes_v2\//);
   assert.match(out.receipt_path,/^data\/control\/dossier_notes_v2\/receipts\//);
+});
+
+
+test("lean preflight and constant-cost Research publication",async()=>{
+  const f=makeFixture(),ctx=await preflight(f);
+  const callsBefore=f.calls.length;
+  assert.equal(f.calls.filter(x=>x[0]==="fetchFile").length,6);
+  assert.equal(f.calls.some(x=>x[0]==="getRepo"),false);
+  for(const row of ctx.manifest.items){
+    const before=f.calls.length,head=ctx.head;
+    const out=await connectorPublishItem(f.api,ctx,{
+      phase:"research",appid:row.appid,expectedHead:head,
+      document:researchDoc(ctx,row.appid)
+    });
+    const latest=f.calls.slice(before);
+    assert.equal(latest.length,10);
+    assert.equal(latest.filter(x=>x[0]==="fetchFile").length,0);
+    assert.equal(latest.filter(x=>x[0]==="fetch" &&
+      x[1].includes("/git/ref/heads/")).length,2);
+    assert.equal(ctx.head,out.receipt_commit);
+  }
+  assert.equal(f.calls.length-callsBefore,60);
+  assert.equal(f.calls.filter(x=>x[0]==="updateRef").length,12);
+  assert.equal(ctx.existing.size,12);
+});
+
+test("resumed batch uses one compare, skips per-commit history reads",async()=>{
+  const f=makeFixture(),ctx=await preflight(f);
+  const out=await connectorPublishItem(f.api,ctx,{
+    phase:"research",appid:"1000010",expectedHead:AUTH,
+    document:researchDoc(ctx,"1000010")
+  });
+  const before=f.calls.length;
+  const resumed=await preflight(f,{expectedHead:out.receipt_commit});
+  const rest=f.calls.slice(before);
+  assert.equal(rest.filter(x=>x[0]==="fetch" &&
+    x[1].includes("/compare/")).length,1);
+  assert.equal(resumed.existing.size,2);
+  await assert.rejects(()=>connectorPublishItem(f.api,resumed,{
+    phase:"research",appid:"1000010",expectedHead:out.receipt_commit,
+    document:researchDoc(resumed,"1000010")
+  }),/already exists/);
+});
+
+test("Assembly preflight requires Research+receipt and no Research schema read",async()=>{
+  const f=makeFixture(),ctx=await preflight(f);
+  const research=await connectorPublishItem(f.api,ctx,{
+    phase:"research",appid:"1000010",expectedHead:AUTH,
+    document:researchDoc(ctx,"1000010")
+  });
+  const before=f.calls.length;
+  const assembly=await preflight(f,{phase:"assembly",expectedHead:research.receipt_commit});
+  assert.ok(assembly.existing.has(research.candidate_path));
+  assert.ok(assembly.existing.has(research.receipt_path));
+  assert.equal(f.calls.slice(before).filter(x=>x[0]==="fetchFile" &&
+    x[1].includes("dossier_research_notes_v2.schema.json")).length,0);
+  await assert.rejects(()=>connectorPublishItem(f.api,assembly,{
+    phase:"research",appid:"1000010",expectedHead:research.receipt_commit,
+    document:researchDoc(assembly,"1000010")
+  }),/phase differs/);
+});
+
+
+test("actual 20-call Code Mode limit: preflight and each item must be separate",async()=>{
+  const f=makeFixture();
+  const initial=await preflight(f);
+  // Stage A: one tool call, no writes; cannot combine with 10-call publish.
+  assert.equal(f.calls.length,14);
+  const handoff=JSON.parse(JSON.stringify(connectorHandoff(initial)));
+  assert.equal(handoff.kind,"DOSSIER-NOTES-V2-SESSION-HANDOFF");
+  let previous=handoff;
+  // Stage B: each tool call starts fresh, reuses checked immutable authority.
+  for(const row of initial.manifest.items){
+    const before=f.calls.length;
+    const ctx=await connectorResumeHandoff(f.api,previous);
+    const out=await connectorPublishItem(f.api,ctx,{
+      phase:"research",appid:row.appid,
+      expectedHead:ctx.head,document:researchDoc(ctx,row.appid)
+    });
+    assert.equal(f.calls.length-before,11,"resume + Research candidate/receipt must fit 20 calls");
+    assert.equal(ctx.head,out.receipt_commit);
+    previous=JSON.parse(JSON.stringify(connectorHandoff(ctx)));
+  }
+  assert.equal(f.calls.filter(x=>x[0]==="updateRef").length,12);
+});
+
+test("handoff is copy-integrity checked and cannot bypass stale-branch CAS",async()=>{
+  const f=makeFixture(),ctx=await preflight(f);
+  const handoff=JSON.parse(JSON.stringify(connectorHandoff(ctx)));
+  const bad=JSON.parse(JSON.stringify(handoff));
+  bad.payload.manifest.items[0].title="Wrong edition";
+  await assert.rejects(()=>connectorResumeHandoff(f.api,bad),
+    /missing or changed session handoff/);
+  f.head=sha(999);
+  await assert.rejects(()=>connectorResumeHandoff(f.api,handoff),/HEAD no longer current/);
+  assert.equal(f.calls.filter(x=>x[0]==="createBlob").length,0);
+});
+
+test("resumed Assembly uses original Research candidate and receipt, one session handoff",async()=>{
+  const f=makeFixture(),researchCtx=await preflight(f);
+  const research=await connectorPublishItem(f.api,researchCtx,{
+    phase:"research",appid:"1000010",expectedHead:AUTH,
+    document:researchDoc(researchCtx,"1000010")
+  });
+  const assembler=await preflight(f,{phase:"assembly",expectedHead:research.receipt_commit});
+  const at=JSON.parse(JSON.stringify(connectorHandoff(assembler)));
+  const resumed=await connectorResumeHandoff(f.api,at);
+  const source=f.files.get(research.candidate_commit+"|"+research.candidate_path);
+  const digest=createHash("sha256").update(source.content).digest("hex");
+  const doc={schema:"DOSSIER-AUTONOMOUS-ASSEMBLY-RESULT-V2",schema_version:2,
+    assignment:researchDoc(researchCtx,"1000010").assignment,
+    research_transport:{
+      research_package_git_commit:research.candidate_commit,
+      research_package_path:research.candidate_path,
+      research_package_blob_sha:source.sha,
+      research_package_raw_sha256:digest,
+      research_package_sha256:digest
+    },
+    outcome:"assembly_missing_evidence",final_dossier:null,operations:[],
+    mechanical_corrections:[],diagnostic:"insufficient evidence",
+    staged_only:true,canonical_acceptance:false};
+  const before=f.calls.length;
+  const result=await connectorPublishItem(f.api,resumed,{
+    phase:"assembly",appid:"1000010",expectedHead:resumed.head,
+    researchCommit:research.candidate_commit,document:doc
+  });
+  assert.equal(result.disposition,"assembly_missing_evidence");
+  assert.ok(f.calls.length-before<=20,"Assembly publication remains within per-call limit");
 });
