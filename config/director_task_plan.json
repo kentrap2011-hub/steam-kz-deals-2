@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-13",
+  "last_curated_on": "2026-11-14",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3627,7 +3627,7 @@
       "id": "dossier-v2-connector-transport-no-gh-token-implement-01",
       "title": "НОВЫЙ ЧАТ 2 — убрать отдельный GH_TOKEN из Dossier V2 Research/Assembly",
       "goal": "Реализовать в существующей V2 pipeline GitHub-коннекторный защищённый create-only transport без личного GH_TOKEN, повторно используя уже выданный owner grant и freeze для шести игр.",
-      "status": "active",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Заменить Python REST/git token-bound transport на доказуемый connector-native Git object commit CAS + точный typed receipt и readback, тесты конкурентных и отказных сценариев.",
       "urgency": "высокая",
@@ -3638,9 +3638,29 @@
       "depends_on": [
         "dossier-v2-reusable-batches-fresh6-launch-ready-implement-01"
       ],
-      "blocker": "Только bounded IMPLEMENT с единственным source PR и CI; не отключать auth/branch/binding/receipts, не исследовать игры в developer-чате, не менять original18/V1/Deep/production.",
-      "updated_on": "2026-11-13",
-      "updated_at_utc": "2026-11-13T17:15:30Z",
+      "blocker": "Connector tokenless implementation merged; superseded by fresh exact no-UI owner launch and receipt workflow.",
+      "updated_on": "2026-11-14",
+      "updated_at_utc": "2026-11-14T17:23:34Z",
+      "recent_completion": true
+    },
+    {
+      "id": "dossier-v2-no-ui-owner-launch-rerun-fresh6-01",
+      "title": "Запуск повторного Dossier V2 Research без ручного GitHub UI",
+      "goal": "Подготовить новый точно ограниченный шестиигровый Dossier V2 batch и безопасную owner-authenticated GitHub push/connector авторизацию и автоматическое создание receipts, чтобы пользователь не запускал GitHub Actions вручную.",
+      "status": "active",
+      "effort": "высокая",
+      "effort_reason": "Реальные owner push event gates, issuer authorization chain, автоматически создаваемые typed Research receipts и защита однократной партии.",
+      "urgency": "высокая",
+      "urgency_reason": "PR 450 принят, повторный Research одобрен, но GitHub connector не поддерживает ручную workflow_dispatch операцию.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_NO_UI_OWNER_LAUNCH_RERUN_FRESH6_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-connector-transport-no-gh-token-implement-01"
+      ],
+      "blocker": "Только ограниченная реализация безопасного GitHub owner proof; старый sandbox и original18 не изменять, до проверенного нового authorization Research не запускать.",
+      "updated_on": "2026-11-14",
+      "updated_at_utc": "2026-11-14T17:23:34Z",
       "recent_completion": false
     }
   ]
