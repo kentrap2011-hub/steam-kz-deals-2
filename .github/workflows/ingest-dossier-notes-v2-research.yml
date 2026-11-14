@@ -1,0 +1,62 @@
+name: Ingest isolated Notes V2 Research receipts (manual GitHub owner only)
+run-name: Research receipts for ${{ inputs.trial_id }}
+
+# The Research chat writes one create-only candidate per game. This manual
+# owner-only job reads the existing frozen cohort and creates typed receipts.
+# No push trigger, schedule, automatic retry, Assembly, main or production write.
+on:
+  workflow_dispatch:
+    inputs:
+      trial_id:
+        description: "Already GitHub-issued and separately authorized V2 cohort"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: dossier-v2-research-receipts-${{ inputs.trial_id }}
+  cancel-in-progress: false
+
+jobs:
+  materialize-research-receipts:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && github.run_attempt == 1 && github.actor_id == 315790060 && github.repository_owner_id == 315790060
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout trusted merged-main ingestion code, not sandbox scripts
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install existing isolated Notes V2 validator
+        run: python -m pip install 'jsonschema==4.23.0'
+
+      - name: Ingest existing create-only candidates; one owner-owned receipt per game
+        env:
+          TRIAL_ID: ${{ inputs.trial_id }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          [[ "$TRIAL_ID" =~ ^dossier-notes-v2-[a-z0-9][a-z0-9-]{8,70}$ ]]
+          test "$TRIAL_ID" != "dossier-notes-v2-original18-first"
+          test "$GITHUB_REF" = "refs/heads/main"
+
+          # Only input data is checked out from the separately issued sandbox.
+          # Ingestion source code and its schema checks run from trusted main.
+          git fetch --no-tags origin "refs/heads/sandbox/$TRIAL_ID"
+          sandbox="$RUNNER_TEMP/dossier-v2-research-sandbox"
+          git worktree add --detach "$sandbox" FETCH_HEAD
+          python scripts/dossier_notes_v2_research_receipt_ingest.py \
+            --repo "$sandbox" --trial-id "$TRIAL_ID"
+
+          # GitHub-owned writer must leave its source checkout untouched.
+          test -z "$(git status --porcelain --untracked-files=all)"
