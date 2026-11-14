@@ -101,7 +101,7 @@ class ResearchIntakeTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "not verified"):
                 intake.plan(self.repo, self.branch, event, "mock-owner")
         with self._owner_mock():
-            with self.assertRaisesRegex(ValueError, "sandbox branch"):
+            with self.assertRaisesRegex(ValueError, "missing frozen trial"):
                 intake.plan(self.repo, "sandbox/other-trial", event, "mock-owner")
 
     def test_second_plain_submission_different_game_is_independent(self):
