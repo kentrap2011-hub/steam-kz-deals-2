@@ -1,15 +1,64 @@
-# Dossier Notes V2 — reusable isolated batch Research one-shot
+# Dossier Notes V2 — Research, one GitHub write per game
 
-**Role:** user-launched one-time semantic Research data-plane ONLY; NOT a developer/operator session, scheduler, production worker, issuer or queue manager. Never run this prompt from implementation chat.
+**Purpose:** one explicitly user-launched, isolated Research run on the exact
+previously frozen and GitHub-owner-authorized cohort. Not a developer session,
+scheduler, issuer, retry loop, Assembly or production job.
 
-## Mandatory start and authority
-1. Fully read `CHAT_PROTOCOL.md`, `CHAT_CONTEXT.md`, `config/execution_ownership_contract.json`, `config/dossier_research_notes_v2_contract.json`, `config/dossier_notes_v2_batch_policy.json`, `config/dossier_research_notes_v2.schema.json` and this prompt from current `main`; pass START.
-2. Receive a **specific GitHub-approved** `trial_id`, unique `marker_commit`, `authorization_commit` and exact sandbox HEAD from the owner. Reject user-invented/mutable queues. The frozen batch data is `config/dossier_notes_v2_batches/{trial_id}.json`; first authorized candidate is `dossier-notes-v2-fresh6-20261111-first`, but do not assume it was actually issued. For any later batch the *same* prompt applies without modification.
-3. Confirm source code landed in main, actual GitHub Actions `issue-dossier-notes-v2-batch.yml` first-attempt owner SUCCESS freeze and separate `authorize-dossier-notes-v2-batch.yml` first-attempt owner SUCCESS authorization; confirm exact owner run ID, actor identity, main ref, immutable grant/manifest/marker parent chain and frozen cohort. The local `python scripts/dossier_notes_v2_batch_pilot.py inspect --trial-id <trial_id> --marker-commit <marker> --authorization-commit <auth>` checks structure only, **NOT** actual Actions completion.
-4. Verify exact current `sandbox/{trial_id}` HEAD and run the **connected GitHub tokenless preflight** from `config/dossier_notes_v2_connector_transport_manual_runbook.md` and `scripts/dossier_notes_v2_connector_transport.mjs`. It checks real first-attempt owner **Freeze and Authorize** Actions, exact owner ID/login, workflow/path/ref/name, original grant/manifest/marker parent chain, frozen bindings and current sandbox HEAD once per invocation. GitHub itself rejects missing write permission; no separate `get_repo` check, committer-time check or full historical commit walk. Missing GitHub connector operation, failed owner proof, stale branch, immutable drift, wrong actor/attempt/source or unsigned/unverified data **STOP before Research/transport**. Existing token-backed Python remains an optional legacy alternative for a genuinely authenticated GitHub checkout; a separate `GH_TOKEN` is **not required for the connector route**.
-5. GitHub owns exact scope and order: read **only** immutable manifest items. For first fresh6 cohort, verify in order: `1000010 Crown Trick`; `102600 Orcs Must Die!`; `1029690 Sniper Elite 5`; `49520 Borderlands 2`; `499180 Braid, Anniversary Edition`; `501590 Bulletstorm: Full Clip Edition`. Never infer another edition or AppID. No user-selected replacement candidates, queue, retry/backlog loop.
+## Start (short)
 
-## Research, transport and terminal behavior
-Research genuine, neutral public player feedback per exact product/edition, noting retrieval/opening/access status, publication timing, evidence role, conflicting or insufficient evidence honestly. Existing Research schema `DOSSIER-RESEARCH-NOTES-V2` allows sparse `no_verifiable_findings` and zero sources; no fabricated quotations, personal identifiers, private review data or inaccessible material claimed as read. Build the exact `assignment` from the authenticated GitHub-frozen manifest (identical to `scripts/dossier_research_notes_v2.py::frozen_assignment`), follow the unchanged Research schema/privacy/evidence rules, and submit **one preexisting Research JSON per independently authorized item** using the **two-call** route in the canonical runbook: first a read-only `connectorPreflight` plus `connectorHandoff`, then `connectorResumeHandoff` plus `connectorPublishItem` in the next Code Mode call. A full preflight (14 GitHub calls) plus two-commit publication (10) exceeds the observed 20-call limit, so they must NEVER be combined in one Code Mode call. Use only the immediately previous verified handoff from this same manual session. It creates a candidate commit and separate typed Research receipt commit, each one GitHub create-only expected-HEAD CAS with final branch HEAD readback, **without a separate token**. For genuine Git/Python environments the original `dossier_notes_v2_batch_pilot.py research` with token still works. Strict GitHub-owned Python inspection/writer remains final acceptance authority. After each confirmed item, issue a new Code Mode call using only the updated `next_handoff` from that successful call; publish exactly one item per Code Mode call. If the handoff is lost, the session is interrupted, or a write is ambiguous, STOP and fresh-preflight the actual current GitHub state rather than guessing. Never retry ambiguous writes, issue a second grant or claim a submitted candidate is final accepted Dossier.
+1. Follow CHAT_PROTOCOL.md and CHAT_CONTEXT.md. Only start after the existing
+   owner Freeze **and separate Authorize** Actions have succeeded for this exact
+   one-use trial. A trial ID supplied in chat is not authorization by itself.
+2. Read the single frozen manifest at
+   data/control/dossier_notes_v2/manifests/<trial_id>.json on
+   sandbox/<trial_id> with GitHub connector fetch_file. Use the returned file
+   SHA (manifest_blob_sha) and exact immutable items.
+   Use the original owner-issued marker_commit, never an invented marker.
+   Do not choose, replace or reorder games. If the manifest is inaccessible or
+   inconsistent, STOP; do not reconstruct it from old messages.
+3. For each item, research genuine public player opinion about exactly its
+   game and edition. Summarize strengths, complaints and uncertainty
+   neutrally. **No mandatory browser access log, proof-of-opening, timestamps
+   or source-count quota.** Do not invent findings, personal review material
+   or claims of accessing pages that were not accessed.
 
-Report actual per-AppID candidate/receipt Git SHAs or missing/rejected, exact duration when measured and real number complete. Do not do Assembly, independent writer, canonical/Deep/production, V1, schedules or Actions dispatch.
+## One-call submission per game
+
+Build a plain JSON document with:
+
+- schema: "DOSSIER-RESEARCH-NOTES-V2"
+- schema_version: 2
+- assignment: the exact row from the manifest plus the same trial_id,
+  original marker_commit and the GitHub-fetched manifest_blob_sha
+  (as defined by frozen_assignment in the existing Python contract)
+- notes_text: concise neutral Research notes, max 1200 characters
+- research_status: notes_recorded, limited_evidence,
+  no_verifiable_findings or tool_interrupted
+- Optional unknowns_text, conflicts_text and source_log. Missing
+  source_log is valid; if supplied, keep public safe locators only.
+
+Use **one** mcp__GitHub__create_file for that game, on
+sandbox/<trial_id>, at the exact create-only path:
+
+data/ai_inbox/dossier_notes_v2/<trial_id>/g<group_sequence as six digits>/<appid>--<assignment_id>.json
+
+Never update, overwrite, resend, pick a different path or retry an ambiguous
+create. Continue independent games only when previous writes are confirmed.
+A returned candidate commit is **not** an acceptance receipt.
+
+## After the Research batch
+
+Report which exact AppIDs produced GitHub candidate commits and which did not.
+Do not write a typed receipt, manually calculate Git hashes, perform handoff
+serialization, or run the old connectorPreflight/connectorPublishItem path.
+
+The repository owner can separately run the **manual** GitHub Actions workflow
+.github/workflows/ingest-dossier-notes-v2-research.yml with this trial ID.
+GitHub then authenticates the owner issuance, independently validates the
+candidate's exact immutable one-add Git commit, and creates each missing typed
+Research receipt. Invalid games do not block valid siblings. Existing receipt
+and Assembly contracts remain in force. Research does not trigger that workflow
+and must not claim acceptance before its confirmation.
+
+No V1, Deep, Assembly, canonical production, schedules, automatic retries or
+new grants. Previous fresh6/original18 immutable submissions are not replayed.
