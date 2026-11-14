@@ -4,7 +4,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {createHash} from "node:crypto";
 import {readFileSync} from "node:fs";
-import {connectorPreflight,connectorPublishItem,v2Sha256} from "./dossier_notes_v2_connector_transport.mjs";
+import {connectorPreflight,connectorHandoff,connectorResumeHandoff,connectorPublishItem,v2Sha256} from "./dossier_notes_v2_connector_transport.mjs";
 
 const REPO="kentrap2011-hub/steam-kz-deals-2";
 const sha=n=>n.toString(16).padStart(40,"0");
@@ -402,4 +402,72 @@ test("Assembly preflight requires Research+receipt and no Research schema read",
     phase:"research",appid:"1000010",expectedHead:research.receipt_commit,
     document:researchDoc(assembly,"1000010")
   }),/phase differs/);
+});
+
+
+test("actual 20-call Code Mode limit: preflight and each item must be separate",async()=>{
+  const f=makeFixture();
+  const initial=await preflight(f);
+  // Stage A: one tool call, no writes; cannot combine with 10-call publish.
+  assert.equal(f.calls.length,14);
+  const handoff=JSON.parse(JSON.stringify(connectorHandoff(initial)));
+  assert.equal(handoff.kind,"DOSSIER-NOTES-V2-SESSION-HANDOFF");
+  let previous=handoff;
+  // Stage B: each tool call starts fresh, reuses checked immutable authority.
+  for(const row of initial.manifest.items){
+    const before=f.calls.length;
+    const ctx=await connectorResumeHandoff(f.api,previous);
+    const out=await connectorPublishItem(f.api,ctx,{
+      phase:"research",appid:row.appid,
+      expectedHead:ctx.head,document:researchDoc(ctx,row.appid)
+    });
+    assert.equal(f.calls.length-before,11,"resume + Research candidate/receipt must fit 20 calls");
+    assert.equal(ctx.head,out.receipt_commit);
+    previous=JSON.parse(JSON.stringify(connectorHandoff(ctx)));
+  }
+  assert.equal(f.calls.filter(x=>x[0]==="updateRef").length,12);
+});
+
+test("handoff is copy-integrity checked and cannot bypass stale-branch CAS",async()=>{
+  const f=makeFixture(),ctx=await preflight(f);
+  const handoff=JSON.parse(JSON.stringify(connectorHandoff(ctx)));
+  const bad=JSON.parse(JSON.stringify(handoff));
+  bad.payload.manifest.items[0].title="Wrong edition";
+  await assert.rejects(()=>connectorResumeHandoff(f.api,bad),
+    /missing or changed session handoff/);
+  f.head=sha(999);
+  await assert.rejects(()=>connectorResumeHandoff(f.api,handoff),/HEAD no longer current/);
+  assert.equal(f.calls.filter(x=>x[0]==="createBlob").length,0);
+});
+
+test("resumed Assembly uses original Research candidate and receipt, one session handoff",async()=>{
+  const f=makeFixture(),researchCtx=await preflight(f);
+  const research=await connectorPublishItem(f.api,researchCtx,{
+    phase:"research",appid:"1000010",expectedHead:AUTH,
+    document:researchDoc(researchCtx,"1000010")
+  });
+  const assembler=await preflight(f,{phase:"assembly",expectedHead:research.receipt_commit});
+  const at=JSON.parse(JSON.stringify(connectorHandoff(assembler)));
+  const resumed=await connectorResumeHandoff(f.api,at);
+  const source=f.files.get(research.candidate_commit+"|"+research.candidate_path);
+  const digest=createHash("sha256").update(source.content).digest("hex");
+  const doc={schema:"DOSSIER-AUTONOMOUS-ASSEMBLY-RESULT-V2",schema_version:2,
+    assignment:researchDoc(researchCtx,"1000010").assignment,
+    research_transport:{
+      research_package_git_commit:research.candidate_commit,
+      research_package_path:research.candidate_path,
+      research_package_blob_sha:source.sha,
+      research_package_raw_sha256:digest,
+      research_package_sha256:digest
+    },
+    outcome:"assembly_missing_evidence",final_dossier:null,operations:[],
+    mechanical_corrections:[],diagnostic:"insufficient evidence",
+    staged_only:true,canonical_acceptance:false};
+  const before=f.calls.length;
+  const result=await connectorPublishItem(f.api,resumed,{
+    phase:"assembly",appid:"1000010",expectedHead:resumed.head,
+    researchCommit:research.candidate_commit,document:doc
+  });
+  assert.equal(result.disposition,"assembly_missing_evidence");
+  assert.ok(f.calls.length-before<=20,"Assembly publication remains within per-call limit");
 });
