@@ -38,6 +38,27 @@ jobs:
           path: sandbox
           fetch-depth: 0
           persist-credentials: true
+      - name: Ensure GitHub executes only issuer-frozen source files
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in \
+            scripts/dossier_notes_v2_research_intake.py \
+            scripts/dossier_notes_v2_batch_preflight.py \
+            scripts/dossier_notes_v2_batch_route.py \
+            scripts/dossier_notes_v2_batch_issuer.py \
+            scripts/dossier_notes_v2_batch_pilot.py \
+            scripts/dossier_research_notes_v2.py \
+            scripts/dossier_notes_v2_per_item_receipts.py \
+            scripts/taste_steam_review_dossier_buffered.py \
+            .github/workflows/dossier-notes-v2-research-intake.yml \
+            .github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml
+          do
+            cmp -s "source/$file" "sandbox/$file" || {
+              echo "Frozen sandbox executable differs from current main: $file" >&2
+              exit 2
+            }
+          done
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
