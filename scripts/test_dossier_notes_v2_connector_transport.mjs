@@ -343,3 +343,63 @@ test("no canonical, production or original18 publication interface exists",async
   assert.match(out.candidate_path,/^data\/ai_inbox\/dossier_notes_v2\//);
   assert.match(out.receipt_path,/^data\/control\/dossier_notes_v2\/receipts\//);
 });
+
+
+test("lean preflight and constant-cost Research publication",async()=>{
+  const f=makeFixture(),ctx=await preflight(f);
+  const callsBefore=f.calls.length;
+  assert.equal(f.calls.filter(x=>x[0]==="fetchFile").length,6);
+  assert.equal(f.calls.some(x=>x[0]==="getRepo"),false);
+  for(const row of ctx.manifest.items){
+    const before=f.calls.length,head=ctx.head;
+    const out=await connectorPublishItem(f.api,ctx,{
+      phase:"research",appid:row.appid,expectedHead:head,
+      document:researchDoc(ctx,row.appid)
+    });
+    const latest=f.calls.slice(before);
+    assert.equal(latest.length,10);
+    assert.equal(latest.filter(x=>x[0]==="fetchFile").length,0);
+    assert.equal(latest.filter(x=>x[0]==="fetch" &&
+      x[1].includes("/git/ref/heads/")).length,2);
+    assert.equal(ctx.head,out.receipt_commit);
+  }
+  assert.equal(f.calls.length-callsBefore,60);
+  assert.equal(f.calls.filter(x=>x[0]==="updateRef").length,12);
+  assert.equal(ctx.existing.size,12);
+});
+
+test("resumed batch uses one compare, skips per-commit history reads",async()=>{
+  const f=makeFixture(),ctx=await preflight(f);
+  const out=await connectorPublishItem(f.api,ctx,{
+    phase:"research",appid:"1000010",expectedHead:AUTH,
+    document:researchDoc(ctx,"1000010")
+  });
+  const before=f.calls.length;
+  const resumed=await preflight(f,{expectedHead:out.receipt_commit});
+  const rest=f.calls.slice(before);
+  assert.equal(rest.filter(x=>x[0]==="fetch" &&
+    x[1].includes("/compare/")).length,1);
+  assert.equal(resumed.existing.size,2);
+  await assert.rejects(()=>connectorPublishItem(f.api,resumed,{
+    phase:"research",appid:"1000010",expectedHead:out.receipt_commit,
+    document:researchDoc(resumed,"1000010")
+  }),/already exists/);
+});
+
+test("Assembly preflight requires Research+receipt and no Research schema read",async()=>{
+  const f=makeFixture(),ctx=await preflight(f);
+  const research=await connectorPublishItem(f.api,ctx,{
+    phase:"research",appid:"1000010",expectedHead:AUTH,
+    document:researchDoc(ctx,"1000010")
+  });
+  const before=f.calls.length;
+  const assembly=await preflight(f,{phase:"assembly",expectedHead:research.receipt_commit});
+  assert.ok(assembly.existing.has(research.candidate_path));
+  assert.ok(assembly.existing.has(research.receipt_path));
+  assert.equal(f.calls.slice(before).filter(x=>x[0]==="fetchFile" &&
+    x[1].includes("dossier_research_notes_v2.schema.json")).length,0);
+  await assert.rejects(()=>connectorPublishItem(f.api,assembly,{
+    phase:"research",appid:"1000010",expectedHead:research.receipt_commit,
+    document:researchDoc(assembly,"1000010")
+  }),/phase differs/);
+});
