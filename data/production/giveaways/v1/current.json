@@ -2,8 +2,8 @@
   "contract": "CROSS-PLATFORM-GIVEAWAY-V1",
   "schema_version": 1,
   "country_code": "KZ",
-  "generated_at_utc": "2026-11-13T01:05:06.248128Z",
-  "fresh_until_utc": "2026-11-14T07:05:06.248128Z",
+  "generated_at_utc": "2026-11-14T00:54:46.020436Z",
+  "fresh_until_utc": "2026-11-15T06:54:46.020436Z",
   "snapshot_status": "incomplete",
   "required_sources": [
     "steam",
@@ -15,21 +15,21 @@
       "required": true,
       "status": "failed",
       "complete": false,
-      "observed_at_utc": "2026-11-13T01:05:06.248128Z",
+      "observed_at_utc": "2026-11-14T00:54:46.020436Z",
       "endpoint": "existing KZ Steam catalog + targeted first-party validation",
       "candidate_count": 0,
       "accepted_count": 0,
       "rejected_count": 0,
       "unverified_count": 0,
       "error_code": "SOURCE_STALE",
-      "error": "Steam candidate snapshot is stale: 1564.3h",
+      "error": "Steam candidate snapshot is stale: 1588.1h",
       "details": {}
     },
     "epic": {
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-11-13T01:05:06.248128Z",
+      "observed_at_utc": "2026-11-14T00:54:46.020436Z",
       "endpoint": "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions",
       "candidate_count": 1,
       "accepted_count": 1,
@@ -49,7 +49,7 @@
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-11-13T01:05:06.248128Z",
+      "observed_at_utc": "2026-11-14T00:54:46.020436Z",
       "endpoint": "https://catalog.gog.com/v1/catalog",
       "candidate_count": 0,
       "accepted_count": 0,
@@ -92,7 +92,7 @@
           "claim_url": "https://store.epicgames.com/en-US/p/knightica-3be45c",
           "promotion_start_utc": "2026-11-12T16:00:00Z",
           "promotion_end_utc": "2026-11-19T16:00:00Z",
-          "observed_at_utc": "2026-11-13T01:05:06.248128Z",
+          "observed_at_utc": "2026-11-14T00:54:46.020436Z",
           "base_price": 278000,
           "final_price": 0,
           "currency": "KZT",
@@ -108,26 +108,27 @@
             "KZ_AVAILABLE"
           ],
           "identity_resolution": {
-            "schema_version": 1,
-            "source_storefront": "epic",
-            "source_product_id": "02d659f31e1c43a78c43fd9fd9edc089:9975548b6d404a94b8a9bdb34cad49e9",
-            "source_provider_product_id": "9975548b6d404a94b8a9bdb34cad49e9",
             "identity_provider": "itad",
-            "provider_game_id": "0190bb85-dac6-73dc-bd6b-3fa5ad9e0573",
-            "steam_appid": 3093400,
-            "status": "resolved",
-            "reason": "exact_unique",
             "provenance": {
+              "api_docs": "https://docs.isthereanydeal.com/",
+              "auth_route": "none_documented",
               "authority": "source_exact_shop_id",
-              "source_shop_id": 16,
-              "steam_shop_id": 61,
+              "checked_at_utc": "2026-11-13T01:05:06.248128Z",
               "lookup_forward": "/lookup/id/shop/{shopId}/v1",
               "lookup_reverse": "/lookup/shop/{shopId}/id/v1",
               "shop_map": "/service/shops/map/v1",
-              "auth_route": "none_documented",
-              "checked_at_utc": "2026-11-13T01:05:06.248128Z",
-              "api_docs": "https://docs.isthereanydeal.com/"
-            }
+              "source_shop_id": 16,
+              "steam_shop_id": 61,
+              "cache_reused": true
+            },
+            "provider_game_id": "0190bb85-dac6-73dc-bd6b-3fa5ad9e0573",
+            "reason": "exact_unique",
+            "schema_version": 1,
+            "source_product_id": "02d659f31e1c43a78c43fd9fd9edc089:9975548b6d404a94b8a9bdb34cad49e9",
+            "source_provider_product_id": "9975548b6d404a94b8a9bdb34cad49e9",
+            "source_storefront": "epic",
+            "status": "resolved",
+            "steam_appid": 3093400
           }
         }
       ],
@@ -154,7 +155,7 @@
   "identity_resolution_counts": {
     "resolved": 1,
     "unresolved": 0,
-    "cache_hits": 0,
-    "network_lookups": 1
+    "cache_hits": 1,
+    "network_lookups": 0
   }
 }
