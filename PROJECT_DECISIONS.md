@@ -1118,3 +1118,15 @@ A canonical Dossier/profile/work/repository write that lands **before** the mark
 
 
 **Self-QA amendment, 2026-11-14 (PR #446):** live ChatGPT Code Mode verification established a **20 nested GitHub-tool-call maximum**. A 14-call issuer preflight plus a 10-call Research publish still needs 24 calls, so the original PR #446 optimization (green synthetic tests) did NOT solve the actual runtime block. Corrected in the same PR: first Code Mode invocation completes only full owner preflight and yields exact session handoff; each subsequent invocation resumes only that immediately preceding verified state with one remote branch HEAD read and performs exactly one item candidate+typed receipt in 10 additional calls (11 total). The handoff's SHA256 is accidental-drift detection, NOT trust provenance: never take a handoff from user-provided files, other chats or web. Failure/loss/ambiguous write always requires a fresh real GitHub preflight. Strict GitHub writer unchanged; synthetic tests now assert the actual call budget. No new grant or automatic queue/retry. Real semantic publication remains untested.
+
+---
+
+## DOSSIER-RESEARCH-ONEWRITE-002 — Research owns content, GitHub owns receipts (2026-11-14)
+
+**User decision:** do not make browsing-access logs, page-opening evidence, source timestamps, or minimum source counts mandatory in the lightweight Research stage; use a separate, explicitly requested audit only when quality is suspect. Maximize simplicity of the interactive semantic worker rather than optimizing dozens of manual GitHub calls.
+
+**Problem:** the existing manual V2 connector path obliges ChatGPT to copy a long transport program, establish a 14-call issuer preflight, maintain a SHA256 handoff between calls, and execute approximately 11 GitHub operations per game for candidate and typed receipt. Repeated handoff errors consumed time despite correct sandbox Git persistence.
+
+**Implementation choice:** reuse the *existing* frozen manifest, create-only canonical Research inbox path, immutable assignments and V2 validators; accept omitted `source_log` while retaining safe validation when present. ChatGPT reads a single GitHub-frozen manifest, performs Research and creates one Research file per game via the connector. A separate **owner-only, manual, first-attempt** GitHub Actions workflow validates actual owner authorization and Git introductions, then creates immutable typed receipts for all independently submitted items. No worker-created receipts, handoff, automatic retry, schedule or canonical production writes. Assembly continues requiring the same unchanged typed Research receipt before it may act. Existing fresh6/original18 immutable files are not rewritten.
+
+**Trade-off:** one manual GitHub owner ingest per batch replaces per-game technical traffic; the Research submission alone is not acceptance. The quality of semantic notes is not technically guaranteed by validating a browsing log. A real new owner-authorized live batch is still required to measure end-to-end wall time and verify live GitHub behavior. Source PR #450; original architecture design PR #449.
