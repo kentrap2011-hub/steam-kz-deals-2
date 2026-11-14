@@ -3,10 +3,10 @@
 
 ## Dossier V2 lean GitHub Connector checks — source PR #446 (2026-11-14)
 
-- Status: `implementation_in_draft_pr; source_only; four_earlier_code_head_CI_success; final_head_review_pending`.
+- Status: `self_review_found_real_20_call_cap; corrected_split_session_handoff_in_draft_PR; final_exact_head_CI_and_source_review_pending`.
 - Explicit user approval: remove redundant/duplicated connector checks without breaking the rest of the project. Source PR: https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/446 ; branch `optimize/dossier-v2-connector-checks-20261114`.
-- `scripts/dossier_notes_v2_connector_transport.mjs`: owner proof once per invocation, one compare for resumed path set, phase-only schemas, one create-only CAS+branch-readback per file; 10 GitHub calls per Research candidate+typed receipt rather than ~29 (code/test observation, not elapsed-time measurement).
-- Tests: exact 4/4 PR runs on code head `74fa118a25f088d056f543423d23185254f3de9f` SUCCESS; test-added/report-only commits need exact-final-HEAD CI check. Report: `reviews/worker_reports/dossier-v2-connector-lean-checks-implement-20261114.md`.
+- `scripts/dossier_notes_v2_connector_transport.mjs`: owner proof once per invocation, one compare for resumed path set, phase-only schemas, one create-only CAS+branch-readback per file; 10 GitHub calls per Research candidate+typed receipt rather than ~29, plus **one** HEAD recheck via `connectorResumeHandoff` in a separate invocation. Actual 20-call Code Mode cap verified; one preflight+publication cannot fit in one call, so the runbook requires preflight-only first call then one game per next call.
+- Tests: prior 4/4 PR CI at code head `74fa118a25f088d056f543423d23185254f3de9f` SUCCESS, but self-QA found the still-broken runtime limit afterward. Corrected Node synthetic tests now check actual 14-call preflight and 11-call handoff+publish. **Fresh PR exact-final-HEAD CI required**. Report: `reviews/worker_reports/dossier-v2-connector-lean-checks-implement-20261114.md`.
 - Legacy Python token transport, GitHub strict writer, issuer, V1, Deep, production and sandbox are unchanged. No live Research/Assembly; separate worker execution follows code review/acceptance.
 
 
