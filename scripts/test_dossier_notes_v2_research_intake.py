@@ -8,6 +8,7 @@ import dossier_notes_v2_research_intake as intake
 import dossier_notes_v2_per_item_receipts as receipts
 import dossier_research_notes_v2 as v2
 from test_dossier_notes_v2_batch_route import add, git, source_copy, synthetic_issuer
+import dossier_notes_v2_batch_route as batch
 
 
 class ResearchIntakeTests(unittest.TestCase):
@@ -182,6 +183,34 @@ class ResearchIntakeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "trigger"):
             intake.reconcile(self.repo, self.branch, self.issuer["auth"],
                              "offline-owner")
+
+
+    def test_new_intake_executable_is_frozen_after_owner_authorization(self):
+        source = Path(self.repo) / "scripts/dossier_notes_v2_research_intake.py"
+        source.write_text(source.read_text() + "\\n# modified after freeze\\n")
+        git(self.repo, "add", "scripts/dossier_notes_v2_research_intake.py")
+        git(self.repo, "commit", "-m", "fixture: forbidden post-issuer change")
+        with self.assertRaisesRegex(ValueError, "sandbox executable"):
+            batch.issuer_structure(
+                self.repo, trial_id=self.trial,
+                marker_commit=self.issuer["marker"],
+                authorization_commit=self.issuer["auth"])
+
+    def test_older_cohort_base_without_intake_files_keeps_legacy_authority(self):
+        temp, repo = source_copy()
+        try:
+            git(repo, "rm", "scripts/dossier_notes_v2_research_intake.py",
+                ".github/workflows/dossier-notes-v2-research-intake.yml")
+            git(repo, "commit", "-m", "fixture: legacy source before intake")
+            git(repo, "checkout", "-b", self.branch)
+            older = synthetic_issuer(repo, self.trial)
+            proven = batch.issuer_structure(
+                repo, trial_id=self.trial,
+                marker_commit=older["marker"],
+                authorization_commit=older["auth"])
+            self.assertTrue(proven["semantic_execution_authorized"])
+        finally:
+            temp.cleanup()
 
 
 if __name__ == "__main__":
