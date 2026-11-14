@@ -1,5 +1,13 @@
 # CURRENT TASK
 
+## IMPLEMENTED IN DRAFT PR / CI PENDING — Dossier V2 one-file Research intake (2026-11-14)
+
+- Owner request: minimize ChatGPT technical rules and per-game GitHub calls; search-process proof is optional and audited only when needed.
+- Draft [PR #447](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/447), branch `simplify/dossier-v2-research-intake-20261114`; new plain one-file per-game GitHub intake and event-driven GitHub-owned strict Research candidate/receipt; synthetic Git regression, same existing V2 PR CI.
+- **State:** source in draft PR only; CI/exact-final-HEAD and independent review pending; workflow not active in main and no new owner-authorized live cohort tested. Existing frozen fresh6, Assembly/legacy, V1/Deep/production unchanged. Do not merge or claim deployed merely from PR creation.
+- Route `config/dossier_notes_v2_research_intake_runbook.md`; decision `PROJECT_DECISIONS.md` DOSSIER-INTAKE-001; worker report `reviews/worker_reports/dossier-v2-single-file-research-intake-20261114.md`.
+
+
 
 ## Dossier V2 lean GitHub Connector checks — source PR #446 (2026-11-14)
 
