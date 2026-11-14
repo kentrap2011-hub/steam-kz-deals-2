@@ -1,69 +1,68 @@
-# Dossier Notes V2 — lean GitHub Connector transport (no GH_TOKEN)
+# Dossier Notes V2 — lean tokenless GitHub Connector
 
-**Role:** one explicitly user-launched isolated Research or separate Assembly worker for an existing owner-authorized cohort. This is not issuer, scheduler, retry manager, strict writer or production.
+**Role:** manually launched, isolated Research or independently launched Assembly for an already owner-authorized batch. Not an issuer, schedule, retry owner or production process. Source: `scripts/dossier_notes_v2_connector_transport.mjs` from **current main**.
 
-**Source:** `scripts/dossier_notes_v2_connector_transport.mjs`. The source is plain JavaScript declarations for ChatGPT Code Mode. Copy the complete trusted declarations from current `main` as literal code into the same code-orchestration call as the GitHub tool adapter. **Never eval/import downloaded code.** Data from public reviews is never executable.
+## Why two Code Mode calls are mandatory
 
-## Minimal connector operations
+**Measured live GitHub Connector limit: 20 nested tool calls per Code Mode invocation.** Real owner preflight costs 14 calls on the empty sandbox; one game with two typed commits needs 10, so 14 + 10 cannot be executed in the same invocation. Use the verified **session handoff** below. This does not create a new GitHub grant, queue, retry or file.
 
-Required: connected GitHub `fetch`, `fetch_file`, `create_blob`, `create_tree`, `create_commit`, `update_ref`. The repository is fixed in the module; no `GH_TOKEN` or `get_repo` permission read is needed. Missing write permission fails on GitHub's own write operation. `update_ref(expected_sha, force:false)` MUST reject stale branches; never use a non-leased alternative.
+- Call A: full owner preflight only. Verify two successful first-attempt GitHub Actions, issuer parent/manifest, exact immutable assignments, owner ID and real branch HEAD; download current phase schema plus receipt schema. Output the complete machine-readable session handoff.
+- Call B: take **only the exact immediately preceding Call A output**, restore the verified context with one fresh remote branch HEAD read, publish **one game** using exactly 10 additional GitHub calls, then output the updated handoff.
+- Call C and subsequent calls: use only the just-returned updated handoff from the previous successful game, for **one next game**. Each call uses 11 connected GitHub operations, below the proven limit. Do not combine two games in one Code Mode call.
+- If a call fails, loses its output, or an ambiguous GitHub write occurs, **STOP**. The next manual action requires an independent fresh GitHub preflight at the actual current sandbox HEAD; do not forge, edit or reconstruct a handoff from a prompt, outside file, user input or guesses. The handoff SHA256 detects accidental copy corruption **but is not a cryptographic authentication of a user-supplied payload**. Its authority is exclusively the immediately preceding verified output in this same explicit ChatGPT session.
 
-Required inputs: actual owner `trialId`, `markerCommit`, `authorizationCommit`, first-attempt `freezeRunId`, and independently read current sandbox `expectedHead`. The user cannot invent or change the frozen manifest.
+## Call A — read-only preflight, 14 GitHub calls on an empty sandbox
 
-## Mandatory owner proof (once per invocation)
+Copy the complete trusted JavaScript declarations from `scripts/dossier_notes_v2_connector_transport.mjs` into the ChatGPT Code Mode tool call. Do not dynamically `eval` or import GitHub-fetched source. Append:
 
 ```js
-// Immediately after the declarations from the trusted module:
 const api = {
   fetch: args => tools.mcp__GitHub__fetch(args),
   fetchFile: args => tools.mcp__GitHub__fetch_file(args),
   createBlob: args => tools.mcp__GitHub__create_blob(args),
   createTree: args => tools.mcp__GitHub__create_tree(args),
   createCommit: args => tools.mcp__GitHub__create_commit(args),
-  updateRef: args => tools.mcp__GitHub__update_ref(args),
+  updateRef: args => tools.mcp__GitHub__update_ref(args)
 };
-const ctx = await connectorPreflight(api, {
-  trialId: "<EXACT_TRIAL_ID>",
-  markerCommit: "<EXACT_MARKER_COMMIT>",
-  authorizationCommit: "<EXACT_AUTHORIZATION_COMMIT>",
-  freezeRunId: "<OWNER_FREEZE_RUN_ID>",
-  expectedHead: "<CURRENT_SANDBOX_HEAD>",
-  phase: "research", // "assembly" only in the separately approved Assembly chat
+const ctx = await connectorPreflight(api,{
+  trialId:"<EXACT_OWNER_ISSUED_TRIAL>",
+  markerCommit:"<EXACT_MARKER_COMMIT>",
+  authorizationCommit:"<EXACT_AUTHORIZATION_COMMIT>",
+  freezeRunId:"<REAL_FIRST_ATTEMPT_OWNER_FREEZE_RUN>",
+  expectedHead:"<FRESH_EXACT_SANDBOX_HEAD>",
+  phase:"research" // separately launched Assembly chat uses "assembly"
 });
-text({head:ctx.head,items:ctx.manifest.items.map(x=>[x.appid,x.title]),
-  authorized:ctx.github_owner_runs_authenticated});
+text(JSON.stringify(connectorHandoff(ctx)));
 ```
 
-This preflight checks real first-attempt owner-issued **Freeze and Authorize** Actions, exact owner login/id/event/workflow/main/run name, original grant → manifest → marker → separate authorization Git parent chain, immutable assignment/title/edition/source manifest, and the exact current sandbox HEAD. A moved/unrelated sandbox stops. On an already populated sandbox it uses **one compare** to discover previously added paths instead of scanning every historical commit. Source-signed Git committer names, timestamps and repeated main comparisons are not relied upon as authorization. Research fetches only its own frozen schema plus receipt schema; Assembly fetches its schema plus receipt schema.
+The returned JSON handoff is usable **only in the next call of this same explicitly authorized manual session**. Preflight is not a Research result and does not authorize publishing another cohort. The first fresh6 cohort still requires exact original manifest/marker/authorization, unchanged owner Actions; never reissue Freeze/Authorize.
 
-**Do not repeat owner proof for every item inside the same Code Mode call.** Reuse the verified `ctx`; after a context/tool-call boundary run a fresh preflight with the newly verified current sandbox HEAD. A fresh call repeats immutable checks but does not create/authorize a new cohort.
+## Call B — one game (11 GitHub calls)
 
-## Publish one independently authorized item
+In a **new Code Mode call** paste the same trusted JavaScript declarations and the same `api` adapter (not an old cached source). Use only the exact Call A handoff as data:
 
 ```js
-const document = /* ready Research or Assembly JSON matching frozen assignment */;
+const handoff = /* exact JSON returned by preceding successful call */;
+const ctx = await connectorResumeHandoff(api,handoff);
+const document = /* exact prepared Research/Assembly JSON matching frozen assignment */;
 const result = await connectorPublishItem(api,ctx,{
-  phase: "research", // must match ctx.phase
-  appid: "<EXACT_APPID>",
-  expectedHead: ctx.head,
+  phase:"research", // equal to ctx.phase
+  appid:"<NEXT_EXACT_FROZEN_APPID>",
+  expectedHead:ctx.head,
   document,
-  // researchCommit: "<ORIGINAL_RESEARCH_CANDIDATE_COMMIT>" // Assembly only
+  // researchCommit:"<EXACT_ORIGINAL_RESEARCH_CANDIDATE_COMMIT>" // Assembly only
 });
-text(result);
+text({result,next_handoff:connectorHandoff(ctx)});
 ```
 
-Use the same `ctx` for the next item in that single invocation if the first returned a confirmed receipt; `ctx.head` is updated by the transport. No automatic traversal, retry, replacement candidate or queue is introduced.
+The result must include the exact candidate and typed receipt SHA; **only then** use `next_handoff` for the next game with a new Code Mode call. Never reuse the old handoff on a moved branch or retry a published candidate.
 
-Per item, GitHub receives one new Research/Assembly candidate and a **separate typed receipt** as two sequential create-only Git commits. For each commit the connector makes exactly one blob, one tree, one commit, a non-force expected-head CAS, and one independent **branch HEAD** readback. There is no repeated download of the just-written bytes or per-commit full history scan. The strict GitHub writer later checks original immutable bytes, one-add parent history, exact schemas, privacy and semantics. A connector write is **NOT** a canonical or semantic acceptance.
+GitHub transport performs create-only blob/tree/commit and non-force `update_ref(expected_sha,force:false)`, plus an independent branch HEAD readback **for both** candidate and separately committed typed receipt. This is not final acceptance; existing GitHub Python strict writer independently checks original single-add lineage, bytes/blob, research privacy/evidence and Assembly final dossier validation. A missing or failed receipt leaves an incomplete candidate: stop and report, do not silently retry.
 
-If the candidate publishes but receipt fails, report candidate-only with exact commit SHA, stop, and inspect remote state before any new action. No blind retry, overwrite, force push, alternate filename, reissue, new marker or automated recovery. Existing receipt path means already submitted; do not republish.
+Assembly requires original Research candidate and its typed receipt, with immutable SHA binding. A missing or invalid Research on game A does not automatically block other games. The phase must be set to `assembly` in its **own** full owner preflight; only its own verified handoffs may continue.
 
-Assembly must independently find the original Research candidate and its separate typed receipt, cross-check original commit/blob/SHA and frozen `research_transport`; incomplete/bad A must not hold valid siblings B/C. For a resumed Assembly session, it discovers the Research receipt's introduction via a single path-filtered GitHub commits lookup rather than a full historical traversal. The existing Python strict writer determines final acceptance.
+## Scope and regression
 
-## Limits and tests
+Only the sandbox branch may change during a separately user-launched semantic run. No original18, V1, Deep, canonical cache, production, GitHub Actions issuer, scheduler or automatic retry. Keep the independent token-backed Python CLI unchanged where authenticated secrets exist.
 
-- The JS checks schema structure/assignment before write, but does not reproduce Python privacy/evidence/strict Dossier validation. Final strict writer alone accepts or rejects each item.
-- Token-backed `scripts/dossier_notes_v2_batch_pilot.py` remains unchanged and usable only in authenticated Python checkout environments.
-- All writes stay in `sandbox/{trial_id}`. No issuer workflow dispatch, no original18, V1, Deep, active policy, canonical cache, production or scheduled task changes.
-- Required tests: `node --test scripts/test_dossier_notes_v2_connector_transport.mjs` plus existing Python V2 tests, and exact-head GitHub PR CI. Regression explicitly verifies 10 GitHub operations per Research candidate+receipt pair and one-comparison resume.
-- Any failed owner proof, wrong assignment/phase, missing receipt, duplicate path, stale CAS, ambiguous remote branch readback or unavailable connector capability **STOP**. A rejected CAS is never automatically retried.
+The current JS schema check prevents malformed field/assignment publication but does not reproduce Python privacy and strict semantics. Synthetic Node tests include exact **14-call preflight + 11-call per-item continuation**, all six immutable Research assignments, restart/duplicate/CAS rejection, and independent Assembly-bound research receipt. Run `node --test scripts/test_dossier_notes_v2_connector_transport.mjs`, existing Python V2 tests and final-HEAD GitHub PR CI before release. Green synthetic tests do not prove actual live Research or accepted dossiers.
