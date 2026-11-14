@@ -615,3 +615,13 @@ Currentness invariant after PPD-012:
 
 
 **Critical 2026-11-14 self-QA correction on PR #446:** the connector Code Mode budget is experimentally **20 GitHub calls per invocation**. **Do not combine** `connectorPreflight` (~14 calls) and `connectorPublishItem` (10 calls). Use a separate preflight-only call that outputs `connectorHandoff(ctx)`, then a separate item-only call with `connectorResumeHandoff(api, exact_previous_handoff)` (1 HEAD read) + `connectorPublishItem` (10 calls). Publish exactly one game per Code Mode call; after confirmed receipt use the new returned handoff for the next item. If the handoff is lost or a write fails ambiguously, STOP and preflight the actual sandbox again. The complete canonical sequence lives in `config/dossier_notes_v2_connector_transport_manual_runbook.md`.
+
+
+---
+
+## Dossier V2 one-file Research intake (2026-11-14; draft PR #447)
+
+- **Start:** `config/dossier_notes_v2_batch_research_manual_one_shot_prompt.md` → `config/dossier_notes_v2_research_intake_runbook.md` → read frozen exact branch manifest once → `mcp__GitHub__create_file` one plain UTF-8 JSON per AppID to `data/ai_inbox/dossier_notes_v2_intake/{trial_id}/{appid}.json` on `sandbox/{trial_id}`.
+- **GitHub backend:** `.github/workflows/dossier-notes-v2-research-intake.yml` on sandbox intake push → `scripts/dossier_notes_v2_research_intake.py` uses existing `dossier_notes_v2_batch_route.py` + `dossier_notes_v2_per_item_receipts.py`; strict original per-item candidate+typed receipt are written as two Git commits then one non-force push.
+- **Constraints:** only future batches frozen after main merge of the new workflow; already issued fresh6 untouched. Input `appid` + `notes` and optional `unknowns`, `conflicts`, `source_urls`; no browsing-access journal. No Assembly, owner issuance/reauthorization, canonical writer, V1, Deep, site or production changes. GitHub workflow receipt success ≠ canonical acceptance. Failure/collision never auto-retries.
+- **Testing:** `scripts/test_dossier_notes_v2_research_intake.py` via existing `.github/workflows/validate-dossier-research-notes-v2.yml`; exact final PR HEAD/CI and separate owner-authorized new-cohort live test needed. Durable rationale: `PROJECT_DECISIONS.md` DOSSIER-INTAKE-001; implementation: draft [PR #447](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/447).

@@ -1118,3 +1118,15 @@ A canonical Dossier/profile/work/repository write that lands **before** the mark
 
 
 **Self-QA amendment, 2026-11-14 (PR #446):** live ChatGPT Code Mode verification established a **20 nested GitHub-tool-call maximum**. A 14-call issuer preflight plus a 10-call Research publish still needs 24 calls, so the original PR #446 optimization (green synthetic tests) did NOT solve the actual runtime block. Corrected in the same PR: first Code Mode invocation completes only full owner preflight and yields exact session handoff; each subsequent invocation resumes only that immediately preceding verified state with one remote branch HEAD read and performs exactly one item candidate+typed receipt in 10 additional calls (11 total). The handoff's SHA256 is accidental-drift detection, NOT trust provenance: never take a handoff from user-provided files, other chats or web. Failure/loss/ambiguous write always requires a fresh real GitHub preflight. Strict GitHub writer unchanged; synthetic tests now assert the actual call budget. No new grant or automatic queue/retry. Real semantic publication remains untested.
+
+---
+
+## DOSSIER-INTAKE-001 — Research stays semantic; GitHub owns Research transport (2026-11-14)
+
+**User decision:** do not require a search-process audit for every game. Research outputs neutral public-feedback conclusions; optional source URLs are useful, but opening status, timestamps and tool provenance are not mandatory. If quality is disputed, run a separate audit rather than burden every Research invocation with proof collection.
+
+**Observed issue:** a six-game manual run took about 23 minutes and manually managed large connector JS/Handoff SHA256 plus 12 Git commits. Two handoff reconstruction mistakes blocked the third game for several minutes. The 20-call Code Mode cap made repeated multi-call transport a poor use of semantic time.
+
+**Architecture:** for **future cohorts issued after this source is merged**, a semantic chat writes one create-only plain Research JSON per frozen AppID to `data/ai_inbox/dossier_notes_v2_intake/{trial_id}/{appid}.json` via a single connected GitHub `create_file`. The GitHub `push` Action, scoped to that intake path and exact `sandbox/dossier-notes-v2-*` branches, derives the immutable assignment, authenticates the existing issuer, validates/privacy-checks the Research Notes and creates the **existing** separate candidate plus typed receipt Git commits in a single non-force push. The independent existing GitHub strict writer remains eventual acceptance authority. No scheduled AI stage, retry daemon, extra cohort selection, canonical Dossier/Deep/production writes or source-quality audit gate.
+
+**Compatibility:** original18 and already-issued frozen cohorts, including fresh6, retain their legacy connector route. Assembly and the token-backed Python route are unchanged. A GitHub Action failure leaves an immutable submitted input without a confirmed Research receipt; it never counts as accepted and cannot be silently resubmitted. Exact-head PR CI and real future-cohort trial are separate acceptance gates.

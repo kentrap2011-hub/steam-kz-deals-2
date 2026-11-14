@@ -12,6 +12,10 @@ on:
       - "scripts/dossier_notes_v2_batch_route.py"
       - "scripts/dossier_notes_v2_batch_issuer.py"
       - "scripts/dossier_notes_v2_batch_pilot.py"
+      - "config/dossier_notes_v2_research_intake_runbook.md"
+      - "scripts/dossier_notes_v2_research_intake.py"
+      - "scripts/test_dossier_notes_v2_research_intake.py"
+      - ".github/workflows/dossier-notes-v2-research-intake.yml"
       - "scripts/dossier_notes_v2_connector_transport.mjs"
       - "scripts/test_dossier_notes_v2_connector_transport.mjs"
       - "config/dossier_notes_v2_connector_transport_manual_runbook.md"
@@ -67,13 +71,15 @@ jobs:
           python scripts/dossier_notes_v2_fresh6_preflight.py --check
       - name: Reusable Git-issuer, second cohort, item writer and adversarial tests
         run: python scripts/test_dossier_notes_v2_batch_route.py -v
+      - name: GitHub-owned plain Research intake offline regression
+        run: python scripts/test_dossier_notes_v2_research_intake.py -v
       - name: Inactive V2 per-item Git receipt regression (14 tests)
         run: python scripts/test_dossier_notes_v2_per_item_receipts.py -v
       - name: Existing strict V2 isolated writer transaction regression
         run: python scripts/test_dossier_two_stage_final_acceptance.py NotesV2IndividualReadinessTests.test_v2_github_writer_hookup_single_transaction -v
       - name: Syntax and PR activation guard
         run: |
-          python -m py_compile scripts/dossier_notes_v2_batch_preflight.py scripts/dossier_notes_v2_batch_route.py scripts/dossier_notes_v2_batch_issuer.py scripts/dossier_notes_v2_batch_pilot.py scripts/test_dossier_notes_v2_batch_route.py
+          python -m py_compile scripts/dossier_notes_v2_research_intake.py scripts/test_dossier_notes_v2_research_intake.py scripts/dossier_notes_v2_batch_preflight.py scripts/dossier_notes_v2_batch_route.py scripts/dossier_notes_v2_batch_issuer.py scripts/dossier_notes_v2_batch_pilot.py scripts/test_dossier_notes_v2_batch_route.py
           python -m py_compile scripts/dossier_notes_v2_fresh6_preflight.py scripts/test_dossier_notes_v2_fresh6_preflight.py scripts/dossier_research_notes_v2.py scripts/dossier_two_stage_versioned.py scripts/dossier_notes_v2_per_item_receipts.py scripts/dossier_notes_v2_original18_pilot.py scripts/taste_steam_review_dossier_buffered.py scripts/dossier_shadow_research_trial_publish.py scripts/dossier_shadow_research_feasibility.py
           python - <<'PY'
           import json
