@@ -46,9 +46,12 @@ the eventual strict GitHub writer are unchanged.
   unchanged V2 regressions before follow-up coalescing improvements.
 - Existing unrelated chain test `test_23_incorrect_original_anchor_cannot_be_substituted`
   failed nondeterministically in run `43605225252`; a later same-workflow
-  run `43605818512` passed without changes to that test.
-- Reconciliation regressions and exact final PR HEAD CI must be checked on
-  the current PR commit; do not claim GitHub live event execution.
+  run `43605818512` passed without changes to that test. This unrelated
+  flaky test also failed on implementation SHA 72af in run 43606457649;
+  a single manual rerun was requested, not a code change.
+- Reconciliation, independent-sibling and issuer-frozen-source regressions PASSED
+  in [V2 run 43606457667](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43606457667) at implementation SHA `72af0089c86b52c58aa4483c2b158b615e54a30f`.
+  Final documentary PR HEAD CI remains to be checked; do not claim a live GitHub intake trigger.
 - No owner Freeze/Authorize replay, no manual Research re-run, no Assembly,
   no sandbox mutation, no production action triggered by this task.
 
