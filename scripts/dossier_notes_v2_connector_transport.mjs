@@ -1,7 +1,8 @@
 /*
  * Dossier Notes V2: connector-native, tokenless manual transport.
  * Paste this module's functions into a ChatGPT Code Mode tool call and call
- * connectorPreflight / connectorPublishItem using the connected GitHub tools.
+ * connectorPreflight / connectorHandoff / connectorResumeHandoff /
+ * connectorPublishItem using the connected GitHub tools.
  * No GH_TOKEN, hidden OAuth exchange, background worker or automatic retry.
  *
  * GitHub remains the control plane. This transport checks immutable issuer,
@@ -309,6 +310,55 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
 }
 // One create-only Git object and an expected-HEAD CAS. GitHub's existing strict
 // sandbox writer later verifies original bytes and one-add ancestry.
+
+// A Code Mode invocation has a limit of 20 GitHub calls. A full immutable
+// preflight (14) plus an item candidate+receipt (10) cannot fit together.
+// This pure handoff preserves the result of a *completed real* preflight
+// across two consecutive Code Mode calls in the SAME explicit manual session.
+// Its digest detects accidental copy drift, not a malicious substitute:
+// never accept a handoff from user text, web, other chat, or unverified file.
+export function connectorHandoff(ctx) {
+  v2Assert(ctx && ctx.github_owner_runs_authenticated===true &&
+    ctx.production_authorized===false && V2_HEX.test(ctx.head) &&
+    V2_HEX.test(ctx.headTree) && ctx.branch==="sandbox/"+ctx.anchor?.trial_id &&
+    (ctx.phase==="research" || ctx.phase==="assembly") &&
+    ctx.existing instanceof Map && ctx.schemas?.[ctx.phase] && ctx.schemas?.receipt &&
+    Array.isArray(ctx.manifest?.items),"only verified preflight context may be handed off");
+  const payload={
+    branch:ctx.branch,phase:ctx.phase,head:ctx.head,headTree:ctx.headTree,
+    manifest:ctx.manifest,anchor:ctx.anchor,schemas:ctx.schemas,
+    existing:[...ctx.existing.entries()],
+    github_owner_runs_authenticated:true,production_authorized:false
+  };
+  return {kind:"DOSSIER-NOTES-V2-SESSION-HANDOFF",version:1,
+    sha256:v2Sha256(v2Canonical(payload)),payload};
+}
+
+export async function connectorResumeHandoff(api,handoff) {
+  v2Assert(handoff?.kind==="DOSSIER-NOTES-V2-SESSION-HANDOFF" &&
+    handoff.version===1 && typeof handoff.sha256==="string" &&
+    handoff.sha256===v2Sha256(v2Canonical(handoff.payload)),
+    "missing or changed session handoff");
+  const p=handoff.payload;
+  v2Assert(p && p.github_owner_runs_authenticated===true &&
+    p.production_authorized===false && V2_HEX.test(p.head) &&
+    V2_HEX.test(p.headTree) && V2_HEX.test(p.anchor?.authorization_commit) &&
+    V2_TRIAL.test(p.anchor?.trial_id) && !p.anchor.trial_id.includes("original18") &&
+    p.branch==="sandbox/"+p.anchor.trial_id &&
+    (p.phase==="research" || p.phase==="assembly") &&
+    p.manifest?.trial_id===p.anchor.trial_id &&
+    Array.isArray(p.manifest.items) && p.schemas?.[p.phase] && p.schemas?.receipt &&
+    Array.isArray(p.existing) &&
+    p.existing.every(row=>Array.isArray(row) && row.length===2 &&
+      typeof row[0]==="string" && (row[1]===null || V2_HEX.test(row[1]))) &&
+    new Set(p.existing.map(row=>row[0])).size===p.existing.length,
+    "session handoff not a valid isolated original preflight");
+  // One GitHub read prevents continuing from stale/parallel branch state.
+  v2Assert(await v2BranchTip(api,p.branch)===p.head,
+    "session handoff HEAD no longer current");
+  return {...p,existing:new Map(p.existing)};
+}
+
 async function v2Add(api,ctx,path,document,expectedHead,description) {
   v2Assert(expectedHead===ctx.head,"stale sandbox HEAD");
   v2Assert(!ctx.existing.has(path),"create-only path already exists: "+path);
