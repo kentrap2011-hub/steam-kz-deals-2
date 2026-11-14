@@ -223,7 +223,7 @@ def reconcile(repo, branch, trigger_commit, token):
     event_changes = git(repo, "diff-tree", "--no-commit-id", "--name-status",
                         "-r", trigger_commit).stdout.decode().strip().splitlines()
     if (len(event_changes) != 1
-            or not event_changes[0].startswith("A\\t")
+            or not event_changes[0].startswith("A\t")
             or not event_changes[0][2:].startswith(
                 INTAKE_PREFIX + "/" + trial_id + "/")
             or not first_parent_contains(repo, trigger_commit, "HEAD")):
