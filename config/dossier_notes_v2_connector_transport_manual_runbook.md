@@ -1,4 +1,6 @@
-# Dossier Notes V2 — lean tokenless GitHub Connector
+# Dossier Notes V2 — lean tokenless GitHub Connector (legacy Research / Assembly)
+
+**New Research cohorts:** use `config/dossier_notes_v2_research_intake_runbook.md` instead. The two-call JS handoff route below is retained only for already-issued immutable batches and for the independent Assembly phase. Do not add handoffs or manually construct receipts for new Research submissions.
 
 **Role:** manually launched, isolated Research or independently launched Assembly for an already owner-authorized batch. Not an issuer, schedule, retry owner or production process. Source: `scripts/dossier_notes_v2_connector_transport.mjs` from **current main**.
 
