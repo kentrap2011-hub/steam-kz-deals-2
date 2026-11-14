@@ -1,0 +1,53 @@
+name: Dossier V2 isolated Research intake
+
+# New authorized cohorts only: a semantic chat adds a simple note file; the
+# GitHub-owned action generates the existing strict candidate and typed receipt.
+# No scheduler, no auto-research, no Assembly or canonical ingestion.
+on:
+  push:
+    branches:
+      - "sandbox/dossier-notes-v2-*"
+    paths:
+      - "data/ai_inbox/dossier_notes_v2_intake/**"
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: dossier-v2-intake-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  research-intake:
+    if: github.repository == 'kentrap2011-hub/steam-kz-deals-2'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Read verified current-main implementation
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: source
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Checkout only the authorized sandbox branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          path: sandbox
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install offline schema validator
+        run: python -m pip install jsonschema==4.23.0
+      - name: Validate one immutable Research intake and create GitHub typed receipt
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python source/scripts/dossier_notes_v2_research_intake.py \
+            --repo sandbox \
+            --branch "$GITHUB_REF_NAME" \
+            --submission-commit "$GITHUB_SHA"
