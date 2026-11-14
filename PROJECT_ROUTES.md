@@ -615,3 +615,13 @@ Currentness invariant after PPD-012:
 
 
 **Critical 2026-11-14 self-QA correction on PR #446:** the connector Code Mode budget is experimentally **20 GitHub calls per invocation**. **Do not combine** `connectorPreflight` (~14 calls) and `connectorPublishItem` (10 calls). Use a separate preflight-only call that outputs `connectorHandoff(ctx)`, then a separate item-only call with `connectorResumeHandoff(api, exact_previous_handoff)` (1 HEAD read) + `connectorPublishItem` (10 calls). Publish exactly one game per Code Mode call; after confirmed receipt use the new returned handoff for the next item. If the handoff is lost or a write fails ambiguously, STOP and preflight the actual sandbox again. The complete canonical sequence lives in `config/dossier_notes_v2_connector_transport_manual_runbook.md`.
+
+---
+
+## Dossier V2 Research single-write GitHub receipt route (2026-11-14, source PR #450)
+
+- New Research prompt: `config/dossier_notes_v2_batch_research_manual_one_shot_prompt.md`; read only original owner-authorized `sandbox/<trial_id>` manifest with `mcp__GitHub__fetch_file`, then `mcp__GitHub__create_file` once per exact game at existing `data/ai_inbox/dossier_notes_v2/<trial_id>/gXXXXXX/<appid>--<assignment_id>.json`.
+- Source provenance fields are not mandatory: `source_log` optional in `config/dossier_research_notes_v2.schema.json`; safe-public-locator/privacy checks retained if supplied. A GitHub candidate commit is not yet a typed receipt.
+- After all currently ready Research candidates, repository owner can manually dispatch `.github/workflows/ingest-dossier-notes-v2-research.yml` (input: `trial_id`) on merged main. It runs trusted main `scripts/dossier_notes_v2_research_receipt_ingest.py`, authenticates existing Freeze/Authorize issuer, inspects each immutable candidate independently and creates one strict typed Research receipt on the cohort sandbox. No automatic trigger, retries, main or canonical writes.
+- Assembly and existing strict isolated writer consume the **same typed Research receipt** as before; `scripts/dossier_notes_v2_per_item_receipts.py` remains the independent GitHub validation authority. Old two-call connector runbook retained for Assembly/legacy only.
+- Offline regression: `scripts/test_dossier_notes_v2_research_receipt_ingest.py` plus existing V2 tests, CI `.github/workflows/validate-dossier-research-notes-v2.yml`. No live performance metric until a fresh, user-authorized cohort after merge; do not reuse previous fresh6.

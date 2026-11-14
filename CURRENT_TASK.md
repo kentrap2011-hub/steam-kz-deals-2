@@ -1,5 +1,15 @@
 # CURRENT TASK
 
+## ЧАТ — Dossier V2 Research one-write implementation (2026-11-14)
+
+- Status: `implemented_in_draft_pr; offline CI running; no live cohort or GitHub owner ingest dispatched`.
+- User authorized simplification: no mandatory browsing-access proof; minimize semantic worker technical operations.
+- Source draft [PR #450](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/450), branch `implement/dossier-v2-research-single-write-20261114`, design/rationale [PR #449](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/449).
+- Research chat now reads one exact frozen manifest and performs one create-only `mcp__GitHub__create_file` per game. Github owner manual workflow `ingest-dossier-notes-v2-research.yml` validates authorized items and generates existing typed Research receipts; Assembly and strict writer unchanged.
+- `source_log` optional; privacy/immutable binding checks retained. No V1, Deep, production, automatic retries, new grant or manual real trial.
+- Test: `scripts/test_dossier_notes_v2_research_receipt_ingest.py`, synthetic CI in `validate-dossier-research-notes-v2.yml`; verify **final PR head CI** and independent review before source acceptance. Live speed/receipt writer only measurable after separately approved new cohort.
+
+
 
 ## Dossier V2 lean GitHub Connector checks — source PR #446 (2026-11-14)
 

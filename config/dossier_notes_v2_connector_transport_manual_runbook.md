@@ -1,6 +1,6 @@
 # Dossier Notes V2 — lean tokenless GitHub Connector
 
-**Role:** manually launched, isolated Research or independently launched Assembly for an already owner-authorized batch. Not an issuer, schedule, retry owner or production process. Source: `scripts/dossier_notes_v2_connector_transport.mjs` from **current main**.
+**Legacy route / Assembly only:** New isolated Research uses `config/dossier_notes_v2_batch_research_manual_one_shot_prompt.md` with one `create_file` per game and GitHub-owned manual receipt ingest. The two-call connector handoff below is retained for **Assembly and legacy isolated Research cohorts only**, not required for new Research. This file does not authorize a new grant, retry, or production process. Source: `scripts/dossier_notes_v2_connector_transport.mjs` from **current main**.
 
 ## Why two Code Mode calls are mandatory
 
