@@ -174,6 +174,20 @@ def _base_contract_proof(repo,base,trial_id):
         "scripts/taste_steam_review_dossier_buffered.py",
         ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml",
     )
+    # New event-driven intake code is immutable only for cohorts frozen after
+    # it first existed in main. Older issued cohorts do not have these files:
+    # do not invalidate their unchanged legacy issuer or allow retrofit.
+    for optional in (
+        "scripts/dossier_notes_v2_research_intake.py",
+        ".github/workflows/dossier-notes-v2-research-intake.yml",
+    ):
+        at_base = (git(repo, "cat-file", "-e", f"{base}:{optional}",
+                       required=False).returncode == 0)
+        at_head = (git(repo, "cat-file", "-e", f"HEAD:{optional}",
+                       required=False).returncode == 0)
+        require(at_base == at_head, "cannot add or delete post-issuer intake executable")
+        if at_base:
+            executable_paths += (optional,)
     for executable in executable_paths:
         # The legacy file_at() intentionally supports only config/ and data/.
         # These are STATIC trusted source paths, so compare Git show bytes
