@@ -43,3 +43,10 @@ All four CI runs were verified complete/success at code-and-doc HEAD before this
 ## Remaining gate
 
 The source is **PR-only**, not merged. Reviewer/Director acceptance and exact final-head checks are required before the next **separately user-launched** six-game Research. Existing actual sandbox authorization SHA remains unchanged. Real connected GitHub publication with zero reissue and independent strict writer are not established by synthetic tests.
+
+
+## 2026-11-14 self-QA correction — actual Code Mode cap
+
+After the prior all-green CI result, a direct connected GitHub read-only execution showed that **20 GitHub calls succeed but an attempted 24-call invocation fails with `Code Mode exceeded the maximum number of tool calls`**. Thus earlier statement that the 14+10 single-invocation transport was sufficient was **wrong**. No semantic Git writes were attempted in that check.
+
+Corrective changes in **the same PR #446**: pure `connectorHandoff` / `connectorResumeHandoff` preserve the verified one-time owner preflight within the same explicit user session, while an independent branch HEAD read rejects a changed sandbox. The next call publishes exactly one candidate+receipt pair under non-force CAS; 11 total connected GitHub calls per item-only invocation. Session JSON hash detects accidental edits but is not a cryptographic authentication of external input: handoffs from outside the immediately preceding verified call are forbidden. Added synthetic budget/continuation/recovery/Assembly tests; updated both manual worker prompts and runbook. Existing strict GitHub Python writer remains the acceptance authority. **New exact final commit SHA and all PR CI still need verification after this correction**.
