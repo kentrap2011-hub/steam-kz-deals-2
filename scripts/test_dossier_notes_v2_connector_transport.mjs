@@ -98,8 +98,6 @@ function makeFixture(n=6) {
     ".github/workflows/authorize-dossier-notes-v2-batch.yml",
     "Authorize isolated Notes V2 batch "+TRIAL+" marker "+MARKER));
   f.api={
-    async getRepo(){return {result:{repository_full_name:REPO,
-      owner:{login:"kentrap2011-hub",id:315790060},permissions:{push:true}}};},
     async fetch({url}){
       f.calls.push(["fetch",url]);
       const prefix="https://api.github.com/repos/"+REPO+"/";
@@ -113,9 +111,29 @@ function makeFixture(n=6) {
       }
       else if(ep.startsWith("actions/runs/")){value=f.runs.get(Number(ep.slice(13)));}
       else if(ep.startsWith("git/ref/heads/")){
-        value={ref:"refs/heads/sandbox/"+TRIAL,object:{sha:f.head}};
+        value={ref:"refs/heads/sandbox/"+TRIAL,
+          object:{sha:f.malformReadback &&
+            f.calls.some(x=>x[0]==="updateRef")?sha(999):f.head}};
       }
-      else if(ep.startsWith("compare/")){value={status:"identical",base_commit:{sha:base}};}
+      else if(ep.startsWith("compare/")){
+        const files=[];
+        let tip=f.head;
+        while(tip!==AUTH){
+          const c=f.commits.get(tip);
+          assert.ok(c,"broken synthetic commit ancestry");
+          files.push(...c.files);
+          tip=c.parents[0].sha;
+        }
+        value={status:files.length?"ahead":"identical",base_commit:{sha:AUTH},
+          head_commit:{sha:f.head},files};
+      }
+      else if(ep.startsWith("commits?")){
+        const search=new URL(url).searchParams;
+        const path=search.get("path");
+        const match=[...f.commits.values()].reverse().find(c=>
+          c.files.some(x=>x.filename===path));
+        value=match?[{sha:match.sha}]:[];
+      }
       assert.ok(value,"missing fixture GitHub "+ep);
       return {result:{content:JSON.stringify(value)}};
     },
@@ -194,7 +212,7 @@ test("Research candidate and typed receipt are separate one-add CAS commits",asy
   const out=await connectorPublishItem(f.api,ctx,{phase:"research",appid:"1000010",
     expectedHead:AUTH,document:researchDoc(ctx,"1000010")});
   assert.notEqual(out.candidate_commit,out.receipt_commit);
-  assert.equal(out.github_git_readback_confirmed,true);
+  assert.equal(out.github_branch_readback_confirmed,true);
   assert.equal(out.canonical_acceptance,false);
   const adds=f.calls.filter(a=>a[0]==="updateRef");
   assert.equal(adds.length,2);
@@ -222,7 +240,8 @@ test("Assembly requires original candidate and typed Research receipt, terminal 
     outcome:"assembly_missing_evidence",final_dossier:null,
     operations:[],mechanical_corrections:[],diagnostic:"insufficient evidence",
     staged_only:true,canonical_acceptance:false};
-  const result=await connectorPublishItem(f.api,ctx,{phase:"assembly",appid:"1000010",
+  const assemblyCtx=await preflight(f,{phase:"assembly",expectedHead:research.receipt_commit});
+  const result=await connectorPublishItem(f.api,assemblyCtx,{phase:"assembly",appid:"1000010",
     researchCommit:research.candidate_commit,expectedHead:research.receipt_commit,
     document:doc});
   assert.equal(result.disposition,"assembly_missing_evidence");
@@ -246,12 +265,11 @@ test("wrong actor, attempt, workflow, marker, run-name and ref all stop prefligh
   const f=makeFixture();
   f.head=sha(999);
   await assert.rejects(()=>preflight(f),/BATCH_V2_CONNECTOR_STOP/);
+  // Untrusted Git committer timestamps must not block valid owner Actions.
   const g=makeFixture();
+  g.commits.get(AUTH).committer.date="2026-11-13T00:00:00Z";
   g.runs.get(FREEZE_ID).run_started_at="2026-11-13T16:46:31Z";
-  await assert.rejects(()=>preflight(g),/Git object not attested/);
-  const h=makeFixture();
-  h.commits.get(AUTH).committer.date="2026-11-13T00:00:00Z";
-  await assert.rejects(()=>preflight(h),/Git object not attested/);
+  await preflight(g);
 });
 test("wrong AppID or edition fails before Git object is created",async()=>{
   const f=makeFixture(),ctx=await preflight(f);
@@ -306,7 +324,7 @@ test("incomplete A is not sibling B blocker; bad B is refused before write",asyn
     expectedHead:a.receipt_commit,document:researchDoc(ctx,"102600")});
   assert.ok(b.receipt_commit);
 });
-test("ambiguous GitHub content readback fails closed with no second write",async()=>{
+test("ambiguous GitHub branch readback fails closed with no second write",async()=>{
   const f=makeFixture(),ctx=await preflight(f);
   f.malformReadback=true;
   await assert.rejects(()=>connectorPublishItem(f.api,ctx,{phase:"research",appid:"1000010",
