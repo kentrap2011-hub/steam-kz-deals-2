@@ -228,8 +228,14 @@ def reconcile(repo, branch, trigger_commit, token):
                 INTAKE_PREFIX + "/" + trial_id + "/")
             or not first_parent_contains(repo, trigger_commit, "HEAD")):
         raise ValueError("trigger is not one issued immutable Research input")
+    rows = batch.rows(repo, trial_id)
+    allowed = {input_path(trial_id, row["appid"]) for row in rows}
+    event_path = event_changes[0][2:]
+    if event_path not in allowed:
+        raise ValueError("trigger AppID is not on the frozen GitHub manifest")
+    require_only_new(repo, trigger_commit, [event_path])
     completed, errors = [], []
-    for row in batch.rows(repo, trial_id):
+    for row in rows:
         appid = row["appid"]
         raw_path = input_path(trial_id, appid)
         if not (repo / raw_path).is_file():
