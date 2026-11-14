@@ -1101,3 +1101,17 @@ A canonical Dossier/profile/work/repository write that lands **before** the mark
 **Границы:** GitHub владеет control plane и публикацией; нет нового worker, scheduler, retry loop, Steam re-fetch, live браузерного перерасчёта. PR CI и независимая QA не являются подтверждением доставки: отдельно требуется штатный ночной запуск и HTTP read-back опубликованного JSON.
 
 **Места:** .github/workflows/build-daily-visual-payload.yml, .github/workflows/deploy-visual.yml, scripts/visual_deploy_dispatch.py, scripts/test_visual_deploy_dispatch.py, reviews/worker_reports/visual-depth-safe-direct-pages-dispatch-implement-01.md.
+
+---
+
+## DOSSIER-CONNECTOR-001 — lean one-shot Research/Assembly transport (2026-11-14)
+
+**Owner approval:** remove all unjustified/repeated GitHub Connector checks; preserve existing production and the strict GitHub-owned independent writer.
+
+**Problem:** initial first-party GitHub Connector transport (PR #445) used repeated authenticated GETs for permissions, fakeable committer name/time, repeated original one-add diff checks, full first-parent traversal every time, full byte readback and multiple HEAD reads for each one-add commit. A six-game manual worker exceeded ChatGPT Code Mode's per-call tool budget before semantic work. No claim that these duplicate checks detected a real production failure was found; synthetic adversarial tests are not measured failures.
+
+**Decision:** prove owner success and exact grant/manifest/marker/authorization Git parent chain **once per invocation**, retain exact manifest+assignment title/edition/phase binding; fetch only the current phase and receipt schema. Replace full historical sandbox traversal with one GitHub compare when resuming. Drop redundant permission precheck, untrusted Git committer timestamps, repeated main ancestry compare, duplicate pre-write HEAD/file-existence reads, self-authored commit/tree re-fetch and per-commit byte readback. Per new file retain one GitHub blob/tree/commit + **non-force expected-head CAS** + one branch ref readback. Keep separate Research/Assembly typed candidate and receipt commits; terminal strict writer re-verifies original Git one-add, bytes, evidence and downstream acceptance. No automatic retry or hidden queue; failed/ambiguous CAS stops. Scoped to `scripts/dossier_notes_v2_connector_transport.mjs`, its tests, runbook and semantic prompts; original token-backed Python route unchanged.
+
+**Tradeoff:** connector's readback attests branch publication, **not independent byte-by-byte content equality**; individual source integrity and historical one-add remain the existing strict GitHub writer's responsibility. A candidate-only/unpaired receipt remains a STOP, not accepted result. Reopened worker independently refreshes owner proof and current HEAD. Code Mode can use the same verified context across items without replaying immutable checks.
+
+**Verification:** synthetic Node adversarial tests and existing Python V2 source/writer checks in GitHub PR CI. They do not constitute live Research or canonical acceptance.
