@@ -5,6 +5,8 @@ One explicit versioned source contract per cohort (data, not executable authorit
 The contract is checked against pinned historical GitHub-prepared exact AppIDs,
 titles/editions, group descriptor blobs and baseline SHA. One owner-issued grant,
 manifest, marker and distinct authorization create a one-use isolated sandbox.
+The tokenless ChatGPT connector transport checks BOTH owner Actions runs via
+connected GitHub; the historical token-backed Python authorizer is preserved.
 """
 import hashlib
 import json
