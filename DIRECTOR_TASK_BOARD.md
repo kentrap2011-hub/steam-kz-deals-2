@@ -5,12 +5,11 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — GitHub connector transport Dossier V2, 2026-11-13
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Dossier V2 no-UI повтор Research, 2026-11-14
 
-- **ЧАТ 1 — прежний semantic Research запуск остановился до семантики из-за отсутствия GH_TOKEN;** ни одного Research/Assembly результата не записано. Это не developer task. Слот не используется для нового задания, пока пользователь не решит продолжать тот физический Research-чат после исправления.
-- **ЧАТ 2 — НОВЫЙ физический worker, зарезервирован:** `dossier-v2-connector-transport-no-gh-token-implement-01` → `WORKER_TASK_DOSSIER_V2_CONNECTOR_TRANSPORT_NO_GH_TOKEN_IMPLEMENT_01.md`. Один bounded source IMPLEMENT: заменить обязательный отдельный GH_TOKEN на GitHub connector с exact owner run proof и CAS/typed receipt Git write/readback. Существующий owner grant и sandbox fresh6 сохранить; никаких новых owner Actions/semantics/production. После self-test+CI source PR → решения директора и resume реального Research.
-- **ЧАТ 3 — свободен:** исторический PR №442 Pages QA report сдан; исходный PR №434 принят ранее.
-- **ЧАТЫ 4–6 — свободны.** Никаких Scheduled Tasks. Исторический верх Board от 2026-11-12 заменён этим текущим назначением; прошлые registry active-записи не являются физически занятыми чатами.
+- **ЧАТ 1 — Research старой шестерки завершён 6/6.** Ветка `sandbox/dossier-notes-v2-fresh6-20261111-first` содержит immutable 6 кандидатов + 6 receipts; повторить её нельзя. ЧАТ 1 свободен для нового Research после отдельного нового owner-authenticated cohort.
+- **ЧАТ 2 — зарезервирован, НОВЫЙ worker:** `dossier-v2-no-ui-owner-launch-rerun-fresh6-01` → `WORKER_TASK_DOSSIER_V2_NO_UI_OWNER_LAUNCH_RERUN_FRESH6_01.md`. Пользователь принял упрощённый Research PR 450; полностью исключить ручные действия в GitHub UI при новом pilot, внедрить ограниченную GitHub owner push alternative и автоматический typed receipt ingest. Один source PR с exact CI; semantic work в developer-чате запрещена.
+- **ЧАТЫ 3–6 — свободны.** Новых Scheduled Tasks нет. Исторические назначения далее не означают занятость чатов.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
