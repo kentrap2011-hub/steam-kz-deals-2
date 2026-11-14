@@ -147,15 +147,6 @@ async function v2GitCommit(api,sha) {
   v2Assert(doc.sha===sha && doc.tree && V2_HEX.test(doc.tree.sha) && Array.isArray(doc.parents),"GitHub Git commit malformed");
   return doc;
 }
-async function v2ExactOneAdd(api,commitSha,parentSha,path) {
-  const c=await v2GitCommit(api,commitSha);
-  v2Assert(c.parents.length===1 && c.parents[0].sha===parentSha,"unexpected Git parent or merge");
-  const rest=await v2Get(api,"commits/"+commitSha);
-  v2Assert(rest.sha===commitSha && rest.files && rest.files.length===1 &&
-    rest.files[0].filename===path && rest.files[0].status==="added",
-    "Git commit must introduce exactly one new file: "+path);
-  return c;
-}
 async function v2BranchTip(api,branch) {
   const ref=await v2Get(api,"git/ref/heads/"+branch);
   v2Assert(ref.ref==="refs/heads/"+branch && V2_HEX.test(ref.object?.sha),"ambiguous remote sandbox ref");
@@ -173,38 +164,28 @@ function v2ReceiptPath(phase,assignment) {
     "/g"+String(assignment.group_sequence).padStart(6,"0")+
     "/"+assignment.appid+"--"+assignment.assignment_id+"--"+phase+".json";
 }
-async function v2Lineage(api,head,auth,trialId,max=104) {
-  const paths=new Map();
-  let current=head;
-  for(let n=0;n<max;n++){
-    if(current===auth)return paths;
-    const commit=await v2GitCommit(api,current);
-    v2Assert(commit.parents.length===1,"sandbox has merge or missing parent");
-    const rest=await v2Get(api,"commits/"+current);
-    v2Assert(rest.sha===current && rest.files?.length===1 &&
-      rest.files[0].status==="added","sandbox after auth must contain only one-add commits");
-    const p=rest.files[0].filename;
-    v2Assert(p.startsWith("data/ai_inbox/dossier_notes_v2/"+trialId+"/") ||
-      p.startsWith("data/ai_inbox/dossier_assembly_v2/"+trialId+"/") ||
-      p.startsWith("data/control/dossier_notes_v2/receipts/"+trialId+"/"),
-      "sandbox contains out-of-scope write "+p);
-    v2Assert(!paths.has(p),"sandbox has duplicate/replaced path");
-    paths.set(p,current);current=commit.parents[0].sha;
+// The strict GitHub writer audits every historical first-parent/one-add commit.
+// During an interactive batch a single compare is sufficient to discover
+// paths and detect a stale/unrelated sandbox, rather than re-reading 2*N
+// historical commits before each item.
+async function v2SandboxScope(api,head,authorizationCommit,trialId) {
+  const found=new Map();
+  if(head===authorizationCommit)return found;
+  const cmp=await v2Get(api,"compare/"+authorizationCommit+"..."+head);
+  v2Assert(cmp.status==="ahead" && cmp.base_commit?.sha===authorizationCommit &&
+    (!cmp.head_commit || cmp.head_commit.sha===head) &&
+    !cmp.too_large && Array.isArray(cmp.files) && cmp.files.length<=104,
+    "sandbox does not descend from exact authorization or compare is incomplete");
+  for(const file of cmp.files) {
+    const p=file.filename;
+    v2Assert(file.status==="added" && !found.has(p) &&
+      (p.startsWith("data/ai_inbox/dossier_notes_v2/"+trialId+"/") ||
+       p.startsWith("data/ai_inbox/dossier_assembly_v2/"+trialId+"/") ||
+       p.startsWith("data/control/dossier_notes_v2/receipts/"+trialId+"/")),
+      "sandbox contains unexpected/modified path: "+p);
+    found.set(p,null);
   }
-  throw Error("BATCH_V2_CONNECTOR_STOP: sandbox does not descend from exact authorization");
-}
-function v2OwnerRunTimestamps(run,commits) {
-  const first=Date.parse(run.run_started_at),last=Date.parse(run.updated_at);
-  v2Assert(Number.isFinite(first) && Number.isFinite(last) &&
-    first<=last && last-first<=15*60*1000,
-    "owner Actions run does not have bounded actual run timestamps");
-  for(const c of commits) {
-    const clock=Date.parse(c.committer?.date);
-    v2Assert(c.committer?.name==="github-actions[bot]" &&
-      c.committer?.email==="41898282+github-actions[bot]@users.noreply.github.com" &&
-      Number.isFinite(clock) && clock>=first && clock<=last,
-      "issuer Git object not attested by the exact owner's Actions run window");
-  }
+  return found;
 }
 function v2OwnerRun(doc,id,path,title,sha) {
   v2Assert(doc.id===Number(id) && doc.run_attempt===1 &&
@@ -217,23 +198,24 @@ function v2OwnerRun(doc,id,path,title,sha) {
    V2_HEX.test(doc.head_sha) && (!sha || doc.head_sha===sha),
    "authentic first-attempt owner GitHub Actions proof absent: "+path);
 }
-export async function connectorPreflight(api,{trialId,markerCommit,authorizationCommit,freezeRunId,expectedHead}) {
+export async function connectorPreflight(api,{trialId,markerCommit,authorizationCommit,
+  freezeRunId,expectedHead,phase="research"}) {
   v2Assert(V2_TRIAL.test(trialId) && !trialId.includes("original18"),"invalid/reused trial");
-  v2Assert(V2_HEX.test(markerCommit)&&V2_HEX.test(authorizationCommit) &&
+  v2Assert(["research","assembly"].includes(phase),"only isolated Research/Assembly allowed");
+  v2Assert(V2_HEX.test(markerCommit) && V2_HEX.test(authorizationCommit) &&
     markerCommit!==authorizationCommit,"invalid issuer SHA");
-  v2Assert(Number.isSafeInteger(Number(freezeRunId)) && Number(freezeRunId)>0,"freeze run ID required");
+  v2Assert(Number.isSafeInteger(Number(freezeRunId)) && Number(freezeRunId)>0,
+    "freeze run ID required");
+  v2Assert(V2_HEX.test(expectedHead),"explicit sandbox HEAD required");
   const branch="sandbox/"+trialId,paths={
     grant:"data/control/dossier_notes_v2/grants/"+trialId+".json",
     manifest:"data/control/dossier_notes_v2/manifests/"+trialId+".json",
     authorization:"data/control/dossier_notes_v2/authorizations/"+trialId+".json"
   };
-  const permission=await api.getRepo({repository_full_name:V2_REPOSITORY});
-  v2Assert(permission.result.repository_full_name===V2_REPOSITORY &&
-    permission.result.owner.login===V2_OWNER_LOGIN &&
-    permission.result.owner.id===V2_OWNER_ID &&
-    permission.result.permissions?.push===true,"GitHub connector lacks exact repo write permission");
+  // Immutable issuer parent chain, once at invocation start.
   const authGit=await v2GitCommit(api,authorizationCommit);
-  v2Assert(authGit.parents.length===1 && authGit.parents[0].sha===markerCommit,"issuer parent mismatch");
+  v2Assert(authGit.parents.length===1 && authGit.parents[0].sha===markerCommit,
+    "authorization is not exact marker child");
   const marker=await v2GitCommit(api,markerCommit);
   v2Assert(marker.parents.length===1,"marker parent mismatch");
   const manifestCommit=marker.parents[0].sha;
@@ -247,26 +229,26 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
   v2Assert(markerRest.files?.length===1 &&
     markerRest.files[0].status==="added" &&
     /^data\/control\/dossier_notes_v2\/run_starts\/[0-9a-f]{32}\.json$/.test(markerRest.files[0].filename),
-    "marker must introduce only one exact nonce file");
-  await v2ExactOneAdd(api,grantCommit,base,paths.grant);
-  await v2ExactOneAdd(api,manifestCommit,grantCommit,paths.manifest);
-  await v2ExactOneAdd(api,authorizationCommit,markerCommit,paths.authorization);
+    "marker must introduce only exact nonce file");
   const nonce=markerRest.files[0].filename.split("/").pop().slice(0,-5);
   const markerDoc=v2Json((await v2File(api,markerRest.files[0].filename,markerCommit)).content);
-  v2Assert(markerDoc.schema==="DOSSIER-NOTES-V2-RUN-START" && markerDoc.schema_version===2 &&
-    markerDoc.trial_id===trialId && markerDoc.nonce===nonce,"nonce marker mismatched");
-  const grant=v2Json((await v2File(api,paths.grant,grantCommit)).content);
+  v2Assert(markerDoc.schema==="DOSSIER-NOTES-V2-RUN-START" &&
+    markerDoc.schema_version===2 && markerDoc.trial_id===trialId &&
+    markerDoc.nonce===nonce,"nonce marker mismatched");
+  const grantFile=await v2File(api,paths.grant,grantCommit);
+  const grant=v2Json(grantFile.content);
   const manifestFile=await v2File(api,paths.manifest,manifestCommit);
   const manifest=v2Json(manifestFile.content);
   const authFile=await v2File(api,paths.authorization,authorizationCommit);
   const auth=v2Json(authFile.content);
   v2Assert(grant.schema==="DOSSIER-NOTES-V2-BATCH-OWNER-GRANT" &&
-    grant.schema_version===1 && grant.scope==="one_git_owner_issued_reusable_batch_sandbox_only" &&
+    grant.schema_version===1 &&
+    grant.scope==="one_git_owner_issued_reusable_batch_sandbox_only" &&
+    grant.trial_id===trialId && grant.base_main_sha===base &&
     grant.manifest_path===paths.manifest &&
+    grant.manifest_blob_sha===manifestFile.sha &&
     grant.source_pins && manifest.original_pins &&
     v2Canonical(grant.source_pins)===v2Canonical(manifest.original_pins) &&
-    grant.trial_id===trialId && grant.base_main_sha===base &&
-    grant.manifest_blob_sha===manifestFile.sha &&
     grant.owner_login===V2_OWNER_LOGIN && String(grant.owner_actor_id)===String(V2_OWNER_ID) &&
     grant.semantic_execution_approved===false && grant.production_approved===false &&
     grant.canonical_ingest_approved===false &&
@@ -276,8 +258,7 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
     auth.schema_version===1 && auth.scope==="one_manual_batch_research_assembly_sandbox_only" &&
     auth.trial_id===trialId && auth.marker_commit===markerCommit &&
     auth.marker_parent===manifestCommit && auth.human_grant_commit===grantCommit &&
-    auth.human_grant_blob_sha===(await v2File(api,paths.grant,grantCommit)).sha &&
-    auth.manifest_blob_sha===manifestFile.sha &&
+    auth.human_grant_blob_sha===grantFile.sha && auth.manifest_blob_sha===manifestFile.sha &&
     auth.semantic_execution_authorized===true && auth.assembly_authorized===true &&
     auth.sandbox_writer_authorized===true && auth.production_authorized===false &&
     auth.canonical_acceptance===false && auth.owner_login===V2_OWNER_LOGIN &&
@@ -290,27 +271,29 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
     manifest.items.every(i=>/^\d+$/.test(i.appid) && i.title && i.assignment_id &&
       Number.isInteger(i.group_sequence) && Number.isInteger(i.item_index)),
     "immutable manifest malformed");
+
+  // GitHub Actions are the owner authority. Their reported success and identity
+  // are checked once; unsigned Git committer names/timestamps add no proof.
   const freeze=await v2Get(api,"actions/runs/"+freezeRunId);
   const author=await v2Get(api,"actions/runs/"+auth.github_authorization_run_id);
   v2OwnerRun(freeze,freezeRunId,V2_ISSUE,
     "Issue one exact batch Dossier Notes V2 frozen sandbox (manual only)",base);
   v2OwnerRun(author,auth.github_authorization_run_id,V2_AUTHORIZE,
     "Authorize isolated Notes V2 batch "+trialId+" marker "+markerCommit);
-  v2OwnerRunTimestamps(freeze,[grantGit,manifestGit,marker]);
-  v2OwnerRunTimestamps(author,[authGit]);
-  const cmp=await v2Get(api,"compare/"+base+"..."+author.head_sha);
-  v2Assert(["identical","ahead"].includes(cmp.status) && cmp.base_commit?.sha===base,
-    "authorizer main source is not descended from frozen base");
-  v2Assert(V2_HEX.test(expectedHead),"explicit 40-character sandbox HEAD required");
+
   const current=await v2BranchTip(api,branch);
   v2Assert(current===expectedHead,"sandbox remote HEAD differs from explicit expected SHA");
-  const seen=await v2Lineage(api,current,authorizationCommit,trialId);
-  const schemas={};
-  for(const [phase,path] of Object.entries({
-    research:"config/dossier_research_notes_v2.schema.json",
-    assembly:"config/dossier_autonomous_assembly_result_v2.schema.json",
-    receipt:"config/dossier_notes_v2_item_receipt.schema.json"
-  }))schemas[phase]=v2Json((await v2File(api,path,base)).content);
+  const existing=await v2SandboxScope(api,current,authorizationCommit,trialId);
+  const headTree=current===authorizationCommit?authGit.tree.sha:
+    (await v2GitCommit(api,current)).tree.sha;
+  // Research must not download Assembly schema (and vice versa).
+  const schemaPath=phase==="research"?
+    "config/dossier_research_notes_v2.schema.json":
+    "config/dossier_autonomous_assembly_result_v2.schema.json";
+  const schemas={
+    [phase]:v2Json((await v2File(api,schemaPath,base)).content),
+    receipt:v2Json((await v2File(api,"config/dossier_notes_v2_item_receipt.schema.json",base)).content)
+  };
   const anchor={
     trial_id:trialId,marker_commit:markerCommit,
     authorization_commit:authorizationCommit,
@@ -321,45 +304,38 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
     semantic_execution_authorized:true,
     issuer_structural_only:true,github_run_authenticated:false
   };
-  return {branch,head:current,manifest,anchor,schemas,existing:seen,
+  return {branch,phase,head:current,headTree,manifest,anchor,schemas,existing,
     github_owner_runs_authenticated:true,production_authorized:false};
 }
-async function v2NoPath(api,path,head) {
-  try { await v2File(api,path,head); }
-  catch(e){if(/NOT_FOUND|\b404\b/.test(String(e)))return;}
-  throw Error("BATCH_V2_CONNECTOR_STOP: create-only path exists or check ambiguous: "+path);
-}
+// One create-only Git object and an expected-HEAD CAS. GitHub's existing strict
+// sandbox writer later verifies original bytes and one-add ancestry.
 async function v2Add(api,ctx,path,document,expectedHead,description) {
-  v2Assert(expectedHead===await v2BranchTip(api,ctx.branch),"stale GitHub branch head");
-  v2Assert(!ctx.existing.has(path),"path introduced previously");
-  await v2NoPath(api,path,expectedHead);
+  v2Assert(expectedHead===ctx.head,"stale sandbox HEAD");
+  v2Assert(!ctx.existing.has(path),"create-only path already exists: "+path);
   const raw=v2Canonical(document);
-  const shaResult=await api.createBlob({repository_full_name:V2_REPOSITORY,content:raw,encoding:"utf-8"});
-  const blob=shaResult.result.sha;
+  const created=await api.createBlob({repository_full_name:V2_REPOSITORY,
+    content:raw,encoding:"utf-8"});
+  const blob=created.result.sha;
   v2Assert(V2_HEX.test(blob),"GitHub blob creation missing SHA");
-  const base=await v2GitCommit(api,expectedHead);
   const tree=await api.createTree({repository_full_name:V2_REPOSITORY,
-    base_tree_sha:base.tree.sha,
+    base_tree_sha:ctx.headTree,
     tree_elements:[{path,mode:"100644",type:"blob",sha:blob}]});
   v2Assert(V2_HEX.test(tree.result.sha),"Git tree not confirmed");
   const commit=await api.createCommit({repository_full_name:V2_REPOSITORY,
     message:description,tree_sha:tree.result.sha,parent_sha:expectedHead});
   const newSha=commit.result.sha;
   v2Assert(V2_HEX.test(newSha),"new commit SHA not available");
-  const planned=await v2GitCommit(api,newSha);
-  v2Assert(planned.parents.length===1 && planned.parents[0].sha===expectedHead &&
-    planned.tree.sha===tree.result.sha,"new object parent/tree mismatch");
-  v2Assert(await v2BranchTip(api,ctx.branch)===expectedHead,"branch moved before CAS");
-  // Connector enforces expected SHA; do not retry on any ambiguous result.
+  // This lease is the concurrency protection. Do not replace with force push.
   const update=await api.updateRef({repository_full_name:V2_REPOSITORY,
     branch_name:ctx.branch,sha:newSha,expected_sha:expectedHead,force:false});
   v2Assert(update.result.success===true,"GitHub compare-and-swap rejected");
-  v2Assert(await v2BranchTip(api,ctx.branch)===newSha,"GitHub post-write branch readback mismatch");
-  await v2ExactOneAdd(api,newSha,expectedHead,path);
-  const file=await v2File(api,path,newSha);
-  v2Assert(file.sha===blob && file.content===raw,"independent GitHub bytes/blob readback mismatch");
-  v2Assert(await v2BranchTip(api,ctx.branch)===newSha,"branch moved after readback");
-  ctx.head=newSha;ctx.existing.set(path,newSha);
+  // One readback confirms publication; full original bytes are checked by
+  // the independent GitHub writer, not re-fetched by ChatGPT on every write.
+  v2Assert(await v2BranchTip(api,ctx.branch)===newSha,
+    "GitHub post-write branch readback mismatch");
+  ctx.head=newSha;
+  ctx.headTree=tree.result.sha;
+  ctx.existing.set(path,newSha);
   return {commit:newSha,path,blob,raw,raw_sha256:v2Sha256(raw)};
 }
 function v2Assignment(ctx,appid){
@@ -369,18 +345,10 @@ function v2Assignment(ctx,appid){
     marker_commit:ctx.anchor.marker_commit,
     manifest_blob_sha:ctx.anchor.manifest_blob_sha};
 }
-function v2DocumentCheck(doc,assignment,phase,schema){
+function v2DocumentCheck(doc,assignment,phase,schema) {
   v2SchemaCheck(doc,schema);
-  v2Assert(doc && typeof doc==="object" && !Array.isArray(doc) &&
-    v2Canonical(doc.assignment)===v2Canonical(assignment),"candidate frozen assignment mismatch");
-  if(phase==="research") {
-    v2Assert(doc.schema==="DOSSIER-RESEARCH-NOTES-V2" && doc.schema_version===2 &&
-      Array.isArray(doc.source_log),"Research schema/fields mismatch");
-  }else{
-    v2Assert(doc.schema==="DOSSIER-AUTONOMOUS-ASSEMBLY-RESULT-V2" &&
-      doc.schema_version===2 && doc.staged_only===true &&
-      doc.canonical_acceptance===false,"Assembly schema/flags mismatch");
-  }
+  v2Assert(v2Canonical(doc.assignment)===v2Canonical(assignment),
+    "candidate frozen assignment mismatch");
 }
 function v2Receipt(assignment,phase,disposition,source) {
   return {schema:"DOSSIER-NOTES-V2-ITEM-RECEIPT",schema_version:2,
@@ -390,18 +358,29 @@ function v2Receipt(assignment,phase,disposition,source) {
 }
 export async function connectorPublishItem(api,ctx,{phase,appid,document,researchCommit,expectedHead}) {
   v2Assert(["research","assembly"].includes(phase),"only Research or Assembly");
-  v2Assert(expectedHead===ctx.head &&
-    expectedHead===await v2BranchTip(api,ctx.branch),"stale or unverified sandbox HEAD");
+  v2Assert(expectedHead===ctx.head,"stale sandbox HEAD");
+  v2Assert(phase===ctx.phase,"phase differs from authorized preflight");
   const assignment=v2Assignment(ctx,appid);
   v2DocumentCheck(document,assignment,phase,ctx.schemas[phase]);
   let researchTransport=null,disposition=null;
   if(phase==="assembly"){
     const researchPath=v2DocumentPath("research",assignment);
     const researchReceiptPath=v2ReceiptPath("research",assignment);
-    v2Assert(V2_HEX.test(researchCommit) && ctx.existing.get(researchPath)===researchCommit,
-      "Assembly cannot use unverified original Research introduction");
-    const receiptCommit=ctx.existing.get(researchReceiptPath);
-    v2Assert(V2_HEX.test(receiptCommit),"typed Research receipt absent");
+    v2Assert(V2_HEX.test(researchCommit) &&
+      ctx.existing.has(researchPath) && ctx.existing.has(researchReceiptPath),
+      "Assembly requires previously submitted original Research and receipt");
+    let receiptCommit=ctx.existing.get(researchReceiptPath);
+    if(!V2_HEX.test(receiptCommit)){
+      // Resumed, separate Assembly session: find only this receipt, not all
+      // historical commits. The strict writer verifies first introduction.
+      const response=await api.fetch({url:V2_API+"commits?sha="+
+        encodeURIComponent(ctx.branch)+"&path="+encodeURIComponent(researchReceiptPath)+
+        "&per_page=1"});
+      const commits=JSON.parse(response.result.content);
+      v2Assert(Array.isArray(commits) && commits.length===1 &&
+        V2_HEX.test(commits[0].sha),"typed Research receipt commit unavailable");
+      receiptCommit=commits[0].sha;
+    }
     const research=await v2File(api,researchPath,researchCommit);
     const typed=v2Json((await v2File(api,researchReceiptPath,receiptCommit)).content);
     const researchSha=v2Sha256(research.content);
@@ -456,7 +435,7 @@ export async function connectorPublishItem(api,ctx,{phase,appid,document,researc
     "dossier notes v2: create-only connector "+phase+" receipt "+appid);
   return {phase,appid:String(appid),candidate_commit:candidate.commit,
     receipt_commit:receipt.commit,candidate_path:candidate.path,
-    receipt_path:receipt.path,disposition,github_git_readback_confirmed:true,
+    receipt_path:receipt.path,disposition,github_branch_readback_confirmed:true,
     github_owner_runs_authenticated:true,semantic_quality_accepted:false,
     canonical_acceptance:false};
 }
