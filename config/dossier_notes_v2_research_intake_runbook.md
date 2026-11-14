@@ -37,7 +37,7 @@ Never invent findings or private source information.
 A GitHub `push` workflow on the isolated sandbox validates the original owner's
 approval and the immutable assignment, then produces the unchanged strict V2
 Research candidate plus typed Research receipt. It performs one create-only
-fast-forward push. It neither runs Research/Assembly nor retries and it cannot
+fast-forward push. Fast submissions are reconciled by GitHub in frozen order even if Actions coalesces intermediate push events. It neither runs Research/Assembly nor retries and it cannot
 publish to canonical Dossier, V1, Deep or production.
 
 After a successful GitHub `create_file` response, continue to the next distinct
