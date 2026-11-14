@@ -208,6 +208,70 @@ def publish(repo, branch, result):
     return {**result, "github_receipt_confirmed": True}
 
 
+def reconcile(repo, branch, trigger_commit, token):
+    """Process *all* unreceipted immutable inputs in frozen order, once per push.
+
+    GitHub Actions concurrency can replace intermediate pending push jobs. A
+    later event must therefore cover earlier plain inputs, not only the last
+    event commit. This is bounded receipt materialization for <=24 prepared
+    items, not semantic retry or a newly selected work queue.
+    """
+    repo = Path(repo).resolve()
+    trial_id = branch.removeprefix("sandbox/")
+    if not TRIAL.fullmatch(trial_id) or branch != "sandbox/" + trial_id:
+        raise ValueError("non-cohort sandbox branch")
+    event_changes = git(repo, "diff-tree", "--no-commit-id", "--name-status",
+                        "-r", trigger_commit).stdout.decode().strip().splitlines()
+    if (len(event_changes) != 1
+            or not event_changes[0].startswith("A\\t")
+            or not event_changes[0][2:].startswith(
+                INTAKE_PREFIX + "/" + trial_id + "/")
+            or not first_parent_contains(repo, trigger_commit, "HEAD")):
+        raise ValueError("trigger is not one issued immutable Research input")
+    completed, errors = [], []
+    for row in batch.rows(repo, trial_id):
+        appid = row["appid"]
+        raw_path = input_path(trial_id, appid)
+        if not (repo / raw_path).is_file():
+            continue
+        target = ("data/ai_inbox/dossier_notes_v2/" + trial_id
+                  + f"/g{row['group_sequence']:06d}/"
+                  + appid + "--" + row["assignment_id"] + ".json")
+        receipt_path = ("data/control/dossier_notes_v2/receipts/" + trial_id
+                        + f"/g{row['group_sequence']:06d}/"
+                        + appid + "--" + row["assignment_id"] + "--research.json")
+        # Existing complete items (from either supported transport) are never
+        # resubmitted. Incomplete legacy items are left untouched for diagnosis.
+        if (repo / target).exists() or (repo / receipt_path).exists():
+            if not ((repo / target).exists() and (repo / receipt_path).exists()):
+                errors.append({"appid": appid, "problem": "partial_existing_transport"})
+            continue
+        history = git(repo, "log", "--first-parent", "--format=%H",
+                      "HEAD", "--", raw_path).stdout.decode().splitlines()
+        if len(history) != 1:
+            errors.append({"appid": appid, "problem": "changed_or_unproven_input"})
+            continue
+        try:
+            work = plan(repo, branch, history[0], token)
+        except (ValueError, OSError, RuntimeError, KeyError, v2.NotesV2Error) as exc:
+            errors.append({"appid": appid, "problem": type(exc).__name__})
+            continue
+        # A failure after candidate creation must STOP, not create an
+        # orphaned candidate plus unrelated receipt or partial remote push.
+        completed.append(materialize(repo, work))
+    pushed = None
+    if completed:
+        pushed = publish(repo, branch, completed[-1])
+    return {
+        "plain_inputs_processed": len(completed),
+        "submitted_candidates": [r["candidate_commit"] for r in completed],
+        "typed_receipts": [r["receipt_commit"] for r in completed],
+        "unresolved": errors,
+        "github_receipt_confirmed": bool(pushed),
+        "canonical_acceptance": False,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", default=".")
@@ -221,10 +285,8 @@ def main():
         parser.error("only the exact sandbox push Action may generate receipts")
     token = os.environ.get("GH_TOKEN")
     try:
-        work = plan(args.repo, args.branch, args.submission_commit, token)
-        result = materialize(args.repo, work)
-        print(json.dumps(publish(args.repo, args.branch, result),
-                         sort_keys=True, ensure_ascii=False))
+        result = reconcile(args.repo, args.branch, args.submission_commit, token)
+        print(json.dumps(result, sort_keys=True, ensure_ascii=False))
     except (ValueError, OSError, RuntimeError, KeyError, v2.NotesV2Error) as exc:
         parser.exit(2, "DOSSIER_V2_INTAKE_BLOCKED: " + str(exc) + "\n")
 
