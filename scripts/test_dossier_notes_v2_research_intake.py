@@ -124,5 +124,65 @@ class ResearchIntakeTests(unittest.TestCase):
         self.assertEqual(git(self.repo, "status", "--porcelain"), "")
 
 
+    def test_coalesced_github_push_handles_all_pending_inputs_once(self):
+        first, second = self.issuer["rows"][:2]
+        add(self.repo, intake.input_path(self.trial, first["appid"]),
+            {"appid": first["appid"], "notes": "First review synthesis"},
+            "fixture: first incoming semantic note")
+        last = add(self.repo, intake.input_path(self.trial, second["appid"]),
+                   {"appid": second["appid"], "notes": "Second review synthesis"},
+                   "fixture: second incoming semantic note")
+        with self._owner_mock(), patch.object(
+                intake, "publish",
+                side_effect=lambda _repo, _branch, result: {
+                    **result, "github_receipt_confirmed": True}):
+            outcome = intake.reconcile(self.repo, self.branch, last, "mock-owner")
+        self.assertEqual(outcome["plain_inputs_processed"], 2)
+        self.assertEqual(len(outcome["submitted_candidates"]), 2)
+        self.assertEqual(len(outcome["typed_receipts"]), 2)
+        self.assertTrue(outcome["github_receipt_confirmed"])
+        self.assertEqual(outcome["unresolved"], [])
+        self.assertFalse(outcome["canonical_acceptance"])
+        self.assertEqual(
+            git(self.repo, "rev-parse", "HEAD"),
+            outcome["typed_receipts"][-1])
+        for item, intro, receipt in zip((first, second),
+                                        outcome["submitted_candidates"],
+                                        outcome["typed_receipts"]):
+            self.assertEqual(
+                receipts.require_batch_research_receipt(
+                    self.repo, marker_commit=self.issuer["marker"],
+                    trial_id=self.trial, appid=item["appid"],
+                    authorization_commit=self.issuer["auth"],
+                    research_commit=intro),
+                receipt)
+        with self._owner_mock(), patch.object(intake, "publish") as send:
+            repeated = intake.reconcile(self.repo, self.branch, last, "mock-owner")
+        self.assertEqual(repeated["plain_inputs_processed"], 0)
+        send.assert_not_called()
+
+    def test_bad_input_does_not_block_independent_sibling(self):
+        first, second = self.issuer["rows"][:2]
+        add(self.repo, intake.input_path(self.trial, first["appid"]),
+            {"appid": second["appid"], "notes": "Wrong AppID"},
+            "fixture: invalid input")
+        last = add(self.repo, intake.input_path(self.trial, second["appid"]),
+                   {"appid": second["appid"], "notes": "Valid independent note"},
+                   "fixture: valid sibling")
+        with self._owner_mock(), patch.object(
+                intake, "publish", return_value={"github_receipt_confirmed": True}):
+            outcome = intake.reconcile(self.repo, self.branch, last, "mock-owner")
+        self.assertEqual(outcome["plain_inputs_processed"], 1)
+        self.assertEqual(outcome["unresolved"],
+                         [{"appid": first["appid"], "problem": "ValueError"}])
+        self.assertEqual(len(outcome["typed_receipts"]), 1)
+        self.assertFalse(outcome["canonical_acceptance"])
+
+    def test_unrelated_push_event_cannot_be_used_as_intake_trigger(self):
+        with self.assertRaisesRegex(ValueError, "trigger"):
+            intake.reconcile(self.repo, self.branch, self.issuer["auth"],
+                             "offline-owner")
+
+
 if __name__ == "__main__":
     unittest.main()
