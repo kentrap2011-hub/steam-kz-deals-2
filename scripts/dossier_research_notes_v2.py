@@ -312,7 +312,7 @@ def validate_notes(document, expected_assignment):
     if document["assignment"] != expected_assignment:
         reject("wrong_binding", "Research V2 AppID/assignment/marker/manifest mismatch")
     _safe_text(document)
-    _validate_sources(document["source_log"])
+    _validate_sources(document.get("source_log", []))
     return _canonical(document)
 
 def prepare_research(repo, *, marker_commit, trial_id, appid, document):
