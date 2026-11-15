@@ -1,0 +1,51 @@
+name: Materialize exact Notes V2 rerun Research receipts from owner candidate push
+run-name: Verify create-only Notes V2 rerun Research event ${{ github.sha }}
+
+# Only owner-authenticated single-file candidate PUSH on the exact isolated
+# rerun branch; bot receipt pushes will not trigger new runs. Legacy manual
+# ingest remains available but shares the same serialized trial lock.
+on:
+  push:
+    branches:
+      - sandbox/dossier-notes-v2-fresh6-20261114-rerun1
+    paths:
+      - "data/ai_inbox/dossier_notes_v2/dossier-notes-v2-fresh6-20261114-rerun1/**"
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: dossier-v2-research-receipts-dossier-notes-v2-fresh6-20261114-rerun1
+  cancel-in-progress: false
+
+jobs:
+  verify-owner-event-and-receipt:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/sandbox/dossier-notes-v2-fresh6-20261114-rerun1' && github.run_attempt == 1 && github.actor_id == 315790060 && github.repository_owner_id == 315790060
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout TRUSTED merged main receipt code, never candidate scripts
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install strict existing validator
+        run: python -m pip install 'jsonschema==4.23.0'
+      - name: Validate owner candidate event and create immutable per-item receipts
+        env:
+          TRIAL_ID: dossier-notes-v2-fresh6-20261114-rerun1
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = "kentrap2011-hub/steam-kz-deals-2"
+          git fetch --no-tags origin "refs/heads/sandbox/$TRIAL_ID"
+          sandbox="$RUNNER_TEMP/dossier-v2-research-rerun1"
+          git worktree add --detach "$sandbox" FETCH_HEAD
+          python scripts/dossier_notes_v2_research_receipt_ingest.py \
+            --repo "$sandbox" --trial-id "$TRIAL_ID"
+          test -z "$(git status --porcelain --untracked-files=all)"

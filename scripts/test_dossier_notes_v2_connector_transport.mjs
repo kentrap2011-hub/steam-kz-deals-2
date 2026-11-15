@@ -13,7 +13,7 @@ const canonical=o=>JSON.stringify(o,Object.keys(o).sort());
 const TRIAL="dossier-notes-v2-fresh6-20261111-first",MARKER=sha(13),AUTH=sha(14);
 const FREEZE_ID=43466039520,AUTHOR_ID=43467293841;
 
-function makeFixture(n=6) {
+function makeFixture(n=6,trialId=TRIAL,ownerPush=false) {
   const f={files:new Map(),commits:new Map(),runs:new Map(),calls:[],sequence:40,
     head:AUTH,mutateHeadOnUpdate:false,malformReadback:false};
   const all=[
@@ -36,9 +36,9 @@ function makeFixture(n=6) {
   });
   cp(base,null);
   const paths={
-    grant:"data/control/dossier_notes_v2/grants/"+TRIAL+".json",
-    manifest:"data/control/dossier_notes_v2/manifests/"+TRIAL+".json",
-    authorization:"data/control/dossier_notes_v2/authorizations/"+TRIAL+".json",
+    grant:"data/control/dossier_notes_v2/grants/"+trialId+".json",
+    manifest:"data/control/dossier_notes_v2/manifests/"+trialId+".json",
+    authorization:"data/control/dossier_notes_v2/authorizations/"+trialId+".json",
     nonce:"data/control/dossier_notes_v2/run_starts/"+"ab".repeat(16)+".json",
   };
   cp(grant,base,paths.grant);cp(manifestCommit,grant,paths.manifest);
@@ -48,21 +48,21 @@ function makeFixture(n=6) {
     f.files.set(id+"|"+path,{content:raw,sha:blob(raw)});
   };
   setFile(MARKER,paths.nonce,{schema:"DOSSIER-NOTES-V2-RUN-START",schema_version:2,
-    trial_id:TRIAL,nonce:"ab".repeat(16)});
+    trial_id:trialId,nonce:"ab".repeat(16)});
   const sourcePins={source_main_sha:base,source_snapshot_id:"synthetic",
     source_queue_sha256:"a".repeat(64)};
   const m={schema:"DOSSIER-NOTES-V2-FROZEN-MANIFEST",schema_version:2,
-    trial_id:TRIAL,original_pins:sourcePins,items};
+    trial_id:trialId,original_pins:sourcePins,items};
   setFile(manifestCommit,paths.manifest,m);
   const gf=f.files.get(manifestCommit+"|"+paths.manifest);
   const g={schema:"DOSSIER-NOTES-V2-BATCH-OWNER-GRANT",schema_version:1,
     scope:"one_git_owner_issued_reusable_batch_sandbox_only",
     manifest_path:paths.manifest,source_pins:sourcePins,
-    trial_id:TRIAL,base_main_sha:base,owner_login:"kentrap2011-hub",
+    trial_id:trialId,base_main_sha:base,owner_login:"kentrap2011-hub",
     owner_actor_id:"315790060",manifest_blob_sha:gf.sha,
     semantic_execution_approved:false,production_approved:false,
     canonical_ingest_approved:false,
-    cohort_contract_path:"config/dossier_notes_v2_batches/"+TRIAL+".json"};
+    cohort_contract_path:"config/dossier_notes_v2_batches/"+trialId+".json"};
   setFile(grant,paths.grant,g);
   const af=f.files.get(grant+"|"+paths.grant);
   for(const file of [
@@ -76,7 +76,7 @@ function makeFixture(n=6) {
   setFile(AUTH,paths.authorization,{
     schema:"DOSSIER-NOTES-V2-BATCH-OWNER-AUTHORIZATION",schema_version:1,
     scope:"one_manual_batch_research_assembly_sandbox_only",
-    trial_id:TRIAL,marker_commit:MARKER,marker_parent:manifestCommit,
+    trial_id:trialId,marker_commit:MARKER,marker_parent:manifestCommit,
     human_grant_commit:grant,human_grant_blob_sha:af.sha,
     manifest_blob_sha:gf.sha,github_authorization_run_id:String(AUTHOR_ID),
     semantic_execution_authorized:true,assembly_authorized:true,
@@ -96,7 +96,23 @@ function makeFixture(n=6) {
     "Issue one exact batch Dossier Notes V2 frozen sandbox (manual only)"));
   f.runs.set(AUTHOR_ID,makeRun(AUTHOR_ID,
     ".github/workflows/authorize-dossier-notes-v2-batch.yml",
-    "Authorize isolated Notes V2 batch "+TRIAL+" marker "+MARKER));
+    "Authorize isolated Notes V2 batch "+trialId+" marker "+MARKER));
+  if(ownerPush){
+    assert.equal(trialId,"dossier-notes-v2-fresh6-20261114-rerun1");
+    const key=AUTH+"|"+paths.authorization;
+    const doc=JSON.parse(f.files.get(key).content);
+    doc.scope="one_owner_main_push_research_assembly_sandbox_only";
+    doc.authority_origin="owner_main_push";
+    doc.owner_push_main_sha=base;
+    setFile(AUTH,paths.authorization,doc);
+    f.runs.delete(FREEZE_ID);
+    f.runs.set(AUTHOR_ID,{
+      ...makeRun(AUTHOR_ID,
+        ".github/workflows/issue-dossier-notes-v2-on-owner-push.yml",
+        "Issue and authorize Notes V2 rerun "+trialId+" source "+base),
+      event:"push"
+    });
+  }
   f.api={
     async fetch({url}){
       f.calls.push(["fetch",url]);
@@ -111,7 +127,7 @@ function makeFixture(n=6) {
       }
       else if(ep.startsWith("actions/runs/")){value=f.runs.get(Number(ep.slice(13)));}
       else if(ep.startsWith("git/ref/heads/")){
-        value={ref:"refs/heads/sandbox/"+TRIAL,
+        value={ref:"refs/heads/sandbox/"+trialId,
           object:{sha:f.malformReadback &&
             f.calls.some(x=>x[0]==="updateRef")?sha(999):f.head}};
       }
@@ -171,7 +187,7 @@ function makeFixture(n=6) {
     },
     async updateRef({repository_full_name,branch_name,sha:next,force,expected_sha}){
       assert.equal(repository_full_name,REPO);
-      assert.equal(branch_name,"sandbox/"+TRIAL);assert.equal(force,false);
+      assert.equal(branch_name,"sandbox/"+trialId);assert.equal(force,false);
       f.calls.push(["updateRef",expected_sha,next]);
       if(f.mutateHeadOnUpdate)f.head=sha(999);
       if(f.head!==expected_sha)throw Error("GitHub CAS rejected stale expected_sha");
@@ -201,6 +217,38 @@ test("first six exact frozen identities and authenticated two owner runs",async(
     ["1000010","102600","1029690","49520","499180","501590"]);
   assert.equal(ctx.github_owner_runs_authenticated,true);
   assert.equal(ctx.production_authorized,false);
+  assert.equal(Object.hasOwn(ctx.anchor,"authority_origin"),false); // legacy bytes
+});
+test("exact rerun1 owner main push authorizes Assembly with only one Actions run",async()=>{
+  const trial="dossier-notes-v2-fresh6-20261114-rerun1";
+  const f=makeFixture(6,trial,true);
+  const ctx=await preflight(f,{trialId:trial,phase:"assembly",freezeRunId:undefined});
+  assert.equal(ctx.github_owner_runs_authenticated,true);
+  assert.equal(ctx.anchor.authority_origin,"owner_main_push");
+  assert.equal(ctx.phase,"assembly");
+  assert.equal(ctx.manifest.trial_id,trial);
+  assert.equal(f.calls.filter(c=>c[0]==="fetch" && c[1].includes("/actions/runs/")).length,1);
+  assert.equal(ctx.production_authorized,false);
+});
+test("owner main push Assembly rejects forged event/owner/sha and wrong scope",async()=>{
+  const trial="dossier-notes-v2-fresh6-20261114-rerun1";
+  for(const tamper of [
+    doc=>{doc.event="workflow_dispatch";},
+    doc=>{doc.actor.id=1;},
+    doc=>{doc.run_attempt=2;},
+    doc=>{doc.head_sha=sha(3);},
+    doc=>{doc.status="in_progress";},
+  ]){
+    const f=makeFixture(6,trial,true);
+    tamper(f.runs.get(AUTHOR_ID));
+    await assert.rejects(preflight(f,{trialId:trial,phase:"assembly"}));
+  }
+  const bad=makeFixture(6,trial,true);
+  const key=AUTH+"|data/control/dossier_notes_v2/authorizations/"+trial+".json";
+  const doc=JSON.parse(bad.files.get(key).content);
+  doc.scope="one_manual_batch_research_assembly_sandbox_only";
+  bad.files.set(key,{content:JSON.stringify(doc),sha:blob(JSON.stringify(doc))});
+  await assert.rejects(preflight(bad,{trialId:trial,phase:"assembly"}));
 });
 test("second arbitrary cohort-size fixture proves no six-only runtime",async()=>{
   const f=makeFixture(1),ctx=await preflight(f);

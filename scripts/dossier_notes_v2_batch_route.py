@@ -25,6 +25,8 @@ OWNER_LOGIN = "kentrap2011-hub"
 OWNER_ID = "315790060"
 ISSUE_WORKFLOW = ".github/workflows/issue-dossier-notes-v2-batch.yml"
 AUTHORIZE_WORKFLOW = ".github/workflows/authorize-dossier-notes-v2-batch.yml"
+OWNER_PUSH_WORKFLOW = ".github/workflows/issue-dossier-notes-v2-on-owner-push.yml"
+OWNER_PUSH_TRIAL = "dossier-notes-v2-fresh6-20261114-rerun1"
 WRITER_WORKFLOW = ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
 SHA = re.compile(r"^[0-9a-f]{40}$")
 ORIGINAL_MARKERS = {
@@ -211,9 +213,14 @@ def expected_grant(repo,trial_id,base):
     }
 
 
-def expected_authorization(repo,trial_id,marker,grant_commit,run_id):
+def expected_authorization(repo,trial_id,marker,grant_commit,run_id,authority_origin="manual"):
+    """Manual owner dispatch is unchanged; push authority is one exact new cohort."""
+    require(authority_origin in ("manual","owner_main_push"),
+            "unsupported authorization origin")
+    if authority_origin == "owner_main_push":
+        require(trial_id == OWNER_PUSH_TRIAL, "owner push may authorize only fresh rerun1")
     bp=manifest_blueprint(repo,trial_id)
-    return {
+    doc={
         "schema":"DOSSIER-NOTES-V2-BATCH-OWNER-AUTHORIZATION",
         "schema_version":1,"trial_id":trial_id,
         "marker_commit":marker,"marker_parent":parent(repo,marker),
@@ -229,6 +236,11 @@ def expected_authorization(repo,trial_id,marker,grant_commit,run_id):
         "production_authorized":False,
         "canonical_acceptance":False,
     }
+    if authority_origin == "owner_main_push":
+        doc["authority_origin"] = authority_origin
+        doc["owner_push_main_sha"] = parent(repo,grant_commit)
+        doc["scope"] = "one_owner_main_push_research_assembly_sandbox_only"
+    return doc
 
 
 def issuer_structure(repo,*,trial_id,marker_commit,authorization_commit):
@@ -268,11 +280,13 @@ def issuer_structure(repo,*,trial_id,marker_commit,authorization_commit):
             "owner grant, policy pin or prepared source differs")
     auth=strict_json(file_at(repo,authorization_commit,path["authorization"]))
     rid=auth.get("github_authorization_run_id") if type(auth) is dict else None
+    origin=auth.get("authority_origin","manual") if type(auth) is dict else None
     require(type(rid) is str and rid.isdigit()
             and int(rid)>0
-            and auth==expected_authorization(repo,trial_id,marker_commit,grant_commit,rid),
+            and origin in ("manual","owner_main_push")
+            and auth==expected_authorization(repo,trial_id,marker_commit,grant_commit,rid,origin),
             "authorization actor/run/one-use scope/manifest differs")
-    return {
+    anchor={
         "trial_id":trial_id,"marker_commit":marker_commit,
         "authorization_commit":authorization_commit,
         "authorization_blob_sha":blob(repo,authorization_commit,path["authorization"]),
@@ -285,29 +299,43 @@ def issuer_structure(repo,*,trial_id,marker_commit,authorization_commit):
         "issuer_structural_only":True,
         "github_run_authenticated":False,
     }
+    # Preserve exact historical issuer/receipt bytes for all manual cohorts.
+    # Only the new push origin extends the immutable receipt issuer payload.
+    if origin=="owner_main_push":
+        anchor["authority_origin"]=origin
+    return anchor
 
 
 def authenticated_owner_run(anchor,token,github_repository=REPOSITORY):
-    """Read GitHub's actual owner-first-attempt successful manual authorizer."""
+    """Read actual completed owner Actions; never trust a chat-supplied run id."""
     require(github_repository==REPOSITORY and bool(token) and anchor.get("trial_id"),
             "missing authenticated exact repository context")
     from dossier_notes_v2_per_item_receipts import _github_get
     rid=anchor["github_authorization_run_id"]
     doc=_github_get(REPOSITORY,"actions/runs/"+rid,token)
+    origin=anchor.get("authority_origin","manual")
+    manual=(origin=="manual")
+    expected_path=AUTHORIZE_WORKFLOW if manual else OWNER_PUSH_WORKFLOW
+    expected_title=(
+        "Authorize isolated Notes V2 batch " + anchor["trial_id"]
+        + " marker " + anchor["marker_commit"] if manual else
+        "Issue and authorize Notes V2 rerun " + anchor["trial_id"]
+        + " source " + anchor["base_main_sha"]
+    )
     require(type(doc) is dict
             and doc.get("id")==int(rid)
-            and doc.get("event")=="workflow_dispatch"
+            and doc.get("event")==("workflow_dispatch" if manual else "push")
             and doc.get("status")=="completed"
             and doc.get("conclusion")=="success"
             and doc.get("run_attempt")==1
             and doc.get("head_branch")=="main"
-            and doc.get("path")==AUTHORIZE_WORKFLOW
-            and doc.get("display_title")==(
-                "Authorize isolated Notes V2 batch "
-                + anchor["trial_id"] + " marker " + anchor["marker_commit"])
+            and doc.get("path")==expected_path
+            and doc.get("display_title")==expected_title
             and doc.get("actor",{}).get("id")==int(OWNER_ID)
             and doc.get("actor",{}).get("login")==OWNER_LOGIN
             and isinstance(doc.get("head_sha"),str)
-            and SHA.fullmatch(doc["head_sha"]),
-            "real successful first-attempt owner manual GitHub authorizer not proven")
+            and SHA.fullmatch(doc["head_sha"])
+            and (manual or (anchor["trial_id"]==OWNER_PUSH_TRIAL
+                 and doc["head_sha"]==anchor["base_main_sha"])),
+            "real successful first-attempt owner GitHub authorizer not proven")
     return True

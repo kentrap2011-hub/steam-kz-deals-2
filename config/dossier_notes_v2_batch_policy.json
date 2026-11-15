@@ -20,5 +20,18 @@
   "scheduled_worker": false,
   "automatic_retry": false,
   "one_use_owner_issued_grant_per_cohort": true,
-  "active": false
+  "active": false,
+  "owner_push_no_ui_first_attempt": {
+    "trial_id": "dossier-notes-v2-fresh6-20261114-rerun1",
+    "requires_owner_id": "315790060",
+    "source_trigger": "owner_main_push_introducing_exact_new_cohort_contract",
+    "source_path": "config/dossier_notes_v2_batches/dossier-notes-v2-fresh6-20261114-rerun1.json",
+    "workflow": ".github/workflows/issue-dossier-notes-v2-on-owner-push.yml",
+    "github_run_evidence": "completed_success_first_attempt_owner_push_with_exact_main_SHA",
+    "immutable_chain": "grant_then_manifest_then_unique_marker_then_direct_child_authorization",
+    "canonical_ingest": false,
+    "production_enabled": false,
+    "scheduled_task": false,
+    "automatic_retry": false
+  }
 }

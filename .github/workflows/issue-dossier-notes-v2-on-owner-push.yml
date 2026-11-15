@@ -1,0 +1,48 @@
+name: Issue and authorize exact six-game Dossier V2 rerun on owner main push
+run-name: Issue and authorize Notes V2 rerun dossier-notes-v2-fresh6-20261114-rerun1 source ${{ github.sha }}
+
+# One NEW source contract, introduced via a real first-attempt owner main push.
+# The GitHub Actions runner makes four distinct immutable sandbox Git commits.
+# No workflow_dispatch, PR/test branch, scheduled semantic Research or production.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - config/dossier_notes_v2_batches/dossier-notes-v2-fresh6-20261114-rerun1.json
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dossier-v2-owner-push-fresh6-rerun1
+  cancel-in-progress: false
+
+jobs:
+  issue-separate-git-authority:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.run_attempt == 1 && github.actor_id == 315790060 && github.repository_owner_id == 315790060
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout trusted exact owner-merged main source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: true
+          fetch-depth: 0
+      - name: Match local main to authenticated event head
+        run: |
+          set -euo pipefail
+          git checkout -B main "$GITHUB_SHA"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test -z "$(git status --porcelain --untracked-files=all)"
+      - name: Owner GitHub event proof and four distinct isolated commits
+        env:
+          EXPECTED_MAIN_SHA: ${{ github.sha }}
+          TRIAL_ID: dossier-notes-v2-fresh6-20261114-rerun1
+        run: |
+          set -euo pipefail
+          python scripts/dossier_notes_v2_batch_issuer.py owner-push-launch \
+            --trial-id "$TRIAL_ID" --expected-main-sha "$EXPECTED_MAIN_SHA"
+      - name: Verify clean checkout; never claim Research was run
+        run: test -z "$(git status --porcelain --untracked-files=all)"
