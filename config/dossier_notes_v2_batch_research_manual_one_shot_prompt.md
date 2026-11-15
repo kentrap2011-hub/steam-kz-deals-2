@@ -6,9 +6,12 @@ scheduler, issuer, retry loop, Assembly or production job.
 
 ## Start (short)
 
-1. Follow CHAT_PROTOCOL.md and CHAT_CONTEXT.md. Only start after the existing
-   owner Freeze **and separate Authorize** Actions have succeeded for this exact
-   one-use trial. A trial ID supplied in chat is not authorization by itself.
+1. Follow CHAT_PROTOCOL.md and CHAT_CONTEXT.md. Only start after the existing one-use GitHub-owned Freeze and separate Authorize **commits** are
+   present AND their real owner Actions run is completed successfully.
+   For `dossier-notes-v2-fresh6-20261114-rerun1`, owner merge and authenticated
+   first-attempt main push (not UI dispatch) is the only new issuer authority.
+   For legacy cohorts, preserve their existing manual owner dispatch.
+   A trial ID or a ChatGPT answer alone is never authorization.
 2. Read the single frozen manifest at
    data/control/dossier_notes_v2/manifests/<trial_id>.json on
    sandbox/<trial_id> with GitHub connector fetch_file. Use the returned file
@@ -52,13 +55,19 @@ Report which exact AppIDs produced GitHub candidate commits and which did not.
 Do not write a typed receipt, manually calculate Git hashes, perform handoff
 serialization, or run the old connectorPreflight/connectorPublishItem path.
 
-The repository owner can separately run the **manual** GitHub Actions workflow
-.github/workflows/ingest-dossier-notes-v2-research.yml with this trial ID.
-GitHub then authenticates the owner issuance, independently validates the
-candidate's exact immutable one-add Git commit, and creates each missing typed
-Research receipt. Invalid games do not block valid siblings. Existing receipt
-and Assembly contracts remain in force. Research does not trigger that workflow
-and must not claim acceptance before its confirmation.
+For the exact rerun1 cohort, a real owner-authenticated sandbox `push`
+from `create_file` triggers GitHub receipt ingestion automatically using
+`.github/workflows/ingest-dossier-notes-v2-research-on-owner-push.yml`.
+This is **not** an automatic semantic retry: the chat still selects no work,
+and GitHub validates exact owner event / branch / immutable Git candidate
+before adding one typed receipt per item. A GitHub candidate commit alone is
+not evidence that a receipt exists; inspect GitHub receipts when finished.
+Missing/invalid candidates remain explicitly incomplete or rejected.
+
+The **manual** `.github/workflows/ingest-dossier-notes-v2-research.yml`
+continues as legacy fallback for already authorized cohorts only.
+Existing strict Assembly and writer contracts are unchanged. Research does
+not manually run receipt workflows or claim strict acceptance.
 
 No V1, Deep, Assembly, canonical production, schedules, automatic retries or
 new grants. Previous fresh6/original18 immutable submissions are not replayed.
