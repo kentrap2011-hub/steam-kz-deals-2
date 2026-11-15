@@ -217,6 +217,7 @@ test("first six exact frozen identities and authenticated two owner runs",async(
     ["1000010","102600","1029690","49520","499180","501590"]);
   assert.equal(ctx.github_owner_runs_authenticated,true);
   assert.equal(ctx.production_authorized,false);
+  assert.equal(Object.hasOwn(ctx.anchor,"authority_origin"),false); // legacy bytes
 });
 test("exact rerun1 owner main push authorizes Assembly with only one Actions run",async()=>{
   const trial="dossier-notes-v2-fresh6-20261114-rerun1";
