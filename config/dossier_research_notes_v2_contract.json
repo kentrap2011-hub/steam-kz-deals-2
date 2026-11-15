@@ -94,7 +94,10 @@
     "manual_connector_research_route": "one_create_only_candidate_per_game",
     "source_log_mandatory": false,
     "manual_receipt_owner_workflow": ".github/workflows/ingest-dossier-notes-v2-research.yml",
-    "technical_receipt_issuer": "github_manual_owner_ingest"
+    "technical_receipt_issuer": "manual_owner_ingest_or_exact_owner_sandbox_push_after_first_attempt_authenticated_owner_main_source_run",
+    "owner_push_automatic_receipt_trial": "dossier-notes-v2-fresh6-20261114-rerun1",
+    "owner_push_receipt_workflow": ".github/workflows/ingest-dossier-notes-v2-research-on-owner-push.yml",
+    "owner_push_receipt_gate": "one_owner_authenticated_create_file_push_for_exact_frozen_candidate_path_followed_by_independent_strict_receipt"
   },
   "assembly": {
     "independent_source_discovery": true,
