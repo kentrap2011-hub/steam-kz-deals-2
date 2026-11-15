@@ -13,7 +13,7 @@ const canonical=o=>JSON.stringify(o,Object.keys(o).sort());
 const TRIAL="dossier-notes-v2-fresh6-20261111-first",MARKER=sha(13),AUTH=sha(14);
 const FREEZE_ID=43466039520,AUTHOR_ID=43467293841;
 
-function makeFixture(n=6,trialId=trialId,ownerPush=false) {
+function makeFixture(n=6,trialId=TRIAL,ownerPush=false) {
   const f={files:new Map(),commits:new Map(),runs:new Map(),calls:[],sequence:40,
     head:AUTH,mutateHeadOnUpdate:false,malformReadback:false};
   const all=[
