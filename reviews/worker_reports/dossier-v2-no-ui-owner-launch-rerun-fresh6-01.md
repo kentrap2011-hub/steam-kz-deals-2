@@ -39,3 +39,9 @@
 ## Time / simplification
 
 The work required reading the actual issuer, owner proof, receipt validator, Actions and test fixtures to avoid issuing false authority. The resulting interactive Research route uses exactly **one GitHub `create_file` per item** and no hand-pasted SHA, issuer tokens, manual Actions UI steps or separate receipt publication by ChatGPT. The one-time source authorization and typed receipts remain strictly GitHub-owned.
+
+### Downstream Assembly compatibility, discovered in self-review
+
+- Existing `scripts/dossier_notes_v2_connector_transport.mjs::connectorPreflight` and Assembly launcher originally hardcoded **two manual first-attempt owner Actions runs**. This would have blocked new rerun1 even with valid GitHub Research receipts, so the same source PR corrects the actual downstream path.
+- For **only** `dossier-notes-v2-fresh6-20261114-rerun1`, the connector now verifies the separate grant/manifest/marker/direct-child-authorization chain plus the **one completed successful first-attempt owner main-push Actions run** and exact source-main SHA, without inventing a legacy Freeze run ID. Legacy manual preflight still demands both real owner runs.
+- `config/dossier_notes_v2_batch_assembly_manual_one_shot_prompt.md` and `config/dossier_notes_v2_connector_transport_manual_runbook.md` document this phase-specific distinction. Synthetic Node fixture tests cover successful exact rerun Assembly preflight, and forged actor/event/attempt/SHA/scope rejection. Existing two-call Assembly publication and strict Research receipt requirements are unchanged.
