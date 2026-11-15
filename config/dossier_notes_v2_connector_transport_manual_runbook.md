@@ -1,12 +1,12 @@
 # Dossier Notes V2 — lean tokenless GitHub Connector
 
-**Legacy route / Assembly only:** New isolated Research uses `config/dossier_notes_v2_batch_research_manual_one_shot_prompt.md` with one `create_file` per game and GitHub-owned manual receipt ingest. The two-call connector handoff below is retained for **Assembly and legacy isolated Research cohorts only**, not required for new Research. This file does not authorize a new grant, retry, or production process. Source: `scripts/dossier_notes_v2_connector_transport.mjs` from **current main**.
+**Legacy route / Assembly only:** New isolated Research uses `config/dossier_notes_v2_batch_research_manual_one_shot_prompt.md` with one `create_file` per game and GitHub-owned receipts (automatic for exact owner-push rerun1, manual legacy fallback). The two-call connector handoff below is retained for **Assembly and legacy isolated Research cohorts only**, not required for new Research. This file does not authorize a new grant, retry, or production process. Source: `scripts/dossier_notes_v2_connector_transport.mjs` from **current main**.
 
 ## Why two Code Mode calls are mandatory
 
 **Measured live GitHub Connector limit: 20 nested tool calls per Code Mode invocation.** Real owner preflight costs 14 calls on the empty sandbox; one game with two typed commits needs 10, so 14 + 10 cannot be executed in the same invocation. Use the verified **session handoff** below. This does not create a new GitHub grant, queue, retry or file.
 
-- Call A: full owner preflight only. Verify two successful first-attempt GitHub Actions, issuer parent/manifest, exact immutable assignments, owner ID and real branch HEAD; download current phase schema plus receipt schema. Output the complete machine-readable session handoff.
+- Call A: full owner preflight only. Verify two separate successful first-attempt owner manual Actions on legacy cohorts, **or one successful first-attempt exact owner main-push Actions** on `dossier-notes-v2-fresh6-20261114-rerun1`, plus the same separately committed issuer parent/manifest, exact immutable assignments, owner ID and real branch HEAD; download current phase schema plus receipt schema. Output the complete machine-readable session handoff.
 - Call B: take **only the exact immediately preceding Call A output**, restore the verified context with one fresh remote branch HEAD read, publish **one game** using exactly 10 additional GitHub calls, then output the updated handoff.
 - Call C and subsequent calls: use only the just-returned updated handoff from the previous successful game, for **one next game**. Each call uses 11 connected GitHub operations, below the proven limit. Do not combine two games in one Code Mode call.
 - If a call fails, loses its output, or an ambiguous GitHub write occurs, **STOP**. The next manual action requires an independent fresh GitHub preflight at the actual current sandbox HEAD; do not forge, edit or reconstruct a handoff from a prompt, outside file, user input or guesses. The handoff SHA256 detects accidental copy corruption **but is not a cryptographic authentication of a user-supplied payload**. Its authority is exclusively the immediately preceding verified output in this same explicit ChatGPT session.
@@ -28,12 +28,14 @@ const ctx = await connectorPreflight(api,{
   trialId:"<EXACT_OWNER_ISSUED_TRIAL>",
   markerCommit:"<EXACT_MARKER_COMMIT>",
   authorizationCommit:"<EXACT_AUTHORIZATION_COMMIT>",
-  freezeRunId:"<REAL_FIRST_ATTEMPT_OWNER_FREEZE_RUN>",
+  freezeRunId:"<REAL_FIRST_ATTEMPT_OWNER_FREEZE_RUN>", // omit ONLY for exact owner-push rerun1
   expectedHead:"<FRESH_EXACT_SANDBOX_HEAD>",
   phase:"research" // separately launched Assembly chat uses "assembly"
 });
 text(JSON.stringify(connectorHandoff(ctx)));
 ```
+
+For `dossier-notes-v2-fresh6-20261114-rerun1`, **omit** `freezeRunId` (there is no separate manual Freeze Actions run): `connectorPreflight` verifies the actual successful owner-main-push authorizer run ID already bound into the GitHub-issued authorization, requiring the exact source-main SHA. For legacy cohorts, the separate freeze run ID and two real owner manual runs remain mandatory. Do not invent a freeze run ID.
 
 The returned JSON handoff is usable **only in the next call of this same explicitly authorized manual session**. Preflight is not a Research result and does not authorize publishing another cohort. The first fresh6 cohort still requires exact original manifest/marker/authorization, unchanged owner Actions; never reissue Freeze/Authorize.
 
@@ -65,4 +67,4 @@ Assembly requires original Research candidate and its typed receipt, with immuta
 
 Only the sandbox branch may change during a separately user-launched semantic run. No original18, V1, Deep, canonical cache, production, GitHub Actions issuer, scheduler or automatic retry. Keep the independent token-backed Python CLI unchanged where authenticated secrets exist.
 
-The current JS schema check prevents malformed field/assignment publication but does not reproduce Python privacy and strict semantics. Synthetic Node tests include exact **14-call preflight + 11-call per-item continuation**, all six immutable Research assignments, restart/duplicate/CAS rejection, and independent Assembly-bound research receipt. Run `node --test scripts/test_dossier_notes_v2_connector_transport.mjs`, existing Python V2 tests and final-HEAD GitHub PR CI before release. Green synthetic tests do not prove actual live Research or accepted dossiers.
+The current JS schema check prevents malformed field/assignment publication but does not reproduce Python privacy and strict semantics. Synthetic Node tests include exact **14-call legacy manual (13-call exact owner-push) preflight + 11-call per-item continuation**, all six immutable Research assignments, restart/duplicate/CAS rejection, and independent Assembly-bound research receipt. Run `node --test scripts/test_dossier_notes_v2_connector_transport.mjs`, existing Python V2 tests and final-HEAD GitHub PR CI before release. Green synthetic tests do not prove actual live Research or accepted dossiers.
