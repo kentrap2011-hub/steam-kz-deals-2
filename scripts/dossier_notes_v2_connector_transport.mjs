@@ -15,6 +15,8 @@ const V2_OWNER_LOGIN = "kentrap2011-hub";
 const V2_OWNER_ID = 315790060;
 const V2_ISSUE = ".github/workflows/issue-dossier-notes-v2-batch.yml";
 const V2_AUTHORIZE = ".github/workflows/authorize-dossier-notes-v2-batch.yml";
+const V2_OWNER_PUSH = ".github/workflows/issue-dossier-notes-v2-on-owner-push.yml";
+const V2_OWNER_PUSH_TRIAL = "dossier-notes-v2-fresh6-20261114-rerun1";
 const V2_API = "https://api.github.com/repos/" + V2_REPOSITORY + "/";
 const V2_HEX = /^[0-9a-f]{40}$/;
 const V2_TRIAL = /^dossier-notes-v2-[a-z0-9][a-z0-9-]{7,90}$/;
@@ -188,10 +190,10 @@ async function v2SandboxScope(api,head,authorizationCommit,trialId) {
   }
   return found;
 }
-function v2OwnerRun(doc,id,path,title,sha) {
+function v2OwnerRun(doc,id,path,title,sha,event="workflow_dispatch") {
   v2Assert(doc.id===Number(id) && doc.run_attempt===1 &&
    doc.status==="completed" && doc.conclusion==="success" &&
-   doc.event==="workflow_dispatch" && doc.head_branch==="main" &&
+   doc.event===event && doc.head_branch==="main" &&
    doc.path===path && doc.display_title===title &&
    doc.actor?.login===V2_OWNER_LOGIN && doc.actor?.id===V2_OWNER_ID &&
    doc.triggering_actor?.login===V2_OWNER_LOGIN &&
@@ -205,8 +207,8 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
   v2Assert(["research","assembly"].includes(phase),"only isolated Research/Assembly allowed");
   v2Assert(V2_HEX.test(markerCommit) && V2_HEX.test(authorizationCommit) &&
     markerCommit!==authorizationCommit,"invalid issuer SHA");
-  v2Assert(Number.isSafeInteger(Number(freezeRunId)) && Number(freezeRunId)>0,
-    "freeze run ID required");
+  // A separate Freeze Action ID is only required for legacy manual cohorts.
+  // The exact owner-main-push rerun has one combined GitHub Actions run.
   v2Assert(V2_HEX.test(expectedHead),"explicit sandbox HEAD required");
   const branch="sandbox/"+trialId,paths={
     grant:"data/control/dossier_notes_v2/grants/"+trialId+".json",
@@ -256,7 +258,12 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
     grant.cohort_contract_path==="config/dossier_notes_v2_batches/"+trialId+".json",
     "frozen owner grant inconsistent");
   v2Assert(auth.schema==="DOSSIER-NOTES-V2-BATCH-OWNER-AUTHORIZATION" &&
-    auth.schema_version===1 && auth.scope==="one_manual_batch_research_assembly_sandbox_only" &&
+    auth.schema_version===1 &&
+     (auth.scope==="one_manual_batch_research_assembly_sandbox_only" &&
+      auth.authority_origin===undefined ||
+      trialId===V2_OWNER_PUSH_TRIAL && auth.authority_origin==="owner_main_push" &&
+      auth.scope==="one_owner_main_push_research_assembly_sandbox_only" &&
+      auth.owner_push_main_sha===base) &&
     auth.trial_id===trialId && auth.marker_commit===markerCommit &&
     auth.marker_parent===manifestCommit && auth.human_grant_commit===grantCommit &&
     auth.human_grant_blob_sha===grantFile.sha && auth.manifest_blob_sha===manifestFile.sha &&
@@ -275,12 +282,22 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
 
   // GitHub Actions are the owner authority. Their reported success and identity
   // are checked once; unsigned Git committer names/timestamps add no proof.
-  const freeze=await v2Get(api,"actions/runs/"+freezeRunId);
-  const author=await v2Get(api,"actions/runs/"+auth.github_authorization_run_id);
-  v2OwnerRun(freeze,freezeRunId,V2_ISSUE,
-    "Issue one exact batch Dossier Notes V2 frozen sandbox (manual only)",base);
-  v2OwnerRun(author,auth.github_authorization_run_id,V2_AUTHORIZE,
-    "Authorize isolated Notes V2 batch "+trialId+" marker "+markerCommit);
+  if(auth.authority_origin==="owner_main_push") {
+    // Exactly one owner-authenticated main push event issued the two separate
+    // Git commit authorities. It cannot be forged by a worker or by PR CI.
+    const owner=await v2Get(api,"actions/runs/"+auth.github_authorization_run_id);
+    v2OwnerRun(owner,auth.github_authorization_run_id,V2_OWNER_PUSH,
+      "Issue and authorize Notes V2 rerun "+trialId+" source "+base,base,"push");
+  } else {
+    v2Assert(Number.isSafeInteger(Number(freezeRunId)) && Number(freezeRunId)>0,
+      "legacy manual freeze run ID required");
+    const freeze=await v2Get(api,"actions/runs/"+freezeRunId);
+    const author=await v2Get(api,"actions/runs/"+auth.github_authorization_run_id);
+    v2OwnerRun(freeze,freezeRunId,V2_ISSUE,
+      "Issue one exact batch Dossier Notes V2 frozen sandbox (manual only)",base);
+    v2OwnerRun(author,auth.github_authorization_run_id,V2_AUTHORIZE,
+      "Authorize isolated Notes V2 batch "+trialId+" marker "+markerCommit);
+  }
 
   const current=await v2BranchTip(api,branch);
   v2Assert(current===expectedHead,"sandbox remote HEAD differs from explicit expected SHA");
@@ -302,6 +319,7 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
     human_grant_commit:grantCommit,base_main_sha:base,
     github_actor_id:String(V2_OWNER_ID),
     github_authorization_run_id:String(auth.github_authorization_run_id),
+    authority_origin:auth.authority_origin||"manual",
     semantic_execution_authorized:true,
     issuer_structural_only:true,github_run_authenticated:false
   };
