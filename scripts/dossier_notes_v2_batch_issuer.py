@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Reusable manual-owner Notes V2 cohort issuer; no semantic or production run.
+"""Owner-controlled Notes V2 cohort issuer: manual or exact first owner main push.
 
-Only authenticated first-attempt GitHub Actions dispatch on merged main may
-create a NEW sandbox one-use grant/manifest/marker, then a SEPARATE authorization.
+Only separately validated owner GitHub Actions events create immutable Git commits.
+No semantics, retries, production or arbitrary trial auto-launch.
 """
 import argparse
 import json
@@ -133,7 +133,7 @@ def freeze(repo,expected,trial_id):
             "production_enabled":False,"canonical_acceptance":False}
 
 
-def authorize(repo,expected,trial_id,marker_commit,env):
+def authorize(repo,expected,trial_id,marker_commit,env,authority_origin="manual"):
     batch.require(isinstance(marker_commit,str) and SHA.fullmatch(marker_commit)
                   and marker_commit not in batch.ORIGINAL_MARKERS,
                   "new marker SHA required")
@@ -167,7 +167,7 @@ def authorize(repo,expected,trial_id,marker_commit,env):
                   batch.expected_grant(repo,trial_id,base),
                   "immutable one-use owner grant differs")
     doc=batch.expected_authorization(repo,trial_id,marker_commit,
-                                     grant_commit,env["GITHUB_RUN_ID"])
+                                     grant_commit,env["GITHUB_RUN_ID"],authority_origin)
     auth_commit=add_commit(repo,path["authorization"],doc,
                            "Authorize one isolated Notes V2 batch pilot")
     anchor=batch.issuer_structure(
@@ -193,21 +193,108 @@ def authorize(repo,expected,trial_id,marker_commit,env):
             "canonical_acceptance":False,"production_enabled":False}
 
 
+def guard_owner_push(repo,trial_id,sha,env):
+    """Actual original owner main push must FIRST introduce the exact new cohort."""
+    batch.require(trial_id==batch.OWNER_PUSH_TRIAL,
+                  "push authorization is restricted to the new rerun1 cohort")
+    batch.paths(trial_id)
+    batch.require(isinstance(sha,str) and SHA.fullmatch(sha),
+                  "exact main push SHA missing")
+    batch.require(
+        env.get("GITHUB_ACTIONS")=="true"
+        and env.get("GITHUB_EVENT_NAME")=="push"
+        and env.get("GITHUB_REPOSITORY")==batch.REPOSITORY
+        and env.get("GITHUB_REPOSITORY_OWNER_ID")==batch.OWNER_ID
+        and env.get("GITHUB_ACTOR_ID")==batch.OWNER_ID
+        and env.get("GITHUB_ACTOR")==batch.OWNER_LOGIN
+        and env.get("GITHUB_TRIGGERING_ACTOR")==batch.OWNER_LOGIN
+        and env.get("GITHUB_REF")=="refs/heads/main"
+        and env.get("GITHUB_WORKFLOW_REF")==
+            batch.REPOSITORY+"/"+batch.OWNER_PUSH_WORKFLOW+"@refs/heads/main"
+        and env.get("GITHUB_SHA")==sha
+        and env.get("GITHUB_RUN_ATTEMPT")=="1"
+        and str(env.get("GITHUB_RUN_ID","")).isdigit()
+        and int(env.get("GITHUB_RUN_ID","0"))>0,
+        "not first-attempt owner-authenticated source push")
+    event_path=env.get("GITHUB_EVENT_PATH")
+    batch.require(isinstance(event_path,str) and Path(event_path).is_file(),
+                  "actual GitHub push event payload missing")
+    try:
+        event=json.loads(Path(event_path).read_text(encoding="utf-8"))
+    except (OSError,ValueError) as exc:
+        raise ValueError("invalid owner push event") from exc
+    parents=execute(repo,"rev-list","--parents","-n","1",sha).split()
+    batch.require(len(parents)>=2 and parents[0]==sha,
+                  "source main push has no real parent")
+    before=parents[1]
+    batch.require(
+        event.get("ref")=="refs/heads/main"
+        and event.get("before")==before and event.get("after")==sha
+        and event.get("created") is False and event.get("deleted") is False
+        and event.get("forced") is False
+        and isinstance(event.get("head_commit"),dict)
+        and event["head_commit"].get("id")==sha
+        and event.get("sender",{}).get("id")==int(batch.OWNER_ID)
+        and event.get("repository",{}).get("full_name")==batch.REPOSITORY
+        and event["repository"].get("owner",{}).get("id")==int(batch.OWNER_ID),
+        "not the actual owner first-parent GitHub main push")
+    source=batch.paths(trial_id)["contract"]
+    batch.require(
+        execute(repo,"diff-tree","--no-commit-id","--name-status","-r",
+                before,sha,"--",source)=="A\t"+source
+        and execute(repo,"symbolic-ref","--short","HEAD")=="main"
+        and execute(repo,"rev-parse","HEAD")==sha
+        and remote(repo,"refs/heads/main")==sha
+        and not execute(repo,"status","--porcelain","--untracked-files=all"),
+        "new source not introduced once at the actual main SHA")
+    batch.require(execute(repo,"remote","get-url","origin") in {
+        "https://github.com/"+batch.REPOSITORY,
+        "https://github.com/"+batch.REPOSITORY+".git",
+        "git@github.com:"+batch.REPOSITORY,
+        "git@github.com:"+batch.REPOSITORY+".git",
+        "ssh://git@github.com/"+batch.REPOSITORY+".git",
+    }, "noncanonical origin")
+    scope=batch.scope(repo,trial_id)
+    batch.require(scope["provenance"]["prepared_for_date"]=="2026-11-11"
+                  and first_parent_contains(repo,scope["provenance"]["main_commit"],sha),
+                  "historical immutable source anchor is not proven")
+    batch._base_contract_proof(repo,sha,trial_id)
+    batch.require(remote(repo,"refs/heads/"+batch.paths(trial_id)["branch"]) is None,
+                  "one-use trial branch already exists")
+
+
+def owner_push_launch(repo,trial_id,sha,env):
+    guard_owner_push(repo,trial_id,sha,env)
+    frozen=freeze(repo,sha,trial_id)
+    execute(repo,"checkout","main")
+    batch.require(execute(repo,"rev-parse","HEAD")==sha
+                  and remote(repo,"refs/heads/main")==sha,
+                  "source main moved before separate authorization commit")
+    granted=authorize(repo,sha,trial_id,frozen["marker_commit"],env,
+                      authority_origin="owner_main_push")
+    return {"source_main_sha":sha,"owner_action_run_id":env["GITHUB_RUN_ID"],
+            "grant_commit":frozen["grant_commit"],
+            "manifest_commit":frozen["manifest_commit"],**granted}
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("mode",choices=["freeze","authorize"])
+    parser.add_argument("mode",choices=["freeze","authorize","owner-push-launch"])
     parser.add_argument("--trial-id",required=True)
     parser.add_argument("--expected-main-sha",required=True)
     parser.add_argument("--marker-commit")
-    parser.add_argument("--confirmation",required=True)
+    parser.add_argument("--confirmation")
     args=parser.parse_args()
     try:
         repo=Path.cwd()
-        guard(repo,args.mode,args.trial_id,args.expected_main_sha,
-              args.confirmation,os.environ)
-        doc=(freeze(repo,args.expected_main_sha,args.trial_id) if args.mode=="freeze"
-             else authorize(repo,args.expected_main_sha,args.trial_id,
-                            args.marker_commit,os.environ))
+        if args.mode=="owner-push-launch":
+            doc=owner_push_launch(repo,args.trial_id,args.expected_main_sha,os.environ)
+        else:
+            guard(repo,args.mode,args.trial_id,args.expected_main_sha,
+                  args.confirmation,os.environ)
+            doc=(freeze(repo,args.expected_main_sha,args.trial_id) if args.mode=="freeze"
+                 else authorize(repo,args.expected_main_sha,args.trial_id,
+                                args.marker_commit,os.environ))
         print(json.dumps(doc,sort_keys=True))
     except (ValueError,OSError,KeyError,subprocess.CalledProcessError) as exc:
         parser.exit(2,"DOSSIER_V2_BATCH_ISSUER_REFUSED: "+str(exc)+"\n")
