@@ -96,6 +96,7 @@ class ReusableBatchTests(unittest.TestCase):
         anchor=batch.issuer_structure(self.repo,trial_id=self.trial,
             marker_commit=self.fixture["marker"],authorization_commit=self.fixture["auth"])
         self.assertTrue(anchor["semantic_execution_authorized"])
+        self.assertNotIn("authority_origin",anchor)  # legacy immutable receipt bytes
         self.assertFalse(anchor["github_run_authenticated"])
         self.assertEqual(anchor["manifest_blob_sha"],
                          batch.manifest_blueprint(self.repo,self.trial)["blob_sha"])
