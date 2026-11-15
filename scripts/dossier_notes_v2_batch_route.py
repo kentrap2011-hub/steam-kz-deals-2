@@ -286,7 +286,7 @@ def issuer_structure(repo,*,trial_id,marker_commit,authorization_commit):
             and origin in ("manual","owner_main_push")
             and auth==expected_authorization(repo,trial_id,marker_commit,grant_commit,rid,origin),
             "authorization actor/run/one-use scope/manifest differs")
-    return {
+    anchor={
         "trial_id":trial_id,"marker_commit":marker_commit,
         "authorization_commit":authorization_commit,
         "authorization_blob_sha":blob(repo,authorization_commit,path["authorization"]),
@@ -295,11 +295,15 @@ def issuer_structure(repo,*,trial_id,marker_commit,authorization_commit):
         "base_main_sha":base,
         "github_actor_id":OWNER_ID,
         "github_authorization_run_id":rid,
-        "authority_origin":origin,
         "semantic_execution_authorized":True,
         "issuer_structural_only":True,
         "github_run_authenticated":False,
     }
+    # Preserve exact historical issuer/receipt bytes for all manual cohorts.
+    # Only the new push origin extends the immutable receipt issuer payload.
+    if origin=="owner_main_push":
+        anchor["authority_origin"]=origin
+    return anchor
 
 
 def authenticated_owner_run(anchor,token,github_repository=REPOSITORY):
