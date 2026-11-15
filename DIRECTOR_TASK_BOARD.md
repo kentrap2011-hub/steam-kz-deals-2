@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Dossier V2 independent L3 QA PR #452, 2026-11-15
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — независимая проверка качества Research V2, 2026-11-15
 
-- **ЧАТ 1 — прежний semantic Research завершён 6/6:** immutable source sandbox `dossier-notes-v2-fresh6-20261111-first` сохранён; для повтора нужен новый `dossier-notes-v2-fresh6-20261114-rerun1` только после source merge и реального owner issuance. Физический прежний ЧАТ 1 завершён, будущий Research — НОВЫЙ чат.
-- **ЧАТ 2 — исходный worker завершил реализацию:** `dossier-v2-no-ui-owner-launch-rerun-fresh6-01` → source PR #452, draft/unmerged; все 4 GitHub PR CI success, независимая L3 QA не выполнена. Его прежний физический чат завершён.
-- **ЧАТ 3 — зарезервирован для НОВОГО независимого worker:** `dossier-v2-owner-push-pr452-independent-l3-qa-01` → `WORKER_TASK_DOSSIER_V2_OWNER_PUSH_PR452_INDEPENDENT_L3_QA_01.md`. Только L3 QA source PR #452, один report-only DRAFT PR, без source edits/merge/live issuer.
-- **ЧАТЫ 4–6 — свободны.** Нет новых Scheduled Tasks, production/V1/Deep изменений.
+- **ЧАТ 1 — повторный semantic Research шести игр:** в sandbox `dossier-notes-v2-fresh6-20261114-rerun1` обнаружены шесть `notes_recorded` candidate и шесть Research receipts; технический промежуточный status `safe_incomplete_research` не означает проверки семантического качества. Прежний физический Research-чат не использовать для независимого аудита; его UI-финал не подтверждён.
+- **НОВЫЙ ЧАТ 2 — зарезервирован, ожидает ручного запуска:** `dossier-v2-fresh6-rerun1-research-quality-independent-audit-01` → `WORKER_TASK_DOSSIER_V2_FRESH6_RERUN1_RESEARCH_QUALITY_INDEPENDENT_AUDIT_01.md`. Только независимая QA качества уже сохранённых шести Research, один report-only DRAFT PR, без Assembly, новых semantic results, production и правок sandbox.
+- **ЧАТ 3 — предыдущая L3 QA owner-push завершена:** отчёт [#454](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/454) с итоговым PASS; source PR #452 уже принят в `main`. Прежний физический ЧАТ 3 свободен.
+- **ЧАТЫ 4–6 свободны.** Никаких Scheduled Tasks, повторного Research и автоматических retries не создавалось.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
