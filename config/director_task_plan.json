@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-14",
+  "last_curated_on": "2026-11-15",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3661,6 +3661,26 @@
       "blocker": "Только ограниченная реализация безопасного GitHub owner proof; старый sandbox и original18 не изменять, до проверенного нового authorization Research не запускать.",
       "updated_on": "2026-11-14",
       "updated_at_utc": "2026-11-14T17:23:34Z",
+      "recent_completion": false
+    },
+    {
+      "id": "dossier-v2-owner-push-pr452-independent-l3-qa-01",
+      "title": "Dossier V2 PR452 — независимая L3 проверка owner-push запуска",
+      "goal": "Независимо проверить границы авторизации, защиту от повторов и автоматические Research receipts перед приёмкой PR452.",
+      "status": "active",
+      "effort": "высокая",
+      "effort_reason": "Новый GitHub owner push authority требует независимых adversarial тестов по правам, run provenance и strict receipts.",
+      "urgency": "высокая",
+      "urgency_reason": "Блокирует безопасное принятие новой партии и повтор уже разрешённого исследования.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_OWNER_PUSH_PR452_INDEPENDENT_L3_QA_01.md",
+      "worker_slot": "ЧАТ 3",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-no-ui-owner-launch-rerun-fresh6-01"
+      ],
+      "blocker": "До независимого L3 verdict source PR452 не принимать; новая партия и semantic Research не запущены.",
+      "updated_on": "2026-11-15",
+      "updated_at_utc": "2026-11-15T07:56:24.192Z",
       "recent_completion": false
     }
   ]

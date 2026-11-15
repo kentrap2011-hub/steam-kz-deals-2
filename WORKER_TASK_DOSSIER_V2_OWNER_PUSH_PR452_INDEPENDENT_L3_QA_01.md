@@ -1,0 +1,25 @@
+# НОВЫЙ ЧАТ 3 — независимая L3 QA PR #452: GitHub owner-push authorization Dossier V2
+
+Repository: kentrap2011-hub/steam-kz-deals-2
+Base branch / source of truth: main
+Task ID: dossier-v2-owner-push-pr452-independent-l3-qa-01
+Assigned: НОВЫЙ физический ЧАТ 3 (не исполнитель ЧАТ 2)
+Mode: INDEPENDENT READ-ONLY L3 QA, one report-only DRAFT PR
+
+## Start and objective
+Полностью прочитай CHAT_PROTOCOL.md, выполни START gate, затем этот task и адресно CHAT_CONTEXT.md, PROJECT_ROUTES.md, PROJECT_DECISIONS.md, config/execution_ownership_contract.json, config/dossier_notes_v2_batch_policy.json, PR #452 и обязательные Dossier V2 issuer/receipt/strict-writer contracts. Работай ТОЛЬКО в указанном репозитории; не открывай, не читай и не меняй другие репозитории. Если connector target другой — STOP.
+
+Проведи независимую содержательную L3 QA именно исходного PR #452 "Dossier V2: owner main-push rerun of fresh6 with automatic Research receipts". Исходный предварительный source HEAD 901dcea905e96849e1da6124c5355b9f3a0f1b94; перечитай LIVE source HEAD/diff/CI перед вердиктом. Developer ЧАТ 2 закончил реализацию, его самопроверка и 4 зелёных CI — доказательства только соответствующих тестов, не независимая L3 QA. Пользователь одобрил эту независимую проверку и хочет полностью обходиться без ручного GitHub UI.
+
+## L3 QA: authority / safety / functionality
+1. Независимо сопоставь текущий source diff PR #452 с task `WORKER_TASK_DOSSIER_V2_NO_UI_OWNER_LAUNCH_RERUN_FRESH6_01.md`, merged Research PR #450, настоящим pinned original source, текущими каноническими правами и user intent. Нет скрытого production activation, scheduled tasks, V1, Deep, original18 или изменений старой партии.
+2. Проаудируй новую owner-authenticated authorization с реальными `push main` event/ref/actor_id/repository_owner_id/first attempt, exact `before/after` SHA, GitHub source introduction one-add, single-use new cohort. PR CI, workflow actor bot, чужой actor, чужая ветка, arbitrary file, replay/re-run, drift, pre-existing sandbox, race/concurrent launch, source self-spoof, wrong source date, marker/nonce, forged owner run или stale parent не должны создавать grant/authorization. Проверяй github Actions run ID, event provenance и first-parent цепь; не принимай claimed owner proof из одного JSON.
+3. Для новой партии `dossier-notes-v2-fresh6-20261114-rerun1` проверь ровно шесть immutable AppID/изданий в первоначальном порядке с настоящей исторической привязкой 2026-11-11 и новыми assignment IDs; отсутствие перезаписи `dossier-notes-v2-fresh6-20261111-first` и original18. Нельзя повторить старый Research по тем же immutable путям.
+4. Проверь one-create-file-per-game GitHub Connector Research и owner-push automatic typed receipt ingest: строгий actor/event/branch/path/candidate-only one-add, source Git parent, schema/privacy, exact SHA/bytes, no-force CAS, first-parent receipts, serial/idempotent exactly-once behavior, bot-push non-loop, sibling independence, no automatic semantic retries, truthful missing/invalid/limited evidence. Важна совместимость действующего Assembly preflight и strict final writer без изобретения прежних двух manual Actions runs; старые manual cohort receipts должны оставаться byte-compatible.
+5. Проверь фактическую пригодность нового workflow: GitHub push path filters на source merge, `GITHUB_TOKEN` push won't trigger recursive Actions (и это ожидаемо), GitHub Connector owner create_file действительно генерирует owner event (доказательства disposable runs 43682622350 и 43682840859). Проверь негативные сценарии и тестовые fixtures; независимо оцени достаточность permission gates и возможные deadlocks для нового sandbox.
+6. Повтори уместные доступные targeted synthetic tests и проанализируй обязательные четыре GitHub CI workflows на последнем exact PR HEAD. Отдели доказанный GitHub smoke от синтетических тестов и от ещё не запущенного реального Research. Сильное уязвимое место или неподтверждённая безопасность = CHANGES_REQUIRED / BLOCKED_EVIDENCE, а не фиктивный PASS.
+
+## Output/write-set
+Единственная допустимая новая запись — независимый report `reviews/worker_reports/dossier-v2-owner-push-pr452-independent-l3-qa-01.md` в ОДНОМ новом report-only DRAFT PR к main; не меняй исходный PR #452, его файлы/коммиты, owner workflows, production, branch refs, старую или новую sandbox-партию, task/Board/registry. Никакой Actions dispatch, owner Freeze/Authorize, semantic Research, Assembly, receipt ingest или source merge этим QA-чатом. Допускаются только безопасные read-only inspections и disposable локальные tests, без реальных owner launch/push writes.
+
+Вердикт: `PASS_FOR_DIRECTOR_MERGE_REVIEW` / `CHANGES_REQUIRED` / `BLOCKED_EVIDENCE`; live source SHA, обязательные exact-HEAD CI, конкретные положительные и отрицательные сценарии, findings по severity, воспроизводимые evidence, путь report и ссылка report-only PR. Если QA PASS — директор отдельно принимает исходный PR и проверяет настоящий GitHub owner issuer Actions readback; QA-чат не делает merge. При FAIL — один конкретный scoped fix без обхода проверки владельца.
