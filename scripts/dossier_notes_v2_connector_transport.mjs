@@ -319,7 +319,7 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
     human_grant_commit:grantCommit,base_main_sha:base,
     github_actor_id:String(V2_OWNER_ID),
     github_authorization_run_id:String(auth.github_authorization_run_id),
-    authority_origin:auth.authority_origin||"manual",
+    ...(auth.authority_origin==="owner_main_push"?{authority_origin:"owner_main_push"}:{}),
     semantic_execution_authorized:true,
     issuer_structural_only:true,github_run_authenticated:false
   };
