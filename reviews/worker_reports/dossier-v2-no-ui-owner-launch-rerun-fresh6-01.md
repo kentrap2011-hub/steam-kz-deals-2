@@ -18,6 +18,12 @@
 - A single authenticated connected `mcp__GitHub__create_file` wrote harmless `owner_input.txt`; GitHub created actual owner-authenticated `push` [run 43682622350](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43682622350) with `actor.id=315790060`, `event=push`, `run_attempt=1`, `status=completed`, `conclusion=success` and exact source commit `d22398e06d8ef7e7ef3a020ab89ec270ead4c5b7`.
 - That GitHub Actions run used only `permissions: contents: write` and successfully created a **new** bot commit `eb3ccc1d352e25955652f1e53fc43738735d82f9` on the disposable branch; `action_output.txt` independently read back with the exact owner actor ID and originating push SHA. Confirms actual connected push and Actions write capability, **not** that a real rerun has been authorized or receipts accepted.
 
+### Exact `sandbox/` GitHub Actions write boundary verified
+
+- Separate disposable-only `sandbox/dossier-notes-v2-disposable-action-probe-20261115` (not the actual rerun sandbox) was seeded with a narrowly scoped temporary workflow and a single harmless connected `create_file` input; no source PR changes, cohort authority or semantic notes.
+- First-attempt actual owner sandbox push [run 43682840859](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/43682840859) **SUCCESS**, `actor.id=315790060`, source input `a8be2000eef73ccf242dd818a15d35dd7f9e50da`.
+- GitHub Actions made and confirmed child sandbox commit `c78ff6f18b1e5553a6e486b3e4d7cfe93a910936`; its file `data/control/dossier_notes_v2/_sandbox_smoke_20261115/action_output.txt` was independently read back with correct `verified_push` and `owner_actor`. This additionally proves sandbox-prefixed branch push and bot commit permissions without any real Research candidate.
+
 ## Test and acceptance contract
 
 - New synthetic tests: old/new cohort isolation, exact AppIDs/titles/edition, frozen source date, original18 exclusion, no stale/ref/actor/run substitutions, real event and immutable one-use owner run requirements, typed strict receipt and subsequent Assembly-ready technical state, idempotent multiple candidate receipts and sibling independence. Existing strict branch/first-parent/one-add/schema/privacy/source checks remain.
