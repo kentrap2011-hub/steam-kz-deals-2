@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""GitHub-owned one-shot receipt materialization for V2 Research submissions.
+"""GitHub-owned receipt materialization for V2 Research submissions.
 
 Research publishes one create-only document using GitHub's contents API. Only
-this owner-only manual GitHub Actions runner may authenticate the issuer, inspect
+this verified owner GitHub Actions runner may authenticate the issuer, inspect
 immutable candidate commits and add typed receipts to the isolated sandbox.
 
 No semantic generation, source browsing attestations, retries, Assembly,
@@ -23,6 +23,7 @@ from dossier_two_stage_staging import (
 )
 
 WORKFLOW = ".github/workflows/ingest-dossier-notes-v2-research.yml"
+AUTO_WORKFLOW = ".github/workflows/ingest-dossier-notes-v2-research-on-owner-push.yml"
 SHA = re.compile(r"^[0-9a-f]{40}$")
 
 
@@ -178,11 +179,86 @@ def _owner_action_gate(trial_id, env):
     batch.paths(trial_id)
 
 
+def _owner_push_candidate_gate(repo,trial_id,env):
+    """An owner candidate create_file push can trigger only its EXACT one-add.
+
+    The candidate event is an immutable Git ancestor; a later candidate or bot
+    receipt may advance HEAD. All receipts are serialized and CAS at the newest
+    checked-out sandbox tip. A stale ref is never overwritten/rebased.
+    """
+    branch=batch.paths(trial_id)["branch"]
+    if trial_id!=batch.OWNER_PUSH_TRIAL:
+        raise ValueError("auto receipt only for exact authorized rerun1")
+    if not (env.get("GITHUB_ACTIONS")=="true"
+            and env.get("GITHUB_EVENT_NAME")=="push"
+            and env.get("GITHUB_REPOSITORY")==batch.REPOSITORY
+            and env.get("GITHUB_REPOSITORY_OWNER_ID")==batch.OWNER_ID
+            and env.get("GITHUB_ACTOR_ID")==batch.OWNER_ID
+            and env.get("GITHUB_ACTOR")==batch.OWNER_LOGIN
+            and env.get("GITHUB_TRIGGERING_ACTOR")==batch.OWNER_LOGIN
+            and env.get("GITHUB_REF")=="refs/heads/"+branch
+            and env.get("GITHUB_WORKFLOW_REF")==
+                batch.REPOSITORY+"/"+AUTO_WORKFLOW+"@refs/heads/"+branch
+            and env.get("GITHUB_RUN_ATTEMPT")=="1"
+            and str(env.get("GITHUB_RUN_ID","")).isdigit()
+            and int(env.get("GITHUB_RUN_ID","0"))>0):
+        raise ValueError("not authenticated first-attempt owner sandbox candidate push")
+    event_sha=env.get("GITHUB_SHA")
+    event_file=env.get("GITHUB_EVENT_PATH")
+    if not (isinstance(event_sha,str) and SHA.fullmatch(event_sha)
+            and isinstance(event_file,str) and Path(event_file).is_file()):
+        raise ValueError("candidate push SHA or GitHub payload missing")
+    try:
+        event=json.loads(Path(event_file).read_text(encoding="utf-8"))
+    except (OSError,ValueError) as exc:
+        raise ValueError("unparseable genuine candidate push event") from exc
+    commits=run(repo,"rev-list","--parents","-n","1",event_sha).split()
+    if len(commits)!=2 or commits[0]!=event_sha:
+        raise ValueError("candidate must have one real first parent")
+    if not (event.get("ref")=="refs/heads/"+branch
+            and event.get("before")==commits[1]
+            and event.get("after")==event_sha
+            and event.get("created") is False
+            and event.get("deleted") is False
+            and event.get("forced") is False
+            and isinstance(event.get("head_commit"),dict)
+            and event["head_commit"].get("id")==event_sha
+            and event.get("sender",{}).get("id")==int(batch.OWNER_ID)
+            and event.get("repository",{}).get("full_name")==batch.REPOSITORY
+            and event["repository"].get("owner",{}).get("id")==int(batch.OWNER_ID)):
+        raise ValueError("candidate event origin is not proven")
+    if not first_parent_contains(repo,event_sha,"HEAD"):
+        raise ValueError("candidate push is not on current sandbox first-parent")
+    from dossier_two_stage_staging import require_only_new
+    changes=run(repo,"diff-tree","--no-commit-id","--name-status",
+                "-r",commits[1],event_sha).splitlines()
+    if len(changes)!=1 or not changes[0].startswith("A\t"):
+        raise ValueError("push commit did not introduce exactly one new candidate")
+    candidate=changes[0][2:]
+    anchor=issuer_from_sandbox(repo,trial_id)
+    manifest,_=v2._manifest(repo,anchor["marker_commit"],trial_id)
+    expected=set()
+    for item in manifest["items"]:
+        assignment=v2.frozen_assignment(
+            repo,marker_commit=anchor["marker_commit"],
+            trial_id=trial_id,appid=item["appid"])
+        expected.add(v2._path("research",assignment))
+    if candidate not in expected:
+        raise ValueError("new path is not one of the six frozen assignments")
+    if (require_only_new(repo,event_sha,[candidate])!=commits[1]
+            or single_introduction(repo,candidate)!=event_sha):
+        raise ValueError("candidate added more than once or modified since source push")
+    return candidate
+
+
 def run_authorized(repo, trial_id, env):
     """Actual entry point: token and real GitHub Actions are mandatory."""
     started = time.monotonic()
     repo = Path(repo).resolve()
-    _owner_action_gate(trial_id, env)
+    if env.get("GITHUB_EVENT_NAME")=="push":
+        _owner_push_candidate_gate(repo,trial_id,env)
+    else:
+        _owner_action_gate(trial_id,env)
     token = env.get("GITHUB_TOKEN")
     if not isinstance(token, str) or not token.strip():
         raise ValueError("authenticated GitHub token missing")
