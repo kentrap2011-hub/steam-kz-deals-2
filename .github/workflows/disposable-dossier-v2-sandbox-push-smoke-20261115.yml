@@ -1,0 +1,34 @@
+name: Disposable - Dossier V2 sandbox push Actions write probe
+on:
+  push:
+    branches:
+      - sandbox/dossier-notes-v2-disposable-action-probe-20261115
+    paths:
+      - data/control/dossier_notes_v2/_sandbox_smoke_20261115/owner_input.txt
+permissions:
+  contents: write
+jobs:
+  smoke:
+    if: github.actor_id == 315790060 && github.repository_owner_id == 315790060 && github.run_attempt == 1 && github.ref == 'refs/heads/sandbox/dossier-notes-v2-disposable-action-probe-20261115'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Prove real connector sandbox push and GitHub Actions write access
+        run: |
+          set -euo pipefail
+          test "$GITHUB_EVENT_NAME" = push
+          test "$GITHUB_ACTOR_ID" = 315790060
+          test "$GITHUB_SHA" = "$(git rev-parse HEAD)"
+          git checkout -B "$GITHUB_REF_NAME" "$GITHUB_SHA"
+          mkdir -p data/control/dossier_notes_v2/_sandbox_smoke_20261115
+          printf 'verified_push=%s\nowner_actor=%s\n' "$GITHUB_SHA" "$GITHUB_ACTOR_ID" > data/control/dossier_notes_v2/_sandbox_smoke_20261115/action_output.txt
+          git add -- data/control/dossier_notes_v2/_sandbox_smoke_20261115/action_output.txt
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'disposable: sandbox Actions write probe'
+          after="$(git rev-parse HEAD)"
+          git push origin "HEAD:$GITHUB_REF"
+          test "$(git ls-remote --exit-code origin "$GITHUB_REF" | cut -f1)" = "$after"
