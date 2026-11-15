@@ -5,11 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Dossier V2 no-UI повтор Research, 2026-11-14
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Dossier V2 independent L3 QA PR #452, 2026-11-15
 
-- **ЧАТ 1 — Research старой шестерки завершён 6/6.** Ветка `sandbox/dossier-notes-v2-fresh6-20261111-first` содержит immutable 6 кандидатов + 6 receipts; повторить её нельзя. ЧАТ 1 свободен для нового Research после отдельного нового owner-authenticated cohort.
-- **ЧАТ 2 — зарезервирован, НОВЫЙ worker:** `dossier-v2-no-ui-owner-launch-rerun-fresh6-01` → `WORKER_TASK_DOSSIER_V2_NO_UI_OWNER_LAUNCH_RERUN_FRESH6_01.md`. Пользователь принял упрощённый Research PR 450; полностью исключить ручные действия в GitHub UI при новом pilot, внедрить ограниченную GitHub owner push alternative и автоматический typed receipt ingest. Один source PR с exact CI; semantic work в developer-чате запрещена.
-- **ЧАТЫ 3–6 — свободны.** Новых Scheduled Tasks нет. Исторические назначения далее не означают занятость чатов.
+- **ЧАТ 1 — прежний semantic Research завершён 6/6:** immutable source sandbox `dossier-notes-v2-fresh6-20261111-first` сохранён; для повтора нужен новый `dossier-notes-v2-fresh6-20261114-rerun1` только после source merge и реального owner issuance. Физический прежний ЧАТ 1 завершён, будущий Research — НОВЫЙ чат.
+- **ЧАТ 2 — исходный worker завершил реализацию:** `dossier-v2-no-ui-owner-launch-rerun-fresh6-01` → source PR #452, draft/unmerged; все 4 GitHub PR CI success, независимая L3 QA не выполнена. Его прежний физический чат завершён.
+- **ЧАТ 3 — зарезервирован для НОВОГО независимого worker:** `dossier-v2-owner-push-pr452-independent-l3-qa-01` → `WORKER_TASK_DOSSIER_V2_OWNER_PUSH_PR452_INDEPENDENT_L3_QA_01.md`. Только L3 QA source PR #452, один report-only DRAFT PR, без source edits/merge/live issuer.
+- **ЧАТЫ 4–6 — свободны.** Нет новых Scheduled Tasks, production/V1/Deep изменений.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
