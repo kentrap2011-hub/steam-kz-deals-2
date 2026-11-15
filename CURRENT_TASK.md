@@ -1,5 +1,13 @@
 # CURRENT TASK
 
+## ЧАТ 2 — Dossier V2 fresh6 owner no-UI rerun (2026-11-15)
+
+- Status: `implemented_in_draft_source_PR; synthetic_tests_pending; not_merged; real_owner_launch_not_started`.
+- Task: `WORKER_TASK_DOSSIER_V2_NO_UI_OWNER_LAUNCH_RERUN_FRESH6_01.md`. One source draft [PR #452](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/452), branch `implement/dossier-v2-owner-push-rerun-fresh6-01`, base main `268abd13816fac0866a677103ef75be82cc26a56`.
+- One-use source contract `dossier-notes-v2-fresh6-20261114-rerun1`: exact pinned six games from November 11. Automatic owner main-push issuer and separate GitHub sandbox create-only Research receipts; legacy manual path and original18/old fresh6 unchanged. No manual GitHub user action, no semantic Research, Assembly, production, Deep, V1 or scheduled task.
+- Validate on **final exact PR HEAD**, verify 4 applicable PR workflows; actual authenticated owner main Actions run / sandbox GitHub Actions push verification only after explicit Director source acceptance and owner merge. Fail closed rather than claim authorization if event identity or Actions runtime is missing. Report: `reviews/worker_reports/dossier-v2-no-ui-owner-launch-rerun-fresh6-01.md`.
+
+
 ## ЧАТ — Dossier V2 Research one-write implementation (2026-11-14)
 
 - Status: `implemented_in_draft_pr; offline CI running; no live cohort or GitHub owner ingest dispatched`.
