@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "ca6be9190367e0ef67f6e139687e20a290591cad7ceec4b3c595a8b568d9b76c",
+  "prepared_required_sha256": "1065260f4dfd8b01f29cbe9608ea8509f5f13e167b142075919276110820cf68",
+  "group_plan_sha256": "d4becc70b785ab14c75bcf488fa431fd8d29ebf985ba0ac2619bbe11725cd89d",
+  "group_count": 75,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "b30aed8bd8768c9f9b074a655f1f15e82023363803bca5a4372aa662ef8285fb"
+  },
+  "sequence": 6,
+  "start_index": 15,
+  "end_index_exclusive": 18,
+  "appids": [
+    "1154810",
+    "1154850",
+    "1161590"
+  ],
+  "items_sha256": "d9c62b13d52588cfb76cc857a0dafaf7f1f9738dade179c42963bc9cd75e53e5",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "da2c03a25c16461a0e69b9dbce1d250c70317fba7eeef0c16c7a18f6cb21be68",
+  "items": [
+    {
+      "key": "App_1154810",
+      "appid": "1154810",
+      "title": "Going Under",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1154810.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1154850",
+      "appid": "1154850",
+      "title": "9th Dawn III",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1154850.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1161590",
+      "appid": "1161590",
+      "title": "Punch Club 2: Fast Forward",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1161590.json",
+      "reason": "refresh_required"
+    }
+  ],
+  "group_sha256": "ed4adabd54c3ac5d3a8b6b3fca203c9922d7217bed8ec11f35fbbeb308d2d076"
+}
