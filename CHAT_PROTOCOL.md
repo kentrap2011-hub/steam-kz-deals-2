@@ -21,6 +21,7 @@
 - [ ] Если это обычный worker-чат и продолжается незаконченная работа — прочитать `CURRENT_TASK.md`.
 - [ ] Если worker запущен ссылкой на конкретный `WORKER_TASK_*.md`, первым task-specific действием полностью прочитать актуальную версию этого task-файла из `main` и зафиксировать обязательный checklist: scope, запреты, разрешённые/обязательные зависимости, acceptance checks, путь worker-report и допустимые финальные статусы. До этого не начинать широкий поиск по репозиторию.
 - [ ] Если пользователь явно запустил канонический one-shot semantic worker по пути, разрешённому `config/execution_ownership_contract.json`, прочитать этот prompt после `CHAT_CONTEXT.md` и работать только в его узкой data-plane роли. Такой semantic worker не создаёт developer branch/PR и не обновляет `CURRENT_TASK.md`, если canonical prompt прямо запрещает developer/operator writes.
+- [ ] Если задача — **независимый содержательный аудит Research Dossier V2**, до проверки внешних фактов и любого `CONFIRMED`/`QUALITY_GOOD` прочитать и выполнить `config/dossier_research_independent_quality_audit_protocol.md`, включая fail-closed Evidence Gate.
 - [ ] До широкого поиска проверить релевантный маршрут в `PROJECT_ROUTES.md`.
 - [ ] Если задача совпадает с известным operational trigger, проверить только релевантную запись в `KNOWN_WORKER_PITFALLS.md`; для unrelated-задач не читать весь файл и не делать broad pitfall/history search «на всякий случай».
 - [ ] Если нужно понять, **почему** принято неочевидное решение — до Git history проверить `PROJECT_DECISIONS.md`.

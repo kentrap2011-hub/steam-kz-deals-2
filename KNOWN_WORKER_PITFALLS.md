@@ -157,3 +157,15 @@
 **Correct move:** create the runtime, builder/ingest and focused regression first (or in the same atomic tree/commit as the workflow), run bounded compile/regression where available, then let CI validate that complete head. A workflow-only red run is not implementation evidence.
 
 **Evidence refs:** Deep Stage-2 continuation, failed run `37509068199` at `Compile Stage 2 runtime` because `scripts/deep_stage2.py` had not landed yet.
+
+---
+
+## PITFALL-009 — Search URLs and GitHub receipts presented as independently opened research evidence
+
+**Trigger:** Research QA reports `opened`/`CONFIRMED` or `QUALITY_GOOD` although the auditor only read search snippets, worker source logs or GitHub candidate/receipt metadata, without opening and reading relevant external pages in the current session.
+
+**Do not repeat:** a plausible report and technically successful PR do not prove semantic verification; a supplied URL is not a visit, and an isolated complaint is not a prevalence estimate.
+
+**Correct move:** follow `config/dossier_research_independent_quality_audit_protocol.md`; independently research exact manifest identities *before* comparing Research claims, record each actually read fragment and provenance, apply per-game Evidence Gate; without sufficient real access return `BLOCKED_EVIDENCE`, not a fabricated score. No URL-count/source-log quota.
+
+**Evidence:** corrected report in draft PR #456, section «Director handoff — исправление процедуры аудита» (2026-11-16); its initial 4 GOOD / 2 WEAK claims were disavowed.
