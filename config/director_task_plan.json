@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-15",
+  "last_curated_on": "2026-11-16",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3701,6 +3701,24 @@
       "blocker": "Только оценка качества; не запускать Assembly или повтор Research до решения пользователя.",
       "updated_on": "2026-11-15",
       "updated_at_utc": "2026-11-15T17:19:00Z",
+      "recent_completion": false
+    },
+    {
+      "id": "dossier-v2-research-qa-evidence-gate-protocol-01",
+      "title": "Dossier V2 — обязательный Evidence Gate для независимого аудита Research",
+      "goal": "Закрепить пять утверждённых правил реального независимого открытия источников и проверки каждого QA вывода до повторной оценки шести игр.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Изменить короткий канонический QA-протокол и ссылки на него без затрагивания семантических данных и рабочих процессов.",
+      "urgency": "высокая",
+      "urgency_reason": "Недоказанный аудит нельзя использовать для решения о готовности шести игр к Assembly.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_RESEARCH_QA_EVIDENCE_GATE_PROTOCOL_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Повторный аудит и Assembly не запускать до принятия обязательного QA Evidence Gate.",
+      "updated_on": "2026-11-16",
+      "updated_at_utc": "2026-11-16T08:54:00Z",
       "recent_completion": false
     }
   ]
