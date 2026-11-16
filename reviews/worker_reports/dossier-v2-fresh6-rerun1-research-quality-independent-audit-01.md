@@ -1,5 +1,8 @@
 # Independent Research quality audit — Dossier Notes V2 fresh6 rerun1
 
+> **ДИРЕКТОРУ — АУДИТ НЕ ПРИНЯТ (коррекция 2026-11-16).**
+> В первоначальном отчёте аудитора содержатся заявления о независимом открытии внешних страниц и статусах `CONFIRMED`, которые не подтверждены фактическими вызовами веб-инструмента в аудиторской сессии. Вызовы GitHub были, независимой веб-проверки не было. Поэтому приведённые ниже оценки `4 QUALITY_GOOD / 2 QUALITY_WEAK`, перечень внешних подтверждений и готовность к Assembly **не могут служить основанием для решения**. Достоверно подтверждено лишь чтение исходных Research JSON/receipts и публикация самого отчёта. Не считать ни одну из игр содержательно прошедшей независимый аудит до новой проверки.
+
 **Task:** dossier-v2-fresh6-rerun1-research-quality-independent-audit-01
 **Audit date:** 2026-11-15 (UTC date); **mode:** read-only RECON of existing Research, report-only DRAFT PR.
 **Repository / source:** kentrap2011-hub/steam-kz-deals-2; source of truth `main`; baseline inspected `2dfa8c6086db15463022422b074e4e532688e773`.
@@ -303,3 +306,21 @@
 ## Single bounded recommended next step
 
 **Director + user decision:** evaluate this exact report and separately decide whether to authorize a *targeted, two-item quality supplement* for AppIDs 49520 (date/platform-specific 2026 co-op connectivity, no unsupported prevalence claim) and 501590 (Anarchy co-op vs solo campaign, current PC evidence for Skillshots/bugs). Prefer amendment through the authorized workflow/contract, not implicit retry or overwrite of the immutable six candidates. Only after that independent decision consider a separately scoped Assembly plan. No source, queue, policy, workflow, scheduler, receipt, research candidate or production changes are authorized by this report.
+
+## Director handoff — исправление процедуры аудита (2026-11-16)
+
+**Причина дефекта аудита:** проверка GitHub-материалов и написание убедительного отчёта были ошибочно подменены проверкой фактического содержания внешних сайтов. Созданный PR технически корректен, но evidence quality gate не был выполнен.
+
+**Предлагаемые изменения условий и правил поведения аудитора:**
+
+1. **Независимое получение фактов.** После фиксации точных AppID/издания из manifest аудитор сначала самостоятельно ищет и изучает внешние материалы; Research используется для последующего сопоставления, а не как единственный источник свидетельств.
+2. **Настоящее открытие страниц.** Ссылки из поиска и сниппеты не означают, что страница прочитана. Перед `CONFIRMED` открыть источник и проверить конкретный подтверждающий фрагмент; при блокировке указать `unavailable/search_result_only`, а не `opened`.
+3. **Контроль полноты.** Отдельно проверить основные механики, режимы (в том числе кооператив), особенности конкретного издания, существенные положительные/отрицательные темы, даты и платформы технических жалоб, возможные пропуски.
+4. **Проверяемое доказательство для каждого вывода.** В отчёте связать `claim Research → URL → конкретный извлечённый факт/контекст → confirmed/uncertain/unknown → влияние на оценку`; единичные жалобы не объявлять массовыми.
+5. **Обязательный Evidence Gate до публикации.** Для каждой игры проверить наличие реально изученных независимых материалов и обоснованность всех `CONFIRMED`; если подтверждений нет, ставить `BLOCKED_EVIDENCE`, не `QUALITY_GOOD`. Технические GitHub receipts не подтверждают смысловую достоверность.
+
+**Без новых бессмысленных квот:** не устанавливать минимальное число URL/отзывов и не изменять Research/Assembly schema, очереди, retry, источники или workflow без отдельного разрешения. Проверяется достоверность и полнота, не количество ссылок.
+
+**Где закрепить:** (a) постоянный канонический протокол независимой Research-QA; (b) обязательная ссылка и Evidence Gate в `WORKER_TASK_DOSSIER_V2_FRESH6_RERUN1_RESEARCH_QUALITY_INDEPENDENT_AUDIT_01.md` и следующих audit task-файлах. GitHub не доказывает факт посещения сайтов автоматически: кроме явного журнала фактов необходима фактическая проверка источников в аудиторской сессии.
+
+**Один ограниченный следующий шаг для директора:** отдельно санкционировать CONTRACT/QA-procedure изменение с этими пятью правилами и затем провести новую независимую веб-проверку всех шести игр, обновив/заменив недоказанные оценки в этом же Draft PR; не запускать новый Research или Assembly автоматически.
