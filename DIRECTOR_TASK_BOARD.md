@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — повторная независимая Research QA по Evidence Gate, 2026-11-16
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — переход Dossier V2 к Assembly, 2026-11-16
 
-- **ЧАТ 1 — прежний Research шести игр:** `dossier-notes-v2-fresh6-20261114-rerun1` содержит 6 Research candidates и 6 технических receipts. Их смысловое качество ещё не доказано независимой проверкой.
-- **НОВЫЙ ЧАТ 2 — зарезервирован для повторного QA:** `dossier-v2-fresh6-rerun1-research-reaudit-evidence-01` → `WORKER_TASK_DOSSIER_V2_FRESH6_RERUN1_RESEARCH_REAUDIT_EVIDENCE_01.md`. Новый физический диалог, отличный от старого дискредитированного QA #456 и разработчика нового протокола #458. Проверка шести игр только через реальное самостоятельное чтение открытых внешних источников; один report-only DRAFT PR, без Research/Assembly/production.
-- **Исправление правил принято:** исходный source [PR #458](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/458) в main, обязательный стандарт `config/dossier_research_independent_quality_audit_protocol.md`. Предыдущая QA #456 INVALID FOR SEMANTIC DECISION; старые 4 GOOD / 2 WEAK не наследовать.
-- **ЧАТ 3 — свободен.** Никаких Scheduled Tasks, автоматических retries, production или Assembly это назначение не разрешает.
+- **Повторный Research:** 6/6 candidate JSON и 6/6 typed Research receipts в sandbox `dossier-notes-v2-fresh6-20261114-rerun1`; смысловое качество не подтверждено отдельной независимой QA, но Assembly самостоятельно проверяет свидетельства.
+- **Повторный независимый аудит — ПРИОСТАНОВЛЕН ПО РЕШЕНИЮ ПОЛЬЗОВАТЕЛЯ:** `dossier-v2-fresh6-rerun1-research-reaudit-evidence-01` → `WORKER_TASK_DOSSIER_V2_FRESH6_RERUN1_RESEARCH_REAUDIT_EVIDENCE_01.md`. Предыдущее назначение НОВОГО ЧАТА 2 отменено ДО подтверждённого запуска, `worker_slot=null`. Отчёт #456 остаётся недостоверным; не запускать этот аудит без отдельного нового решения.
+- **Следующий этап — Assembly** только для той же frozen партии через канонический `config/dossier_notes_v2_batch_assembly_manual_one_shot_prompt.md`; требует отдельного физического рабочего чата, exact GitHub preflight и действующего sandbox-only authorization. Не запускать Research, writer, production, Deep или Scheduled Tasks.
+- **ЧАТ 1, ЧАТ 2 и ЧАТ 3 — свободны** по последним подтверждённым результатам. Не выводить запуск Assembly из одной регистрации без пользовательского handoff.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
