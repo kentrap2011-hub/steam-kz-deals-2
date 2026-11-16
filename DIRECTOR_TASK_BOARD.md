@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — исправление доказательного стандарта Dossier V2 Research QA, 2026-11-16
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — повторная независимая Research QA по Evidence Gate, 2026-11-16
 
-- **ЧАТ 1 — повторный Research 6 игр:** в `sandbox/dossier-notes-v2-fresh6-20261114-rerun1` есть 6 research JSON и 6 технических receipts. Самостоятельное содержательное качество этим не доказано; прежний semantic worker не используется для независимой QA.
-- **НОВЫЙ ЧАТ 2 — зарезервирован для внедрения правил:** `dossier-v2-research-qa-evidence-gate-protocol-01` → `WORKER_TASK_DOSSIER_V2_RESEARCH_QA_EVIDENCE_GATE_PROTOCOL_01.md`. Пользователь одобрил пять изменений QA evidence gate после самоопровержения аудита #456. Это только operating Markdown protocol / обязательная точка входа, один source PR; без семантических запусков, Assembly или production. Прежний физический ЧАТ 2 с отчётом #456 завершён и не используется.
-- **ЧАТ 3 — свободен.** После принятия source PR правил директор зарегистрирует для нового физического аудитора отдельную независимую проверку всех шести игр. Предварительно не запускать.
-- **Старый аудит #456 — INVALID FOR SEMANTIC DECISION:** начальные 4 GOOD/2 WEAK не доказаны независимым посещением страниц. Внешняя QA повторяется только по новым правилам. Новых Scheduled Tasks и retry нет.
+- **ЧАТ 1 — прежний Research шести игр:** `dossier-notes-v2-fresh6-20261114-rerun1` содержит 6 Research candidates и 6 технических receipts. Их смысловое качество ещё не доказано независимой проверкой.
+- **НОВЫЙ ЧАТ 2 — зарезервирован для повторного QA:** `dossier-v2-fresh6-rerun1-research-reaudit-evidence-01` → `WORKER_TASK_DOSSIER_V2_FRESH6_RERUN1_RESEARCH_REAUDIT_EVIDENCE_01.md`. Новый физический диалог, отличный от старого дискредитированного QA #456 и разработчика нового протокола #458. Проверка шести игр только через реальное самостоятельное чтение открытых внешних источников; один report-only DRAFT PR, без Research/Assembly/production.
+- **Исправление правил принято:** исходный source [PR #458](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/458) в main, обязательный стандарт `config/dossier_research_independent_quality_audit_protocol.md`. Предыдущая QA #456 INVALID FOR SEMANTIC DECISION; старые 4 GOOD / 2 WEAK не наследовать.
+- **ЧАТ 3 — свободен.** Никаких Scheduled Tasks, автоматических retries, production или Assembly это назначение не разрешает.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
