@@ -637,3 +637,12 @@ Currentness invariant after PPD-012:
 - **Status:** source PR #452 draft pending code CI/independent acceptance; no owner main push auth run, no rerun sandbox and no Research performed at time of this route entry. **Verified structure on source branch based on main `268abd13816fac0866a677103ef75be82cc26a56`; actual runtime verification pending.**
 
 **Assembly compatibility amendment (2026-11-15):** `scripts/dossier_notes_v2_connector_transport.mjs::connectorPreflight({phase:"assembly"})` accepts precisely rerun1 `authority_origin:"owner_main_push"`, pinning source main SHA and the single verified successful owner push Action, but requires the existing separate Git commits. Legacy cohorts still require two separately verified manual Actions. Entry in `config/dossier_notes_v2_batch_assembly_manual_one_shot_prompt.md` and `config/dossier_notes_v2_connector_transport_manual_runbook.md`; tested in `scripts/test_dossier_notes_v2_connector_transport.mjs`.
+
+---
+
+## Dossier V2 — независимый Research Quality Audit / Evidence Gate
+
+- **Проверено:** 2026-11-16 на `main@cc85a48433916255296be9e9ecaece9c9771df75`; task `WORKER_TASK_DOSSIER_V2_RESEARCH_QA_EVIDENCE_GATE_PROTOCOL_01.md`.
+- **Обязательный вход аудитора:** `CHAT_PROTOCOL.md` → `config/dossier_research_independent_quality_audit_protocol.md` → frozen manifest конкретного audit task → самостоятельные открытые внешние источники → только затем Research claims → evidence-backed вердикт каждой игры.
+- **Инцидент:** исправленный report-only [PR #456](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/456), `reviews/worker_reports/dossier-v2-fresh6-rerun1-research-quality-independent-audit-01.md`, «Director handoff — исправление процедуры аудита». Прежние 4 GOOD / 2 WEAK дезавуированы: `opened` и фактический веб-контент не были подтверждены.
+- **Граница:** GitHub receipts/CI = технический транспорт, не внешнее подтверждение claims; отсутствие веб-доступа = `BLOCKED_EVIDENCE`. Новый независимый READ-ONLY аудит назначает Director отдельно, без повторного Research/Assembly. Исторический task содержит postmortem-ссылку.
