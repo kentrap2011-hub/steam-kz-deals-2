@@ -3,7 +3,7 @@
 Repository: kentrap2011-hub/steam-kz-deals-2
 Base branch / source of truth: main
 Task ID: dossier-v2-fresh6-rerun1-research-reaudit-evidence-01
-Assigned: НОВЫЙ физический ЧАТ 2, не предыдущий ЧАТ 2 с дискредитированным аудитом #456 и не физический ЧАТ 2 разработчика протокола #458.
+Assigned: ОТЛОЖЕНО пользователем 2026-11-16; прежняя резервация ЧАТА 2 снята; worker_slot=null.
 Mode: READ-ONLY / RECON — независимое содержательное QA, один report-only DRAFT PR.
 
 ## START и обязательный evidence gate
@@ -37,3 +37,6 @@ reviews/worker_reports/dossier-v2-fresh6-rerun1-research-reaudit-evidence-01.md
 Запрещены: правки research candidate/receipt/sandbox, старого PR #456, протокола, source/runtime/contract/schema/workflows, Board/registry, production, canonical ingest, V1/Deep, scheduled tasks, выдача новых grants, Research rerun, Assembly, искусственный retry, запуск Actions, source merge. Не считать эту проверку разрешением на Assembly и не запускать ничего после публикации.
 
 Definition of Done: все шесть независимо проверены по новому каноническому Evidence Gate и опубликован ровно один содержательный отчёт в report-only DRAFT PR; если веб-доступ фактически отсутствует — честный BLOCKED_EVIDENCE. После этого директор принимает решение по конкретным находкам, не разрешая новой semantic стадии автоматически.
+## Управленческая остановка (2026-11-16)
+
+Пользователь решил пропустить отдельный аудит и перейти к Assembly. Это задание оставлено для истории, но не авторизовано к запуску при нынешнем решении; прежняя незапущенная резервация физического ЧАТА 2 снята. Не считай этот статус завершённым аудитом или оценкой Research. Новое назначение потребует отдельного указания пользователя.
