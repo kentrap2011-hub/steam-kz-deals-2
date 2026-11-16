@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — переход Dossier V2 к Assembly, 2026-11-16
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Dossier V2 Assembly на шести играх, 2026-11-16
 
-- **Повторный Research:** 6/6 candidate JSON и 6/6 typed Research receipts в sandbox `dossier-notes-v2-fresh6-20261114-rerun1`; смысловое качество не подтверждено отдельной независимой QA, но Assembly самостоятельно проверяет свидетельства.
-- **Повторный независимый аудит — ПРИОСТАНОВЛЕН ПО РЕШЕНИЮ ПОЛЬЗОВАТЕЛЯ:** `dossier-v2-fresh6-rerun1-research-reaudit-evidence-01` → `WORKER_TASK_DOSSIER_V2_FRESH6_RERUN1_RESEARCH_REAUDIT_EVIDENCE_01.md`. Предыдущее назначение НОВОГО ЧАТА 2 отменено ДО подтверждённого запуска, `worker_slot=null`. Отчёт #456 остаётся недостоверным; не запускать этот аудит без отдельного нового решения.
-- **Следующий этап — Assembly** только для той же frozen партии через канонический `config/dossier_notes_v2_batch_assembly_manual_one_shot_prompt.md`; требует отдельного физического рабочего чата, exact GitHub preflight и действующего sandbox-only authorization. Не запускать Research, writer, production, Deep или Scheduled Tasks.
-- **ЧАТ 1, ЧАТ 2 и ЧАТ 3 — свободны** по последним подтверждённым результатам. Не выводить запуск Assembly из одной регистрации без пользовательского handoff.
+- **НОВЫЙ ЧАТ 1 — зарезервирован (ожидает ручного запуска):** `dossier-v2-fresh6-rerun1-assembly-one-shot-01` → `WORKER_TASK_DOSSIER_V2_FRESH6_RERUN1_ASSEMBLY_ONE_SHOT_01.md`. Одноразовый semantic Assembly на изолированной frozen партии `dossier-notes-v2-fresh6-20261114-rerun1`; только существующий canonical launcher, самостоятельная проверка Research facts, candidate + typed receipt в sandbox. Без дополнительного QA этапа, Research rerun, writer/production, Scheduled Tasks.
+- **Research шести игр:** 6/6 candidate JSON + 6/6 Research receipts существуют в sandbox `sandbox/dossier-notes-v2-fresh6-20261114-rerun1`; GitHub owner authorization содержит `assembly_authorized=true`, успешный первый owner main push run 43697110508. Отдельный аудит не проводился; Assembly не вправе наследовать ошибочные оценки QA #456.
+- **Независимый повторный аудит — ПРИОСТАНОВЛЕН пользователем:** `dossier-v2-fresh6-rerun1-research-reaudit-evidence-01` сохранён в registry без слота (`status=blocked, worker_slot=null`). Старое резервирование ЧАТА 2 снято, старый отчёт #456 не подтверждён как качественная независимая проверка.
+- **ЧАТ 2 и ЧАТ 3 — свободны** по последним подтверждённым работам. После Assembly директор проверяет receipts; sandbox writer только по отдельному разрешению. Нет новых Scheduled Tasks.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
