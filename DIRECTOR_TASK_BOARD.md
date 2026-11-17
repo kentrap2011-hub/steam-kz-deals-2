@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Dossier V2 Assembly на шести играх, 2026-11-16
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — диагностика Assembly после шести результатов, 2026-11-17
 
-- **НОВЫЙ ЧАТ 1 — зарезервирован (ожидает ручного запуска):** `dossier-v2-fresh6-rerun1-assembly-one-shot-01` → `WORKER_TASK_DOSSIER_V2_FRESH6_RERUN1_ASSEMBLY_ONE_SHOT_01.md`. Одноразовый semantic Assembly на изолированной frozen партии `dossier-notes-v2-fresh6-20261114-rerun1`; только существующий canonical launcher, самостоятельная проверка Research facts, candidate + typed receipt в sandbox. Без дополнительного QA этапа, Research rerun, writer/production, Scheduled Tasks.
-- **Research шести игр:** 6/6 candidate JSON + 6/6 Research receipts существуют в sandbox `sandbox/dossier-notes-v2-fresh6-20261114-rerun1`; GitHub owner authorization содержит `assembly_authorized=true`, успешный первый owner main push run 43697110508. Отдельный аудит не проводился; Assembly не вправе наследовать ошибочные оценки QA #456.
-- **Независимый повторный аудит — ПРИОСТАНОВЛЕН пользователем:** `dossier-v2-fresh6-rerun1-research-reaudit-evidence-01` сохранён в registry без слота (`status=blocked, worker_slot=null`). Старое резервирование ЧАТА 2 снято, старый отчёт #456 не подтверждён как качественная независимая проверка.
-- **ЧАТ 2 и ЧАТ 3 — свободны** по последним подтверждённым работам. После Assembly директор проверяет receipts; sandbox writer только по отдельному разрешению. Нет новых Scheduled Tasks.
+- **НОВЫЙ ЧАТ 2 — зарезервирован (ожидает запуска):** `dossier-v2-assembly-evidence-trust-access-recon-01` → `WORKER_TASK_DOSSIER_V2_ASSEMBLY_EVIDENCE_TRUST_ACCESS_RECON_01.md`. Только независимый READ-ONLY анализ четырёх `assembly_missing_evidence`, недоступных русских отзывов, границы доверия к Research и exact strict requirements. Один report-only DRAFT PR, без изменения source/schema, повторного Assembly, Research или writer.
+- **ЧАТ 1 — завершил Assembly (номер свободен):** sandbox `dossier-notes-v2-fresh6-20261114-rerun1` содержит 6 Assembly candidate и 6 assembly receipts: 49520 и 499180 `strict_item_valid_pending_existing_atomic_group_ingest`; 1000010, 102600, 1029690, 501590 `assembly_missing_evidence`. Ни один исходный outcome не означает автоматически canonical acceptance; sandbox writer не запускали.
+- **Пользовательское решение:** Research является рабочей основой для Assembly; повторно проверять его конкретное утверждение при реальном содержательном противоречии или ином установленном основании, не из-за отвлечённых сомнений. Диагностировать отдельно доступ к evidence и требования strict final validator, не подменять их QA прежнего Research.
+- **ЧАТ 3 — свободен; ЧАТ 1 — свободен.** Прежний независимый Research QA `dossier-v2-fresh6-rerun1-research-reaudit-evidence-01` остаётся `blocked, worker_slot=null` по решению пользователя; PR #456 не подтверждает семантическое качество. Writer/production/Deep/новые grants/Scheduled Tasks запрещены без отдельного разрешения.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 

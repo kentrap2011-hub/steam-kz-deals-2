@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-16",
+  "last_curated_on": "2026-11-17",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3759,6 +3759,26 @@
       "blocker": "Только sandbox Assembly по действующей GitHub авторизации; итоговый isolated writer и production отдельно не разрешены.",
       "updated_on": "2026-11-16",
       "updated_at_utc": "2026-11-16T17:53:00Z",
+      "recent_completion": false
+    },
+    {
+      "id": "dossier-v2-assembly-evidence-trust-access-recon-01",
+      "title": "Диагностика недостающих доказательств Assembly и избыточной проверки Research",
+      "goal": "Найти реальные причины четырёх отказов Assembly и доказать границу между доверяемым Research и обязательной provenance строгого Dossier.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Четыре exact Assembly terminal, два успешных контроля, адресная проверка правил и доступных путей к публичным отзывам.",
+      "urgency": "высокая",
+      "urgency_reason": "Поможет устранить ненужное дублирование Research и восстановить полноту Assembly без лишних повторных семантических запусков.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_ASSEMBLY_EVIDENCE_TRUST_ACCESS_RECON_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-fresh6-rerun1-assembly-one-shot-01"
+      ],
+      "blocker": "Только read-only диагностика; Assembly retry, изменения правил и sandbox writer отдельно не разрешены.",
+      "updated_on": "2026-11-17",
+      "updated_at_utc": "2026-11-17T10:08:00Z",
       "recent_completion": false
     }
   ]
