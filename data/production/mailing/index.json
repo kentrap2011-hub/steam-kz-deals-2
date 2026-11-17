@@ -19,28 +19,29 @@
     "title"
   ],
   "country_code": "kz",
-  "item_count": 248,
+  "item_count": 252,
   "chunk_size": 150,
   "chunk_count": 2,
   "chunk_pattern": "data/production/mailing/chunk_NNN.tsv",
   "source_index_path": "data/production/shortlist/index.json",
   "source_index_version": 9,
-  "source_chunk_count": 5,
-  "source_item_count": 248,
+  "source_chunk_count": 6,
+  "source_item_count": 252,
   "source_complete": true,
   "source_coverage_ratio": 1.0,
-  "source_updated_at_utc": "2026-11-15T23:59:56.869036+00:00",
+  "source_updated_at_utc": "2026-11-17T02:57:25.571361+00:00",
   "needs_tuning": false,
   "manifest_complete": true,
   "manifest_coverage_ratio": 1.0,
-  "manifest_updated_at_utc": "2026-11-15T23:59:56.869036+00:00",
+  "manifest_updated_at_utc": "2026-11-17T02:57:25.571361+00:00",
   "manifest_needs_tuning": false,
   "source_files_verified": [
     "data/production/shortlist/chunk_001.tsv",
     "data/production/shortlist/chunk_002.tsv",
     "data/production/shortlist/chunk_003.tsv",
     "data/production/shortlist/chunk_004.tsv",
-    "data/production/shortlist/chunk_005.tsv"
+    "data/production/shortlist/chunk_005.tsv",
+    "data/production/shortlist/chunk_006.tsv"
   ],
   "integrity_attestation": {
     "version": 1,
@@ -48,75 +49,82 @@
     "producer_workflow": ".github/workflows/build-mailing-feed.yml",
     "source_manifest": {
       "path": "data/production/manifest.json",
-      "git_blob_sha": "7b6d07ae4bfc62bc69290bd77215160114f2a490",
-      "sha256": "d0623646845c1a4de94725a7ce8feafefbb39d71f1a27019c448049c738ad30a",
-      "size_bytes": 10765
+      "git_blob_sha": "78e1b752bc1177ee410ebdb14b52a5f430a294a3",
+      "sha256": "043f8fae34ae70a185abbe44f95a559ab0c18a99a25cf25faee029f5b9ddd691",
+      "size_bytes": 10737
     },
     "source_index": {
       "path": "data/production/shortlist/index.json",
-      "git_blob_sha": "456f5733c074f94fff825c839dda560d9b04e396",
-      "sha256": "8c42e8dc8c4ea751aab6985f9e0e411a813d7aa7022504464ecba0939985e4d2",
-      "size_bytes": 3693
+      "git_blob_sha": "107fdc6c43b36e51f337f42fd4fcb113d7441d71",
+      "sha256": "16de847db644d22530ac70e6d0608103376a6e672533a5da80548cfbe67cf356",
+      "size_bytes": 3692
     },
     "source_chunks": [
       {
         "path": "data/production/shortlist/chunk_001.tsv",
-        "git_blob_sha": "566b76cac8627d042a2168357d77e217d357fd9a",
-        "sha256": "e8d74086286eceb0920fb76e6ba2555beba79b20c5c585196a590f462556894f",
-        "size_bytes": 9307,
+        "git_blob_sha": "e008266e26cde69e78e5fd442b2803d1f34c59c7",
+        "sha256": "8cfedefc6cc1be0caf3780cb20b5b0223df4b06f14a77292ffd5da3973f9d23b",
+        "size_bytes": 9395,
         "row_count": 50
       },
       {
         "path": "data/production/shortlist/chunk_002.tsv",
-        "git_blob_sha": "8f5b2731f758a71ad24748a941abf475abf5fdb3",
-        "sha256": "ede1a76657bc0e8c98d94bd1dae6f6453d9b22d9641f92f4126fe08ed1ffbdd7",
-        "size_bytes": 7751,
+        "git_blob_sha": "827f4cfb046d630eab7005340d52e1ddbe974ba1",
+        "sha256": "7d4c94d29999951e5667544ecd00573968e1e4b3d05a7ea94595613ce9888431",
+        "size_bytes": 7928,
         "row_count": 50
       },
       {
         "path": "data/production/shortlist/chunk_003.tsv",
-        "git_blob_sha": "674db0c9d2550c922c432de8063dcf735578b0b7",
-        "sha256": "7fb37d7dbf562679e22895f9366ee3cd138f4daa1f296edc9792a9b03ca363bb",
-        "size_bytes": 7085,
+        "git_blob_sha": "8eaa95e31408878ba1df5c4745e1a5cb08dda9e5",
+        "sha256": "617f51c850a2977492cc459ee2d666b4f3e96335076271a7f2ee47709afc3188",
+        "size_bytes": 7158,
         "row_count": 50
       },
       {
         "path": "data/production/shortlist/chunk_004.tsv",
-        "git_blob_sha": "21d5c1bc50b4fb6377600a441c9ff132ffddb5ee",
-        "sha256": "567047b4e175bb90978e7a5fe8bb8ef417cf0d33742e8d7bfbbc5a48a1bb42c4",
-        "size_bytes": 6611,
+        "git_blob_sha": "3b1438304191beb59c430685bbb2542178e8010e",
+        "sha256": "7f37c56b4f85f567e859dff03519a5bcab8eec176525b93c6eaf7484f10840bb",
+        "size_bytes": 6681,
         "row_count": 50
       },
       {
         "path": "data/production/shortlist/chunk_005.tsv",
-        "git_blob_sha": "9eeb7f120cab21b77097a5780ce9150fd97da658",
-        "sha256": "730a5e87111d9a1aedf00249febb055f843c1811faae2cf17185d3c6430d4710",
-        "size_bytes": 5635,
-        "row_count": 48
+        "git_blob_sha": "9678b7eca94fa06eef7e6903da13e1cfeb91be92",
+        "sha256": "0ac0a550e170054eecf6e893306fbe8d6708b2cd16f692c878681f802cde8aa8",
+        "size_bytes": 6012,
+        "row_count": 50
+      },
+      {
+        "path": "data/production/shortlist/chunk_006.tsv",
+        "git_blob_sha": "a8234b61a8305d2b76a962adc77e74258b7fd030",
+        "sha256": "e986ea4ed5b94692d3c5dfa8c99557be45f9c1737f57d04ebad2e69d7b6b5ce6",
+        "size_bytes": 202,
+        "row_count": 2
       }
     ],
     "mailing_chunks": [
       {
         "path": "data/production/mailing/chunk_001.tsv",
-        "git_blob_sha": "45d8eb27b896a8a1ceaf763346cda9dbb7cd38e6",
-        "sha256": "882e3bac31577f86e02494b443f00d9540ae21f399e5d2de3db540ccb4b33593",
-        "size_bytes": 22586,
+        "git_blob_sha": "4a129a27a1093899c6718e64e7600bd36617c6d3",
+        "sha256": "4c3aef46c4eb157dffe0c9f4688a57e7adc2b46455e8ae570cf1100a33d9d466",
+        "size_bytes": 22927,
         "row_count": 150
       },
       {
         "path": "data/production/mailing/chunk_002.tsv",
-        "git_blob_sha": "0fb75184ed9d1290228edb29a78a0a1ac1cbd187",
-        "sha256": "06da0e6dcfa604d8fdcf6422d6d85bb73b82c909c7eacc590d79d8e79a4b19dc",
-        "size_bytes": 11295,
-        "row_count": 98
+        "git_blob_sha": "cea18486012732d6f734fe33e574083bfcce1b9e",
+        "sha256": "c098e67e977f6c24b9aca7daa95db9c0cd7857b780e788489711b84c331a1074",
+        "size_bytes": 11892,
+        "row_count": 102
       }
     ],
-    "source_chunk_count_verified": 5,
+    "source_chunk_count_verified": 6,
     "mailing_chunk_count_verified": 2,
-    "source_rows_verified": 248,
-    "mailing_rows_verified": 248,
+    "source_rows_verified": 252,
+    "mailing_rows_verified": 252,
     "source_to_mailing_row_projection_lossless": true,
     "all_source_rows_column_validated": true,
-    "attestation_digest_sha256": "a681a27402d90e0a2ac5bbbf02e24f420560ecd779bf31eafc0c09ee358d0322"
+    "attestation_digest_sha256": "bc27f5fd5754352ae229fc0de39b7314ade69075268715dcda27921638781200"
   }
 }
