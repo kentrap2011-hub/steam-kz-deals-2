@@ -272,9 +272,17 @@ def owner_push_launch(repo,trial_id,sha,env):
                   "source main moved before separate authorization commit")
     granted=authorize(repo,sha,trial_id,frozen["marker_commit"],env,
                       authority_origin="owner_main_push")
+    replay = {}
+    if trial_id == batch.OWNER_PUSH_REPLAY_TRIAL:
+        # The same one-use authenticated owner run can copy the old immutable
+        # Research content. It must never generate new semantic Research.
+        from dossier_notes_v2_assembly_replay_seed import seed
+        replay = {"research_replay": seed(
+            repo, trial_id=trial_id, marker_commit=frozen["marker_commit"],
+            authorization_commit=granted["authorization_commit"])}
     return {"source_main_sha":sha,"owner_action_run_id":env["GITHUB_RUN_ID"],
             "grant_commit":frozen["grant_commit"],
-            "manifest_commit":frozen["manifest_commit"],**granted}
+            "manifest_commit":frozen["manifest_commit"],**granted,**replay}
 
 
 def main():
