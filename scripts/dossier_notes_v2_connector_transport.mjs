@@ -17,6 +17,14 @@ const V2_ISSUE = ".github/workflows/issue-dossier-notes-v2-batch.yml";
 const V2_AUTHORIZE = ".github/workflows/authorize-dossier-notes-v2-batch.yml";
 const V2_OWNER_PUSH = ".github/workflows/issue-dossier-notes-v2-on-owner-push.yml";
 const V2_OWNER_PUSH_TRIAL = "dossier-notes-v2-fresh6-20261114-rerun1";
+const V2_OWNER_PUSH_REPLAY_TRIAL = "dossier-notes-v2-fresh6-assembly-rerun2-20261117";
+const V2_OWNER_PUSH_REPLAY = ".github/workflows/issue-dossier-notes-v2-assembly-rerun-on-owner-push.yml";
+function v2OwnerPushWorkflow(trialId) {
+  return trialId===V2_OWNER_PUSH_REPLAY_TRIAL?V2_OWNER_PUSH_REPLAY:V2_OWNER_PUSH;
+}
+function v2IsOwnerPushTrial(trialId) {
+  return trialId===V2_OWNER_PUSH_TRIAL || trialId===V2_OWNER_PUSH_REPLAY_TRIAL;
+}
 const V2_API = "https://api.github.com/repos/" + V2_REPOSITORY + "/";
 const V2_HEX = /^[0-9a-f]{40}$/;
 const V2_TRIAL = /^dossier-notes-v2-[a-z0-9][a-z0-9-]{7,90}$/;
@@ -261,7 +269,7 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
     auth.schema_version===1 &&
      (auth.scope==="one_manual_batch_research_assembly_sandbox_only" &&
       auth.authority_origin===undefined ||
-      trialId===V2_OWNER_PUSH_TRIAL && auth.authority_origin==="owner_main_push" &&
+      v2IsOwnerPushTrial(trialId) && auth.authority_origin==="owner_main_push" &&
       auth.scope==="one_owner_main_push_research_assembly_sandbox_only" &&
       auth.owner_push_main_sha===base) &&
     auth.trial_id===trialId && auth.marker_commit===markerCommit &&
@@ -286,7 +294,7 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
     // Exactly one owner-authenticated main push event issued the two separate
     // Git commit authorities. It cannot be forged by a worker or by PR CI.
     const owner=await v2Get(api,"actions/runs/"+auth.github_authorization_run_id);
-    v2OwnerRun(owner,auth.github_authorization_run_id,V2_OWNER_PUSH,
+    v2OwnerRun(owner,auth.github_authorization_run_id,v2OwnerPushWorkflow(trialId),
       "Issue and authorize Notes V2 rerun "+trialId+" source "+base,base,"push");
   } else {
     v2Assert(Number.isSafeInteger(Number(freezeRunId)) && Number(freezeRunId)>0,
