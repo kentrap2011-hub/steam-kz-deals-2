@@ -3780,6 +3780,26 @@
       "updated_on": "2026-11-17",
       "updated_at_utc": "2026-11-17T10:08:00Z",
       "recent_completion": false
+    },
+    {
+      "id": "dossier-v2-assembly-trust-by-default-prompt-fix-01",
+      "title": "Assembly V2 — исправить инструкции о доверии к Research",
+      "goal": "Сократить избыточную перепроверку выводов Research, сохранив обязательные доказательства строгого Dossier и доступные альтернативные источники отзывов.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Две адресные текстовые правки guidance с проверкой согласованности и влияния на strict evidence gates без изменения кода.",
+      "urgency": "высокая",
+      "urgency_reason": "Необходимая коррекция перед любым новым разрешённым использованием Assembly, чтобы избежать четырёх ненужных semantic dead ends.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_ASSEMBLY_TRUST_BY_DEFAULT_PROMPT_FIX_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-assembly-evidence-trust-access-recon-01"
+      ],
+      "blocker": "Только два prompt-файла и worker report; source PR после CI/Director acceptance, никаких semantic повторов или writer.",
+      "updated_on": "2026-11-17",
+      "updated_at_utc": "2026-11-17T17:55:00Z",
+      "recent_completion": false
     }
   ]
 }

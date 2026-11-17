@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — диагностика Assembly после шести результатов, 2026-11-17
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — исправление доверия к Research в Assembly, 2026-11-17
 
-- **НОВЫЙ ЧАТ 2 — зарезервирован (ожидает запуска):** `dossier-v2-assembly-evidence-trust-access-recon-01` → `WORKER_TASK_DOSSIER_V2_ASSEMBLY_EVIDENCE_TRUST_ACCESS_RECON_01.md`. Только независимый READ-ONLY анализ четырёх `assembly_missing_evidence`, недоступных русских отзывов, границы доверия к Research и exact strict requirements. Один report-only DRAFT PR, без изменения source/schema, повторного Assembly, Research или writer.
-- **ЧАТ 1 — завершил Assembly (номер свободен):** sandbox `dossier-notes-v2-fresh6-20261114-rerun1` содержит 6 Assembly candidate и 6 assembly receipts: 49520 и 499180 `strict_item_valid_pending_existing_atomic_group_ingest`; 1000010, 102600, 1029690, 501590 `assembly_missing_evidence`. Ни один исходный outcome не означает автоматически canonical acceptance; sandbox writer не запускали.
-- **Пользовательское решение:** Research является рабочей основой для Assembly; повторно проверять его конкретное утверждение при реальном содержательном противоречии или ином установленном основании, не из-за отвлечённых сомнений. Диагностировать отдельно доступ к evidence и требования strict final validator, не подменять их QA прежнего Research.
-- **ЧАТ 3 — свободен; ЧАТ 1 — свободен.** Прежний независимый Research QA `dossier-v2-fresh6-rerun1-research-reaudit-evidence-01` остаётся `blocked, worker_slot=null` по решению пользователя; PR #456 не подтверждает семантическое качество. Writer/production/Deep/новые grants/Scheduled Tasks запрещены без отдельного разрешения.
+- **НОВЫЙ ЧАТ 1 — зарезервирован (ожидает запуска):** `dossier-v2-assembly-trust-by-default-prompt-fix-01` → `WORKER_TASK_DOSSIER_V2_ASSEMBLY_TRUST_BY_DEFAULT_PROMPT_FIX_01.md`. Пользователь одобрил ограниченный IMPLEMENT: исправить *только два* Assembly prompt-файла, чтобы не перепроверять Research без конкретного противоречия, и сохранить обязательные strict-final evidence/provenance проверки и реальные альтернативы русских отзывов. Один исходный source PR + worker report; без semantic rerun, writer и production.
+- **ЧАТ 2 — завершил READ-ONLY диагностику (номер свободен):** [PR #465](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/465) сохраняет report с причинами 4 terminal Assembly, проверкой Steam/альтернативных источников и минимальным предложением. Report-only DRAFT PR не является source merge и не меняет contracts.
+- **Предыдущий Assembly — завершён:** frozen `dossier-notes-v2-fresh6-20261114-rerun1` содержит 6 Assembly candidates и 6 Assembly receipts: 49520 и 499180 `strict_item_valid_pending_existing_atomic_group_ingest`; 1000010, 102600, 1029690, 501590 `assembly_missing_evidence`. Итоговых accepted atomic groups нет, writer не запускался.
+- **ЧАТ 3 — свободен; ЧАТ 2 — свободен.** Отдельный Research QA остаётся приостановлен по решению пользователя. Новые grants, semantic one-shot/retry, sandbox writer, canonical ingest, production/Deep и Scheduled Tasks без отдельной авторизации запрещены.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
