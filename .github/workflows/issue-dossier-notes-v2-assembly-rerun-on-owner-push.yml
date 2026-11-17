@@ -1,0 +1,51 @@
+name: Issue one exact fresh6 Assembly replay on owner main push
+run-name: Issue and authorize Notes V2 rerun dossier-notes-v2-fresh6-assembly-rerun2-20261117 source ${{ github.sha }}
+
+# Only the first authenticated owner merge introducing the NEW one-use cohort
+# may issue sandbox authority and deterministically rebind verified old Research.
+# Never runs Assembly, semantic Research, canonical writer or production.
+on:
+  push:
+    branches: [main]
+    paths:
+      - config/dossier_notes_v2_batches/dossier-notes-v2-fresh6-assembly-rerun2-20261117.json
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: dossier-v2-owner-push-fresh6-assembly-rerun2
+  cancel-in-progress: false
+
+jobs:
+  authorize-and-rebind-old-research:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.run_attempt == 1 && github.actor_id == 315790060 && github.repository_owner_id == 315790060
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout immutable owner-merged source with full Git history
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Install strict Notes V2 JSON validator
+        run: python -m pip install jsonschema==4.23.0
+      - name: Verify main and clean source checkout
+        run: |
+          set -euo pipefail
+          git checkout -B main "$GITHUB_SHA"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test -z "$(git status --porcelain --untracked-files=all)"
+      - name: One owner authority then six verified Research-only Git copies
+        env:
+          EXPECTED_MAIN_SHA: ${{ github.sha }}
+          TRIAL_ID: dossier-notes-v2-fresh6-assembly-rerun2-20261117
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          python scripts/dossier_notes_v2_batch_issuer.py owner-push-launch \
+            --trial-id "$TRIAL_ID" --expected-main-sha "$EXPECTED_MAIN_SHA"
+      - name: Assert no untracked worktree changes
+        run: test -z "$(git status --porcelain --untracked-files=all)"
