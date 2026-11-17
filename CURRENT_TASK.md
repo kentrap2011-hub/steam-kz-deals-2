@@ -1,5 +1,13 @@
 # CURRENT TASK
 
+## ЧАТ 1 — Dossier V2 fresh6 Assembly rerun2 source (2026-11-17)
+
+- Status: `implemented_in_draft_PR_pending_final_head_CI_and_independent_L3; owner_issuer_not_started; semantic_Assembly_not_started`.
+- Source: [PR #470](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/470), branch `implement/dossier-v2-fresh6-assembly-rerun2-20261117`; report `reviews/worker_reports/dossier-v2-fresh6-assembly-rerun2-implement-01.md`.
+- New exact six-member GitHub-only issuer + deterministic old Research rebind: `config/dossier_notes_v2_batches/dossier-notes-v2-fresh6-assembly-rerun2-20261117.json`; old Research/Assembly never overwritten; no full semantic Research repetition. Direct one-shot Assembly launcher `config/dossier_notes_v2_fresh6_assembly_rerun2_manual_one_shot_prompt.md` cannot be used until owner source PR merge, real authenticated first-attempt main push, verified new sandbox grant/marker/authorization, six new Research candidate+typed receipt commits.
+- Next: exact-final-HEAD PR CI and independent L3 of Git provenance/issuer/writer isolation; only then owner merge and live GitHub owner receipt verification, separately explicit manual Assembly and owner-approved sandbox writer. No V1/Deep/production, scheduled task or automatic retry.
+
+
 ## ЧАТ 2 — Dossier V2 fresh6 owner no-UI rerun (2026-11-15)
 
 - Status: `implemented_in_draft_source_PR; synthetic_tests_pending; not_merged; real_owner_launch_not_started`.
