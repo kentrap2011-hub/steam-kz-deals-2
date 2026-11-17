@@ -195,8 +195,8 @@ def authorize(repo,expected,trial_id,marker_commit,env,authority_origin="manual"
 
 def guard_owner_push(repo,trial_id,sha,env):
     """Actual original owner main push must FIRST introduce the exact new cohort."""
-    batch.require(trial_id==batch.OWNER_PUSH_TRIAL,
-                  "push authorization is restricted to the new rerun1 cohort")
+    batch.require(trial_id in batch.OWNER_PUSH_TRIALS,
+                  "push authorization is restricted to the two exact preapproved cohorts")
     batch.paths(trial_id)
     batch.require(isinstance(sha,str) and SHA.fullmatch(sha),
                   "exact main push SHA missing")
@@ -210,7 +210,7 @@ def guard_owner_push(repo,trial_id,sha,env):
         and env.get("GITHUB_TRIGGERING_ACTOR")==batch.OWNER_LOGIN
         and env.get("GITHUB_REF")=="refs/heads/main"
         and env.get("GITHUB_WORKFLOW_REF")==
-            batch.REPOSITORY+"/"+batch.OWNER_PUSH_WORKFLOW+"@refs/heads/main"
+            batch.REPOSITORY+"/"+batch.owner_push_workflow(trial_id)+"@refs/heads/main"
         and env.get("GITHUB_SHA")==sha
         and env.get("GITHUB_RUN_ATTEMPT")=="1"
         and str(env.get("GITHUB_RUN_ID","")).isdigit()
