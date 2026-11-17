@@ -98,7 +98,8 @@ function makeFixture(n=6,trialId=TRIAL,ownerPush=false) {
     ".github/workflows/authorize-dossier-notes-v2-batch.yml",
     "Authorize isolated Notes V2 batch "+trialId+" marker "+MARKER));
   if(ownerPush){
-    assert.equal(trialId,"dossier-notes-v2-fresh6-20261114-rerun1");
+    assert.ok(["dossier-notes-v2-fresh6-20261114-rerun1",
+      "dossier-notes-v2-fresh6-assembly-rerun2-20261117"].includes(trialId));
     const key=AUTH+"|"+paths.authorization;
     const doc=JSON.parse(f.files.get(key).content);
     doc.scope="one_owner_main_push_research_assembly_sandbox_only";
