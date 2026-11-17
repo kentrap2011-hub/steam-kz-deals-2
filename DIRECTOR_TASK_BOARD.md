@@ -5,12 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — исправление доверия к Research в Assembly, 2026-11-17
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — безопасный повторный Assembly для шести игр, 2026-11-17
 
-- **НОВЫЙ ЧАТ 1 — зарезервирован (ожидает запуска):** `dossier-v2-assembly-trust-by-default-prompt-fix-01` → `WORKER_TASK_DOSSIER_V2_ASSEMBLY_TRUST_BY_DEFAULT_PROMPT_FIX_01.md`. Пользователь одобрил ограниченный IMPLEMENT: исправить *только два* Assembly prompt-файла, чтобы не перепроверять Research без конкретного противоречия, и сохранить обязательные strict-final evidence/provenance проверки и реальные альтернативы русских отзывов. Один исходный source PR + worker report; без semantic rerun, writer и production.
-- **ЧАТ 2 — завершил READ-ONLY диагностику (номер свободен):** [PR #465](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/465) сохраняет report с причинами 4 terminal Assembly, проверкой Steam/альтернативных источников и минимальным предложением. Report-only DRAFT PR не является source merge и не меняет contracts.
-- **Предыдущий Assembly — завершён:** frozen `dossier-notes-v2-fresh6-20261114-rerun1` содержит 6 Assembly candidates и 6 Assembly receipts: 49520 и 499180 `strict_item_valid_pending_existing_atomic_group_ingest`; 1000010, 102600, 1029690, 501590 `assembly_missing_evidence`. Итоговых accepted atomic groups нет, writer не запускался.
-- **ЧАТ 3 — свободен; ЧАТ 2 — свободен.** Отдельный Research QA остаётся приостановлен по решению пользователя. Новые grants, semantic one-shot/retry, sandbox writer, canonical ingest, production/Deep и Scheduled Tasks без отдельной авторизации запрещены.
+- **НОВЫЙ ЧАТ 1 — зарезервирован (ожидает ручного запуска):** `dossier-v2-fresh6-assembly-rerun-route-recon-01` → `WORKER_TASK_DOSSIER_V2_FRESH6_ASSEMBLY_RERUN_ROUTE_RECON_01.md`. Пользователь запросил повторный Assembly после принятых trust-by-default инструкций [PR #467](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/467). **Сначала только READ-ONLY RECON безопасного GitHub-owned immutable replay/recovery route**: старый `dossier-notes-v2-fresh6-20261114-rerun1` содержит все 6 create-only Assembly candidates/receipts; `no_retry_between_invocations=true`; запрещено запускать обычный второй Assembly на старых путях или переписывать receipts. Один report-only DRAFT PR; затем отдельное разрешённое техническое решение/семантический запуск.
+- **ЧАТ 1 прежний — свободен после завершённого IMPLEMENT:** source prompt fix PR #467 MERGED в main `b08146ec2c7d2cf1186b86c3e452bd9927fc5154` и все 4 required checks PASS. Новое назначение использует **НОВЫЙ физический диалог** с тем же номером. Два prompts изменены, contracts/schema/validator не изменены.
+- **Шесть frozen результатов без перезаписи:** старый Assembly: 49520 и 499180 item-ready / pending atomic three-game writer, 1000010, 102600, 1029690 и 501590 missing evidence. Существующий Research остаётся прикреплённым и не должен автоматически перепроверяться полностью.
+- **ЧАТ 2 и ЧАТ 3 — свободны.** Отдельный независимый Research QA остаётся приостановлен. Sandbox writer, реальные semantic repeats, новые grants/authority, production/Deep и Scheduled Tasks не запускать до подтверждения канонического маршрута и применимого отдельного permission gate.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 

@@ -3800,6 +3800,26 @@
       "updated_on": "2026-11-17",
       "updated_at_utc": "2026-11-17T17:55:00Z",
       "recent_completion": false
+    },
+    {
+      "id": "dossier-v2-fresh6-assembly-rerun-route-recon-01",
+      "title": "Dossier V2 — безопасный маршрут для повторного Assembly шести frozen игр",
+      "goal": "Найти минимальный GitHub-owned путь повторного изолированного Assembly с reuse Research и immutable create-only результатами после исправления trust-by-default prompts.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Адресно проверить immutable sandbox receipts, существующий no-retry, issuer/transport и один безопасный способ новой авторизованной попытки.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь запросил повторный Assembly, но старый trial уже исчерпал свои create-only пути и без безопасного route новый run отвергнется.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_FRESH6_ASSEMBLY_RERUN_ROUTE_RECON_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-v2-assembly-trust-by-default-prompt-fix-01"
+      ],
+      "blocker": "READ-ONLY RECON маршрута: старый immutable Assembly нельзя повторять на тех же путях; никаких semantic writes, retry или new grant до отдельной подтверждённой authority.",
+      "updated_on": "2026-11-17",
+      "updated_at_utc": "2026-11-17T18:30:00Z",
+      "recent_completion": false
     }
   ]
 }
