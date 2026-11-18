@@ -27,6 +27,15 @@ ISSUE_WORKFLOW = ".github/workflows/issue-dossier-notes-v2-batch.yml"
 AUTHORIZE_WORKFLOW = ".github/workflows/authorize-dossier-notes-v2-batch.yml"
 OWNER_PUSH_WORKFLOW = ".github/workflows/issue-dossier-notes-v2-on-owner-push.yml"
 OWNER_PUSH_TRIAL = "dossier-notes-v2-fresh6-20261114-rerun1"
+OWNER_PUSH_REPLAY_TRIAL = "dossier-notes-v2-fresh6-assembly-rerun2-20261117"
+OWNER_PUSH_REPLAY_WORKFLOW = ".github/workflows/issue-dossier-notes-v2-assembly-rerun-on-owner-push.yml"
+OWNER_PUSH_TRIALS = {OWNER_PUSH_TRIAL, OWNER_PUSH_REPLAY_TRIAL}
+
+
+def owner_push_workflow(trial_id):
+    require(trial_id in OWNER_PUSH_TRIALS, "not a preapproved one-use owner-push cohort")
+    return (OWNER_PUSH_REPLAY_WORKFLOW if trial_id == OWNER_PUSH_REPLAY_TRIAL
+            else OWNER_PUSH_WORKFLOW)
 WRITER_WORKFLOW = ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
 SHA = re.compile(r"^[0-9a-f]{40}$")
 ORIGINAL_MARKERS = {
@@ -218,7 +227,7 @@ def expected_authorization(repo,trial_id,marker,grant_commit,run_id,authority_or
     require(authority_origin in ("manual","owner_main_push"),
             "unsupported authorization origin")
     if authority_origin == "owner_main_push":
-        require(trial_id == OWNER_PUSH_TRIAL, "owner push may authorize only fresh rerun1")
+        require(trial_id in OWNER_PUSH_TRIALS, "owner push may authorize only two exact separately issued cohorts")
     bp=manifest_blueprint(repo,trial_id)
     doc={
         "schema":"DOSSIER-NOTES-V2-BATCH-OWNER-AUTHORIZATION",
@@ -315,7 +324,7 @@ def authenticated_owner_run(anchor,token,github_repository=REPOSITORY):
     doc=_github_get(REPOSITORY,"actions/runs/"+rid,token)
     origin=anchor.get("authority_origin","manual")
     manual=(origin=="manual")
-    expected_path=AUTHORIZE_WORKFLOW if manual else OWNER_PUSH_WORKFLOW
+    expected_path=AUTHORIZE_WORKFLOW if manual else owner_push_workflow(anchor["trial_id"])
     expected_title=(
         "Authorize isolated Notes V2 batch " + anchor["trial_id"]
         + " marker " + anchor["marker_commit"] if manual else
@@ -335,7 +344,7 @@ def authenticated_owner_run(anchor,token,github_repository=REPOSITORY):
             and doc.get("actor",{}).get("login")==OWNER_LOGIN
             and isinstance(doc.get("head_sha"),str)
             and SHA.fullmatch(doc["head_sha"])
-            and (manual or (anchor["trial_id"]==OWNER_PUSH_TRIAL
+            and (manual or (anchor["trial_id"] in OWNER_PUSH_TRIALS
                  and doc["head_sha"]==anchor["base_main_sha"])),
             "real successful first-attempt owner GitHub authorizer not proven")
     return True

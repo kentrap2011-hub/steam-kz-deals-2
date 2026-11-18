@@ -98,7 +98,8 @@ function makeFixture(n=6,trialId=TRIAL,ownerPush=false) {
     ".github/workflows/authorize-dossier-notes-v2-batch.yml",
     "Authorize isolated Notes V2 batch "+trialId+" marker "+MARKER));
   if(ownerPush){
-    assert.equal(trialId,"dossier-notes-v2-fresh6-20261114-rerun1");
+    assert.ok(["dossier-notes-v2-fresh6-20261114-rerun1",
+      "dossier-notes-v2-fresh6-assembly-rerun2-20261117"].includes(trialId));
     const key=AUTH+"|"+paths.authorization;
     const doc=JSON.parse(f.files.get(key).content);
     doc.scope="one_owner_main_push_research_assembly_sandbox_only";
@@ -108,7 +109,9 @@ function makeFixture(n=6,trialId=TRIAL,ownerPush=false) {
     f.runs.delete(FREEZE_ID);
     f.runs.set(AUTHOR_ID,{
       ...makeRun(AUTHOR_ID,
-        ".github/workflows/issue-dossier-notes-v2-on-owner-push.yml",
+        trialId==="dossier-notes-v2-fresh6-assembly-rerun2-20261117"
+          ?".github/workflows/issue-dossier-notes-v2-assembly-rerun-on-owner-push.yml"
+          :".github/workflows/issue-dossier-notes-v2-on-owner-push.yml",
         "Issue and authorize Notes V2 rerun "+trialId+" source "+base),
       event:"push"
     });
@@ -229,6 +232,17 @@ test("exact rerun1 owner main push authorizes Assembly with only one Actions run
   assert.equal(ctx.manifest.trial_id,trial);
   assert.equal(f.calls.filter(c=>c[0]==="fetch" && c[1].includes("/actions/runs/")).length,1);
   assert.equal(ctx.production_authorized,false);
+});
+test("fresh six Assembly replay accepts only exact new GitHub owner-push workflow",async()=>{
+  const trial="dossier-notes-v2-fresh6-assembly-rerun2-20261117";
+  const f=makeFixture(6,trial,true);
+  const ctx=await preflight(f,{trialId:trial,phase:"assembly",freezeRunId:undefined});
+  assert.equal(ctx.anchor.authority_origin,"owner_main_push");
+  assert.equal(ctx.manifest.items.length,6);
+  assert.equal(ctx.production_authorized,false);
+  const bad=makeFixture(6,trial,true);
+  bad.runs.get(AUTHOR_ID).path=".github/workflows/issue-dossier-notes-v2-on-owner-push.yml";
+  await assert.rejects(preflight(bad,{trialId:trial,phase:"assembly"}));
 });
 test("owner main push Assembly rejects forged event/owner/sha and wrong scope",async()=>{
   const trial="dossier-notes-v2-fresh6-20261114-rerun1";

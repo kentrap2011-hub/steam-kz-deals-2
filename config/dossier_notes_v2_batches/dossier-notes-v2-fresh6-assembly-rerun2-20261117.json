@@ -1,0 +1,134 @@
+{
+  "schema": "DOSSIER-NOTES-V2-COHORT-PREPARATION-CONTRACT",
+  "schema_version": 1,
+  "status": "github_prepared_scope_only_requires_distinct_owner_grant",
+  "repository": "kentrap2011-hub/steam-kz-deals-2",
+  "owner": "github_control_plane",
+  "intended_semantic_phases": [
+    "research",
+    "assembly"
+  ],
+  "trial_id": "dossier-notes-v2-fresh6-assembly-rerun2-20261117",
+  "proposed_sandbox_branch": "sandbox/dossier-notes-v2-fresh6-assembly-rerun2-20261117",
+  "original18_unchanged": true,
+  "owner_actions_authorized": false,
+  "semantic_execution_authorized": false,
+  "sandbox_writer_authorized": false,
+  "canonical_ingest_authorized": false,
+  "production_enabled": false,
+  "scheduled_tasks_enabled": false,
+  "automated_retry_enabled": false,
+  "provenance": {
+    "main_commit": "665f5d0202859a6bac20566671f10158538e4764",
+    "worker_index_path": "data/production/pre_ai/taste_steam_review_dossier_worker_index.json",
+    "worker_index_blob_sha": "d33497a9501d68c6a38e8fa076651f663a5ebec2",
+    "snapshot_id": "25c227d782188699f56b5702b3f0cfa63b101d890f09620b7b59893fab93c1af",
+    "prepared_for_date": "2026-11-11",
+    "source_queue_sha256": "66b1751644c2f26d2fcb62586b7f6028f2e775c39cebdcd9893d9f253d13151a",
+    "group_plan_sha256": "31f8b4324bb4a0e4210700f358498c34784bd4529ea06ffd1f04703d1ad34c7f",
+    "group_descriptors": [
+      {
+        "path": "data/production/pre_ai/taste_steam_review_dossier_worker_groups/25c227d782188699f56b5702b3f0cfa63b101d890f09620b7b59893fab93c1af/g000001.json",
+        "blob_sha": "dedcec0fa09197d88551c388d707d5b28fad4015",
+        "sequence": 1,
+        "group_sha256": "f4e4fd79522da375882c34aafb56352d06f9e0e79d0009045742558e434fd104"
+      },
+      {
+        "path": "data/production/pre_ai/taste_steam_review_dossier_worker_groups/25c227d782188699f56b5702b3f0cfa63b101d890f09620b7b59893fab93c1af/g000070.json",
+        "blob_sha": "7369b4b1c7b4d461285dde76d69e7e9eeaad11e2",
+        "sequence": 70,
+        "group_sha256": "9b48e5fe8a6ef49b61556c8648ea8a00f487c7b7a9d6aa5367933083f56b2e21"
+      }
+    ]
+  },
+  "candidates": [
+    {
+      "appid": "1000010",
+      "title": "Crown Trick",
+      "source_group_sequence": 1,
+      "source_item_index": 0,
+      "source_reason": "refresh_required",
+      "baseline_blob_sha": "adedf896c4b33a5a41d0d16f4226b7dfabc65c0a"
+    },
+    {
+      "appid": "102600",
+      "title": "Orcs Must Die!",
+      "source_group_sequence": 1,
+      "source_item_index": 1,
+      "source_reason": "refresh_required",
+      "baseline_blob_sha": "98a8bcadca78c0e6c2f7f2f69dfb6a7581ad0aad"
+    },
+    {
+      "appid": "1029690",
+      "title": "Sniper Elite 5",
+      "source_group_sequence": 1,
+      "source_item_index": 2,
+      "source_reason": "refresh_required",
+      "baseline_blob_sha": "5533d987a697e2da80bb9ce988c3c1b74f3874e2"
+    },
+    {
+      "appid": "49520",
+      "title": "Borderlands 2",
+      "source_group_sequence": 70,
+      "source_item_index": 0,
+      "source_reason": "missing_dossier",
+      "baseline_blob_sha": null
+    },
+    {
+      "appid": "499180",
+      "title": "Braid, Anniversary Edition",
+      "source_group_sequence": 70,
+      "source_item_index": 1,
+      "source_reason": "missing_dossier",
+      "baseline_blob_sha": null
+    },
+    {
+      "appid": "501590",
+      "title": "Bulletstorm: Full Clip Edition",
+      "source_group_sequence": 70,
+      "source_item_index": 2,
+      "source_reason": "missing_dossier",
+      "baseline_blob_sha": null
+    }
+  ],
+  "required_future_authority": [
+    "One exact owner-authenticated first-attempt main push newly introducing this replay cohort source after owner merge",
+    "New sandbox grant/manifest/nonce marker/direct-child authorization with actual successful owner Action",
+    "Only GitHub deterministic copy of old six immutable Research contents after independent old Git lineage and receipt verification; new-trial assignment and new one-add typed receipts",
+    "Fresh explicit one-shot Assembly for the same six exact frozen games, no new semantic Research",
+    "Separate owner-approved sandbox strict writer; no old branch, production, Deep, V1 or schedule changes"
+  ],
+  "max_items": 24,
+  "manifest_issued": false,
+  "replay_source": {
+    "mode": "github_verified_deterministic_rebind_of_existing_research_no_semantic_rerun",
+    "trial_id": "dossier-notes-v2-fresh6-20261114-rerun1",
+    "sandbox_head": "c4232fb579fa88c4ed01afd5c45c57792c309984",
+    "manifest_blob_sha": "752d5689c3f7d055c94c1844877337eea13ebd79",
+    "marker_commit": "cdc8bcf79cef6d6e7c3c97ab91b5fb9416ab96d1",
+    "candidate_commits": {
+      "49520": "28c69e5c3dddbaf9a6bdc9126e04f837189b79dd",
+      "102600": "eb3fa455f27429995a6a956265ab0ee8fa666373",
+      "499180": "6f68d00f30c15743a473b5e629295e76ab3b64b3",
+      "501590": "47a51d0110c8d90a601d9b1c93a0b5473e07da6f",
+      "1000010": "d3e7f7bc75dd2aaa8d8e8b0d72eb7196bdc96c8d",
+      "1029690": "10af52500494ce39166b1af528a772b297aceaaa"
+    },
+    "candidate_blobs": {
+      "49520": "3872ebebdb41c233a410f87a3cb0d2f70e717f46",
+      "102600": "2ed0600870442c76272b655688696add1fad19b2",
+      "499180": "6a41e6405cf5e5e60dd4c7739e60ecba628f41ff",
+      "501590": "1f66c942d21c7506b9b79ee22a1f7c4dc5540342",
+      "1000010": "1737afbff09b18dfd5f7fefb4a0d6e2fd9d7f32d",
+      "1029690": "7cddb91dff2d5aa8f4ca0ebb75cf701006030c14"
+    },
+    "research_receipt_blobs": {
+      "49520": "55dea0f04a6c228726e8280049fba086ef38f594",
+      "102600": "28e53f7686af16adcfc349066187c4458a232f64",
+      "499180": "5d477a691e0631161a46ed66d6be9349fe20153e",
+      "501590": "bcd0f89f0a17778ea562dc2f8512a04553eaf682",
+      "1000010": "75d7937d36a54138dcd5d573ef69acb96feca65e",
+      "1029690": "e7375b885139b9259930e4d80609008a833687f7"
+    }
+  }
+}

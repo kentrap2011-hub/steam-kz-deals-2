@@ -195,8 +195,8 @@ def authorize(repo,expected,trial_id,marker_commit,env,authority_origin="manual"
 
 def guard_owner_push(repo,trial_id,sha,env):
     """Actual original owner main push must FIRST introduce the exact new cohort."""
-    batch.require(trial_id==batch.OWNER_PUSH_TRIAL,
-                  "push authorization is restricted to the new rerun1 cohort")
+    batch.require(trial_id in batch.OWNER_PUSH_TRIALS,
+                  "push authorization is restricted to the two exact preapproved cohorts")
     batch.paths(trial_id)
     batch.require(isinstance(sha,str) and SHA.fullmatch(sha),
                   "exact main push SHA missing")
@@ -210,7 +210,7 @@ def guard_owner_push(repo,trial_id,sha,env):
         and env.get("GITHUB_TRIGGERING_ACTOR")==batch.OWNER_LOGIN
         and env.get("GITHUB_REF")=="refs/heads/main"
         and env.get("GITHUB_WORKFLOW_REF")==
-            batch.REPOSITORY+"/"+batch.OWNER_PUSH_WORKFLOW+"@refs/heads/main"
+            batch.REPOSITORY+"/"+batch.owner_push_workflow(trial_id)+"@refs/heads/main"
         and env.get("GITHUB_SHA")==sha
         and env.get("GITHUB_RUN_ATTEMPT")=="1"
         and str(env.get("GITHUB_RUN_ID","")).isdigit()
@@ -272,9 +272,17 @@ def owner_push_launch(repo,trial_id,sha,env):
                   "source main moved before separate authorization commit")
     granted=authorize(repo,sha,trial_id,frozen["marker_commit"],env,
                       authority_origin="owner_main_push")
+    replay = {}
+    if trial_id == batch.OWNER_PUSH_REPLAY_TRIAL:
+        # The same one-use authenticated owner run can copy the old immutable
+        # Research content. It must never generate new semantic Research.
+        from dossier_notes_v2_assembly_replay_seed import seed
+        replay = {"research_replay": seed(
+            repo, trial_id=trial_id, marker_commit=frozen["marker_commit"],
+            authorization_commit=granted["authorization_commit"])}
     return {"source_main_sha":sha,"owner_action_run_id":env["GITHUB_RUN_ID"],
             "grant_commit":frozen["grant_commit"],
-            "manifest_commit":frozen["manifest_commit"],**granted}
+            "manifest_commit":frozen["manifest_commit"],**granted,**replay}
 
 
 def main():
