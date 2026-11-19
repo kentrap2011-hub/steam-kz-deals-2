@@ -91,6 +91,23 @@ class NotesV2Tests(unittest.TestCase):
         self.assertEqual(w["status"],"ready_for_autonomous_assembly")
         self.assertFalse(w["may_independently_discover"])
 
+    def test_lean_final_candidate_can_be_validated_without_researching_reviews_again(self):
+        # This exercises the actual immutable Research -> Assembly pre-submit interface
+        # without creating a review-level provenance ledger.
+        from test_dossier_notes_v2_lean_final import make_lean_final
+        research=self.note(
+            notes_text="Игроки хвалят динамичную стрельбу, но критикуют повторяемость.",
+            research_status="notes_recorded",
+        )
+        _,work=self.work(research)
+        doc=make_lean_final(self.appid, self.assignment["title"])
+        assembled=v2.candidate_assembly(work,outcome="assembled_candidate_ready",
+                                         final_dossier=doc)
+        result=v2.prepare_assembly_transport(self.repo,work,assembled)
+        self.assertEqual(result["status"],"ready_for_create_only_submission")
+        self.assertNotIn("player_feedback_records", doc)
+        self.assertFalse(work["may_independently_discover"])
+
     def test_SULFUR_role_conflict_is_stage2_problem_not_transport_rejection(self):
         doc=self.note(notes_text="SULFUR identity source role labeled current_state; identity uncertain",
                       unknowns_text="true identity corroboration absent")
