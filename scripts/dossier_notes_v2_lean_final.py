@@ -9,7 +9,7 @@ import json
 import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, parse_qsl
 
 from jsonschema import Draft202012Validator
 
@@ -64,6 +64,20 @@ def validate_lean_final(dossier, *, expected_appid=None, expected_title=None,
             raise ValueError(f"lean final unsafe public source link {i}")
         if re.search(r"/(?:profiles|users|user|members)/[^/]+", url.path, re.I):
             raise ValueError("lean final author/profile scoped source forbidden")
+        if any(key.lower() in {"token", "auth", "password", "secret", "api_key",
+                                    "access_token", "steamid", "userid", "authorid"}
+               for key, _ in parse_qsl(url.query, keep_blank_values=True)):
+            raise ValueError("lean final source URL contains sensitive query")
+        date = src.get("published_on")
+        if date is not None:
+            published = _date(date, f"sources[{i}].published_on")
+            if published > generated.date():
+                raise ValueError("lean final source publication date is in the future")
+        # Steam-source AppID can be checked locally without rereading the review.
+        if url.hostname.lower() in {"steamcommunity.com", "store.steampowered.com"}:
+            match = re.search(r"/app/(\d+)(?:/|$)", url.path)
+            if not match or match.group(1) != dossier["appid"]:
+                raise ValueError("lean final Steam source belongs to wrong AppID/edition")
         canonical = (url.scheme, url.hostname.lower(), url.path.rstrip("/"), url.query)
         if canonical in seen_urls:
             raise ValueError("lean final duplicate source URL")
@@ -99,6 +113,17 @@ def validate_lean_final(dossier, *, expected_appid=None, expected_title=None,
                     raise ValueError("lean final temporal claim postdates dossier generation")
                 if state == "current" and (generated.date() - date).days > 365:
                     raise ValueError("lean final current-state evidence is too old")
+                # Date assertion must be tied to a dated, player-authored source.
+                # A generic Steam storefront/collection URL alone cannot establish
+                # any review publication date: the supplied date must be explicitly
+                # recorded as source metadata; no live content is re-fetched here.
+                supported = any(
+                    sources[ref]["kind"] == "player_feedback"
+                    and sources[ref].get("published_on") == when
+                    for ref in refs
+                )
+                if not supported:
+                    raise ValueError("lean final temporal claim lacks matching dated player source")
             elif when is not None:
                 raise ValueError("lean final undated/uncertain claim must not assert as_of")
     if not sources and dossier["confidence"] != "limited":
