@@ -18,7 +18,7 @@ def make_lean_final(appid="2124120", title="SULFUR", now=None):
         "schema": LEAN_SCHEMA, "schema_version": 1,
         "appid": str(appid), "title": title,
         "generated_at_utc": generated, "expires_at_utc": expires, "ttl_days": 20,
-        "game_identity": {"appid":str(appid),"work_title":title,"release_year":2024},
+        "game_identity": {"appid":str(appid),"work_title":title,"release_year":2024 if str(appid) == "2124120" else None},
         "summary": "Динамичный шутер с боевой добычей и значимыми тактическими компромиссами.",
         "observations": [
             {"category":"mechanics", "sentiment":"positive",
