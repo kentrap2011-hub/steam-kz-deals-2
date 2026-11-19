@@ -1325,11 +1325,20 @@ def _drain_notes_v2_individual(
                     or original.get("outcome") != "assembled_candidate_ready"):
                 raise ValueError("original Assembly Git binding changed")
             dossier = original["final_dossier"]
-            validate_dossier_strict(
-                dossier, strict_contract, expected_appid=appid,
-                expected_title=work["assignment"]["title"],
-            )
-            validate_compact_provenance(dossier, load_compact_provenance_policy())
+            # Lean final is strictly confined to an isolated Notes V2 trial.
+            # Production/canonical writer still requires unchanged strict V2.
+            from dossier_notes_v2_lean_final import LEAN_SCHEMA, validate_lean_final
+            if dossier.get("schema") == LEAN_SCHEMA and trial_sandbox:
+                validate_lean_final(
+                    dossier, expected_appid=appid,
+                    expected_title=work["assignment"]["title"],
+                )
+            else:
+                validate_dossier_strict(
+                    dossier, strict_contract, expected_appid=appid,
+                    expected_title=work["assignment"]["title"],
+                )
+                validate_compact_provenance(dossier, load_compact_provenance_policy())
             dossier_sha = canonical_sha256(dossier)
             target = dossier_path(store, appid)
             receipt = accepted / trial_id / (
