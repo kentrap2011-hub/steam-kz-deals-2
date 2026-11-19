@@ -13,7 +13,7 @@ from dossier_notes_v2_lean_final import LEAN_SCHEMA, SCHEMA_PATH, validate_lean_
 _SANDBOX_PATH = re.compile(
     r"^data/control/dossier_notes_v2/"
     r"(?:batch_pilot_store/[a-z0-9][a-z0-9-]{7,99}|pilot_store)/"
-    r"App_[0-9]+\\.json$"
+    r"App_[0-9]+\.json$"
 )
 
 def preview_binding():
