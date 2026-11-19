@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "DOSSIER-NOTES-V2-LEAN-FINAL-V1 (isolated trial only)",
-  "description": "Compact neutral player-experience claims for the authorized inactive Notes V2 sandbox. Not the canonical V2 web-evidence schema, not Deep-ready.",
+  "description": "Compact neutral observations for inactive Notes V2 sandbox only. Optional source publication dates are required only for explicit current/historical claims; no per-review ledger.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -209,6 +209,13 @@
               "player_feedback",
               "context"
             ]
+          },
+          "published_on": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
           }
         }
       }
