@@ -7,8 +7,6 @@ test-only preview caller may use this lean gate. Normal Deep keeps its V2 path.
 """
 import json
 import re
-from datetime import datetime, timezone
-from pathlib import Path
 
 from dossier_notes_v2_lean_final import LEAN_SCHEMA, SCHEMA_PATH, validate_lean_final
 
