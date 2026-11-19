@@ -39,6 +39,9 @@ on:
       - "config/dossier_notes_v2_lean_final.schema.json"
       - "scripts/dossier_notes_v2_lean_final.py"
       - "scripts/test_dossier_notes_v2_lean_final.py"
+      - "scripts/dossier_notes_v2_deep_compat.py"
+      - "scripts/test_dossier_notes_v2_deep_compat.py"
+      - "scripts/progressive_pass2.py"
       - "scripts/dossier_two_stage_versioned.py"
       - "scripts/test_dossier_research_notes_v2.py"
       - "scripts/dossier_notes_v2_per_item_receipts.py"
@@ -77,6 +80,10 @@ jobs:
         run: |
           python -m py_compile scripts/dossier_notes_v2_lean_final.py scripts/test_dossier_notes_v2_lean_final.py
           python scripts/test_dossier_notes_v2_lean_final.py -v
+      - name: Lean dossier isolated Deep compatibility and old V2 regression
+        run: |
+          python -m py_compile scripts/dossier_notes_v2_deep_compat.py scripts/test_dossier_notes_v2_deep_compat.py scripts/progressive_pass2.py
+          python scripts/test_dossier_notes_v2_deep_compat.py -v
       - name: Prepared fresh6 scope and no-authority adversarial tests (no semantic execution)
         run: |
           python scripts/test_dossier_notes_v2_fresh6_preflight.py -v
