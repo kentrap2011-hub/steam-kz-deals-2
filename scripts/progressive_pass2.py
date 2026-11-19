@@ -541,7 +541,21 @@ def _bound_dossier(work_item):
         raise ValueError('Deep negative assessment Dossier document is missing')
     if str(dossier.get('appid') or '') != str(work_item.get('appid') or ''):
         raise ValueError('Deep negative assessment Dossier appid mismatch')
-    if dossier.get('web_evidence_contract_binding') != work_item.get('dossier_compatibility_binding'):
+    if dossier.get('schema') == 'DOSSIER-NOTES-V2-LEAN-FINAL-V1':
+        # Explicit offline/sandbox preview only. No normal GitHub Deep work item
+        # can set this private local preview flag or use its preview-only binding.
+        if work_item.get('_sandbox_lean_preview') is not True or work_item.get('preview_only') is not True:
+            raise ValueError('lean Dossier cannot be consumed as canonical Deep evidence')
+        from dossier_notes_v2_deep_compat import lean_preview_eligibility
+        ok, reason = lean_preview_eligibility(
+            binding={'appid': work_item.get('appid')},
+            semantic_input={'title': dossier.get('title')},
+            dossier_record=record,
+            current_binding=work_item.get('dossier_compatibility_binding'),
+        )
+        if not ok:
+            raise ValueError('Deep lean sandbox preview binding mismatch: ' + reason)
+    elif dossier.get('web_evidence_contract_binding') != work_item.get('dossier_compatibility_binding'):
         raise ValueError('Deep negative assessment Dossier binding mismatch')
     return dossier
 
@@ -989,6 +1003,7 @@ def dossier_is_eligible(
     now=None,
     pass1_entry=None,
     pass2_state_doc=None,
+    lean_sandbox_preview=False,
 ):
     """Validate only the current Deep evidence gate.
 
@@ -1010,6 +1025,15 @@ def dossier_is_eligible(
         return False, 'canonical_dossier_record_invalid'
     if str(dossier.get('appid') or '') != str(binding.get('appid') or ''):
         return False, 'dossier_wrong_appid'
+
+    if dossier.get('schema') == 'DOSSIER-NOTES-V2-LEAN-FINAL-V1':
+        if not lean_sandbox_preview:
+            return False, 'lean_dossier_is_not_canonical_deep_evidence'
+        from dossier_notes_v2_deep_compat import lean_preview_eligibility
+        return lean_preview_eligibility(
+            binding=binding, semantic_input=semantic_input,
+            dossier_record=dossier_record, current_binding=current_binding, now=now
+        )
 
     identity = dossier.get('game_identity')
     if not isinstance(identity, dict) or identity.get('resolution_status') != 'resolved':
