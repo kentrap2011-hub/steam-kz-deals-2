@@ -342,11 +342,13 @@ class NotesV2IndividualReadinessTests(unittest.TestCase):
             f.repo, marker_commit=f.marker, trial_id=helpers.TRIAL,
             appid=appid, research_commit=research)
         self.assertEqual(work["status"], "ready_for_autonomous_assembly")
-        dossier = (
-            {"appid": appid, "title": a["title"]}
-            if result == "invalid_strict"
-            else web_dossier(appid, datetime.now(timezone.utc), title=a["title"])
-        )
+        if result == "lean":
+            from test_dossier_notes_v2_lean_final import make_lean_final
+            dossier = make_lean_final(appid, a["title"])
+        elif result == "invalid_strict":
+            dossier = {"appid": appid, "title": a["title"]}
+        else:
+            dossier = web_dossier(appid, datetime.now(timezone.utc), title=a["title"])
         document = notes.candidate_assembly(
             work, outcome="assembled_candidate_ready", final_dossier=dossier)
         helpers.write(f.repo, work["output_path"], document)
@@ -489,6 +491,28 @@ class NotesV2IndividualReadinessTests(unittest.TestCase):
         self.assertEqual(len(list(receipts.rglob("*.json"))), 3)
         if before is not None:
             self.assertEqual(helpers.run(f.repo, "rev-parse", "HEAD"), before)
+
+    def test_v2_lean_candidate_is_local_ready_but_non_sandbox_writer_cannot_publish(self):
+        # A lean pilot candidate may validate at the inactive Notes V2 Assembly
+        # boundary, but must never pass the old canonical strict writer.
+        f, helpers = self.fixture()
+        from taste_steam_review_dossier_buffered import drain_buffered_groups
+        appid = helpers.C["original_groups"][0]["appids"][0]
+        pair = self.submit(f, helpers, appid, result="lean")
+        projected = self.inspect_v2(f, helpers, {appid: pair})
+        self.assertEqual(projected["items"][0]["status"], "ready")
+        (f.repo / ".dossier-final-offline-fixture").write_text("synthetic\\n")
+        store, receipts = f.repo / "store", f.repo / "accepted"
+        # Offline test route does not have the explicit owner sandbox flag,
+        # so its writer must refuse the lean-only format as incompatible.
+        result = drain_buffered_groups(notes_v2={
+            "repo": f.repo, "marker_commit": f.marker,
+            "trial_id": helpers.TRIAL, "item_commits": {appid: pair},
+            "store_dir": store, "accepted_dir": receipts,
+            "offline_fixture": True,
+        })
+        self.assertEqual(result["items"][0]["status"], "writer_rejected")
+        self.assertFalse((store / ("App_" + appid + ".json")).exists())
 
     def test_v2_single_writer_collision_and_unauthorized_fail_closed(self):
         f, helpers = self.fixture()
