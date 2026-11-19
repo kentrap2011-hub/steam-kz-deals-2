@@ -107,7 +107,23 @@
     "max_mechanical_self_corrections": 2,
     "no_retry_between_invocations": true,
     "strict_final_validation": "scripts/taste_steam_review_dossier_strict.py",
-    "group_acceptance": "existing_atomic_three_game_writer_only"
+    "group_acceptance": "existing_atomic_three_game_writer_only",
+    "isolated_lean_final": {
+      "enabled_for_new_owner_authorized_sandbox_trials_only": true,
+      "schema": "config/dossier_notes_v2_lean_final.schema.json",
+      "validator": "scripts/dossier_notes_v2_lean_final.py",
+      "no_per_review_records": true,
+      "no_mandatory_twelve_dimension_ledger": true,
+      "minimum_safety": [
+        "exact_appid_title_edition",
+        "balanced_game_experience_findings",
+        "safe_source_links_when_available",
+        "dated_recent_technical_claims",
+        "privacy"
+      ],
+      "canonical_or_deep_ingest": false,
+      "legacy_strict_final_still_required_for_canonical": true
+    }
   },
   "attempts": "transport refusal proves no acceptance but not worker attempt history; report attempt state unknown unless GitHub attests execution",
   "reviewer_authorization": "real GitHub identity lookup + owner-confirmed separate appointment required; regex-only forbidden",
