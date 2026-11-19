@@ -108,6 +108,9 @@ class LeanFinalContractTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"matching dated player source"):
             self.check(doc)
         doc["sources"][1]["published_on"]="2020-01-01"
+        with self.assertRaisesRegex(ValueError,"matching dated player source"):
+            self.check(doc)
+        doc["sources"][1]["url"]="https://steamcommunity.com/app/2124120/discussions/0/999999999999999999/"
         self.check(doc)
         doc["observations"][0]["evidence_status"]="current"
         doc["observations"][0]["as_of"]=NOW.date().isoformat()
