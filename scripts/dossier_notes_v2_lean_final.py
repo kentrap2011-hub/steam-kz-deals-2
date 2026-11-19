@@ -117,11 +117,21 @@ def validate_lean_final(dossier, *, expected_appid=None, expected_title=None,
                 # A generic Steam storefront/collection URL alone cannot establish
                 # any review publication date: the supplied date must be explicitly
                 # recorded as source metadata; no live content is re-fetched here.
-                supported = any(
-                    sources[ref]["kind"] == "player_feedback"
-                    and sources[ref].get("published_on") == when
-                    for ref in refs
-                )
+                supported = False
+                for ref in refs:
+                    source = sources[ref]
+                    if (source["kind"] != "player_feedback"
+                            or source.get("published_on") != when):
+                        continue
+                    locator = urlsplit(source["url"])
+                    if locator.hostname in {"steamcommunity.com", "store.steampowered.com"}:
+                        # An app landing page or generic reviews collection has
+                        # no single publication date, even if the worker labels it.
+                        if re.fullmatch(r"/app/[0-9]+(?:/(?:reviews|discussions))?/?",
+                                        locator.path):
+                            continue
+                    supported = True
+                    break
                 if not supported:
                     raise ValueError("lean final temporal claim lacks matching dated player source")
             elif when is not None:
