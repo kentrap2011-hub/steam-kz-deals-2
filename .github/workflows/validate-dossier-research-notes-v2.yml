@@ -93,6 +93,8 @@ jobs:
         run: python scripts/test_dossier_notes_v2_per_item_receipts.py -v
       - name: Existing strict V2 isolated writer transaction regression
         run: python scripts/test_dossier_two_stage_final_acceptance.py NotesV2IndividualReadinessTests.test_v2_github_writer_hookup_single_transaction -v
+      - name: Lean sandbox cannot bypass the canonical strict writer
+        run: python scripts/test_dossier_two_stage_final_acceptance.py NotesV2IndividualReadinessTests.test_v2_lean_candidate_is_local_ready_but_non_sandbox_writer_cannot_publish -v
       - name: Syntax and PR activation guard
         run: |
           python -m py_compile scripts/dossier_notes_v2_research_receipt_ingest.py scripts/test_dossier_notes_v2_research_receipt_ingest.py scripts/test_dossier_notes_v2_owner_push.py
