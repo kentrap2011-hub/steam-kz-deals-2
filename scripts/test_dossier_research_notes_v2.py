@@ -89,7 +89,7 @@ class NotesV2Tests(unittest.TestCase):
         w=v2.assembly_work(self.repo,marker_commit=self.marker,trial_id=TRIAL,
                            appid=self.appid,research_commit=sha)
         self.assertEqual(w["status"],"ready_for_autonomous_assembly")
-        self.assertTrue(w["may_independently_discover"])
+        self.assertFalse(w["may_independently_discover"])
 
     def test_SULFUR_role_conflict_is_stage2_problem_not_transport_rejection(self):
         doc=self.note(notes_text="SULFUR identity source role labeled current_state; identity uncertain",
