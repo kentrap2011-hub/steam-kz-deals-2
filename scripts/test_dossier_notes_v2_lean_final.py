@@ -105,7 +105,18 @@ class LeanFinalContractTests(unittest.TestCase):
         doc=make_lean_final()
         doc["observations"][0]["evidence_status"]="historical"
         doc["observations"][0]["as_of"]="2020-01-01"
+        with self.assertRaisesRegex(ValueError,"matching dated player source"):
+            self.check(doc)
+        doc["sources"][1]["published_on"]="2020-01-01"
         self.check(doc)
+        doc["observations"][0]["evidence_status"]="current"
+        doc["observations"][0]["as_of"]=NOW.date().isoformat()
+        doc["sources"][1]["published_on"]=NOW.date().isoformat()
+        self.check(doc)
+        doc["sources"][1]["kind"]="context"
+        with self.assertRaisesRegex(ValueError,"matching dated player source"):
+            self.check(doc)
+
 
     def test_unsafe_author_profile_and_duplicate_sources_rejected(self):
         doc=make_lean_final()
@@ -115,6 +126,20 @@ class LeanFinalContractTests(unittest.TestCase):
         doc=make_lean_final()
         doc["sources"][1]["url"]=doc["sources"][0]["url"]
         with self.assertRaisesRegex(ValueError,"duplicate source URL"):
+            self.check(doc)
+
+    def test_temporal_source_date_and_exact_steam_appid(self):
+        doc=make_lean_final()
+        doc["sources"][1]["published_on"]="2026-02-30"
+        with self.assertRaisesRegex(ValueError,"real calendar date"):
+            self.check(doc)
+        doc=make_lean_final()
+        doc["sources"][1]["url"]="https://steamcommunity.com/app/999999/reviews/"
+        with self.assertRaisesRegex(ValueError,"wrong AppID"):
+            self.check(doc)
+        doc=make_lean_final()
+        doc["sources"][1]["url"] += "?token=secret"
+        with self.assertRaisesRegex(ValueError,"sensitive query"):
             self.check(doc)
 
     def test_empty_source_requires_limited_confidence_and_uncertainty(self):
