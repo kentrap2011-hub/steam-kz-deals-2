@@ -654,7 +654,7 @@ class NotesV2Tests(unittest.TestCase):
     def test_assembly_transport_rejects_forged_work_binding(self):
         sha,work=self.work()
         fake=copy.deepcopy(work)
-        fake["source_notes_are_unverified_leads"]=False
+        fake["source_notes_are_unverified_leads"]=True
         terminal=v2.candidate_assembly(fake,outcome="assembly_missing_evidence",
                                        diagnostic="Fixture")
         with self.assertRaises(v2.NotesV2Error) as cm:
