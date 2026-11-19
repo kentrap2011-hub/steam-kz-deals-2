@@ -30,8 +30,8 @@ def make_lean_final(appid="2124120", title="SULFUR", now=None):
         ],
         "conflicts":[],
         "sources":[
-            {"url":"https://store.steampowered.com/app/2124120/SULFUR/","kind":"identity"},
-            {"url":"https://steamcommunity.com/app/2124120/reviews/","kind":"player_feedback"},
+            {"url":f"https://store.steampowered.com/app/{appid}/","kind":"identity"},
+            {"url":f"https://steamcommunity.com/app/{appid}/reviews/","kind":"player_feedback"},
         ],
         "unknowns":["Частота и актуальность отдельных технических жалоб не подтверждены."],
         "confidence":"limited",
