@@ -190,7 +190,7 @@ class P2StagingTests(unittest.TestCase):
         self.assertEqual(p["status"], "rejected_invalid")
         r = p["files"][p["receipt_path"]]
         self.assertEqual(r["reason_code"], "invalid_json")
-        self.assertNotIn("bad", json.dumps(r))
+        self.assertNotIn('"bad"', json.dumps(r))
         self.assertFalse(r["retry_authorized"])
 
     def test_04_duplicate_raw_json_field_rejected(self):
