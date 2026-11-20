@@ -21,6 +21,7 @@ from dossier_two_stage_staging import (
 )
 from dossier_two_stage_contract_guard import _privacy
 from taste_steam_review_dossier_strict import validate_dossier_strict
+from dossier_notes_v2_lean_final import LEAN_SCHEMA, validate_lean_final
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "config"
@@ -381,7 +382,7 @@ def assembly_work(repo, *, marker_commit, trial_id, appid, research_commit):
                                  "research_package_blob_sha","research_package_raw_sha256",
                                  "research_package_sha256")},
             "output_path":_path("assembly", a),
-            "source_notes_are_unverified_leads":True,"may_independently_discover":True,
+            "source_notes_are_unverified_leads":False,"may_independently_discover":False,
             "max_mechanical_corrections":2,"canonical_acceptance":False}
 
 
@@ -461,9 +462,13 @@ def inspect_assembly(repo, *, marker_commit, trial_id, appid, research_commit, r
             final = doc["final_dossier"]
             if final.get("appid") != work["assignment"]["appid"] or final.get("title") != work["assignment"]["title"]:
                 reject("final_strict_or_group_rejected", "wrong final exact product")
-            strict = json.loads((CONFIG / "taste_steam_review_dossier_contract.json").read_text("utf-8"))
-            validate_dossier_strict(final,strict,expected_appid=work["assignment"]["appid"],
+            if final.get("schema") == LEAN_SCHEMA:
+                validate_lean_final(final, expected_appid=work["assignment"]["appid"],
                                     expected_title=work["assignment"]["title"])
+            else:
+                strict = json.loads((CONFIG / "taste_steam_review_dossier_contract.json").read_text("utf-8"))
+                validate_dossier_strict(final,strict,expected_appid=work["assignment"]["appid"],
+                                        expected_title=work["assignment"]["title"])
         except NotesV2Error:
             raise
         except (ValueError, KeyError, TypeError, AssertionError) as exc:
@@ -545,10 +550,15 @@ def prepare_assembly_transport(repo, work, document):
         reject("wrong_binding", "supplied Assembly document differs from validated candidate")
     if document["outcome"] == "assembled_candidate_ready":
         try:
-            strict = json.loads((CONFIG / "taste_steam_review_dossier_contract.json").read_text("utf-8"))
-            validate_dossier_strict(document["final_dossier"], strict,
-                 expected_appid=work["assignment"]["appid"],
-                 expected_title=work["assignment"]["title"])
+            final = document["final_dossier"]
+            if final.get("schema") == LEAN_SCHEMA:
+                validate_lean_final(final, expected_appid=work["assignment"]["appid"],
+                                    expected_title=work["assignment"]["title"])
+            else:
+                strict = json.loads((CONFIG / "taste_steam_review_dossier_contract.json").read_text("utf-8"))
+                validate_dossier_strict(final, strict,
+                     expected_appid=work["assignment"]["appid"],
+                     expected_title=work["assignment"]["title"])
         except (ValueError, AssertionError, TypeError, KeyError) as exc:
             reject("final_strict_or_group_rejected", "strict draft validation failed: "+str(exc))
     path = _path("assembly", work["assignment"])
