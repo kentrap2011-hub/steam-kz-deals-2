@@ -623,6 +623,94 @@ def check_nested_dlc_exact_parent_proof():
     assert run(fixtures)[1]['dlc_price_lookups'] == len(fixtures) - 1
 
 
+def check_batch_price_only_cannot_prove_dlc_completeness():
+    """Offline counterexamples: filtered price-only API is not relation metadata.
+
+    The snapshots are synthetic, not preserved raw responses from run
+    42601207552. This test proves that removing relation-bearing fields can
+    lose a paid descendant or suppress an essential fail-closed decision.
+    No network fetch, collector, global history or production writes.
+    """
+    core = collector.load_core()
+    sale = {'currency': 'KZT', 'final': 25000, 'discount_percent': 85}
+    # 2820 -> 201310 (unpriced) -> 601 (discounted and eligible).
+    # Another direct discounted sibling 600 demonstrates silent partial loss.
+    fixture = {
+        '2820': {'steam_appid': 2820, 'type': 'game', 'dlc': [201310, 600]},
+        '201310': {'steam_appid': 201310, 'type': 'dlc',
+                   'fullgame': {'appid': 2820}, 'dlc': [601]},
+        '600': {'steam_appid': 600, 'type': 'dlc',
+                'fullgame': {'appid': 2820}, 'price_overview': sale},
+        '601': {'steam_appid': 601, 'type': 'dlc',
+                'fullgame': {'appid': 201310}, 'price_overview': sale},
+    }
+
+    def discover(records):
+        observed = []
+        def fetch(ident):
+            observed.append(ident)
+            return records[ident]
+        offers, stats = targeted.discover_dlc_for_bases(
+            ['2820'], core, fetch=fetch
+        )
+        return offers, stats, observed
+
+    baseline, stats, calls = discover(fixture)
+    assert sorted(baseline) == ['App_600', 'App_601']
+    assert baseline['App_601']['verified_parent_chains'] == [
+        ['2820', '201310', '601']
+    ]
+    assert stats['nested_intermediate_unique_ids'] == 1
+    assert stats['nested_child_unique_ids'] == 1
+    assert set(calls) == set(fixture)
+
+    # Give the alleged optimization extra metadata that the actual
+    # price_overview-filtered API does NOT supply, but remove ONLY the
+    # intermediary's 'dlc' list. It still loses the eligible grandchild.
+    no_relation = dict(fixture)
+    no_relation['201310'] = {
+        field: value for field, value in fixture['201310'].items()
+        if field != 'dlc'
+    }
+    missing_offer, missing_stats, missing_calls = discover(no_relation)
+    assert sorted(missing_offer) == ['App_600']
+    assert 'App_601' not in missing_offer
+    assert missing_stats['nested_child_unique_ids'] == 0
+    assert '601' not in missing_calls
+
+    # Even with the relation list retained, a batch-only priced child's
+    # missing fullgame cannot prove its exact intermediate parent.
+    no_parent = dict(fixture)
+    no_parent['601'] = {
+        field: value for field, value in fixture['601'].items()
+        if field != 'fullgame'
+    }
+    try:
+        discover(no_parent)
+    except RuntimeError as exc:
+        assert 'missing nested parent proof' in str(exc)
+    else:
+        raise AssertionError('price-only grandchild bypassed parent proof')
+
+    # Current collector rejects a wrong asserted parent, even though KZT
+    # price and the ancestor's discovery list are unchanged.
+    foreign = dict(fixture)
+    foreign['601'] = dict(fixture['601'], fullgame={'appid': 999999})
+    filtered, _, _ = discover(foreign)
+    assert sorted(filtered) == ['App_600']
+
+    # Third-hop evidence causes a hard failure today; deleting relationship
+    # metadata would silently bypass the completeness stop instead.
+    third_hop = dict(fixture)
+    third_hop['601'] = dict(fixture['601'], dlc=[700])
+    try:
+        discover(third_hop)
+    except RuntimeError as exc:
+        assert 'exceeds verified two-hop relation scope' in str(exc)
+    else:
+        raise AssertionError('third hop was silently truncated')
+
+
 def check_conservative_obscure_rescue_and_package():
     assert targeted.candidate_needs_obscure_gate(paid('App_1', reviews=20, percent=85))
     assert not targeted.candidate_needs_obscure_gate(paid('App_1', reviews=11, percent=95))
@@ -1245,6 +1333,7 @@ def main():
     check_dlc_membership_identity_regressions()
     check_verified_listed_base_alias_1697640()
     check_nested_dlc_exact_parent_proof()
+    check_batch_price_only_cannot_prove_dlc_completeness()
     check_conservative_obscure_rescue_and_package()
     check_five_middling_games_package_below_individual_cutoff()
     check_direct_subs_are_discoverable_without_current_app()
