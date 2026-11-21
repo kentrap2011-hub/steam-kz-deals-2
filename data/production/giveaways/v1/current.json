@@ -2,8 +2,8 @@
   "contract": "CROSS-PLATFORM-GIVEAWAY-V1",
   "schema_version": 1,
   "country_code": "KZ",
-  "generated_at_utc": "2026-11-20T01:48:37.289213Z",
-  "fresh_until_utc": "2026-11-21T07:48:37.289213Z",
+  "generated_at_utc": "2026-11-21T01:30:11.990336Z",
+  "fresh_until_utc": "2026-11-22T07:30:11.990336Z",
   "snapshot_status": "incomplete",
   "required_sources": [
     "steam",
@@ -15,21 +15,21 @@
       "required": true,
       "status": "failed",
       "complete": false,
-      "observed_at_utc": "2026-11-20T01:48:37.289213Z",
+      "observed_at_utc": "2026-11-21T01:30:11.990336Z",
       "endpoint": "existing KZ Steam catalog + targeted first-party validation",
       "candidate_count": 0,
       "accepted_count": 0,
       "rejected_count": 0,
       "unverified_count": 0,
       "error_code": "SOURCE_STALE",
-      "error": "Steam candidate snapshot is stale: 1733.0h",
+      "error": "Steam candidate snapshot is stale: 1756.7h",
       "details": {}
     },
     "epic": {
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-11-20T01:48:37.289213Z",
+      "observed_at_utc": "2026-11-21T01:30:11.990336Z",
       "endpoint": "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions",
       "candidate_count": 1,
       "accepted_count": 1,
@@ -49,7 +49,7 @@
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-11-20T01:48:37.289213Z",
+      "observed_at_utc": "2026-11-21T01:30:11.990336Z",
       "endpoint": "https://catalog.gog.com/v1/catalog",
       "candidate_count": 0,
       "accepted_count": 0,
@@ -92,7 +92,7 @@
           "claim_url": "https://store.epicgames.com/en-US/p/mark-of-the-deep-f7dc08",
           "promotion_start_utc": "2026-11-19T16:00:00Z",
           "promotion_end_utc": "2026-11-26T16:00:00Z",
-          "observed_at_utc": "2026-11-20T01:48:37.289213Z",
+          "observed_at_utc": "2026-11-21T01:30:11.990336Z",
           "base_price": 520000,
           "final_price": 0,
           "currency": "KZT",
@@ -108,26 +108,27 @@
             "KZ_AVAILABLE"
           ],
           "identity_resolution": {
-            "schema_version": 1,
-            "source_storefront": "epic",
-            "source_product_id": "3d6441ab9d4246208bc97d7babf664b5:1f9a12b06b4f437790b6913ad136a08c",
-            "source_provider_product_id": "1f9a12b06b4f437790b6913ad136a08c",
             "identity_provider": "itad",
-            "provider_game_id": "018d937f-6f14-72be-9554-eeff3cd3a8c0",
-            "steam_appid": 1933370,
-            "status": "resolved",
-            "reason": "exact_unique",
             "provenance": {
+              "api_docs": "https://docs.isthereanydeal.com/",
+              "auth_route": "none_documented",
               "authority": "source_exact_shop_id",
-              "source_shop_id": 16,
-              "steam_shop_id": 61,
+              "checked_at_utc": "2026-11-20T01:48:37.289213Z",
               "lookup_forward": "/lookup/id/shop/{shopId}/v1",
               "lookup_reverse": "/lookup/shop/{shopId}/id/v1",
               "shop_map": "/service/shops/map/v1",
-              "auth_route": "none_documented",
-              "checked_at_utc": "2026-11-20T01:48:37.289213Z",
-              "api_docs": "https://docs.isthereanydeal.com/"
-            }
+              "source_shop_id": 16,
+              "steam_shop_id": 61,
+              "cache_reused": true
+            },
+            "provider_game_id": "018d937f-6f14-72be-9554-eeff3cd3a8c0",
+            "reason": "exact_unique",
+            "schema_version": 1,
+            "source_product_id": "3d6441ab9d4246208bc97d7babf664b5:1f9a12b06b4f437790b6913ad136a08c",
+            "source_provider_product_id": "1f9a12b06b4f437790b6913ad136a08c",
+            "source_storefront": "epic",
+            "status": "resolved",
+            "steam_appid": 1933370
           }
         }
       ],
@@ -154,7 +155,7 @@
   "identity_resolution_counts": {
     "resolved": 1,
     "unresolved": 0,
-    "cache_hits": 0,
-    "network_lookups": 1
+    "cache_hits": 1,
+    "network_lookups": 0
   }
 }
