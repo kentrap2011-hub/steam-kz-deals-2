@@ -1,0 +1,31 @@
+name: One-shot Steam KZ price batch canary (30 IDs)
+
+on:
+  pull_request:
+    types: [opened]
+    branches: [main]
+    paths:
+      - "scripts/steam_kz_price_batch_canary.py"
+      - ".github/workflows/steam-kz-price-batch-canary.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  price-only-batch-canary:
+    if: github.event.pull_request.head.repo.full_name == 'kentrap2011-hub/steam-kz-deals-2' && github.event.pull_request.head.ref == 'trial/steam-kz-price-batch-30-20261109'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate script syntax
+        run: python -m py_compile scripts/steam_kz_price_batch_canary.py
+      - name: Compare 30 individual KZ prices against one batch
+        run: python -u scripts/steam_kz_price_batch_canary.py
