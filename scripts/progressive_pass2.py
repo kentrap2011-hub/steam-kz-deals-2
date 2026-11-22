@@ -1671,7 +1671,7 @@ def recompute_eligibility(
             counts['recovery_owned_count'] += 1
             reasons[family_id] = f'recovery_owned_{dossier_reason}'
             continue
-        if not recovery_authorization_is_live(entry, dossier_record, current_binding):
+        if not recovery_authorization_is_live(entry, dossier_record, item_binding):
             counts['recovery_owned_count'] += 1
             reasons[family_id] = 'recovery_owned_fresh_authorization_required'
             continue
