@@ -210,6 +210,18 @@ Production validator проверяет:
 
 ---
 
+## Inactive Lean Dossier canonical writer/store → Taste semantic input → normal Deep (2026-11-22)
+
+- **Last code route check:** 2026-11-22, PR #471, source branch `fix/dossier-assembly-no-routine-discovery-20261119`, checked at `32d8a67968c8b481c490d00ff1fe46530a03d7b7`. **Draft, not merged, not activated.**
+- **Format/owner authority:** `config/dossier_lean_canonical_dual_format_contract.json` — Lean writer, reader and Deep are all **false by default**. Existing GitHub source/writer permissions remain mandatory; legacy strict V2 format and old Deep binding unchanged.
+- **Shared writer:** `scripts/taste_steam_review_dossier_buffered.py::_drain_notes_v2_individual` → strict legacy validator or Lean-specific `scripts/dossier_lean_canonical_dual.py::validate_writer_lean` and `lean_receipt_fields`; exact GitHub-controlled per-item receipt, atomic cache+receipt staging via existing `scripts/stage_taste_dossier_canonical_writer.sh`.
+- **Canonical read/freshness:** `scripts/dossier_lean_canonical_dual.py::inspect_accepted_lean` checks committed exact cache+receipt, original frozen Research→Assembly Git lineage, edition/AppID/release-year, source freshness and separate quality+receipt binding; `versioned_dossier_state` is called from `scripts/taste_steam_review_dossier_buffered.py` cache reuse and `scripts/taste_steam_review_dossier_web.py` manifest + semantic input.
+- **Deep:** `scripts/progressive_pass2.py::dossier_is_eligible`, `recompute_eligibility` and `_bound_dossier` use exact canonical Lean owner acceptance only when enabled, retain normalizer inputs `observations/conflicts` and original strict fallback; sandbox preview still separate.
+- **Offline verification:** `scripts/test_dossier_lean_canonical_dual.py` uses the existing disposable Git fixture + real writer boundary, semantic reader, normal Deep work projection and score/negative normalizers. Run via PR-only `.github/workflows/validate-dossier-research-notes-v2.yml`. The synthetic Git test does not authenticate actual GitHub owner action.
+- **No activation:** production acceptance, Deep semantics, migrations, scheduled tasks, live GitHub writer and source merge forbidden without separate owner decision and independent L3 on final CI HEAD.
+
+---
+
 ## Taste Steam review dossier: non-blocking per-group progress and immutable recovery
 
 **Что ищем:** как Scheduled ChatGPT публикует immutable predeclared 3-game candidates, а GitHub независимо классифицирует каждую группу как `pending`, `accepted` или `failed_or_invalid_pending_recovery` без head-of-line blocking.
