@@ -41,6 +41,10 @@ on:
       - "scripts/test_dossier_notes_v2_lean_final.py"
       - "scripts/dossier_notes_v2_deep_compat.py"
       - "scripts/test_dossier_notes_v2_deep_compat.py"
+      - "config/dossier_lean_canonical_dual_format_contract.json"
+      - "scripts/dossier_lean_canonical_dual.py"
+      - "scripts/test_dossier_lean_canonical_dual.py"
+      - "scripts/taste_steam_review_dossier_web.py"
       - "scripts/progressive_pass2.py"
       - "scripts/dossier_two_stage_versioned.py"
       - "scripts/test_dossier_research_notes_v2.py"
@@ -84,6 +88,10 @@ jobs:
         run: |
           python -m py_compile scripts/dossier_notes_v2_deep_compat.py scripts/test_dossier_notes_v2_deep_compat.py scripts/progressive_pass2.py
           python scripts/test_dossier_notes_v2_deep_compat.py -v
+      - name: Disabled canonical Lean writer-to-Deep offline Git integration and old V2 regression
+        run: |
+          python -m py_compile scripts/dossier_lean_canonical_dual.py scripts/test_dossier_lean_canonical_dual.py scripts/taste_steam_review_dossier_web.py
+          python scripts/test_dossier_lean_canonical_dual.py -v
       - name: Prepared fresh6 scope and no-authority adversarial tests (no semantic execution)
         run: |
           python scripts/test_dossier_notes_v2_fresh6_preflight.py -v
