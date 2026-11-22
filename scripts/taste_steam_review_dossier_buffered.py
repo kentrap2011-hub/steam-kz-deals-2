@@ -1333,6 +1333,14 @@ def _drain_notes_v2_individual(
                     dossier, expected_appid=appid,
                     expected_title=work["assignment"]["title"],
                 )
+            elif dossier.get("schema") == LEAN_SCHEMA:
+                # An inactive contract is never permission; offline simulation
+                # must pass the separate disposable-Git fixture gate.
+                from dossier_lean_canonical_dual import require_gate, validate_writer_lean
+                require_gate("writer", repo_root=root, offline_fixture=offline_fixture)
+                validate_writer_lean(
+                    dossier, appid=appid, title=work["assignment"]["title"],
+                )
             else:
                 validate_dossier_strict(
                     dossier, strict_contract, expected_appid=appid,
@@ -1356,6 +1364,9 @@ def _drain_notes_v2_individual(
                 "assembly_commit": pair["assembly_commit"],
                 "dossier_sha256": dossier_sha,
             }
+            if dossier.get("schema") == LEAN_SCHEMA and not trial_sandbox:
+                from dossier_lean_canonical_dual import lean_receipt_fields
+                bound_receipt.update(lean_receipt_fields(dossier))
             exists_cache = target.exists()
             exists_receipt = receipt.exists()
             if exists_cache:
