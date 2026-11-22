@@ -5,6 +5,7 @@ All Research and Assembly inputs are synthetic immutable local fixtures.
 This is NOT a GitHub owner grant, actual semantic Research/Assembly, or Deep run.
 """
 import copy
+import hashlib
 import json
 import unittest
 from datetime import datetime, timezone
@@ -54,7 +55,7 @@ class CanonicalLeanDualIntegrationTests(unittest.TestCase):
         record = {
             "path": (dual.STORE / ("App_" + APPID + ".json")).as_posix(),
             "doc": doc,
-            "content_sha256": canonical_sha256(doc),
+            "content_sha256": hashlib.sha256(raw).hexdigest(),
         }
         if accepted:
             helpers.commit(f.repo, "fixture: atomic Lean cache and owner-shaped receipt")
@@ -77,7 +78,8 @@ class CanonicalLeanDualIntegrationTests(unittest.TestCase):
         self.assertEqual(verified["binding"]["quality_binding"], dual.quality_binding())
         self.assertEqual(verified["receipt"]["research_commit"], pair["research_commit"])
         self.assertEqual(verified["receipt"]["assembly_commit"], pair["assembly_commit"])
-        self.assertEqual(verified["receipt"]["dossier_sha256"], record["content_sha256"])
+        self.assertEqual(verified["receipt"]["dossier_sha256"], canonical_sha256(record["doc"]))
+        self.assertNotEqual(verified["receipt"]["dossier_sha256"], record["content_sha256"])
         policy = json.loads(dual.POLICY_PATH.read_text(encoding="utf-8"))
         self.assertFalse(policy["lean_writer_enabled"])
         self.assertFalse(policy["lean_reader_enabled"])
