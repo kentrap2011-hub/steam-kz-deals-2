@@ -8,6 +8,7 @@ import copy
 import hashlib
 import json
 import unittest
+from unittest.mock import patch
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -74,6 +75,12 @@ class CanonicalLeanDualIntegrationTests(unittest.TestCase):
         self.assertNotIn("provenance", record["doc"])
         self.assertNotIn("player_feedback_records", record["doc"])
         self.assertNotIn("evidence", record["doc"])
+        changed = helpers.run(f.repo, "diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD").splitlines()
+        self.assertIn(record["path"], changed)
+        self.assertIn(receipt_path.relative_to(f.repo).as_posix(), changed)
+        with patch.object(deep, "DOSSIER_STORE", f.repo / dual.STORE):
+            # Real Deep loader SHA is raw JSON bytes, not writer's object SHA.
+            self.assertEqual(deep.canonical_dossier_loader(APPID), record)
         verified = self.verify(f, record)
         self.assertEqual(verified["binding"]["quality_binding"], dual.quality_binding())
         self.assertEqual(verified["receipt"]["research_commit"], pair["research_commit"])
