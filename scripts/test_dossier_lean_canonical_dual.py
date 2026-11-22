@@ -296,6 +296,36 @@ class CanonicalLeanDualIntegrationTests(unittest.TestCase):
         d["generated_at_utc"] = "2022-01-01T00:00:00Z"
         self.assertRaises(ValueError, dual.validate_writer_lean, d, appid=APPID, title=TITLE, now=NOW)
 
+    def test_fixed_same_game_semantic_examples_are_not_forced_into_a_ledger(self):
+        # Three synthetic same-game views, not fresh external investigation.
+        # The strict legacy fixture has mixed mechanics + a neutral locale check.
+        # Lean retains separate actionable strength/trade-off and optional dissent.
+        from test_dossier_notes_v2_lean_final import make_lean_final
+        from dossier_notes_v2_lean_final import validate_lean_final
+        legacy = web_dossier(APPID, NOW, title=TITLE, release_year=2024)
+        lean = make_lean_final(APPID, TITLE, now=NOW)
+        dissent = copy.deepcopy(lean)
+        dissent["conflicts"] = [{
+            "statement": "Игроки расходятся в оценках повторяемости маршрутов и обучения.",
+            "source_indices": [1],
+        }]
+        for version in (lean, dissent):
+            validate_lean_final(version, now=NOW)
+            self.assertNotIn("provenance", version)
+            self.assertTrue(any(o["category"] == "mechanics" for o in version["observations"]))
+            self.assertTrue(any(o["sentiment"] in ("positive", "mixed") for o in version["observations"]))
+            self.assertTrue(any(o["sentiment"] in ("negative", "mixed") for o in version["observations"]))
+            self.assertTrue(version["unknowns"])
+            self.assertTrue(deep.dossier_negative_candidate_refs(version))
+        original_risks = deep.dossier_negative_candidate_refs(legacy)
+        baseline_risks = deep.dossier_negative_candidate_refs(lean)
+        dissent_risks = deep.dossier_negative_candidate_refs(dissent)
+        self.assertEqual(original_risks, [{"kind": "observation", "index": 0}])
+        self.assertEqual(baseline_risks, [{"kind": "observation", "index": 1}])
+        self.assertEqual(dissent_risks[-1], {"kind": "conflict", "index": 0})
+        # These are structural candidate-risk comparisons, NOT claimed equal
+        # semantic quality or a fabricated actual Deep evaluation outcome.
+
     def test_strict_legacy_still_uses_original_binding_and_no_lean_receipts(self):
         dossier = web_dossier(APPID, NOW, title=TITLE, release_year=2024)
         contract = json.loads(
