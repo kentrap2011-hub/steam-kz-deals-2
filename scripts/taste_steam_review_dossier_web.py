@@ -411,14 +411,17 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
         appid = row["appid"]
         existing = load_dossier_if_present(store_dir, appid)
         try:
-            state = dossier_state_strict(
-                existing,
-                contract,
-                now=now,
-                expected_appid=appid,
-                expected_title=row["title"],
-                expected_ttl_days=ttl,
-            )
+            if isinstance(existing, dict) and existing.get("schema") == "DOSSIER-NOTES-V2-LEAN-FINAL-V1":
+                from dossier_lean_canonical_dual import versioned_dossier_state
+                state, _ = versioned_dossier_state(
+                    existing, contract, store_dir=store_dir, appid=appid,
+                    now=now, expected_title=row["title"], expected_ttl_days=ttl,
+                )
+            else:
+                state = dossier_state_strict(
+                    existing, contract, now=now, expected_appid=appid,
+                    expected_title=row["title"], expected_ttl_days=ttl,
+                )
         except ValueError:
             state = "invalid"
         item = {
