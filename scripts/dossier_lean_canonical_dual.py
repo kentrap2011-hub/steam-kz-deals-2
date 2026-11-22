@@ -143,26 +143,30 @@ def _receipt_for(repo_root, appid, digest, dossier):
     # A committed file is insufficient by itself: rebind to the exact immutable
     # Research/Assembly chain authenticated by the existing GitHub V2 inspector.
     from dossier_research_notes_v2 import assembly_work, inspect_assembly
-    checked = inspect_assembly(
-        repo_root, marker_commit=receipt["marker_commit"],
-        trial_id=receipt["trial_id"], appid=appid,
-        research_commit=receipt["research_commit"],
-        result_commit=receipt["assembly_commit"],
-    )
-    if checked.get("status") != "strict_item_valid_pending_existing_atomic_group_ingest":
-        raise ValueError("canonical Lean issuer/Research/Assembly ancestry unverified")
-    work = assembly_work(
-        repo_root, marker_commit=receipt["marker_commit"],
-        trial_id=receipt["trial_id"], appid=appid,
-        research_commit=receipt["research_commit"],
-    )
-    if work.get("status") != "ready_for_autonomous_assembly" or work["assignment"] != assignment:
-        raise ValueError("canonical Lean receipt differs from frozen assignment")
-    from dossier_two_stage_staging import json_at
-    candidate = json_at(repo_root, receipt["assembly_commit"], work["output_path"])
-    if (candidate.get("final_dossier") != dossier
-            or candidate.get("outcome") != "assembled_candidate_ready"):
-        raise ValueError("canonical Lean dossier differs from immutable Assembly bytes")
+    try:
+        checked = inspect_assembly(
+            repo_root, marker_commit=receipt["marker_commit"],
+            trial_id=receipt["trial_id"], appid=appid,
+            research_commit=receipt["research_commit"],
+            result_commit=receipt["assembly_commit"],
+        )
+        if checked.get("status") != "strict_item_valid_pending_existing_atomic_group_ingest":
+            raise ValueError("wrong immutable V2 Assembly status")
+        work = assembly_work(
+            repo_root, marker_commit=receipt["marker_commit"],
+            trial_id=receipt["trial_id"], appid=appid,
+            research_commit=receipt["research_commit"],
+        )
+        if (work.get("status") != "ready_for_autonomous_assembly"
+                or work["assignment"] != assignment):
+            raise ValueError("wrong original frozen work assignment")
+        from dossier_two_stage_staging import json_at
+        candidate = json_at(repo_root, receipt["assembly_commit"], work["output_path"])
+        if (candidate.get("final_dossier") != dossier
+                or candidate.get("outcome") != "assembled_candidate_ready"):
+            raise ValueError("immutable Assembly bytes differ from accepted Lean")
+    except (ValueError, TypeError, KeyError, OSError, subprocess.CalledProcessError) as exc:
+        raise ValueError("canonical Lean issuer/Research/Assembly ancestry unverified") from exc
     return receipt
 
 
