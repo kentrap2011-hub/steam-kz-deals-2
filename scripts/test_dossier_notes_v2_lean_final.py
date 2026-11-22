@@ -131,6 +131,24 @@ class LeanFinalContractTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"duplicate source URL"):
             self.check(doc)
 
+    def test_nonpublic_private_or_encoded_author_source_urls_fail(self):
+        for url in (
+            "https://10.0.0.1/app/2124120/",
+            "https://192.168.1.5/reviews/",
+            "https://[::1]/reviews/",
+            "https://example.invalid/reviews/",
+            "https://example.internal/reviews/",
+            "https://example.com:8080/reviews/",
+            "https://example.com/profile/12345",
+            "https://example.com/%70rofiles/12345",
+            "https://example.com/reviews/?authorid=12345",
+        ):
+            with self.subTest(url=url):
+                doc=make_lean_final()
+                doc["sources"][1]["url"]=url
+                with self.assertRaises(ValueError):
+                    self.check(doc)
+
     def test_temporal_source_date_and_exact_steam_appid(self):
         doc=make_lean_final()
         doc["sources"][1]["published_on"]="2026-02-30"
