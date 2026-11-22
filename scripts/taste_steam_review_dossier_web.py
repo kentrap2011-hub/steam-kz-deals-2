@@ -553,7 +553,7 @@ def persist_submission_and_advance_snapshot_strict(submission, manifest, contrac
     return persisted, next_manifest
 
 
-def build_semantic_input_strict(pin, contract, store_dir, *, now=None):
+def build_semantic_input_strict(pin, contract, store_dir, *, now=None, lean_offline_fixture=False):
     """Keep Taste Semantic Producer input shape unchanged while requiring fresh V2 dossiers."""
     validate_pin(pin)
     now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
@@ -566,6 +566,7 @@ def build_semantic_input_strict(pin, contract, store_dir, *, now=None):
             from dossier_lean_canonical_dual import versioned_dossier_state
             state, lean_binding = versioned_dossier_state(
                 doc, contract, store_dir=store_dir, appid=appid, now=now,
+                lean_offline_fixture=lean_offline_fixture,
             )
         except ValueError as exc:
             missing.append({"key": row["key"], "appid": appid, "state": "invalid", "error": str(exc)})
