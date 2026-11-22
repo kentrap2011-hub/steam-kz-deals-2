@@ -5,11 +5,12 @@ The contract validates exact identity, balanced usable findings, safe high-level
 source links and dated temporal claims. It deliberately does NOT require a
 per-review ledger, invented mention counts or twelve coverage declarations.
 """
+import ipaddress
 import json
 import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from urllib.parse import urlsplit, parse_qsl
+from urllib.parse import urlsplit, parse_qsl, unquote
 
 from jsonschema import Draft202012Validator
 
@@ -59,13 +60,29 @@ def validate_lean_final(dossier, *, expected_appid=None, expected_title=None,
     seen_urls = set()
     for i, src in enumerate(sources):
         url = urlsplit(src["url"])
-        if (url.scheme != "https" or not url.hostname or url.username or url.password
-                or url.fragment or url.hostname in {"localhost", "127.0.0.1"}):
+        host = (url.hostname or "").lower().rstrip(".")
+        try:
+            port = url.port
+        except ValueError:
+            raise ValueError(f"lean final invalid source port {i}") from None
+        if (url.scheme != "https" or not host or url.username or url.password
+                or url.fragment or port not in (None, 443)
+                or host == "localhost"
+                or host.endswith((".localhost", ".local", ".internal", ".test", ".invalid"))):
             raise ValueError(f"lean final unsafe public source link {i}")
-        if re.search(r"/(?:profiles|users|user|members)/[^/]+", url.path, re.I):
+        try:
+            ip = ipaddress.ip_address(host)
+            if not ip.is_global:
+                raise ValueError(f"lean final nonpublic source IP {i}")
+        except ValueError as exc:
+            if "nonpublic source IP" in str(exc):
+                raise
+        if re.search(r"/(?:profile|profiles|users|user|members|account|accounts)/[^/]+",
+                     unquote(url.path), re.I):
             raise ValueError("lean final author/profile scoped source forbidden")
         if any(key.lower() in {"token", "auth", "password", "secret", "api_key",
-                                    "access_token", "steamid", "userid", "authorid"}
+                                    "access_token", "steamid", "userid", "authorid",
+                                    "author", "accountid", "reviewid", "session"}
                for key, _ in parse_qsl(url.query, keep_blank_values=True)):
             raise ValueError("lean final source URL contains sensitive query")
         date = src.get("published_on")
