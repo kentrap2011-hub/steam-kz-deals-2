@@ -566,7 +566,7 @@ def build_semantic_input_strict(pin, contract, store_dir, *, now=None, lean_offl
             from dossier_lean_canonical_dual import versioned_dossier_state
             state, lean_binding = versioned_dossier_state(
                 doc, contract, store_dir=store_dir, appid=appid, now=now,
-                lean_offline_fixture=lean_offline_fixture,
+                offline_fixture=lean_offline_fixture,
             )
         except ValueError as exc:
             missing.append({"key": row["key"], "appid": appid, "state": "invalid", "error": str(exc)})
