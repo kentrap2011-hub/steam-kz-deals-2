@@ -47,7 +47,7 @@ class CanonicalLeanDualIntegrationTests(unittest.TestCase):
             "accepted_dir": receipt_dir,
             "offline_fixture": True,
         })
-        self.assertEqual(result["items"][-1]["status"], "persisted_pending_github_commit")
+        self.assertEqual(next(i for i in result["items"] if i["appid"] == APPID)["status"], "persisted_pending_github_commit")
         raw = (store / ("App_" + APPID + ".json")).read_bytes()
         doc = json.loads(raw)
         receipt_path = next(receipt_dir.rglob(APPID + "--*.json"))
@@ -192,7 +192,7 @@ class CanonicalLeanDualIntegrationTests(unittest.TestCase):
             "accepted_dir": f.repo / dual.RECEIPTS,
             "offline_fixture": True,
         })
-        self.assertEqual(second["items"][-1]["status"], "already_persisted_same_binding")
+        self.assertEqual(next(i for i in second["items"] if i["appid"] == APPID)["status"], "already_persisted_same_binding")
         self.verify(f, record)
 
     def test_wrong_appid_edition_year_digest_path_and_deep_binding_fail_closed(self):
@@ -262,8 +262,8 @@ class CanonicalLeanDualIntegrationTests(unittest.TestCase):
     def test_lean_quality_negatives_privacy_dates_pros_cons_and_expiry(self):
         f, _, record, _, _ = self.fixture()
         for mutate in (
-            lambda d: d["observations"][0].update(sentiment="negative"),
-            lambda d: d["observations"][1].update(sentiment="positive"),
+            lambda d: [r.update(sentiment="negative") for r in d["observations"]],
+            lambda d: [r.update(sentiment="positive") for r in d["observations"]],
             lambda d: d["sources"][0].update(url="http://insecure.example/app/" + APPID),
             lambda d: d["sources"][0].update(url="https://example.org/users/private"),
             lambda d: d["observations"][0].update(evidence_status="current", as_of=None),
