@@ -140,11 +140,35 @@ def _receipt_for(repo_root, appid, digest, dossier):
     relative = path.relative_to(repo_root)
     if _git_committed_bytes(repo_root, relative) != path.read_bytes():
         raise ValueError("canonical Lean receipt not exactly Git-committed")
+    # A committed file is insufficient by itself: rebind to the exact immutable
+    # Research/Assembly chain authenticated by the existing GitHub V2 inspector.
+    from dossier_research_notes_v2 import assembly_work, inspect_assembly
+    checked = inspect_assembly(
+        repo_root, marker_commit=receipt["marker_commit"],
+        trial_id=receipt["trial_id"], appid=appid,
+        research_commit=receipt["research_commit"],
+        result_commit=receipt["assembly_commit"],
+    )
+    if checked.get("status") != "strict_item_valid_pending_existing_atomic_group_ingest":
+        raise ValueError("canonical Lean issuer/Research/Assembly ancestry unverified")
+    work = assembly_work(
+        repo_root, marker_commit=receipt["marker_commit"],
+        trial_id=receipt["trial_id"], appid=appid,
+        research_commit=receipt["research_commit"],
+    )
+    if work.get("status") != "ready_for_autonomous_assembly" or work["assignment"] != assignment:
+        raise ValueError("canonical Lean receipt differs from frozen assignment")
+    from dossier_two_stage_staging import json_at
+    candidate = json_at(repo_root, receipt["assembly_commit"], work["output_path"])
+    if (candidate.get("final_dossier") != dossier
+            or candidate.get("outcome") != "assembled_candidate_ready"):
+        raise ValueError("canonical Lean dossier differs from immutable Assembly bytes")
     return receipt
 
 
 def inspect_accepted_lean(dossier_record, *, repo_root=ROOT, now=None,
                           expected_appid=None, expected_title=None,
+                          expected_ttl_days=None,
                           offline_fixture=False, stage="reader"):
     """Use only exact Git-committed canonical store + owner writer receipt."""
     require_gate(stage, repo_root=repo_root, offline_fixture=offline_fixture)
@@ -176,7 +200,8 @@ def inspect_accepted_lean(dossier_record, *, repo_root=ROOT, now=None,
     if (dossier_record.get("content_sha256") != digest
             or not isinstance(dossier_record.get("content_sha256"), str)):
         raise ValueError("canonical Lean content digest mismatch")
-    validate_writer_lean(doc, appid=appid, title=doc["title"], now=now)
+    validate_writer_lean(doc, appid=appid, title=doc["title"], now=now,
+                         expected_ttl_days=expected_ttl_days)
     receipt = _receipt_for(root, appid, digest, doc)
     receipt_digest = canonical_sha256(receipt)
     binding = {
@@ -189,7 +214,8 @@ def inspect_accepted_lean(dossier_record, *, repo_root=ROOT, now=None,
 
 
 def versioned_dossier_state(dossier, contract, *, store_dir, appid, now=None,
-                            expected_title=None, offline_fixture=False):
+                            expected_title=None, expected_ttl_days=None,
+                            offline_fixture=False):
     """Strict default stays byte-compatible; Lean needs committed owner receipt."""
     from taste_steam_review_dossier_strict import dossier_state_strict
     if not isinstance(dossier, dict) or dossier.get("schema") != LEAN_SCHEMA:
@@ -204,5 +230,6 @@ def versioned_dossier_state(dossier, contract, *, store_dir, appid, now=None,
     evidence = inspect_accepted_lean(
         record, repo_root=root, expected_appid=appid,
         expected_title=expected_title, now=now,
+        expected_ttl_days=expected_ttl_days,
         offline_fixture=offline_fixture, stage="reader")
     return "fresh", evidence["binding"]
