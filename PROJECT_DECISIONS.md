@@ -1172,3 +1172,19 @@ A canonical Dossier/profile/work/repository write that lands **before** the mark
 **Compact temporal amendment:** `sources[].published_on` is optional and is only required for a final `current`/`historical` observation. The observation's `as_of` must match a bound dated player source; Steam URLs must carry the exact AppID and a generic storefront/reviews collection cannot masquerade as a dated concrete post. This remains **structural provenance**, not live authentication of a source or proof that the text is truthful. Unverifiable technical complaints stay `uncertain`.
 
 **Acceptance checks before any activation:** new lean format must pass exact work/edition and temporal/privacy checks, Research→Assembly offline tests, isolated writer safety and sibling tests, end-to-end QA against real game samples, and an explicit compatibility decision for Deep. Do not assume successful schema CI demonstrates source truth or measured downstream fit gains.
+
+---
+
+## DOSSIER-LEAN-002 — Separate inactive canonical Lean binding and exact committed owner receipt (2026-11-22)
+
+**Status:** IMPLEMENT in source Draft PR #471; independent L3, exact-final-HEAD CI and owner activation decision pending; no live canonical Lean or normal Deep authorization granted.
+
+**Decision:** preserve the existing strict `TASTE-STEAM-REVIEW-DOSSIER-V2` reader, complete historical dossiers and accepted Deep outputs unchanged. For future separately authorized Lean material, introduce a **different versioned** format/quality/receipt binding rather than inventing `provenance.player_feedback_records`, feedback counts or strict V2 `web_evidence_contract_binding`. A Lean label, read-only sandbox preview or standalone file can never become authoritative merely by passing the Lean schema: the exact frozen original Research→Assembly Git lineage must validate, the existing owner writer must commit one exact canonical store file and bound receipt, and the Deep issuer must receive the distinct binding. Default switches for Lean writer, reader and normal Deep are all `false`.
+
+**Hash distinction:** the established Dossier writer receipt names the canonical-JSON-object SHA256, while the existing Deep canonical loader binds SHA256 of **exact stored bytes**. Retain and validate both; do not silently replace one with the other or alter legacy receipt structure. Versioned Lean provenance binds the canonical object, raw stored bytes, approved frozen assignment and exact receipt independently.
+
+**Why:** a superficially compatible Lean document can contain semantically useful positive/negative observations but has none of the legacy per-review ledger. Treating it as strict V2 would either reject legitimate compact content or encourage fabricated evidence. A separate default-off dual-reader retains rollback safety and historical compatibility without automatically redoing Research/Assembly, promoting old trial objects, or changing a scheduled process.
+
+**Trade-offs / not proven:** the slim source URL/date and original release-year values are self-reported and syntactically verified, not a new independent semantic truth oracle; offline Git fixtures do not prove live GitHub owner execution. Distinct old strict files cannot be replaced with Lean through the existing create-only collision guard. Production cutover, historical migration, exact issuer proof in live GitHub and representative real-game semantic adequacy remain separately authorized follow-ups, not implied by a green CI.
+
+**Locations:** `config/dossier_lean_canonical_dual_format_contract.json`, `scripts/dossier_lean_canonical_dual.py`, `scripts/taste_steam_review_dossier_buffered.py`, `scripts/taste_steam_review_dossier_web.py`, `scripts/progressive_pass2.py`, `scripts/test_dossier_lean_canonical_dual.py` and `PROJECT_ROUTES.md`.
