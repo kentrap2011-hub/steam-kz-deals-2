@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-17",
+  "last_curated_on": "2026-11-22",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3819,6 +3819,24 @@
       "blocker": "READ-ONLY RECON маршрута: старый immutable Assembly нельзя повторять на тех же путях; никаких semantic writes, retry или new grant до отдельной подтверждённой authority.",
       "updated_on": "2026-11-17",
       "updated_at_utc": "2026-11-17T18:30:00Z",
+      "recent_completion": false
+    },
+    {
+      "id": "dossier-lean-canonical-store-deep-dual-format-integration-01",
+      "title": "НОВЫЙ ЧАТ 2 — lean Dossier и Deep: совместимость двух форматов",
+      "goal": "Продолжить исходную ветку облегчённого Dossier до версионированной совместимости writer, semantic-input и Deep, сохранив старые данные и выключенную по умолчанию активацию.",
+      "status": "active",
+      "effort": "высокая",
+      "effort_reason": "Несколько границ GitHub-owned writer, кэша, версионированного формата и Deep; требуется offline end-to-end, регрессии и последующая независимая L3 QA.",
+      "urgency": "высокая",
+      "urgency_reason": "Текущий source содержит только sandbox-просмотр Deep; каноническое хранилище и штатный Deep не поддерживают облегчённый формат.",
+      "task_file": "WORKER_TASK_DOSSIER_LEAN_CANONICAL_STORE_DEEP_DUAL_FORMAT_INTEGRATION_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Промежуточный source не принят; lean production feature gate выключен. Запрещены real writer, Deep запуск, production, merge до независимой L3 QA и отдельного разрешения.",
+      "updated_on": "2026-11-22",
+      "updated_at_utc": "2026-11-22T12:06:00Z",
       "recent_completion": false
     }
   ]
