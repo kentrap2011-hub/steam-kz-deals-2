@@ -207,6 +207,30 @@ class CanonicalLeanDualIntegrationTests(unittest.TestCase):
         self.assertEqual(next(i for i in second["items"] if i["appid"] == APPID)["status"], "already_persisted_same_binding")
         self.verify(f, record)
 
+    def test_existing_strict_canonical_bytes_are_not_migrated_or_overwritten(self):
+        fixture_case = writer_tests.NotesV2IndividualReadinessTests(
+            methodName="test_v2_github_writer_hookup_single_transaction"
+        )
+        f, _ = fixture_case.fixture()
+        self.addCleanup(fixture_case.doCleanups)
+        pair = fixture_case.submit(f, helpers, APPID, result="lean")
+        (f.repo / ".dossier-final-offline-fixture").write_text("synthetic\n")
+        from taste_steam_review_dossier import atomic_write_json
+        store = f.repo / dual.STORE
+        strict_path = store / ("App_" + APPID + ".json")
+        atomic_write_json(strict_path, web_dossier(APPID, NOW, title=TITLE, release_year=2024))
+        accepted_strict_bytes = strict_path.read_bytes()
+        helpers.commit(f.repo, "fixture: previously canonically stored strict V2")
+        result = drain_buffered_groups(notes_v2={
+            "repo": f.repo, "marker_commit": f.marker, "trial_id": helpers.TRIAL,
+            "item_commits": {APPID: pair}, "store_dir": store,
+            "accepted_dir": f.repo / dual.RECEIPTS, "offline_fixture": True,
+        })
+        item = next(row for row in result["items"] if row["appid"] == APPID)
+        self.assertEqual(item["status"], "writer_rejected")
+        self.assertEqual(strict_path.read_bytes(), accepted_strict_bytes)
+        self.assertFalse(list((f.repo / dual.RECEIPTS).rglob("*.json")))
+
     def test_wrong_appid_edition_year_digest_path_and_deep_binding_fail_closed(self):
         f, _, record, _, _ = self.fixture()
         bad = copy.deepcopy(record)
