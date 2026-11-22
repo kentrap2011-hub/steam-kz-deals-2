@@ -270,6 +270,14 @@ class CanonicalLeanDualIntegrationTests(unittest.TestCase):
         self.assertRaisesRegex(ValueError, "uncommitted", self.verify, f, record)
         disk.write_bytes(original)
         self.verify(f, record)
+        # Even an EXACTLY Git-committed forged receipt cannot substitute for
+        # the immutable original owner-issued Research -> Assembly Git chain.
+        committed_forgery = copy.deepcopy(doc)
+        committed_forgery["assembly_commit"] = "0" * 40
+        receipt_path.write_text(json.dumps(committed_forgery), encoding="utf-8")
+        helpers.commit(f.repo, "fixture: forged already-committed assembly issuer")
+        with self.assertRaisesRegex(ValueError, "issuer/Research/Assembly ancestry unverified"):
+            self.verify(f, record)
 
     def test_lean_quality_negatives_privacy_dates_pros_cons_and_expiry(self):
         f, _, record, _, _ = self.fixture()
