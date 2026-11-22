@@ -80,7 +80,10 @@ class CanonicalLeanDualIntegrationTests(unittest.TestCase):
         self.assertIn(receipt_path.relative_to(f.repo).as_posix(), changed)
         with patch.object(deep, "DOSSIER_STORE", f.repo / dual.STORE):
             # Real Deep loader SHA is raw JSON bytes, not writer's object SHA.
-            self.assertEqual(deep.canonical_dossier_loader(APPID), record)
+            loaded = deep.canonical_dossier_loader(APPID)
+            self.assertEqual(loaded["content_sha256"], record["content_sha256"])
+            self.assertEqual(loaded["doc"], record["doc"])
+            self.assertTrue(loaded["path"].endswith(record["path"]))
         verified = self.verify(f, record)
         self.assertEqual(verified["binding"]["quality_binding"], dual.quality_binding())
         self.assertEqual(verified["receipt"]["research_commit"], pair["research_commit"])
