@@ -196,10 +196,13 @@ def inspect_accepted_lean(dossier_record, *, repo_root=ROOT, now=None,
         raise ValueError("canonical Lean store is uncommitted/mutable")
     if json.loads(raw.decode("utf-8")) != doc:
         raise ValueError("canonical Lean stored document mismatch")
+    # The existing Deep loader binds SHA256 of exact stored file bytes, whereas
+    # the legacy V2 writer's receipt binds canonical JSON-object SHA256.
+    # Preserve BOTH without ever conflating them or changing old receipts.
+    raw_digest = hashlib.sha256(raw).hexdigest()
+    if dossier_record.get("content_sha256") != raw_digest:
+        raise ValueError("canonical Lean raw-content digest mismatch")
     digest = canonical_sha256(doc)
-    if (dossier_record.get("content_sha256") != digest
-            or not isinstance(dossier_record.get("content_sha256"), str)):
-        raise ValueError("canonical Lean content digest mismatch")
     validate_writer_lean(doc, appid=appid, title=doc["title"], now=now,
                          expected_ttl_days=expected_ttl_days)
     receipt = _receipt_for(root, appid, digest, doc)
@@ -222,9 +225,12 @@ def versioned_dossier_state(dossier, contract, *, store_dir, appid, now=None,
         return dossier_state_strict(dossier, contract, now=now, expected_appid=appid,
                                     expected_title=expected_title), None
     path = STORE / ("App_" + str(appid) + ".json")
-    record = {"path": path.as_posix(), "doc": dossier,
-              "content_sha256": canonical_sha256(dossier)}
     root = Path(store_dir).resolve().parent.parent.parent
+    raw_path = root / path
+    if not raw_path.is_file() or raw_path.is_symlink():
+        raise ValueError("canonical Lean source bytes not found")
+    record = {"path": path.as_posix(), "doc": dossier,
+              "content_sha256": hashlib.sha256(raw_path.read_bytes()).hexdigest()}
     if (Path(store_dir).resolve() != (root / STORE).resolve()):
         raise ValueError("canonical Lean cannot be read from arbitrary store")
     evidence = inspect_accepted_lean(
