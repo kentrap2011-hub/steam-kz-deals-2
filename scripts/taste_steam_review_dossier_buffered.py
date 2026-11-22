@@ -298,6 +298,17 @@ def compatible_cached_dossier(item, manifest, contract, store_dir, *, now=None):
     doc = load_dossier_if_present(store_dir, appid)
     if doc is None:
         return None
+    if doc.get("schema") == "DOSSIER-NOTES-V2-LEAN-FINAL-V1":
+        from dossier_lean_canonical_dual import versioned_dossier_state
+        try:
+            state, _ = versioned_dossier_state(
+                doc, contract, store_dir=store_dir, appid=appid,
+                now=now, expected_title=item.get("title"),
+                expected_ttl_days=int(manifest["ttl_days"]),
+            )
+            return doc if state == "fresh" else None
+        except (ValueError, OSError, TypeError, KeyError):
+            return None
     try:
         docs = validate_dossiers_against_expected_items(
             [doc],
@@ -826,6 +837,17 @@ def _active_existing_dossier(appid, current_manifest, contract, store_dir):
     title = existing.get("title") if isinstance(existing, dict) else None
     if not isinstance(title, str) or not title:
         return None
+    if existing.get("schema") == "DOSSIER-NOTES-V2-LEAN-FINAL-V1":
+        from dossier_lean_canonical_dual import versioned_dossier_state
+        try:
+            state, _ = versioned_dossier_state(
+                existing, contract, store_dir=store_dir, appid=appid,
+                expected_title=title,
+                expected_ttl_days=int(current_manifest["ttl_days"]),
+            )
+            return existing if state == "fresh" else None
+        except (ValueError, OSError, TypeError, KeyError):
+            return None
     try:
         docs = validate_dossiers_against_expected_items(
             [existing],
