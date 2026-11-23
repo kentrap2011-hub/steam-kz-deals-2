@@ -402,7 +402,8 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
     github_authorization_run_id:String(auth.github_authorization_run_id),
     ...(auth.authority_origin==="owner_main_push"?{authority_origin:"owner_main_push"}:{}),
     ...(generic?{authority_origin:"generic_owner_request",
-      request_commit:grant.request_commit,request_ref:grant.request_ref}:{}),
+      request_commit:grant.request_commit,request_ref:grant.request_ref,
+      source_pins:grant.source_pins}:{}),
     semantic_execution_authorized:true,
     issuer_structural_only:true,github_run_authenticated:false
   };
