@@ -12,6 +12,12 @@ on:
       - "scripts/dossier_notes_v2_batch_route.py"
       - "scripts/dossier_notes_v2_batch_issuer.py"
       - "scripts/dossier_notes_v2_assembly_replay_seed.py"
+      - "scripts/dossier_notes_v2_generic_replay.py"
+      - "scripts/test_dossier_notes_v2_generic_replay.py"
+      - "config/dossier_notes_v2_generic_replay_policy.json"
+      - "config/dossier_notes_v2_generic_assembly_replay_runbook.md"
+      - "config/dossier_notes_v2_generic_assembly_replay_manual_one_shot_prompt.md"
+      - ".github/workflows/issue-dossier-notes-v2-generic-assembly-replay.yml"
       - "scripts/test_dossier_notes_v2_assembly_replay_seed.py"
       - ".github/workflows/issue-dossier-notes-v2-assembly-rerun-on-owner-push.yml"
       - "scripts/dossier_notes_v2_batch_pilot.py"
@@ -104,6 +110,8 @@ jobs:
         run: python scripts/test_dossier_notes_v2_owner_push.py -v
       - name: Exact frozen six Research replay, one-use issuer and new receipt regression
         run: python scripts/test_dossier_notes_v2_assembly_replay_seed.py -v
+      - name: Generic two-run Research replay and owner request offline regressions
+        run: python scripts/test_dossier_notes_v2_generic_replay.py -v
       - name: Inactive V2 per-item Git receipt regression (14 tests)
         run: python scripts/test_dossier_notes_v2_per_item_receipts.py -v
       - name: Existing strict V2 isolated writer transaction regression
@@ -113,7 +121,7 @@ jobs:
       - name: Syntax and PR activation guard
         run: |
           python -m py_compile scripts/dossier_notes_v2_research_receipt_ingest.py scripts/test_dossier_notes_v2_research_receipt_ingest.py scripts/test_dossier_notes_v2_owner_push.py
-          python -m py_compile scripts/dossier_notes_v2_assembly_replay_seed.py scripts/test_dossier_notes_v2_assembly_replay_seed.py
+          python -m py_compile scripts/dossier_notes_v2_assembly_replay_seed.py scripts/test_dossier_notes_v2_assembly_replay_seed.py scripts/dossier_notes_v2_generic_replay.py scripts/test_dossier_notes_v2_generic_replay.py
           python -m py_compile scripts/dossier_notes_v2_batch_preflight.py scripts/dossier_notes_v2_batch_route.py scripts/dossier_notes_v2_batch_issuer.py scripts/dossier_notes_v2_batch_pilot.py scripts/test_dossier_notes_v2_batch_route.py
           python -m py_compile scripts/dossier_notes_v2_fresh6_preflight.py scripts/test_dossier_notes_v2_fresh6_preflight.py scripts/dossier_research_notes_v2.py scripts/dossier_two_stage_versioned.py scripts/dossier_notes_v2_per_item_receipts.py scripts/dossier_notes_v2_original18_pilot.py scripts/taste_steam_review_dossier_buffered.py scripts/dossier_shadow_research_trial_publish.py scripts/dossier_shadow_research_feasibility.py
           python - <<'PY'
