@@ -3856,6 +3856,24 @@
       "updated_on": "2026-11-23",
       "updated_at_utc": "2026-11-23T16:16:00Z",
       "recent_completion": false
+    },
+    {
+      "id": "dossier-v2-assembly-generic-replay-owner-gate-01",
+      "title": "НОВЫЙ ЧАТ 1 — универсальный GitHub-механизм повторного Assembly",
+      "goal": "Однократно реализовать повторный Assembly по ранее проверенному Research без нового кода, поручения или отдельного source PR на каждый последующий запуск.",
+      "status": "planned",
+      "effort": "высокая",
+      "effort_reason": "Нужна безопасная параметризованная GitHub authority, уникальные immutable namespace, перенос Research receipts, generic launcher, fail-closed регрессии.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь отменяет разовый rerun3 и хочет выполнять следующие Assembly по одному ручному запросу без повторной разработки.",
+      "task_file": "WORKER_TASK_DOSSIER_V2_ASSEMBLY_GENERIC_REPLAY_OWNER_GATE_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Запуск только после остановки предыдущего ЧАТ 1. Никакой реальной выдачи owner authority, Research, Assembly или production в ходе реализации.",
+      "updated_on": "2026-11-23",
+      "updated_at_utc": "2026-11-23T17:03:00Z",
+      "recent_completion": false
     }
   ]
 }
