@@ -59,3 +59,13 @@
 ## Navigation delay / improvement
 
 Most effort went to mandatory initial protocol/context/task reads, GitHub owner boundary investigation, independent checks of both immutable six-game cohorts, and precise single-use code/Node/Python regression wiring. Rather than broad repository search on future runs, the new dated `PROJECT_ROUTES.md` entry directly names cohort, workflow, issuer/seed, connector, CI and post-merge gates. New focused synthetic tests prevent this source from accidentally expanding global retry/production rights.
+
+## Actual GitHub PR CI on complete source/test HEAD, 2026-11-23
+
+The previous source/test HEAD `1a41ea330a6cb4b07be9d4fef1d89441247302b8` completed **all four GitHub PR checks successfully**:
+- `synthetic-v2` **SUCCESS**, [run #45221016921](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45221016921): Node tokenless connector, all legacy Notes V2/Research receipt/issuer/replay tests, **new Lean rerun3 exact SHA/owner regression**, strict isolated writer, Lean→Deep inactive compatibility and syntax/PR no-activation guard. The two initial NEW test-fixture failures were diagnosed and corrected on the same PR before this successful run. None was a live semantic or production failure.
+- `validate` **SUCCESS**, [run #45221017250](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45221017250).
+- `offline-chain-qa` **SUCCESS**, [run #45221016860](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45221016860).
+- `backlog-disposition` **SUCCESS**, [run #45221016948](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45221016948).
+
+**Strict qualification:** these runs prove the above *exact* source/test SHA, not a later HEAD containing this CI report/registry housekeeping. Before Director accepts PR #475, independently check all required green GitHub checks against the **new latest PR HEAD**. PR mergeability previously returned `true` against `main@6d2edbf8cb86d9c73ce8bbd922907775dd8f6101`, but the PR is still DRAFT and not merged. No actual owner-push sandbox issuer, semantic Research/Assembly or canonical/Deep/production was launched by this CI.
