@@ -557,7 +557,12 @@ def _require_batch_target(repo, trial_id, branch):
     """Prevent direct transport helpers from using a different cohort sandbox."""
     if trial_id.startswith("dossier-notes-v2-") and trial_id != v2._contract()["manual_v2_issuer"]["trial_id"]:
         from dossier_notes_v2_batch_route import paths, scope
-        scope(repo, trial_id)
+        from dossier_notes_v2_generic_replay import is_generic
+        if is_generic(trial_id):
+            # New generic per-run manifest is a GitHub grant, not a developer PR.
+            policy = __import__("dossier_notes_v2_generic_replay").policy(repo)
+        else:
+            scope(repo, trial_id)
         if branch != paths(trial_id)["branch"]:
             v2.reject("wrong_binding", "batch transport cannot publish outside its one-use sandbox")
 
