@@ -297,8 +297,7 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
       Number.isInteger(i.group_sequence) && Number.isInteger(i.item_index)),
     "immutable manifest malformed");
 
-  const generic=v2Generic(trialId);
-  if(generic) {
+    if(generic) {
     v2Assert(phase==="assembly" && freezeRunId===undefined,
       "generic replay authorizes only separately launched Assembly");
     const pins=grant.source_pins, records=pins?.source_research;
