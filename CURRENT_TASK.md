@@ -1,5 +1,11 @@
 # CURRENT TASK
 
+## ЧАТ 1 — generic owner-gated Assembly replay, 2026-11-23
+
+- Task: `WORKER_TASK_DOSSIER_V2_ASSEMBLY_GENERIC_REPLAY_OWNER_GATE_01.md`. Source branch `implement/dossier-v2-assembly-generic-replay-owner-gate-20261123`, based on `main@6d2edbf8cb86d9c73ce8bbd922907775dd8f6101`; new implementation PR pending. Previous hardcoded rerun3 draft PR #475 remains separate, unmerged and inactive. User explicitly superseded that implementation; do not merge it.
+- Stage: `START_and_architecture_preflight_complete; reusable_owner_request_implementation_in_progress; no_live_replay_issued`. Canonical owner GitHub; explicit request by user via connected GitHub create-only request; no arbitrary ChatGPT authorizations. No Research, Assembly semantic, writer, production, Deep or schedule.
+
+
 ## ЧАТ 1 — Dossier V2 fresh6 Assembly rerun2 source (2026-11-17)
 
 - Status: `implemented_in_draft_PR_not_merged; independent_L3_required; owner_issuer_not_started; semantic_Assembly_not_started; exact_final_HEAD_CI_required`.
