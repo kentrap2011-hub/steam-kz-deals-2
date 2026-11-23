@@ -19,11 +19,15 @@ const V2_OWNER_PUSH = ".github/workflows/issue-dossier-notes-v2-on-owner-push.ym
 const V2_OWNER_PUSH_TRIAL = "dossier-notes-v2-fresh6-20261114-rerun1";
 const V2_OWNER_PUSH_REPLAY_TRIAL = "dossier-notes-v2-fresh6-assembly-rerun2-20261117";
 const V2_OWNER_PUSH_REPLAY = ".github/workflows/issue-dossier-notes-v2-assembly-rerun-on-owner-push.yml";
+const V2_OWNER_PUSH_REPLAY_TRIAL3 = "dossier-notes-v2-fresh6-lean-assembly-rerun3-20261123";
+const V2_OWNER_PUSH_REPLAY_WORKFLOW3 = ".github/workflows/issue-dossier-notes-v2-lean-assembly-rerun3-on-owner-push.yml";
 function v2OwnerPushWorkflow(trialId) {
+  if (trialId===V2_OWNER_PUSH_REPLAY_TRIAL3) return V2_OWNER_PUSH_REPLAY_WORKFLOW3;
   return trialId===V2_OWNER_PUSH_REPLAY_TRIAL?V2_OWNER_PUSH_REPLAY:V2_OWNER_PUSH;
 }
 function v2IsOwnerPushTrial(trialId) {
-  return trialId===V2_OWNER_PUSH_TRIAL || trialId===V2_OWNER_PUSH_REPLAY_TRIAL;
+  return trialId===V2_OWNER_PUSH_TRIAL || trialId===V2_OWNER_PUSH_REPLAY_TRIAL ||
+    trialId===V2_OWNER_PUSH_REPLAY_TRIAL3;
 }
 const V2_API = "https://api.github.com/repos/" + V2_REPOSITORY + "/";
 const V2_HEX = /^[0-9a-f]{40}$/;
