@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-22",
+  "last_curated_on": "2026-11-23",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3837,6 +3837,24 @@
       "blocker": "Промежуточный source не принят; lean production feature gate выключен. Запрещены real writer, Deep запуск, production, merge до независимой L3 QA и отдельного разрешения.",
       "updated_on": "2026-11-22",
       "updated_at_utc": "2026-11-22T12:06:00Z",
+      "recent_completion": false
+    },
+    {
+      "id": "dossier-lean-fresh6-assembly-rerun3-owner-route-01",
+      "title": "НОВЫЙ ЧАТ 1 — подготовить безопасный повторный Lean Assembly шести игр",
+      "goal": "Подготовить одну новую GitHub-authorized immutable sandbox партию для повторного Lean Assembly шести игр, перенеся уже существующий Research без семантического повтора.",
+      "status": "active",
+      "effort": "высокая",
+      "effort_reason": "Нужно адресно расширить one-use GitHub issuer и deterministic Research copy с отдельным namespace, проверить immutable evidence и сохранить старые маршруты.",
+      "urgency": "высокая",
+      "urgency_reason": "Пользователь явно запросил повторный второй этап Dossier; старая попытка уже исчерпала create-only записи.",
+      "task_file": "WORKER_TASK_DOSSIER_LEAN_FRESH6_ASSEMBLY_RERUN3_OWNER_ROUTE_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Сначала bounded source PR, обязательный CI и GitHub owner-run; затем отдельный semantic Assembly чат. Не перезаписывать старые receipts, не запускать Research или production.",
+      "updated_on": "2026-11-23",
+      "updated_at_utc": "2026-11-23T16:16:00Z",
       "recent_completion": false
     }
   ]
