@@ -116,6 +116,77 @@ function makeFixture(n=6,trialId=TRIAL,ownerPush=false) {
       event:"push"
     });
   }
+  if(trialId.startsWith("dossier-notes-v2-assembly-replay-")){
+    const nonce=trialId.slice("dossier-notes-v2-assembly-replay-".length);
+    assert.equal(nonce,"ab".repeat(16));
+    const requestBranch="dossier-assembly-requests/"+nonce;
+    const requestPath="data/control/dossier_notes_v2/replay_requests/"+nonce+".json";
+    const requestCommit=sha(77);
+    cp(requestCommit,base,requestPath);
+    const sourceRecords=items.map((row,i)=>({
+      appid:row.appid,title:row.title,
+      group_sequence:row.group_sequence,item_index:row.item_index,
+      source_assignment_id:"batch-"+sha(i+100).slice(0,24),
+      research_commit:sha(100+i),research_blob_sha:sha(110+i),
+      research_receipt_commit:sha(120+i),research_receipt_blob_sha:sha(130+i)
+    }));
+    const pins={source_trial_id:"dossier-notes-v2-fresh6-20261114-rerun1",
+      source_sandbox_head:sha(145),source_marker_commit:sha(146),
+      source_authorization_commit:sha(147),source_manifest_blob_sha:sha(148),
+      source_manifest_pins:sourcePins,source_research:sourceRecords,
+      request_commit:requestCommit,request_blob_sha:"",
+      request_nonce:nonce
+    };
+    const req={schema:"DOSSIER-NOTES-V2-GENERIC-ASSEMBLY-REPLAY-REQUEST-V1",
+      schema_version:1,nonce,source_trial_id:pins.source_trial_id,
+      appids:items.map(x=>x.appid),
+      purpose:"repeat_assembly_from_exact_accepted_research"};
+    setFile(requestCommit,requestPath,req);
+    pins.request_blob_sha=f.files.get(requestCommit+"|"+requestPath).sha;
+    for(let i=0;i<items.length;i++){
+      const r=items[i],v=sourceRecords[i];
+      const identity={trial_id:trialId,source_trial_id:pins.source_trial_id,
+        source_manifest_blob_sha:pins.source_manifest_blob_sha,
+        source_assignment_id:v.source_assignment_id,
+        research_commit:v.research_commit,group_sequence:v.group_sequence,
+        item_index:v.item_index,appid:v.appid,title:v.title};
+      const canonicalIdentity=JSON.stringify(identity,Object.keys(identity).sort())+"\n";
+      const digest=createHash("sha256").update(canonicalIdentity).digest("hex");
+      r.assignment_id="batch-"+digest.slice(0,24);
+      r.original_assignment_sha256=digest;
+    }
+    m.original_pins=pins;
+    setFile(manifestCommit,paths.manifest,m);
+    const mf=f.files.get(manifestCommit+"|"+paths.manifest);
+    g.scope="one_owner_requested_isolated_assembly_replay_only";
+    g.source_pins=pins;g.frozen_rows=items;
+    g.request_ref="refs/heads/"+requestBranch;
+    g.request_commit=requestCommit;g.request_blob_sha=pins.request_blob_sha;
+    g.manifest_blob_sha=mf.sha;
+    delete g.cohort_contract_path;
+    setFile(grant,paths.grant,g);
+    const gsha=f.files.get(grant+"|"+paths.grant).sha;
+    setFile(AUTH,paths.authorization,{
+      schema:"DOSSIER-NOTES-V2-BATCH-OWNER-AUTHORIZATION",schema_version:1,
+      scope:"one_owner_requested_isolated_assembly_replay_only",
+      authority_origin:"generic_owner_request",
+      request_ref:g.request_ref,request_commit:requestCommit,
+      trial_id:trialId,marker_commit:MARKER,marker_parent:manifestCommit,
+      human_grant_commit:grant,human_grant_blob_sha:gsha,
+      manifest_blob_sha:mf.sha,github_authorization_run_id:String(AUTHOR_ID),
+      semantic_execution_authorized:true,assembly_authorized:true,
+      sandbox_writer_authorized:true,production_authorized:false,
+      canonical_acceptance:false,owner_login:"kentrap2011-hub",
+      owner_actor_id:"315790060"
+    });
+    f.runs.delete(FREEZE_ID);
+    f.runs.set(AUTHOR_ID,{
+      ...makeRun(AUTHOR_ID,
+        ".github/workflows/issue-dossier-notes-v2-generic-assembly-replay.yml",
+        "Authorize Assembly replay "+requestBranch+" at "+requestCommit),
+      event:"push",head_sha:requestCommit,head_branch:requestBranch
+    });
+  }
   f.api={
     async fetch({url}){
       f.calls.push(["fetch",url]);
