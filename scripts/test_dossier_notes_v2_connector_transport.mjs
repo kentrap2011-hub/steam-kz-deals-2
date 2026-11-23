@@ -604,3 +604,54 @@ test("resumed Assembly uses original Research candidate and receipt, one session
   assert.equal(result.disposition,"assembly_missing_evidence");
   assert.ok(f.calls.length-before<=20,"Assembly publication remains within per-call limit");
 });
+
+test("generic owner replay is an exact issued request, not a hardcoded main cohort",async()=>{
+  const trial="dossier-notes-v2-assembly-replay-"+"ab".repeat(16);
+  const f=makeFixture(6,trial);
+  const ctx=await preflight(f,{trialId:trial,phase:"assembly",freezeRunId:undefined});
+  assert.equal(ctx.manifest.trial_id,trial);
+  assert.equal(ctx.manifest.items.length,6);
+  assert.equal(ctx.github_owner_runs_authenticated,true);
+  assert.equal(ctx.anchor.authority_origin,"generic_owner_request");
+  assert.equal(ctx.production_authorized,false);
+  assert.equal(f.calls.filter(x=>x[0]==="fetch" &&
+    x[1].includes("/actions/runs/")).length,1);
+  assert.equal(f.calls.filter(x=>x[0]==="fetchFile" &&
+    x[1].includes("/replay_requests/")).length,1);
+  assert.ok(f.calls.length<=20,"single owner preflight must fit connector budget");
+});
+
+test("generic replay refuses wrong owner run, request file, source and Research scope",async()=>{
+  const trial="dossier-notes-v2-assembly-replay-"+"ab".repeat(16);
+  for(const mutate of [
+    f=>{f.runs.get(AUTHOR_ID).event="workflow_dispatch";},
+    f=>{f.runs.get(AUTHOR_ID).run_attempt=2;},
+    f=>{f.runs.get(AUTHOR_ID).head_branch="main";},
+    f=>{f.runs.get(AUTHOR_ID).head_sha=sha(999);},
+    f=>{f.runs.get(AUTHOR_ID).actor.id=0;},
+    f=>{f.runs.get(AUTHOR_ID).conclusion="failure";},
+    f=>{f.runs.get(AUTHOR_ID).path="wrong";},
+    f=>{f.runs.get(AUTHOR_ID).display_title="wrong";},
+    f=>{const p="data/control/dossier_notes_v2/replay_requests/"+"ab".repeat(16)+".json";
+      const id=sha(77);const x=JSON.parse(f.files.get(id+"|"+p).content);
+      x.appids[0]="99999";f.files.set(id+"|"+p,{
+        content:JSON.stringify(x),sha:blob(JSON.stringify(x))});},
+    f=>{const p="data/control/dossier_notes_v2/grants/"+trial+".json";
+      const k=sha(11)+"|"+p,x=JSON.parse(f.files.get(k).content);
+      x.source_pins.source_research[0].title="Wrong Edition";
+      f.files.set(k,{content:JSON.stringify(x),sha:blob(JSON.stringify(x))});},
+    f=>{const p="data/control/dossier_notes_v2/authorizations/"+trial+".json";
+      const k=AUTH+"|"+p,x=JSON.parse(f.files.get(k).content);
+      x.request_ref="refs/heads/main";
+      f.files.set(k,{content:JSON.stringify(x),sha:blob(JSON.stringify(x))});},
+  ]){
+    const f=makeFixture(6,trial);
+    mutate(f);
+    await assert.rejects(preflight(f,{trialId:trial,phase:"assembly"}),
+      /BATCH_V2_CONNECTOR_STOP/);
+    assert.equal(f.calls.filter(x=>x[0]==="updateRef").length,0);
+  }
+  const f=makeFixture(6,trial);
+  await assert.rejects(preflight(f,{trialId:trial,phase:"research"}),
+    /only separately launched Assembly/);
+});
