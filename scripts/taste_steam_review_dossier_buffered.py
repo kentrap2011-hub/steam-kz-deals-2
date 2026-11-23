@@ -1165,7 +1165,11 @@ def _drain_notes_v2_individual(
         )
         from dossier_two_stage_staging import git as sandbox_git
         path_set = batch_paths(trial_id)
-        batch_scope(root, trial_id)
+        from dossier_notes_v2_generic_replay import is_generic, policy as generic_policy
+        if is_generic(trial_id):
+            generic_policy(root)  # only owner-issued sandbox; no per-run main cohort file
+        else:
+            batch_scope(root, trial_id)
         source = json.loads(
             (Path(__file__).resolve().parents[1] / "config" /
              "dossier_research_notes_v2_contract.json").read_text(encoding="utf-8")
