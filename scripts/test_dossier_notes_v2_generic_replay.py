@@ -154,8 +154,9 @@ class GenericOwnerReplayTests(unittest.TestCase):
                 issue_fixture(repo,"cd"*16)
             for old in ("data/ai_inbox/dossier_notes_v2/"+OLD,
                         "data/ai_inbox/dossier_assembly_v2/"+OLD,
-                        "data/cache/taste_steam_review_dossiers"):
-                self.assertFalse((repo/old).exists(),old)
+                        "data/cache/taste_steam_review_dossiers",
+                        "data/cache/progressive_pass2_state.json"):
+                self.assertEqual(git(repo,"diff","--name-only",base,"HEAD","--",old),"",old)
         finally:
             temp.cleanup()
 
@@ -184,8 +185,10 @@ class GenericOwnerReplayTests(unittest.TestCase):
                 generic.rows_from_pins(req["trial_id"],bad)
             bad=copy.deepcopy(pins)
             bad["source_research"][1]["research_receipt_blob_sha"]="0"*40
-            self.assertNotEqual(generic.rows_from_pins(req["trial_id"],bad),
-                                generic.rows_from_pins(req["trial_id"],pins))
+            # Assignment identity remains based on the original Research commit;
+            # runtime owner source attestation must verify the separate receipt blob.
+            self.assertEqual(generic.rows_from_pins(req["trial_id"],bad),
+                             generic.rows_from_pins(req["trial_id"],pins))
             for badids in (["999999999"],["49520","49520"],[],["Braid"]):
                 with self.assertRaises(ValueError):
                     generic.request_doc("ab"*16,OLD,badids)
