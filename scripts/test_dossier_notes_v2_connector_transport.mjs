@@ -99,7 +99,8 @@ function makeFixture(n=6,trialId=TRIAL,ownerPush=false) {
     "Authorize isolated Notes V2 batch "+trialId+" marker "+MARKER));
   if(ownerPush){
     assert.ok(["dossier-notes-v2-fresh6-20261114-rerun1",
-      "dossier-notes-v2-fresh6-assembly-rerun2-20261117"].includes(trialId));
+      "dossier-notes-v2-fresh6-assembly-rerun2-20261117",
+      "dossier-notes-v2-fresh6-lean-assembly-rerun3-20261123"].includes(trialId));
     const key=AUTH+"|"+paths.authorization;
     const doc=JSON.parse(f.files.get(key).content);
     doc.scope="one_owner_main_push_research_assembly_sandbox_only";
@@ -109,9 +110,11 @@ function makeFixture(n=6,trialId=TRIAL,ownerPush=false) {
     f.runs.delete(FREEZE_ID);
     f.runs.set(AUTHOR_ID,{
       ...makeRun(AUTHOR_ID,
-        trialId==="dossier-notes-v2-fresh6-assembly-rerun2-20261117"
-          ?".github/workflows/issue-dossier-notes-v2-assembly-rerun-on-owner-push.yml"
-          :".github/workflows/issue-dossier-notes-v2-on-owner-push.yml",
+        trialId==="dossier-notes-v2-fresh6-lean-assembly-rerun3-20261123"
+          ?".github/workflows/issue-dossier-notes-v2-lean-assembly-rerun3-on-owner-push.yml"
+          :trialId==="dossier-notes-v2-fresh6-assembly-rerun2-20261117"
+            ?".github/workflows/issue-dossier-notes-v2-assembly-rerun-on-owner-push.yml"
+            :".github/workflows/issue-dossier-notes-v2-on-owner-push.yml",
         "Issue and authorize Notes V2 rerun "+trialId+" source "+base),
       event:"push"
     });
@@ -532,4 +535,65 @@ test("resumed Assembly uses original Research candidate and receipt, one session
   });
   assert.equal(result.disposition,"assembly_missing_evidence");
   assert.ok(f.calls.length-before<=20,"Assembly publication remains within per-call limit");
+});
+
+test("Lean rerun3 only authenticates its own first-attempt owner source-run",async()=>{
+  const trial="dossier-notes-v2-fresh6-lean-assembly-rerun3-20261123";
+  const f=makeFixture(6,trial,true);
+  const ctx=await preflight(f,{trialId:trial,phase:"assembly",freezeRunId:undefined});
+  assert.equal(ctx.github_owner_runs_authenticated,true);
+  assert.equal(ctx.anchor.authority_origin,"owner_main_push");
+  assert.equal(ctx.manifest.items.length,6);
+  assert.equal(ctx.production_authorized,false);
+  for(const change of [
+    r=>{r.path=".github/workflows/issue-dossier-notes-v2-assembly-rerun-on-owner-push.yml";},
+    r=>{r.event="workflow_dispatch";},
+    r=>{r.run_attempt=2;},
+    r=>{r.head_sha=sha(123);},
+    r=>{r.actor.id=0;},
+    r=>{r.display_title="forged";},
+    r=>{r.conclusion="failure";},
+  ]){
+    const bad=makeFixture(6,trial,true);
+    change(bad.runs.get(AUTHOR_ID));
+    await assert.rejects(preflight(bad,{trialId:trial,phase:"assembly"}));
+  }
+  const noResearch=makeFixture(6,trial,true);
+  const notReady=await preflight(noResearch,{trialId:trial,phase:"assembly"});
+  await assert.rejects(connectorPublishItem(noResearch.api,notReady,{
+    phase:"assembly",appid:"1000010",expectedHead:AUTH,
+    researchCommit:sha(123),document:researchDoc(notReady,"1000010")
+  }),/Research candidate and receipt|Assembly requires|Research/);
+  assert.equal(noResearch.calls.filter(x=>x[0]==="updateRef").length,0);
+});
+
+test("Lean rerun3 stale HEAD and interrupted two-commit publication cannot be retried",async()=>{
+  const trial="dossier-notes-v2-fresh6-lean-assembly-rerun3-20261123";
+  const stale=makeFixture(6,trial,true),a=await preflight(stale,{trialId:trial});
+  stale.head=sha(999);
+  await assert.rejects(connectorPublishItem(stale.api,a,{
+    phase:"research",appid:"1000010",expectedHead:AUTH,
+    document:researchDoc(a,"1000010")
+  }));
+  assert.equal(stale.calls.filter(x=>x[0]==="updateRef").length,0);
+  const f=makeFixture(6,trial,true),ctx=await preflight(f,{trialId:trial});
+  const doc=researchDoc(ctx,"1000010");
+  let calls=0;
+  const createBlob=f.api.createBlob;
+  f.api.createBlob=async args=>{
+    if(++calls===2) throw Error("synthetic interrupted receipt");
+    return createBlob(args);
+  };
+  await assert.rejects(connectorPublishItem(f.api,ctx,{
+    phase:"research",appid:"1000010",expectedHead:AUTH,document:doc
+  }),/synthetic interrupted receipt/);
+  const candidate=ctx.head;
+  assert.notEqual(candidate,AUTH);
+  assert.equal(f.calls.filter(x=>x[0]==="updateRef").length,1);
+  const recovered=await preflight(f,{trialId:trial,expectedHead:candidate});
+  await assert.rejects(connectorPublishItem(f.api,recovered,{
+    phase:"research",appid:"1000010",expectedHead:candidate,
+    document:researchDoc(recovered,"1000010")
+  }),/already exists/);
+  assert.equal(f.calls.filter(x=>x[0]==="updateRef").length,1);
 });
