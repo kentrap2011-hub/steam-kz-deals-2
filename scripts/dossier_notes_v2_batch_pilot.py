@@ -24,13 +24,18 @@ def execute(args):
     repo = Path(args.repo).resolve()
     c = v2._contract()
     trial_id = args.trial_id
-    scope = batch.scope(repo, trial_id)
+    from dossier_notes_v2_generic_replay import is_generic, policy as generic_policy
+    if is_generic(trial_id):
+        generic_policy(repo)
+        prepared = {"trial_id": trial_id, "proposed_sandbox_branch": batch.paths(trial_id)["branch"]}
+    else:
+        prepared = batch.scope(repo, trial_id)
     paths = batch.paths(trial_id)
     if (c.get("active") is not False
             or c.get("production_enabled") is not False
             or c.get("authorized_for_canonical_ingest") is not False
-            or scope["trial_id"] != trial_id
-            or scope["proposed_sandbox_branch"] != paths["branch"]):
+            or prepared["trial_id"] != trial_id
+            or prepared["proposed_sandbox_branch"] != paths["branch"]):
         v2.reject("wrong_binding", "only inactive isolated GitHub-issued batch is allowed")
     head_branch = git(repo, "symbolic-ref", "--short", "HEAD").stdout.decode().strip()
     if head_branch != paths["branch"]:
