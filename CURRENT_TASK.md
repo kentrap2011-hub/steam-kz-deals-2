@@ -1,5 +1,13 @@
 # CURRENT TASK
 
+## ЧАТ 1 — Lean Assembly fresh6 rerun3 owner route (2026-11-23)
+
+- Status: `source_implementation_complete_in_draft_PR_475; green_source_test_CI_observed_at_1a41ea3; latest_PR_HEAD_CI_must_be_green_before_director_acceptance; owner_first_attempt_not_started; semantic_Assembly_not_started; no_production_or_Deep`.
+- Task: `WORKER_TASK_DOSSIER_LEAN_FRESH6_ASSEMBLY_RERUN3_OWNER_ROUTE_01.md`; source [PR #475](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/475), branch `implement/dossier-lean-fresh6-assembly-rerun3-owner-20261123`; report `reviews/worker_reports/dossier-lean-fresh6-assembly-rerun3-owner-route-01.md`.
+- Exact new one-use trial: `dossier-notes-v2-fresh6-lean-assembly-rerun3-20261123`. Six frozen AppIDs in order: 1000010, 102600, 1029690, 49520, 499180, 501590; old Research source pin and rerun1/rerun2 transport immutable. GitHub owner-first-attempt main-push issuer creates a NEW grant/manifest/marker/direct-child authorization + deterministic Research candidate/typed-receipt copies, NOT new semantic Research. New separate one-shot Lean Assembly launcher: `config/dossier_notes_v2_fresh6_lean_assembly_rerun3_manual_one_shot_prompt.md`.
+- All 4 GitHub PR checks passed at immutable source/test SHA `1a41ea330a6cb4b07be9d4fef1d89441247302b8` (see report); recheck **latest final HEAD** after report/registry commits. Source requires clean mergeability/scope review; user waived separate L3 only. **No worker merge**. Only after Director accepts/merges source, independently inspect actual owner push and six new typed Research receipts; then separately user-launch NEW physical Assembly chat. Writer/Deep/canonical/production/scheduler remain disabled; no automatic retry. Other work below remains historical/independent.
+
+
 ## ЧАТ 1 — Dossier V2 fresh6 Assembly rerun2 source (2026-11-17)
 
 - Status: `implemented_in_draft_PR_not_merged; independent_L3_required; owner_issuer_not_started; semantic_Assembly_not_started; exact_final_HEAD_CI_required`.

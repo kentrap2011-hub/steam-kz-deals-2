@@ -25,10 +25,15 @@ import dossier_research_notes_v2 as v2
 from dossier_two_stage_staging import blob, exists, json_at, parent, require_only_new
 
 NEW = batch.OWNER_PUSH_REPLAY_TRIAL
+NEW3 = batch.OWNER_PUSH_REPLAY_TRIAL3
+REPLAYS = {NEW, NEW3}
 OLD = "dossier-notes-v2-fresh6-20261114-rerun1"
 OLD_HEAD = "c4232fb579fa88c4ed01afd5c45c57792c309984"
 OLD_MARKER = "cdc8bcf79cef6d6e7c3c97ab91b5fb9416ab96d1"
 OLD_MANIFEST_BLOB = "752d5689c3f7d055c94c1844877337eea13ebd79"
+# Merged rerun2 source cohort blob: all six immutable Research introduction,
+# content and receipt pins are fixed here, not chosen by the new source contract.
+OLD_SOURCE_CONTRACT_BLOB = "e1715c1fdaf395114d4e209208004a63ac233ed5"
 SIX = ("1000010", "102600", "1029690", "49520", "499180", "501590")
 
 
@@ -72,8 +77,9 @@ def single_add(repo, path, raw, title):
     return commit
 
 
-def validate_source_contract(repo):
-    c = batch.scope(repo, NEW)
+def validate_source_contract(repo, trial_id=NEW):
+    batch.require(trial_id in REPLAYS, "not a preapproved replay source")
+    c = batch.scope(repo, trial_id)
     src = c.get("replay_source")
     batch.require(isinstance(src, dict) and set(src) == {
         "mode", "trial_id", "sandbox_head", "manifest_blob_sha", "marker_commit",
@@ -91,6 +97,9 @@ def validate_source_contract(repo):
                       "frozen original Research SHA map changed: " + name)
     batch.require([row["appid"] for row in c["candidates"]] == list(SIX),
                   "replay cannot change frozen six-item scope/order")
+    frozen = json.loads(command(repo, "cat-file", "blob", OLD_SOURCE_CONTRACT_BLOB))
+    batch.require(src == frozen.get("replay_source"),
+                  "Research commit/blob/typed-receipt pins differ from merged rerun2 source")
     return src
 
 
@@ -141,16 +150,16 @@ def source_notes(old_repo, src):
 
 def seed(repo, *, trial_id, marker_commit, authorization_commit):
     repo = Path(repo).resolve()
-    batch.require(trial_id == NEW, "seed cannot authorize arbitrary trials")
+    batch.require(trial_id in REPLAYS, "seed cannot authorize arbitrary trials")
     only_clean(repo)
-    original = validate_source_contract(repo)
-    branch = batch.paths(NEW)["branch"]
+    original = validate_source_contract(repo, trial_id)
+    branch = batch.paths(trial_id)["branch"]
     current = command(repo, "rev-parse", "HEAD")
     batch.require(remote_head(repo, branch) == authorization_commit
                   and current == authorization_commit,
                   "new sandbox is not at direct-child authorization (one use)")
     anchor = batch.issuer_structure(
-        repo, trial_id=NEW, marker_commit=marker_commit,
+        repo, trial_id=trial_id, marker_commit=marker_commit,
         authorization_commit=authorization_commit)
     batch.require(anchor.get("authority_origin") == "owner_main_push"
                   and anchor["github_authorization_run_id"] == os.environ["GITHUB_RUN_ID"]
@@ -172,35 +181,35 @@ def seed(repo, *, trial_id, marker_commit, authorization_commit):
         finally:
             command(repo, "worktree", "remove", "--force", str(old_checkout))
 
-    manifest, manifest_blob = v2._manifest(repo, marker_commit, NEW)
+    manifest, manifest_blob = v2._manifest(repo, marker_commit, trial_id)
     batch.require(manifest_blob == anchor["manifest_blob_sha"]
                   and [row["appid"] for row in manifest["items"]] == list(SIX),
                   "new GitHub owner manifest scope drift")
     items = []
     for appid in SIX:
         assignment = v2.frozen_assignment(
-            repo, marker_commit=marker_commit, trial_id=NEW, appid=appid)
+            repo, marker_commit=marker_commit, trial_id=trial_id, appid=appid)
         doc = copy.deepcopy(old_notes[appid])
         doc["assignment"] = assignment
         new_work = receipts.prepare_candidate(
-            repo, marker_commit=marker_commit, trial_id=NEW, appid=appid,
+            repo, marker_commit=marker_commit, trial_id=trial_id, appid=appid,
             authorization_commit=authorization_commit, document=doc)
         candidate = single_add(repo, new_work["output_path"], new_work["bytes"],
                                "dossier v2 replay: GitHub rebind immutable Research " + appid)
         checked = receipts.inspect_candidate(
-            repo, marker_commit=marker_commit, trial_id=NEW, appid=appid,
+            repo, marker_commit=marker_commit, trial_id=trial_id, appid=appid,
             authorization_commit=authorization_commit, introduction_commit=candidate)
         batch.require(checked["status"] == "safe_incomplete_research",
                       "fresh copy research introduction not independently valid")
         proposed = receipts.prepare_receipt(
-            repo, marker_commit=marker_commit, trial_id=NEW, appid=appid,
+            repo, marker_commit=marker_commit, trial_id=trial_id, appid=appid,
             authorization_commit=authorization_commit, introduction_commit=candidate)
         batch.require(proposed["disposition"] == "safe_incomplete_research",
                       "copied Research receipt did not pass strict technical check")
         receipt = single_add(repo, proposed["receipt_path"], proposed["receipt_bytes"],
                              "dossier v2 replay: GitHub typed Research receipt " + appid)
         proven = receipts.inspect_receipt_commit(
-            repo, marker_commit=marker_commit, trial_id=NEW, appid=appid,
+            repo, marker_commit=marker_commit, trial_id=trial_id, appid=appid,
             authorization_commit=authorization_commit, introduction_commit=candidate,
             receipt_commit=receipt)
         batch.require(proven["disposition"] == "safe_incomplete_research",
@@ -218,7 +227,7 @@ def seed(repo, *, trial_id, marker_commit, authorization_commit):
                   and remote_head(repo, old_branch) == OLD_HEAD,
                   "GitHub readback failed; do not retry or overwrite")
     return {"status": "six_Research_rebound_by_GitHub_not_semantic_research",
-            "trial_id": NEW, "new_sandbox_head": new_tip,
+            "trial_id": trial_id, "new_sandbox_head": new_tip,
             "marker_commit": marker_commit, "authorization_commit": authorization_commit,
             "items": items, "canonical_acceptance": False,
             "assembly_performed": False, "production_written": False}

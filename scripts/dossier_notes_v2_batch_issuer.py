@@ -39,6 +39,8 @@ def remote(repo, ref):
 
 
 def guard(repo,mode,trial_id,sha,confirmation,env):
+    batch.require(trial_id != batch.OWNER_PUSH_REPLAY_TRIAL3,
+                  "rerun3 requires one owner-main-push issuer; manual issue refused")
     batch.paths(trial_id)  # canonical safe slug and no original18
     batch.require(isinstance(sha,str) and SHA.fullmatch(sha),
                   "current main SHA required")
@@ -196,7 +198,7 @@ def authorize(repo,expected,trial_id,marker_commit,env,authority_origin="manual"
 def guard_owner_push(repo,trial_id,sha,env):
     """Actual original owner main push must FIRST introduce the exact new cohort."""
     batch.require(trial_id in batch.OWNER_PUSH_TRIALS,
-                  "push authorization is restricted to the two exact preapproved cohorts")
+                  "push authorization is restricted to exact preapproved cohorts")
     batch.paths(trial_id)
     batch.require(isinstance(sha,str) and SHA.fullmatch(sha),
                   "exact main push SHA missing")
@@ -273,7 +275,7 @@ def owner_push_launch(repo,trial_id,sha,env):
     granted=authorize(repo,sha,trial_id,frozen["marker_commit"],env,
                       authority_origin="owner_main_push")
     replay = {}
-    if trial_id == batch.OWNER_PUSH_REPLAY_TRIAL:
+    if trial_id in (batch.OWNER_PUSH_REPLAY_TRIAL, batch.OWNER_PUSH_REPLAY_TRIAL3):
         # The same one-use authenticated owner run can copy the old immutable
         # Research content. It must never generate new semantic Research.
         from dossier_notes_v2_assembly_replay_seed import seed
