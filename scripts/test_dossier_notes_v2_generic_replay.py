@@ -238,6 +238,72 @@ class GenericOwnerReplayTests(unittest.TestCase):
         finally:
             temp.cleanup()
 
+    def test_source_missing_and_mutated_typed_receipt_rejected_before_any_new_issuer(self):
+        """Real disposable old Research Git worktree; owner REST check is mocked only."""
+        from test_dossier_notes_v2_owner_push import synthetic_push_issuer
+        temp,repo=source_copy()
+        try:
+            old=synthetic_push_issuer(repo,trial=OLD)
+            git(repo,"checkout","-B","sandbox/"+OLD,old["auth"])
+            chosen=old["rows"][:2]
+            rows=[]
+            for index,item in enumerate(chosen):
+                appid=item["appid"]
+                a=v2.frozen_assignment(repo,marker_commit=old["marker"],
+                    trial_id=OLD,appid=appid)
+                document={
+                    "schema":"DOSSIER-RESEARCH-NOTES-V2","schema_version":2,
+                    "assignment":a,"research_status":"limited_evidence",
+                    "notes_text":"Synthetic original Research for strict source receipt checks"
+                }
+                work=receipts.prepare_candidate(repo,marker_commit=old["marker"],
+                    trial_id=OLD,appid=appid,authorization_commit=old["auth"],
+                    document=document)
+                research=add(repo,work["output_path"],work["bytes"],
+                             "fixture safe Research source "+appid)
+                if index==0:
+                    typed=receipts.prepare_receipt(repo,marker_commit=old["marker"],
+                        trial_id=OLD,appid=appid,authorization_commit=old["auth"],
+                        introduction_commit=research)
+                    add(repo,typed["receipt_path"],typed["receipt_bytes"],
+                        "fixture first typed Research receipt")
+                rows.append((appid,research,a))
+            with tempfile.TemporaryDirectory() as remote_dir:
+                bare=Path(remote_dir)/"git.git"
+                from subprocess import run
+                run(["git","init","--bare","--quiet",str(bare)],check=True)
+                git(repo,"remote","set-url","origin",str(bare))
+                git(repo,"push","origin","HEAD:refs/heads/sandbox/"+OLD)
+                request={"nonce":"ab"*16,"request_commit":fake_sha("request"),
+                    "request_blob_sha":fake_sha("request-blob"),"request":{
+                        "source_trial_id":OLD,
+                        "appids":[x[0] for x in rows]}}
+                with patch.object(batch,"authenticated_owner_run",return_value=True):
+                    with self.assertRaises(v2.NotesV2Error):
+                        generic._source_from_git(repo,request,"synthetic-token")
+                second=rows[1]
+                typed=receipts.prepare_receipt(repo,marker_commit=old["marker"],
+                    trial_id=OLD,appid=second[0],authorization_commit=old["auth"],
+                    introduction_commit=second[1])
+                add(repo,typed["receipt_path"],typed["receipt_bytes"],
+                    "fixture second typed Research receipt")
+                git(repo,"push","origin","HEAD:refs/heads/sandbox/"+OLD)
+                with patch.object(batch,"authenticated_owner_run",return_value=True):
+                    notes,pins=generic._source_from_git(repo,request,"synthetic-token")
+                self.assertEqual(list(notes),[row[0] for row in rows])
+                self.assertEqual(len(pins["source_research"]),2)
+                damaged=json.loads((repo/typed["receipt_path"]).read_text())
+                damaged["disposition"]="wrong_binding"
+                (repo/typed["receipt_path"]).write_text(json.dumps(damaged))
+                git(repo,"add","--",typed["receipt_path"])
+                git(repo,"commit","-m","fixture forbidden receipt rewrite")
+                git(repo,"push","origin","HEAD:refs/heads/sandbox/"+OLD)
+                with patch.object(batch,"authenticated_owner_run",return_value=True):
+                    with self.assertRaises((ValueError,v2.NotesV2Error)):
+                        generic._source_from_git(repo,request,"synthetic-token")
+        finally:
+            temp.cleanup()
+
     def test_real_completed_owner_run_gate_and_wrong_token_scope(self):
         temp,repo=source_copy()
         try:
