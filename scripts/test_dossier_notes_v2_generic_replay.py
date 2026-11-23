@@ -117,7 +117,14 @@ class GenericOwnerReplayTests(unittest.TestCase):
             self.assertIn("github.run_attempt == 1",workflow)
             for bad in ("schedule:", "workflow_dispatch:", "branches: [main]"):
                 self.assertNotIn(bad,workflow)
-            self.assertEqual(generic.request_doc("ab"*16,OLD,["1000010"])["appids"],["1000010"])
+            doc=generic.request_doc("ab"*16,OLD,["1000010"])
+            self.assertEqual(doc["appids"],["1000010"])
+            from jsonschema import Draft202012Validator
+            schema=json.loads((repo/"config/dossier_notes_v2_generic_replay_request.schema.json").read_text())
+            Draft202012Validator.check_schema(schema)
+            Draft202012Validator(schema).validate(doc)
+            with self.assertRaises(Exception):
+                Draft202012Validator(schema).validate({**doc,"unexpected":"forbidden"})
             for source in ("dossier-notes-v2-assembly-replay-"+"ff"*16,
                            "dossier-notes-v2-original18-first", "../outside"):
                 with self.subTest(source=source),self.assertRaises(ValueError):
