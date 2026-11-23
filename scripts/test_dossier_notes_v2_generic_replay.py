@@ -323,6 +323,32 @@ class GenericOwnerReplayTests(unittest.TestCase):
         finally:
             temp.cleanup()
 
+    def test_partial_new_research_git_copy_does_not_unlock_assembly(self):
+        temp,repo=source_copy()
+        try:
+            f=issue_fixture(repo,"ab"*16,selected=SIX[:1],copies=False)
+            appid=f["rows"][0]["appid"]
+            a=v2.frozen_assignment(repo,marker_commit=f["marker"],
+                trial_id=f["trial"],appid=appid)
+            doc={"schema":"DOSSIER-RESEARCH-NOTES-V2","schema_version":2,
+                "assignment":a,"research_status":"limited_evidence",
+                "notes_text":"Synthetic Research candidate exists but typed receipt is absent."}
+            plan=receipts.prepare_candidate(repo,marker_commit=f["marker"],
+                trial_id=f["trial"],appid=appid,
+                authorization_commit=f["auth"],document=doc)
+            candidate=seed.single_add(repo,plan["output_path"],plan["bytes"],
+                                      "fixture partial Research one-add only")
+            with self.assertRaises(v2.NotesV2Error):
+                receipts.require_batch_research_receipt(repo,marker_commit=f["marker"],
+                    trial_id=f["trial"],appid=appid,authorization_commit=f["auth"],
+                    research_commit=candidate)
+            self.assertFalse((repo/"data/ai_inbox/dossier_assembly_v2"/f["trial"]).exists())
+            with self.assertRaises(ValueError):
+                seed.single_add(repo,plan["output_path"],plan["bytes"],
+                                "cannot duplicate existing partial Research")
+        finally:
+            temp.cleanup()
+
     def test_real_completed_owner_run_gate_and_wrong_token_scope(self):
         temp,repo=source_copy()
         try:
