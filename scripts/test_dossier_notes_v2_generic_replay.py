@@ -304,6 +304,13 @@ class GenericOwnerReplayTests(unittest.TestCase):
                     notes,pins=generic._source_from_git(repo,request,"synthetic-token")
                 self.assertEqual(list(notes),[row[0] for row in rows])
                 self.assertEqual(len(pins["source_research"]),2)
+                # A syntactically valid AppID not in the immutable source
+                # cannot become an authorized semantic Assembly item.
+                wrong_request=copy.deepcopy(request)
+                wrong_request["request"]["appids"]=[rows[0][0],"999999999"]
+                with patch.object(batch,"authenticated_owner_run",return_value=True):
+                    with self.assertRaises(ValueError):
+                        generic._source_from_git(repo,wrong_request,"synthetic-token")
                 damaged=json.loads((repo/typed["receipt_path"]).read_text())
                 damaged["disposition"]="wrong_binding"
                 (repo/typed["receipt_path"]).write_text(json.dumps(damaged))
