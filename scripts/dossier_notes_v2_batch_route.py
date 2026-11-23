@@ -28,12 +28,16 @@ AUTHORIZE_WORKFLOW = ".github/workflows/authorize-dossier-notes-v2-batch.yml"
 OWNER_PUSH_WORKFLOW = ".github/workflows/issue-dossier-notes-v2-on-owner-push.yml"
 OWNER_PUSH_TRIAL = "dossier-notes-v2-fresh6-20261114-rerun1"
 OWNER_PUSH_REPLAY_TRIAL = "dossier-notes-v2-fresh6-assembly-rerun2-20261117"
+OWNER_PUSH_REPLAY_TRIAL3 = "dossier-notes-v2-fresh6-lean-assembly-rerun3-20261123"
 OWNER_PUSH_REPLAY_WORKFLOW = ".github/workflows/issue-dossier-notes-v2-assembly-rerun-on-owner-push.yml"
-OWNER_PUSH_TRIALS = {OWNER_PUSH_TRIAL, OWNER_PUSH_REPLAY_TRIAL}
+OWNER_PUSH_REPLAY_WORKFLOW3 = ".github/workflows/issue-dossier-notes-v2-lean-assembly-rerun3-on-owner-push.yml"
+OWNER_PUSH_TRIALS = {OWNER_PUSH_TRIAL, OWNER_PUSH_REPLAY_TRIAL, OWNER_PUSH_REPLAY_TRIAL3}
 
 
 def owner_push_workflow(trial_id):
     require(trial_id in OWNER_PUSH_TRIALS, "not a preapproved one-use owner-push cohort")
+    if trial_id == OWNER_PUSH_REPLAY_TRIAL3:
+        return OWNER_PUSH_REPLAY_WORKFLOW3
     return (OWNER_PUSH_REPLAY_WORKFLOW if trial_id == OWNER_PUSH_REPLAY_TRIAL
             else OWNER_PUSH_WORKFLOW)
 WRITER_WORKFLOW = ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
@@ -185,6 +189,11 @@ def _base_contract_proof(repo,base,trial_id):
         "scripts/taste_steam_review_dossier_buffered.py",
         ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml",
     )
+    if trial_id == OWNER_PUSH_REPLAY_TRIAL3:
+        executable_paths += (
+            "scripts/dossier_notes_v2_assembly_replay_seed.py",
+            OWNER_PUSH_REPLAY_WORKFLOW3,
+        )
     for executable in executable_paths:
         # The legacy file_at() intentionally supports only config/ and data/.
         # These are STATIC trusted source paths, so compare Git show bytes
@@ -227,7 +236,7 @@ def expected_authorization(repo,trial_id,marker,grant_commit,run_id,authority_or
     require(authority_origin in ("manual","owner_main_push"),
             "unsupported authorization origin")
     if authority_origin == "owner_main_push":
-        require(trial_id in OWNER_PUSH_TRIALS, "owner push may authorize only two exact separately issued cohorts")
+        require(trial_id in OWNER_PUSH_TRIALS, "owner push may authorize only exact separately issued cohorts")
     bp=manifest_blueprint(repo,trial_id)
     doc={
         "schema":"DOSSIER-NOTES-V2-BATCH-OWNER-AUTHORIZATION",
