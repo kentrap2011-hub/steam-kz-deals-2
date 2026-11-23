@@ -298,6 +298,17 @@ def compatible_cached_dossier(item, manifest, contract, store_dir, *, now=None):
     doc = load_dossier_if_present(store_dir, appid)
     if doc is None:
         return None
+    if doc.get("schema") == "DOSSIER-NOTES-V2-LEAN-FINAL-V1":
+        from dossier_lean_canonical_dual import versioned_dossier_state
+        try:
+            state, _ = versioned_dossier_state(
+                doc, contract, store_dir=store_dir, appid=appid,
+                now=now, expected_title=item.get("title"),
+                expected_ttl_days=int(manifest["ttl_days"]),
+            )
+            return doc if state == "fresh" else None
+        except (ValueError, OSError, TypeError, KeyError):
+            return None
     try:
         docs = validate_dossiers_against_expected_items(
             [doc],
@@ -826,6 +837,17 @@ def _active_existing_dossier(appid, current_manifest, contract, store_dir):
     title = existing.get("title") if isinstance(existing, dict) else None
     if not isinstance(title, str) or not title:
         return None
+    if existing.get("schema") == "DOSSIER-NOTES-V2-LEAN-FINAL-V1":
+        from dossier_lean_canonical_dual import versioned_dossier_state
+        try:
+            state, _ = versioned_dossier_state(
+                existing, contract, store_dir=store_dir, appid=appid,
+                expected_title=title,
+                expected_ttl_days=int(current_manifest["ttl_days"]),
+            )
+            return existing if state == "fresh" else None
+        except (ValueError, OSError, TypeError, KeyError):
+            return None
     try:
         docs = validate_dossiers_against_expected_items(
             [existing],
@@ -1325,11 +1347,28 @@ def _drain_notes_v2_individual(
                     or original.get("outcome") != "assembled_candidate_ready"):
                 raise ValueError("original Assembly Git binding changed")
             dossier = original["final_dossier"]
-            validate_dossier_strict(
-                dossier, strict_contract, expected_appid=appid,
-                expected_title=work["assignment"]["title"],
-            )
-            validate_compact_provenance(dossier, load_compact_provenance_policy())
+            # Lean final is strictly confined to an isolated Notes V2 trial.
+            # Production/canonical writer still requires unchanged strict V2.
+            from dossier_notes_v2_lean_final import LEAN_SCHEMA, validate_lean_final
+            if dossier.get("schema") == LEAN_SCHEMA and trial_sandbox:
+                validate_lean_final(
+                    dossier, expected_appid=appid,
+                    expected_title=work["assignment"]["title"],
+                )
+            elif dossier.get("schema") == LEAN_SCHEMA:
+                # An inactive contract is never permission; offline simulation
+                # must pass the separate disposable-Git fixture gate.
+                from dossier_lean_canonical_dual import require_gate, validate_writer_lean
+                require_gate("writer", repo_root=root, offline_fixture=offline_fixture)
+                validate_writer_lean(
+                    dossier, appid=appid, title=work["assignment"]["title"],
+                )
+            else:
+                validate_dossier_strict(
+                    dossier, strict_contract, expected_appid=appid,
+                    expected_title=work["assignment"]["title"],
+                )
+                validate_compact_provenance(dossier, load_compact_provenance_policy())
             dossier_sha = canonical_sha256(dossier)
             target = dossier_path(store, appid)
             receipt = accepted / trial_id / (
@@ -1347,6 +1386,9 @@ def _drain_notes_v2_individual(
                 "assembly_commit": pair["assembly_commit"],
                 "dossier_sha256": dossier_sha,
             }
+            if dossier.get("schema") == LEAN_SCHEMA and not trial_sandbox:
+                from dossier_lean_canonical_dual import lean_receipt_fields
+                bound_receipt.update(lean_receipt_fields(dossier))
             exists_cache = target.exists()
             exists_receipt = receipt.exists()
             if exists_cache:

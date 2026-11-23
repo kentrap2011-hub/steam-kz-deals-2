@@ -190,7 +190,7 @@ class P2StagingTests(unittest.TestCase):
         self.assertEqual(p["status"], "rejected_invalid")
         r = p["files"][p["receipt_path"]]
         self.assertEqual(r["reason_code"], "invalid_json")
-        self.assertNotIn("bad", json.dumps(r))
+        self.assertNotIn('"bad"', json.dumps(r))
         self.assertFalse(r["retry_authorized"])
 
     def test_04_duplicate_raw_json_field_rejected(self):
@@ -356,7 +356,7 @@ class P2StagingTests(unittest.TestCase):
     def test_23_incorrect_original_anchor_cannot_be_substituted(self):
         self.f.submit()
         with self.assertRaises(ValueError):
-            receive_research(self.f.root, marker_commit=self.f.marker[:-1] + "0",
+            receive_research(self.f.root, marker_commit=self.f.marker[:-1] + ("0" if self.f.marker[-1] != "0" else "1"),
                              prepared_work_path=self.f.p_path,
                              package_commit=self.f.package_commit)
 

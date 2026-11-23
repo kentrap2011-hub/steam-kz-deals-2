@@ -411,14 +411,17 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
         appid = row["appid"]
         existing = load_dossier_if_present(store_dir, appid)
         try:
-            state = dossier_state_strict(
-                existing,
-                contract,
-                now=now,
-                expected_appid=appid,
-                expected_title=row["title"],
-                expected_ttl_days=ttl,
-            )
+            if isinstance(existing, dict) and existing.get("schema") == "DOSSIER-NOTES-V2-LEAN-FINAL-V1":
+                from dossier_lean_canonical_dual import versioned_dossier_state
+                state, _ = versioned_dossier_state(
+                    existing, contract, store_dir=store_dir, appid=appid,
+                    now=now, expected_title=row["title"], expected_ttl_days=ttl,
+                )
+            else:
+                state = dossier_state_strict(
+                    existing, contract, now=now, expected_appid=appid,
+                    expected_title=row["title"], expected_ttl_days=ttl,
+                )
         except ValueError:
             state = "invalid"
         item = {
@@ -550,7 +553,7 @@ def persist_submission_and_advance_snapshot_strict(submission, manifest, contrac
     return persisted, next_manifest
 
 
-def build_semantic_input_strict(pin, contract, store_dir, *, now=None):
+def build_semantic_input_strict(pin, contract, store_dir, *, now=None, lean_offline_fixture=False):
     """Keep Taste Semantic Producer input shape unchanged while requiring fresh V2 dossiers."""
     validate_pin(pin)
     now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
@@ -560,14 +563,18 @@ def build_semantic_input_strict(pin, contract, store_dir, *, now=None):
         appid = str(row["appid"])
         doc = load_dossier_if_present(store_dir, appid)
         try:
-            state = dossier_state_strict(doc, contract, now=now, expected_appid=appid)
+            from dossier_lean_canonical_dual import versioned_dossier_state
+            state, lean_binding = versioned_dossier_state(
+                doc, contract, store_dir=store_dir, appid=appid, now=now,
+                offline_fixture=lean_offline_fixture,
+            )
         except ValueError as exc:
             missing.append({"key": row["key"], "appid": appid, "state": "invalid", "error": str(exc)})
             continue
         if state != "fresh":
             missing.append({"key": row["key"], "appid": appid, "state": state})
             continue
-        rows.append({
+        semantic_row = {
             "key": row["key"],
             "appid": appid,
             "taste_fingerprint": row.get("taste_fingerprint"),
@@ -579,7 +586,11 @@ def build_semantic_input_strict(pin, contract, store_dir, *, now=None):
                 "generated_at_utc": doc["generated_at_utc"],
                 "expires_at_utc": doc["expires_at_utc"],
             },
-        })
+        }
+        if lean_binding is not None:
+            semantic_row["dossier_binding"]["dossier_format"] = doc["schema"]
+            semantic_row["dossier_binding"]["quality_binding"] = lean_binding
+        rows.append(semantic_row)
     if missing:
         raise ValueError("Taste semantic input held: missing/stale/invalid web-evidence dossier(s): " + __import__("json").dumps(missing, ensure_ascii=False))
     out = {

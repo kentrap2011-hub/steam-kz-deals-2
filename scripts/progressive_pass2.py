@@ -541,7 +541,32 @@ def _bound_dossier(work_item):
         raise ValueError('Deep negative assessment Dossier document is missing')
     if str(dossier.get('appid') or '') != str(work_item.get('appid') or ''):
         raise ValueError('Deep negative assessment Dossier appid mismatch')
-    if dossier.get('web_evidence_contract_binding') != work_item.get('dossier_compatibility_binding'):
+    if dossier.get('schema') == 'DOSSIER-NOTES-V2-LEAN-FINAL-V1':
+        if work_item.get('_sandbox_lean_preview') is True and work_item.get('preview_only') is True:
+            from dossier_notes_v2_deep_compat import lean_preview_eligibility
+            ok, reason = lean_preview_eligibility(
+                binding={'appid': work_item.get('appid')},
+                semantic_input={'title': dossier.get('title')},
+                dossier_record=record,
+                current_binding=work_item.get('dossier_compatibility_binding'),
+            )
+            if not ok:
+                raise ValueError('Deep lean sandbox preview binding mismatch: ' + reason)
+        else:
+            from dossier_lean_canonical_dual import inspect_accepted_lean
+            fixture_root = work_item.get('_lean_offline_fixture_root')
+            try:
+                accepted = inspect_accepted_lean(
+                    record, repo_root=fixture_root or ROOT,
+                    expected_appid=work_item.get('appid'),
+                    expected_title=(work_item.get('semantic_input') or {}).get('title'),
+                    offline_fixture=fixture_root is not None, stage='deep',
+                )
+            except (ValueError, OSError) as exc:
+                raise ValueError('lean Dossier cannot be consumed as canonical Deep evidence: ' + str(exc)) from exc
+            if accepted['binding'] != work_item.get('dossier_compatibility_binding'):
+                raise ValueError('Deep lean quality/receipt binding mismatch')
+    elif dossier.get('web_evidence_contract_binding') != work_item.get('dossier_compatibility_binding'):
         raise ValueError('Deep negative assessment Dossier binding mismatch')
     return dossier
 
@@ -959,9 +984,11 @@ def prepared_work_item_dossier_is_live(work_item, now=None):
     if not isinstance(work_item, dict):
         return False, 'prepared_work_item_missing'
     current_binding = current_dossier_binding()
+    record = canonical_dossier_loader(work_item.get('appid'))
+    if isinstance(record, dict) and (record.get('doc') or {}).get('schema') == 'DOSSIER-NOTES-V2-LEAN-FINAL-V1':
+        current_binding = work_item.get('dossier_compatibility_binding')
     if work_item.get('dossier_compatibility_binding') != current_binding:
         return False, 'dossier_compatibility_binding_mismatch'
-    record = canonical_dossier_loader(work_item.get('appid'))
     if not isinstance(record, dict):
         return False, 'no_canonically_accepted_dossier'
     if record.get('path') != work_item.get('dossier_path'):
@@ -989,6 +1016,9 @@ def dossier_is_eligible(
     now=None,
     pass1_entry=None,
     pass2_state_doc=None,
+    lean_sandbox_preview=False,
+    lean_offline_fixture=False,
+    lean_repo_root=ROOT,
 ):
     """Validate only the current Deep evidence gate.
 
@@ -1010,6 +1040,33 @@ def dossier_is_eligible(
         return False, 'canonical_dossier_record_invalid'
     if str(dossier.get('appid') or '') != str(binding.get('appid') or ''):
         return False, 'dossier_wrong_appid'
+
+    if dossier.get('schema') == 'DOSSIER-NOTES-V2-LEAN-FINAL-V1':
+        if lean_sandbox_preview:
+            from dossier_notes_v2_deep_compat import lean_preview_eligibility
+            return lean_preview_eligibility(
+                binding=binding, semantic_input=semantic_input,
+                dossier_record=dossier_record, current_binding=current_binding, now=now
+            )
+        from dossier_lean_canonical_dual import inspect_accepted_lean
+        if not isinstance(semantic_input, dict) or semantic_input.get('title') != dossier.get('title'):
+            return False, 'dossier_wrong_work_title'
+        if not _cross_stage_release_year_compatible(
+            (dossier.get('game_identity') or {}).get('release_year'), semantic_input
+        ):
+            return False, 'dossier_release_year_missing_or_invalid'
+        try:
+            accepted = inspect_accepted_lean(
+                dossier_record, repo_root=lean_repo_root,
+                now=now, expected_appid=binding.get('appid'),
+                expected_title=semantic_input.get('title'),
+                offline_fixture=lean_offline_fixture, stage='deep',
+            )
+        except (ValueError, OSError, TypeError, KeyError):
+            return False, 'lean_dossier_is_not_canonical_deep_evidence'
+        if current_binding != accepted['binding']:
+            return False, 'dossier_compatibility_binding_mismatch'
+        return True, 'eligible'
 
     identity = dossier.get('game_identity')
     if not isinstance(identity, dict) or identity.get('resolution_status') != 'resolved':
@@ -1506,6 +1563,8 @@ def recompute_eligibility(
     current_binding,
     dossier_loader=canonical_dossier_loader,
     now=None,
+    lean_offline_fixture=False,
+    lean_repo_root=ROOT,
 ):
     now = now or datetime.now(timezone.utc)
     generation, bindings, queue_by_family = progressive_pass1.current_bindings(
@@ -1565,12 +1624,26 @@ def recompute_eligibility(
         queue_row = queue_by_family.get(family_id) or {}
         semantic_input = _semantic_input(queue_row)
         dossier_record = dossier_loader(binding['appid'])
+        item_binding = current_binding
+        if isinstance(dossier_record, dict) and (dossier_record.get('doc') or {}).get('schema') == 'DOSSIER-NOTES-V2-LEAN-FINAL-V1':
+            from dossier_lean_canonical_dual import inspect_accepted_lean
+            try:
+                accepted_lean = inspect_accepted_lean(
+                    dossier_record, repo_root=lean_repo_root, now=now,
+                    expected_appid=binding['appid'], expected_title=semantic_input.get('title'),
+                    offline_fixture=lean_offline_fixture, stage='deep',
+                )
+                item_binding = accepted_lean['binding']
+            except (ValueError, OSError, TypeError, KeyError):
+                pass  # Fail closed in dossier_is_eligible; never rebind on a schema label.
         dossier_ok, dossier_reason = dossier_is_eligible(
             binding=binding,
             semantic_input=semantic_input,
             dossier_record=dossier_record,
-            current_binding=current_binding,
+            current_binding=item_binding,
             now=now,
+            lean_offline_fixture=lean_offline_fixture,
+            lean_repo_root=lean_repo_root,
         )
 
         if entry is None:
@@ -1583,7 +1656,7 @@ def recompute_eligibility(
                     binding,
                     queue_row,
                     dossier_record,
-                    current_binding,
+                    item_binding,
                     work_mode='normal_first_pass',
                 )
             )
@@ -1598,7 +1671,7 @@ def recompute_eligibility(
             counts['recovery_owned_count'] += 1
             reasons[family_id] = f'recovery_owned_{dossier_reason}'
             continue
-        if not recovery_authorization_is_live(entry, dossier_record, current_binding):
+        if not recovery_authorization_is_live(entry, dossier_record, item_binding):
             counts['recovery_owned_count'] += 1
             reasons[family_id] = 'recovery_owned_fresh_authorization_required'
             continue
@@ -1608,7 +1681,7 @@ def recompute_eligibility(
                 binding,
                 queue_row,
                 dossier_record,
-                current_binding,
+                item_binding,
                 work_mode='recovery',
                 recovery_authorization=auth,
             )

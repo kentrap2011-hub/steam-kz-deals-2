@@ -1,0 +1,29 @@
+{
+  "schema": "DOSSIER-LEAN-CANONICAL-DUAL-FORMAT-V1",
+  "version": 1,
+  "owner": "github_control_plane",
+  "status": "implemented_inactive",
+  "legacy_strict_v2_unchanged": true,
+  "legacy_cache_and_deep_binding_unchanged": true,
+  "lean_schema": "DOSSIER-NOTES-V2-LEAN-FINAL-V1",
+  "lean_writer_enabled": false,
+  "lean_reader_enabled": false,
+  "lean_deep_enabled": false,
+  "requires_source_owner_canonical_authorization": true,
+  "requires_existing_writer_owner_authorization": true,
+  "requires_committed_exact_canonical_receipt": true,
+  "requires_separate_quality_binding": true,
+  "canonical_store": "data/cache/taste_steam_review_dossiers",
+  "canonical_receipt_root": "data/control/dossier_notes_v2/canonical_accepted",
+  "canonical_receipt_schema": "DOSSIER-NOTES-V2-INDIVIDUAL-CANONICAL-ACCEPTANCE-V1",
+  "activation": "separate_owner_approval_L3_and_explicit_contract_change_after_live_authority_review",
+  "offline_positive_test": "only_disposable_git_fixture_with_existing_offline_gate_not_live_authorization",
+  "forbidden": [
+    "production_activation",
+    "automatic_owner_grant",
+    "sandbox_promotion",
+    "legacy_provenance_coercion",
+    "new_queue_or_scheduler",
+    "reanalysis_of_old_semantic_outputs"
+  ]
+}
