@@ -62,4 +62,22 @@ Any bounded **1–24 AppID subset** of an already genuine non-generic owner-issu
 - Documentation `PROJECT_ROUTES.md` and `PROJECT_DECISIONS.md#DOSSIER-GENERIC-REPLAY-005` record the reusable route and why avoiding per-run source PRs changes the owner control boundary.
 - The critical operator limitation is connecting the explicit real user request to the two create-only GitHub calls; if unavailable, use truthful `BLOCKED_AUTHORITY` and bounded owner-operated request, not silent recurring automation.
 
-**Source status at report-writing:** `SOURCE_PR_476_DRAFT_CI_IN_PROGRESS; NO_LIVE_OWNER_REQUEST; NO_SEMANTIC_ASSEMBLY; NO_CANONICAL_OR_PRODUCTION`. Reverify exact FINAL PR HEAD and all mandatory tests before declaring implementation ready; do not self-merge.
+## Verified GitHub source/test CI, 2026-11-23
+
+At verified repository/PR HEAD `e65a40055d55d4245c5cbdda8c973edf7c6cc136`, all six actual GitHub PR checks were **completed / SUCCESS**:
+
+| Check | Real GitHub Actions run |
+| --- | --- |
+| `synthetic-v2` — Node connector, two repeat Git trials, Research receipt tamper/missing, strict writer/Lean/Deep inactive safety | [45239228735](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45239228735) |
+| `validate` | [45239228702](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45239228702) |
+| `test` | [45239228824](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45239228824) |
+| `offline-chain-qa` | [45239228708](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45239228708) |
+| `offline-final-group-bridge` | [45239228795](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45239228795) |
+| `backlog-disposition` | [45239229356](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45239229356) |
+
+On this head GitHub PR #476 returned `mergeable=true`, `mergeable_state=clean`, base `main@6d2edbf8cb86d9c73ce8bbd922907775dd8f6101`. Prior red tests were bounded errors in newly authored synthetic fixtures (literal YAML comment match, duplicate Git commit error type, wrong stage for arbitrary AppID, unwanted legacy Freeze input); all corrected in the same PR and fully revalidated at this SHA.
+
+**SHA qualification:** The docs/report update containing these CI results moves the PR HEAD. Its **new final** HEAD requires an independent exact HEAD CI check; this report documents the validated code/test SHA and the subsequent PR discussion records latest HEAD as needed. Green offline CI is **not** evidence of real owner request push, real semantic Assembly, independent security QA, or canonical/Deep acceptance.
+
+**Source status after verified code/head run:** `SOURCE_IMPLEMENTED_DRAFT_PR_476; CODE_AND_TEST_PR_CI_GREEN_AT_E65A400; FINAL_DOC_HEAD_CI_RECHECK_REQUIRED; INDEPENDENT_RISK_QA_AND_DIRECTOR_ACCEPTANCE_REQUIRED; NO_LIVE_OWNER_REQUEST`. Do NOT merge this worker's own PR or issue a new sandbox.
+
