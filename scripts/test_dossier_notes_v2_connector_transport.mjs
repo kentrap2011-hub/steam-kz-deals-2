@@ -659,7 +659,7 @@ test("generic replay refuses wrong owner run, request file, source and Research 
 test("generic Assembly stale expected sandbox HEAD never publishes any Git object",async()=>{
   const trial="dossier-notes-v2-assembly-replay-"+"ab".repeat(16);
   const f=makeFixture(6,trial);
-  const ctx=await preflight(f,{trialId:trial,phase:"assembly"});
+  const ctx=await preflight(f,{trialId:trial,phase:"assembly",freezeRunId:undefined});
   await assert.rejects(connectorPublishItem(f.api,ctx,{
     phase:"assembly",appid:"1000010",expectedHead:sha(999),document:{}
   }),/stale sandbox HEAD/);
