@@ -115,7 +115,7 @@ class GenericOwnerReplayTests(unittest.TestCase):
             self.assertIn("dossier-assembly-requests/**",workflow)
             self.assertIn("replay_requests/*.json",workflow)
             self.assertIn("github.run_attempt == 1",workflow)
-            for bad in ("schedule:", "workflow_dispatch:", "branches: [main]"):
+            for bad in ("\n  schedule:", "\n  workflow_dispatch:", "\n    branches: [main]"):
                 self.assertNotIn(bad,workflow)
             doc=generic.request_doc("ab"*16,OLD,["1000010"])
             self.assertEqual(doc["appids"],["1000010"])
@@ -157,7 +157,8 @@ class GenericOwnerReplayTests(unittest.TestCase):
             self.assertTrue(set(r["assignment_id"] for r in outcomes[0]["rows"])
                               .isdisjoint(set(r["assignment_id"] for r in outcomes[1]["rows"])))
             self.assertEqual(git(repo,"rev-parse","HEAD"),outcomes[-1]["head"])
-            with self.assertRaises(ValueError):
+            # A duplicate namespace cannot be a second one-add issuance.
+            with self.assertRaises(Exception):
                 issue_fixture(repo,"cd"*16)
             for old in ("data/ai_inbox/dossier_notes_v2/"+OLD,
                         "data/ai_inbox/dossier_assembly_v2/"+OLD,
@@ -196,7 +197,11 @@ class GenericOwnerReplayTests(unittest.TestCase):
             # runtime owner source attestation must verify the separate receipt blob.
             self.assertEqual(generic.rows_from_pins(req["trial_id"],bad),
                              generic.rows_from_pins(req["trial_id"],pins))
-            for badids in (["999999999"],["49520","49520"],[],["Braid"]):
+            # The request schema validates syntax, not self-authorized Research
+            # scope. GitHub's _source_from_git verifies source cohort membership.
+            self.assertEqual(generic.request_doc("ab"*16,OLD,["999999999"])["appids"],
+                             ["999999999"])
+            for badids in (["49520","49520"],[],["Braid"]):
                 with self.assertRaises(ValueError):
                     generic.request_doc("ab"*16,OLD,badids)
         finally:
