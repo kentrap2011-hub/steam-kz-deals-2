@@ -575,7 +575,8 @@ test("Lean rerun3 stale HEAD and interrupted two-commit publication cannot be re
     phase:"research",appid:"1000010",expectedHead:AUTH,
     document:researchDoc(a,"1000010")
   }));
-  assert.equal(stale.calls.filter(x=>x[0]==="updateRef").length,0);
+  assert.equal(stale.head,sha(999)); // CAS was attempted but could not advance remote
+  assert.equal(stale.calls.filter(x=>x[0]==="updateRef").length,1);
   const f=makeFixture(6,trial,true),ctx=await preflight(f,{trialId:trial});
   const doc=researchDoc(ctx,"1000010");
   let calls=0;
