@@ -560,10 +560,27 @@ test("Lean rerun3 only authenticates its own first-attempt owner source-run",asy
   }
   const noResearch=makeFixture(6,trial,true);
   const notReady=await preflight(noResearch,{trialId:trial,phase:"assembly"});
+  const row=notReady.manifest.items[0];
+  const bound={...row,trial_id:trial,marker_commit:MARKER,
+    manifest_blob_sha:notReady.anchor.manifest_blob_sha};
+  const missingResearchDoc={
+    schema:"DOSSIER-AUTONOMOUS-ASSEMBLY-RESULT-V2",schema_version:2,
+    assignment:bound,research_transport:{
+      research_package_git_commit:sha(123),
+      research_package_path:"data/ai_inbox/dossier_notes_v2/"+trial+
+        "/g000001/1000010--"+row.assignment_id+".json",
+      research_package_blob_sha:sha(124),
+      research_package_raw_sha256:"a".repeat(64),
+      research_package_sha256:"a".repeat(64)
+    },
+    outcome:"assembly_missing_evidence",final_dossier:null,
+    operations:[],mechanical_corrections:[],diagnostic:"Synthetic missing Research",
+    staged_only:true,canonical_acceptance:false
+  };
   await assert.rejects(connectorPublishItem(noResearch.api,notReady,{
     phase:"assembly",appid:"1000010",expectedHead:AUTH,
-    researchCommit:sha(123),document:researchDoc(notReady,"1000010")
-  }),/Research candidate and receipt|Assembly requires|Research/);
+    researchCommit:sha(123),document:missingResearchDoc
+  }),/Assembly requires previously submitted original Research and receipt/);
   assert.equal(noResearch.calls.filter(x=>x[0]==="updateRef").length,0);
 });
 
