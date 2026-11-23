@@ -209,7 +209,7 @@ async function preflight(f,opts={}){
 function researchDoc(ctx,appid){
   const row=ctx.manifest.items.find(r=>r.appid===appid);
   return {schema:"DOSSIER-RESEARCH-NOTES-V2",schema_version:2,
-    assignment:{...row,trial_id:TRIAL,marker_commit:MARKER,
+    assignment:{...row,trial_id:ctx.manifest.trial_id,marker_commit:MARKER,
       manifest_blob_sha:ctx.anchor.manifest_blob_sha},notes_text:"No verifiable sources",source_log:[],
     research_status:"no_verifiable_findings"};
 }
