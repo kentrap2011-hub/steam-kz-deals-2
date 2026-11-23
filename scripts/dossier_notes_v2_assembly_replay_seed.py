@@ -31,6 +31,9 @@ OLD = "dossier-notes-v2-fresh6-20261114-rerun1"
 OLD_HEAD = "c4232fb579fa88c4ed01afd5c45c57792c309984"
 OLD_MARKER = "cdc8bcf79cef6d6e7c3c97ab91b5fb9416ab96d1"
 OLD_MANIFEST_BLOB = "752d5689c3f7d055c94c1844877337eea13ebd79"
+# Merged rerun2 source cohort blob: all six immutable Research introduction,
+# content and receipt pins are fixed here, not chosen by the new source contract.
+OLD_SOURCE_CONTRACT_BLOB = "e1715c1fdaf395114d4e209208004a63ac233ed5"
 SIX = ("1000010", "102600", "1029690", "49520", "499180", "501590")
 
 
@@ -94,6 +97,9 @@ def validate_source_contract(repo, trial_id=NEW):
                       "frozen original Research SHA map changed: " + name)
     batch.require([row["appid"] for row in c["candidates"]] == list(SIX),
                   "replay cannot change frozen six-item scope/order")
+    frozen = json.loads(command(repo, "cat-file", "blob", OLD_SOURCE_CONTRACT_BLOB))
+    batch.require(src == frozen.get("replay_source"),
+                  "Research commit/blob/typed-receipt pins differ from merged rerun2 source")
     return src
 
 
