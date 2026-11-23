@@ -175,9 +175,15 @@ class LeanAssemblyRerun3OwnerTests(unittest.TestCase):
                 appid=item["appid"], authorization_commit=issuer_chain["auth"],
                 introduction_commit=candidate, receipt_commit=receipt_commit)
             self.assertEqual(verified["disposition"], "safe_incomplete_research")
-            with self.assertRaises(Exception):
-                v2.assembly_work(repo, marker_commit=issuer_chain["marker"], trial_id=TRIAL,
-                                 appid=SIX[1], research_commit=candidate)
+            sibling = v2.assembly_work(
+                repo, marker_commit=issuer_chain["marker"], trial_id=TRIAL,
+                appid=SIX[1], research_commit=candidate)
+            self.assertNotEqual(sibling["status"], "ready_for_autonomous_assembly")
+            self.assertFalse(sibling.get("canonical_acceptance", False))
+            with self.assertRaises(v2.NotesV2Error):
+                v2.candidate_assembly(
+                    sibling, outcome="assembly_missing_evidence",
+                    diagnostic="wrong original Research provenance")
             with self.assertRaises(ValueError):
                 replay.seed(repo, trial_id=RERUN2, marker_commit=issuer_chain["marker"],
                             authorization_commit=issuer_chain["auth"])
