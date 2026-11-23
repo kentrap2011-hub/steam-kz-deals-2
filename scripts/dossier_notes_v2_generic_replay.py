@@ -440,7 +440,7 @@ def authenticated_owner_run(anchor, token, repository):
             and doc.get("head_sha") == anchor["request_commit"]
             and doc.get("path") == WORKFLOW
             and doc.get("display_title") == (
-                "Authorize Assembly replay " + nonce + " at " + anchor["request_commit"])
+                "Authorize Assembly replay " + branch + " at " + anchor["request_commit"])
             and doc.get("actor", {}).get("id") == int(batch.OWNER_ID)
             and doc.get("actor", {}).get("login") == batch.OWNER_LOGIN
             and doc.get("triggering_actor", {}).get("id") == int(batch.OWNER_ID)
