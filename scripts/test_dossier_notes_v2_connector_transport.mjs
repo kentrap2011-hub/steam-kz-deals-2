@@ -116,6 +116,77 @@ function makeFixture(n=6,trialId=TRIAL,ownerPush=false) {
       event:"push"
     });
   }
+  if(trialId.startsWith("dossier-notes-v2-assembly-replay-")){
+    const nonce=trialId.slice("dossier-notes-v2-assembly-replay-".length);
+    assert.equal(nonce,"ab".repeat(16));
+    const requestBranch="dossier-assembly-requests/"+nonce;
+    const requestPath="data/control/dossier_notes_v2/replay_requests/"+nonce+".json";
+    const requestCommit=sha(77);
+    cp(requestCommit,base,requestPath);
+    const sourceRecords=items.map((row,i)=>({
+      appid:row.appid,title:row.title,
+      group_sequence:row.group_sequence,item_index:row.item_index,
+      source_assignment_id:"batch-"+sha(i+100).slice(0,24),
+      research_commit:sha(100+i),research_blob_sha:sha(110+i),
+      research_receipt_commit:sha(120+i),research_receipt_blob_sha:sha(130+i)
+    }));
+    const pins={source_trial_id:"dossier-notes-v2-fresh6-20261114-rerun1",
+      source_sandbox_head:sha(145),source_marker_commit:sha(146),
+      source_authorization_commit:sha(147),source_manifest_blob_sha:sha(148),
+      source_manifest_pins:sourcePins,source_research:sourceRecords,
+      request_commit:requestCommit,request_blob_sha:"",
+      request_nonce:nonce
+    };
+    const req={schema:"DOSSIER-NOTES-V2-GENERIC-ASSEMBLY-REPLAY-REQUEST-V1",
+      schema_version:1,nonce,source_trial_id:pins.source_trial_id,
+      appids:items.map(x=>x.appid),
+      purpose:"repeat_assembly_from_exact_accepted_research"};
+    setFile(requestCommit,requestPath,req);
+    pins.request_blob_sha=f.files.get(requestCommit+"|"+requestPath).sha;
+    for(let i=0;i<items.length;i++){
+      const r=items[i],v=sourceRecords[i];
+      const identity={trial_id:trialId,source_trial_id:pins.source_trial_id,
+        source_manifest_blob_sha:pins.source_manifest_blob_sha,
+        source_assignment_id:v.source_assignment_id,
+        research_commit:v.research_commit,group_sequence:v.group_sequence,
+        item_index:v.item_index,appid:v.appid,title:v.title};
+      const canonicalIdentity=JSON.stringify(identity,Object.keys(identity).sort())+"\n";
+      const digest=createHash("sha256").update(canonicalIdentity).digest("hex");
+      r.assignment_id="batch-"+digest.slice(0,24);
+      r.original_assignment_sha256=digest;
+    }
+    m.original_pins=pins;
+    setFile(manifestCommit,paths.manifest,m);
+    const mf=f.files.get(manifestCommit+"|"+paths.manifest);
+    g.scope="one_owner_requested_isolated_assembly_replay_only";
+    g.source_pins=pins;g.frozen_rows=items;
+    g.request_ref="refs/heads/"+requestBranch;
+    g.request_commit=requestCommit;g.request_blob_sha=pins.request_blob_sha;
+    g.manifest_blob_sha=mf.sha;
+    delete g.cohort_contract_path;
+    setFile(grant,paths.grant,g);
+    const gsha=f.files.get(grant+"|"+paths.grant).sha;
+    setFile(AUTH,paths.authorization,{
+      schema:"DOSSIER-NOTES-V2-BATCH-OWNER-AUTHORIZATION",schema_version:1,
+      scope:"one_owner_requested_isolated_assembly_replay_only",
+      authority_origin:"generic_owner_request",
+      request_ref:g.request_ref,request_commit:requestCommit,
+      trial_id:trialId,marker_commit:MARKER,marker_parent:manifestCommit,
+      human_grant_commit:grant,human_grant_blob_sha:gsha,
+      manifest_blob_sha:mf.sha,github_authorization_run_id:String(AUTHOR_ID),
+      semantic_execution_authorized:true,assembly_authorized:true,
+      sandbox_writer_authorized:true,production_authorized:false,
+      canonical_acceptance:false,owner_login:"kentrap2011-hub",
+      owner_actor_id:"315790060"
+    });
+    f.runs.delete(FREEZE_ID);
+    f.runs.set(AUTHOR_ID,{
+      ...makeRun(AUTHOR_ID,
+        ".github/workflows/issue-dossier-notes-v2-generic-assembly-replay.yml",
+        "Authorize Assembly replay "+requestBranch+" at "+requestCommit),
+      event:"push",head_sha:requestCommit,head_branch:requestBranch
+    });
+  }
   f.api={
     async fetch({url}){
       f.calls.push(["fetch",url]);
@@ -532,4 +603,69 @@ test("resumed Assembly uses original Research candidate and receipt, one session
   });
   assert.equal(result.disposition,"assembly_missing_evidence");
   assert.ok(f.calls.length-before<=20,"Assembly publication remains within per-call limit");
+});
+
+test("generic owner replay is an exact issued request, not a hardcoded main cohort",async()=>{
+  const trial="dossier-notes-v2-assembly-replay-"+"ab".repeat(16);
+  const f=makeFixture(6,trial);
+  const ctx=await preflight(f,{trialId:trial,phase:"assembly",freezeRunId:undefined});
+  assert.equal(ctx.manifest.trial_id,trial);
+  assert.equal(ctx.manifest.items.length,6);
+  assert.equal(ctx.github_owner_runs_authenticated,true);
+  assert.equal(ctx.anchor.authority_origin,"generic_owner_request");
+  assert.equal(ctx.production_authorized,false);
+  assert.equal(f.calls.filter(x=>x[0]==="fetch" &&
+    x[1].includes("/actions/runs/")).length,1);
+  assert.equal(f.calls.filter(x=>x[0]==="fetchFile" &&
+    x[1].includes("/replay_requests/")).length,1);
+  assert.ok(f.calls.length<=20,"single owner preflight must fit connector budget");
+});
+
+test("generic replay refuses wrong owner run, request file, source and Research scope",async()=>{
+  const trial="dossier-notes-v2-assembly-replay-"+"ab".repeat(16);
+  for(const mutate of [
+    f=>{f.runs.get(AUTHOR_ID).event="workflow_dispatch";},
+    f=>{f.runs.get(AUTHOR_ID).run_attempt=2;},
+    f=>{f.runs.get(AUTHOR_ID).head_branch="main";},
+    f=>{f.runs.get(AUTHOR_ID).head_sha=sha(999);},
+    f=>{f.runs.get(AUTHOR_ID).actor.id=0;},
+    f=>{f.runs.get(AUTHOR_ID).conclusion="failure";},
+    f=>{f.runs.get(AUTHOR_ID).path="wrong";},
+    f=>{f.runs.get(AUTHOR_ID).display_title="wrong";},
+    f=>{const p="data/control/dossier_notes_v2/replay_requests/"+"ab".repeat(16)+".json";
+      const id=sha(77);const x=JSON.parse(f.files.get(id+"|"+p).content);
+      x.appids[0]="99999";f.files.set(id+"|"+p,{
+        content:JSON.stringify(x),sha:blob(JSON.stringify(x))});},
+    f=>{const p="data/control/dossier_notes_v2/grants/"+trial+".json";
+      const k=sha(11)+"|"+p,x=JSON.parse(f.files.get(k).content);
+      x.source_pins.source_research[0].title="Wrong Edition";
+      f.files.set(k,{content:JSON.stringify(x),sha:blob(JSON.stringify(x))});},
+    f=>{const p="data/control/dossier_notes_v2/authorizations/"+trial+".json";
+      const k=AUTH+"|"+p,x=JSON.parse(f.files.get(k).content);
+      x.request_ref="refs/heads/main";
+      f.files.set(k,{content:JSON.stringify(x),sha:blob(JSON.stringify(x))});},
+  ]){
+    const f=makeFixture(6,trial);
+    mutate(f);
+    await assert.rejects(preflight(f,{trialId:trial,phase:"assembly"}),
+      /BATCH_V2_CONNECTOR_STOP/);
+    assert.equal(f.calls.filter(x=>x[0]==="updateRef").length,0);
+  }
+  const f=makeFixture(6,trial);
+  await assert.rejects(preflight(f,{trialId:trial,phase:"research"}),
+    /only separately launched Assembly/);
+});
+
+test("generic Assembly stale expected sandbox HEAD never publishes any Git object",async()=>{
+  const trial="dossier-notes-v2-assembly-replay-"+"ab".repeat(16);
+  const f=makeFixture(6,trial);
+  const ctx=await preflight(f,{trialId:trial,phase:"assembly",freezeRunId:undefined});
+  await assert.rejects(connectorPublishItem(f.api,ctx,{
+    phase:"assembly",appid:"1000010",expectedHead:sha(999),document:{}
+  }),/stale sandbox HEAD/);
+  assert.equal(f.calls.filter(x=>x[0]==="createBlob").length,0);
+  assert.equal(f.calls.filter(x=>x[0]==="updateRef").length,0);
+  f.head=sha(888);
+  const handoff=JSON.parse(JSON.stringify(connectorHandoff(ctx)));
+  await assert.rejects(connectorResumeHandoff(f.api,handoff),/HEAD no longer current/);
 });

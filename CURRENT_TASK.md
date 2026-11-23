@@ -1,5 +1,12 @@
 # CURRENT TASK
 
+## ЧАТ 1 — generic owner-gated Assembly replay, 2026-11-23
+
+- Task: `WORKER_TASK_DOSSIER_V2_ASSEMBLY_GENERIC_REPLAY_OWNER_GATE_01.md`; source draft [PR #476](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/476), branch `implement/dossier-v2-assembly-generic-replay-owner-gate-20261123` from `main@6d2edbf8cb86d9c73ce8bbd922907775dd8f6101`, report `reviews/worker_reports/dossier-v2-assembly-generic-replay-owner-gate-01.md`. Old hardcoded rerun3 PR #475 is separate, unmerged and superseded; do not merge or activate it.
+- Stage: `source_implementation_complete_in_draft_PR_476; exact_final_HEAD_CI_required; independent_QA_and_Director_acceptance_required; no_live_replay_issued`. New generic first-owner-request path from connected GitHub branch+create-only file needs no developer source PR per repeated Assembly; old Research frozen and typed receipts are re-verified GitHub-side, new unique owner grant/marker/manifest and fresh Research candidate+typed receipts are separately generated. No actual Research/Assembly semantics, writer, production, Deep, schedule or retries launched.
+- Next: verify all mandatory GitHub CI at exact final PR HEAD, independent security/owner review and Director source acceptance; only then explicit user-authorized first live request for same six frozen games and real owner Actions evidence, followed by a separately new semantic Assembly chat. No silent issuance from source merge.
+
+
 ## ЧАТ 1 — Dossier V2 fresh6 Assembly rerun2 source (2026-11-17)
 
 - Status: `implemented_in_draft_PR_not_merged; independent_L3_required; owner_issuer_not_started; semantic_Assembly_not_started; exact_final_HEAD_CI_required`.

@@ -263,7 +263,10 @@ def _manifest(repo, marker_commit, trial_id):
                 or file_at(repo, "HEAD", path) != file_at(repo, p, path)):
             reject("broken_git_provenance", "V2 frozen manifest was overwritten")
         _assert_unchanged_since(repo, p, path)
-        if not (trial_id.startswith("dossier-notes-v2-") and trial_id != c["manual_v2_issuer"]["trial_id"]):
+        from dossier_notes_v2_generic_replay import is_generic, frozen_plan
+        if is_generic(trial_id):
+            expected_pins, expected_rows = frozen_plan(repo, trial_id, marker_commit)
+        elif not (trial_id.startswith("dossier-notes-v2-") and trial_id != c["manual_v2_issuer"]["trial_id"]):
             expected_pins = c["immutable_original_pins"]
             expected_rows = _original_rows()
         else:

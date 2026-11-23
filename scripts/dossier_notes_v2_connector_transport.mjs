@@ -19,6 +19,9 @@ const V2_OWNER_PUSH = ".github/workflows/issue-dossier-notes-v2-on-owner-push.ym
 const V2_OWNER_PUSH_TRIAL = "dossier-notes-v2-fresh6-20261114-rerun1";
 const V2_OWNER_PUSH_REPLAY_TRIAL = "dossier-notes-v2-fresh6-assembly-rerun2-20261117";
 const V2_OWNER_PUSH_REPLAY = ".github/workflows/issue-dossier-notes-v2-assembly-rerun-on-owner-push.yml";
+const V2_GENERIC_PREFIX = "dossier-notes-v2-assembly-replay-";
+const V2_GENERIC_WORKFLOW = ".github/workflows/issue-dossier-notes-v2-generic-assembly-replay.yml";
+function v2Generic(trialId) { return trialId.startsWith(V2_GENERIC_PREFIX) && /^[0-9a-f]{32}$/.test(trialId.slice(V2_GENERIC_PREFIX.length)); }
 function v2OwnerPushWorkflow(trialId) {
   return trialId===V2_OWNER_PUSH_REPLAY_TRIAL?V2_OWNER_PUSH_REPLAY:V2_OWNER_PUSH;
 }
@@ -198,10 +201,10 @@ async function v2SandboxScope(api,head,authorizationCommit,trialId) {
   }
   return found;
 }
-function v2OwnerRun(doc,id,path,title,sha,event="workflow_dispatch") {
+function v2OwnerRun(doc,id,path,title,sha,event="workflow_dispatch",headBranch="main") {
   v2Assert(doc.id===Number(id) && doc.run_attempt===1 &&
    doc.status==="completed" && doc.conclusion==="success" &&
-   doc.event===event && doc.head_branch==="main" &&
+   doc.event===event && doc.head_branch===headBranch &&
    doc.path===path && doc.display_title===title &&
    doc.actor?.login===V2_OWNER_LOGIN && doc.actor?.id===V2_OWNER_ID &&
    doc.triggering_actor?.login===V2_OWNER_LOGIN &&
@@ -252,9 +255,11 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
   const manifest=v2Json(manifestFile.content);
   const authFile=await v2File(api,paths.authorization,authorizationCommit);
   const auth=v2Json(authFile.content);
+  const generic=v2Generic(trialId);
   v2Assert(grant.schema==="DOSSIER-NOTES-V2-BATCH-OWNER-GRANT" &&
     grant.schema_version===1 &&
-    grant.scope==="one_git_owner_issued_reusable_batch_sandbox_only" &&
+    (generic ? grant.scope==="one_owner_requested_isolated_assembly_replay_only" :
+      grant.scope==="one_git_owner_issued_reusable_batch_sandbox_only") &&
     grant.trial_id===trialId && grant.base_main_sha===base &&
     grant.manifest_path===paths.manifest &&
     grant.manifest_blob_sha===manifestFile.sha &&
@@ -263,7 +268,7 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
     grant.owner_login===V2_OWNER_LOGIN && String(grant.owner_actor_id)===String(V2_OWNER_ID) &&
     grant.semantic_execution_approved===false && grant.production_approved===false &&
     grant.canonical_ingest_approved===false &&
-    grant.cohort_contract_path==="config/dossier_notes_v2_batches/"+trialId+".json",
+    (generic || grant.cohort_contract_path==="config/dossier_notes_v2_batches/"+trialId+".json"),
     "frozen owner grant inconsistent");
   v2Assert(auth.schema==="DOSSIER-NOTES-V2-BATCH-OWNER-AUTHORIZATION" &&
     auth.schema_version===1 &&
@@ -271,7 +276,11 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
       auth.authority_origin===undefined ||
       v2IsOwnerPushTrial(trialId) && auth.authority_origin==="owner_main_push" &&
       auth.scope==="one_owner_main_push_research_assembly_sandbox_only" &&
-      auth.owner_push_main_sha===base) &&
+      auth.owner_push_main_sha===base ||
+      generic && auth.authority_origin==="generic_owner_request" &&
+      auth.scope==="one_owner_requested_isolated_assembly_replay_only" &&
+      auth.request_commit===grant.request_commit &&
+      auth.request_ref===grant.request_ref) &&
     auth.trial_id===trialId && auth.marker_commit===markerCommit &&
     auth.marker_parent===manifestCommit && auth.human_grant_commit===grantCommit &&
     auth.human_grant_blob_sha===grantFile.sha && auth.manifest_blob_sha===manifestFile.sha &&
@@ -288,9 +297,73 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
       Number.isInteger(i.group_sequence) && Number.isInteger(i.item_index)),
     "immutable manifest malformed");
 
+    if(generic) {
+    v2Assert(phase==="assembly" && freezeRunId===undefined,
+      "generic replay authorizes only separately launched Assembly");
+    const pins=grant.source_pins, records=pins?.source_research;
+    const n=trialId.slice(V2_GENERIC_PREFIX.length);
+    const requestBranch="dossier-assembly-requests/"+n;
+    const requestPath="data/control/dossier_notes_v2/replay_requests/"+n+".json";
+    v2Assert(grant.scope==="one_owner_requested_isolated_assembly_replay_only" &&
+      grant.request_ref==="refs/heads/"+requestBranch &&
+      V2_HEX.test(grant.request_commit) && grant.request_blob_sha===pins?.request_blob_sha &&
+      grant.request_commit===pins?.request_commit && pins?.request_nonce===n &&
+      typeof pins.source_trial_id==="string" &&
+      /^dossier-notes-v2-[a-z0-9][a-z0-9-]{8,70}$/.test(pins.source_trial_id) &&
+      !v2Generic(pins.source_trial_id) &&
+      Array.isArray(records) && records.length===manifest.items.length &&
+      records.length>=1 && records.length<=24 &&
+      v2Canonical(grant.frozen_rows)===v2Canonical(manifest.items),
+      "generic owner grant or source Research binding malformed");
+    let last=null;
+    for(let i=0;i<records.length;i++) {
+      const source=records[i],row=manifest.items[i];
+      const position=[source.group_sequence,source.item_index];
+      const key=position.join(":");
+      v2Assert(source.appid===row.appid && source.title===row.title &&
+        /^(0|[1-9][0-9]*)$/.test(source.appid) &&
+        (!last || position[0]>last[0] ||
+          (position[0]===last[0] && position[1]>last[1])) &&
+        ["research_commit","research_blob_sha","research_receipt_commit",
+         "research_receipt_blob_sha"].every(k=>V2_HEX.test(source[k])),
+        "source Research row not exact or ordered");
+      const identity={trial_id:trialId,source_trial_id:pins.source_trial_id,
+        source_manifest_blob_sha:pins.source_manifest_blob_sha,
+        source_assignment_id:source.source_assignment_id,
+        research_commit:source.research_commit,group_sequence:position[0],
+        item_index:position[1],appid:source.appid,title:source.title};
+      const hash=v2Sha256(v2Canonical(identity)+"\n");
+      v2Assert(row.assignment_id==="batch-"+hash.slice(0,24) &&
+        row.original_assignment_sha256===hash,
+        "new replay manifest assignment not derived from exact Research");
+      last=position;
+    }
+    const reqGit=await v2GitCommit(api,grant.request_commit);
+    const reqRest=await v2Get(api,"commits/"+grant.request_commit);
+    v2Assert(reqGit.parents?.length===1 && reqGit.parents[0].sha===base &&
+      reqRest.files?.length===1 && reqRest.files[0].filename===requestPath &&
+      reqRest.files[0].status==="added",
+      "request must be one-add direct child of frozen main");
+    const reqFile=await v2File(api,requestPath,grant.request_commit);
+    const req=v2Json(reqFile.content);
+    v2Assert(reqFile.sha===grant.request_blob_sha &&
+      v2Canonical(req)===v2Canonical({
+        schema:"DOSSIER-NOTES-V2-GENERIC-ASSEMBLY-REPLAY-REQUEST-V1",
+        schema_version:1,nonce:n,source_trial_id:pins.source_trial_id,
+        appids:manifest.items.map(i=>i.appid),
+        purpose:"repeat_assembly_from_exact_accepted_research"
+      }),"owner request payload changed or arbitrary scope");
+  }
+
   // GitHub Actions are the owner authority. Their reported success and identity
   // are checked once; unsigned Git committer names/timestamps add no proof.
-  if(auth.authority_origin==="owner_main_push") {
+  if(auth.authority_origin==="generic_owner_request") {
+    const owner=await v2Get(api,"actions/runs/"+auth.github_authorization_run_id);
+    const requestBranch=grant.request_ref.slice("refs/heads/".length);
+    v2OwnerRun(owner,auth.github_authorization_run_id,V2_GENERIC_WORKFLOW,
+      "Authorize Assembly replay "+requestBranch+" at "+grant.request_commit,
+      grant.request_commit,"push",requestBranch);
+  } else if(auth.authority_origin==="owner_main_push") {
     // Exactly one owner-authenticated main push event issued the two separate
     // Git commit authorities. It cannot be forged by a worker or by PR CI.
     const owner=await v2Get(api,"actions/runs/"+auth.github_authorization_run_id);
@@ -328,6 +401,9 @@ export async function connectorPreflight(api,{trialId,markerCommit,authorization
     github_actor_id:String(V2_OWNER_ID),
     github_authorization_run_id:String(auth.github_authorization_run_id),
     ...(auth.authority_origin==="owner_main_push"?{authority_origin:"owner_main_push"}:{}),
+    ...(generic?{authority_origin:"generic_owner_request",
+      request_commit:grant.request_commit,request_ref:grant.request_ref,
+      source_pins:grant.source_pins}:{}),
     semantic_execution_authorized:true,
     issuer_structural_only:true,github_run_authenticated:false
   };

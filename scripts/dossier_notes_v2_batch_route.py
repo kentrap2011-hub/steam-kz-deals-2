@@ -254,6 +254,10 @@ def expected_authorization(repo,trial_id,marker,grant_commit,run_id,authority_or
 
 def issuer_structure(repo,*,trial_id,marker_commit,authorization_commit):
     """Structural proof only; actual authenticated owner Actions check separate."""
+    from dossier_notes_v2_generic_replay import is_generic, issuer_structure as generic_issuer
+    if is_generic(trial_id):
+        return generic_issuer(repo, trial_id=trial_id, marker_commit=marker_commit,
+                              authorization_commit=authorization_commit)
     repo=Path(repo)
     path=paths(trial_id)
     for value in (marker_commit,authorization_commit):
@@ -317,6 +321,9 @@ def issuer_structure(repo,*,trial_id,marker_commit,authorization_commit):
 
 def authenticated_owner_run(anchor,token,github_repository=REPOSITORY):
     """Read actual completed owner Actions; never trust a chat-supplied run id."""
+    if anchor.get("authority_origin") == "generic_owner_request":
+        from dossier_notes_v2_generic_replay import authenticated_owner_run as generic_run
+        return generic_run(anchor, token, github_repository)
     require(github_repository==REPOSITORY and bool(token) and anchor.get("trial_id"),
             "missing authenticated exact repository context")
     from dossier_notes_v2_per_item_receipts import _github_get

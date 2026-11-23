@@ -1,0 +1,50 @@
+name: Issue explicitly owner-requested generic Notes V2 Assembly replay
+run-name: Authorize Assembly replay ${{ github.ref_name }} at ${{ github.sha }}
+
+# No main-push or schedule: a REAL owner explicitly creates one new request
+# branch AND one add-only request file. The first-attempt run deterministically
+# rebinds authenticated old Research without running a semantic stage.
+on:
+  push:
+    branches:
+      - 'dossier-assembly-requests/**'
+    paths:
+      - 'data/control/dossier_notes_v2/replay_requests/*.json'
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: dossier-v2-owner-generic-request-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate-and-create-one-replay:
+    if: github.event_name == 'push' && github.event.created == false && github.event.forced == false && github.run_attempt == 1 && github.actor_id == 315790060 && github.repository_owner_id == 315790060
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact immutable request commit including full Git provenance
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install existing strict Notes V2 validator
+        run: python -m pip install jsonschema==4.23.0
+      - name: Validate exact owner request and copy verified Research to isolated sandbox
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          REQUEST_BRANCH="${GITHUB_REF#refs/heads/}"
+          git checkout -B "$REQUEST_BRANCH" "$GITHUB_SHA"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test -z "$(git status --porcelain --untracked-files=all)"
+          python scripts/dossier_notes_v2_generic_replay.py owner-request-launch
+      - name: Verify local copy-only source checkout is clean
+        run: test -z "$(git status --porcelain --untracked-files=all)"

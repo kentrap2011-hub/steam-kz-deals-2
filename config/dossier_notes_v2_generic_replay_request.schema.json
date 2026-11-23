@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DOSSIER-NOTES-V2-GENERIC-ASSEMBLY-REPLAY-REQUEST-V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "nonce",
+    "source_trial_id",
+    "appids",
+    "purpose"
+  ],
+  "properties": {
+    "schema": {
+      "const": "DOSSIER-NOTES-V2-GENERIC-ASSEMBLY-REPLAY-REQUEST-V1"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "nonce": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{32}$"
+    },
+    "source_trial_id": {
+      "type": "string",
+      "pattern": "^dossier-notes-v2-[a-z0-9][a-z0-9-]{8,70}$",
+      "not": {
+        "pattern": "^dossier-notes-v2-assembly-replay-"
+      }
+    },
+    "appids": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 24,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9]{1,12}$"
+      }
+    },
+    "purpose": {
+      "const": "repeat_assembly_from_exact_accepted_research"
+    }
+  }
+}
