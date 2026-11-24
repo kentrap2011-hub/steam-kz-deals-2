@@ -1380,6 +1380,8 @@ def _drain_notes_v2_individual(
                     dossier, appid=appid, title=lean_frozen[appid]["title"],
                     expected_ttl_days=14,
                 )
+                if dossier["game_identity"]["release_year"] != lean_frozen[appid]["original_release_year"]:
+                    raise ValueError("Lean original release year differs from frozen candidate")
             elif dossier.get("schema") == LEAN_SCHEMA:
                 # An inactive contract is never permission; offline simulation
                 # must pass the separate disposable-Git fixture gate.
