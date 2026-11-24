@@ -80,6 +80,7 @@ def exact_transaction(repo, *, mode):
                 or receipt.get("dossier_format") != LEAN_SCHEMA
                 or receipt.get("quality_binding") != quality_binding()
                 or receipt.get("original_release_year") != doc["game_identity"]["release_year"]
+                or doc["game_identity"]["release_year"] != row["original_release_year"]
                 or receipt.get("isolated_sandbox_acceptance") is not True
                 or receipt.get("canonical_acceptance") is not False
                 or receipt.get("deep_ready") is not False):
