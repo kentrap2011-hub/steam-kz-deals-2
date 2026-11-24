@@ -36,7 +36,7 @@ class SixItemSandboxWriterTests(unittest.TestCase):
             doc = make_lean_final(appid, row["title"], now=now)
             doc["ttl_days"] = 14
             doc["expires_at_utc"] = (now + timedelta(days=14)).strftime("%Y-%m-%dT%H:%M:%SZ")
-            doc["game_identity"]["release_year"] = 2020
+            doc["game_identity"]["release_year"] = row["original_release_year"]
             store = self.root / reader.ROOT_STORE / self.grant["trial_id"] / ("App_" + appid + ".json")
             receipt = self.root / reader.ROOT_RECEIPTS / self.grant["trial_id"] / (
                 "g" + str(row["group_sequence"]).zfill(6)) / (
