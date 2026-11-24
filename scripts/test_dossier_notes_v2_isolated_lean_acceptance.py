@@ -282,14 +282,16 @@ class SixItemSandboxWriterTests(unittest.TestCase):
         self.assertFalse((self.root / dual.STORE).exists())
         self.assertFalse((self.root / dual.RECEIPTS).exists())
 
-    def test_actual_writer_rejects_bad_lean_and_incomplete_six_atomically(self):
+    def test_actual_writer_rejects_invalid_lean_atomically(self):
         with self.assertRaisesRegex(ValueError, "six-item transaction incomplete"):
             self.isolated_writer(broken_appid="1029690")
-        # The disposable checkout can contain transient files, but there has
-        # been no Git commit/push and cannot be a valid owner acceptance.
+        # Disposable transient files are NOT an accepted owner Git commit/push.
         self.assertFalse(self.git("log", "-1", "--format=%s").startswith("Persist isolated"))
+
+    def test_actual_writer_rejects_partial_group_before_any_write(self):
         with self.assertRaisesRegex(ValueError, "six-item Lean sandbox atomic readiness"):
             self.isolated_writer(incomplete=True)
+        self.assertFalse((self.root / reader.ROOT_STORE).exists())
 
 if __name__ == "__main__":
     unittest.main()
