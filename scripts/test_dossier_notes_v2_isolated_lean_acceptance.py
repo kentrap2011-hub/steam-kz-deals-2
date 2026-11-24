@@ -173,7 +173,7 @@ class SixItemSandboxWriterTests(unittest.TestCase):
                         "request_commit":self.grant["original_request_commit"]})
 
 
-    def isolated_writer(self, *, broken_appid=None, incomplete=False):
+    def isolated_writer(self, *, broken_appid=None, incomplete=False, replay=False):
         # Exercise the REAL shared writer on disposable Git only. Authentication
         # and immutable source Git lookups are synthetic mocks, never accepted
         # owner evidence. Full Lean validation, writes and collision gates are real.
@@ -182,16 +182,17 @@ class SixItemSandboxWriterTests(unittest.TestCase):
         from taste_steam_review_dossier_buffered import drain_buffered_groups
         from dossier_notes_v2_batch_route import REPOSITORY, WRITER_WORKFLOW, OWNER_ID, OWNER_LOGIN
 
-        self.git("reset", "-q")
-        shutil.rmtree(self.root / reader.ROOT_STORE)
-        shutil.rmtree(self.root / reader.ROOT_RECEIPTS)
         trial = self.grant["trial_id"]
-        auth_path = (self.root / "data/control/dossier_notes_v2/authorizations"
-                     / (trial + ".json"))
-        auth_path.parent.mkdir(parents=True, exist_ok=True)
-        auth_path.write_text('{"offline_fixture_only":true}\n', encoding="utf-8")
-        self.git("add", str(auth_path.relative_to(self.root)))
-        self.git("commit", "-qm", "offline synthetic authorizer")
+        if not replay:
+            self.git("reset", "-q")
+            shutil.rmtree(self.root / reader.ROOT_STORE)
+            shutil.rmtree(self.root / reader.ROOT_RECEIPTS)
+            auth_path = (self.root / "data/control/dossier_notes_v2/authorizations"
+                         / (trial + ".json"))
+            auth_path.parent.mkdir(parents=True, exist_ok=True)
+            auth_path.write_text('{"offline_fixture_only":true}\n', encoding="utf-8")
+            self.git("add", str(auth_path.relative_to(self.root)))
+            self.git("commit", "-qm", "offline synthetic authorizer")
         rows = self.grant["items"]
         item_map = {r["appid"]: {
             "research_commit": r["research_commit"],
@@ -284,6 +285,14 @@ class SixItemSandboxWriterTests(unittest.TestCase):
             self.assertFalse(bound["deep_ready"])
         self.assertFalse((self.root / dual.STORE).exists())
         self.assertFalse((self.root / dual.RECEIPTS).exists())
+
+    def test_actual_writer_no_second_acceptance_same_paths(self):
+        first = self.isolated_writer()
+        self.assertEqual(len(first["items"]), 6)
+        with self.assertRaisesRegex(ValueError, "six-item transaction incomplete"):
+            self.isolated_writer(replay=True)
+        self.assertEqual(self.git("log", "-1", "--format=%s"),
+                         "offline synthetic authorizer")
 
     def test_actual_writer_rejects_invalid_lean_atomically(self):
         with self.assertRaisesRegex(ValueError, "six-item transaction incomplete"):
