@@ -1307,6 +1307,18 @@ def _drain_notes_v2_individual(
         root, marker_commit=marker_commit, trial_id=trial_id,
         item_commits=item_commits,
     )
+    # Versioned isolated Lean grant is separate from globally disabled
+    # canonical Lean. All six must be individually ready BEFORE any write.
+    from dossier_lean_canonical_dual import SANDBOX_GRANT, require_isolated_sandbox_writer
+    lean_trial_id = json.loads(SANDBOX_GRANT.read_text(encoding="utf-8"))["trial_id"]
+    lean_frozen = None
+    if trial_sandbox and trial_id == lean_trial_id:
+        lean_frozen = require_isolated_sandbox_writer(
+            root, trial_id=trial_id, marker_commit=marker_commit,
+            item_commits=item_commits, issuer=anchor)
+        if (len(projection["items"]) != len(lean_frozen)
+                or any(x["status"] != "ready" for x in projection["items"])):
+            raise ValueError("six-item Lean sandbox atomic readiness is incomplete")
     strict_contract = json.loads(
         (Path(__file__).resolve().parents[1] / "config" /
          "taste_steam_review_dossier_contract.json").read_text(encoding="utf-8")
@@ -1355,9 +1367,18 @@ def _drain_notes_v2_individual(
             # Production/canonical writer still requires unchanged strict V2.
             from dossier_notes_v2_lean_final import LEAN_SCHEMA, validate_lean_final
             if dossier.get("schema") == LEAN_SCHEMA and trial_sandbox:
-                validate_lean_final(
-                    dossier, expected_appid=appid,
-                    expected_title=work["assignment"]["title"],
+                if lean_frozen is None:
+                    raise ValueError("Lean sandbox lacks a versioned exact-trial owner grant")
+                from dossier_lean_canonical_dual import validate_writer_lean
+                if (work["assignment"]["title"] != lean_frozen[appid]["title"]
+                        or work["assignment"]["assignment_id"] !=
+                           lean_frozen[appid]["assignment_id"]
+                        or work["assignment"]["group_sequence"] !=
+                           lean_frozen[appid]["group_sequence"]):
+                    raise ValueError("Lean game/edition frozen assignment mismatch")
+                validate_writer_lean(
+                    dossier, appid=appid, title=lean_frozen[appid]["title"],
+                    expected_ttl_days=14,
                 )
             elif dossier.get("schema") == LEAN_SCHEMA:
                 # An inactive contract is never permission; offline simulation
@@ -1393,6 +1414,19 @@ def _drain_notes_v2_individual(
             if dossier.get("schema") == LEAN_SCHEMA and not trial_sandbox:
                 from dossier_lean_canonical_dual import lean_receipt_fields
                 bound_receipt.update(lean_receipt_fields(dossier))
+            elif dossier.get("schema") == LEAN_SCHEMA and trial_sandbox:
+                from dossier_lean_canonical_dual import lean_receipt_fields
+                # Deep uses raw stored bytes; the writer uses canonical-object
+                # digest. Never substitute either hash for the other.
+                raw_bytes = (json.dumps(dossier, ensure_ascii=False, indent=2)
+                             + "\n").encode("utf-8")
+                bound_receipt.update(lean_receipt_fields(dossier))
+                bound_receipt.update({
+                    "isolated_sandbox_acceptance": True,
+                    "canonical_acceptance": False,
+                    "deep_ready": False,
+                    "dossier_raw_sha256": hashlib.sha256(raw_bytes).hexdigest(),
+                })
             exists_cache = target.exists()
             exists_receipt = receipt.exists()
             if exists_cache:
@@ -1426,6 +1460,12 @@ def _drain_notes_v2_individual(
             row["status"] = "writer_rejected"
             row["reason"] = str(exc)[:240]
         rows.append(row)
+    if lean_frozen is not None and (
+            len(rows) != 6
+            or any(row["status"] != "persisted_pending_github_commit" for row in rows)):
+        # GitHub workflow fails before git add/commit/push, including if the
+        # last of six was rejected. No partial acceptance can be published.
+        raise ValueError("Lean sandbox six-item transaction incomplete; publish nothing")
     return {
         "schema": "DOSSIER-NOTES-V2-INDIVIDUAL-WRITER-RESULT-V1",
         "offline_fixture": offline_fixture,
