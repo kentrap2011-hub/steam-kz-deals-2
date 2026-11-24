@@ -309,6 +309,8 @@ def require_isolated_sandbox_writer(repo_root, *, trial_id, marker_commit,
                 or pair != {k: row[k] for k in ("research_commit", "assembly_commit")}
                 or type(row.get("title")) is not str
                 or type(row.get("group_sequence")) is not int
+                or type(row.get("original_release_year")) is not int
+                or not 1970 <= row["original_release_year"] <= 2100
                 or not re.fullmatch(r"batch-[0-9a-f]{24}", str(row.get("assignment_id")))):
             raise ValueError("Lean AppID/edition/immutable commits differ from frozen six")
         path = (
