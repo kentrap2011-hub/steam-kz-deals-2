@@ -25,6 +25,9 @@ class SixItemSandboxWriterTests(unittest.TestCase):
         self.git("init", "-q", "-b", "sandbox/" + self.grant["trial_id"])
         self.git("config", "user.name", "offline-fixture")
         self.git("config", "user.email", "fixture@example.invalid")
+        # A real candidate sandbox is not a root commit: the writer appends
+        # one atomic commit to an already existing frozen Git history.
+        self.git("commit", "--allow-empty", "-qm", "offline frozen sandbox baseline")
         self.docs = {}
         self.receipts = {}
         now = datetime.now(timezone.utc).replace(microsecond=0)
