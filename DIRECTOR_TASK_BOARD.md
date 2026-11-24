@@ -5,11 +5,11 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — изолированная приёмка шести Lean Dossier, 2026-11-24
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — независимая L3 QA Lean isolated writer, 2026-11-24
 
-- **НОВЫЙ ЧАТ 2 — зарезервирован (ожидает ручного запуска):** `dossier-lean-fresh6-isolated-writer-acceptance-01` → `WORKER_TASK_DOSSIER_LEAN_FRESH6_ISOLATED_WRITER_ACCEPTANCE_01.md`. User-approved bounded **real isolated GitHub writer acceptance** of exact six Lean Assembly candidates in `sandbox/dossier-notes-v2-assembly-replay-cdcdb4951e2fc98336729af75b954da4`, HEAD observed `d1b9a9e78dcde879a03370682ade4969763fd9d1`; run `45243093290` issued exact Research; 6 Assembly candidates + typed receipts now staged, `canonical_acceptance=false`. Worker must use existing GitHub-owned writer; fix only proven Lean sandbox-writer blockers, offline E2E and regressions; bounded source PR / exact CI / required Director gates before any real isolated writer, then exact real receipt readback. **No Research, Assembly, Deep, production, live main canonical, scheduled tasks or global Lean flag enabling.**
-- **Предыдущий ЧАТ 1 — завершил универсальный Assembly и шесть результатов, свободен:** generic source #476 merged, owner replay one-shot #45243093290 success, Assembly staged six Lean candidates with create-only receipts, no writer acceptance. Abandoned one-off source #475 remains separate, not merged.
-- **Предыдущий ЧАТ 2 — завершил Lean canonical dual-format code:** source #471 merged; lean writer/reader/deep feature flags stay false. **ЧАТ 1 и ЧАТ 3 — свободны.** Historical registry tasks do not occupy slots.
+- **НОВЫЙ ЧАТ 1 — зарезервирован (ожидает ручного запуска):** `dossier-lean-isolated-writer-pr478-l3-independent-qa-01` → `WORKER_TASK_DOSSIER_LEAN_ISOLATED_WRITER_PR478_L3_INDEPENDENT_QA_01.md`. Пользователь явно выбрал ЧАТ 1 вместо ЧАТА 3 для **независимой проверки writer-кода source PR #478**, написанного ЧАТОМ 2. Аудит exact source HEAD, реальные owner/permission/write gates, six-item atomicity, Lean schema/digest/readback, negative/strict regression, обязательный CI. Авторство предыдущего ЧАТА 1 в upstream generic Assembly обязано быть раскрыто; **не считать эту работу независимой семантической проверкой своих шести кандидатов**. Только один report-only draft PR; не запускать writer и не сливать source.
+- **ЧАТ 2 — завершил bounded IMPLEMENT и сдал source PR #478, свободен:** исходный HEAD при регистрации `e9ec11b4957b04bf1be645e947d385575250bcad`, семь exact-HEAD CI SUCCESS, source всё ещё draft/unmerged. Реально принятых writer Lean Dossier **0 из 6**. После L3/Director merge отдельно нужен реальный owner writer-dispatch и независимый readback. Deep, production/main canonical и автоматический retry выключены.
+- **ЧАТ 3 — свободен.** ЧАТ 1 занят только после пользовательского подтверждения запуска нового физического окна, пока зарезервирован.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
