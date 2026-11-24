@@ -99,6 +99,10 @@ jobs:
         run: |
           python -m py_compile scripts/dossier_lean_canonical_dual.py scripts/test_dossier_lean_canonical_dual.py scripts/taste_steam_review_dossier_web.py
           python scripts/test_dossier_lean_canonical_dual.py -v
+      - name: Exact six Lean sandbox-only writer and atomic post-commit readback regressions
+        run: |
+          python -m py_compile scripts/dossier_notes_v2_isolated_lean_readback.py scripts/test_dossier_notes_v2_isolated_lean_acceptance.py scripts/dossier_lean_canonical_dual.py scripts/taste_steam_review_dossier_buffered.py
+          python scripts/test_dossier_notes_v2_isolated_lean_acceptance.py -v
       - name: Prepared fresh6 scope and no-authority adversarial tests (no semantic execution)
         run: |
           python scripts/test_dossier_notes_v2_fresh6_preflight.py -v
