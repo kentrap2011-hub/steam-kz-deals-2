@@ -243,3 +243,93 @@ def versioned_dossier_state(dossier, contract, *, store_dir, appid, now=None,
         expected_ttl_days=expected_ttl_days,
         offline_fixture=offline_fixture, stage="reader")
     return "fresh", evidence["binding"]
+
+# A separate *sandbox-only* grant. This never enables the canonical Lean flags.
+SANDBOX_GRANT = ROOT / "config/dossier_notes_v2_isolated_lean_acceptance.json"
+
+
+def require_isolated_sandbox_writer(repo_root, *, trial_id, marker_commit,
+                                    item_commits, issuer):
+    """Fail closed on the exact user-approved six, before any cache/receipt write.
+
+    Executed only by the existing serialized GitHub batch writer. It does not
+    mint GitHub authority, accept typed transport as quality, or bypass the
+    full independent Lean validator.
+    """
+    grant = json.loads(SANDBOX_GRANT.read_text(encoding="utf-8"))
+    if (grant.get("schema") != "DOSSIER-NOTES-V2-ISOLATED-LEAN-ACCEPTANCE-V1"
+            or grant.get("version") != 1 or grant.get("owner") != "github_control_plane"
+            or grant.get("isolated_only") is not True
+            or grant.get("single_owner_first_attempt_only") is not True
+            or grant.get("exact_six_atomic_persistence") is not True
+            or grant.get("canonical_main_acceptance") is not False
+            or grant.get("production_enabled") is not False
+            or grant.get("deep_enabled") is not False
+            or grant.get("automatic_retry") is not False
+            or trial_id != grant.get("trial_id")
+            or marker_commit != grant.get("marker_commit")
+            or issuer.get("authorization_commit") != grant.get("authorization_commit")
+            or str(issuer.get("github_authorization_run_id"))
+               != grant.get("owner_source_actions_run_id")
+            or issuer.get("request_commit") != grant.get("original_request_commit")
+            or grant.get("writer_workflow") !=
+               ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"):
+        raise ValueError("unapproved Lean sandbox writer trial or owner source")
+    policy = _policy()
+    if any(policy["lean_" + stage + "_enabled"] for stage in ("writer", "reader", "deep")):
+        raise ValueError("sandbox Lean requires all canonical/Deep gates OFF")
+    items = grant.get("items")
+    if (not isinstance(items, list) or len(items) != 6
+            or len({x.get("appid") for x in items if isinstance(x, dict)}) != 6
+            or type(item_commits) is not dict
+            or set(item_commits) != {x["appid"] for x in items}):
+        raise ValueError("Lean sandbox must bind exactly six frozen candidates")
+    frozen = grant.get("frozen_sandbox_head")
+    if not isinstance(frozen, str) or not _SHA.fullmatch(frozen):
+        raise ValueError("invalid exact pre-acceptance sandbox HEAD")
+    root = Path(repo_root).resolve()
+    ancestry = subprocess.run(
+        ["git", "-C", str(root), "merge-base", "--is-ancestor", frozen, "HEAD"],
+        capture_output=True, check=False,
+    )
+    if ancestry.returncode:
+        raise ValueError("Lean sandbox no longer descends from frozen candidate HEAD")
+    from dossier_two_stage_staging import json_at
+    auth = json_at(root, grant["authorization_commit"],
+                   "data/control/dossier_notes_v2/authorizations/" + trial_id + ".json")
+    if (auth.get("sandbox_writer_authorized") is not True
+            or auth.get("canonical_acceptance") is not False
+            or auth.get("production_authorized") is not False
+            or auth.get("request_commit") != grant["original_request_commit"]):
+        raise ValueError("GitHub owner did not authorize exact sandbox writer")
+    for row in items:
+        appid = row["appid"]
+        pair = item_commits[appid]
+        if (type(pair) is not dict
+                or pair != {k: row[k] for k in ("research_commit", "assembly_commit")}
+                or type(row.get("title")) is not str
+                or type(row.get("group_sequence")) is not int
+                or not re.fullmatch(r"batch-[0-9a-f]{24}", str(row.get("assignment_id")))):
+            raise ValueError("Lean AppID/edition/immutable commits differ from frozen six")
+        path = (
+            "data/control/dossier_notes_v2/receipts/" + trial_id
+            + "/g" + str(row["group_sequence"]).zfill(6) + "/"
+            + appid + "--" + row["assignment_id"] + "--assembly.json"
+        )
+        observed = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "HEAD:" + path],
+            capture_output=True, check=False, text=True,
+        )
+        if (observed.returncode or observed.stdout.strip() !=
+                row.get("typed_assembly_receipt_blob_sha")):
+            raise ValueError("Lean original typed Assembly transport changed: " + appid)
+        # This is a one-use sandbox publication, not a repeatable acceptance API.
+        store = root / ("data/control/dossier_notes_v2/batch_pilot_store/"
+                        + trial_id + "/App_" + appid + ".json")
+        receipt = root / ("data/control/dossier_notes_v2/batch_pilot_accepted/"
+                          + trial_id + "/g"
+                          + str(row["group_sequence"]).zfill(6) + "/"
+                          + appid + "--" + row["assignment_id"] + ".json")
+        if store.exists() or receipt.exists():
+            raise ValueError("Lean sandbox acceptance already published or collided")
+    return {row["appid"]: row for row in items}
