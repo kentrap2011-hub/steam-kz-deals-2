@@ -288,12 +288,12 @@ def require_isolated_sandbox_writer(repo_root, *, trial_id, marker_commit,
     if not isinstance(frozen, str) or not _SHA.fullmatch(frozen):
         raise ValueError("invalid exact pre-acceptance sandbox HEAD")
     root = Path(repo_root).resolve()
-    ancestry = subprocess.run(
-        ["git", "-C", str(root), "merge-base", "--is-ancestor", frozen, "HEAD"],
-        capture_output=True, check=False,
+    actual = subprocess.run(
+        ["git", "-C", str(root), "rev-parse", "HEAD"],
+        capture_output=True, check=False, text=True,
     )
-    if ancestry.returncode:
-        raise ValueError("Lean sandbox no longer descends from frozen candidate HEAD")
+    if actual.returncode or actual.stdout.strip() != frozen:
+        raise ValueError("Lean sandbox must equal exact frozen pre-acceptance HEAD")
     from dossier_two_stage_staging import json_at
     auth = json_at(root, grant["authorization_commit"],
                    "data/control/dossier_notes_v2/authorizations/" + trial_id + ".json")
