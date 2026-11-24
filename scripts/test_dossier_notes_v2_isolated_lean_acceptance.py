@@ -170,5 +170,126 @@ class SixItemSandboxWriterTests(unittest.TestCase):
                         "request_commit":self.grant["original_request_commit"]})
 
 
+    def isolated_writer(self, *, broken_appid=None, incomplete=False):
+        # Exercise the REAL shared writer on disposable Git only. Authentication
+        # and immutable source Git lookups are synthetic mocks, never accepted
+        # owner evidence. Full Lean validation, writes and collision gates are real.
+        import os
+        import shutil
+        from taste_steam_review_dossier_buffered import drain_buffered_groups
+        from dossier_notes_v2_batch_route import REPOSITORY, WRITER_WORKFLOW, OWNER_ID, OWNER_LOGIN
+
+        self.git("reset", "-q")
+        shutil.rmtree(self.root / reader.ROOT_STORE)
+        shutil.rmtree(self.root / reader.ROOT_RECEIPTS)
+        trial = self.grant["trial_id"]
+        auth_path = (self.root / "data/control/dossier_notes_v2/authorizations"
+                     / (trial + ".json"))
+        auth_path.parent.mkdir(parents=True, exist_ok=True)
+        auth_path.write_text('{"offline_fixture_only":true}\n', encoding="utf-8")
+        self.git("add", str(auth_path.relative_to(self.root)))
+        self.git("commit", "-qm", "offline synthetic authorizer")
+        rows = self.grant["items"]
+        item_map = {r["appid"]: {
+            "research_commit": r["research_commit"],
+            "assembly_commit": r["assembly_commit"],
+        } for r in rows}
+        documents = {a: copy.deepcopy(doc) for a, (doc, _) in self.docs.items()}
+        if broken_appid is not None:
+            documents[broken_appid]["game_identity"]["release_year"] = None
+        projection = {"items": [
+            {"appid": row["appid"], "group_sequence": row["group_sequence"],
+             "status": "missing" if incomplete and row["appid"] == "102600" else "ready"}
+            for row in rows
+        ]}
+        assignment = {
+            row["appid"]: {
+                "trial_id": trial, "appid": row["appid"],
+                "title": row["title"], "group_sequence": row["group_sequence"],
+                "assignment_id": row["assignment_id"],
+            } for row in rows
+        }
+        current_appid = ["1000010"]
+
+        def inspect(repo, *, marker_commit, trial_id, appid, research_commit, result_commit):
+            current_appid[0] = appid
+            return {"status": "strict_item_valid_pending_existing_atomic_group_ingest"}
+
+        def work(repo, *, marker_commit, trial_id, appid, research_commit):
+            current_appid[0] = appid
+            return {"status": "ready_for_autonomous_assembly",
+                    "assignment": assignment[appid], "research_transport": {},
+                    "output_path": "dummy/" + appid}
+
+        def candidate(repo, commit, path):
+            a = path.split("/")[-1]
+            return {"assignment": assignment[a], "research_transport": {},
+                    "outcome": "assembled_candidate_ready", "final_dossier": documents[a]}
+
+        env = {
+            "GITHUB_ACTIONS": "true", "GITHUB_EVENT_NAME": "workflow_dispatch",
+            "GITHUB_REF": "refs/heads/main",
+            "GITHUB_WORKFLOW_REF": REPOSITORY + "/" + WRITER_WORKFLOW + "@refs/heads/main",
+            "GITHUB_REPOSITORY": REPOSITORY,
+            "GITHUB_REPOSITORY_OWNER_ID": OWNER_ID,
+            "GITHUB_ACTOR_ID": OWNER_ID, "GITHUB_ACTOR": OWNER_LOGIN,
+            "GITHUB_TRIGGERING_ACTOR": OWNER_LOGIN,
+            "GITHUB_RUN_ATTEMPT": "1", "GITHUB_RUN_ID": "1234",
+            "GITHUB_TOKEN": "offline-fixture-not-a-real-token",
+        }
+        with patch.dict(os.environ, env), patch(
+                "dossier_notes_v2_generic_replay.policy", return_value={}), patch(
+                "dossier_notes_v2_batch_route.issuer_structure",
+                return_value={"authorization_commit": self.grant["authorization_commit"],
+                              "semantic_execution_authorized": True}), patch(
+                "dossier_notes_v2_batch_route.authenticated_owner_run",
+                return_value=True), patch(
+                "dossier_research_notes_v2.individual_final_readiness",
+                return_value=projection), patch(
+                "dossier_notes_v2_per_item_receipts.require_batch_terminal_receipts",
+                return_value=True), patch(
+                "dossier_research_notes_v2.inspect_assembly", side_effect=inspect), patch(
+                "dossier_research_notes_v2.assembly_work", side_effect=work), patch(
+                "dossier_two_stage_staging.json_at", side_effect=candidate), patch.object(
+                dual, "require_isolated_sandbox_writer",
+                return_value={r["appid"]: r for r in rows}):
+            return drain_buffered_groups(notes_v2={
+                "repo": self.root, "marker_commit": self.grant["marker_commit"],
+                "trial_id": trial, "item_commits": item_map,
+                "store_dir": self.root / reader.ROOT_STORE / trial,
+                "accepted_dir": self.root / reader.ROOT_RECEIPTS,
+                "offline_fixture": False, "trial_sandbox": True,
+            })
+
+    def test_actual_writer_six_lean_records_and_receipts_in_sandbox_only(self):
+        result = self.isolated_writer()
+        self.assertFalse(result["canonical_acceptance"])
+        self.assertEqual(len(result["items"]), 6)
+        self.assertEqual([r["status"] for r in result["items"]],
+                         ["persisted_pending_github_commit"] * 6)
+        for row in self.grant["items"]:
+            appid = row["appid"]
+            receipt = self.root / reader.ROOT_RECEIPTS / self.grant["trial_id"] / (
+                "g" + str(row["group_sequence"]).zfill(6)) / (
+                appid + "--" + row["assignment_id"] + ".json")
+            bound = json.loads(receipt.read_text())
+            raw = (self.root / reader.ROOT_STORE / self.grant["trial_id"]
+                   / ("App_" + appid + ".json")).read_bytes()
+            self.assertEqual(bound["dossier_raw_sha256"],
+                             hashlib.sha256(raw).hexdigest())
+            self.assertFalse(bound["canonical_acceptance"])
+            self.assertFalse(bound["deep_ready"])
+        self.assertFalse((self.root / dual.STORE).exists())
+        self.assertFalse((self.root / dual.RECEIPTS).exists())
+
+    def test_actual_writer_rejects_bad_lean_and_incomplete_six_atomically(self):
+        with self.assertRaisesRegex(ValueError, "six-item transaction incomplete"):
+            self.isolated_writer(broken_appid="1029690")
+        # The disposable checkout can contain transient files, but there has
+        # been no Git commit/push and cannot be a valid owner acceptance.
+        self.assertFalse(self.git("log", "-1", "--format=%s").startswith("Persist isolated"))
+        with self.assertRaisesRegex(ValueError, "six-item Lean sandbox atomic readiness"):
+            self.isolated_writer(incomplete=True)
+
 if __name__ == "__main__":
     unittest.main()
