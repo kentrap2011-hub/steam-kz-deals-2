@@ -5,11 +5,11 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — исправление путей Lean writer, 2026-11-25
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — независимая QA Lean writer path fix, 2026-11-25
 
-- **НОВЫЙ ЧАТ 3 — зарезервирован (ожидает запуска):** `dossier-lean-writer-auto-path-layout-fix-01` → `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_PATH_LAYOUT_FIX_01.md`. По прямому решению пользователя новый физический исполнитель исправляет конкретную ошибку `V2 single-item paths must be separate writer-owned subdirectories` из run #45628656098. Только bounded FIX source PR + offline tests + report, без реального writer, перезапуска старых Actions или расширения grant.
-- **ЧАТ 2 — свободен:** исходное включение и исправления в PR #486, #487, #488 приняты директором. Цель live приёмки не достигнута: последний Actions #45628656098 FAILED, 0/6 accepted. Старый worker-task завершён ПЕРЕДАЧЕЙ остатка новому ЧАТУ 3; это не означает готовность автоматизации.
-- **ЧАТ 1 — свободен.** Все более старые блоки Board — исторический архив.
+- **НОВЫЙ ЧАТ 1 — зарезервирован (ожидает запуска):** `dossier-lean-auto-path-layout-pr490-l3-independent-qa-01` → `WORKER_TASK_DOSSIER_LEAN_AUTO_PATH_LAYOUT_PR490_L3_INDEPENDENT_QA_01.md`. Пользователь сказал «Делаем» после предложения проверить, принять source PR #490 по результату и отдельно решить новую авторизацию. L3 QA только материальной path binding дельты. Без новых claims, live Actions или production.
+- **ЧАТ 3 — свободен:** завершил `dossier-lean-writer-auto-path-layout-fix-01`, source PR #490 HEAD `89939b27f3f5c2a5c17a029c6b37110318cfc52e`, CI 3/3 PASS. Физический номер освобождён по финальному отчёту независимо от source merge.
+- **ЧАТ 2 — свободен:** предыдущая активация в исходных PR #486–#488 передана, live one-use claim после Actions #45628656098 уже израсходован, accepted docs 0/6; новая реальная запись запрещена без отдельной owner-authority.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
