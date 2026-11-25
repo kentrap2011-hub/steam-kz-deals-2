@@ -1,10 +1,11 @@
 # CURRENT TASK
 
-## ЧАТ 1 — Lean writer automatic ready gate: BLOCKED_AUTHORIZATION (2026-11-25)
+## ЧАТ 1 — Lean writer automatic ready-gate: scoped six source, INACTIVE (2026-11-25)
 
-- Task: `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_READY_GATE_01.md`; report-only source [branch](https://github.com/kentrap2011-hub/steam-kz-deals-2/tree/recon/dossier-lean-writer-auto-ready-auth-boundary-20261125), base `main@bf5a017392f5ffa491d10ef513d7232b5229d643`.
-- Closure: **HARD STOP, not implemented**. Original exact-six owner writer workflow run `45540222575` failed at first attempt (before data writes), while the existing grant is single-use and forbids automatic retries. Generic policy `allow_automatic_writer=false`; no separate per-trial auto-writer/recovery authorization exists. No retry, writer or semantic/production execution initiated.
-- Durable report: `reviews/worker_reports/dossier-lean-writer-auto-ready-gate-01.md`. Director must decide a distinct explicit narrow one-use recovery authorization versus terminal suppression of original six before any implementation/CI/activation. Other workstreams unchanged.
+- Task: `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_READY_GATE_01.md`; [source draft PR #484](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/484), base `main@bf5a017392f5ffa491d10ef513d7232b5229d643`. Exact final HEAD CI / independent L3 pending.
+- User explicitly approved ONE new automatic recovery attempt for the original six after previously failed owner manual run `45540222575`. A distinct exact-six one-use versioned contract is committed with `activation_enabled=false`; new trusted main ready watcher, Git control-branch attempt claim, original shared writer/12-file readback, and offline regression scaffolding are in draft PR. No actual writer, replay, Research, Assembly, Deep or production run.
+- **Not feature-complete:** only historical exact six accepted by new source. Future owner-issued eligible Lean trials still need an independent per-trial auto-grant and immutable original-year authority; no generic blanket activation. Do not merge/activate before future branch completed (or task scope explicitly revised), final CI and independent L3.
+- Report: `reviews/worker_reports/dossier-lean-writer-auto-ready-gate-01.md`. Other workstreams unchanged.
 
 ## ЧАТ 2 — generic Lean writer preflight route fix (2026-11-25)
 
