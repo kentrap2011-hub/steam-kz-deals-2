@@ -272,8 +272,251 @@ def check_claim_ref(repo, trial_id):
     return sha.split()[0]
 
 
+
+def command(repo, *args, check=True):
+    return subprocess.run(
+        ["git", "-C", str(repo), *args],
+        capture_output=True, text=True, check=check)
+
+
+def output(repo, *args):
+    return command(repo, *args).stdout.strip()
+
+
+def verify_main_checkout(repo, env):
+    require(output(repo, "rev-parse", "HEAD") == env.get("GITHUB_SHA"),
+            "reviewed main checkout does not match GitHub event SHA")
+    require(output(repo, "symbolic-ref", "--short", "HEAD") == "main",
+            "runtime must execute trusted main source only")
+    require(output(repo, "ls-remote", "origin", "refs/heads/main").split()[0] ==
+            env["GITHUB_SHA"], "trusted main moved before automation")
+    require(not output(repo, "status", "--porcelain", "--untracked-files=all"),
+            "source checkout dirty")
+    remote = output(repo, "remote", "get-url", "origin")
+    require(remote in (
+        "https://github.com/" + batch.REPOSITORY,
+        "https://github.com/" + batch.REPOSITORY + ".git",
+        "git@github.com:" + batch.REPOSITORY,
+        "git@github.com:" + batch.REPOSITORY + ".git",
+    ), "unrecognized writer source remote")
+
+
+def claim_once(source_repo, signal, env):
+    """Atomic create-only control ref, independent of frozen sandbox HEAD.
+
+    A successful claim consumes the NEW recovery attempt even if the subsequent
+    writer fails before writing, during commit, or on push. Never rerun this.
+    """
+    from tempfile import TemporaryDirectory
+    trial = signal["trial_id"]
+    ref = CLAIM_PREFIX + trial.removeprefix(generic.PREFIX)
+    require(check_claim_ref(source_repo, trial) is None,
+            "attempt already claimed: running, accepted or terminal failed")
+    claim_path = "data/control/dossier_notes_v2/auto_writer_attempts/" + trial + ".json"
+    record = {
+        "schema": "DOSSIER-LEAN-AUTO-WRITER-ATTEMPT-V1",
+        "trial_id": trial,
+        "original_frozen_sandbox_head": policy()["recovery"]["original_frozen_sandbox_head"],
+        "previous_terminal_failed_run_id": 45540222575,
+        "automation_run_id": env["GITHUB_RUN_ID"],
+        "automation_source_main_sha": env["GITHUB_SHA"],
+        "source_event": signal["event_kind"],
+        "source_signal_sha": signal["source_signal_sha"],
+        "source_signal_run_id": signal["source_signal_run_id"],
+        "attempt": 1, "no_retry": True,
+        "canonical_acceptance": False, "production": False, "deep": False,
+    }
+    with TemporaryDirectory(prefix="lean-auto-claim-") as tmp:
+        worktree = Path(tmp) / "control"
+        command(source_repo, "worktree", "add", "--detach", str(worktree),
+                env["GITHUB_SHA"])
+        try:
+            command(worktree, "checkout", "-b",
+                    "dossier-lean-auto-attempt-" + trial.removeprefix(generic.PREFIX))
+            file = worktree / claim_path
+            require(not file.exists(), "claim path not create-only")
+            file.parent.mkdir(parents=True, exist_ok=True)
+            file.write_text(json.dumps(record, sort_keys=True, indent=2) + "\n",
+                            encoding="utf-8")
+            command(worktree, "add", "--", claim_path)
+            require(output(worktree, "diff", "--cached", "--name-status") ==
+                    "A\t" + claim_path, "only one claim file may be created")
+            command(worktree, "config", "user.name", "steam-kz-bot")
+            command(worktree, "config", "user.email",
+                    "steam-kz-bot@users.noreply.github.com")
+            command(worktree, "commit", "-m", "Claim one Lean auto writer attempt")
+            target = output(worktree, "rev-parse", "HEAD")
+            require(check_claim_ref(source_repo, trial) is None,
+                    "claim appeared before push")
+            # Exactly ONE non-force Git push. Failure/uncertainty is terminal.
+            command(worktree, "push", "origin", "HEAD:" + ref)
+            require(check_claim_ref(source_repo, trial) == target,
+                    "claim remote readback mismatch; never retry push")
+            return target
+        finally:
+            command(source_repo, "worktree", "remove", "--force", str(worktree),
+                    check=False)
+
+
+def authenticated_auto_context(repo, trial_id, marker_commit, item_commits, env=None):
+    """Separate narrow GitHub-owned path, never a relaxation of manual owner gate."""
+    env = os.environ if env is None else env
+    contract = policy()
+    require(contract["activation_enabled"] is True
+            and trial_id == contract["recovery"]["trial_id"]
+            and marker_commit == contract["recovery"]["marker_commit"]
+            and item_commits == exact_pairs()
+            and env.get("GITHUB_TOKEN")
+            and env.get("LEAN_AUTO_CLAIM_SHA")
+            and SHA.fullmatch(env["LEAN_AUTO_CLAIM_SHA"]),
+            "not the exact separately owner-approved automated recovery")
+    require(env.get("GITHUB_EVENT_PATH"), "GitHub event payload absent")
+    event = json.loads(Path(env["GITHUB_EVENT_PATH"]).read_text(encoding="utf-8"))
+    signal = verify_source_signal(event, env)
+    require(signal["trial_id"] == trial_id,
+            "event does not authorize this trial")
+    remote_claim = check_claim_ref(repo, trial_id)
+    require(remote_claim == env["LEAN_AUTO_CLAIM_SHA"],
+            "immutable first-attempt claim has changed or is missing")
+    path = ("data/control/dossier_notes_v2/auto_writer_attempts/" +
+            trial_id + ".json")
+    raw = output(repo, "show", remote_claim + ":" + path)
+    claim = json.loads(raw)
+    require(claim == {
+        "schema": "DOSSIER-LEAN-AUTO-WRITER-ATTEMPT-V1",
+        "trial_id": trial_id,
+        "original_frozen_sandbox_head":
+            contract["recovery"]["original_frozen_sandbox_head"],
+        "previous_terminal_failed_run_id": 45540222575,
+        "automation_run_id": env["GITHUB_RUN_ID"],
+        "automation_source_main_sha": env["GITHUB_SHA"],
+        "source_event": signal["event_kind"],
+        "source_signal_sha": signal["source_signal_sha"],
+        "source_signal_run_id": signal["source_signal_run_id"],
+        "attempt": 1, "no_retry": True,
+        "canonical_acceptance": False, "production": False, "deep": False,
+    }, "claim does not match this authenticated GitHub-owned invocation")
+    return True
+
+
+def run(source_repo, env):
+    """One trusted main workflow job, shared existing writer lock, no semantic work."""
+    source_repo = Path(source_repo).resolve()
+    cfg = policy()
+    if not cfg["activation_enabled"]:
+        return {"status": "activation_disabled_source_only",
+                "writer_launched": False}
+    event = json.loads(Path(env["GITHUB_EVENT_PATH"]).read_text(encoding="utf-8"))
+    signal = verify_source_signal(event, env)
+    verify_main_checkout(source_repo, env)
+    trial = signal["trial_id"]
+    if check_claim_ref(source_repo, trial) is not None:
+        return {"status": "suppressed_already_claimed_no_retry",
+                "trial_id": trial, "writer_launched": False}
+    # A workflow_run notification is a hint. Authenticate the genuine
+    # successful first-attempt read-only push signal from GitHub's API.
+    if signal["source_signal_run_id"] is not None:
+        original = _github_get(batch.REPOSITORY, "actions/runs/" +
+                               str(signal["source_signal_run_id"]),
+                               env["GITHUB_TOKEN"])
+        require(original.get("id") == signal["source_signal_run_id"]
+                and original.get("path") == SIGNAL_WORKFLOW
+                and original.get("event") == "push"
+                and original.get("run_attempt") == 1
+                and original.get("status") == "completed"
+                and original.get("conclusion") == "success"
+                and original.get("head_branch") == "sandbox/" + trial
+                and original.get("head_sha") == signal["source_signal_sha"],
+                "upstream ready-signal run not authenticated")
+    from tempfile import TemporaryDirectory
+    original = json.loads((ROOT / "config/dossier_notes_v2_isolated_lean_acceptance.json").read_text())
+    sandbox_ref = "refs/heads/sandbox/" + trial
+    with TemporaryDirectory(prefix="lean-auto-sandbox-") as tmp:
+        dest = Path(tmp) / "sandbox"
+        remote_before = output(source_repo, "ls-remote", "origin", sandbox_ref)
+        require(remote_before.split()[0] ==
+                original["frozen_sandbox_head"],
+                "original six sandbox changed; no new attempt")
+        command(source_repo, "fetch", "--no-tags", "origin",
+                "+" + sandbox_ref + ":refs/remotes/origin/sandbox/" + trial)
+        require(output(source_repo, "rev-parse",
+                       "refs/remotes/origin/sandbox/" + trial) ==
+                original["frozen_sandbox_head"],
+                "sandbox changed during bounded fetch")
+        command(source_repo, "worktree", "add", "--detach", str(dest),
+                original["frozen_sandbox_head"])
+        try:
+            command(dest, "checkout", "-b", "sandbox/" + trial)
+            readiness = validate_ready(dest, token=env["GITHUB_TOKEN"])
+            if not readiness["ready"]:
+                return {"status": "not_ready_no_attempt",
+                        "trial_id": trial, "writer_launched": False}
+            require(check_claim_ref(source_repo, trial) is None,
+                    "one-use claim has appeared before writer")
+            claim = claim_once(source_repo, signal, env)
+            # Claim is now immutable. ANY later failure is terminal, including
+            # zero-write failures. Do not retry the operation or Git push.
+            env["LEAN_AUTO_CLAIM_SHA"] = claim
+            os.environ["LEAN_AUTO_CLAIM_SHA"] = claim
+            from taste_steam_review_dossier_buffered import drain_buffered_groups
+            result = drain_buffered_groups(notes_v2={
+                "repo": dest,
+                "marker_commit": readiness["marker_commit"],
+                "trial_id": trial, "item_commits": readiness["pairs"],
+                "store_dir": Path("data/control/dossier_notes_v2/batch_pilot_store") / trial,
+                "accepted_dir": Path("data/control/dossier_notes_v2/batch_pilot_accepted"),
+                "offline_fixture": False, "trial_sandbox": True,
+            })
+            from dossier_notes_v2_isolated_lean_readback import exact_transaction
+            store = "data/control/dossier_notes_v2/batch_pilot_store/" + trial
+            accepted = "data/control/dossier_notes_v2/batch_pilot_accepted/" + trial
+            command(dest, "add", "--", store, accepted)
+            command(dest, "diff", "--cached", "--check")
+            exact_transaction(dest, mode="staged")  # EXACT 12 docs/receipts
+            command(dest, "config", "user.name", "steam-kz-bot")
+            command(dest, "config", "user.email",
+                    "steam-kz-bot@users.noreply.github.com")
+            command(dest, "commit", "-m",
+                    "Persist one owner-recovered Lean six-item isolated sandbox")
+            exact_transaction(dest, mode="committed")
+            require(not output(dest, "status", "--porcelain", "--untracked-files=all"),
+                    "sandbox writer unexpectedly left dirty worktree")
+            require(output(source_repo, "ls-remote", "origin", sandbox_ref)
+                    .split()[0] == original["frozen_sandbox_head"],
+                    "sandbox moved before one non-force publication")
+            command(dest, "push", "origin", "HEAD:" + sandbox_ref)
+            require(output(source_repo, "ls-remote", "origin", sandbox_ref)
+                    .split()[0] == output(dest, "rev-parse", "HEAD"),
+                    "postpush readback failed; do not retry")
+            exact_transaction(dest, mode="committed")
+            return {"status": "accepted_sandbox_only_after_postpush_readback",
+                    "trial_id": trial, "claim_sha": claim,
+                    "commit_sha": output(dest, "rev-parse", "HEAD"),
+                    "canonical_acceptance": False, "deep_ready": False,
+                    "writer_result": result}
+        finally:
+            command(source_repo, "worktree", "remove", "--force", str(dest),
+                    check=False)
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("mode", choices=("inspect-policy", "run"), nargs="?",
+                        default="inspect-policy")
+    args = parser.parse_args()
+    if args.mode == "inspect-policy":
+        print(json.dumps({"status": "source_review_only",
+                          "activation_enabled": policy()["activation_enabled"]}))
+        return
+    try:
+        result = run(Path.cwd(), os.environ)
+        print(json.dumps(result, ensure_ascii=False, sort_keys=True))
+    except (ValueError, OSError, KeyError, TypeError,
+            subprocess.CalledProcessError) as exc:
+        parser.exit(2, "LEAN_AUTO_READY_TERMINAL_OR_PRECHECK_BLOCKED: " +
+                    str(exc) + "\n")
+
+
 if __name__ == "__main__":
-    # No executing entrypoint: the offline source cannot dispatch, claim or run
-    # a writer. A separately reviewed runtime workflow is mandatory.
-    print(json.dumps({"status": "source_preflight_only_inactive",
-                      "activation_enabled": policy()["activation_enabled"]}))
+    main()
