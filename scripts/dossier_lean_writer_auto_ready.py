@@ -675,6 +675,17 @@ def authenticated_auto_context(repo, trial_id, marker_commit, item_commits, env=
     return True
 
 
+def sandbox_writer_destinations(sandbox_repo, trial_id):
+    """Use the existing V2 writer-owned namespaces INSIDE the sandbox worktree.
+
+    The auto workflow runs from main, but the writer resolves destination
+    paths itself; passing workflow-relative paths points outside its repo.
+    """
+    paths = batch.paths(trial_id)
+    root = Path(sandbox_repo).resolve()
+    return root / paths["store"], root / paths["accepted"]
+
+
 def run(source_repo, env):
     """One trusted main workflow job, shared existing writer lock, no semantic work."""
     source_repo = Path(source_repo).resolve()
@@ -741,12 +752,13 @@ def run(source_repo, env):
             env["LEAN_AUTO_CLAIM_SHA"] = claim
             os.environ["LEAN_AUTO_CLAIM_SHA"] = claim
             from taste_steam_review_dossier_buffered import drain_buffered_groups
+            store_dest, accepted_dest = sandbox_writer_destinations(dest, trial)
             result = drain_buffered_groups(notes_v2={
                 "repo": dest,
                 "marker_commit": readiness["marker_commit"],
                 "trial_id": trial, "item_commits": readiness["pairs"],
-                "store_dir": Path("data/control/dossier_notes_v2/batch_pilot_store") / trial,
-                "accepted_dir": Path("data/control/dossier_notes_v2/batch_pilot_accepted"),
+                "store_dir": store_dest,
+                "accepted_dir": accepted_dest,
                 "offline_fixture": False, "trial_sandbox": True,
             })
             from dossier_notes_v2_isolated_lean_readback import exact_transaction
