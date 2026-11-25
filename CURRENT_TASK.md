@@ -1,5 +1,13 @@
 # CURRENT TASK
 
+## ЧАТ 2 — generic Lean writer preflight route fix (2026-11-25)
+
+- Task: `WORKER_TASK_DOSSIER_LEAN_GENERIC_WRITER_PREFLIGHT_ROUTE_FIX_01.md`; source branch `fix/dossier-lean-generic-writer-preflight-route-20261125`, base `main@a8708f68081abf4dcfdae08bae6fdca373318bdc`.
+- Status: `source_implemented_draft_PR_482_first_offline_CI_5_of_5_SUCCESS_independent_security_L3_pending`; failed owner-run `45540222575` is evidence only, no rerun. Original isolated acceptance remains 0/6; all canonical/Deep/production Lean switches are false.
+- Scope: generic 32-hex trial IDs use main-pinned authenticated generic issuer preflight before existing sandbox-only writer; true legacy batch keeps old strict cohort preflight. No new issuer/request or production writes.
+- Required report: `reviews/worker_reports/dossier-lean-generic-writer-preflight-route-fix-01.md`; independent security L3 before Director merge. Existing other workstreams retained unchanged.
+
+
 ## ЧАТ 2 — isolated Lean Dossier six-item sandbox-only writer acceptance (2026-11-24)
 
 - Task: `WORKER_TASK_DOSSIER_LEAN_FRESH6_ISOLATED_WRITER_ACCEPTANCE_01.md`. Source draft [PR #478](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/478), branch `implement/dossier-lean-fresh6-isolated-writer-acceptance-20261124`, base `main@f9974ec85b6d4b7e2ac6ca2699a404339f8561b7`. Report `reviews/worker_reports/dossier-lean-fresh6-isolated-writer-acceptance-01.md`.

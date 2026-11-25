@@ -77,9 +77,10 @@ jobs:
           ref: ${{ github.event_name == 'workflow_dispatch' && inputs.notes_v2_batch_pilot_writer == true && format('sandbox/{0}', inputs.notes_v2_trial_id) || github.event_name == 'workflow_dispatch' && inputs.notes_v2_original18_pilot_writer == true && 'sandbox/dossier-notes-v2-original18-first' || 'main' }}
           fetch-depth: 0
 
-      # Frozen six: immutable sandbox data, reviewed main source code.
-      - name: Pin main source for exact six-item Lean sandbox writer
-        if: github.event_name == 'workflow_dispatch' && inputs.notes_v2_batch_pilot_writer == true && inputs.notes_v2_trial_id == 'dossier-notes-v2-assembly-replay-cdcdb4951e2fc98336729af75b954da4'
+      # Generic trials retain their frozen sandbox data but import the pinned,
+      # reviewed main source; the exact-six Lean readback remains trial-gated.
+      - name: Pin main source for generic owner-requested sandbox writer
+        if: github.event_name == 'workflow_dispatch' && inputs.notes_v2_batch_pilot_writer == true && startsWith(inputs.notes_v2_trial_id, 'dossier-notes-v2-assembly-replay-')
         run: |
           set -euo pipefail
           test "${GITHUB_REF}" = "refs/heads/main"
@@ -229,7 +230,17 @@ jobs:
           test "${GITHUB_ACTOR}" = "kentrap2011-hub"
           test "${GITHUB_TRIGGERING_ACTOR}" = "kentrap2011-hub"
           test "${GITHUB_RUN_ATTEMPT}" = "1"
-          python scripts/dossier_notes_v2_batch_preflight.py --trial-id "${NOTES_V2_TRIAL_ID}"
+          # Only exact 32-hex generic owner-requested trials can take this path.
+          # Unknown/malformed generic-prefixed trials fail closed inside it.
+          # Genuine legacy cohorts retain their unchanged strict batch preflight.
+          if [[ "${NOTES_V2_TRIAL_ID}" == dossier-notes-v2-assembly-replay-* ]]; then
+            python "${RUNNER_TEMP}/dossier-lean-writer-source/scripts/dossier_notes_v2_writer_preflight.py" \
+              --repo . --trial-id "${NOTES_V2_TRIAL_ID}" \
+              --marker-commit "${NOTES_V2_MARKER_COMMIT}" \
+              --item-commits-json "${NOTES_V2_ITEM_COMMITS_JSON}"
+          else
+            python scripts/dossier_notes_v2_batch_preflight.py --trial-id "${NOTES_V2_TRIAL_ID}"
+          fi
           test "$(git symbolic-ref --short HEAD)" = "sandbox/${NOTES_V2_TRIAL_ID}"
           remote_before="$(git rev-parse HEAD)"
           test "$(git ls-remote origin refs/heads/sandbox/${NOTES_V2_TRIAL_ID} | cut -f1)" = "$remote_before"
@@ -239,7 +250,7 @@ jobs:
           import sys
           from pathlib import Path
           sys.path.insert(0, str(Path.cwd() / "scripts"))
-          if os.environ["NOTES_V2_TRIAL_ID"] == "dossier-notes-v2-assembly-replay-cdcdb4951e2fc98336729af75b954da4":
+          if os.environ["NOTES_V2_TRIAL_ID"].startswith("dossier-notes-v2-assembly-replay-"):
               sys.path.insert(0, str(Path(os.environ["RUNNER_TEMP"])
                                      / "dossier-lean-writer-source" / "scripts"))
           from taste_steam_review_dossier_buffered import drain_buffered_groups
