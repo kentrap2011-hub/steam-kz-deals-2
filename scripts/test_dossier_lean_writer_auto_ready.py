@@ -283,6 +283,29 @@ class LeanAutoReadySourceTests(unittest.TestCase):
         finally:
             temp.cleanup()
 
+    def test_claimed_failed_writer_is_suppressed_before_second_run(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            event_file = Path(temporary) / "event.json"
+            event_file.write_text("{}", encoding="utf-8")
+            env = {"GITHUB_EVENT_PATH": str(event_file)}
+            trial = GRANT["trial_id"]
+            signal = {"trial_id": trial, "source_signal_run_id": None,
+                      "source_signal_sha": GRANT["frozen_sandbox_head"],
+                      "event_kind": "owner_activation_catchup"}
+            with patch.object(ready, "policy",
+                              return_value={"activation_enabled": True}), \
+                 patch.object(ready, "verify_source_signal",
+                              return_value=signal), \
+                 patch.object(ready, "verify_main_checkout"), \
+                 patch.object(ready, "check_claim_ref",
+                              return_value="a" * 40), \
+                 patch.object(ready, "claim_once") as claim:
+                result = ready.run(temporary, env)
+            self.assertEqual(result["status"],
+                             "suppressed_already_claimed_no_retry")
+            self.assertFalse(result["writer_launched"])
+            claim.assert_not_called()
+
     def test_attempt_claim_is_one_per_trial_and_replay_visible(self):
         with patch.object(ready.subprocess, "run",
                           return_value=SimpleNamespace(stdout="", returncode=0)):
