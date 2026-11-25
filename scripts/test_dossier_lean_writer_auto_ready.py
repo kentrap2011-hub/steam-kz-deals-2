@@ -227,6 +227,45 @@ class LeanAutoReadySourceTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "release year"):
                 call()
 
+    def test_future_signed_trial_without_owner_optin_is_suppressed(self):
+        from test_dossier_notes_v2_batch_route import git, source_copy
+        from test_dossier_notes_v2_generic_replay import issue_fixture
+        import dossier_notes_v2_generic_replay as generic
+        temp, repo = source_copy()
+        try:
+            issued = issue_fixture(repo, "bc" * 16, copies=False)
+            git(repo, "checkout", "-b", "sandbox/" + issued["trial"])
+            with patch.object(ready, "policy",
+                              return_value={"activation_enabled": True}):
+                result = ready.future_plan(
+                    repo, trial_id=issued["trial"], token="synthetic-token")
+            self.assertFalse(result["ready"])
+            self.assertEqual(result["status"],
+                             "suppressed_no_individual_owner_auto_grant")
+        finally:
+            temp.cleanup()
+
+    def test_future_issuer_binds_baseline_git_blob_not_untrusted_year(self):
+        from test_dossier_notes_v2_batch_route import git, source_copy
+        from test_dossier_notes_v2_generic_replay import issue_fixture
+        temp, repo = source_copy()
+        try:
+            issued = issue_fixture(
+                repo, "de" * 16, lean_auto_writer=True, copies=False)
+            git(repo, "checkout", "-b", "sandbox/" + issued["trial"])
+            with patch.object(ready, "policy",
+                              return_value={"activation_enabled": True}), \
+                 patch.object(ready.batch, "authenticated_owner_run",
+                              return_value=True):
+                # Fixture has merely syntactically-valid baseline SHA strings,
+                # not actual original strict evidence blobs. Future auto MUST
+                # reject the authorization before it can reach writer/claim.
+                with self.assertRaises(ValueError):
+                    ready.future_plan(
+                        repo, trial_id=issued["trial"], token="synthetic-token")
+        finally:
+            temp.cleanup()
+
     def test_attempt_claim_is_one_per_trial_and_replay_visible(self):
         with patch.object(ready.subprocess, "run",
                           return_value=SimpleNamespace(stdout="", returncode=0)):
