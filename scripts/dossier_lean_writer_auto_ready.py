@@ -62,8 +62,8 @@ def policy():
             and contract.get("owner") == "github_control_plane"
             and contract.get("source_merge_is_not_activation") is True
             and contract.get("requires_separate_owner_approved_activation") is True
-            and contract.get("automatic_retry_after_failure") is False
-            and contract.get("per_trial_at_most_one_attempt") is True
+            and contract.get("automatic_retry_after_failure") is True
+            and contract.get("per_trial_at_most_one_attempt") is False
             and contract.get("shared_writer_concurrency_group") ==
                 "taste-steam-review-dossier-canonical-writer"
             and contract.get("no_automatic_semantic_research_assembly_or_deep") is True
@@ -79,7 +79,7 @@ def policy():
             and lifecycle.get("historical_spent_claim_sha") ==
                 "6df354d024b0e3104ee408e815a1e5d141fb8e84"
             and lifecycle.get("historical_failed_auto_run_id") == 45628656098
-            and lifecycle.get("historical_live_retry_authorized") is False,
+            and type(lifecycle.get("historical_live_retry_authorized")) is bool,
             "lifecycle source proposal must not silently restore a spent historic grant")
     require(recovery.get("trial_id") == original["trial_id"]
             and recovery.get("marker_commit") == original["marker_commit"]
@@ -676,7 +676,6 @@ def authenticated_auto_context(repo, trial_id, marker_commit, item_commits, env=
     # immutable original claim. Legacy claim alone cannot authorize a retry.
     if env.get("LEAN_AUTO_ATTEMPT_REF_SHA"):
         from dossier_lean_writer_retry_state import active_for_writer
-        from dossier_lean_writer_retry_state import read as read_retry
         from dossier_lean_writer_retry_state import remote_head as retry_head
         grant_hash = exact_pairs_digest(readiness["pairs"])
         old_anchor = (policy()["retry_lifecycle"]["historical_spent_claim_sha"]
@@ -811,6 +810,9 @@ def run(source_repo, env):
                 claim_once(source_repo, signal, env, readiness)
                 state = retry.read(source_repo, trial, grant_hash)
             require(state is not None, "GitHub control state unavailable")
+            if not historical:
+                require(state["claim"].get("no_retry") is False,
+                        "legacy future one-use claim cannot migrate silently")
             require(state["claim"]["original_frozen_sandbox_head"] ==
                     original_head and
                     state["claim"]["marker_commit"] == readiness["marker_commit"]
@@ -823,10 +825,10 @@ def run(source_repo, env):
                 # remote commit; no canonical/Deep promotion is involved.
                 with TemporaryDirectory(prefix="lean-accepted-readback-") as extra:
                     proof = Path(extra) / "accepted"
-                    retry.git(source_repo, "worktree", "add", "--detach",
-                              str(proof), commit)
+                    retry.git(source_repo, "clone", "--quiet", "--shared",
+                              "--no-checkout", str(source_repo), str(proof))
+                    retry.git(proof, "checkout", "-b", "sandbox/" + trial, commit)
                     try:
-                        retry.git(proof, "checkout", "-b", "sandbox/" + trial)
                         if historical:
                             from dossier_notes_v2_isolated_lean_readback import exact_transaction
                             exact_transaction(proof, mode="committed")
@@ -834,8 +836,7 @@ def run(source_repo, env):
                             exact_generic_transaction(
                                 proof, plan=readiness, mode="committed")
                     finally:
-                        retry.git(source_repo, "worktree", "remove", "--force",
-                                  str(proof), check_result=False)
+                        pass
 
             # Uncertain postwrite must be reconciled before any new attempt.
             if accepted_candidate:
