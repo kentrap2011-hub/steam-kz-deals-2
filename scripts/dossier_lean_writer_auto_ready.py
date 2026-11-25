@@ -760,8 +760,10 @@ def main():
                         default="inspect-policy")
     args = parser.parse_args()
     if args.mode == "inspect-policy":
-        print(json.dumps({"status": "source_review_only",
-                          "activation_enabled": policy()["activation_enabled"]}))
+        enabled = policy()["activation_enabled"]
+        print(json.dumps({"status": ("versioned_activation_enabled" if enabled
+                                       else "source_review_only"),
+                          "activation_enabled": enabled}))
         return
     try:
         result = run(Path.cwd(), os.environ)
