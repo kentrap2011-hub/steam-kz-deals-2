@@ -3951,20 +3951,40 @@
       "id": "dossier-lean-writer-auto-activation-01",
       "title": "Включить автоматический Lean Writer без ручных запусков",
       "goal": "Довести принятый событийный Lean writer до реального безопасного запуска и подтвердить приёмку шести готовых досье без действий пользователя в GitHub.",
-      "status": "active",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Нужны узкая активация GitHub Actions, проверка единственного разрешённого исполнения и фактическое чтение результатов из sandbox.",
       "urgency": "высокая",
       "urgency_reason": "Автоматизация принята в коде, но ещё выключена, поэтому готовые досье не принимаются автоматически.",
       "task_file": "WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_ACTIVATION_01.md",
-      "worker_slot": "ЧАТ 2",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "dossier-lean-writer-auto-ready-gate-01"
       ],
-      "blocker": "Исходный код уже принят, но переключатель выключен. Реальный owner event и одноразовая приёмка требуют подтверждённых safety/authorization gates.",
+      "blocker": "ЧАТ 2 завершил исходные фиксы; live writer до сих пор останавливается на проверке путей V2. Остаток передан новому ЧАТУ 3.",
       "updated_on": "2026-11-25",
-      "updated_at_utc": "2026-11-25T09:02:41.793Z",
+      "updated_at_utc": "2026-11-25T14:06:54.587Z",
+      "recent_completion": true
+    },
+    {
+      "id": "dossier-lean-writer-auto-path-layout-fix-01",
+      "title": "Исправить пути изолированного Lean auto-writer",
+      "goal": "Устранить ошибку раздельных writer-owned поддиректорий при реальном автоматическом запуске шести готовых Lean досье.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Адресная совместимость V2 writer path и минимальные offline Git-регрессии.",
+      "urgency": "высокая",
+      "urgency_reason": "Активированный writer останавливается до приёмки готовых шести документов.",
+      "task_file": "WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_PATH_LAYOUT_FIX_01.md",
+      "worker_slot": "ЧАТ 3",
+      "order": null,
+      "depends_on": [
+        "dossier-lean-writer-auto-activation-01"
+      ],
+      "blocker": "Реальный автоматический запуск заблокирован инвариантом V2 single-item path layout; никаких повторных Actions или новых grants.",
+      "updated_on": "2026-11-25",
+      "updated_at_utc": "2026-11-25T14:06:54.587Z",
       "recent_completion": false
     }
   ]
