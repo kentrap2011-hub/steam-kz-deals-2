@@ -1,5 +1,13 @@
 # CURRENT TASK
 
+## ЧАТ 2 — Lean writer scoped owner-waived auto activation PR #486 (2026-11-25)
+
+- Task `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_ACTIVATION_01.md`. Owner explicitly instructed “Включай без проверки” after L3 block; independent L3 waived only for isolated auto-activation, with no runtime authority/readback waiver.
+- Draft activation source [PR #486](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/486), branch `report/dossier-lean-writer-auto-activation-blocked-l3-20261125`. Scope: versioned `activation_enabled=true` only in PR, exact owner L3-waiver object, fail-closed policy guard, updated tests, decision and report. **Source not merged, main still inactive; CI exact final HEAD pending.**
+- Historical sandbox `dossier-notes-v2-assembly-replay-cdcdb4951e2fc98336729af75b954da4` remains `d1b9a9e78dcde879a03370682ade4969763fd9d1`, real accepted 0/6 docs and 0/6 receipts; prior failed run `45540222575` cannot be rerun. No auto attempt claim, no new semantic or production work.
+- Next: Director reviews exact final #486 HEAD CI then owner merge if all remaining source/authority gates pass; real owner-authenticated activation push and exact six+six sandbox readback must be verified. Worker cannot self-merge or claim live success. Report `reviews/worker_reports/dossier-lean-writer-auto-activation-01.md`.
+
+
 ## ЧАТ 1 — Lean writer automatic ready-gate: scoped six source, INACTIVE (2026-11-25)
 
 - Task: `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_READY_GATE_01.md`; [source draft PR #484](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/484), base `main@bf5a017392f5ffa491d10ef513d7232b5229d643`. Exact final HEAD CI / independent L3 pending.
