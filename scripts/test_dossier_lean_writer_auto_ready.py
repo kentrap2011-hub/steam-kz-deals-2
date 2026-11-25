@@ -51,7 +51,10 @@ class LeanAutoReadySourceTests(unittest.TestCase):
         self.assertNotIn("workflow_dispatch:", runner)
         old = (root / ready.batch.WRITER_WORKFLOW).read_text(encoding="utf-8")
         self.assertIn("python scripts/dossier_notes_v2_batch_preflight.py --trial-id", old)
-        self.assertIn('test "        valid = {
+        self.assertIn('test "${GITHUB_RUN_ATTEMPT}" = "1"', old)
+
+    def test_actual_failed_manual_attempt_must_be_proven_not_ignored(self):
+        valid = {
             "id": 45540222575, "event": "workflow_dispatch",
             "path": ready.batch.WRITER_WORKFLOW,
             "run_attempt": 1, "status": "completed",
