@@ -224,9 +224,18 @@ def verify_source_signal(event, env):
         # GitHub Actions push payloads omit head_commit.modified/added.
         # The exact activation path is proven against real Git objects after
         # trusted main checkout, rather than trusting absent event fields.
-        return {"trial_id": expected,
+        # A main owner source-fix may address one exact previously failed
+        # existing grant. Only the reviewed runner may set this ephemeral
+        # selector after proving a unique append-only control history.
+        target = env.get("LEAN_AUTO_TRIAL_ID", expected)
+        require(generic.is_generic(target),
+                "owner source retry target is not an immutable generic trial")
+        frozen = env.get("LEAN_AUTO_FROZEN_HEAD", original["frozen_sandbox_head"])
+        require(isinstance(frozen, str) and SHA.fullmatch(frozen),
+                "owner source retry target lacks exact frozen SHA")
+        return {"trial_id": target,
                 "source_signal_run_id": None,
-                "source_signal_sha": original["frozen_sandbox_head"],
+                "source_signal_sha": frozen,
                 "event_kind": "owner_activation_catchup"}
     raise ValueError("LEAN_AUTO_READY_BLOCKED: unrecognized automatic event")
 
@@ -743,6 +752,59 @@ def sandbox_writer_destinations(sandbox_repo, trial_id):
     return root / paths["store"], root / paths["accepted"]
 
 
+def unique_failed_source_retry(source_repo, env, cfg):
+    """An owner-reviewed main code fix can wake ONE failed existing grant.
+
+    This is a bounded control-REF lookup (not a semantic queue), requiring
+    an already-existing immutable owner claim and retryable terminal event.
+    Ambiguous multiple grants fail closed instead of choosing a user scope.
+    """
+    import dossier_lean_writer_retry_state as retry
+    raw = output(source_repo, "ls-remote", "--heads", "origin",
+                 CLAIM_PREFIX + "*").splitlines()
+    require(len(raw) <= 128, "too many control refs for bounded source wakeup")
+    candidates = []
+    for line in raw:
+        fields = line.split()
+        require(len(fields) == 2 and SHA.fullmatch(fields[0])
+                and fields[1].startswith(CLAIM_PREFIX),
+                "unrecognized remote attempt control ref")
+        tail = fields[1][len(CLAIM_PREFIX):]
+        trial = generic.PREFIX + tail
+        require(generic.is_generic(trial), "malformed trial in control refs")
+        historical = trial == cfg["recovery"]["trial_id"]
+        if historical and not cfg["retry_lifecycle"]["historical_live_retry_authorized"]:
+            continue
+        ref = fields[1]
+        command(source_repo, "fetch", "--no-tags", "origin", ref)
+        claim_path = ("data/control/dossier_notes_v2/auto_writer_attempts/" +
+                      trial + ".json")
+        claim = json.loads(output(source_repo, "show", fields[0] + ":" + claim_path))
+        grant_digest = claim.get("item_commits_sha256")
+        require(isinstance(grant_digest, str)
+                and re.fullmatch(r"[0-9a-f]{64}", grant_digest),
+                "control claim missing immutable digest")
+        snapshot = retry.read(
+            source_repo, trial, grant_digest,
+            historical_anchor=(cfg["retry_lifecycle"]["historical_spent_claim_sha"]
+                               if historical else None))
+        last = snapshot["last"]
+        if last is None or last["kind"] != "retryable_failed":
+            continue
+        can, reason = retry.eligible(
+            snapshot, source_sha=env["GITHUB_SHA"],
+            max_attempts=cfg["retry_lifecycle"]["max_total_attempts"],
+            retry_delay_minutes=0)
+        if can:
+            require(claim.get("original_frozen_sandbox_head")
+                    and SHA.fullmatch(claim["original_frozen_sandbox_head"]),
+                    "frozen authority missing from failed claim")
+            candidates.append((trial, claim["original_frozen_sandbox_head"]))
+    require(len(candidates) <= 1,
+            "multiple failed grants: require explicit scoped owner recovery event")
+    return candidates[0] if candidates else None
+
+
 def authentic_failed_auto_run(token, expected_id, claim):
     """Live GitHub Actions proof of the old postclaim failure, never a new grant."""
     actual = _github_get(batch.REPOSITORY, "actions/runs/" + str(expected_id), token)
@@ -771,6 +833,17 @@ def run(source_repo, env):
     verify_main_checkout(source_repo, env)
     if signal["event_kind"] == "owner_activation_catchup":
         require_activation_git_change(source_repo, event, env)
+        # If the old historical claim has no newly issued migration grant,
+        # a source fix can still resume one independently owner-granted future
+        # trial without rewriting its frozen plan or creating a new grant.
+        selected = unique_failed_source_retry(source_repo, env, cfg)
+        if selected is not None:
+            trial_target, frozen_head = selected
+            env["LEAN_AUTO_TRIAL_ID"] = trial_target
+            env["LEAN_AUTO_FROZEN_HEAD"] = frozen_head
+            os.environ["LEAN_AUTO_TRIAL_ID"] = trial_target
+            os.environ["LEAN_AUTO_FROZEN_HEAD"] = frozen_head
+            signal = verify_source_signal(event, env)
     trial = signal["trial_id"]
     historical = trial == cfg["recovery"]["trial_id"]
     lifecycle = cfg["retry_lifecycle"]
@@ -909,11 +982,17 @@ def run(source_repo, env):
                 retry.append(source_repo, trial, state, failed)
                 state = retry.read(source_repo, trial, grant_hash,
                                    historical_anchor=old_anchor)
+            # On a genuine owner source-fix wakeup, the reviewed change
+            # itself is the external event. No same-source retry storm:
+            # attempts remain capped, source hash MUST advance, and one
+            # control-branch lease is CAS acquired first.
+            delay = (0 if signal["event_kind"] == "owner_activation_catchup"
+                     else lifecycle["minimum_retry_minutes"])
             eligible, reason = retry.eligible(
                 state, source_sha=env["GITHUB_SHA"],
                 max_attempts=lifecycle["max_total_attempts"],
                 stale_minutes=lifecycle["exclusive_lease_minutes"],
-                retry_delay_minutes=lifecycle["minimum_retry_minutes"])
+                retry_delay_minutes=delay)
             if not eligible:
                 return {"status": str(reason), "trial_id": trial,
                         "writer_launched": False}
