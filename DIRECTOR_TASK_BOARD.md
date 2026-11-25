@@ -5,13 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Lean writer source fix принят без L3, 2026-11-25
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — возобновляемый Lean Writer, 2026-11-25
 
-- **ЧАТ 1 — свободен:** независимая QA `dossier-lean-auto-path-layout-pr490-l3-independent-qa-01` отменена прямым решением пользователя «Без проверки» до запуска worker-а; проверка не выполнялась, verdict отсутствует.
-- **ЧАТ 2 — свободен:** этап активации передан; историческая автоматическая попытка #45628656098 создала необратимый one-use claim и завершилась до записи досье.
-- **ЧАТ 3 — свободен:** исправление путей `dossier-lean-writer-auto-path-layout-fix-01` принято в `main` source PR #490, merge commit `c3663639854513b59b6a8dbc2ab9d4cb1c12f9fc`, exact source HEAD 3/3 CI PASS. Независимая L3 не проводилась.
-- **Live writer:** frozen 6 приняты 0/6; предыдущий claim израсходован. Новый запуск не разрешён source merge, старые failed Actions не повторять; требуется отдельное решение о восстановлении после отказа.
-
+- **НОВЫЙ ЧАТ 1 — зарезервирован (ожидает запуска):** `dossier-lean-writer-resumable-retry-01` → `WORKER_TASK_DOSSIER_LEAN_WRITER_RESUMABLE_RETRY_01.md`. По прямому запросу пользователя убрать blocking-on-failure систему: GitHub-owned resumable/idempotent retry в той же immutable разрешённой партии. Один bounded IMPLEMENT source PR + тесты; не live run, не выдавать новый grant, не удалять исторический claim. Отдельная L3 для changes auth/retry перед source merge.
+- **ЧАТ 2 — свободен:** прежняя активация source PR #486–#488 принята, задача сдана; прямой postclaim recovery не разрешён.
+- **ЧАТ 3 — свободен:** path-layout source fix PR #490 принят в `main@c3663639854513b59b6a8dbc2ab9d4cb1c12f9fc`, independent review пропущена по пользовательскому решению. Нет live acceptance.
+- **Live historical six:** 0/6 accepted, `refs/heads/dossier-lean-auto-attempts/cdcdb4951e2fc98336729af75b954da4` уже существует. Новый task меняет правила только через reviewed source; старые failed Actions не rerun. Отдельный scoped owner authorization нужен до новой реальной попытки, если канонический контракт этого требует.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
