@@ -4,7 +4,7 @@
 
 - Task: `WORKER_TASK_DOSSIER_LEAN_WRITER_RESUMABLE_RETRY_01.md`; branch `fix/dossier-lean-writer-resumable-retry-20261125`; source PR #494 (draft).
 - Scope: replace permanent postclaim block with append-only per-attempt GitHub control-ref events, one shared writer lock, strict immutable trial grant, bounded attempts, lease expiry and postwrite exact readback. Historical consumed claim remains intact and its *live* migration is explicitly OFF.
-- Status: `SOURCE_IMPLEMENTATION_IN_PR_CI_AND_INDEPENDENT_L3_PENDING`; no actual writer, no sandbox state mutation, no Research/Assembly/Deep/production.
+- Status: `BLOCKED_CI_PENDING_L3` (source draft PR #494, exact final HEAD mandatory CI not yet verified); no actual writer, no sandbox state mutation, no Research/Assembly/Deep/production.
 - Required report: `reviews/worker_reports/dossier-lean-writer-resumable-retry-01.md`. Other concurrent workstreams below remain unchanged.
 
 
