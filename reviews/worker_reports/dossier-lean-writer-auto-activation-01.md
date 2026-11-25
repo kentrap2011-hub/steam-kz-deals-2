@@ -2,7 +2,7 @@
 
 ## Latest runtime failure and source fix (2026-11-25)
 
-- **Status:** `SOURCE_READY_AWAITING_DIRECTOR_MERGE` for branch `fix/dossier-lean-auto-main-push-added-files-gate-20261125`; **final HEAD CI and source PR acceptance still pending**. This section supersedes historical pre-merge status below.
+- **Status:** `SOURCE_READY_AWAITING_DIRECTOR_MERGE` for [source PR #487](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/487) (`fix/dossier-lean-auto-main-push-added-files-gate-20261125`); **final HEAD CI and source PR acceptance still pending**. This section supersedes historical pre-merge status below.
 - Source activation PR #486 merged to `main` as `cfd29df88311af8749428f580dfa3dff236f9dba`. Its exact final PR HEAD `f2c1ba57e1196913b174203b2cabf91e08fb025d` had **5/5 successful PR checks**.
 - Genuine owner `main` activation-file push triggered real [Actions #45591943959](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45591943959), job `139128109794`; conclusion **failure at 10:07:56Z**, before any claim or writer: `LEAN_AUTO_READY_BLOCKED: catch-up only on a genuine separate activation contract change`.
 - Exact cause: `verify_source_signal` required the expected activation path in `head_commit.modified` **and globally empty** `head_commit.added`. The owner merge legitimately modified the activation config but also added this worker report. The unrelated added path is not a change to activation authority. The old mock test had `added=[]`, so CI did not cover the real merge shape.
