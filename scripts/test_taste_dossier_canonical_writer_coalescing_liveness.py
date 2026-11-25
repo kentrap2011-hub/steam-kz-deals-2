@@ -30,6 +30,14 @@ WRITERS = {
     ".github/workflows/authorize-progressive-pass2-recovery.yml",
 }
 
+# This single owner-gated writer shares the safety/serialization lock but
+# writes ONLY isolated sandbox Lean trial records. It must not touch canonical
+# main Dossier state or recompute Deep. The original five shared canonical
+# writers still MUST reconcile before projecting or writing.
+ISOLATED_SANDBOX_ONLY_WRITERS = {
+    ".github/workflows/dossier-lean-writer-auto-ready.yml",
+}
+
 
 def _write_json(path, value):
     path = Path(path)
@@ -245,7 +253,32 @@ class CanonicalWriterCoalescingLivenessTests(unittest.TestCase):
                 actual.add(rel)
                 text_by_path[rel] = text
 
-        self.assertEqual(actual, WRITERS)
+        self.assertEqual(actual, WRITERS | ISOLATED_SANDBOX_ONLY_WRITERS)
+        for rel in sorted(ISOLATED_SANDBOX_ONLY_WRITERS):
+            workflow = text_by_path[rel]
+            self.assertIn(WRITER_GROUP, workflow)
+            self.assertIn("cancel-in-progress: false", workflow)
+            self.assertNotIn(RECONCILE, workflow)
+            self.assertNotIn(VALIDATE, workflow)
+            self.assertNotIn(DEEP_RECOMPUTE, workflow)
+            self.assertNotIn("schedule:", workflow)
+            self.assertIn("python scripts/dossier_lean_writer_auto_ready.py run",
+                          workflow)
+            self.assertIn("workflow_run:", workflow)
+            self.assertIn("config/dossier_lean_writer_auto_ready_v1.json",
+                          workflow)
+            self.assertIn("contents: write", workflow)
+            # The source file itself must retain a disabled main activation
+            # gate and isolated N+N write destination, not canonical production.
+            contract = json.loads((ROOT / "config/dossier_lean_writer_auto_ready_v1.json").read_text())
+            self.assertFalse(contract["activation_enabled"])
+            self.assertFalse(contract["canonical_main_acceptance"])
+            self.assertFalse(contract["automatic_retry_after_failure"])
+            source = (ROOT / "scripts/dossier_lean_writer_auto_ready.py").read_text()
+            self.assertIn("data/control/dossier_notes_v2/batch_pilot_store/", source)
+            self.assertIn("data/control/dossier_notes_v2/batch_pilot_accepted/", source)
+            self.assertIn("def claim_once(", source)
+            self.assertIn("def authenticated_auto_context(", source)
         for rel in sorted(WRITERS):
             workflow = text_by_path[rel]
             self.assertIn(WRITER_GROUP, workflow)
