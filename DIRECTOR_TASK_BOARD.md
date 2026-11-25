@@ -5,11 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — независимая QA Lean writer path fix, 2026-11-25
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — Lean writer source fix принят без L3, 2026-11-25
 
-- **НОВЫЙ ЧАТ 1 — зарезервирован (ожидает запуска):** `dossier-lean-auto-path-layout-pr490-l3-independent-qa-01` → `WORKER_TASK_DOSSIER_LEAN_AUTO_PATH_LAYOUT_PR490_L3_INDEPENDENT_QA_01.md`. Пользователь сказал «Делаем» после предложения проверить, принять source PR #490 по результату и отдельно решить новую авторизацию. L3 QA только материальной path binding дельты. Без новых claims, live Actions или production.
-- **ЧАТ 3 — свободен:** завершил `dossier-lean-writer-auto-path-layout-fix-01`, source PR #490 HEAD `89939b27f3f5c2a5c17a029c6b37110318cfc52e`, CI 3/3 PASS. Физический номер освобождён по финальному отчёту независимо от source merge.
-- **ЧАТ 2 — свободен:** предыдущая активация в исходных PR #486–#488 передана, live one-use claim после Actions #45628656098 уже израсходован, accepted docs 0/6; новая реальная запись запрещена без отдельной owner-authority.
+- **ЧАТ 1 — свободен:** независимая QA `dossier-lean-auto-path-layout-pr490-l3-independent-qa-01` отменена прямым решением пользователя «Без проверки» до запуска worker-а; проверка не выполнялась, verdict отсутствует.
+- **ЧАТ 2 — свободен:** этап активации передан; историческая автоматическая попытка #45628656098 создала необратимый one-use claim и завершилась до записи досье.
+- **ЧАТ 3 — свободен:** исправление путей `dossier-lean-writer-auto-path-layout-fix-01` принято в `main` source PR #490, merge commit `c3663639854513b59b6a8dbc2ab9d4cb1c12f9fc`, exact source HEAD 3/3 CI PASS. Независимая L3 не проводилась.
+- **Live writer:** frozen 6 приняты 0/6; предыдущий claim израсходован. Новый запуск не разрешён source merge, старые failed Actions не повторять; требуется отдельное решение о восстановлении после отказа.
+
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 

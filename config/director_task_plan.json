@@ -3991,20 +3991,20 @@
       "id": "dossier-lean-auto-path-layout-pr490-l3-independent-qa-01",
       "title": "Независимая L3 QA путей Lean writer",
       "goal": "Независимо проверить sandbox-owned writer path binding и отсутствие ослабления одноразовой авторизации перед принятием исправления.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Содержательная проверка материальной границы изолированного сохранения и негативных Git-тестов.",
       "urgency": "высокая",
       "urgency_reason": "Непроверенная независимо запись в sandbox блокирует приёмку исходного исправления.",
       "task_file": "WORKER_TASK_DOSSIER_LEAN_AUTO_PATH_LAYOUT_PR490_L3_INDEPENDENT_QA_01.md",
-      "worker_slot": "ЧАТ 1",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "dossier-lean-writer-auto-path-layout-fix-01"
       ],
-      "blocker": "Требуется независимый L3 security verdict; реальный postclaim не разрешает повторную попытку после source merge.",
+      "blocker": "Задача отменена явным решением владельца пропустить независимую L3; source fix принят без QA. Реальный postclaim запрещает автоматический retry.",
       "updated_on": "2026-11-25",
-      "updated_at_utc": "2026-11-25T16:14:55.761Z",
+      "updated_at_utc": "2026-11-25T17:59:41.308Z",
       "recent_completion": false
     }
   ]
