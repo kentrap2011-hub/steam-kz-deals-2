@@ -3928,6 +3928,24 @@
       "updated_on": "2026-11-25",
       "updated_at_utc": "2026-11-25T02:40:00Z",
       "recent_completion": false
+    },
+    {
+      "id": "dossier-lean-writer-auto-ready-gate-01",
+      "title": "GitHub writer: автоматический запуск по готовности партии",
+      "goal": "Реализовать безопасный событийный auto-writer для подтверждённых готовых Lean-партий, включая разовую приёмку текущих шести, без ручного JSON и повторов.",
+      "status": "active",
+      "effort": "высокая",
+      "effort_reason": "Требует GitHub event-to-writer gate, удостоверения полномочий, одноразовости и отрицательных E2E регрессий без обхода изолированного writer.",
+      "urgency": "высокая",
+      "urgency_reason": "Ручной запуск writer затрудняет подтверждённую приёмку готовых шести и последующие партии.",
+      "task_file": "WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_READY_GATE_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Реальная автоматическая активация и новая writer-authority логика требуют независимой L3, Director safety gates и отдельно подтверждённой узкой owner-authority; source IMPLEMENT не является запуском.",
+      "updated_on": "2026-11-25",
+      "updated_at_utc": "2026-11-25T06:05:00Z",
+      "recent_completion": false
     }
   ]
 }
