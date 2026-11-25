@@ -37,13 +37,30 @@ def policy():
     recovery = contract.get("recovery", {})
     from dossier_lean_canonical_dual import SANDBOX_GRANT, _policy
     original = json.loads(SANDBOX_GRANT.read_text(encoding="utf-8"))
+    # Owner may waive only the independent L3 process for this reviewed
+    # isolated activation. This never weakens real GitHub actor/event,
+    # immutable grant, one-use claim, TTL, or postpush readback checks.
+    expected_waiver = {
+        "explicit": True,
+        "approved_on": "2026-11-25",
+        "authorization": "user_direct_instruction_activate_without_independent_review",
+        "scope": "isolated_sandbox_auto_writer_activation_only",
+        "does_not_waive_runtime_gates": True,
+    }
+    independent_review = contract.get("requires_independent_L3_final_head_review")
+    review_gate = (
+        (independent_review is True and contract.get("owner_L3_waiver") is None)
+        or (independent_review is False
+            and contract.get("owner_L3_waiver") == expected_waiver
+            and contract.get("activation_enabled") is True)
+    )
+    require(review_gate, "independent L3 or exact scoped owner waiver required")
     require(contract.get("schema") ==
             "DOSSIER-LEAN-WRITER-AUTO-READY-AUTHORIZATION-V1"
             and contract.get("schema_version") == 1
             and contract.get("repository") == batch.REPOSITORY
             and contract.get("owner") == "github_control_plane"
             and contract.get("source_merge_is_not_activation") is True
-            and contract.get("requires_independent_L3_final_head_review") is True
             and contract.get("requires_separate_owner_approved_activation") is True
             and contract.get("automatic_retry_after_failure") is False
             and contract.get("per_trial_at_most_one_attempt") is True
