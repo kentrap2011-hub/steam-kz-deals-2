@@ -273,6 +273,137 @@ def check_claim_ref(repo, trial_id):
 
 
 
+def future_plan(repo, *, trial_id, token):
+    """Verify one opt-in owner-issued immutable Lean batch; never choose scope.
+
+    Exact immutable typed Assembly receipts supply Git commit pairs. Missing
+    receipts are NOT READY, never a request to issue new semantic work.
+    """
+    from dossier_two_stage_staging import parent, file_at
+    from dossier_lean_canonical_dual import validate_writer_lean
+    repo = Path(repo).resolve()
+    require(generic.is_generic(trial_id), "not a generic scoped trial")
+    grant_policy = policy()
+    require(grant_policy["activation_enabled"] is True,
+            "future auto writer cannot be activated by an issuer alone")
+    path = batch.paths(trial_id)
+    require(git(repo, "symbolic-ref", "--short", "HEAD").stdout.decode().strip()
+            == path["branch"], "future ready state not its exact sandbox")
+    auths = git(repo, "log", "--first-parent", "--format=%H", "HEAD", "--",
+                path["authorization"]).stdout.decode().splitlines()
+    require(len(auths) == 1 and SHA.fullmatch(auths[0]),
+            "future owner authorization not unique")
+    marker = parent(repo, auths[0])
+    anchor = batch.issuer_structure(
+        repo, trial_id=trial_id, marker_commit=marker,
+        authorization_commit=auths[0])
+    if anchor.get("sandbox_lean_auto_writer_authorized") is not True:
+        return {"status": "suppressed_no_individual_owner_auto_grant",
+                "ready": False, "trial_id": trial_id}
+    batch.authenticated_owner_run(anchor, token, batch.REPOSITORY)
+    _, rows = generic.frozen_plan(repo, trial_id, marker)
+    require(1 <= len(rows) <= 24 and len({r["appid"] for r in rows}) == len(rows),
+            "future auto scope malformed")
+    source_pins = anchor.get("source_pins", {})
+    require(source_pins.get("lean_auto_writer") is True,
+            "signed source does not opt in to Lean automatic writer")
+    source_by_appid = {r["appid"]: r for r in source_pins["source_research"]}
+    item_pairs = {}
+    for row in rows:
+        a = row["appid"]
+        baseline_sha = row.get("baseline_blob_sha")
+        year = row.get("original_release_year")
+        require(type(year) is int and 1970 <= year <= 2100
+                and isinstance(baseline_sha, str) and SHA.fullmatch(baseline_sha)
+                and source_by_appid[a].get("baseline_blob_sha") == baseline_sha
+                and source_by_appid[a].get("original_release_year") == year,
+                "future owner-issued baseline/year evidence mismatch")
+        strict_original = json.loads(
+            git(repo, "cat-file", "blob", baseline_sha).stdout.decode("utf-8"))
+        require(strict_original.get("schema") == "TASTE-STEAM-REVIEW-DOSSIER-V2"
+                and strict_original.get("appid") == a
+                and strict_original.get("title") == row["title"]
+                and strict_original.get("game_identity", {}).get("release_year") == year,
+                "future pinned old strict game edition/year blob invalid")
+        receipt_path = (
+            "data/control/dossier_notes_v2/receipts/" + trial_id
+            + "/g" + str(row["group_sequence"]).zfill(6)
+            + "/" + a + "--" + row["assignment_id"] + "--assembly.json"
+        )
+        found = git(repo, "cat-file", "-e", "HEAD:" + receipt_path,
+                    check=False)
+        if found.returncode != 0:
+            return {"status": "not_ready_missing_assembly_receipt",
+                    "ready": False, "trial_id": trial_id, "missing_appid": a}
+        typed = json_at(repo, "HEAD", receipt_path)
+        source = typed.get("source", {})
+        pair = {key: source.get(key) for key in ("research_commit", "assembly_commit")}
+        require(typed.get("schema") == "DOSSIER-NOTES-V2-ITEM-RECEIPT"
+                and typed.get("phase") == "assembly"
+                and typed.get("trial_id") == trial_id
+                and typed.get("appid") == a
+                and typed.get("disposition") ==
+                    "strict_item_valid_pending_existing_atomic_group_ingest"
+                and typed.get("assignment", {}).get("assignment_id") ==
+                    row["assignment_id"]
+                and typed.get("assignment", {}).get("title") == row["title"]
+                and all(isinstance(val, str) and SHA.fullmatch(val)
+                        for val in pair.values()),
+                "future terminal receipt malformed or not ready")
+        item_pairs[a] = pair
+    projection = v2.individual_final_readiness(
+        repo, marker_commit=marker, trial_id=trial_id, item_commits=item_pairs)
+    require(len(projection["items"]) == len(rows)
+            and all(i["status"] == "ready" for i in projection["items"]),
+            "future terminal receipts do not all pass strict Git lineage")
+    for row in rows:
+        a = row["appid"]
+        pair = item_pairs[a]
+        require_batch_terminal_receipts(
+            repo, marker_commit=marker, trial_id=trial_id, appid=a,
+            authorization_commit=auths[0],
+            research_commit=pair["research_commit"],
+            assembly_commit=pair["assembly_commit"])
+        checked = v2.inspect_assembly(
+            repo, marker_commit=marker, trial_id=trial_id, appid=a,
+            research_commit=pair["research_commit"],
+            result_commit=pair["assembly_commit"])
+        require(checked.get("status") ==
+                "strict_item_valid_pending_existing_atomic_group_ingest",
+                "original Assembly final Git lineage changed")
+        work = v2.assembly_work(
+            repo, marker_commit=marker, trial_id=trial_id,
+            appid=a, research_commit=pair["research_commit"])
+        original = json_at(repo, pair["assembly_commit"], work["output_path"])
+        require(work.get("status") == "ready_for_autonomous_assembly"
+                and original.get("outcome") == "assembled_candidate_ready"
+                and original.get("assignment") == work["assignment"]
+                and original.get("research_transport") == work["research_transport"]
+                and work["assignment"]["appid"] == a
+                and work["assignment"]["title"] == row["title"]
+                and work["assignment"]["assignment_id"] == row["assignment_id"]
+                and work["assignment"]["group_sequence"] == row["group_sequence"],
+                "future frozen work/edition/assignment mismatch")
+        doc = original["final_dossier"]
+        validate_writer_lean(doc, appid=a, title=row["title"],
+                             expected_ttl_days=14)
+        require(doc["game_identity"]["release_year"] == row["original_release_year"],
+                "future Lean work year differs from original strict pinned baseline")
+        store = repo / path["store"] / ("App_" + a + ".json")
+        accepted = repo / path["accepted"] / trial_id / (
+            "g" + str(row["group_sequence"]).zfill(6)) / (
+                a + "--" + row["assignment_id"] + ".json")
+        require(not store.exists() and not accepted.exists(),
+                "future writer collision or prior acceptance")
+    return {
+        "status": "ready_future_exact_owner_grant", "ready": True,
+        "trial_id": trial_id, "marker_commit": marker,
+        "sandbox_head": git(repo, "rev-parse", "HEAD").stdout.decode().strip(),
+        "rows": rows, "pairs": item_pairs, "issuer": anchor,
+        "canonical_acceptance": False, "deep_ready": False,
+    }
+
+
 def command(repo, *args, check=True):
     return subprocess.run(
         ["git", "-C", str(repo), *args],
