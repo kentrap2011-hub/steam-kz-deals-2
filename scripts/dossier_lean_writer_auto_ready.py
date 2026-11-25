@@ -331,7 +331,7 @@ def future_plan(repo, *, trial_id, token):
             + "/" + a + "--" + row["assignment_id"] + "--assembly.json"
         )
         found = git(repo, "cat-file", "-e", "HEAD:" + receipt_path,
-                    check=False)
+                    required=False)
         if found.returncode != 0:
             return {"status": "not_ready_missing_assembly_receipt",
                     "ready": False, "trial_id": trial_id, "missing_appid": a}
