@@ -81,6 +81,25 @@ def policy():
             and lifecycle.get("historical_failed_auto_run_id") == 45628656098
             and type(lifecycle.get("historical_live_retry_authorized")) is bool,
             "lifecycle source proposal must not silently restore a spent historic grant")
+    paused = lifecycle.get("paused_trial_ids")
+    require(isinstance(paused, list) and len(paused) == len(set(paused))
+            and all(isinstance(t, str) and generic.is_generic(t) for t in paused),
+            "invalid owner pause list")
+    exact_historical_migration = {
+        "trial_id": original["trial_id"],
+        "old_claim_sha": lifecycle["historical_spent_claim_sha"],
+        "old_failed_auto_run_id": lifecycle["historical_failed_auto_run_id"],
+        "original_sandbox_head": original["frozen_sandbox_head"],
+        "immutable_pair_digest": exact_pairs_digest(exact_pairs()),
+        "owner_decision": "explicit_new_exact_trial_recovery_after_L3_review",
+    }
+    if lifecycle["historical_live_retry_authorized"]:
+        require(lifecycle.get("historical_migration_grant") ==
+                exact_historical_migration,
+                "historic spent attempt cannot revive without new exact owner grant")
+    else:
+        require(lifecycle.get("historical_migration_grant") is None,
+                "inactive historical migration must not carry latent grant")
     require(recovery.get("trial_id") == original["trial_id"]
             and recovery.get("marker_commit") == original["marker_commit"]
             and recovery.get("original_frozen_sandbox_head") ==
@@ -755,6 +774,9 @@ def run(source_repo, env):
     trial = signal["trial_id"]
     historical = trial == cfg["recovery"]["trial_id"]
     lifecycle = cfg["retry_lifecycle"]
+    if trial in lifecycle["paused_trial_ids"]:
+        return {"status": "owner_paused_exact_trial",
+                "trial_id": trial, "writer_launched": False}
     # V1's consumed historical owner permission is never reinterpreted as V2.
     # Only a *separate* exact owner migration decision can flip this gate.
     if historical and not lifecycle["historical_live_retry_authorized"]:
