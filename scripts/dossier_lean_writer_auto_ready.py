@@ -514,7 +514,36 @@ def verify_main_checkout(repo, env):
     ), "unrecognized writer source remote")
 
 
-def claim_once(source_repo, signal, env):
+def exact_pairs_digest(pairs):
+    import hashlib
+    return hashlib.sha256(json.dumps(
+        pairs, ensure_ascii=False, sort_keys=True,
+        separators=(",", ":")).encode("utf-8")).hexdigest()
+
+
+def claim_record(signal, env, readiness):
+    trial = signal["trial_id"]
+    historical = trial == policy()["recovery"]["trial_id"]
+    return {
+        "schema": "DOSSIER-LEAN-AUTO-WRITER-ATTEMPT-V1",
+        "trial_id": trial,
+        "original_frozen_sandbox_head": readiness["sandbox_head"],
+        "marker_commit": readiness["marker_commit"],
+        "item_commits_sha256": exact_pairs_digest(readiness["pairs"]),
+        "owner_source_run_id": str(
+            readiness["issuer"]["github_authorization_run_id"]),
+        "previous_terminal_failed_run_id": 45540222575 if historical else None,
+        "automation_run_id": env["GITHUB_RUN_ID"],
+        "automation_source_main_sha": env["GITHUB_SHA"],
+        "source_event": signal["event_kind"],
+        "source_signal_sha": signal["source_signal_sha"],
+        "source_signal_run_id": signal["source_signal_run_id"],
+        "attempt": 1, "no_retry": True,
+        "canonical_acceptance": False, "production": False, "deep": False,
+    }
+
+
+def claim_once(source_repo, signal, env, readiness):
     """Atomic create-only control ref, independent of frozen sandbox HEAD.
 
     A successful claim consumes the NEW recovery attempt even if the subsequent
@@ -526,19 +555,7 @@ def claim_once(source_repo, signal, env):
     require(check_claim_ref(source_repo, trial) is None,
             "attempt already claimed: running, accepted or terminal failed")
     claim_path = "data/control/dossier_notes_v2/auto_writer_attempts/" + trial + ".json"
-    record = {
-        "schema": "DOSSIER-LEAN-AUTO-WRITER-ATTEMPT-V1",
-        "trial_id": trial,
-        "original_frozen_sandbox_head": policy()["recovery"]["original_frozen_sandbox_head"],
-        "previous_terminal_failed_run_id": 45540222575,
-        "automation_run_id": env["GITHUB_RUN_ID"],
-        "automation_source_main_sha": env["GITHUB_SHA"],
-        "source_event": signal["event_kind"],
-        "source_signal_sha": signal["source_signal_sha"],
-        "source_signal_run_id": signal["source_signal_run_id"],
-        "attempt": 1, "no_retry": True,
-        "canonical_acceptance": False, "production": False, "deep": False,
-    }
+    record = claim_record(signal, env, readiness)
     with TemporaryDirectory(prefix="lean-auto-claim-") as tmp:
         worktree = Path(tmp) / "control"
         command(source_repo, "worktree", "add", "--detach", str(worktree),
@@ -572,43 +589,38 @@ def claim_once(source_repo, signal, env):
 
 
 def authenticated_auto_context(repo, trial_id, marker_commit, item_commits, env=None):
-    """Separate narrow GitHub-owned path, never a relaxation of manual owner gate."""
+    """Separate, owner-signed once-only auto permission; never relax manual path."""
     env = os.environ if env is None else env
-    contract = policy()
-    require(contract["activation_enabled"] is True
-            and trial_id == contract["recovery"]["trial_id"]
-            and marker_commit == contract["recovery"]["marker_commit"]
-            and item_commits == exact_pairs()
+    require(policy()["activation_enabled"] is True
+            and generic.is_generic(trial_id)
             and env.get("GITHUB_TOKEN")
             and env.get("LEAN_AUTO_CLAIM_SHA")
-            and SHA.fullmatch(env["LEAN_AUTO_CLAIM_SHA"]),
-            "not the exact separately owner-approved automated recovery")
-    require(env.get("GITHUB_EVENT_PATH"), "GitHub event payload absent")
+            and isinstance(env["LEAN_AUTO_CLAIM_SHA"], str)
+            and SHA.fullmatch(env["LEAN_AUTO_CLAIM_SHA"])
+            and env.get("GITHUB_EVENT_PATH"),
+            "missing separate authenticated GitHub-owned auto context")
     event = json.loads(Path(env["GITHUB_EVENT_PATH"]).read_text(encoding="utf-8"))
     signal = verify_source_signal(event, env)
     require(signal["trial_id"] == trial_id,
-            "event does not authorize this trial")
+            "source event not for this exact trial")
+    recovery = policy()["recovery"]
+    readiness = (validate_ready(repo, token=env["GITHUB_TOKEN"])
+                 if trial_id == recovery["trial_id"] else
+                 future_plan(repo, trial_id=trial_id, token=env["GITHUB_TOKEN"]))
+    require(readiness["ready"] is True
+            and readiness["marker_commit"] == marker_commit
+            and readiness["pairs"] == item_commits
+            and readiness["sandbox_head"] ==
+                output(repo, "rev-parse", "HEAD"),
+            "no exact trial, immutable SHA pairs or terminal-ready source")
     remote_claim = check_claim_ref(repo, trial_id)
     require(remote_claim == env["LEAN_AUTO_CLAIM_SHA"],
-            "immutable first-attempt claim has changed or is missing")
+            "durable one-use control ref missing or modified")
     path = ("data/control/dossier_notes_v2/auto_writer_attempts/" +
             trial_id + ".json")
-    raw = output(repo, "show", remote_claim + ":" + path)
-    claim = json.loads(raw)
-    require(claim == {
-        "schema": "DOSSIER-LEAN-AUTO-WRITER-ATTEMPT-V1",
-        "trial_id": trial_id,
-        "original_frozen_sandbox_head":
-            contract["recovery"]["original_frozen_sandbox_head"],
-        "previous_terminal_failed_run_id": 45540222575,
-        "automation_run_id": env["GITHUB_RUN_ID"],
-        "automation_source_main_sha": env["GITHUB_SHA"],
-        "source_event": signal["event_kind"],
-        "source_signal_sha": signal["source_signal_sha"],
-        "source_signal_run_id": signal["source_signal_run_id"],
-        "attempt": 1, "no_retry": True,
-        "canonical_acceptance": False, "production": False, "deep": False,
-    }, "claim does not match this authenticated GitHub-owned invocation")
+    claim = json.loads(output(repo, "show", remote_claim + ":" + path))
+    require(claim == claim_record(signal, env, readiness),
+            "claim must bind exact owner issuer, all SHA pairs and GitHub run")
     return True
 
 
