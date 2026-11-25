@@ -1174,6 +1174,27 @@ def _drain_notes_v2_individual(
             (Path(__file__).resolve().parents[1] / "config" /
              "dossier_research_notes_v2_contract.json").read_text(encoding="utf-8")
         )
+        # Separate, narrowly authenticated GitHub-owned automatic path.
+        # The manual OWNER/first-attempt workflow_dispatch checks below are
+        # unchanged. No arbitrary PR, push, bot actor, fork or input can use
+        # the automatic path without the exact once-only control-branch claim.
+        automatic = False
+        if os.environ.get("GITHUB_EVENT_NAME") in ("workflow_run", "push"):
+            from dossier_lean_writer_auto_ready import authenticated_auto_context
+            automatic = authenticated_auto_context(
+                root, trial_id, marker_commit, item_commits)
+        manual_owner_first_attempt = (
+            os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
+            and os.environ.get("GITHUB_REF") == "refs/heads/main"
+            and os.environ.get("GITHUB_WORKFLOW_REF") ==
+                REPOSITORY + "/" + WRITER_WORKFLOW + "@refs/heads/main"
+            and os.environ.get("GITHUB_ACTOR_ID") == OWNER_ID
+            and os.environ.get("GITHUB_REPOSITORY_OWNER_ID") == OWNER_ID
+            and os.environ.get("GITHUB_ACTOR") == OWNER_LOGIN
+            and os.environ.get("GITHUB_TRIGGERING_ACTOR") == OWNER_LOGIN
+            and os.environ.get("GITHUB_RUN_ATTEMPT") == "1"
+            and str(os.environ.get("GITHUB_RUN_ID", "")).isdigit()
+        )
         if (source.get("active") is not False
                 or source.get("authorized_for_canonical_ingest") is not False
                 or source.get("production_enabled") is not False
@@ -1181,18 +1202,11 @@ def _drain_notes_v2_individual(
                 or sandbox_git(root, "symbolic-ref", "--short", "HEAD").stdout.decode().strip()
                    != path_set["branch"]
                 or os.environ.get("GITHUB_ACTIONS") != "true"
-                or os.environ.get("GITHUB_EVENT_NAME") != "workflow_dispatch"
-                or os.environ.get("GITHUB_REF") != "refs/heads/main"
-                or os.environ.get("GITHUB_WORKFLOW_REF")
-                   != REPOSITORY + "/" + WRITER_WORKFLOW + "@refs/heads/main"
                 or os.environ.get("GITHUB_REPOSITORY") != REPOSITORY
-                or os.environ.get("GITHUB_ACTOR_ID") != OWNER_ID
-                or os.environ.get("GITHUB_REPOSITORY_OWNER_ID") != OWNER_ID
-                or os.environ.get("GITHUB_ACTOR") != OWNER_LOGIN
-                or os.environ.get("GITHUB_TRIGGERING_ACTOR") != OWNER_LOGIN
-                or os.environ.get("GITHUB_RUN_ATTEMPT") != "1"
-                or not str(os.environ.get("GITHUB_RUN_ID", "")).isdigit()):
-            raise ValueError("reusable batch writer needs real owner first-attempt sandbox dispatch")
+                or not (manual_owner_first_attempt or automatic)):
+            raise ValueError(
+                "reusable batch writer requires authenticated manual first attempt "
+                "or exact single-use GitHub-owned automatic recovery claim")
         authorizers = sandbox_git(root, "log", "--first-parent",
                                "--format=%H", "HEAD", "--", path_set["authorization"]).stdout.decode().splitlines()
         if len(authorizers) != 1:
