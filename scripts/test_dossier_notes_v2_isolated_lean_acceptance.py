@@ -285,8 +285,45 @@ class SixItemSandboxWriterTests(unittest.TestCase):
                          ["persisted_pending_github_commit"] * 6)
         self.git("add", "data/control/dossier_notes_v2/")
         self.assertEqual(self.verify("staged")["verified_items"], 6)
-        self.git("commit", "-qm", "offline automatic ready acceptance")
-        self.assertEqual(self.verify("committed")["verified_items"], 6)
+        # Future owner-opted-in N+N reader is also exercised on the real
+        # shared writer's own files (immutable source identity synthetic).
+        import dossier_lean_writer_auto_ready as future
+        plan = {
+            "rows": self.grant["items"], "trial_id": self.grant["trial_id"],
+            "marker_commit": self.grant["marker_commit"],
+            "pairs": {
+                r["appid"]: {
+                    "research_commit": r["research_commit"],
+                    "assembly_commit": r["assembly_commit"],
+                } for r in self.grant["items"]
+            },
+        }
+        assignments = {}
+        for row in self.grant["items"]:
+            appid = row["appid"]
+            receipt = (self.root / reader.ROOT_RECEIPTS /
+                       self.grant["trial_id"] /
+                       ("g" + str(row["group_sequence"]).zfill(6)) /
+                       (appid + "--" + row["assignment_id"] + ".json"))
+            assignments[appid] = json.loads(receipt.read_text())["assignment"]
+        def offline_assignment(repo, *, appid, **kwargs):
+            return assignments[appid]
+        def offline_assembly(repo, *, appid, **kwargs):
+            return {"output_path": "offline/" + appid}
+        def offline_result(repo, sha, path):
+            appid = path.split("/")[-1]
+            return {"outcome": "assembled_candidate_ready",
+                    "final_dossier": self.docs[appid][0]}
+        with patch.object(future.v2, "frozen_assignment",
+                          side_effect=offline_assignment), patch.object(
+            future.v2, "assembly_work", side_effect=offline_assembly), patch.object(
+            future, "json_at", side_effect=offline_result):
+            self.assertEqual(future.exact_generic_transaction(
+                self.root, plan=plan, mode="staged")["verified_items"], 6)
+            self.git("commit", "-qm", "offline automatic ready acceptance")
+            self.assertEqual(self.verify("committed")["verified_items"], 6)
+            self.assertEqual(future.exact_generic_transaction(
+                self.root, plan=plan, mode="committed")["verified_items"], 6)
         self.assertEqual(len(self.git("show", "--pretty=format:",
                                       "--name-only", "HEAD").splitlines()), 12)
         with self.assertRaises(ValueError):
