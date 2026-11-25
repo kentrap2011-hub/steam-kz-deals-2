@@ -4,7 +4,7 @@
 - Repository: `kentrap2011-hub/steam-kz-deals-2` only
 - Initial main HEAD: `a8708f68081abf4dcfdae08bae6fdca373318bdc`
 - Source branch: `fix/dossier-lean-generic-writer-preflight-route-20261125`
-- Status: `IMPLEMENT_IN_SOURCE_PR_PENDING_CI_INDEPENDENT_SECURITY_L3`
+- Status: `IMPLEMENT_SOURCE_PR_OFFLINE_CI_PASSED_INDEPENDENT_SECURITY_L3_REQUIRED`
 - Real acceptance: **0/6**. No live writer, semantic execution, rerun, Deep, production or issuer was invoked.
 
 ## Confirmed incident and root cause
@@ -29,8 +29,13 @@ GitHub Actions failed real owner writer run `45540222575` (job `138956661141`) o
 ## Checks and residual risk
 
 - Regression intended to detect run #45540222575: the actual writer workflow's generic prefix must select the authenticated generic issuer path and **never** try the nonexistent old cohort config; legacy must keep old cohort check.
-- Test results: **pending PR checks at final SHA** (update this report on completion).
-- Exact final HEAD: **pending last report/CI commit** (see final PR head; update on completion).
+- First complete PR CI at code HEAD `a0e568bd1dd61cef478ff10e5871cf5426f7eab1`: **5/5 SUCCESS**, including the newly added full writer command route regression:
+  - [Notes V2 / generic writer CI 45542547969](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45542547969): SUCCESS (new generic-vs-legacy writer step PASS).
+  - [Buffered Dossier CI 45542548172](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45542548172): SUCCESS.
+  - [Backlog dispositions CI 45542547935](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45542547935): SUCCESS.
+  - [Progressive PASS 2 CI 45542547932](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45542547932): SUCCESS.
+  - [Site registry CI 45542547942](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45542547942): SUCCESS.
+- A final narrow additional regression (missing/malformed issuer/manifest, invalid group cardinality) is queued in the same PR; **final PR HEAD and exact-HEAD CI are authoritative on PR #482**, and must be independently checked after the last source commit, not inferred from earlier CI. This report is a durable record of the verified first check set, not a claim that subsequent SHA already passed.
 - Source CI does **not** equal real owner writer acceptance. Same trial's failed real Actions run may consume a single-use attempt policy; no recovery, new request, nonce, run retry or reissue is authorized here.
 - Mandatory independent **security L3** on the material writer authorization route delta and Director approval before merge. Real owner-run readback and 6/6 persisted remain explicitly **unverified**.
 - No changes to original18, Notes V1, Deep/production caches, scheduled tasks, canonical main Lean store, existing sandbox receipts or global switches.
