@@ -268,10 +268,12 @@ class CanonicalWriterCoalescingLivenessTests(unittest.TestCase):
             self.assertIn("config/dossier_lean_writer_auto_ready_v1.json",
                           workflow)
             self.assertIn("contents: write", workflow)
-            # The source file itself must retain a disabled main activation
-            # gate and isolated N+N write destination, not canonical production.
+            # This narrow owner-approved activation keeps only isolated N+N
+            # write destinations and leaves canonical production disabled.
             contract = json.loads((ROOT / "config/dossier_lean_writer_auto_ready_v1.json").read_text())
-            self.assertFalse(contract["activation_enabled"])
+            self.assertTrue(contract["activation_enabled"])
+            self.assertTrue(contract["owner_L3_waiver"]["explicit"])
+            self.assertTrue(contract["owner_L3_waiver"]["does_not_waive_runtime_gates"])
             self.assertFalse(contract["canonical_main_acceptance"])
             self.assertFalse(contract["automatic_retry_after_failure"])
             source = (ROOT / "scripts/dossier_lean_writer_auto_ready.py").read_text()

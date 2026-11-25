@@ -15,23 +15,42 @@ GRANT = json.loads(SANDBOX_GRANT.read_text(encoding="utf-8"))
 
 
 class LeanAutoReadySourceTests(unittest.TestCase):
-    def test_new_owner_approval_is_narrow_but_source_activation_remains_off(self):
+    def test_owner_explicit_l3_waiver_is_narrow_and_activation_is_versioned(self):
         p = ready.policy()
-        self.assertFalse(p["activation_enabled"])
+        self.assertTrue(p["activation_enabled"])
+        self.assertFalse(p["requires_independent_L3_final_head_review"])
+        self.assertEqual(p["owner_L3_waiver"]["authorization"],
+                         "user_direct_instruction_activate_without_independent_review")
+        self.assertTrue(p["owner_L3_waiver"]["does_not_waive_runtime_gates"])
         self.assertTrue(p["recovery"]["permission_bound_to_exact_previous_failed_run"])
         self.assertEqual(p["recovery"]["failed_manual_workflow_run_id"], 45540222575)
         self.assertEqual(p["recovery"]["trial_id"], GRANT["trial_id"])
         self.assertFalse(p["automatic_retry_after_failure"])
-        self.assertTrue(p["requires_independent_L3_final_head_review"])
         self.assertTrue(p["future_trial_requirements"][
             "eligible_only_with_separate_immutable_owner_issued_auto_writer_grant"])
         self.assertEqual(len(ready.exact_pairs()), 6)
 
-    def test_no_source_event_can_activate_without_separate_contract_change(self):
-        with self.assertRaisesRegex(ValueError, "activation pending"):
-            ready.verify_source_signal({}, {})
-        with self.assertRaisesRegex(ValueError, "no auto-run"):
-            ready.validate_ready(".", token="test")
+    def test_inactive_policy_still_blocks_any_source_event(self):
+        with patch.object(ready, "policy", return_value={"activation_enabled": False}):
+            with self.assertRaisesRegex(ValueError, "activation pending"):
+                ready.verify_source_signal({}, {})
+            with self.assertRaisesRegex(ValueError, "no auto-run"):
+                ready.validate_ready(".", token="test")
+
+    def test_owner_waiver_is_exactly_bound_and_cannot_open_general_bypass(self):
+        p = ready.policy()
+        with patch.object(ready, "POLICY") as path:
+            path.read_text.return_value = json.dumps({
+                **p, "owner_L3_waiver": {**p["owner_L3_waiver"], "scope": "all"}
+            })
+            with self.assertRaisesRegex(ValueError, "exact scoped owner waiver"):
+                ready.policy()
+        with patch.object(ready, "POLICY") as path:
+            path.read_text.return_value = json.dumps({
+                **p, "owner_L3_waiver": None
+            })
+            with self.assertRaisesRegex(ValueError, "exact scoped owner waiver"):
+                ready.policy()
 
     def test_action_wakeup_trust_and_shared_writer_static_guard(self):
         root = Path(__file__).resolve().parents[1]
