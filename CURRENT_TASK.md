@@ -1,5 +1,13 @@
 # CURRENT TASK
 
+## ЧАТ 1 — Lean Writer resumable retry lifecycle (2026-11-25)
+
+- Task: `WORKER_TASK_DOSSIER_LEAN_WRITER_RESUMABLE_RETRY_01.md`; branch `fix/dossier-lean-writer-resumable-retry-20261125`; source PR #494 (draft).
+- Scope: replace permanent postclaim block with append-only per-attempt GitHub control-ref events, one shared writer lock, strict immutable trial grant, bounded attempts, lease expiry and postwrite exact readback. Historical consumed claim remains intact and its *live* migration is explicitly OFF.
+- Status: `SOURCE_IMPLEMENTATION_IN_PR_CI_AND_INDEPENDENT_L3_PENDING`; no actual writer, no sandbox state mutation, no Research/Assembly/Deep/production.
+- Required report: `reviews/worker_reports/dossier-lean-writer-resumable-retry-01.md`. Other concurrent workstreams below remain unchanged.
+
+
 ## ЧАТ 3 — Lean Writer auto sandbox destination fix (2026-11-25)
 
 - Task `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_PATH_LAYOUT_FIX_01.md`; source branch `fix/dossier-lean-auto-writer-sandbox-path-layout-20261125` from `main@2a98a3d57b2a97e2c1239804ec0285a55220b513`.
