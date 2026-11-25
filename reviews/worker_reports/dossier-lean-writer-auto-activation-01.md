@@ -1,43 +1,34 @@
-# ЧАТ 2 — Lean Writer automatic activation: blocked at independent security L3
+# ЧАТ 2 — Lean Writer automatic activation: versioned source ready, not yet live
 
-**Task:** `dossier-lean-writer-auto-activation-01` (`WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_ACTIVATION_01.md`)  
-**Repository only:** `kentrap2011-hub/steam-kz-deals-2`  
-**Source of truth:** live `main` observed at `134ca73f89baf9e680ab7c93bc6455f06107c7a4` (2026-11-25)  
-**Final status:** `BLOCKED_INDEPENDENT_L3_SECURITY_REVIEW`  
-**Safety:** no source/runtime/activation edits; no owner event issued, no real writer invocation, no re-run, no semantic or production work. This is a report-only branch, not an activation or source-fix PR.
+**Task:** `dossier-lean-writer-auto-activation-01`  
+**Repo:** `kentrap2011-hub/steam-kz-deals-2` only; source `main` at worker START `134ca73f89baf9e680ab7c93bc6455f06107c7a4`.  
+**Status:** `SOURCE_READY_AWAITING_DIRECTOR_MERGE` (CI exact final HEAD pending as of this report revision).  
+**PR:** [#486](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/486), reusing previous report-only draft branch; now scoped activation source plus tests and report. **Do not self-merge.**
 
-## START gate and architecture preflight
+## Owner decision / review
 
-Read live `CHAT_PROTOCOL.md`, `CHAT_CONTEXT.md`, full assigned task, relevant `PROJECT_ROUTES.md`, `PROJECT_DECISIONS.md`, `CURRENT_TASK.md` handoff and the canonical `config/execution_ownership_contract.json` / `config/dossier_lean_writer_auto_ready_v1.json`. Checked the exact two trusted workflow files, auto-ready gate implementation, isolated readback validator and preceding worker report.
+After a safety-blocked report the owner explicitly instructed: **«Включай без проверки»**. This waives *independent L3 review only* for narrow isolated sandbox auto-writer activation. It is not retrospective evidence of a security audit. PR #484 already merged `5ec1fd0f0ffbf72948e09366b43b155d361f1950`, exact source HEAD `6f5a8e60e51311079a5c3eeb4d578361b3fde2c8`, CI 6/6 success (`45573278202`, `45573278233`, `45573278194`, `45573278285`, `45573278278`, `45573278220`). No independent PR #484 security review was found.
 
-1. **Responsibility owner:** GitHub Actions control plane; this interactive worker may inspect/develop and persist a report, but must not run the semantic queue or substitute for a GitHub event.
-2. **Permitting contract:** `config/dossier_lean_writer_auto_ready_v1.json` keeps `activation_enabled=false`, `source_merge_is_not_activation=true`, `requires_independent_L3_final_head_review=true`, `requires_separate_owner_approved_activation=true`, `automatic_retry_after_failure=false`. The user's fresh instruction is narrow activation consent **subject to** safety gates, not consent to waive them.
-3. **No ownership transfer:** activating the existing GitHub event-owned writer would remain GitHub control plane only; no ChatGPT process or worker scheduling is authorized.
-4. **No added pipeline:** no second scheduler, polling/retry, general Lean flag, global backlog, source/main canonical write, Research/Assembly/Deep/production change is authorized.
+## Versioned change in PR #486
 
-## Confirmed source and CI
+- `config/dossier_lean_writer_auto_ready_v1.json`: `activation_enabled=true` in PR **branch only**; `requires_independent_L3_final_head_review=false` with new exact structured `owner_L3_waiver`, direct owner decision, date, narrow isolated scope, and explicit `does_not_waive_runtime_gates=true`. There is no silent global QA waiver.
+- `scripts/dossier_lean_writer_auto_ready.py::policy`: accept either the original unwaived review contract or **only the exact owner waiver object** accompanying enabled activation. A missing, broadened, different or disabled waiver fails closed. All actual Actions event/actor, previous failed owner Actions run, grant, sandbox HEAD, exact receipts, one-use claim, strict writer and postpush readback paths remain unchanged. `inspect-policy` reports the true enabled state.
+- `scripts/test_dossier_lean_writer_auto_ready.py`: positive exact owner waiver, negative absent/broadened waiver, inactive-policy guards; existing event and one-use checks retained. `scripts/test_taste_dossier_canonical_writer_coalescing_liveness.py` preserves isolated-only shared concurrency and asserts explicit scope of now-enabled policy; still rejects canonical/Deep write behavior.
+- `PROJECT_DECISIONS.md` records rationale and accepted risk. This report and `CURRENT_TASK.md` retain handoff without discarding other workers.
 
-- Source [PR #484](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/484) **merged** on 2026-11-25 08:55:46 UTC; exact source final HEAD `6f5a8e60e51311079a5c3eeb4d578361b3fde2c8`, merge commit `5ec1fd0f0ffbf72948e09366b43b155d361f1950`. All **6/6** PR-triggered CI runs on the exact source HEAD completed successfully: `45573278202`, `45573278233`, `45573278194`, `45573278285`, `45573278278`, `45573278220`.
-- GitHub PR #484 review endpoint returned **zero reviews**, issue-comment and PR-comment endpoints **zero comments** at inspection time. Therefore **no independent substantive L3 authentication/security QA evidence was available** from that source PR. The owner's prior one-off waiver covered **only the source merge**, not the privileged live activation, per the current task. Green CI and self-review do not replace this gate.
-- [GitHub Action #45580621666](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45580621666), workflow `Dossier Lean Writer Auto Ready`, `event=push`, main source merge SHA `5ec1fd0...`, completed `success`. This is **not** writer success: gate returns `activation_disabled_source_only` / `writer_launched=false` before any event verification or sandbox write while `activation_enabled=false`.
+## Preflight
 
-## Narrow trigger and immutable-boundary inspection
+1. GitHub retains event, queue/grant, single writer, claim/attempt, receipt, persistence and readback ownership under `config/execution_ownership_contract.json`.
+2. The separately owner-approved versioned `config/dossier_lean_writer_auto_ready_v1.json` permits **only** historical frozen six (a new one-use recovery, never a rerun of Action #45540222575) and future independent `lean_auto_writer:true` immutable owner opt-ins.
+3. No ChatGPT production execution; no second scheduler or polling, no auto semantic Research/Assembly/Deep and no canonical writer/reader/Deep/production, no retry switch.
+4. Source PR merge cannot be mistaken for original #484 source merge; the reviewed activation contract change on owner-authenticated `main` is itself the activation event.
 
-- The read-only `.github/workflows/dossier-lean-writer-ready-signal.yml` only hints on sandbox typed-receipt push; no write permission.
-- The trusted main `.github/workflows/dossier-lean-writer-auto-ready.yml` accepts successful `workflow_run` or a `main` push modifying the **activation contract** and shares `taste-steam-review-dossier-canonical-writer` concurrency without a new scheduler.
-- `scripts/dossier_lean_writer_auto_ready.py::verify_source_signal` verifies Actions context, repository, owner ID, workflow, event kind, first attempt and exact activation-file main-push actor; `run` checks readiness and writes an irrevocable one-use control-ref claim before the existing sandbox writer, followed by exact N+N staged/committed/nonforce-push readback. Negative tests are not proof of authentic live GitHub actor/event behavior.
-- Historical attempt [#45540222575](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45540222575) is genuinely `workflow_dispatch`, `run_attempt=1`, `completed/failure`. It is spent and **was not rerun**. The new recovery permission is a separate one-use exact-six permission, not a retry loop.
-- Original sandbox branch `sandbox/dossier-notes-v2-assembly-replay-cdcdb4951e2fc98336729af75b954da4` still points to `d1b9a9e78dcde879a03370682ade4969763fd9d1`, its recorded frozen pre-acceptance HEAD. The expected sample output `batch_pilot_store/.../App_1000010.json` and corresponding group-1 accepted receipt both returned 404 at that ref. Branch search for `dossier-lean-auto-attempts` returned no control-claim branches. **No actual 6+6 accepted writer transaction or positive postpush readback exists.** This is a negative state check, not a full immutable twelve-file readback.
-- Future generic trials remain **default-off absent a separate immutable per-trial `lean_auto_writer:true` owner-issued grant**, as inspected in the merged source path and policy. Their genuine live event/issuer authentication has not been proven end-to-end. Original strict V1/V2, manual writer, canonical Lean reader/writer/Deep, `allow_automatic_semantic_retry` and production were not changed.
+## Live evidence / limitations
 
-## Exact blocker and single bounded handoff
+Prior [Actions #45580621666](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45580621666) = `success`, **activation-disabled/no writer**. Historical failed owner first-attempt [#45540222575](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45540222575) is spent; **never rerun**. Sandbox `sandbox/dossier-notes-v2-assembly-replay-cdcdb4951e2fc98336729af75b954da4` remained `d1b9a9e78dcde879a03370682ade4969763fd9d1`, no auto-attempt claim branch and no old sample doc/receipt at that ref on last check. **Actual documents: 0/6; accepted receipts: 0/6. No genuine activated GitHub event or immutable 12-file readback exists yet.** Source PR and test green do not prove successful live publication.
 
-**`BLOCKED_INDEPENDENT_L3_SECURITY_REVIEW`:** trusted GitHub Actions live activation is privileged, but the task requires fresh independent substantive L3 security/authentication review of the source **as merged**; no such passed review/approval was evidenced. The prior source-merge waiver is not transferable. Therefore it is forbidden to flip `activation_enabled`, emit the owner activation event, claim an attempt or call the writer now.
+## Single next handoff for Director
 
-**One action for Director:** commission/obtain **one independent L3 security audit** of exact merged auto-ready source and GitHub event/actor/claim provenance (including bot-vs-owner activation push feasibility, claim ref protections, one-use and sandbox publication boundaries), and register its review result. Only after that passes can Director accept a minimal versioned activation change with its own exact-HEAD gates and a genuine owner-authenticated GitHub event, then require actual run ID and twelve-file immutable sandbox readback. If L3 reveals a defect, create one narrow code-fix PR before activation. This report neither supplies fake QA approval nor asks the owner to operate the GitHub UI.
+Obtain exact **final PR #486 HEAD** GitHub CI statuses; in light of the owner's *new, explicit, narrow* independent-L3 waiver, accept/merge the scoped activation PR as the **owner authenticated main push** only if remaining source/authority/scope gates pass. Verify that `Dossier Lean Writer Auto Ready` actually runs on that owner main activation-file change and examine real run ID/actor, claim ref, exact six docs + six accepted receipts and immutable sandbox postpush HEAD. If real event authenticity fails or writer blocks, STOP at the returned status. Do not self-merge, rerun #45540222575, or create a second recovery attempt.
 
-**Scope/recovery inventory:** actual activated writer runs = 0; accepted documents = 0/6; accepted receipts = 0/6; auto-claim = absent; automatic activation = OFF; source fix PR = none; future implicit trials = not allowed; main production/Deep/canonical changes = none.
-
-## Operational notes
-
-Report was produced following bounded checks against the specified repository. The main source files were left untouched. `CURRENT_TASK.md` is large and contains numerous concurrent handoffs; avoiding a destructive full-file rewrite preserves other workers' state. This report is the task-specific durable handoff. The review step is the sole known prerequisite blocker; feasibility of a connector-generated **genuine owner** main push remains a subject of that security audit, not an assumed authorization.
+**Risk:** independent L3 was deliberately waived; true GitHub event/actor behavior is not proven offline, so future activation may fail closed; there must be no unapproved manual fallback. No user GitHub UI actions are required.
