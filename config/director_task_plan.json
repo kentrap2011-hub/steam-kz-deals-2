@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-24",
+  "last_curated_on": "2026-11-25",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -3909,6 +3909,24 @@
       "blocker": "Проверяющий ранее создавал входные результаты Assembly, поэтому независим только от кода writer, написанного другим чатом; source merge и реальный writer запрещены.",
       "updated_on": "2026-11-24",
       "updated_at_utc": "2026-11-24T17:00:00Z",
+      "recent_completion": false
+    },
+    {
+      "id": "dossier-lean-generic-writer-preflight-route-fix-01",
+      "title": "Исправить preflight для универсальных партий Lean writer",
+      "goal": "Устранить подтверждённый сбой маршрутизации старого cohort preflight для новой generic Lean sandbox-партии, сохранив авторизацию и old strict writer.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Требуется ограниченная правка реального writer маршрута и негативные регрессии безопасности для двух форматов партий.",
+      "urgency": "высокая",
+      "urgency_reason": "Реальный изолированный writer завершился с ошибкой до приёмки шести готовых Lean Dossier.",
+      "task_file": "WORKER_TASK_DOSSIER_LEAN_GENERIC_WRITER_PREFLIGHT_ROUTE_FIX_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [],
+      "blocker": "Разрешён только bounded FIX и source tests; отдельные L3 QA, merge и реальный повторный запуск writer требуют собственных gates.",
+      "updated_on": "2026-11-25",
+      "updated_at_utc": "2026-11-25T02:40:00Z",
       "recent_completion": false
     }
   ]
