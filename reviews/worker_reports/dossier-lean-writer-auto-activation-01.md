@@ -2,7 +2,7 @@
 
 ## Final two-run diagnosis and verified Git owner-diff correction — 2026-11-25
 
-**Status: `SOURCE_READY_AWAITING_DIRECTOR_MERGE`** of `fix/dossier-lean-owner-activation-verified-git-delta-20261125` (final PR HEAD CI pending at this note). No live write or verified 6+6 yet; worker must not merge/dispatch.
+**Status: `SOURCE_READY_AWAITING_DIRECTOR_MERGE`** of [PR #488](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/488), branch `fix/dossier-lean-owner-activation-verified-git-delta-20261125` (final PR HEAD CI pending at this note). No live write or verified 6+6 yet; worker must not merge/dispatch.
 
 ### Reproduced real symptom and actual cause
 
