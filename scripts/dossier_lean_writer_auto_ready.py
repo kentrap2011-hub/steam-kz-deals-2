@@ -230,17 +230,30 @@ def require_activation_git_change(source_repo, event, env):
                        before, after, check=False)
     require(ancestry.returncode == 0,
             "activation push before commit is not an ancestor of after")
-    path = "config/dossier_lean_writer_auto_ready_v1.json"
-    previous = command(source_repo, "rev-parse", "--verify",
-                       before + ":" + path, check=False)
-    current = command(source_repo, "rev-parse", "--verify",
-                      after + ":" + path, check=False)
-    old_blob = previous.stdout.strip()
-    new_blob = current.stdout.strip()
-    require(previous.returncode == 0 and current.returncode == 0
-            and SHA.fullmatch(old_blob) and SHA.fullmatch(new_blob)
-            and old_blob != new_blob,
-            "owner main push did not change an existing activation contract")
+    # An owner-reviewed source fix is itself a bounded recovery wakeup;
+    # GitHub's paths trigger is only a hint and NEVER an authorization proof.
+    allowed = (
+        "config/dossier_lean_writer_auto_ready_v1.json",
+        "scripts/dossier_lean_writer_auto_ready.py",
+        "scripts/dossier_lean_writer_retry_state.py",
+        ".github/workflows/dossier-lean-writer-auto-ready.yml",
+    )
+    verified_delta = False
+    for path in allowed:
+        previous = command(source_repo, "rev-parse", "--verify",
+                           before + ":" + path, check=False)
+        current = command(source_repo, "rev-parse", "--verify",
+                          after + ":" + path, check=False)
+        old_blob = previous.stdout.strip()
+        new_blob = current.stdout.strip()
+        # Both sides must exist. New source files are allowed only if at
+        # least one preexisting owner-controlled policy/source file changed.
+        if (previous.returncode == 0 and current.returncode == 0
+                and SHA.fullmatch(old_blob) and SHA.fullmatch(new_blob)
+                and old_blob != new_blob):
+            verified_delta = True
+    require(verified_delta,
+            "owner main push did not change reviewed existing Lean writer source")
 
 
 def validate_ready(repo, *, token):
