@@ -157,6 +157,29 @@ class DisposableJournal(unittest.TestCase):
             self.snapshot(), source_sha="4" * 40,
             retry_delay_minutes=0)[1], "attempt_budget_exhausted")
 
+    def test_reviewed_source_fix_discovers_unique_failed_exact_owner_grant(self):
+        import dossier_lean_writer_auto_ready as ready
+        config = {
+            "recovery": {"trial_id": "dossier-notes-v2-assembly-replay-" + "c" * 32},
+            "retry_lifecycle": {"historical_live_retry_authorized": False,
+                                "historical_spent_claim_sha": "0" * 40,
+                                "max_total_attempts": 3},
+        }
+        self.assertIsNone(ready.unique_failed_source_retry(
+            self.repo, {"GITHUB_SHA": "2" * 40}, config))
+        self.transition("started", 1)
+        self.transition("retryable_failed", 1)
+        self.assertEqual(ready.unique_failed_source_retry(
+            self.repo, {"GITHUB_SHA": "2" * 40}, config), (TRIAL, HEAD))
+        self.assertIsNone(ready.unique_failed_source_retry(
+            self.repo, {"GITHUB_SHA": self.main}, config))
+        self.transition("started", 2,
+                        {"GITHUB_RUN_ID": "9902", "GITHUB_SHA": "2" * 40})
+        self.transition("accepted", 2,
+                        {"GITHUB_RUN_ID": "9902", "GITHUB_SHA": "2" * 40})
+        self.assertIsNone(ready.unique_failed_source_retry(
+            self.repo, {"GITHUB_SHA": "3" * 40}, config))
+
     def test_historical_claim_requires_exact_spent_anchor(self):
         # Real historic data has a V1-only claim and no V2 event.
         # V2 must start as attempt 2 and must not rewrite the original ref.
