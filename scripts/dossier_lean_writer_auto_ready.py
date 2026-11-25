@@ -404,6 +404,82 @@ def future_plan(repo, *, trial_id, token):
     }
 
 
+def exact_generic_transaction(repo, *, plan, mode):
+    """Same byte/atomic/readback standard for immutable owner-opted-in future trial."""
+    import hashlib
+    from dossier_lean_canonical_dual import LEAN_SCHEMA, quality_binding, validate_writer_lean
+    from taste_steam_review_dossier import canonical_sha256
+    require(mode in ("staged", "committed"), "invalid future readback mode")
+    repo = Path(repo).resolve()
+    trial = plan["trial_id"]
+    marker = plan["marker_commit"]
+    expected = set()
+    for row in plan["rows"]:
+        appid = row["appid"]
+        store = ("data/control/dossier_notes_v2/batch_pilot_store/" + trial
+                 + "/App_" + appid + ".json")
+        receipt = ("data/control/dossier_notes_v2/batch_pilot_accepted/" + trial
+                   + "/g" + str(row["group_sequence"]).zfill(6)
+                   + "/" + appid + "--" + row["assignment_id"] + ".json")
+        for path in (store, receipt):
+            dest = repo / path
+            require(not dest.is_symlink() and dest.is_file()
+                    and dest.resolve().is_relative_to(repo),
+                    "missing or unsafe isolated future accepted record")
+            stored = command(repo, "show",
+                             (":" if mode == "staged" else "HEAD:") + path).stdout.encode()
+            require(stored == dest.read_bytes(),
+                    "Git stage/committed accepted record differs from actual raw bytes")
+            expected.add(path)
+        raw = (repo / store).read_bytes()
+        doc = json.loads(raw.decode("utf-8"))
+        record = json.loads((repo / receipt).read_text(encoding="utf-8"))
+        pair = plan["pairs"][appid]
+        assignment = v2.frozen_assignment(
+            repo, marker_commit=marker, trial_id=trial, appid=appid)
+        require(doc.get("schema") == LEAN_SCHEMA
+                and doc.get("appid") == appid
+                and doc.get("title") == row["title"]
+                and doc.get("game_identity", {}).get("release_year") ==
+                    row["original_release_year"]
+                and record.get("schema") ==
+                    "DOSSIER-NOTES-V2-ISOLATED-TRIAL-RECEIPT-V1"
+                and record.get("trial_id") == trial
+                and record.get("marker_commit") == marker
+                and record.get("assignment") == assignment
+                and record.get("research_commit") == pair["research_commit"]
+                and record.get("assembly_commit") == pair["assembly_commit"]
+                and record.get("dossier_sha256") == canonical_sha256(doc)
+                and record.get("dossier_raw_sha256") ==
+                    hashlib.sha256(raw).hexdigest()
+                and record.get("dossier_format") == LEAN_SCHEMA
+                and record.get("quality_binding") == quality_binding()
+                and record.get("original_release_year") == row["original_release_year"]
+                and record.get("isolated_sandbox_acceptance") is True
+                and record.get("canonical_acceptance") is False
+                and record.get("deep_ready") is False,
+                "future Lean accepted object, edition, digests or receipt mismatch")
+        validate_writer_lean(doc, appid=appid, title=row["title"],
+                             expected_ttl_days=14)
+        work = v2.assembly_work(
+            repo, marker_commit=marker, trial_id=trial, appid=appid,
+            research_commit=pair["research_commit"])
+        original = json_at(repo, pair["assembly_commit"], work["output_path"])
+        require(original.get("outcome") == "assembled_candidate_ready"
+                and original.get("final_dossier") == doc,
+                "future accepted data differs from original immutable Assembly")
+    changed = (output(repo, "diff", "--cached", "--name-only")
+               if mode == "staged" else output(
+                   repo, "diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD"))
+    changed_paths = changed.splitlines()
+    require(set(changed_paths) == expected
+            and len(changed_paths) == len(expected) == 2 * len(plan["rows"]),
+            "future isolated transaction must be exactly N docs + N receipts")
+    return {"schema": "DOSSIER-LEAN-AUTO-FUTURE-SANDBOX-READBACK-V1",
+            "trial_id": trial, "verified_items": len(plan["rows"]),
+            "mode": mode, "canonical_acceptance": False, "deep_ready": False}
+
+
 def command(repo, *args, check=True):
     return subprocess.run(
         ["git", "-C", str(repo), *args],
