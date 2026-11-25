@@ -174,7 +174,8 @@ class SixItemSandboxWriterTests(unittest.TestCase):
                         "request_commit":self.grant["original_request_commit"]})
 
 
-    def isolated_writer(self, *, broken_appid=None, incomplete=False, replay=False, automatic=False):
+    def isolated_writer(self, *, broken_appid=None, incomplete=False, replay=False,
+                        automatic=False, writer_paths=None):
         # Exercise the REAL shared writer on disposable Git only. Authentication
         # and immutable source Git lookups are synthetic mocks, never accepted
         # owner evidence. Full Lean validation, writes and collision gates are real.
@@ -250,6 +251,13 @@ class SixItemSandboxWriterTests(unittest.TestCase):
             env["GITHUB_WORKFLOW_REF"] = (
                 REPOSITORY +
                 "/.github/workflows/dossier-lean-writer-auto-ready.yml@refs/heads/main")
+        if writer_paths is None:
+            if automatic:
+                from dossier_lean_writer_auto_ready import sandbox_writer_destinations
+                writer_paths = sandbox_writer_destinations(self.root, trial)
+            else:
+                writer_paths = (self.root / reader.ROOT_STORE / trial,
+                                self.root / reader.ROOT_RECEIPTS)
         auto_proof = (patch(
             "dossier_lean_writer_auto_ready.authenticated_auto_context",
             return_value=True) if automatic else nullcontext())
@@ -272,10 +280,59 @@ class SixItemSandboxWriterTests(unittest.TestCase):
             return drain_buffered_groups(notes_v2={
                 "repo": self.root, "marker_commit": self.grant["marker_commit"],
                 "trial_id": trial, "item_commits": item_map,
-                "store_dir": self.root / reader.ROOT_STORE / trial,
-                "accepted_dir": self.root / reader.ROOT_RECEIPTS,
+                "store_dir": writer_paths[0],
+                "accepted_dir": writer_paths[1],
                 "offline_fixture": False, "trial_sandbox": True,
             })
+
+    def test_auto_destinations_match_real_sandbox_writer_namespace(self):
+        # Real temporary Git checkout, exact frozen six and the same path
+        # selector used by the privileged auto runner; no live GitHub write.
+        from dossier_lean_writer_auto_ready import sandbox_writer_destinations
+        from dossier_notes_v2_batch_route import paths
+        trial = self.grant["trial_id"]
+        store, accepted = sandbox_writer_destinations(self.root, trial)
+        names = paths(trial)
+        self.assertEqual(store, self.root / names["store"])
+        self.assertEqual(accepted, self.root / names["accepted"])
+        self.assertTrue(store.is_relative_to(self.root))
+        self.assertTrue(accepted.is_relative_to(self.root))
+        self.assertFalse(store.is_relative_to(accepted))
+        self.assertFalse(accepted.is_relative_to(store))
+        result = self.isolated_writer(automatic=True)
+        self.assertEqual(len(result["items"]), 6)
+        self.assertTrue(all(r["status"] == "persisted_pending_github_commit"
+                            for r in result["items"]))
+        self.git("add", "data/control/dossier_notes_v2/")
+        self.assertEqual(self.verify("staged")["verified_items"], 6)
+
+    def test_auto_writer_rejects_workflow_cwd_relative_destinations(self):
+        # This is the exact old bad argument shape. Resolve() would take
+        # these relative paths from main workflow cwd, not sandbox checkout.
+        from dossier_notes_v2_batch_route import paths
+        names = paths(self.grant["trial_id"])
+        with self.assertRaisesRegex(
+                ValueError, "V2 single-item paths must be separate writer-owned subdirectories"):
+            self.isolated_writer(
+                automatic=True,
+                writer_paths=(Path(names["store"]), Path(names["accepted"])))
+
+    def test_auto_writer_rejects_overlapping_sandbox_dirs(self):
+        from dossier_lean_writer_auto_ready import sandbox_writer_destinations
+        store, _ = sandbox_writer_destinations(self.root, self.grant["trial_id"])
+        with self.assertRaisesRegex(
+                ValueError, "V2 single-item paths must be separate writer-owned subdirectories"):
+            self.isolated_writer(
+                automatic=True, writer_paths=(store, store / "receipts"))
+
+    def test_existing_manual_writer_cannot_target_live_strict_namespace(self):
+        # No automatic auth is inherited by workflow_dispatch, and isolated
+        # manual V2 cannot stage into canonical strict V2/Deep persistence.
+        with self.assertRaisesRegex(
+                ValueError, "batch pilot may write only its own isolated sandbox namespace"):
+            self.isolated_writer(writer_paths=(
+                self.root / "data/cache/taste_steam_review_dossiers",
+                self.root / "data/control/dossier_notes_v2/canonical_accepted"))
 
     def test_auto_event_reuses_real_shared_writer_and_twelve_file_transaction(self):
         # Disposable Git only: event/issuer/action authentication mocked,
