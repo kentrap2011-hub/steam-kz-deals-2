@@ -1153,6 +1153,7 @@ def _drain_notes_v2_individual(
             or spec.get("v1_group_writer_unchanged") is not True):
         raise ValueError("unrecognized V2 single-item writer authority")
     root = Path(repo).resolve()
+    automatic = False  # Auto path is NEVER inherited by legacy/manual trials.
     if offline_fixture and trial_sandbox:
         raise ValueError("nonproduction GitHub pilot must not use offline fixture mode")
     if trial_sandbox and trial_id.startswith("dossier-notes-v2-") and trial_id != "dossier-notes-v2-original18-first":
