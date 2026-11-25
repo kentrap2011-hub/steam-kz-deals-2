@@ -104,6 +104,19 @@ def read(repo, trial, expected_grant_hash, historical_anchor=None):
         check(parts[1] == BASE + trial + "/events/" +
               f"{len(events)+1:04d}-{event['kind']}.json",
               "nonsequential journal event")
+        if events:
+            baseline = events[0]
+            check(event.get("marker_commit") == baseline["marker_commit"]
+                  and event.get("frozen_sandbox_head") == baseline["frozen_sandbox_head"]
+                  and event.get("owner_source_run_id") == baseline["owner_source_run_id"],
+                  "attempt history changed immutable frozen authority")
+        if event["kind"] == "accepted":
+            accepted_hash = event.get("accepted_sandbox_commit")
+            check(isinstance(accepted_hash, str) and len(accepted_hash) == 40
+                  and all(c in "0123456789abcdef" for c in accepted_hash),
+                  "accepted outcome lacks immutable sandbox commit")
+        check(all(c in "0123456789abcdef" for c in event["main_sha"]),
+              "journal source main SHA malformed")
         if not events:
             check(event["kind"] == "started"
                   and event["attempt"] == (2 if historical_anchor else 1),
