@@ -1,5 +1,12 @@
 # CURRENT TASK
 
+## ЧАТ 2 — isolated Lean Dossier six-item sandbox-only writer acceptance (2026-11-24)
+
+- Task: `WORKER_TASK_DOSSIER_LEAN_FRESH6_ISOLATED_WRITER_ACCEPTANCE_01.md`. Source draft [PR #478](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/478), branch `implement/dossier-lean-fresh6-isolated-writer-acceptance-20261124`, base `main@f9974ec85b6d4b7e2ac6ca2699a404339f8561b7`. Report `reviews/worker_reports/dossier-lean-fresh6-isolated-writer-acceptance-01.md`.
+- Stage: `source_implemented_in_draft_PR; source_exact_final_HEAD_CI_and_independent_L3_required; real_owner_sandbox_writer_not_dispatched; 0/6_isolated_accepted`. Frozen trial `dossier-notes-v2-assembly-replay-cdcdb4951e2fc98336729af75b954da4`, frozen pre-acceptance HEAD `d1b9a9e78dcde879a03370682ade4969763fd9d1`. All six immutable Assembly + typed receipts located, not acceptance.
+- Changes: explicit exact-six grant; independent Lean final/year/TTL/edition/privacy/source validation in existing shared GitHub batch pilot writer; canonical versus raw SHA distinction; exact 12-file stage/committed readback; disposable Git positive/negative offline tests; no global Lean or Deep flags.
+- Next: check exact final PR HEAD CI and independent L3/Director source approval; merge only by Director; then separately first-attempt owner Actions sandbox-only dispatch through existing shared writer; verify actual run, branch commit and six persisted receipts. **No Research/Assembly replay, no production, canonical main, Deep, auto retry or manual counterfeit receipts.**
+
 ## ЧАТ 1 — generic owner-gated Assembly replay, 2026-11-23
 
 - Task: `WORKER_TASK_DOSSIER_V2_ASSEMBLY_GENERIC_REPLAY_OWNER_GATE_01.md`; source draft [PR #476](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/476), branch `implement/dossier-v2-assembly-generic-replay-owner-gate-20261123` from `main@6d2edbf8cb86d9c73ce8bbd922907775dd8f6101`, report `reviews/worker_reports/dossier-v2-assembly-generic-replay-owner-gate-01.md`. Old hardcoded rerun3 PR #475 is separate, unmerged and superseded; do not merge or activate it.
