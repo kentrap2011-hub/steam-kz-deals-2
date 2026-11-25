@@ -1,11 +1,11 @@
 # CURRENT TASK
 
-## ЧАТ 2 — Lean writer scoped owner-waived auto activation PR #486 (2026-11-25)
+## ЧАТ 2 — Lean writer auto activation post-merge gate fix (2026-11-25)
 
-- Task `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_ACTIVATION_01.md`. Owner explicitly instructed “Включай без проверки” after L3 block; independent L3 waived only for isolated auto-activation, with no runtime authority/readback waiver.
-- Draft activation source [PR #486](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/486), branch `report/dossier-lean-writer-auto-activation-blocked-l3-20261125`. Scope: versioned `activation_enabled=true` only in PR, exact owner L3-waiver object, fail-closed policy guard, updated tests, decision and report. **Source not merged, main still inactive; CI exact final HEAD pending.**
-- Historical sandbox `dossier-notes-v2-assembly-replay-cdcdb4951e2fc98336729af75b954da4` remains `d1b9a9e78dcde879a03370682ade4969763fd9d1`, real accepted 0/6 docs and 0/6 receipts; prior failed run `45540222575` cannot be rerun. No auto attempt claim, no new semantic or production work.
-- Next: Director reviews exact final #486 HEAD CI then owner merge if all remaining source/authority gates pass; real owner-authenticated activation push and exact six+six sandbox readback must be verified. Worker cannot self-merge or claim live success. Report `reviews/worker_reports/dossier-lean-writer-auto-activation-01.md`.
+- Task `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_ACTIVATION_01.md`; owner waiver of independent L3 applies only to isolated sandbox auto-writer. PR #486 **merged** to `main@cfd29df88311af8749428f580dfa3dff236f9dba`, final 5/5 CI green.
+- Real owner [Actions #45591943959](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45591943959) **failed preclaim**: genuine modified activation config but unrelated new worker report in `head_commit.added`, incorrectly rejected by global `and not added` guard. No claim, sandbox unchanged `d1b9a9e78dcde879a03370682ade4969763fd9d1`, 0/6 accepted docs/receipts. Do not rerun original manual Action `45540222575` or failed auto run.
+- Current fix [PR #487](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/487), branch `fix/dossier-lean-auto-main-push-added-files-gate-20261125`: narrowly accept unrelated added files while requiring owner-authenticated `main` push with existing modified activation config; add positive/negative real merge-shape tests and a versioned config status update to trigger a **new owner-approved event** after Director merge. No retry rules, semantic, Deep or production changes.
+- Next: final HEAD CI and Director acceptance of narrow source PR (not self-merge); verify new genuine event ID, single claim, exact 6+6 sandbox postpush readback or named fail-closed. Report `reviews/worker_reports/dossier-lean-writer-auto-activation-01.md`.
 
 
 ## ЧАТ 1 — Lean writer automatic ready-gate: scoped six source, INACTIVE (2026-11-25)

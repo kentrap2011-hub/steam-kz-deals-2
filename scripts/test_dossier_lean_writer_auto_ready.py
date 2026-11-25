@@ -171,17 +171,32 @@ class LeanAutoReadySourceTests(unittest.TestCase):
                 "config/dossier_lean_writer_auto_ready_v1.json"
             ], "added": []},
         }
+        activation_path = "config/dossier_lean_writer_auto_ready_v1.json"
         with patch.object(ready, "policy", return_value={"activation_enabled": True}):
             self.assertEqual(ready.verify_source_signal(event, env)[
                 "event_kind"], "owner_activation_catchup")
+            # Regression for real merged #486: the contract was modified
+            # while an unrelated worker-report path was newly added.
+            merge_with_report = copy.deepcopy(event)
+            merge_with_report["head_commit"]["added"] = [
+                "reviews/worker_reports/dossier-lean-writer-auto-activation-01.md"]
+            self.assertEqual(ready.verify_source_signal(merge_with_report, env)[
+                "event_kind"], "owner_activation_catchup")
             for key, bad in (("forced", True), ("after", "0" * 40),
                              ("sender", {"id": 17}),
-                             ("head_commit", {"modified": ["README.md"], "added": []})):
-                with self.subTest(key=key):
+                             ("head_commit", {"modified": ["README.md"], "added": []}),
+                             ("head_commit", {"modified": [activation_path],
+                                              "added": [activation_path]}),
+                             ("head_commit", {"modified": [activation_path],
+                                              "added": None})):
+                with self.subTest(key=key, bad=bad):
                     modified = dict(event)
                     modified[key] = bad
                     with self.assertRaises(ValueError):
                         ready.verify_source_signal(modified, env)
+            wrong_actor = dict(env, GITHUB_ACTOR_ID="123")
+            with self.assertRaises(ValueError):
+                ready.verify_source_signal(merge_with_report, wrong_actor)
 
     def test_exact_ready_validates_year_edition_and_every_terminal_receipt(self):
         # Synthetic dependency stand-ins: validates fail-closed orchestration.
