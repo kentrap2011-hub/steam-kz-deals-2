@@ -884,7 +884,10 @@ def run(source_repo, env):
                         state, readiness, previous_env, "accepted",
                         last["attempt"], sandbox_commit=sandbox_head)
                     retry.append(source_repo, trial, state, accepted)
-                elif last is not None and last["kind"] != "accepted":
+                elif last is not None and last["kind"] == "accepted":
+                    require(last.get("accepted_sandbox_commit") == sandbox_head,
+                            "terminal accepted sandbox changed since exact receipt")
+                else:
                     raise ValueError("verified accepted bytes conflict with terminal journal")
                 return {"status": "verified_noop_already_accepted",
                         "trial_id": trial, "commit_sha": sandbox_head,
