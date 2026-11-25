@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Offline exact-six Lean writer transaction regression; never live authorization."""
 import copy
+from contextlib import nullcontext
 import hashlib
 import json
 import subprocess
@@ -173,7 +174,7 @@ class SixItemSandboxWriterTests(unittest.TestCase):
                         "request_commit":self.grant["original_request_commit"]})
 
 
-    def isolated_writer(self, *, broken_appid=None, incomplete=False, replay=False):
+    def isolated_writer(self, *, broken_appid=None, incomplete=False, replay=False, automatic=False):
         # Exercise the REAL shared writer on disposable Git only. Authentication
         # and immutable source Git lookups are synthetic mocks, never accepted
         # owner evidence. Full Lean validation, writes and collision gates are real.
@@ -241,7 +242,18 @@ class SixItemSandboxWriterTests(unittest.TestCase):
             "GITHUB_RUN_ATTEMPT": "1", "GITHUB_RUN_ID": "1234",
             "GITHUB_TOKEN": "offline-fixture-not-a-real-token",
         }
-        with patch.dict(os.environ, env), patch(
+        if automatic:
+            # Separate GitHub-owned workflow_run actor, not manual owner dispatch.
+            # Only the authenticated GitHub API/event/one-use claim is mocked.
+            # The existing shared writer/Lean validation/staging remain real.
+            env["GITHUB_EVENT_NAME"] = "workflow_run"
+            env["GITHUB_WORKFLOW_REF"] = (
+                REPOSITORY +
+                "/.github/workflows/dossier-lean-writer-auto-ready.yml@refs/heads/main")
+        auto_proof = (patch(
+            "dossier_lean_writer_auto_ready.authenticated_auto_context",
+            return_value=True) if automatic else nullcontext())
+        with patch.dict(os.environ, env), auto_proof, patch(
                 "dossier_notes_v2_generic_replay.policy", return_value={}), patch(
                 "dossier_notes_v2_batch_route.issuer_structure",
                 return_value={"authorization_commit": self.grant["authorization_commit"],
@@ -264,6 +276,21 @@ class SixItemSandboxWriterTests(unittest.TestCase):
                 "accepted_dir": self.root / reader.ROOT_RECEIPTS,
                 "offline_fixture": False, "trial_sandbox": True,
             })
+
+    def test_auto_event_reuses_real_shared_writer_and_twelve_file_transaction(self):
+        # Disposable Git only: event/issuer/action authentication mocked,
+        # but full existing Lean writer, byte staging and readback are real.
+        result = self.isolated_writer(automatic=True)
+        self.assertEqual([r["status"] for r in result["items"]],
+                         ["persisted_pending_github_commit"] * 6)
+        self.git("add", "data/control/dossier_notes_v2/")
+        self.assertEqual(self.verify("staged")["verified_items"], 6)
+        self.git("commit", "-qm", "offline automatic ready acceptance")
+        self.assertEqual(self.verify("committed")["verified_items"], 6)
+        self.assertEqual(len(self.git("show", "--pretty=format:",
+                                      "--name-only", "HEAD").splitlines()), 12)
+        with self.assertRaises(ValueError):
+            self.isolated_writer(replay=True, automatic=True)
 
     def test_actual_writer_six_lean_records_and_receipts_in_sandbox_only(self):
         result = self.isolated_writer()
