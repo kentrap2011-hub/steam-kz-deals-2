@@ -5,11 +5,11 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — активация Lean writer, 2026-11-25
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — исправление путей Lean writer, 2026-11-25
 
-- **НОВЫЙ ЧАТ 2 — зарезервирован (ожидает запуска):** `dossier-lean-writer-auto-activation-01` → `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_ACTIVATION_01.md`. Пользователь разрешил поручить включение автоматизации без самостоятельных действий в GitHub. Задача — довести уже принятый source до живого узкого GitHub-owned sandbox writer, доказать реальную приёмку шести и исключить ручные JSON/Actions; сохранить отдельные authority/safety gates, не включать Deep/production или новые semantic retries.
-- **ЧАТ 1 — свободен:** `dossier-lean-writer-auto-ready-gate-01` завершён; source PR #484 принят в `main@5ec1fd0f0ffbf72948e09366b43b155d361f1950`, 6/6 CI PASS, но автоматизация ещё OFF. Отказ от независимой L3 относился к source merge #484, а не ко всем будущим live gates.
-- **ЧАТ 3 — свободен.** Другие исторические назначения ниже не являются текущими физическими занятиями.
+- **НОВЫЙ ЧАТ 3 — зарезервирован (ожидает запуска):** `dossier-lean-writer-auto-path-layout-fix-01` → `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_PATH_LAYOUT_FIX_01.md`. По прямому решению пользователя новый физический исполнитель исправляет конкретную ошибку `V2 single-item paths must be separate writer-owned subdirectories` из run #45628656098. Только bounded FIX source PR + offline tests + report, без реального writer, перезапуска старых Actions или расширения grant.
+- **ЧАТ 2 — свободен:** исходное включение и исправления в PR #486, #487, #488 приняты директором. Цель live приёмки не достигнута: последний Actions #45628656098 FAILED, 0/6 accepted. Старый worker-task завершён ПЕРЕДАЧЕЙ остатка новому ЧАТУ 3; это не означает готовность автоматизации.
+- **ЧАТ 1 — свободен.** Все более старые блоки Board — исторический архив.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
