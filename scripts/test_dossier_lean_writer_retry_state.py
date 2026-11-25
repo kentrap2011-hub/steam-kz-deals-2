@@ -72,7 +72,8 @@ class DisposableJournal(unittest.TestCase):
         return state.read(self.repo, TRIAL, DIGEST)
 
     def record(self, snapshot, kind, number, env=None):
-        return state.make_event(snapshot, self.ready, env or self.env, kind, number)
+        return state.make_event(snapshot, self.ready, env or self.env, kind, number,
+                                sandbox_commit="8" * 40 if kind == "accepted" else None)
 
     def transition(self, kind, number, env=None):
         snapshot = self.snapshot()
