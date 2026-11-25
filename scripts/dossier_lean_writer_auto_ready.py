@@ -193,8 +193,13 @@ def verify_source_signal(event, env):
                 "catch-up requires genuine approved main owner activation push")
         changed = event.get("head_commit", {}).get("modified", [])
         added = event.get("head_commit", {}).get("added", [])
-        require("config/dossier_lean_writer_auto_ready_v1.json" in changed
-                and not added,
+        activation_path = "config/dossier_lean_writer_auto_ready_v1.json"
+        # A merge may add an unrelated report or documentation file. Only
+        # the activation contract must be an existing *modified* file; an
+        # arbitrary new file neither grants nor blocks owner catch-up.
+        require(isinstance(changed, list) and isinstance(added, list)
+                and activation_path in changed
+                and activation_path not in added,
                 "catch-up only on a genuine separate activation contract change")
         return {"trial_id": expected,
                 "source_signal_run_id": None,
