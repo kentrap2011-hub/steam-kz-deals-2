@@ -169,3 +169,15 @@
 **Correct move:** follow `config/dossier_research_independent_quality_audit_protocol.md`; independently research exact manifest identities *before* comparing Research claims, record each actually read fragment and provenance, apply per-game Evidence Gate; without sufficient real access return `BLOCKED_EVIDENCE`, not a fabricated score. No URL-count/source-log quota.
 
 **Evidence:** corrected report in draft PR #456, section «Director handoff — исправление процедуры аудита» (2026-11-16); its initial 4 GOOD / 2 WEAK claims were disavowed.
+
+---
+
+## PITFALL-010 — GitHub Actions push-event commit metadata incorrectly mocked as present
+
+**Trigger / symptom:** real GitHub owner `push` workflow fails at `event.head_commit.modified`/`added` authorization check even though REST commit comparison proves the policy file changed; offline tests pass because fabricated event fixtures include these fields. Repeated real evidence: Lean Writer Auto Ready runs `45591943959` and `45603534459`, both blocked preclaim on the same faulty gate.
+
+**Do not repeat:** do not infer that the payload had unexpected added files when the real Actions payload is unobserved. GitHub explicitly documents that Actions `push` event `commit` objects omit `added`, `removed`, `modified`. Do not blindly delete all change authorization merely because `on.push.paths` is configured; path filters may be bypassed when GitHub pushes contain more than 1,000 commits or GitHub diff generation times out.
+
+**Correct move:** first check official GitHub Actions event payload spec against the real failed run; test only fields Actions actually supplies. For authorization of a privileged owner-config catch-up, authenticate actor/ref/after SHA and compare the existing exact config Git blob at real validated `before` and `after` commits (nonzero ancestor), before irreversible one-use claim. Positive/negative test with a real disposable Git history, not only a forged event array; keep report additions irrelevant and retries off.
+
+**Evidence refs:** `reviews/worker_reports/dossier-lean-writer-auto-activation-01.md`; `scripts/dossier_lean_writer_auto_ready.py`; GitHub official docs `/en/actions/reference/workflows-and-actions/events-that-trigger-workflows` and `/en/actions/reference/workflows-and-actions/workflow-syntax`.
