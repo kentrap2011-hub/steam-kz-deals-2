@@ -789,12 +789,24 @@ def unique_failed_source_retry(source_repo, env, cfg):
             historical_anchor=(cfg["retry_lifecycle"]["historical_spent_claim_sha"]
                                if historical else None))
         last = snapshot["last"]
-        if last is None or last["kind"] != "retryable_failed":
+        if last is None:
             continue
-        can, reason = retry.eligible(
-            snapshot, source_sha=env["GITHUB_SHA"],
-            max_attempts=cfg["retry_lifecycle"]["max_total_attempts"],
-            retry_delay_minutes=0)
+        if last["kind"] == "started":
+            # A crashed action may leave a lease without a failure event.
+            # Only a fully expired lease may be selected, and run() first
+            # reconciles the remote sandbox before claiming a new attempt.
+            can = (retry.minutes_since(last) >=
+                   cfg["retry_lifecycle"]["exclusive_lease_minutes"]
+                   and last["main_sha"] != env["GITHUB_SHA"]
+                   and last["attempt"] <
+                   cfg["retry_lifecycle"]["max_total_attempts"])
+        elif last["kind"] == "retryable_failed":
+            can, _ = retry.eligible(
+                snapshot, source_sha=env["GITHUB_SHA"],
+                max_attempts=cfg["retry_lifecycle"]["max_total_attempts"],
+                retry_delay_minutes=0)
+        else:
+            can = False
         if can:
             require(claim.get("original_frozen_sandbox_head")
                     and SHA.fullmatch(claim["original_frozen_sandbox_head"]),
