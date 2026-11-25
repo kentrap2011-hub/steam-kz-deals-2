@@ -189,6 +189,58 @@ class WriterRoutePreflightTests(unittest.TestCase):
             self.checked()
         self.assertFalse((self.repo / paths["store"]).exists())
 
+    def test_missing_or_malformed_generic_grant_request_binding_and_manifest(self):
+        # The request itself lives on a separate owner-push branch. The writer
+        # must refuse its immutable hash/commit binding when a forged local
+        # grant claims a different request or changes its versioned manifest.
+        paths = batch.paths(self.trial)
+        baseline = git(self.repo, "rev-parse", "HEAD")
+        cases = (
+            ("grant missing", paths["grant"], None),
+            ("grant malformed", paths["grant"], b"{invalid-json\\n"),
+            ("request binding forged", paths["grant"], "bad-request"),
+            ("manifest missing", paths["manifest"], None),
+            ("manifest malformed", paths["manifest"], b"{invalid-json\\n"),
+            ("manifest schema version", paths["manifest"], "bad-version"),
+            ("manifest group count", paths["manifest"], "wrong-items"),
+        )
+        for name, path, payload in cases:
+            with self.subTest(name=name):
+                if payload is None:
+                    git(self.repo, "rm", "--", path)
+                    git(self.repo, "commit", "-m", "offline malformed: " + name)
+                else:
+                    if payload == "bad-request":
+                        doc = json.loads((self.repo / path).read_text())
+                        doc["request_blob_sha"] = "0" * 40
+                        payload = doc
+                    elif payload == "bad-version":
+                        doc = json.loads((self.repo / path).read_text())
+                        doc["schema_version"] = 999
+                        payload = doc
+                    elif payload == "wrong-items":
+                        doc = json.loads((self.repo / path).read_text())
+                        doc["items"] = doc["items"] * 25
+                        payload = doc
+                    add(self.repo, path, payload, "offline malformed: " + name)
+                with self.assertRaises((ValueError, KeyError, v2.NotesV2Error)):
+                    self.checked()
+                self.assert_no_stage()
+                git(self.repo, "reset", "--hard", baseline)
+                self.assert_no_stage()
+
+    def test_unbounded_or_extra_immutable_result_map_refused(self):
+        with self.assertRaises(ValueError):
+            self.checked(items={
+                str(1000000 + i): {"research_commit": "a" * 40,
+                                  "assembly_commit": "b" * 40}
+                for i in range(25)
+            })
+        with self.assertRaises(ValueError):
+            self.checked(items={self.appid: {
+                **self.items[self.appid], "unexpected": "0" * 40}})
+        self.assert_no_stage()
+
     def test_strict_old_cohort_still_uses_unchanged_batch_preflight(self):
         from test_dossier_notes_v2_batch_route import synthetic_issuer
         # A separate fresh disposable legacy checkout; generic route rejects it.
