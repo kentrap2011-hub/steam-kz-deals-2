@@ -893,6 +893,8 @@ def run(source_repo, env):
                         "trial_id": trial, "commit_sha": sandbox_head,
                         "writer_launched": False}
             last = state["last"]
+            require(last is None or last["kind"] != "accepted",
+                    "terminal accepted journal exists but sandbox lost its exact commit")
             if last is not None and last["kind"] == "started":
                 if retry.minutes_since(last) < lifecycle["exclusive_lease_minutes"]:
                     return {"status": "active_lease_no_second_writer",
