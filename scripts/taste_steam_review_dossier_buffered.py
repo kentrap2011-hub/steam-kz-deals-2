@@ -1333,6 +1333,19 @@ def _drain_notes_v2_individual(
         if (len(projection["items"]) != len(lean_frozen)
                 or any(x["status"] != "ready" for x in projection["items"])):
             raise ValueError("six-item Lean sandbox atomic readiness is incomplete")
+    elif trial_sandbox and automatic and is_generic(trial_id):
+        # Only a genuinely owner-issued per-trial opt-in, with independent
+        # original-year strict baseline and all terminal typed receipts,
+        # may use Lean. The global reader/writer/Deep switches stay OFF.
+        from dossier_lean_writer_auto_ready import future_plan
+        future = future_plan(root, trial_id=trial_id,
+                             token=os.environ["GITHUB_TOKEN"])
+        if not future["ready"] or future["pairs"] != item_commits:
+            raise ValueError("future Lean auto writer not exact terminal-ready")
+        lean_frozen = {row["appid"]: row for row in future["rows"]}
+        if (len(projection["items"]) != len(lean_frozen)
+                or any(x["status"] != "ready" for x in projection["items"])):
+            raise ValueError("future Lean sandbox atomic readiness incomplete")
     strict_contract = json.loads(
         (Path(__file__).resolve().parents[1] / "config" /
          "taste_steam_review_dossier_contract.json").read_text(encoding="utf-8")
