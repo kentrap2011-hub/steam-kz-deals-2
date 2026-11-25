@@ -1,49 +1,44 @@
-# ЧАТ 1 — Lean writer auto-ready gate: BLOCKED authorization boundary
+# ЧАТ 1 — Lean writer auto-ready: scoped six recovery source, INACTIVE / future-trial gate pending
 
 **Task:** `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_READY_GATE_01.md`  
-**Checked:** 2026-11-25, `main@bf5a017392f5ffa491d10ef513d7232b5229d643`.  
-**Status:** `BLOCKED_AUTHORIZATION_CONFLICT` — HARD STOP before implementation. This is a report-only PR, **not** a functioning source implementation and **not** activation.
+**Base:** `main@bf5a017392f5ffa491d10ef513d7232b5229d643`  
+**PR:** [#484](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/484), `recon/dossier-lean-writer-auto-ready-auth-boundary-20261125`  
+**Stage:** `PARTIAL_IMPLEMENTED_SOURCE_IN_DRAFT_INACTIVE`. **Not ready for merge or activation.** Exact-final-HEAD PR CI and independent L3 still mandatory.
 
-## START / authoritative inputs
+## Original blocker resolved narrowly by the user's new explicit decision
 
-Read in order from live `main`: `CHAT_PROTOCOL.md`, `CHAT_CONTEXT.md`, complete worker task; relevant `PROJECT_ROUTES.md` and `PROJECT_DECISIONS.md`; `config/execution_ownership_contract.json`; `config/dossier_notes_v2_generic_replay_policy.json`; `config/dossier_lean_canonical_dual_format_contract.json`; `config/dossier_notes_v2_isolated_lean_acceptance.json`; original shared writer workflow and its preflight/Lean readback implementations.
+The user expressly approved **one NEW automatic attempt for the historical six** after the previously failed first writer run. This approval is stored in `config/dossier_lean_writer_auto_ready_v1.json` as a separate versioned scoped recovery permission, bound to original `dossier-notes-v2-assembly-replay-cdcdb4951e2fc98336729af75b954da4`, frozen sandbox SHA `d1b9a9e78dcde879a03370682ade4969763fd9d1`, marker `b267882dd3d056a1fc18d6a3fb75380ac38bd9cd`, original owner source request and **failed owner first attempt #45540222575**. This is **not** retroactive reuse of the original grant and **not** authorization for a second try after the next failure.
 
-Ownership preflight: GitHub alone owns scope, grant, immutable receipt validation, writer serialization, once-only state, retry state, and persistence. No ChatGPT scheduler/worker or PR run can issue a new grant. The current generic replay policy has `allow_automatic_writer=false`, `allow_automatic_semantic_retry=false`, `automatic_launch_on_source_merge=false`. Global Lean writer/reader/Deep switches are false.
+Previous real run: `workflow_dispatch`, run_attempt=1, completed/failure on main `147be762d217dc1e7dc53a6fbd896f323f6af08c`, actor and triggering actor `kentrap2011-hub`. Real job failed at legacy cohort preflight without store/receipt commit; PR #482 fixed routing on main `7e0d575...`. Original frozen sandbox remains at 0/6 accepted.
 
-## Confirmed real first writer failure, not an unspent grant
+## Current source implementation (only historical six are mapped)
 
-- The **actual authenticated owner manual** `workflow_dispatch` run [#45540222575](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45540222575) is `completed/failure`, `run_attempt=1`, actor and triggering actor `kentrap2011-hub`, branch `main`, run source SHA `147be762d217dc1e7dc53a6fbd896f323f6af08c`; job `138956661141`.
-- Job step **Persist strictly checked reusable V2 batch in isolated sandbox only** failed with `DOSSIER_V2_BATCH_BLOCKED: [Errno 2] ... config/dossier_notes_v2_batches/dossier-notes-v2-assembly-replay-cdcdb4951e2fc98336729af75b954da4.json`. This was old-cohort routing before any writer output, commit or push. It is nevertheless a **failed real first writer attempt**, not an unattempted owner grant.
-- Source routing fix [PR #482](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/482) has been merged at `7e0d575373e4daf39bb184005dad031b7e85eea1`; correcting the code path does **not** erase or reauthorize the failed attempt.
-- The real Git ref `refs/heads/sandbox/dossier-notes-v2-assembly-replay-cdcdb4951e2fc98336729af75b954da4` still points to `d1b9a9e78dcde879a03370682ade4969763fd9d1`. This is the exact frozen pre-acceptance HEAD in the original grant; 0/6 sandbox acceptance, no new writer commit observed.
-- Existing isolated six grant states `single_owner_first_attempt_only=true` and `automatic_retry=false`. In code, the current owner actor/attempt-1 gate is per dispatch invocation; a **new** run ID with attempt 1 must not be misinterpreted as a never-used **per-trial** grant. The worker task explicitly prohibits any automatic retry after failure, **including zero-write** failure.
+- `config/dossier_lean_writer_auto_ready_v1.json`: versioned exact owner recovery and future-grant requirements; `activation_enabled=false` and explicit separate owner activation/L3 review gates. Canonical/production/Deep and generic automatic-writer flags remain false.
+- `.github/workflows/dossier-lean-writer-ready-signal.yml`: read-only sandbox terminal-receipt push hint, without secrets/write permission. Existing frozen six predates this workflow and instead has **one bounded catch-up on a separately approved main activation-policy push**.
+- `.github/workflows/dossier-lean-writer-auto-ready.yml`: main-owned `workflow_run` consumer / bounded main activation catch-up, inside the **existing shared** `taste-steam-review-dossier-canonical-writer` concurrency group. No schedule, workflow_dispatch form, semantic worker or independent canonical writer.
+- `scripts/dossier_lean_writer_auto_ready.py`: trust boundary for exact main GitHub workflow/repo/ref, original completed source issuer, previous real failed owner run, original frozen six Git SHA pairs and typed receipts, all six actual Assembly files / Lean TTL, original year, title, edition, source safety. Reads all six before consuming new attempt. Fail-closed missing/partial/collision/stale HEAD.
+- One **create-only atomic Git control ref** `refs/heads/dossier-lean-auto-attempts/<exact-32hex>` is a durable one-shot claim: once it exists, later wakeups must be suppressed regardless of success or failure. Claim is distinct from frozen sandbox; creation is one nonforce push with readback and no retry. After claim the existing `taste_steam_review_dossier_buffered.py::_drain_notes_v2_individual` owns the full writer. Exact 12 files are checked by existing `dossier_notes_v2_isolated_lean_readback.py` staged, committed and after exactly one nonforce sandbox push.
+- Original strict manual actor/first-attempt path is preserved; a **separate** automatic GitHub workflow + source event + exact remote claim proof is required for auto. Original18/V1/manual/canonical/Deep/production are not opted in or disabled.
+- Both auto event modes remain **dormant** while `activation_enabled=false`. The source PR merge cannot activate writer.
 
-**Decision:** Catch-up/bootstrap of these existing six under the unchanged grant would turn a known terminal failed writer attempt into an unapproved second execution. Requirement E expressly says STOP if this conflict exists. Do not hide it behind `github-actions[bot]`, a new nonce, workflow change, approval by PR merge, or an artificial “first auto attempt” counter.
+## Tests and evidence
 
-## Authorization boundary requiring Director/owner resolution
+PR-only test paths:
+- `scripts/test_dossier_lean_writer_auto_ready.py`: versioned owner permission and previous failure, source workflow/repo/ref/run verification, forged signal/event/activation, exact six readiness and original-year rejection, repeat-claim disposition. The actual GitHub API responses are mocked; it does **not** authenticate a live Actions actor.
+- Extended `scripts/test_dossier_notes_v2_isolated_lean_acceptance.py`: synthetic automatic event identity enters **real existing shared writer** and verifies six generated Lean cache documents plus six receipts through the real isolated staged/committed readback on disposable Git. Only automatic event/issuer GitHub identity is mocked.
+- `.github/workflows/validate-dossier-research-notes-v2.yml`: new test routed together with existing strict/legacy tests.
 
-Two independent grants are absent:
+**Test result:** check GitHub CI on final PR HEAD; no claim of passing CI until observed. These are synthetic Git fixtures, not an actual source event/owner approval, remote branch write or production trial.
 
-1. **Existing exact six:** a fresh, explicitly owner-approved and canonically recorded recovery/exception decision *for the already failed writer attempt*, with its own immutable per-trial single-use identity and previous-run linkage. It must say whether a second execution is permitted at all. A policy update or user request to build automation is not retrospectively a recovery grant. Without this, the original six must remain terminal-suppressed.
-2. **Future batches:** a versioned, trial-scoped `sandbox-auto-writer` eligibility mechanism issued by the genuine existing GitHub owner request/issuer, distinct from global `allow_automatic_writer=false`; only narrowly approved Lean-format trials qualify. No blanket generic batch enablement or automatic semantic retry.
+## Critical remaining blockers / independent L3
 
-For both: source review and independent L3 authorization review must approve the exact proposed code HEAD; live activation requires a separate explicit owner decision. No source merge or PR CI can implicitly execute the first real write.
+1. **Future owner-issued Lean batches are not yet supported.** Existing generic owner request/issuer has `allow_automatic_writer=false` and contains no independently frozen original release-year per item. The new runner deliberately accepts **only** the existing exact-six grant. A fresh versioned per-trial opt-in issued by a real, first-attempt existing owner GitHub Action, with immutable original-year/edition and typed receipt authority, must be implemented/tested before the reusable future path is complete. Do not mistake `sandbox_writer_authorized=true` (manual grant) for automatic permission or enable all generic trials by default.
+2. Independently review exact final source HEAD for L3 event/write permissions, worktree source pinning, authenticity of source signals/claim ref and attempted-write irreversibility, potential workflow_run event-provider edge cases, correct staged-and-pushed transaction handling and remote delete/replay threat.
+3. End-to-end actual live event→GitHub Actions bot actor→one-use claim→writer push is **not verified**; no workflow has been launched. No actual original six accepted, no production/Deep effects.
+4. Do not merge/activate this source PR as feature-complete. Later Director approval of final source and a **separate explicit activation authorization** are required; first owner-approved activation changes only `activation_enabled` on reviewed main and requires verified source revision. A merge with this flag false cannot run writer.
 
-## Bounded implementation design once authorization is settled (NOT implemented)
+## Source files changed
 
-- Reuse the existing locked writer `taste-steam-review-dossier-canonical-writer` and original strict validator/transaction/readback; preserve V1/V2, original18/manual paths and canonical/Deep/production flags.
-- Exact ready-wakeup should observe only authenticated, eligible owner-issued trial and terminal typed Assembly receipts, and freeze the current sandbox HEAD and immutable request, grant, marker, six-pair Git SHA map (derive from Git, never owner-pasted fields); fail-closed on non-Lean, stale, malformed, expired, mismatched, wrong-edition/title/year, or partially ready items.
-- Catch-up for historical six cannot start unless separately approved. If newly authorized, bound it to **exactly one** named trial/recovery ID and exact frozen HEAD, with explicit previous failed run link and no unbounded scan or rerun.
-- A GitHub-owned once-only guard must classify `not_ready / running / accepted / terminal_failed / suppressed`; lock and immutable state must prevent duplicate dispatches, replays, race wakeups, double commit/push, and retries after a failed push. Validate actual actor/ref/repo/workflow and prevent untrusted PR/branch/fork events from escalating permissions.
-- Prove that the chosen event mechanism actually fires for **real** trusted GitHub writes (including GitHub-token-generated events where relevant); don't infer event delivery from synthetic tests alone.
-- Offline tests must run real event → authenticated ready preflight → **existing** writer → exact 12-file staged/committed readback in disposable Git and adversarial negative matrix. Any PR checks would be synthetic and are not owner credential proof.
+`config/dossier_lean_writer_auto_ready_v1.json`; `scripts/dossier_lean_writer_auto_ready.py`; `scripts/test_dossier_lean_writer_auto_ready.py`; `scripts/taste_steam_review_dossier_buffered.py`; `scripts/test_dossier_notes_v2_isolated_lean_acceptance.py`; `.github/workflows/dossier-lean-writer-ready-signal.yml`; `.github/workflows/dossier-lean-writer-auto-ready.yml`; `.github/workflows/validate-dossier-research-notes-v2.yml`; `CURRENT_TASK.md`, this report, `PROJECT_ROUTES.md`, `PROJECT_DECISIONS.md` (when updated). No live sandbox, cache, source result, execution or existing owner grant mutated.
 
-## Files changed / verification / activation
-
-- **Report-only:** this file and a closed blocked handoff entry in `CURRENT_TASK.md`. No executable code, workflow, grant, consent, schema, queue, sandbox, receipt or canonical data modified.
-- **Read-only evidence:** actual run metadata, job steps and log; real sandbox ref; merged source PR #482; live main and machine contracts.
-- **Tests executed:** none; execution cannot enter writer without the missing authorization decision. **GitHub CI:** a report-only PR may have ordinary PR checks, but no end-to-end automation tests exist on this head. Do not mark the requested acceptance tests PASS.
-- **Actual writer/Research/Assembly/Deep/production:** not launched. No Actions manual dispatch or retry performed; no semantic replay.
-- **Director next decision:** first decide whether the previously failed original six may receive a *new explicit one-use recovery authority*, or remain terminal-suppressed. Only then register a scoped implementation of a trial-specific auto-writer grant/wakeup with independent L3 and exact-HEAD CI; no direct activation on source merge.
-
-**Definition of done not met:** automatic six-item and future-trial writer behavior is NOT implemented, NOT tested end-to-end and NOT activated.
+**Blocked task acceptance:** original six path is source-implemented but INACTIVE; future per-trial path and independent L3/CI/real activation not complete. No automatic attempts permitted.
