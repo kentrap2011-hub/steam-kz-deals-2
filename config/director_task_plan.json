@@ -3971,20 +3971,40 @@
       "id": "dossier-lean-writer-auto-path-layout-fix-01",
       "title": "Исправить пути изолированного Lean auto-writer",
       "goal": "Устранить ошибку раздельных writer-owned поддиректорий при реальном автоматическом запуске шести готовых Lean досье.",
-      "status": "active",
+      "status": "complete",
       "effort": "средняя",
       "effort_reason": "Адресная совместимость V2 writer path и минимальные offline Git-регрессии.",
       "urgency": "высокая",
       "urgency_reason": "Активированный writer останавливается до приёмки готовых шести документов.",
       "task_file": "WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_PATH_LAYOUT_FIX_01.md",
-      "worker_slot": "ЧАТ 3",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "dossier-lean-writer-auto-activation-01"
       ],
-      "blocker": "Реальный автоматический запуск заблокирован инвариантом V2 single-item path layout; никаких повторных Actions или новых grants.",
+      "blocker": "Source fix готов и CI 3/3 PASS; live claim после postclaim failure израсходован. PR ждёт независимой L3 и директорской приёмки.",
       "updated_on": "2026-11-25",
-      "updated_at_utc": "2026-11-25T14:06:54.587Z",
+      "updated_at_utc": "2026-11-25T16:14:55.761Z",
+      "recent_completion": true
+    },
+    {
+      "id": "dossier-lean-auto-path-layout-pr490-l3-independent-qa-01",
+      "title": "Независимая L3 QA путей Lean writer",
+      "goal": "Независимо проверить sandbox-owned writer path binding и отсутствие ослабления одноразовой авторизации перед принятием исправления.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Содержательная проверка материальной границы изолированного сохранения и негативных Git-тестов.",
+      "urgency": "высокая",
+      "urgency_reason": "Непроверенная независимо запись в sandbox блокирует приёмку исходного исправления.",
+      "task_file": "WORKER_TASK_DOSSIER_LEAN_AUTO_PATH_LAYOUT_PR490_L3_INDEPENDENT_QA_01.md",
+      "worker_slot": "ЧАТ 1",
+      "order": null,
+      "depends_on": [
+        "dossier-lean-writer-auto-path-layout-fix-01"
+      ],
+      "blocker": "Требуется независимый L3 security verdict; реальный postclaim не разрешает повторную попытку после source merge.",
+      "updated_on": "2026-11-25",
+      "updated_at_utc": "2026-11-25T16:14:55.761Z",
       "recent_completion": false
     }
   ]
