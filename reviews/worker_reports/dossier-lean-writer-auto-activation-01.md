@@ -1,5 +1,25 @@
 # ЧАТ 2 — Lean Writer automatic activation: post-merge preclaim event gate correction
 
+## Final two-run diagnosis and verified Git owner-diff correction — 2026-11-25
+
+**Status: `SOURCE_READY_AWAITING_DIRECTOR_MERGE`** of [PR #488](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/488), branch `fix/dossier-lean-owner-activation-verified-git-delta-20261125` (final PR HEAD CI pending at this note). No live write or verified 6+6 yet; worker must not merge/dispatch.
+
+### Reproduced real symptom and actual cause
+
+- PR #486 merged as `cfd29df88311af8749428f580dfa3dff236f9dba`; auto owner push Actions [#45591943959](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45591943959) failed **preclaim** with `LEAN_AUTO_READY_BLOCKED: catch-up only on a genuine separate activation contract change`.
+- PR #487 merged as `5456a5a3f9b0e53702d1422cab531a079b4ced7c`, source HEAD `6c347963cced20860afc47536f141d23d4c680d3` 4/4 CI successful; auto owner push Actions [#45603534459](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45603534459) failed **identically preclaim**.
+- **Confirmed API contract defect** (GitHub's official `Events that trigger workflows` documentation): the Actions push-event payload *does not include* the `added`, `removed` and `modified` properties of the `commit` object. Previous gate (both #486/#487) used `event.head_commit.modified/added`. The original hypothesis blaming an unrelated added report was insufficient; the missing event fields are the actual source of the repeated false failures. Older offline synthetic events invented these omitted fields.
+- GitHub workflow `on.push.paths` filters to this exact config but is **not an absolute security guarantee**: GitHub docs specify that push events exceeding 1,000 commits or diff generation timeouts can run without the normal path filter. Removing *all* independent activation-file proof therefore risks running historical recovery on an unrelated authenticated owner push.
+- The appropriate narrow fix **removes all use of the absent event `head_commit.modified/added` fields**. The separate `require_activation_git_change` validates GitHub-authenticated owner/main/ref/run `before` and `after` SHAs against the checked-out verified Git history, requires nonzero real ancestor `before`, and requires the **existing activation config Git blob to actually change** between `before` and `after`. Additional files never matter. It executes **before any one-use claim**.
+- Positive/negative tests use actual temporary Git history: changed config plus an added report succeeds; unrelated owner push and newly-created config do not grant; bad/missing before SHA, reversed/nonancestor push, wrong actor, forced/wrong-ref/wrong-SHA events all fail. The prior single-use-claim/no-retry and sandbox readback tests remain.
+- No `allow_automatic_semantic_retry`, production, Deep, canonical Lean reader/writer, writer permissions, shared lock, trial scope, historical failed-run or per-trial immutable-grant changes. Versioned **config status only** changes, without expanding authority, to let a future true owner `main` merge of the fix produce a new event. Never rerun either failed Actions run or original failed manual #45540222575.
+
+### State and remaining acceptance
+
+Checked `main=5456a5a3f9b0e53702d1422cab531a079b4ced7c`, frozen sandbox `d1b9a9e78dcde879a03370682ade4969763fd9d1` and zero `refs/heads/dossier-lean-auto-attempts/` claims after second preclaim failure. The original 6 docs and 6 accepted receipts remain **0/6 and 0/6**. Next Director action: accept exact final source PR HEAD with mandatory GitHub CI; owner merge; inspect fresh Actions ID, event authenticity, claim creation at most once, exact Git postpush 6+6 isolated readback or precise fail-closed blocker. No manual workflow dispatch or self-merge.
+
+---
+
 ## Latest runtime failure and source fix (2026-11-25)
 
 - **Status:** `SOURCE_READY_AWAITING_DIRECTOR_MERGE` for [source PR #487](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/487) (`fix/dossier-lean-auto-main-push-added-files-gate-20261125`); **final HEAD CI and source PR acceptance still pending**. This section supersedes historical pre-merge status below.

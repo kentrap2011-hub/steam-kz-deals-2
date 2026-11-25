@@ -191,21 +191,45 @@ def verify_source_signal(event, env):
                 and env.get("GITHUB_ACTOR_ID") == batch.OWNER_ID
                 and env.get("GITHUB_TRIGGERING_ACTOR") == batch.OWNER_LOGIN,
                 "catch-up requires genuine approved main owner activation push")
-        changed = event.get("head_commit", {}).get("modified", [])
-        added = event.get("head_commit", {}).get("added", [])
-        activation_path = "config/dossier_lean_writer_auto_ready_v1.json"
-        # A merge may add an unrelated report or documentation file. Only
-        # the activation contract must be an existing *modified* file; an
-        # arbitrary new file neither grants nor blocks owner catch-up.
-        require(isinstance(changed, list) and isinstance(added, list)
-                and activation_path in changed
-                and activation_path not in added,
-                "catch-up only on a genuine separate activation contract change")
+        # GitHub Actions push payloads omit head_commit.modified/added.
+        # The exact activation path is proven against real Git objects after
+        # trusted main checkout, rather than trusting absent event fields.
         return {"trial_id": expected,
                 "source_signal_run_id": None,
                 "source_signal_sha": original["frozen_sandbox_head"],
                 "event_kind": "owner_activation_catchup"}
     raise ValueError("LEAN_AUTO_READY_BLOCKED: unrecognized automatic event")
+
+
+def require_activation_git_change(source_repo, event, env):
+    """Fail closed unless the owner push really changed the existing contract.
+
+    The workflow paths filter is useful but can be bypassed by GitHub's
+    documented large-push/diff-timeout behavior. The Git tree pair is the
+    source of truth, not missing head_commit.modified/added event fields.
+    """
+    require(env.get("GITHUB_EVENT_NAME") == "push",
+            "activation diff requires an owner main push")
+    before = event.get("before")
+    after = event.get("after")
+    require(isinstance(before, str) and SHA.fullmatch(before)
+            and before != "0" * 40 and after == env.get("GITHUB_SHA"),
+            "activation push lacks a real Git before/after range")
+    ancestry = command(source_repo, "merge-base", "--is-ancestor",
+                       before, after, check=False)
+    require(ancestry.returncode == 0,
+            "activation push before commit is not an ancestor of after")
+    path = "config/dossier_lean_writer_auto_ready_v1.json"
+    previous = command(source_repo, "rev-parse", "--verify",
+                       before + ":" + path, check=False)
+    current = command(source_repo, "rev-parse", "--verify",
+                      after + ":" + path, check=False)
+    old_blob = previous.stdout.strip()
+    new_blob = current.stdout.strip()
+    require(previous.returncode == 0 and current.returncode == 0
+            and SHA.fullmatch(old_blob) and SHA.fullmatch(new_blob)
+            and old_blob != new_blob,
+            "owner main push did not change an existing activation contract")
 
 
 def validate_ready(repo, *, token):
@@ -661,6 +685,8 @@ def run(source_repo, env):
     event = json.loads(Path(env["GITHUB_EVENT_PATH"]).read_text(encoding="utf-8"))
     signal = verify_source_signal(event, env)
     verify_main_checkout(source_repo, env)
+    if signal["event_kind"] == "owner_activation_catchup":
+        require_activation_git_change(source_repo, event, env)
     trial = signal["trial_id"]
     if check_claim_ref(source_repo, trial) is not None:
         return {"status": "suppressed_already_claimed_no_retry",

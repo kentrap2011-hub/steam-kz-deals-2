@@ -1,12 +1,12 @@
 # CURRENT TASK
 
-## ЧАТ 2 — Lean writer auto activation post-merge gate fix (2026-11-25)
+## ЧАТ 2 — Lean Writer owner activation real Git-delta guard fix (2026-11-25)
 
-- Task `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_ACTIVATION_01.md`; owner waiver of independent L3 applies only to isolated sandbox auto-writer. PR #486 **merged** to `main@cfd29df88311af8749428f580dfa3dff236f9dba`, final 5/5 CI green.
-- Real owner [Actions #45591943959](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45591943959) **failed preclaim**: genuine modified activation config but unrelated new worker report in `head_commit.added`, incorrectly rejected by global `and not added` guard. No claim, sandbox unchanged `d1b9a9e78dcde879a03370682ade4969763fd9d1`, 0/6 accepted docs/receipts. Do not rerun original manual Action `45540222575` or failed auto run.
-- Current fix [PR #487](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/487), branch `fix/dossier-lean-auto-main-push-added-files-gate-20261125`: narrowly accept unrelated added files while requiring owner-authenticated `main` push with existing modified activation config; add positive/negative real merge-shape tests and a versioned config status update to trigger a **new owner-approved event** after Director merge. No retry rules, semantic, Deep or production changes.
-- Next: final HEAD CI and Director acceptance of narrow source PR (not self-merge); verify new genuine event ID, single claim, exact 6+6 sandbox postpush readback or named fail-closed. Report `reviews/worker_reports/dossier-lean-writer-auto-activation-01.md`.
-
+- Task `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_ACTIVATION_01.md`, repository only `kentrap2011-hub/steam-kz-deals-2`. Owner explicitly authorized narrow sandbox activation without independent L3, *not* relaxation of owner/one-use/Git checks.
+- PR #486 merged `cfd29df88311af8749428f580dfa3dff236f9dba`; real auto Actions [#45591943959](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45591943959) failed preclaim. PR #487 merged `5456a5a3f9b0e53702d1422cab531a079b4ced7c`; real auto Actions [#45603534459](https://github.com/kentrap2011-hub/steam-kz-deals-2/actions/runs/45603534459) failed **the same** preclaim gate. GitHub documents that Actions push events omit `head_commit.modified/added` which earlier tests invented; adding a report is not the true root cause.
+- Fix [PR #488](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/488), branch `fix/dossier-lean-owner-activation-verified-git-delta-20261125`: remove invalid event-field gate; preserve existing verified owner `main` event, and require actual existing activation policy Git blob changed across legitimate `before/after` ancestors. This protects against abnormal GitHub paths-filter bypasses (>1000 commits/diff timeout). Add real temp-Git positive/negative event regressions; change config `status` only for new approved event. No scope/retry/Deep/production/claim permission broadened.
+- After both failed owner runs: **0 claim refs**, frozen sandbox `d1b9a9e78dcde879a03370682ade4969763fd9d1`, **0/6 docs and 0/6 receipts**, recovery authorization unspent, old manual #45540222575 forever spent. Do not rerun #45591943959 or #45603534459.
+- Status `SOURCE_READY_AWAITING_DIRECTOR_MERGE` pending exact new source PR HEAD CI, then director-owned merge. Verify fresh real Actions ID and 6+6 postpush readback or exact fail-closed. Report `reviews/worker_reports/dossier-lean-writer-auto-activation-01.md`.
 
 ## ЧАТ 1 — Lean writer automatic ready-gate: scoped six source, INACTIVE (2026-11-25)
 
