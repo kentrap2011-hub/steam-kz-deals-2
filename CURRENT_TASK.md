@@ -1,5 +1,13 @@
 # CURRENT TASK
 
+## ЧАТ 3 — Lean Writer auto sandbox destination fix (2026-11-25)
+
+- Task `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_PATH_LAYOUT_FIX_01.md`; source branch `fix/dossier-lean-auto-writer-sandbox-path-layout-20261125` from `main@2a98a3d57b2a97e2c1239804ec0285a55220b513`.
+- Real auto run `45628656098` is **postclaim terminal failure**. Claim ref `dossier-lean-auto-attempts/cdcdb4951e2fc98336729af75b954da4` at `6df354d024b0e3104ee408e815a1e5d141fb8e84` is consumed; frozen sandbox unchanged `d1b9a9e78dcde879a03370682ade4969763fd9d1` and 0/6 acceptance. No retry, grant, sandbox mutation or live writer.
+- Root cause: main-cwd-relative writer paths passed to temp sandbox checkout; fix derives exact absolute isolated paths from `batch.paths(trial_id)`. Disposable Git 6+6 positive and wrong/overlapping/manual strict destination negative regressions added.
+- Source-only PR pending exact final-HEAD CI/Director acceptance; independent runtime decision stays `BLOCKED_ALREADY_CLAIMED_NO_RETRY`. Report `reviews/worker_reports/dossier-lean-writer-auto-path-layout-fix-01.md`. All other workstreams below remain untouched.
+
+
 ## ЧАТ 2 — Lean Writer owner activation real Git-delta guard fix (2026-11-25)
 
 - Task `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_ACTIVATION_01.md`, repository only `kentrap2011-hub/steam-kz-deals-2`. Owner explicitly authorized narrow sandbox activation without independent L3, *not* relaxation of owner/one-use/Git checks.
