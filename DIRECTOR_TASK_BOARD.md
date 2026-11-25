@@ -5,11 +5,11 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — автоматический writer по готовности партии, 2026-11-25
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — активация Lean writer, 2026-11-25
 
-- **НОВЫЙ ЧАТ 1 — зарезервирован (ожидает запуска):** `dossier-lean-writer-auto-ready-gate-01` → `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_READY_GATE_01.md`. Пользователь явно разрешил автоматический GitHub-owned **изолированный writer по готовности Research/Assembly** без ручного JSON/Actions, включая один безопасный catch-up для существующих шести досье. Только bounded source IMPLEMENT + offline tests/CI + report PR; никакого real auto-dispatch, writer, semantic, Deep/production или retry на этапе реализации. Отдельная L3 безопасности триггера/владельца, Director source merge и контролируемая активация обязательны. Не активировать глобальные Lean флаги и future scheduled semantic workers.
-- **ЧАТ 2 — свободен:** завершил исправление маршрутизации старого cohort preflight к generic `dossier-notes-v2-assembly-replay-*`; source PR #482 MERGED в `main@7e0d575373e4daf39bb184005dad031b7e85eea1`, 5/5 exact-HEAD CI PASS. Старый writer run #45540222575 FAILED before persistence, не повторять; шесть frozen Assembly candidates+receipts пока не приняты (0/6), observed sandbox HEAD `d1b9a9e78dcde879a03370682ade4969763fd9d1`.
-- **ЧАТ 3 — свободен.** ЧАТ 1 ранее сдал независимую L3 source QA старого writer PR #478 (report PR #480). Это не QA будущего automatic-trigger изменения. После финального worker report номер снова освобождается.
+- **НОВЫЙ ЧАТ 2 — зарезервирован (ожидает запуска):** `dossier-lean-writer-auto-activation-01` → `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_ACTIVATION_01.md`. Пользователь разрешил поручить включение автоматизации без самостоятельных действий в GitHub. Задача — довести уже принятый source до живого узкого GitHub-owned sandbox writer, доказать реальную приёмку шести и исключить ручные JSON/Actions; сохранить отдельные authority/safety gates, не включать Deep/production или новые semantic retries.
+- **ЧАТ 1 — свободен:** `dossier-lean-writer-auto-ready-gate-01` завершён; source PR #484 принят в `main@5ec1fd0f0ffbf72948e09366b43b155d361f1950`, 6/6 CI PASS, но автоматизация ещё OFF. Отказ от независимой L3 относился к source merge #484, а не ко всем будущим live gates.
+- **ЧАТ 3 — свободен.** Другие исторические назначения ниже не являются текущими физическими занятиями.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
