@@ -420,7 +420,8 @@ class LeanAutoReadySourceTests(unittest.TestCase):
                       "event_kind": "owner_activation_catchup"}
             with patch.object(ready, "policy",
                               return_value={"activation_enabled": True, "recovery": {"trial_id": trial},
-                                            "retry_lifecycle": {"historical_live_retry_authorized": False}}), \
+                                            "retry_lifecycle": {"historical_live_retry_authorized": False,
+                                                                "paused_trial_ids": []}}), \
                  patch.object(ready, "verify_source_signal",
                               return_value=signal), \
                  patch.object(ready, "verify_main_checkout"), \
