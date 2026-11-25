@@ -1,5 +1,11 @@
 # CURRENT TASK
 
+## ЧАТ 1 — Lean writer automatic ready gate: BLOCKED_AUTHORIZATION (2026-11-25)
+
+- Task: `WORKER_TASK_DOSSIER_LEAN_WRITER_AUTO_READY_GATE_01.md`; report-only source [branch](https://github.com/kentrap2011-hub/steam-kz-deals-2/tree/recon/dossier-lean-writer-auto-ready-auth-boundary-20261125), base `main@bf5a017392f5ffa491d10ef513d7232b5229d643`.
+- Closure: **HARD STOP, not implemented**. Original exact-six owner writer workflow run `45540222575` failed at first attempt (before data writes), while the existing grant is single-use and forbids automatic retries. Generic policy `allow_automatic_writer=false`; no separate per-trial auto-writer/recovery authorization exists. No retry, writer or semantic/production execution initiated.
+- Durable report: `reviews/worker_reports/dossier-lean-writer-auto-ready-gate-01.md`. Director must decide a distinct explicit narrow one-use recovery authorization versus terminal suppression of original six before any implementation/CI/activation. Other workstreams unchanged.
+
 ## ЧАТ 2 — generic Lean writer preflight route fix (2026-11-25)
 
 - Task: `WORKER_TASK_DOSSIER_LEAN_GENERIC_WRITER_PREFLIGHT_ROUTE_FIX_01.md`; source branch `fix/dossier-lean-generic-writer-preflight-route-20261125`, base `main@a8708f68081abf4dcfdae08bae6fdca373318bdc`.
