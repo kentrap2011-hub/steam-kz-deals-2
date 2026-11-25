@@ -143,17 +143,23 @@ def verify_source_signal(event, env):
     if env.get("GITHUB_EVENT_NAME") == "workflow_run":
         prior = event.get("workflow_run", {})
         repository = prior.get("head_repository") or {}
-        require(prior.get("event") == "push"
+        branch = prior.get("head_branch")
+        trial_id = branch[len("sandbox/"):] if isinstance(branch, str) and branch.startswith("sandbox/") else None
+        require(generic.is_generic(trial_id)
+                and prior.get("event") == "push"
                 and prior.get("status") == "completed"
                 and prior.get("conclusion") == "success"
                 and prior.get("run_attempt") == 1
                 and prior.get("path") == SIGNAL_WORKFLOW
-                and prior.get("head_branch") == "sandbox/" + expected
-                and prior.get("head_sha") == original["frozen_sandbox_head"]
+                and isinstance(prior.get("head_sha"), str)
+                and SHA.fullmatch(prior["head_sha"])
+                and (trial_id != expected or
+                     prior["head_sha"] == original["frozen_sandbox_head"])
                 and repository.get("full_name") == batch.REPOSITORY
-                and prior.get("id") and type(prior["id"]) is int,
-                "wrong ready-signal source run, repo, branch or HEAD")
-        return {"trial_id": expected,
+                and type(prior.get("id")) is int
+                and prior["id"] > 0,
+                "wrong ready-signal source run, repo, trial, workflow or HEAD")
+        return {"trial_id": trial_id,
                 "source_signal_run_id": prior["id"],
                 "source_signal_sha": prior["head_sha"],
                 "event_kind": "terminal_receipt_push"}
@@ -255,7 +261,7 @@ def validate_ready(repo, *, token):
     return {"status": "ready_exact_six_read_only", "ready": True,
             "trial_id": trial, "marker_commit": marker,
             "sandbox_head": original["frozen_sandbox_head"],
-            "pairs": pairs, "canonical_acceptance": False,
+            "pairs": pairs, "issuer": issuer, "canonical_acceptance": False,
             "deep_ready": False}
 
 
