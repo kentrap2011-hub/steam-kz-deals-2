@@ -426,6 +426,7 @@ class LeanAutoReadySourceTests(unittest.TestCase):
                               return_value=signal), \
                  patch.object(ready, "verify_main_checkout"), \
                  patch.object(ready, "require_activation_git_change"), \
+                 patch.object(ready, "unique_failed_source_retry", return_value=None), \
                  patch.object(ready, "check_claim_ref",
                               return_value="a" * 40), \
                  patch.object(ready, "claim_once") as claim:
