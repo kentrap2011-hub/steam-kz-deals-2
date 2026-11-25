@@ -254,12 +254,8 @@ class LeanAutoReadySourceTests(unittest.TestCase):
                     repo, {"before": unrelated, "after": activation}, env)
             with self.assertRaisesRegex(ValueError, "not an ancestor"):
                 ready.require_activation_git_change(
-                    repo, {"before": next_head, "after": next_head},
-                    {"GITHUB_EVENT_NAME": "push", "GITHUB_SHA": next_head}
-                ) if False else ready.require_activation_git_change(
                     repo, {"before": next_head, "after": base},
-                    {"GITHUB_EVENT_NAME": "push", "GITHUB_SHA": base}
-                )
+                    {"GITHUB_EVENT_NAME": "push", "GITHUB_SHA": base})
 
     def test_newly_added_activation_contract_is_not_a_valid_change(self):
         with tempfile.TemporaryDirectory() as tmp:
