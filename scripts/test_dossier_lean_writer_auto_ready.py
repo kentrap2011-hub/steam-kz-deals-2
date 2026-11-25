@@ -2,6 +2,7 @@
 """Read-only authorization/ready gate negative tests (not live writer CI)."""
 import copy
 import json
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -162,41 +163,130 @@ class LeanAutoReadySourceTests(unittest.TestCase):
             "GITHUB_SHA": "f" * 40, "GITHUB_ACTOR_ID": ready.batch.OWNER_ID,
             "GITHUB_TRIGGERING_ACTOR": ready.batch.OWNER_LOGIN,
         }
+        # Actual GitHub Actions push payload does NOT contain
+        # head_commit.added/removed/modified. Event gate authenticates the
+        # actor; a separate real-Git check proves the activation diff.
         event = {
             "ref": "refs/heads/main", "created": False, "deleted": False,
-            "forced": False, "after": "f" * 40,
+            "forced": False, "before": "e" * 40, "after": "f" * 40,
             "repository": {"full_name": ready.batch.REPOSITORY},
             "sender": {"id": int(ready.batch.OWNER_ID)},
-            "head_commit": {"modified": [
-                "config/dossier_lean_writer_auto_ready_v1.json"
-            ], "added": []},
         }
-        activation_path = "config/dossier_lean_writer_auto_ready_v1.json"
         with patch.object(ready, "policy", return_value={"activation_enabled": True}):
             self.assertEqual(ready.verify_source_signal(event, env)[
                 "event_kind"], "owner_activation_catchup")
-            # Regression for real merged #486: the contract was modified
-            # while an unrelated worker-report path was newly added.
-            merge_with_report = copy.deepcopy(event)
-            merge_with_report["head_commit"]["added"] = [
-                "reviews/worker_reports/dossier-lean-writer-auto-activation-01.md"]
-            self.assertEqual(ready.verify_source_signal(merge_with_report, env)[
-                "event_kind"], "owner_activation_catchup")
             for key, bad in (("forced", True), ("after", "0" * 40),
                              ("sender", {"id": 17}),
-                             ("head_commit", {"modified": ["README.md"], "added": []}),
-                             ("head_commit", {"modified": [activation_path],
-                                              "added": [activation_path]}),
-                             ("head_commit", {"modified": [activation_path],
-                                              "added": None})):
-                with self.subTest(key=key, bad=bad):
+                             ("ref", "refs/heads/not-main"),
+                             ("repository", {"full_name": "attacker/repo"})):
+                with self.subTest(key=key):
                     modified = dict(event)
                     modified[key] = bad
                     with self.assertRaises(ValueError):
                         ready.verify_source_signal(modified, env)
-            wrong_actor = dict(env, GITHUB_ACTOR_ID="123")
-            with self.assertRaises(ValueError):
-                ready.verify_source_signal(merge_with_report, wrong_actor)
+            for key, bad in (("GITHUB_ACTOR_ID", "123"),
+                             ("GITHUB_TRIGGERING_ACTOR", "attacker"),
+                             ("GITHUB_RUN_ATTEMPT", "2"),
+                             ("GITHUB_REF", "refs/heads/not-main")):
+                with self.subTest(key=key):
+                    with self.assertRaises(ValueError):
+                        ready.verify_source_signal(event, {**env, key: bad})
+
+    def test_activation_push_requires_real_existing_modified_git_blob(self):
+        # Exercise a real Git history, not synthetic head_commit metadata.
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+
+            def git(*args):
+                return subprocess.run(
+                    ["git", "-C", str(repo), *args], check=True,
+                    capture_output=True, text=True).stdout.strip()
+
+            git("init", "-q", "-b", "main")
+            git("config", "user.name", "offline")
+            git("config", "user.email", "offline@example.invalid")
+            path = repo / "config/dossier_lean_writer_auto_ready_v1.json"
+            path.parent.mkdir(parents=True)
+            path.write_text('{"activation_enabled": true, "status": "old"}\n')
+            git("add", ".")
+            git("commit", "-qm", "baseline existing activation contract")
+            base = git("rev-parse", "HEAD")
+
+            (repo / "README.md").write_text("unrelated change\n")
+            git("add", "README.md")
+            git("commit", "-qm", "unrelated owner push")
+            unrelated = git("rev-parse", "HEAD")
+            env = {"GITHUB_EVENT_NAME": "push", "GITHUB_SHA": unrelated}
+            with self.assertRaisesRegex(ValueError, "did not change"):
+                ready.require_activation_git_change(
+                    repo, {"before": base, "after": unrelated}, env)
+
+            # Real #486/#487 merge shape: config modified, extra report may be
+            # added, while Actions push event has no modified/added fields.
+            path.write_text('{"activation_enabled": true, "status": "new"}\n')
+            report = repo / "reviews/worker_reports/example.md"
+            report.parent.mkdir(parents=True)
+            report.write_text("worker report\n")
+            git("add", ".")
+            git("commit", "-qm", "merge activation and worker report")
+            activation = git("rev-parse", "HEAD")
+            env["GITHUB_SHA"] = activation
+            event = {"before": unrelated, "after": activation}
+            self.assertIsNone(ready.require_activation_git_change(repo, event, env))
+
+            # A normal push, despite being by the owner, cannot re-activate
+            # historical six unless this same config actually changes.
+            report.write_text("updated report\n")
+            git("add", ".")
+            git("commit", "-qm", "another unrelated owner push")
+            next_head = git("rev-parse", "HEAD")
+            env["GITHUB_SHA"] = next_head
+            with self.assertRaisesRegex(ValueError, "did not change"):
+                ready.require_activation_git_change(
+                    repo, {"before": activation, "after": next_head}, env)
+            for bad in (None, "0" * 40, "f" * 40):
+                with self.subTest(invalid_before=bad):
+                    with self.assertRaises(ValueError):
+                        ready.require_activation_git_change(
+                            repo, {"before": bad, "after": next_head}, env)
+            with self.assertRaisesRegex(ValueError, "before/after"):
+                ready.require_activation_git_change(
+                    repo, {"before": unrelated, "after": activation}, env)
+            with self.assertRaisesRegex(ValueError, "not an ancestor"):
+                ready.require_activation_git_change(
+                    repo, {"before": next_head, "after": next_head},
+                    {"GITHUB_EVENT_NAME": "push", "GITHUB_SHA": next_head}
+                ) if False else ready.require_activation_git_change(
+                    repo, {"before": next_head, "after": base},
+                    {"GITHUB_EVENT_NAME": "push", "GITHUB_SHA": base}
+                )
+
+    def test_newly_added_activation_contract_is_not_a_valid_change(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+
+            def git(*args):
+                return subprocess.run(
+                    ["git", "-C", str(repo), *args], check=True,
+                    capture_output=True, text=True).stdout.strip()
+
+            git("init", "-q", "-b", "main")
+            git("config", "user.name", "offline")
+            git("config", "user.email", "offline@example.invalid")
+            (repo / "README.md").write_text("baseline\n")
+            git("add", ".")
+            git("commit", "-qm", "baseline without activation config")
+            before = git("rev-parse", "HEAD")
+            path = repo / "config/dossier_lean_writer_auto_ready_v1.json"
+            path.parent.mkdir(parents=True)
+            path.write_text('{"activation_enabled": true}\n')
+            git("add", ".")
+            git("commit", "-qm", "new config must not grant authority")
+            after = git("rev-parse", "HEAD")
+            with self.assertRaisesRegex(ValueError, "did not change"):
+                ready.require_activation_git_change(
+                    repo, {"before": before, "after": after},
+                    {"GITHUB_EVENT_NAME": "push", "GITHUB_SHA": after})
 
     def test_exact_ready_validates_year_edition_and_every_terminal_receipt(self):
         # Synthetic dependency stand-ins: validates fail-closed orchestration.
@@ -334,6 +424,7 @@ class LeanAutoReadySourceTests(unittest.TestCase):
                  patch.object(ready, "verify_source_signal",
                               return_value=signal), \
                  patch.object(ready, "verify_main_checkout"), \
+                 patch.object(ready, "require_activation_git_change"), \
                  patch.object(ready, "check_claim_ref",
                               return_value="a" * 40), \
                  patch.object(ready, "claim_once") as claim:
