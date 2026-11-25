@@ -70,6 +70,17 @@ def policy():
             and contract.get("canonical_main_acceptance") is False
             and type(contract.get("activation_enabled")) is bool,
             "unrecognized source approval/activation contract")
+    lifecycle = contract.get("retry_lifecycle", {})
+    require(lifecycle.get("schema") == "DOSSIER-LEAN-WRITER-RESUMABLE-V1"
+            and lifecycle.get("enabled_for_new_scoped_grants") is True
+            and lifecycle.get("max_total_attempts") == 3
+            and lifecycle.get("exclusive_lease_minutes") == 30
+            and lifecycle.get("minimum_retry_minutes") == 2
+            and lifecycle.get("historical_spent_claim_sha") ==
+                "6df354d024b0e3104ee408e815a1e5d141fb8e84"
+            and lifecycle.get("historical_failed_auto_run_id") == 45628656098
+            and lifecycle.get("historical_live_retry_authorized") is False,
+            "lifecycle source proposal must not silently restore a spent historic grant")
     require(recovery.get("trial_id") == original["trial_id"]
             and recovery.get("marker_commit") == original["marker_commit"]
             and recovery.get("original_frozen_sandbox_head") ==
@@ -586,7 +597,7 @@ def claim_record(signal, env, readiness):
         "source_event": signal["event_kind"],
         "source_signal_sha": signal["source_signal_sha"],
         "source_signal_run_id": signal["source_signal_run_id"],
-        "attempt": 1, "no_retry": True,
+        "attempt": 1, "no_retry": historical,
         "canonical_acceptance": False, "production": False, "deep": False,
     }
 
@@ -661,6 +672,21 @@ def authenticated_auto_context(repo, trial_id, marker_commit, item_commits, env=
             and readiness["sandbox_head"] ==
                 output(repo, "rev-parse", "HEAD"),
             "no exact trial, immutable SHA pairs or terminal-ready source")
+    # A V2 execution lease is a separate append-only event after the
+    # immutable original claim. Legacy claim alone cannot authorize a retry.
+    if env.get("LEAN_AUTO_ATTEMPT_REF_SHA"):
+        from dossier_lean_writer_retry_state import active_for_writer
+        from dossier_lean_writer_retry_state import read as read_retry
+        from dossier_lean_writer_retry_state import remote_head as retry_head
+        grant_hash = exact_pairs_digest(readiness["pairs"])
+        old_anchor = (policy()["retry_lifecycle"]["historical_spent_claim_sha"]
+                      if trial_id == recovery["trial_id"] else None)
+        active_for_writer(
+            repo, {**readiness, "pairs_sha256": grant_hash}, env,
+            env["LEAN_AUTO_ATTEMPT_REF_SHA"], historic_anchor=old_anchor)
+        require(retry_head(repo, trial_id) == env["LEAN_AUTO_ATTEMPT_REF_SHA"],
+                "active lease changed before sandbox writer")
+        return True
     remote_claim = check_claim_ref(repo, trial_id)
     require(remote_claim == env["LEAN_AUTO_CLAIM_SHA"],
             "durable one-use control ref missing or modified")
@@ -686,28 +712,48 @@ def sandbox_writer_destinations(sandbox_repo, trial_id):
     return root / paths["store"], root / paths["accepted"]
 
 
+def authentic_failed_auto_run(token, expected_id, claim):
+    """Live GitHub Actions proof of the old postclaim failure, never a new grant."""
+    actual = _github_get(batch.REPOSITORY, "actions/runs/" + str(expected_id), token)
+    require(actual.get("id") == expected_id
+            and actual.get("path") == AUTO_WORKFLOW
+            and actual.get("event") == "push"
+            and actual.get("run_attempt") == 1
+            and actual.get("head_branch") == "main"
+            and actual.get("head_sha") == claim["automation_source_main_sha"]
+            and actual.get("status") == "completed"
+            and actual.get("conclusion") == "failure",
+            "historical postclaim Action failure not authenticated")
+
+
 def run(source_repo, env):
-    """One trusted main workflow job, shared existing writer lock, no semantic work."""
+    """Trusted existing Actions trigger; one CAS lease per exact frozen trial."""
+    from tempfile import TemporaryDirectory
+    import dossier_lean_writer_retry_state as retry
+
     source_repo = Path(source_repo).resolve()
     cfg = policy()
     if not cfg["activation_enabled"]:
-        return {"status": "activation_disabled_source_only",
-                "writer_launched": False}
+        return {"status": "activation_disabled_source_only", "writer_launched": False}
     event = json.loads(Path(env["GITHUB_EVENT_PATH"]).read_text(encoding="utf-8"))
     signal = verify_source_signal(event, env)
     verify_main_checkout(source_repo, env)
     if signal["event_kind"] == "owner_activation_catchup":
         require_activation_git_change(source_repo, event, env)
     trial = signal["trial_id"]
-    if check_claim_ref(source_repo, trial) is not None:
-        return {"status": "suppressed_already_claimed_no_retry",
+    historical = trial == cfg["recovery"]["trial_id"]
+    lifecycle = cfg["retry_lifecycle"]
+    # V1's consumed historical owner permission is never reinterpreted as V2.
+    # Only a *separate* exact owner migration decision can flip this gate.
+    if historical and not lifecycle["historical_live_retry_authorized"]:
+        return {"status": "historical_spent_claim_awaits_scoped_owner_migration",
                 "trial_id": trial, "writer_launched": False}
-    # A workflow_run notification is a hint. Authenticate the genuine
-    # successful first-attempt read-only push signal from GitHub's API.
+
+    # A receipt event is only a read-only hint; trust the completed Actions run.
     if signal["source_signal_run_id"] is not None:
-        original = _github_get(batch.REPOSITORY, "actions/runs/" +
-                               str(signal["source_signal_run_id"]),
-                               env["GITHUB_TOKEN"])
+        original = _github_get(
+            batch.REPOSITORY, "actions/runs/" + str(signal["source_signal_run_id"]),
+            env["GITHUB_TOKEN"])
         require(original.get("id") == signal["source_signal_run_id"]
                 and original.get("path") == SIGNAL_WORKFLOW
                 and original.get("event") == "push"
@@ -716,84 +762,208 @@ def run(source_repo, env):
                 and original.get("conclusion") == "success"
                 and original.get("head_branch") == "sandbox/" + trial
                 and original.get("head_sha") == signal["source_signal_sha"],
-                "upstream ready-signal run not authenticated")
-    from tempfile import TemporaryDirectory
-    historical = trial == cfg["recovery"]["trial_id"]
+                "upstream ready signal not authenticated")
+
     sandbox_ref = "refs/heads/sandbox/" + trial
-    with TemporaryDirectory(prefix="lean-auto-sandbox-") as tmp:
+    with TemporaryDirectory(prefix="lean-auto-resumable-") as tmp:
         dest = Path(tmp) / "sandbox"
-        remote_before = output(source_repo, "ls-remote", "origin", sandbox_ref)
-        found = remote_before.split()
-        require(len(found) == 2 and SHA.fullmatch(found[0])
-                and found[0] == signal["source_signal_sha"],
-                "sandbox moved or is not exact authenticated ready-event HEAD")
-        command(source_repo, "fetch", "--no-tags", "origin",
-                "+" + sandbox_ref + ":refs/remotes/origin/sandbox/" + trial)
-        require(output(source_repo, "rev-parse",
-                       "refs/remotes/origin/sandbox/" + trial) == found[0],
-                "sandbox changed during bounded fetch")
-        command(source_repo, "worktree", "add", "--detach", str(dest),
-                found[0])
+        remote_before = retry.git(
+            source_repo, "ls-remote", "origin", sandbox_ref).stdout.strip().split()
+        require(len(remote_before) == 2 and SHA.fullmatch(remote_before[0]),
+                "sandbox branch unavailable or ambiguous")
+        sandbox_head = remote_before[0]
+        # An accepted sandbox is recognized only by exact immutable readback;
+        # never rebuild it or overwrite a receipt.
+        retry.git(source_repo, "fetch", "--no-tags", "origin", sandbox_ref)
+        original_head = (cfg["recovery"]["original_frozen_sandbox_head"]
+                         if historical else signal["source_signal_sha"])
+        accepted_candidate = sandbox_head != original_head
+        source_head = original_head if accepted_candidate else sandbox_head
+        if not accepted_candidate:
+            require(sandbox_head == signal["source_signal_sha"],
+                    "sandbox moved before ready signal")
+        else:
+            require(retry.sha(source_repo, "rev-parse", sandbox_head + "^") ==
+                    original_head, "sandbox has unexpected ancestry; no replay")
+        retry.git(source_repo, "worktree", "add", "--detach", str(dest), source_head)
         try:
-            command(dest, "checkout", "-b", "sandbox/" + trial)
+            retry.git(dest, "checkout", "-b", "sandbox/" + trial)
             readiness = (validate_ready(dest, token=env["GITHUB_TOKEN"])
                          if historical else future_plan(
                              dest, trial_id=trial, token=env["GITHUB_TOKEN"]))
             if not readiness["ready"]:
                 return {"status": "not_ready_no_attempt",
                         "trial_id": trial, "writer_launched": False}
-            require(check_claim_ref(source_repo, trial) is None,
-                    "one-use claim has appeared before writer")
-            require(readiness["sandbox_head"] == found[0],
-                    "readiness checked a stale sandbox HEAD")
-            claim = claim_once(source_repo, signal, env, readiness)
-            # Claim is now immutable. ANY later failure is terminal, including
-            # zero-write failures. Do not retry the operation or Git push.
-            env["LEAN_AUTO_CLAIM_SHA"] = claim
-            os.environ["LEAN_AUTO_CLAIM_SHA"] = claim
+            require(readiness["sandbox_head"] == original_head,
+                    "frozen ready head differs from authorization")
+            grant_hash = exact_pairs_digest(readiness["pairs"])
+            old_anchor = (lifecycle["historical_spent_claim_sha"]
+                          if historical else None)
+            state = retry.read(source_repo, trial, grant_hash,
+                               historical_anchor=old_anchor)
+            if historical:
+                require(state is not None, "spent historical claim missing")
+                authentic_failed_auto_run(
+                    env["GITHUB_TOKEN"],
+                    lifecycle["historical_failed_auto_run_id"], state["claim"])
+            elif state is None:
+                # First attempt only: old one-add anchor remains part of provenance.
+                claim_once(source_repo, signal, env, readiness)
+                state = retry.read(source_repo, trial, grant_hash)
+            require(state is not None, "GitHub control state unavailable")
+            require(state["claim"]["original_frozen_sandbox_head"] ==
+                    original_head and
+                    state["claim"]["marker_commit"] == readiness["marker_commit"]
+                    and state["claim"]["owner_source_run_id"] ==
+                    str(readiness["issuer"]["github_authorization_run_id"]),
+                    "immutable control-grant mismatch")
+
+            def readback_remote(commit):
+                # All checks run against a separately checked-out immutable
+                # remote commit; no canonical/Deep promotion is involved.
+                with TemporaryDirectory(prefix="lean-accepted-readback-") as extra:
+                    proof = Path(extra) / "accepted"
+                    retry.git(source_repo, "worktree", "add", "--detach",
+                              str(proof), commit)
+                    try:
+                        retry.git(proof, "checkout", "-b", "sandbox/" + trial)
+                        if historical:
+                            from dossier_notes_v2_isolated_lean_readback import exact_transaction
+                            exact_transaction(proof, mode="committed")
+                        else:
+                            exact_generic_transaction(
+                                proof, plan=readiness, mode="committed")
+                    finally:
+                        retry.git(source_repo, "worktree", "remove", "--force",
+                                  str(proof), check_result=False)
+
+            # Uncertain postwrite must be reconciled before any new attempt.
+            if accepted_candidate:
+                readback_remote(sandbox_head)
+                last = state["last"]
+                if last is not None and last["kind"] == "started":
+                    previous_env = {"GITHUB_RUN_ID": last["run_id"],
+                                    "GITHUB_SHA": last["main_sha"]}
+                    accepted = retry.make_event(
+                        state, readiness, previous_env, "accepted",
+                        last["attempt"], sandbox_commit=sandbox_head)
+                    retry.append(source_repo, trial, state, accepted)
+                elif last is not None and last["kind"] != "accepted":
+                    raise ValueError("verified accepted bytes conflict with terminal journal")
+                return {"status": "verified_noop_already_accepted",
+                        "trial_id": trial, "commit_sha": sandbox_head,
+                        "writer_launched": False}
+            last = state["last"]
+            if last is not None and last["kind"] == "started":
+                if retry.minutes_since(last) < lifecycle["exclusive_lease_minutes"]:
+                    return {"status": "active_lease_no_second_writer",
+                            "trial_id": trial, "writer_launched": False}
+                # Lease expired and sandbox remains exactly frozen: prior
+                # attempt had no committed acceptance. Preserve history.
+                old_env = {"GITHUB_RUN_ID": last["run_id"],
+                           "GITHUB_SHA": last["main_sha"]}
+                failed = retry.make_event(state, readiness, old_env,
+                                          "retryable_failed", last["attempt"],
+                                          detail="stale_lease_frozen_sandbox_readback")
+                retry.append(source_repo, trial, state, failed)
+                state = retry.read(source_repo, trial, grant_hash,
+                                   historical_anchor=old_anchor)
+            eligible, reason = retry.eligible(
+                state, source_sha=env["GITHUB_SHA"],
+                max_attempts=lifecycle["max_total_attempts"],
+                stale_minutes=lifecycle["exclusive_lease_minutes"],
+                retry_delay_minutes=lifecycle["minimum_retry_minutes"])
+            if not eligible:
+                return {"status": str(reason), "trial_id": trial,
+                        "writer_launched": False}
+            attempt = reason
+            started = retry.make_event(state, readiness, env, "started", attempt)
+            head = retry.append(source_repo, trial, state, started)
+            env["LEAN_AUTO_CLAIM_SHA"] = state["anchor"]
+            env["LEAN_AUTO_ATTEMPT_REF_SHA"] = head
+            os.environ["LEAN_AUTO_CLAIM_SHA"] = state["anchor"]
+            os.environ["LEAN_AUTO_ATTEMPT_REF_SHA"] = head
+            state = retry.read(source_repo, trial, grant_hash,
+                               historical_anchor=old_anchor)
             from taste_steam_review_dossier_buffered import drain_buffered_groups
-            store_dest, accepted_dest = sandbox_writer_destinations(dest, trial)
-            result = drain_buffered_groups(notes_v2={
-                "repo": dest,
-                "marker_commit": readiness["marker_commit"],
-                "trial_id": trial, "item_commits": readiness["pairs"],
-                "store_dir": store_dest,
-                "accepted_dir": accepted_dest,
-                "offline_fixture": False, "trial_sandbox": True,
-            })
-            from dossier_notes_v2_isolated_lean_readback import exact_transaction
-            readback = (lambda mode: exact_transaction(dest, mode=mode)
-                        if historical else exact_generic_transaction(
-                            dest, plan=readiness, mode=mode))
-            store = "data/control/dossier_notes_v2/batch_pilot_store/" + trial
-            accepted = "data/control/dossier_notes_v2/batch_pilot_accepted/" + trial
-            command(dest, "add", "--", store, accepted)
-            command(dest, "diff", "--cached", "--check")
-            readback("staged")  # exactly 2 * N original owner-granted paths
-            command(dest, "config", "user.name", "steam-kz-bot")
-            command(dest, "config", "user.email",
-                    "steam-kz-bot@users.noreply.github.com")
-            command(dest, "commit", "-m",
-                    "Persist one owner-issued Lean isolated sandbox batch")
-            readback("committed")
-            require(not output(dest, "status", "--porcelain", "--untracked-files=all"),
-                    "sandbox writer unexpectedly left dirty worktree")
-            require(output(source_repo, "ls-remote", "origin", sandbox_ref)
-                    .split()[0] == found[0],
-                    "sandbox moved before one non-force publication")
-            command(dest, "push", "origin", "HEAD:" + sandbox_ref)
-            require(output(source_repo, "ls-remote", "origin", sandbox_ref)
-                    .split()[0] == output(dest, "rev-parse", "HEAD"),
-                    "postpush readback failed; do not retry")
-            readback("committed")
+            try:
+                store_dest, accepted_dest = sandbox_writer_destinations(dest, trial)
+                result = drain_buffered_groups(notes_v2={
+                    "repo": dest, "marker_commit": readiness["marker_commit"],
+                    "trial_id": trial, "item_commits": readiness["pairs"],
+                    "store_dir": store_dest, "accepted_dir": accepted_dest,
+                    "offline_fixture": False, "trial_sandbox": True,
+                })
+                from dossier_notes_v2_isolated_lean_readback import exact_transaction
+                verify = (lambda mode: exact_transaction(dest, mode=mode)
+                          if historical else exact_generic_transaction(
+                              dest, plan=readiness, mode=mode))
+                paths = batch.paths(trial)
+                retry.git(dest, "add", "--", paths["store"], paths["accepted"])
+                retry.git(dest, "diff", "--cached", "--check")
+                verify("staged")
+                retry.git(dest, "config", "user.name", "steam-kz-bot")
+                retry.git(dest, "config", "user.email",
+                          "steam-kz-bot@users.noreply.github.com")
+                retry.git(dest, "commit", "-m",
+                          "Persist one owner-issued Lean isolated sandbox batch")
+                verify("committed")
+                require(not retry.sha(dest, "status", "--porcelain",
+                                      "--untracked-files=all"),
+                        "sandbox dirty after isolated transaction")
+                require(retry.remote_head(source_repo, trial) == head,
+                        "exclusive control lease was superseded")
+                require(retry.git(source_repo, "ls-remote", "origin",
+                                  sandbox_ref).stdout.split()[0] == original_head,
+                        "sandbox CAS changed before publication")
+                # A non-fast-forward or racing push cannot overwrite existing
+                # files; uncertain network response is reconciled below.
+                retry.git(dest, "push", "origin", "HEAD:" + sandbox_ref)
+                final = retry.sha(dest, "rev-parse", "HEAD")
+                require(retry.git(source_repo, "ls-remote", "origin",
+                                  sandbox_ref).stdout.split()[0] == final,
+                        "postpush sandbox hash differs")
+                readback_remote(final)
+            except Exception as exc:
+                actual = retry.git(source_repo, "ls-remote", "origin",
+                                   sandbox_ref).stdout.split()
+                if len(actual) == 2 and actual[0] != original_head:
+                    # Unknown remote state: prove exact acceptance or block.
+                    try:
+                        require(retry.sha(source_repo, "rev-parse",
+                                          actual[0] + "^") == original_head,
+                                "unexpected postwrite parent")
+                        retry.git(source_repo, "fetch", "--no-tags", "origin",
+                                  sandbox_ref)
+                        readback_remote(actual[0])
+                    except Exception:
+                        blocked = retry.make_event(
+                            state, readiness, env, "blocked_invalid_input", attempt,
+                            detail="uncertain_or_conflicting_remote_write")
+                        retry.append(source_repo, trial, state, blocked)
+                        raise
+                    final = actual[0]
+                    result = {"reconciled_after_uncertain_push": True}
+                elif len(actual) == 2 and actual[0] == original_head:
+                    failed = retry.make_event(
+                        state, readiness, env, "retryable_failed", attempt,
+                        detail=type(exc).__name__ + ": no_sandbox_write;_new_source_required")
+                    retry.append(source_repo, trial, state, failed)
+                    raise
+                else:
+                    raise ValueError("remote sandbox ref unverifiable; lease held for later reconcile") from exc
+
+            accepted = retry.make_event(
+                state, readiness, env, "accepted", attempt, sandbox_commit=final)
+            retry.append(source_repo, trial, state, accepted)
             return {"status": "accepted_sandbox_only_after_postpush_readback",
-                    "trial_id": trial, "claim_sha": claim,
-                    "commit_sha": output(dest, "rev-parse", "HEAD"),
-                    "canonical_acceptance": False, "deep_ready": False,
-                    "writer_result": result}
+                    "trial_id": trial, "commit_sha": final,
+                    "claim_anchor_sha": state["anchor"],
+                    "attempt": attempt, "canonical_acceptance": False,
+                    "deep_ready": False, "writer_result": result}
         finally:
-            command(source_repo, "worktree", "remove", "--force", str(dest),
-                    check=False)
+            retry.git(source_repo, "worktree", "remove", "--force", str(dest),
+                      check_result=False)
 
 
 def main():
