@@ -654,31 +654,35 @@ def run(source_repo, env):
                 and original.get("head_sha") == signal["source_signal_sha"],
                 "upstream ready-signal run not authenticated")
     from tempfile import TemporaryDirectory
-    original = json.loads((ROOT / "config/dossier_notes_v2_isolated_lean_acceptance.json").read_text())
+    historical = trial == cfg["recovery"]["trial_id"]
     sandbox_ref = "refs/heads/sandbox/" + trial
     with TemporaryDirectory(prefix="lean-auto-sandbox-") as tmp:
         dest = Path(tmp) / "sandbox"
         remote_before = output(source_repo, "ls-remote", "origin", sandbox_ref)
-        require(remote_before.split()[0] ==
-                original["frozen_sandbox_head"],
-                "original six sandbox changed; no new attempt")
+        found = remote_before.split()
+        require(len(found) == 2 and SHA.fullmatch(found[0])
+                and found[0] == signal["source_signal_sha"],
+                "sandbox moved or is not exact authenticated ready-event HEAD")
         command(source_repo, "fetch", "--no-tags", "origin",
                 "+" + sandbox_ref + ":refs/remotes/origin/sandbox/" + trial)
         require(output(source_repo, "rev-parse",
-                       "refs/remotes/origin/sandbox/" + trial) ==
-                original["frozen_sandbox_head"],
+                       "refs/remotes/origin/sandbox/" + trial) == found[0],
                 "sandbox changed during bounded fetch")
         command(source_repo, "worktree", "add", "--detach", str(dest),
-                original["frozen_sandbox_head"])
+                found[0])
         try:
             command(dest, "checkout", "-b", "sandbox/" + trial)
-            readiness = validate_ready(dest, token=env["GITHUB_TOKEN"])
+            readiness = (validate_ready(dest, token=env["GITHUB_TOKEN"])
+                         if historical else future_plan(
+                             dest, trial_id=trial, token=env["GITHUB_TOKEN"]))
             if not readiness["ready"]:
                 return {"status": "not_ready_no_attempt",
                         "trial_id": trial, "writer_launched": False}
             require(check_claim_ref(source_repo, trial) is None,
                     "one-use claim has appeared before writer")
-            claim = claim_once(source_repo, signal, env)
+            require(readiness["sandbox_head"] == found[0],
+                    "readiness checked a stale sandbox HEAD")
+            claim = claim_once(source_repo, signal, env, readiness)
             # Claim is now immutable. ANY later failure is terminal, including
             # zero-write failures. Do not retry the operation or Git push.
             env["LEAN_AUTO_CLAIM_SHA"] = claim
@@ -693,27 +697,30 @@ def run(source_repo, env):
                 "offline_fixture": False, "trial_sandbox": True,
             })
             from dossier_notes_v2_isolated_lean_readback import exact_transaction
+            readback = (lambda mode: exact_transaction(dest, mode=mode)
+                        if historical else exact_generic_transaction(
+                            dest, plan=readiness, mode=mode))
             store = "data/control/dossier_notes_v2/batch_pilot_store/" + trial
             accepted = "data/control/dossier_notes_v2/batch_pilot_accepted/" + trial
             command(dest, "add", "--", store, accepted)
             command(dest, "diff", "--cached", "--check")
-            exact_transaction(dest, mode="staged")  # EXACT 12 docs/receipts
+            readback("staged")  # exactly 2 * N original owner-granted paths
             command(dest, "config", "user.name", "steam-kz-bot")
             command(dest, "config", "user.email",
                     "steam-kz-bot@users.noreply.github.com")
             command(dest, "commit", "-m",
-                    "Persist one owner-recovered Lean six-item isolated sandbox")
-            exact_transaction(dest, mode="committed")
+                    "Persist one owner-issued Lean isolated sandbox batch")
+            readback("committed")
             require(not output(dest, "status", "--porcelain", "--untracked-files=all"),
                     "sandbox writer unexpectedly left dirty worktree")
             require(output(source_repo, "ls-remote", "origin", sandbox_ref)
-                    .split()[0] == original["frozen_sandbox_head"],
+                    .split()[0] == found[0],
                     "sandbox moved before one non-force publication")
             command(dest, "push", "origin", "HEAD:" + sandbox_ref)
             require(output(source_repo, "ls-remote", "origin", sandbox_ref)
                     .split()[0] == output(dest, "rev-parse", "HEAD"),
                     "postpush readback failed; do not retry")
-            exact_transaction(dest, mode="committed")
+            readback("committed")
             return {"status": "accepted_sandbox_only_after_postpush_readback",
                     "trial_id": trial, "claim_sha": claim,
                     "commit_sha": output(dest, "rev-parse", "HEAD"),
