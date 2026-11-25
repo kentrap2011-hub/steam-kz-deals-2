@@ -31,7 +31,7 @@ def fake_sha(value):
     return hashlib.sha1(str(value).encode("utf-8")).hexdigest()
 
 
-def synth(nonce, selected=SIX):
+def synth(nonce, selected=SIX, lean_auto_writer=False):
     tr = generic.trial(nonce)
     pins = {
         "source_trial_id": OLD, "source_sandbox_head": fake_sha("old-head"),
@@ -51,16 +51,26 @@ def synth(nonce, selected=SIX):
             "research_receipt_blob_sha":fake_sha("Receipt-blob-"+a),
         } for a,title,g,i in selected]
     }
+    if lean_auto_writer:
+        pins["lean_auto_writer"] = True
+        years = {"1000010":2020,"102600":2011,"1029690":2022,
+                 "49520":2012,"499180":2024,"501590":2017}
+        for source in pins["source_research"]:
+            source["baseline_blob_sha"] = fake_sha("pinned-baseline-" + source["appid"])
+            source["original_release_year"] = years[source["appid"]]
     req = {"nonce":nonce,"trial_id":tr,
            "base_main_sha":None,"request_ref":"refs/heads/dossier-assembly-requests/"+nonce,
            "request_commit":pins["request_commit"],
            "request_blob_sha":pins["request_blob_sha"]}
+    if lean_auto_writer:
+        req["request"] = generic.request_doc(
+            nonce,OLD,[r[0] for r in selected],lean_auto_writer=True)
     return req,pins
 
 
-def issue_fixture(repo, nonce, selected=SIX, copies=True):
+def issue_fixture(repo, nonce, selected=SIX, copies=True, lean_auto_writer=False):
     base = git(repo,"rev-parse","HEAD")
-    req,pins = synth(nonce,selected)
+    req,pins = synth(nonce,selected,lean_auto_writer=lean_auto_writer)
     req["base_main_sha"] = base
     tr = req["trial_id"]
     grant,manifest = generic.expected_grant(repo,req,pins)
@@ -103,6 +113,38 @@ def issue_fixture(repo, nonce, selected=SIX, copies=True):
 
 
 class GenericOwnerReplayTests(unittest.TestCase):
+    def test_opt_in_auto_grant_pins_original_year_without_legacy_drift(self):
+        from jsonschema import Draft202012Validator
+        temp, repo = source_copy()
+        try:
+            nonce = "ef" * 16
+            owner_request = generic.request_doc(
+                nonce, OLD, [r[0] for r in SIX], lean_auto_writer=True)
+            self.assertTrue(owner_request["lean_auto_writer"])
+            schema = json.loads((repo / "config/dossier_notes_v2_generic_replay_request.schema.json").read_text())
+            Draft202012Validator(schema).validate(owner_request)
+            with self.assertRaises(ValueError):
+                generic.request_doc(nonce, OLD, ["1000010"], lean_auto_writer="true")
+            with self.assertRaises(Exception):
+                Draft202012Validator(schema).validate({
+                    **owner_request, "lean_auto_writer": False
+                })
+            issued = issue_fixture(repo, nonce, lean_auto_writer=True, copies=False)
+            path = batch.paths(issued["trial"])
+            grant = json.loads((repo / path["grant"]).read_text())
+            auth = json.loads((repo / path["authorization"]).read_text())
+            self.assertTrue(grant["sandbox_lean_auto_writer_authorized"])
+            self.assertTrue(auth["sandbox_lean_auto_writer_authorized"])
+            self.assertTrue(issued["anchor"]["sandbox_lean_auto_writer_authorized"])
+            self.assertEqual([row["original_release_year"] for row in issued["rows"]],
+                             [2020, 2011, 2022, 2012, 2024, 2017])
+            bad = copy.deepcopy(grant["source_pins"])
+            bad["source_research"][0]["baseline_blob_sha"] = "wrong"
+            with self.assertRaises(ValueError):
+                generic.rows_from_pins(issued["trial"], bad)
+        finally:
+            temp.cleanup()
+
     def test_contract_no_auto_merge_workflow_or_production(self):
         temp,repo=source_copy()
         try:

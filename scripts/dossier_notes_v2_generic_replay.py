@@ -99,7 +99,7 @@ def request_path(nonce):
     return REQUEST_PATH + nonce + ".json"
 
 
-def request_doc(nonce, source_trial_id, appids):
+def request_doc(nonce, source_trial_id, appids, *, lean_auto_writer=False):
     trial(nonce)
     require(type(source_trial_id) is str and SOURCE.fullmatch(source_trial_id)
             and not is_generic(source_trial_id)
@@ -109,11 +109,15 @@ def request_doc(nonce, source_trial_id, appids):
             and all(type(a) is str and re.fullmatch(r"[0-9]{1,12}", a) for a in appids)
             and len(set(appids)) == len(appids),
             "bounded unique exact AppID selection required")
-    return {
+    require(type(lean_auto_writer) is bool, "invalid explicit owner Lean auto choice")
+    doc = {
         "schema": "DOSSIER-NOTES-V2-GENERIC-ASSEMBLY-REPLAY-REQUEST-V1",
         "schema_version": 1, "nonce": nonce, "source_trial_id": source_trial_id,
         "appids": appids, "purpose": PURPOSE,
     }
+    if lean_auto_writer:
+        doc["lean_auto_writer"] = True
+    return doc
 
 
 def request_guard(repo, env):
@@ -172,7 +176,8 @@ def request_guard(repo, env):
             and event.get("sender", {}).get("id") == int(batch.OWNER_ID),
             "request not genuine first-owner GitHub push")
     doc = strict_json(file_at(repo, sha, request_path(nonce)))
-    require(doc == request_doc(nonce, doc.get("source_trial_id"), doc.get("appids")),
+    require(doc == request_doc(nonce, doc.get("source_trial_id"), doc.get("appids"),
+                               lean_auto_writer=doc.get("lean_auto_writer", False)),
             "request schema, selection, purpose or owner binding invalid")
     require(not issuer.remote(repo, "refs/heads/sandbox/" + tr),
             "new trial already issued; workflow rerun cannot unlock another attempt")
@@ -214,6 +219,8 @@ def _source_from_git(repo, request, token):
                     "requested games not exact ordered subset of frozen source manifest")
             docs = {}
             source_proof = []
+            auto = request["request"].get("lean_auto_writer") is True
+            baseline_by_appid = {c["appid"]: c for c in src["candidates"]}
             for row in ordered:
                 appid = row["appid"]
                 original = v2.frozen_assignment(checkout, marker_commit=marker,
@@ -232,14 +239,33 @@ def _source_from_git(repo, request, token):
                 v2.validate_notes(doc, original)
                 docs[appid] = doc
                 receipt_path = ingest._receipt_path(original)
-                source_proof.append({
+                source_entry = {
                     "appid": appid, "title": row["title"],
                     "group_sequence": row["group_sequence"], "item_index": row["item_index"],
                     "source_assignment_id": row["assignment_id"],
                     "research_commit": intro, "research_blob_sha": blob(checkout, intro, file),
                     "research_receipt_commit": receipt,
                     "research_receipt_blob_sha": blob(checkout, receipt, receipt_path),
-                })
+                }
+                if auto:
+                    # The exact original-year identity is already in the old
+                    # independently pinned strict Dossier baseline Git blob.
+                    # Never infer it from a later untrusted Lean candidate.
+                    require(appid in baseline_by_appid,
+                            "original pinned baseline missing for Lean auto")
+                    baseline_sha = baseline_by_appid[appid]["baseline_blob_sha"]
+                    require(SHA.fullmatch(baseline_sha),
+                            "unrecognized original strict baseline object")
+                    baseline_doc = json.loads(git(checkout, "cat-file", "blob",
+                                                  baseline_sha))
+                    year = baseline_doc.get("game_identity", {}).get("release_year")
+                    require(baseline_doc.get("appid") == appid
+                            and baseline_doc.get("title") == row["title"]
+                            and type(year) is int and 1970 <= year <= 2100,
+                            "original pinned work identity/year missing for Lean auto")
+                    source_entry["baseline_blob_sha"] = baseline_sha
+                    source_entry["original_release_year"] = year
+                source_proof.append(source_entry)
             pins = {
                 "source_trial_id": source, "source_sandbox_head": source_head,
                 "source_marker_commit": marker, "source_authorization_commit": auth,
@@ -250,6 +276,8 @@ def _source_from_git(repo, request, token):
                 "request_blob_sha": request["request_blob_sha"],
                 "request_nonce": request["nonce"],
             }
+            if auto:
+                pins["lean_auto_writer"] = True
             return docs, pins
         finally:
             git(repo, "worktree", "remove", "--force", str(checkout))
@@ -259,6 +287,9 @@ def rows_from_pins(trial_id, pins):
     require(is_generic(trial_id) and pins["request_nonce"] == trial_id[len(PREFIX):],
             "wrong replay trial/source nonce")
     records = pins["source_research"]
+    auto = pins.get("lean_auto_writer") is True
+    require("lean_auto_writer" not in pins or auto,
+            "unsupported automatic writer marker in original source")
     require(type(records) is list and 1 <= len(records) <= 24, "missing bounded Research source")
     result = []
     last = None
@@ -285,10 +316,18 @@ def rows_from_pins(trial_id, pins):
             "appid": a, "title": source["title"],
         }
         digest = hashlib.sha256(batch.canonical(identity)).hexdigest()
-        result.append({"group_sequence": position[0], "item_index": position[1],
-                       "appid": a, "title": source["title"],
-                       "assignment_id": "batch-" + digest[:24],
-                       "original_assignment_sha256": digest})
+        row = {"group_sequence": position[0], "item_index": position[1],
+               "appid": a, "title": source["title"],
+               "assignment_id": "batch-" + digest[:24],
+               "original_assignment_sha256": digest}
+        if auto:
+            year = source.get("original_release_year")
+            require(type(year) is int and 1970 <= year <= 2100
+                    and SHA.fullmatch(str(source.get("baseline_blob_sha"))),
+                    "auto trial lacks independent pinned strict baseline/year")
+            row["original_release_year"] = year
+            row["baseline_blob_sha"] = source["baseline_blob_sha"]
+        result.append(row)
     return result
 
 
@@ -323,7 +362,7 @@ def expected_grant(repo, request, pins):
         "schema": "DOSSIER-NOTES-V2-FROZEN-MANIFEST", "schema_version": 2,
         "trial_id": tr, "original_pins": pins, "items": rows,
     }
-    return {
+    grant = {
         "schema": "DOSSIER-NOTES-V2-BATCH-OWNER-GRANT", "schema_version": 1,
         "scope": SCOPE, "trial_id": tr,
         "base_main_sha": request["base_main_sha"],
@@ -336,13 +375,18 @@ def expected_grant(repo, request, pins):
         "owner_login": batch.OWNER_LOGIN, "owner_actor_id": batch.OWNER_ID,
         "semantic_execution_approved": False, "production_approved": False,
         "canonical_ingest_approved": False,
-    }, manifest
+    }
+    if pins.get("lean_auto_writer") is True:
+        require(request["request"].get("lean_auto_writer") is True,
+                "Lean automatic writer requires original explicit owner request")
+        grant["sandbox_lean_auto_writer_authorized"] = True
+    return grant, manifest
 
 
 def expected_authorization(repo, trial_id, marker_commit, grant_commit, run_id):
     paths = batch.paths(trial_id)
     grant = json_at(repo, grant_commit, paths["grant"])
-    return {
+    result = {
         "schema": "DOSSIER-NOTES-V2-BATCH-OWNER-AUTHORIZATION", "schema_version": 1,
         "trial_id": trial_id, "marker_commit": marker_commit,
         "marker_parent": parent(repo, marker_commit),
@@ -357,6 +401,11 @@ def expected_authorization(repo, trial_id, marker_commit, grant_commit, run_id):
         "sandbox_writer_authorized": True, "production_authorized": False,
         "canonical_acceptance": False,
     }
+    if grant.get("sandbox_lean_auto_writer_authorized") is True:
+        require(grant.get("source_pins", {}).get("lean_auto_writer") is True,
+                "auto writer must bind to owner request and original baseline")
+        result["sandbox_lean_auto_writer_authorized"] = True
+    return result
 
 
 def issuer_structure(repo, *, trial_id, marker_commit, authorization_commit):
@@ -407,7 +456,7 @@ def issuer_structure(repo, *, trial_id, marker_commit, authorization_commit):
         require(first_parent_contains(repo, commit, "HEAD")
                 and file_at(repo, commit, path) == file_at(repo, "HEAD", path),
                 "immutable issuer path changed after one-add")
-    return {
+    result = {
         "trial_id": trial_id, "marker_commit": marker_commit,
         "authorization_commit": authorization_commit,
         "authorization_blob_sha": blob(repo, authorization_commit, paths["authorization"]),
@@ -420,6 +469,12 @@ def issuer_structure(repo, *, trial_id, marker_commit, authorization_commit):
         "semantic_execution_authorized": True,
         "issuer_structural_only": True, "github_run_authenticated": False,
     }
+    if grant.get("sandbox_lean_auto_writer_authorized") is True:
+        require(auth.get("sandbox_lean_auto_writer_authorized") is True
+                and grant.get("source_pins", {}).get("lean_auto_writer") is True,
+                "auto grant lost independent issuer binding")
+        result["sandbox_lean_auto_writer_authorized"] = True
+    return result
 
 
 def authenticated_owner_run(anchor, token, repository):

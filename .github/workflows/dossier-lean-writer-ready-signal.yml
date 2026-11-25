@@ -1,0 +1,30 @@
+name: Dossier Lean Writer Ready Signal
+
+on:
+  push:
+    branches:
+      - 'sandbox/dossier-notes-v2-assembly-replay-*'
+    paths:
+      - 'data/control/dossier_notes_v2/receipts/**'
+
+# Untrusted mutable sandbox owns only a READ-ONLY hint; never grant it write
+# or secrets. The trusted main workflow independently verifies all Git state.
+permissions:
+  contents: read
+
+jobs:
+  signal:
+    if: github.event.created == false && github.event.deleted == false && github.event.forced == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Advisory terminal-receipt wakeup only (zero data writes)
+        env:
+          SOURCE_REF: ${{ github.ref }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = "kentrap2011-hub/steam-kz-deals-2"
+          [[ "$SOURCE_REF" =~ ^refs/heads/sandbox/dossier-notes-v2-assembly-replay-[0-9a-f]{32}$ ]]
+          [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          echo "Read-only receipt wakeup; acceptance and writer reside exclusively on trusted main."

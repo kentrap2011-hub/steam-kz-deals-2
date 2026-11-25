@@ -1153,6 +1153,7 @@ def _drain_notes_v2_individual(
             or spec.get("v1_group_writer_unchanged") is not True):
         raise ValueError("unrecognized V2 single-item writer authority")
     root = Path(repo).resolve()
+    automatic = False  # Auto path is NEVER inherited by legacy/manual trials.
     if offline_fixture and trial_sandbox:
         raise ValueError("nonproduction GitHub pilot must not use offline fixture mode")
     if trial_sandbox and trial_id.startswith("dossier-notes-v2-") and trial_id != "dossier-notes-v2-original18-first":
@@ -1174,6 +1175,27 @@ def _drain_notes_v2_individual(
             (Path(__file__).resolve().parents[1] / "config" /
              "dossier_research_notes_v2_contract.json").read_text(encoding="utf-8")
         )
+        # Separate, narrowly authenticated GitHub-owned automatic path.
+        # The manual OWNER/first-attempt workflow_dispatch checks below are
+        # unchanged. No arbitrary PR, push, bot actor, fork or input can use
+        # the automatic path without the exact once-only control-branch claim.
+        automatic = False
+        if os.environ.get("GITHUB_EVENT_NAME") in ("workflow_run", "push"):
+            from dossier_lean_writer_auto_ready import authenticated_auto_context
+            automatic = authenticated_auto_context(
+                root, trial_id, marker_commit, item_commits)
+        manual_owner_first_attempt = (
+            os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
+            and os.environ.get("GITHUB_REF") == "refs/heads/main"
+            and os.environ.get("GITHUB_WORKFLOW_REF") ==
+                REPOSITORY + "/" + WRITER_WORKFLOW + "@refs/heads/main"
+            and os.environ.get("GITHUB_ACTOR_ID") == OWNER_ID
+            and os.environ.get("GITHUB_REPOSITORY_OWNER_ID") == OWNER_ID
+            and os.environ.get("GITHUB_ACTOR") == OWNER_LOGIN
+            and os.environ.get("GITHUB_TRIGGERING_ACTOR") == OWNER_LOGIN
+            and os.environ.get("GITHUB_RUN_ATTEMPT") == "1"
+            and str(os.environ.get("GITHUB_RUN_ID", "")).isdigit()
+        )
         if (source.get("active") is not False
                 or source.get("authorized_for_canonical_ingest") is not False
                 or source.get("production_enabled") is not False
@@ -1181,18 +1203,11 @@ def _drain_notes_v2_individual(
                 or sandbox_git(root, "symbolic-ref", "--short", "HEAD").stdout.decode().strip()
                    != path_set["branch"]
                 or os.environ.get("GITHUB_ACTIONS") != "true"
-                or os.environ.get("GITHUB_EVENT_NAME") != "workflow_dispatch"
-                or os.environ.get("GITHUB_REF") != "refs/heads/main"
-                or os.environ.get("GITHUB_WORKFLOW_REF")
-                   != REPOSITORY + "/" + WRITER_WORKFLOW + "@refs/heads/main"
                 or os.environ.get("GITHUB_REPOSITORY") != REPOSITORY
-                or os.environ.get("GITHUB_ACTOR_ID") != OWNER_ID
-                or os.environ.get("GITHUB_REPOSITORY_OWNER_ID") != OWNER_ID
-                or os.environ.get("GITHUB_ACTOR") != OWNER_LOGIN
-                or os.environ.get("GITHUB_TRIGGERING_ACTOR") != OWNER_LOGIN
-                or os.environ.get("GITHUB_RUN_ATTEMPT") != "1"
-                or not str(os.environ.get("GITHUB_RUN_ID", "")).isdigit()):
-            raise ValueError("reusable batch writer needs real owner first-attempt sandbox dispatch")
+                or not (manual_owner_first_attempt or automatic)):
+            raise ValueError(
+                "reusable batch writer requires authenticated manual first attempt "
+                "or exact single-use GitHub-owned automatic recovery claim")
         authorizers = sandbox_git(root, "log", "--first-parent",
                                "--format=%H", "HEAD", "--", path_set["authorization"]).stdout.decode().splitlines()
         if len(authorizers) != 1:
@@ -1319,6 +1334,19 @@ def _drain_notes_v2_individual(
         if (len(projection["items"]) != len(lean_frozen)
                 or any(x["status"] != "ready" for x in projection["items"])):
             raise ValueError("six-item Lean sandbox atomic readiness is incomplete")
+    elif trial_sandbox and automatic and is_generic(trial_id):
+        # Only a genuinely owner-issued per-trial opt-in, with independent
+        # original-year strict baseline and all terminal typed receipts,
+        # may use Lean. The global reader/writer/Deep switches stay OFF.
+        from dossier_lean_writer_auto_ready import future_plan
+        future = future_plan(root, trial_id=trial_id,
+                             token=os.environ["GITHUB_TOKEN"])
+        if not future["ready"] or future["pairs"] != item_commits:
+            raise ValueError("future Lean auto writer not exact terminal-ready")
+        lean_frozen = {row["appid"]: row for row in future["rows"]}
+        if (len(projection["items"]) != len(lean_frozen)
+                or any(x["status"] != "ready" for x in projection["items"])):
+            raise ValueError("future Lean sandbox atomic readiness incomplete")
     strict_contract = json.loads(
         (Path(__file__).resolve().parents[1] / "config" /
          "taste_steam_review_dossier_contract.json").read_text(encoding="utf-8")
