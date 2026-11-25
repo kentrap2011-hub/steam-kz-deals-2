@@ -432,8 +432,10 @@ def exact_generic_transaction(repo, *, plan, mode):
             require(not dest.is_symlink() and dest.is_file()
                     and dest.resolve().is_relative_to(repo),
                     "missing or unsafe isolated future accepted record")
-            stored = command(repo, "show",
-                             (":" if mode == "staged" else "HEAD:") + path).stdout.encode()
+            stored = subprocess.run(
+                ["git", "-C", str(repo), "show",
+                 (":" if mode == "staged" else "HEAD:") + path],
+                capture_output=True, check=True).stdout
             require(stored == dest.read_bytes(),
                     "Git stage/committed accepted record differs from actual raw bytes")
             expected.add(path)
@@ -618,6 +620,9 @@ def authenticated_auto_context(repo, trial_id, marker_commit, item_commits, env=
             "durable one-use control ref missing or modified")
     path = ("data/control/dossier_notes_v2/auto_writer_attempts/" +
             trial_id + ".json")
+    from dossier_two_stage_staging import require_only_new
+    require(require_only_new(repo, remote_claim, [path]) == env["GITHUB_SHA"],
+            "auto control claim not one-add on this exact reviewed main source")
     claim = json.loads(output(repo, "show", remote_claim + ":" + path))
     require(claim == claim_record(signal, env, readiness),
             "claim must bind exact owner issuer, all SHA pairs and GitHub run")
