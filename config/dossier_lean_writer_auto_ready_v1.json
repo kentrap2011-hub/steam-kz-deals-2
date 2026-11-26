@@ -8,8 +8,8 @@
   "source_merge_is_not_activation": true,
   "requires_independent_L3_final_head_review": false,
   "requires_separate_owner_approved_activation": true,
-  "automatic_retry_after_failure": false,
-  "per_trial_at_most_one_attempt": true,
+  "automatic_retry_after_failure": true,
+  "per_trial_at_most_one_attempt": false,
   "shared_writer_concurrency_group": "taste-steam-review-dossier-canonical-writer",
   "no_automatic_semantic_research_assembly_or_deep": true,
   "canonical_main_acceptance": false,
@@ -42,5 +42,32 @@
     "authorization": "user_direct_instruction_activate_without_independent_review",
     "scope": "isolated_sandbox_auto_writer_activation_only",
     "does_not_waive_runtime_gates": true
+  },
+  "retry_lifecycle": {
+    "schema": "DOSSIER-LEAN-WRITER-RESUMABLE-V1",
+    "enabled_for_new_scoped_grants": true,
+    "max_total_attempts": 3,
+    "exclusive_lease_minutes": 30,
+    "minimum_retry_minutes": 2,
+    "automatic_retry_trigger": "owner_verified_existing_policy_or_source_code_change_or_authenticated_terminal_receipt_signal",
+    "same_source_retry": false,
+    "append_only_claim_and_attempt_history": true,
+    "strict_original_grant_required": true,
+    "postwrite_readback_before_new_attempt": true,
+    "manual_pause_allowed_via_versioned_owner_policy": true,
+    "historical_spent_claim_sha": "6df354d024b0e3104ee408e815a1e5d141fb8e84",
+    "historical_failed_auto_run_id": 45628656098,
+    "historical_live_retry_authorized": false,
+    "historical_separate_exact_owner_migration_required": true,
+    "paused_trial_ids": [],
+    "historical_scope_migration_required_fields": [
+      "trial_id",
+      "old_claim_sha",
+      "old_failed_auto_run_id",
+      "original_sandbox_head",
+      "immutable_pair_digest",
+      "owner_decision"
+    ],
+    "historical_migration_grant": null
   }
 }

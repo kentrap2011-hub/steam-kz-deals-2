@@ -19,6 +19,8 @@ on:
       - ".github/workflows/dossier-lean-writer-ready-signal.yml"
       - ".github/workflows/dossier-lean-writer-auto-ready.yml"
       - "scripts/dossier_lean_writer_auto_ready.py"
+      - "scripts/dossier_lean_writer_retry_state.py"
+      - "scripts/test_dossier_lean_writer_retry_state.py"
       - "scripts/test_dossier_lean_writer_auto_ready.py"
       - "scripts/test_dossier_notes_v2_writer_preflight.py"
       - "config/dossier_notes_v2_generic_replay_policy.json"
@@ -126,10 +128,11 @@ jobs:
         run: python scripts/test_dossier_notes_v2_generic_replay.py -v
       - name: Real writer command route generic-vs-legacy offline owner/receipt regressions
         run: python scripts/test_dossier_notes_v2_writer_preflight.py -v
-      - name: Inactive Lean auto-ready one-use recovery and authenticated event negative tests
+      - name: Lean scoped retry, immutable grant, append-only CAS and authenticated event regressions
         run: |
-          python -m py_compile scripts/dossier_lean_writer_auto_ready.py scripts/test_dossier_lean_writer_auto_ready.py
+          python -m py_compile scripts/dossier_lean_writer_auto_ready.py scripts/test_dossier_lean_writer_auto_ready.py scripts/dossier_lean_writer_retry_state.py scripts/test_dossier_lean_writer_retry_state.py
           python scripts/test_dossier_lean_writer_auto_ready.py -v
+          python scripts/test_dossier_lean_writer_retry_state.py -v
       - name: Inactive V2 per-item Git receipt regression (14 tests)
         run: python scripts/test_dossier_notes_v2_per_item_receipts.py -v
       - name: Existing strict V2 isolated writer transaction regression

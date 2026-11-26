@@ -26,7 +26,10 @@ class LeanAutoReadySourceTests(unittest.TestCase):
         self.assertTrue(p["recovery"]["permission_bound_to_exact_previous_failed_run"])
         self.assertEqual(p["recovery"]["failed_manual_workflow_run_id"], 45540222575)
         self.assertEqual(p["recovery"]["trial_id"], GRANT["trial_id"])
-        self.assertFalse(p["automatic_retry_after_failure"])
+        self.assertTrue(p["automatic_retry_after_failure"])
+        self.assertFalse(p["per_trial_at_most_one_attempt"])
+        self.assertFalse(p["retry_lifecycle"]["historical_live_retry_authorized"])
+        self.assertEqual(p["retry_lifecycle"]["max_total_attempts"], 3)
         self.assertTrue(p["future_trial_requirements"][
             "eligible_only_with_separate_immutable_owner_issued_auto_writer_grant"])
         self.assertEqual(len(ready.exact_pairs()), 6)
@@ -406,7 +409,7 @@ class LeanAutoReadySourceTests(unittest.TestCase):
         finally:
             temp.cleanup()
 
-    def test_claimed_failed_writer_is_suppressed_before_second_run(self):
+    def test_spent_historical_claim_cannot_be_auto_migrated_on_source_merge(self):
         with tempfile.TemporaryDirectory() as temporary:
             event_file = Path(temporary) / "event.json"
             event_file.write_text("{}", encoding="utf-8")
@@ -416,17 +419,20 @@ class LeanAutoReadySourceTests(unittest.TestCase):
                       "source_signal_sha": GRANT["frozen_sandbox_head"],
                       "event_kind": "owner_activation_catchup"}
             with patch.object(ready, "policy",
-                              return_value={"activation_enabled": True}), \
+                              return_value={"activation_enabled": True, "recovery": {"trial_id": trial},
+                                            "retry_lifecycle": {"historical_live_retry_authorized": False,
+                                                                "paused_trial_ids": []}}), \
                  patch.object(ready, "verify_source_signal",
                               return_value=signal), \
                  patch.object(ready, "verify_main_checkout"), \
                  patch.object(ready, "require_activation_git_change"), \
+                 patch.object(ready, "unique_failed_source_retry", return_value=None), \
                  patch.object(ready, "check_claim_ref",
                               return_value="a" * 40), \
                  patch.object(ready, "claim_once") as claim:
                 result = ready.run(temporary, env)
             self.assertEqual(result["status"],
-                             "suppressed_already_claimed_no_retry")
+                             "historical_spent_claim_awaits_scoped_owner_migration")
             self.assertFalse(result["writer_launched"])
             claim.assert_not_called()
 

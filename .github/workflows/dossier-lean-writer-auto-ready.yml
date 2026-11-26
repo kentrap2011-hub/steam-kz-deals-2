@@ -2,8 +2,8 @@ name: Dossier Lean Writer Auto Ready
 
 # workflow_run executes reviewed DEFAULT-BRANCH code, never sandbox-provided
 # action source. A sandbox push workflow is just an untrusted read-only hint.
-# The main activation-file push is a bounded single-use historic-six catch-up,
-# not a scheduler or backlog scan.
+# A verified owner main source/policy change may wake a previously granted trial;
+# this is event-driven, never a scheduler or an arbitrary backlog scan.
 on:
   workflow_run:
     workflows:
@@ -13,6 +13,9 @@ on:
     branches: [main]
     paths:
       - 'config/dossier_lean_writer_auto_ready_v1.json'
+      - 'scripts/dossier_lean_writer_auto_ready.py'
+      - 'scripts/dossier_lean_writer_retry_state.py'
+      - '.github/workflows/dossier-lean-writer-auto-ready.yml'
 
 permissions:
   contents: write
@@ -40,11 +43,11 @@ jobs:
           python-version: '3.12'
       - name: Install already-used V2 schema validator
         run: python -m pip install 'jsonschema==4.23.0'
-      - name: Fail-closed auto-ready gate, one-use claim and existing shared writer
+      - name: Fail-closed auto-ready gate, CAS attempt journal and existing shared writer
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           # Source code always comes from checked-out reviewed main.
-          # Inactive until a separate owner-approved activation PR.
+          # Historic spent claim remains paused until a new exact owner migration decision.
           python scripts/dossier_lean_writer_auto_ready.py run
