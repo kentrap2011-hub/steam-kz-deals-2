@@ -5,13 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — resumable Lean writer source принят без независимой QA, 2026-11-26
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — восстановление прежних шести Lean досье, 2026-11-26
 
-- **ЧАТ 1 — свободен:** задача `dossier-lean-writer-resumable-retry-01` сдана; source PR #494 принят в `main@b481cf9a7432602fbc4e611967f1bbc7cd0c39b8` после 4/4 exact HEAD CI. Пользователь явно отказался от независимой L3; такой QA НЕ было.
-- **ЧАТ 2 — свободен:** предыдущая активация источника завершена, авторизация исторической повторной попытки отсутствует.
-- **ЧАТ 3 — свободен:** предыдущий path-layout FIX source PR #490 принят, live результат ещё не подтверждён.
-- **Live historical six:** старый postclaim израсходован, sandbox unchanged, 0/6 принято. Новый retry source уже на main, но `historical_live_retry_authorized=false` и `historical_migration_grant=null`; никакого retry или изменённого исторического grant не разрешено.
-
+- **НОВЫЙ ЧАТ 2 — зарезервирован (ожидает запуска):** `dossier-lean-historical-six-owner-migration-01` → `WORKER_TASK_DOSSIER_LEAN_HISTORICAL_SIX_OWNER_MIGRATION_01.md`. Пользователь дал новое явное разрешение на восстановление точно старой frozen six из прежнего spent claim через уже принятый resumable Writer. Узкий миграционный owner-policy PR; без повторных Research/Assembly, переиспользования старых Actions, нового trial или самовольного source merge.
+- **ЧАТ 1 — свободен:** resumable Lean Writer source PR #494 принят в main, исходная задача закрыта. Независимая QA PR #494 была пропущена по прямому решению владельца; это не универсальный waiver.
+- **ЧАТ 3 — свободен:** предыдущий path-layout FIX PR #490 завершён; новых поручений нет.
+- **Live historical six:** до новой миграции accepted 0/6, sandbox `d1b9a9e78dcde879a03370682ade4969763fd9d1`, старый immutable claim `6df354d024b0e3104ee408e815a1e5d141fb8e84`. Новый owner grant оформляется только адресным PR и source merge; успешный live readback ещё не подтверждён.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 

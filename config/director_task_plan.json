@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "DIRECTOR-FORWARD-TASK-REGISTRY-V1",
   "source_board": "DIRECTOR_TASK_BOARD.md",
-  "last_curated_on": "2026-11-25",
+  "last_curated_on": "2026-11-26",
   "maintenance": "Director and task tooling must update this canonical forward registry together with the Board's forward sections. Publication validates current Board forward references and the Deep dependency map; historical accepted sections are not current state. Every changed item must receive its actual updated_at_utc timestamp (ISO UTC).",
   "items": [
     {
@@ -4026,6 +4026,26 @@
       "updated_on": "2026-11-26",
       "updated_at_utc": "2026-11-26T02:05:33.557Z",
       "recent_completion": true
+    },
+    {
+      "id": "dossier-lean-historical-six-owner-migration-01",
+      "title": "Разрешить восстановление прежних шести Lean досье",
+      "goal": "Применить новое разрешение владельца к точной прежней партии через штатный GitHub resumable Writer и проверить возможность автоматического запуска без повторных исследований.",
+      "status": "active",
+      "effort": "средняя",
+      "effort_reason": "Нужно точное сопоставление старого claim, digest, sandbox и узкий versioned owner-policy PR с проверкой существующего маршрута.",
+      "urgency": "высокая",
+      "urgency_reason": "Новая схема повторных запусков принята, но старая партия блокируется историческим migration flag, несмотря на явное новое разрешение пользователя.",
+      "task_file": "WORKER_TASK_DOSSIER_LEAN_HISTORICAL_SIX_OWNER_MIGRATION_01.md",
+      "worker_slot": "ЧАТ 2",
+      "order": null,
+      "depends_on": [
+        "dossier-lean-writer-resumable-retry-01"
+      ],
+      "blocker": "Разрешение владельца получено для прежних шести; нужно exact policy binding и приемка Director перед новым owner Actions. Исторические claim и старые failed runs неизменяемы.",
+      "updated_on": "2026-11-26",
+      "updated_at_utc": "2026-11-26T02:10:15.720Z",
+      "recent_completion": false
     }
   ]
 }
