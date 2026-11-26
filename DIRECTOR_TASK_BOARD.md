@@ -5,12 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — возобновляемый Lean Writer, 2026-11-25
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — resumable Lean writer source принят без независимой QA, 2026-11-26
 
-- **НОВЫЙ ЧАТ 1 — зарезервирован (ожидает запуска):** `dossier-lean-writer-resumable-retry-01` → `WORKER_TASK_DOSSIER_LEAN_WRITER_RESUMABLE_RETRY_01.md`. По прямому запросу пользователя убрать blocking-on-failure систему: GitHub-owned resumable/idempotent retry в той же immutable разрешённой партии. Один bounded IMPLEMENT source PR + тесты; не live run, не выдавать новый grant, не удалять исторический claim. Отдельная L3 для changes auth/retry перед source merge.
-- **ЧАТ 2 — свободен:** прежняя активация source PR #486–#488 принята, задача сдана; прямой postclaim recovery не разрешён.
-- **ЧАТ 3 — свободен:** path-layout source fix PR #490 принят в `main@c3663639854513b59b6a8dbc2ab9d4cb1c12f9fc`, independent review пропущена по пользовательскому решению. Нет live acceptance.
-- **Live historical six:** 0/6 accepted, `refs/heads/dossier-lean-auto-attempts/cdcdb4951e2fc98336729af75b954da4` уже существует. Новый task меняет правила только через reviewed source; старые failed Actions не rerun. Отдельный scoped owner authorization нужен до новой реальной попытки, если канонический контракт этого требует.
+- **ЧАТ 1 — свободен:** задача `dossier-lean-writer-resumable-retry-01` сдана; source PR #494 принят в `main@b481cf9a7432602fbc4e611967f1bbc7cd0c39b8` после 4/4 exact HEAD CI. Пользователь явно отказался от независимой L3; такой QA НЕ было.
+- **ЧАТ 2 — свободен:** предыдущая активация источника завершена, авторизация исторической повторной попытки отсутствует.
+- **ЧАТ 3 — свободен:** предыдущий path-layout FIX source PR #490 принят, live результат ещё не подтверждён.
+- **Live historical six:** старый postclaim израсходован, sandbox unchanged, 0/6 принято. Новый retry source уже на main, но `historical_live_retry_authorized=false` и `historical_migration_grant=null`; никакого retry или изменённого исторического grant не разрешено.
+
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 

@@ -4011,21 +4011,21 @@
       "id": "dossier-lean-writer-resumable-retry-01",
       "title": "Убрать вечную блокировку повторного Lean Writer",
       "goal": "Заменить блокирующий one-use claim на GitHub-owned возобновляемую идемпотентную запись той же разрешённой партии без нового разрешения после каждого технического сбоя.",
-      "status": "active",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Изменение state machine, retry/lock, миграции исторической попытки и реальных негативных Git-тестов.",
       "urgency": "высокая",
       "urgency_reason": "Израсходованный claim блокирует принятие готовых шести досье при исправленной технической ошибке.",
       "task_file": "WORKER_TASK_DOSSIER_LEAN_WRITER_RESUMABLE_RETRY_01.md",
-      "worker_slot": "ЧАТ 1",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "dossier-lean-writer-auto-path-layout-fix-01"
       ],
-      "blocker": "Новая retry архитектура требует отдельной независимой L3 QA перед merge и точной owner-authority для любого live восстановления; source task не запускает writer.",
-      "updated_on": "2026-11-25",
-      "updated_at_utc": "2026-11-25T18:17:01.458Z",
-      "recent_completion": false
+      "blocker": "Исходное исправление принято по явному решению владельца без независимой QA; историческая повторная запись остаётся выключенной до отдельного разрешения.",
+      "updated_on": "2026-11-26",
+      "updated_at_utc": "2026-11-26T02:05:33.557Z",
+      "recent_completion": true
     }
   ]
 }
