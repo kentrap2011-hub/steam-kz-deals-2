@@ -5,12 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — восстановление прежних шести Lean досье, 2026-11-26
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — исторические шесть Lean Dossier приняты в sandbox, 2026-11-26
 
-- **НОВЫЙ ЧАТ 2 — зарезервирован (ожидает запуска):** `dossier-lean-historical-six-owner-migration-01` → `WORKER_TASK_DOSSIER_LEAN_HISTORICAL_SIX_OWNER_MIGRATION_01.md`. Пользователь дал новое явное разрешение на восстановление точно старой frozen six из прежнего spent claim через уже принятый resumable Writer. Узкий миграционный owner-policy PR; без повторных Research/Assembly, переиспользования старых Actions, нового trial или самовольного source merge.
-- **ЧАТ 1 — свободен:** resumable Lean Writer source PR #494 принят в main, исходная задача закрыта. Независимая QA PR #494 была пропущена по прямому решению владельца; это не универсальный waiver.
-- **ЧАТ 3 — свободен:** предыдущий path-layout FIX PR #490 завершён; новых поручений нет.
-- **Live historical six:** до новой миграции accepted 0/6, sandbox `d1b9a9e78dcde879a03370682ade4969763fd9d1`, старый immutable claim `6df354d024b0e3104ee408e815a1e5d141fb8e84`. Новый owner grant оформляется только адресным PR и source merge; успешный live readback ещё не подтверждён.
+- **ЧАТ 1 — свободен:** resumable Writer source PR #494 принят ранее в main; независимая L3 была пропущена по решению владельца.
+- **ЧАТ 2 — свободен:** завершил `dossier-lean-historical-six-owner-migration-01`, source PR #497 принят в `main@005e67f5751d20b5a79444dd31beccbefafafc75` после 4/4 CI и явного отказа владельца от независимой QA. Реальный owner GitHub Actions #45758862308 `success`.
+- **ЧАТ 3 — свободен:** предыдущий path-layout source fix PR #490 сдан, новых поручений нет.
+- **Live historical six — SUCCESS в изолированном sandbox:** `sandbox/dossier-notes-v2-assembly-replay-cdcdb4951e2fc98336729af75b954da4@372efa1e7e1f95905a3d16dd95f531f12bed2d9c`. Ровно 6 dossier JSON + 6 immutable accepted receipt JSON, один коммит с родителем `d1b9a9e78dcde879a03370682ade4969763fd9d1`, ни одного удаления. Append-only journal ref `63348f1f8d9dea3a5bf1a035647491e2d22a530d`, terminal event `0002-accepted.json`, attempt 2; original anchor `6df354d024b0e3104ee408e815a1e5d141fb8e84` preserved. `canonical_acceptance=false`, `deep_ready=false`, production OFF; не путать isolated acceptance с канонической публикацией.
+
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
