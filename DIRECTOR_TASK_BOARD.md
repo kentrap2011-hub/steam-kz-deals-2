@@ -5,13 +5,12 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — исторические шесть Lean Dossier приняты в sandbox, 2026-11-26
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — сравнение старого и Lean Dossier, 2026-11-26
 
-- **ЧАТ 1 — свободен:** resumable Writer source PR #494 принят ранее в main; независимая L3 была пропущена по решению владельца.
-- **ЧАТ 2 — свободен:** завершил `dossier-lean-historical-six-owner-migration-01`, source PR #497 принят в `main@005e67f5751d20b5a79444dd31beccbefafafc75` после 4/4 CI и явного отказа владельца от независимой QA. Реальный owner GitHub Actions #45758862308 `success`.
-- **ЧАТ 3 — свободен:** предыдущий path-layout source fix PR #490 сдан, новых поручений нет.
-- **Live historical six — SUCCESS в изолированном sandbox:** `sandbox/dossier-notes-v2-assembly-replay-cdcdb4951e2fc98336729af75b954da4@372efa1e7e1f95905a3d16dd95f531f12bed2d9c`. Ровно 6 dossier JSON + 6 immutable accepted receipt JSON, один коммит с родителем `d1b9a9e78dcde879a03370682ade4969763fd9d1`, ни одного удаления. Append-only journal ref `63348f1f8d9dea3a5bf1a035647491e2d22a530d`, terminal event `0002-accepted.json`, attempt 2; original anchor `6df354d024b0e3104ee408e815a1e5d141fb8e84` preserved. `canonical_acceptance=false`, `deep_ready=false`, production OFF; не путать isolated acceptance с канонической публикацией.
-
+- **НОВЫЙ ЧАТ 1 — зарезервирован (ожидает запуска):** `dossier-lean-six-old-new-speed-quality-compare-01` → `WORKER_TASK_DOSSIER_LEAN_SIX_OLD_NEW_SPEED_QUALITY_COMPARE_01.md`. По прямому запросу пользователя сравнить исторические и Lean результаты одинаковых шести игр по длительности процесса Research/Assembly/Writer и качеству самих текстов. Один report-only PR; не запускать новые semantic stages, Writer, Deep, production и не переписывать records.
+- **ЧАТ 2 — свободен:** historical-six migration завершена; owner Actions #45758862308 принял 6+6 в sandbox.
+- **ЧАТ 3 — свободен:** нет текущих поручений.
+- **Проверенный Lean baseline:** `sandbox/dossier-notes-v2-assembly-replay-cdcdb4951e2fc98336729af75b954da4@372efa1e7e1f95905a3d16dd95f531f12bed2d9c`, 6 dossiers + 6 receipts; canonical/Deep OFF. Сравнение скоростей и содержания пока не выполнено; старые сопоставимые файлы и timestamps должен подтвердить worker.
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
