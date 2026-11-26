@@ -28,11 +28,66 @@ class LeanAutoReadySourceTests(unittest.TestCase):
         self.assertEqual(p["recovery"]["trial_id"], GRANT["trial_id"])
         self.assertTrue(p["automatic_retry_after_failure"])
         self.assertFalse(p["per_trial_at_most_one_attempt"])
-        self.assertFalse(p["retry_lifecycle"]["historical_live_retry_authorized"])
+        self.assertTrue(p["retry_lifecycle"]["historical_live_retry_authorized"])
         self.assertEqual(p["retry_lifecycle"]["max_total_attempts"], 3)
         self.assertTrue(p["future_trial_requirements"][
             "eligible_only_with_separate_immutable_owner_issued_auto_writer_grant"])
         self.assertEqual(len(ready.exact_pairs()), 6)
+
+    def test_exact_historical_six_migration_requires_truthful_owner_provenance(self):
+        p = ready.policy()
+        lifecycle = p["retry_lifecycle"]
+        expected = {
+            "trial_id": GRANT["trial_id"],
+            "old_claim_sha": "6df354d024b0e3104ee408e815a1e5d141fb8e84",
+            "old_failed_auto_run_id": 45628656098,
+            "original_sandbox_head": GRANT["frozen_sandbox_head"],
+            "immutable_pair_digest": ready.exact_pairs_digest(ready.exact_pairs()),
+            "owner_decision": "explicit_owner_approved_exact_six_recovery_2026_11_26",
+        }
+        self.assertTrue(lifecycle["historical_live_retry_authorized"])
+        self.assertEqual(lifecycle["historical_migration_grant"], expected)
+        self.assertNotIn("L3", expected["owner_decision"])
+        self.assertEqual(len(ready.exact_pairs()), 6)
+
+        tampered_grants = (
+            {"trial_id": "dossier-notes-v2-assembly-replay-" + "f" * 32},
+            {"old_claim_sha": "0" * 40},
+            {"old_failed_auto_run_id": 45628656097},
+            {"original_sandbox_head": "0" * 40},
+            {"immutable_pair_digest": "0" * 64},
+            {"owner_decision": "explicit_new_exact_trial_recovery_after_L3_review"},
+        )
+        for change in tampered_grants:
+            with self.subTest(change=change):
+                bad_policy = {
+                    **p,
+                    "retry_lifecycle": {
+                        **lifecycle,
+                        "historical_migration_grant": {**expected, **change},
+                    },
+                }
+                with patch.object(ready, "POLICY") as path:
+                    path.read_text.return_value = json.dumps(bad_policy)
+                    with self.assertRaisesRegex(
+                            ValueError, "historic spent attempt cannot revive"):
+                        ready.policy()
+
+        for live, grant in ((False, expected), (True, None)):
+            with self.subTest(live=live):
+                bad_policy = {
+                    **p,
+                    "retry_lifecycle": {
+                        **lifecycle,
+                        "historical_live_retry_authorized": live,
+                        "historical_migration_grant": grant,
+                    },
+                }
+                with patch.object(ready, "POLICY") as path:
+                    path.read_text.return_value = json.dumps(bad_policy)
+                    with self.assertRaisesRegex(
+                            ValueError, "historic spent attempt|inactive historical migration"):
+                        ready.policy()
 
     def test_inactive_policy_still_blocks_any_source_event(self):
         with patch.object(ready, "policy", return_value={"activation_enabled": False}):
