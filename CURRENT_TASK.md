@@ -1,5 +1,14 @@
 # CURRENT TASK
 
+## NEW PHYSICAL ЧАТ 2 — exact historical-six Lean Writer owner migration (2026-11-26)
+
+- Task: `WORKER_TASK_DOSSIER_LEAN_HISTORICAL_SIX_OWNER_MIGRATION_01.md`; branch `fix/dossier-lean-historical-six-owner-migration-20261126`; source-only draft [PR #497](https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/497).
+- Verified immutable old claim `6df354d...`, original frozen sandbox `d1b9a9e...`, exact six SHA pair digest `6bfadc...`; six typed Assembly receipts ready, sandbox Lean accepted 0/6.
+- Owner's new exact permission is bound in versioned policy; the misleading `after_L3_review` source decision literal was corrected without asserting L3 occurred. New authorization delta requires independent QA or a newly explicit waiver.
+- Status: `BLOCKED_CI_PENDING_INDEPENDENT_L3` until exact final source HEAD required checks and QA; no self-merge, old Action reruns, sandbox writes, Research/Assembly, Deep or production.
+- Worker report: `reviews/worker_reports/dossier-lean-historical-six-owner-migration-01.md`. Director owns any later merge and live six+six verification. All other task entries preserved.
+
+
 ## ЧАТ 1 — Lean Writer resumable retry lifecycle (2026-11-25)
 
 - Task: `WORKER_TASK_DOSSIER_LEAN_WRITER_RESUMABLE_RETRY_01.md`; branch `fix/dossier-lean-writer-resumable-retry-20261125`; source PR #494 (draft).
