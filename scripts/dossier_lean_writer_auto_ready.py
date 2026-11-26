@@ -91,7 +91,9 @@ def policy():
         "old_failed_auto_run_id": lifecycle["historical_failed_auto_run_id"],
         "original_sandbox_head": original["frozen_sandbox_head"],
         "immutable_pair_digest": exact_pairs_digest(exact_pairs()),
-        "owner_decision": "explicit_new_exact_trial_recovery_after_L3_review",
+        # Owner permission is NOT an assertion of independent L3 completion.
+        # New authorization changes require their own Director QA/merge gate.
+        "owner_decision": "explicit_owner_approved_exact_six_recovery_2026_11_26",
     }
     if lifecycle["historical_live_retry_authorized"]:
         require(lifecycle.get("historical_migration_grant") ==
