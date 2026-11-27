@@ -5,12 +5,13 @@
 
 `DIRECTOR_HANDOFF_CURRENT.md` is the required compact entry point for the next Director chat. Do not reconstruct context by broadly scanning GitHub; read the handoff + current top Board state, then inspect only exact files needed for the user's current request.
 
-## ТЕКУЩИЕ НАЗНАЧЕНИЯ — сравнение старого и Lean Dossier, 2026-11-26
+## ТЕКУЩИЕ НАЗНАЧЕНИЯ — сравнение старого и Lean Dossier частично завершено, 2026-11-27
 
-- **НОВЫЙ ЧАТ 1 — зарезервирован (ожидает запуска):** `dossier-lean-six-old-new-speed-quality-compare-01` → `WORKER_TASK_DOSSIER_LEAN_SIX_OLD_NEW_SPEED_QUALITY_COMPARE_01.md`. По прямому запросу пользователя сравнить исторические и Lean результаты одинаковых шести игр по длительности процесса Research/Assembly/Writer и качеству самих текстов. Один report-only PR; не запускать новые semantic stages, Writer, Deep, production и не переписывать records.
-- **ЧАТ 2 — свободен:** historical-six migration завершена; owner Actions #45758862308 принял 6+6 в sandbox.
-- **ЧАТ 3 — свободен:** нет текущих поручений.
-- **Проверенный Lean baseline:** `sandbox/dossier-notes-v2-assembly-replay-cdcdb4951e2fc98336729af75b954da4@372efa1e7e1f95905a3d16dd95f531f12bed2d9c`, 6 dossiers + 6 receipts; canonical/Deep OFF. Сравнение скоростей и содержания пока не выполнено; старые сопоставимые файлы и timestamps должен подтвердить worker.
+- **ЧАТ 1 — свободен:** `dossier-lean-six-old-new-speed-quality-compare-01` завершён, report-only source PR #500 принят в `main@a3ff47c6619ad4b1e93c184c1eb0521efaf0f6ef` после 2/2 exact HEAD CI. Проверено 6/6 Lean и лишь 3/6 старых совпадающих full V2; в трёх сопоставимых парах Lean ≈ old в Crown Trick и Orcs Must Die!, старый лучше в Sniper Elite 5. Время полного Research→Assembly нельзя корректно сравнить.
+- **ЧАТ 2 — свободен:** историческая sandbox-приёмка 6+6 через owner Writer успешно закрыта.
+- **ЧАТ 3 — свободен:** новых подтверждённых поручений нет.
+- **Отдельный путь полного сравнения:** source-only PR #503 готовит будущие новые строгие OLD-format досье на все шесть в отдельном sandbox; это не существующие old результаты. Пока PR не принят и отдельный semantic worker не выполнил Research, качественное сравнение 6/6 и скорость полномасштабных трасс не доказаны. Не инициировать source merge или запуск этим обновлением Board.
+
 
 ## АКТУАЛЬНОЕ СОСТОЯНИЕ — вложенные DLC, 2026-11-05
 
