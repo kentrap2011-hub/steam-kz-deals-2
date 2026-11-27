@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Offline negative and contract tests; no semantic research or GitHub writes."""
 import json
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -76,6 +77,38 @@ class StrictSixControlTests(unittest.TestCase):
         with patch.object(v, "ROOT", Path(self.temp.name)):
             with self.assertRaisesRegex(ValueError, "missing create-only run-start marker"):
                 v.validate_outputs()
+
+    def test_git_marker_exact_one_add(self):
+        root = Path(self.temp.name) / "sandbox"
+        root.mkdir()
+        def git(*args):
+            result = subprocess.run(["git", "-C", str(root), *args],
+                                    check=True, stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE, text=True)
+            return result.stdout.strip()
+        git("init", "-q")
+        git("config", "user.name", "Strict Six Test")
+        git("config", "user.email", "strict-six@example.invalid")
+        (root / "README.md").write_text("base", encoding="utf-8")
+        git("add", "README.md")
+        git("commit", "-qm", "base")
+        base = git("rev-parse", "HEAD")
+        marker_rel = v.RESULT_ROOT + "/run_start.json"
+        marker_path = root / marker_rel
+        marker_path.parent.mkdir(parents=True)
+        marker_path.write_text('{"schema":"marker"}', encoding="utf-8")
+        git("add", marker_rel)
+        git("commit", "-qm", "one marker")
+        marker = git("rev-parse", "HEAD")
+        with patch.object(v, "ROOT", root):
+            self.assertEqual(v._one_add_commit(marker_rel), (marker, base))
+            malformed = v.RESULT_ROOT + "/App_1000010.json"
+            (root / malformed).write_text("{}", encoding="utf-8")
+            (root / (v.RESULT_ROOT + "/extra.txt")).write_text("extra", encoding="utf-8")
+            git("add", malformed, v.RESULT_ROOT + "/extra.txt")
+            git("commit", "-qm", "invalid two-path candidate")
+            with self.assertRaisesRegex(ValueError, "exactly one path"):
+                v._one_add_commit(malformed)
 
 
 if __name__ == "__main__":
