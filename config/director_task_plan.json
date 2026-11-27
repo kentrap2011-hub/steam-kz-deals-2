@@ -4051,21 +4051,21 @@
       "id": "dossier-lean-six-old-new-speed-quality-compare-01",
       "title": "Сравнить старый и новый Dossier для шести игр",
       "goal": "По тем же шести играм сопоставить фактические интервалы Research, Assembly и Writer, а также качество содержания старых и Lean разборов с точными исходниками и ограничениями.",
-      "status": "active",
+      "status": "complete",
       "effort": "высокая",
       "effort_reason": "Нужно найти старые совпадающие досье, восстановить временные отметки и предметно прочитать до двенадцати полных текстов с доказательствами.",
       "urgency": "высокая",
       "urgency_reason": "Решение о постоянном запуске нового Dossier должно опираться на доказанную скорость и качество реальных шести разборов.",
       "task_file": "WORKER_TASK_DOSSIER_LEAN_SIX_OLD_NEW_SPEED_QUALITY_COMPARE_01.md",
-      "worker_slot": "ЧАТ 1",
+      "worker_slot": null,
       "order": null,
       "depends_on": [
         "dossier-lean-historical-six-owner-migration-01"
       ],
-      "blocker": "Только сравнение доказанных старых и новых артефактов; если для игры старого разбора нет, не создавать фиктивную пару и не утверждать ускорение.",
-      "updated_on": "2026-11-26",
-      "updated_at_utc": "2026-11-26T11:07:45.542Z",
-      "recent_completion": false
+      "blocker": "Сравнительный report-only PR принят; старый точный baseline подтверждён для 3 из 6 игр, прочие потребуют нового строгого контрольного исследования; полная скорость Dossier не измерена.",
+      "updated_on": "2026-11-27",
+      "updated_at_utc": "2026-11-27T03:51:17.525Z",
+      "recent_completion": true
     }
   ]
 }
