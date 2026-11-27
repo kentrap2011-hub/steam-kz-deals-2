@@ -1,0 +1,43 @@
+name: Validate old six Dossier strict sandbox control
+
+on:
+  pull_request:
+    paths:
+      - "config/dossier_old6_fresh_strict_control_v1.json"
+      - "config/dossier_old6_fresh_strict_control_worker_prompt.md"
+      - "config/execution_ownership_contract.json"
+      - "scripts/validate_dossier_old6_control.py"
+      - "scripts/test_validate_dossier_old6_control.py"
+      - ".github/workflows/validate-dossier-old6-control.yml"
+      - "reviews/dossier_old6_controls/dossier-old6-20261127-exact-six-01/**"
+      - "reviews/worker_reports/dossier-old6-fresh-strict-source-preparation-01.md"
+
+permissions:
+  contents: read
+
+jobs:
+  strict-six:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Static source scope, isolation and syntax
+        run: |
+          python -m py_compile scripts/validate_dossier_old6_control.py scripts/test_validate_dossier_old6_control.py
+          python scripts/validate_dossier_old6_control.py --check-config
+          python scripts/test_validate_dossier_old6_control.py -v
+      - name: Validate full completed candidate trial if published
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -d reviews/dossier_old6_controls/dossier-old6-20261127-exact-six-01; then
+            python scripts/validate_dossier_old6_control.py --check-outputs
+          else
+            echo "SOURCE_ONLY: no candidate files published; semantic launch and acceptance not demonstrated"
+          fi
