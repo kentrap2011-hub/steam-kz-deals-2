@@ -1,0 +1,65 @@
+{
+  "schema": "DOSSIER-OLD6-FRESH-STRICT-CONTROL-V1",
+  "schema_version": 1,
+  "trial_id": "dossier-old6-20261127-exact-six-01",
+  "status": "source_prepared_not_activated",
+  "mode": "one_shot_nonproduction_strict_V2_control",
+  "owner_authorization": "2026-11-27 explicit request: prepare old Dossier to freshly analyze all six fixed games",
+  "source_repository": "kentrap2011-hub/steam-kz-deals-2",
+  "source_snapshot_id": "25c227d782188699f56b5702b3f0cfa63b101d890f09620b7b59893fab93c1af",
+  "source_main_sha": "665f5d0202859a6bac20566671f10158538e4764",
+  "source_prepared_for_date": "2026-11-11",
+  "schema_to_produce": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "strict_validator": "scripts/taste_steam_review_dossier_strict.py::validate_dossiers_against_expected_items",
+  "original_worker_prompt": "config/taste_steam_review_dossier_worker_prompt.md",
+  "source_evidence_contract": "config/taste_steam_review_dossier_web_evidence_contract.json",
+  "ttl_days": 20,
+  "earliest_generated_at_utc": "2026-11-27T00:00:00Z",
+  "minimum_fresh_research": true,
+  "reuse_prior_strict_cache": false,
+  "reuse_lean_or_notes_v2_research": false,
+  "copy_prior_dossier_text": false,
+  "work_groups": [
+    {
+      "group_sequence": 1,
+      "items": [
+        {
+          "appid": "1000010",
+          "title": "Crown Trick"
+        },
+        {
+          "appid": "102600",
+          "title": "Orcs Must Die!"
+        },
+        {
+          "appid": "1029690",
+          "title": "Sniper Elite 5"
+        }
+      ]
+    },
+    {
+      "group_sequence": 70,
+      "items": [
+        {
+          "appid": "49520",
+          "title": "Borderlands 2"
+        },
+        {
+          "appid": "499180",
+          "title": "Braid, Anniversary Edition"
+        },
+        {
+          "appid": "501590",
+          "title": "Bulletstorm: Full Clip Edition"
+        }
+      ]
+    }
+  ],
+  "sandbox_result_root": "reviews/dossier_old6_controls/dossier-old6-20261127-exact-six-01",
+  "compare_to_lean_acceptance_commit": "372efa1e7e1f95905a3d16dd95f531f12bed2d9c",
+  "canonical_cache_write_allowed": false,
+  "deep_or_production_allowed": false,
+  "recurring_or_background_execution_allowed": false,
+  "semantic_launch_authorized_by_source_pr_alone": false,
+  "acceptance_condition": "six_new_full_strict_json_files_plus_git_one_add_provenance_plus_exact_PR_HEAD_CI_plus_explicit_semantic_quality_review"
+}
