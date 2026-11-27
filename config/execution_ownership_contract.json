@@ -413,6 +413,49 @@
         "create a second scheduler, recurring manual stage, quota, queue, retry daemon or backlog manager",
         "modify Dossier V2, Fast, Deep, taste ranking or the original Dossier semantics during invocation"
       ]
+    },
+    "dossier_old6_fresh_strict_control_one_shot": {
+      "allowed": true,
+      "role": "isolated_user_launched_six_game_legacy_strict_semantic_sandbox_only",
+      "authorization_source": "2026-11-27 explicit owner request to prepare a fresh six-game old-format Dossier comparison",
+      "frozen_exact_scope": "config/dossier_old6_fresh_strict_control_v1.json",
+      "canonical_launcher_prompt": "config/dossier_old6_fresh_strict_control_worker_prompt.md",
+      "existing_worker_prompt": "config/taste_steam_review_dossier_worker_prompt.md",
+      "existing_web_evidence_contract": "config/taste_steam_review_dossier_web_evidence_contract.json",
+      "existing_schema": "config/taste_steam_review_dossier_schema.json",
+      "existing_strict_validator": "scripts/taste_steam_review_dossier_strict.py",
+      "requires_fresh_explicit_user_launch_every_run": true,
+      "requires_reviewed_merged_source_on_main": true,
+      "branch_prefix": "sandbox/dossier-old6-20261127-exact-six-01",
+      "candidate_root": "reviews/dossier_old6_controls/dossier-old6-20261127-exact-six-01",
+      "permits_research_exactly_six_items_only": true,
+      "permits_new_sandbox_run_start_marker": true,
+      "permits_create_only_one_candidate_per_exact_appid": true,
+      "must_research_fresh_without_old_cache_or_lean_reuse": true,
+      "github_owns": [
+        "immutable fixed six identities and two ordered groups",
+        "reviewed source manifest and source Git commit",
+        "exact Git provenance of one-add marker and six one-add files",
+        "validation of six strict original-format V2 objects",
+        "post-submission CI and separate semantic-quality decision"
+      ],
+      "worker_may": [
+        "read the merged immutable six-item manifest and exact original semantic/evidence contracts",
+        "make one new sandbox branch at the then-current actual main and create one nonce-free marker tied to its exact single Git parent",
+        "perform fresh neutral public player-feedback research under unchanged old strict V2 semantic contract for the exact six",
+        "publish exactly six separate immutable one-add game Dossier JSON files in manifest order",
+        "open a report-only control PR and state candidates submitted, not canonical accepted"
+      ],
+      "forbidden": [
+        "reuse previous strict cache or Lean/Notes V2 evidence as a substitute for new research",
+        "select extra items, substitute edition, change scope/group/order or old worker contract",
+        "write to canonical Dossier cache, prepared queue, production, Deep or Scheduled Tasks",
+        "change GitHub issuer/validation, retry, queue, ownership or user-authorized scope from a semantic worker",
+        "fabricate an accepted receipt or claim CI implies factual truth",
+        "launch on an unmerged feature branch or without a fresh user-started dedicated semantic chat",
+        "create a recurring worker or background schedule",
+        "self-merge PR, overwrite any previously submitted file, or start a second sandbox trial"
+      ]
     }
   },
   "site_publication_resilience": {
